@@ -1,0 +1,216 @@
+% Topic document: official format, 11 pt and 1-inch margins.
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage[round]{natbib}
+\usepackage[colorlinks=true,allcolors=blue!50!black]{hyperref}
+\title{Reservas bancarias, colateral y asignaci\'on de capital}
+\author{Alejandro Ventura \\ \small\url{https://github.com/alejandroventuraventurameza-tech/ai-project}}
+\date{Propuesta de tema: 7 de octubre de 2026}
+\begin{document}
+\maketitle
+
+\section{La pregunta y el track}
+\textbf{Track B: modelo de tesis.} \textquestiondown Bajo qu\'e condiciones una
+expansi\'on de reservas reduce el costo del cr\'edito y mejora la asignaci\'on de
+un capital fijo entre empresas heterog\'eneas en productividad, patrimonio y
+colateral? El alcance acordado \textbf{A} es un n\'ucleo est\'atico con un banco
+y dos empresas. El alcance \textbf{B}, objetivo de la presentaci\'on final, ampl\'ia
+la transmisi\'on y los reg\'imenes. Estas letras designan alcances del proyecto;
+la elecci\'on del curso sigue siendo Track B. La manufactura formal peruana
+motiva la pregunta, pero esta propuesta no identifica efectos causales.
+
+\section{El baseline y el modelo que falta}
+El antecedente principal es \citet{gonzalez2026}, versi\'on de enero de 2026:
+ya conecta pol\'itica monetaria, heterogeneidad y mala asignaci\'on. La
+restricci\'on es $q_t k_t\leq\gamma q_t a_t$ (ec.~4, p.~7); el problema est\'atico
+maximiza $m_t f_t-w_t l_t-R_t k_t$ (ec.~6, p.~8), con $m_t$ precio real
+del insumo y $R_t$ costo del capital. Esa notaci\'on no es nuestro $m,R$.
+Sus proposiciones 1 y 2 (pp.~19 y 20--21; pruebas B.7.1--B.7.2) separan cambios
+en la distribuci\'on patrimonial y en el umbral de productividad. Nuestro modelo
+no rederiva esas proposiciones: usa dos empresas con rendimientos decrecientes,
+costos de liquidez bancaria y colateral terminal heterog\'eneo, frente al
+continuo con rendimientos constantes del antecedente.
+
+\citet{bianchi2022} aporta reservas, dep\'ositos, pr\'estamos y liquidaci\'on
+interbancaria con fricciones. El archivo local es el manuscrito de marzo de
+2021, no la maquetaci\'on publicada: su secci\'on 2 describe las dos etapas y las
+ecuaciones 2--3 (p.~6) el balance y la restricci\'on de capital bancario.
+El costo cuadr\'atico siguiente es una \textbf{simplificaci\'on propia}; no es
+una ecuaci\'on ni una proposici\'on de Bianchi y Bigio.
+
+\paragraph{Banco e instrumento de cantidad.}
+Con reservas $m$ dadas por la autoridad, patrimonio bancario $E\geq0$, cr\'edito
+$B$ y dep\'ositos $D$, el banco toma los retornos brutos $t,\rho,r_m$ y resuelve
+\[
+ \max_{B,D\geq0}\ tB+r_m m-\rho D-C(B,D,m),\qquad B+m=D+E,
+\]
+\[
+ C=cB+\frac{\kappa}{2}(\delta D-m)_+^2,\quad
+ c\geq0,\quad\kappa>0,\quad0<\delta<1,\quad (v)_+=\max\{v,0\}.
+\]
+Todas las posiciones se expresan en unidades del bien inicial; los pagos y el
+costo, en el bien terminal. $\delta D$ resume necesidades de liquidaci\'on,
+no un mercado OTC expl\'icito. En un \mbox{\emph{interior}}, con liquidez escasa,
+\[
+ t=\rho+c+\kappa\delta[\delta(B+m-E)-m].
+\]
+\newpage
+El experimento A var\'ia $m$ manteniendo $\rho$ fijo. Un hogar pasivo ofrece
+dep\'ositos y capital; no se resuelve su bienestar ni un equilibrio monetario
+din\'amico completo. El precio de reservas $r_m$ afecta beneficios, pero, con
+$m$ fijo, no aparece en esta condici\'on marginal.
+
+\paragraph{Empresas, unidades y timing.}
+Al inicio cada empresa $i\in\{H,L\}$ posee fondos $n_i>0$, usa $x_i$ y toma
+deuda principal $b_i\geq0$ para alquilar $k_i\geq0$ a precio $R>0$. Produce al
+final $y_i=A_i k_i^\alpha$, con $A_H>A_L>0$, $0<\alpha<1$, y paga $tb_i$.
+El l\'imite $h_i>0$ es riqueza terminal pignorable ex\'ogena; no es el capital
+adquirido. Los fondos no usados rinden $\rho>0$. Omitiendo la dotaci\'on
+terminal constante, el problema es
+\begin{equation}\label{eq:firm}
+ \max_{k_i,x_i,b_i\geq0}\ A_i k_i^\alpha-tb_i+\rho(n_i-x_i),
+ \quad Rk_i=x_i+b_i,\quad x_i\leq n_i,\quad tb_i\leq h_i.
+\end{equation}
+La desigualdad $t>\rho$ elimina el arbitraje de endeudarse para ahorrar:
+$x_i=\min\{Rk_i,n_i\}$ y $b_i=(Rk_i-n_i)_+$. Por tanto,
+\[
+ \max_{0\leq k_i\leq\bar k_i}\ A_i k_i^\alpha-\rho Rk_i
+ -(t-\rho)(Rk_i-n_i)_+ +\rho n_i,
+ \qquad\bar k_i=\frac{n_i+h_i/t}{R}.
+\]
+Este objetivo es estrictamente c\'oncavo. Definiendo
+$M_i=\alpha A_i k_i^{\alpha-1}$, sus condiciones marginales son
+\[
+\begin{array}{ll}
+ M_i=\rho R,& Rk_i<n_i \quad\text{(autofinanciamiento interior)},\\
+ \rho R\leq M_i\leq tR,& Rk_i=n_i \quad\text{(quiebre, sin deuda)},\\
+ M_i=tR,& n_i<Rk_i<n_i+h_i/t\quad\text{(deuda interior)},\\
+ M_i=tR(1+\mu_i),\quad\mu_i\geq0,
+ &Rk_i=n_i+h_i/t\quad\text{(colateral activo)}.
+\end{array}
+\]
+Aqu\'i $\mu_i$ multiplica $h_i-tb_i$ en el problema original. En el interior
+con deuda, la condici\'on de $x_i$ hace usar todos los fondos propios; con deuda
+limitada, $M_i>tR$ significa $\mu_i>0$. Los casos de igualdad delimitan cambios
+de r\'egimen y no admiten trasladar derivadas de un interior sin comprobaci\'on.
+
+\paragraph{Cierre y medida de mala asignaci\'on.}
+Se fija la oferta f\'isica $K>0$, $k_H+k_L=K$, y se determina $R$ por vaciado
+del mercado. El cr\'edito bancario debe satisfacer $B=b_H+b_L$ y su balance,
+con $D\geq0$. Una reducci\'on de $t$ a $R$ fijo no prueba una mejora de
+asignaci\'on: hay que resolver tambi\'en $R$. El benchmark sin fricciones es
+\[
+ k_H^*=K\frac{A_H^{1/(1-\alpha)}}{A_H^{1/(1-\alpha)}+A_L^{1/(1-\alpha)}},
+ \quad Y^*=A_H(k_H^*)^\alpha+A_L(K-k_H^*)^\alpha.
+\]
+Se usar\'an $\mathcal L=1-Y/Y^*$ y
+$G=|\log M_H-\log M_L|$, donde $Y=A_Hk_H^\alpha+A_Lk_L^\alpha$.
+La igualdad $M_H=M_L$ caracteriza la asignaci\'on eficiente interior. Como
+$K$ permanece fijo, una subida de $Y$ implica una subida de productividad
+agregada a insumos dados; no es el contrafactual emp\'irico de Hsieh--Klenow.
+
+\newpage
+\section{El resultado esperado}
+Los siguientes son \textbf{resultados candidatos con derivaci\'on preliminar},
+no una afirmaci\'on universal sobre pol\'itica monetaria. Se mantienen fijos
+$K,A_i,n_i,h_i,\rho,E,c,\kappa,\delta$. Toda comparaci\'on se restringe a un
+intervalo donde se conservan las desigualdades estrictas del r\'egimen.
+
+\paragraph{P1: H limitada y L se autofinancia.}
+Sup\'ongase $b_H=h_H/t$, $M_H>tR$ y $Rk_L<n_L$, de modo que
+$M_L=\rho R$. Si $s=1/(1-\alpha)$, el equilibrio real satisface
+\[
+ \frac{n_H+h_H/t}{R}+\left(\frac{\alpha A_L}{\rho R}\right)^s=K.
+\]
+La derivaci\'on impl\'icita entrega
+\[
+ \frac{dR}{dt}=-\frac{h_H}{t^2(k_H+sk_L)}<0,\qquad
+ \frac{dk_H}{dt}=-\frac{sk_Lh_H}{t^2R(k_H+sk_L)}<0.
+\]
+Como $M_H>tR>\rho R=M_L$, H est\'a subcapitalizada respecto de $k_H^*$.
+Una ca\'ida local de $t$ reasigna capital desde L hacia H, eleva $Y$ y reduce
+$\mathcal L$ y $G$. El resultado exige que H siga limitada y L siga en
+autofinanciamiento interior. No cubre el quiebre $Rk_L=n_L$.
+
+\paragraph{P2: ambas empresas limitadas.}
+Sup\'ongase $b_i=h_i/t$ y $M_i>tR$ para ambas. El vaciado del mercado implica
+\[
+ R=\frac{n_H+n_L+(h_H+h_L)/t}{K},\qquad
+ k_H=K\frac{tn_H+h_H}{t(n_H+n_L)+h_H+h_L}.
+\]
+Entonces
+\[
+ \frac{dk_H}{dt}
+ =\frac{K(n_Hh_L-n_Lh_H)}{[t(n_H+n_L)+h_H+h_L]^2}.
+\]
+Una ca\'ida de $t$ aumenta $k_H$ \textbf{si y solo si}
+$h_H/n_H>h_L/n_L$; la igualdad produce neutralidad en las participaciones.
+Para que esa reasignaci\'on mejore eficiencia se necesita adem\'as
+$k_H<k_H^*$ y que no se cruce $k_H^*$ en la comparaci\'on finita. Si H ya
+est\'a sobrecapitalizada, darle m\'as capital puede empeorar la asignaci\'on.
+El signo del efecto sobre producto se verifica mediante
+\[
+ \frac{dY}{dt}=(M_H-M_L)\frac{dk_H}{dt}.
+\]
+
+\paragraph{De reservas a costo del cr\'edito.}
+En P1, $B(t)=h_H/t$; en P2, $B(t)=(h_H+h_L)/t$. En ambos $B'(t)<0$.
+Al imponer simult\'aneamente el equilibrio bancario en liquidez escasa,
+\[
+ \frac{dt}{dm}=\frac{-\kappa\delta(1-\delta)}{1-\kappa\delta^2B'(t)}<0.
+\]
+La derivada incluye la respuesta del cr\'edito. Con reservas abundantes,
+$t=\rho+c$ y m\'as reservas son neutrales. El caso $t=\rho$ y un encaje
+activo requieren otra caracterizaci\'on.
+
+\newpage
+\section{Por qu\'e no est\'a ya resuelto}
+La conexi\'on entre dinero y mala asignaci\'on \textbf{ya existe}. Se usa el
+manuscrito local de enero de 2026 (173 p\'aginas PDF): ecuaciones 4 y 6,
+proposiciones 1--2 y pruebas B.7.1--B.7.2. Las versiones de 2023 y BdE 2021
+quedan como contexto hist\'orico. La versi\'on elegida tiene tres autores:
+Gonz\'alez, Nu\~no y Thaler; reconoce a Albrizio y retira el bloque
+emp\'irico anterior. La web del autor informa una revisi\'on
+solicitada en JPE: aqu\'i se cita como manuscrito, no como art\'iculo publicado.
+Tambi\'en se localiz\'o el trabajo relacionado \emph{A tale of two margins:
+Monetary policy and capital misallocation} (European Economic Review, 2026);
+su existencia refuerza la necesidad de delimitar el aporte, no certifica novedad.
+
+El aporte por evaluar es una descomposici\'on de la transmisi\'on desde liquidez
+bancaria hacia capital relativo, con $tb_i\leq h_i$ y dos reg\'imenes. La
+condici\'on $h_H/n_H>h_L/n_L$ depende de este cierre. No se replica la
+din\'amica distributiva ni el problema Ramsey de 2026. La b\'usqueda de citantes
+sigue parcial; no se afirma haber probado originalidad.
+
+\section{Plan y riesgos}
+\textbf{Tema:} cerrar A, verificar las cuatro regiones, P1--P2 y el equilibrio
+real y bancario, y entregar propuesta y diapositivas compiladas.
+\textbf{Para el 30 de octubre:} desarrollar B como extensi\'on controlada:
+separar instrumento de precio, reservas y encaje; estudiar transiciones de
+r\'egimen y, si es tractable, acumulaci\'on de patrimonio. No se promete un
+DSGE completo, dolarizaci\'on ni una pol\'itica \`optima.
+
+\textbf{Lean, despu\'es de fijar el art\'iculo:} integrar el PDF del manuscrito,
+registrar su commit y ejecutar la habilidad de formalizaci\'on de
+AppliedModelingLib sobre ese PDF inmutable, con \texttt{gpt-5.6-sol} y esfuerzo
+\texttt{xhigh}. Objetivos: identidad de P2, signo de su cambio finito, y P1
+con todas las hip\'otesis econ\'omicas declaradas. Ejecutar el chequeo por
+art\'iculo \texttt{--fast}, conservar su salida y la carpeta generada completa
+en \texttt{lean/} respetando su
+\texttt{.gitignore}, y mapear cada resultado a declaraci\'on, archivo y estado.
+Sin \texttt{sorry}, sin predicados vac\'ios ni hip\'otesis que asuman la conclusi\'on.
+Repetir si cambia una proposici\'on. Lean sigue pendiente.
+
+\textbf{Riesgo principal:} la sensibilidad del resultado al colateral
+ex\'ogeno, al capital fijo y a cambios de r\'egimen. La comprobaci\'on num\'erica
+usar\'a sorteos y contraejemplos; no sustituye la demostraci\'on.
+EEA 2023 y ENAHO 2025 permanecer\'an como motivaci\'on descriptiva pendiente de
+auditor\'ia. No se usar\'an sus proxies o ganancias preliminares de TFP como
+identificaci\'on causal ni como calibraci\'on validada.
+\bibliographystyle{plainnat}
+\bibliography{../paper/references}
+\end{document}

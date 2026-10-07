@@ -1,0 +1,268 @@
+% Preliminary manuscript, not the final 8--20-page submission.
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage[round]{natbib}
+\usepackage[colorlinks=true,allcolors=blue!50!black]{hyperref}
+\newtheorem{proposition}{Proposici\'on}
+\newtheorem{lemma}{Lema}
+\theoremstyle{definition}
+\newtheorem{assumption}{Supuesto}
+\title{Reservas bancarias, colateral y asignaci\'on de capital}
+\author{Alejandro Ventura\thanks{Universidad del Pac\'ifico. Track B. Repositorio:
+\url{https://github.com/alejandroventuraventurameza-tech/ai-project}.}}
+\date{Borrador preliminar del n\'ucleo A: 7 de octubre de 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Una expansi\'on de reservas puede mejorar o empeorar la asignaci\'on de capital.
+Este borrador estudia un banco y dos empresas con colateral de pago heterog\'eneo.
+Si la empresa productiva est\'a limitada y la otra se autofinancia, reducir el
+costo del cr\'edito mejora localmente eficiencia. Si ambas est\'an limitadas,
+la reasignaci\'on depende del colateral relativo al patrimonio, y su eficiencia
+depende adem\'as de la brecha inicial de productos marginales. Se presentan
+derivaciones preliminares y verificaciones num\'ericas. La extensi\'on B, el
+ap\'endice manuscrito y la formalizaci\'on Lean siguen pendientes. Este texto
+no constituye todav\'ia la entrega final de 8--20 p\'aginas.
+\end{abstract}
+
+\section{Introducci\'on}
+La pregunta es cu\'ando la liquidez bancaria mejora la asignaci\'on de capital
+entre empresas heterog\'eneas. El Track B exige construir el modelo de la tesis;
+el alcance A a\'isla un mecanismo est\'atico, con oferta de capital fija. El
+alcance B estudiar\'a instrumentos de precio y cantidad, encaje y cambios de
+r\'egimen. No se deduce una recomendaci\'on monetaria universal ni bienestar.
+
+\section{Literatura relacionada}
+\citet{gonzalez2026}, versi\'on de enero de 2026, es el antecedente principal.
+Ya estudia pol\'itica monetaria y mala asignaci\'on. La ec.~4 (p.~7)
+impone $q_tk_t\leq\gamma q_ta_t$,
+y la ec.~6 (p.~8) expresa el problema est\'atico de la empresa. En esa notaci\'on
+$m_t$ es precio real del insumo y $R_t$ costo del capital; son distintos de
+nuestras reservas $m$ y precio inicial de alquiler $R$. Sus proposiciones
+1--2 (p.~19 y pp.~20--21, pruebas B.7.1--B.7.2) estudian la distribuci\'on
+patrimonial y el umbral de productividad. Esta versi\'on tiene tres autores
+y reconoce el aporte previo de Albrizio. La relaci\'on general no es nuestra
+novedad. Nuestro cierre est\'atico de dos firmas con rendimientos decrecientes
+no replica su continuo de firmas con rendimientos constantes, la din\'amica
+distributiva ni el problema de pol\'itica \`optima.
+
+\citet{bianchi2022} fundamenta la importancia de reservas, dep\'ositos y
+liquidez interbancaria. Se consult\'o localmente su manuscrito de marzo de 2021,
+no la versi\'on editorial publicada. Nuestro costo cuadr\'atico es una
+aproximaci\'on propia, sin identificarlo con sus ecuaciones. La originalidad
+del cierre particular a\'un requiere revisar trabajos citantes.
+
+\section{Modelo}
+\begin{assumption}\label{ass:primitives}
+$A_H>A_L>0$, $0<\alpha<1$, $K,n_i,h_i>0$, $R>0$ y $t>\rho>0$.
+Las primitivas y $K$ no cambian con $t$ en el experimento de asignaci\'on.
+\end{assumption}
+\begin{assumption}\label{ass:funding}
+El capital se alquila al inicio por $Rk_i$, se produce al final
+$A_i k_i^\alpha$ y se paga deuda bruta $tb_i$. El patrimonio inicial es $n_i$;
+los fondos no utilizados rinden $\rho$. El colateral terminal ex\'ogeno $h_i$
+limita el pago, no el principal. Se omite su valor terminal constante.
+\end{assumption}
+\begin{assumption}\label{ass:clearing}
+$k_H+k_L=K$, $B=b_H+b_L$, $B+m=D+E$, $D\geq0$. Un hogar pasivo
+ofrece capital y dep\'ositos a los precios dados; no se modela su bienestar.
+\end{assumption}
+\begin{assumption}\label{ass:bank}
+$E\geq0$, $m\geq0$, $c\geq0$, $\kappa>0$, $0<\delta<1$. El banco es
+tomador de precios; toma reservas $m$ dadas y elige una cartera interior
+factible. Su costo propio es $C=cB+\kappa(\delta D-m)_+^2/2$.
+\end{assumption}
+La empresa resuelve
+\begin{equation}\label{eq:firm}
+\max_{k_i,x_i,b_i\geq0} A_i k_i^\alpha-tb_i+\rho(n_i-x_i),
+\quad Rk_i=x_i+b_i,\quad x_i\leq n_i,\quad tb_i\leq h_i.
+\end{equation}
+El banco maximiza $tB+r_m m-\rho D-C$, sujeto a su balance. Sustituir
+$D=B+m-E$ da, cuando $\delta D>m$,
+\begin{equation}\label{eq:bank}
+t=\rho+c+\kappa\delta[\delta(B+m-E)-m].
+\end{equation}
+La segunda derivada de beneficios en ese interior es $-\kappa\delta^2<0$.
+El costo representa escasez de liquidaci\'on de manera reducida; no contiene
+b\'usqueda OTC ni una ley de movimiento de reservas. Un encaje activo queda
+fuera del experimento A y exige un multiplicador adicional.
+
+\section{Resultados y derivaciones preliminares}
+\begin{lemma}\label{lem:funding}
+Bajo los supuestos \ref{ass:primitives}--\ref{ass:funding},
+$x_i=\min\{Rk_i,n_i\}$ y $b_i=(Rk_i-n_i)_+$. La elecci\'on de capital
+es el m\'aximo \`unico de
+\[
+A_i k_i^\alpha-\rho Rk_i-(t-\rho)(Rk_i-n_i)_++\rho n_i,
+\qquad 0\leq k_i\leq(n_i+h_i/t)/R.
+\]
+\end{lemma}
+\begin{proof}
+Fijado $k_i$, se tiene $b_i=Rk_i-x_i$. La parte financiera del objetivo es
+$-tRk_i+(t-\rho)x_i+\rho n_i$. Como $t>\rho$, aumentar $x_i$ es
+estrictamente beneficioso hasta $\min\{Rk_i,n_i\}$. El colateral determina
+la cota superior de $k_i$. El t\'ermino productivo es estrictamente c\'oncavo
+y el negativo de la parte positiva es c\'oncavo, por lo que la suma es
+estrictamente c\'oncava. Continuidad y compacidad garantizan existencia;
+concavidad estricta garantiza unicidad. La derivada productiva diverge al
+acercarse a cero; con $n_i>0$ la soluci\'on de capital es positiva.
+\end{proof}
+Escribiendo $M_i=\alpha A_i k_i^{\alpha-1}$, las cuatro regiones son:
+$M_i=\rho R$ si $Rk_i<n_i$; $\rho R\leq M_i\leq tR$ en el quiebre;
+$M_i=tR$ con deuda interior; y $M_i=tR(1+\mu_i)$, $\mu_i\geq0$,
+en la cota de colateral. No se invoca una FOC diferenciable en el quiebre.
+
+\newpage
+\begin{proposition}\label{prop:mixed}
+Bajo los supuestos \ref{ass:primitives}--\ref{ass:clearing}, sup\'ongase
+$b_H=h_H/t$, $M_H>tR$ y $Rk_L<n_L$, de modo que $M_L=\rho R$.
+En un intervalo que conserva estas desigualdades, $dk_H/dt<0$.
+Una reducci\'on local de $t$ eleva producto y reduce la mala asignaci\'on.
+\end{proposition}
+\begin{proof}
+Si $s=1/(1-\alpha)>1$, el mercado de capital exige
+\[
+F(R,t)=\frac{n_H+h_H/t}{R}+\left(\frac{\alpha A_L}{\rho R}\right)^s-K=0.
+\]
+Para cada $t>0$, $F$ es estrictamente decreciente en $R$, diverge a $+\infty$
+cuando $R\downarrow0$ y converge a $-K$ cuando $R\uparrow\infty$.
+Existe una ra\'iz positiva \`unica. Adem\'as,
+\[
+F_t=-\frac{h_H}{t^2R},\quad F_R=-\frac{k_H+sk_L}{R}<0,\quad
+R'=-\frac{h_H}{t^2(k_H+sk_L)}<0.
+\]
+Como $k_L=(\alpha A_L/(\rho R))^s$, $k_L'=-sk_LR'/R>0$ y
+\[
+k_H'=-k_L'=-\frac{sk_Lh_H}{t^2R(k_H+sk_L)}<0.
+\]
+El producto total cumple $Y'=(M_H-M_L)k_H'<0$, pues $M_H>tR>M_L$.
+El benchmark eficiente $k_H^*$ iguala marginales. Con $K$ fijo,
+\[
+\frac{d}{dk_H}\log\frac{M_H}{M_L}
+=(\alpha-1)\left(\frac1{k_H}+\frac1{k_L}\right)<0.
+\]
+El log-ratio es positivo inicialmente y decrece si aumenta $k_H$; su valor
+absoluto tambi\'en decrece mientras no cruce cero. Las desigualdades de
+r\'egimen garantizan una mejora local y deben reevaluarse para cambios finitos.
+\end{proof}
+
+\newpage
+\begin{proposition}\label{prop:both}
+Bajo los supuestos \ref{ass:primitives}--\ref{ass:clearing}, sup\'ongase
+$b_i=h_i/t$ y $M_i>tR$ para ambas firmas. En ese r\'egimen,
+\[
+k_H=K\frac{tn_H+h_H}{t(n_H+n_L)+h_H+h_L},\quad
+\frac{dk_H}{dt}=\frac{K(n_Hh_L-n_Lh_H)}{[t(n_H+n_L)+h_H+h_L]^2}.
+\]
+Al caer $t$, aumenta $k_H$ si y solo si $h_H/n_H>h_L/n_L$. Para que ese
+aumento mejore eficiencia debe cumplirse $k_H<k_H^*$, y una comparaci\'on
+finita no debe sobrepasar $k_H^*$.
+\end{proposition}
+\begin{proof}
+Las dos cotas activas implican $Rk_i=n_i+h_i/t$. Sumando y usando
+$k_H+k_L=K$ se obtiene $R=(n_H+n_L+(h_H+h_L)/t)/K$. Sustituir en
+la cota de H da la identidad. La regla del cociente produce el numerador
+\[
+K\{n_H[t(n_H+n_L)+h_H+h_L]-(tn_H+h_H)(n_H+n_L)\}
+=K(n_Hh_L-n_Lh_H).
+\]
+El denominador es positivo; $n_i>0$ permite ordenar los ratios.
+Para dos tasas $t_1<t_0$ del mismo r\'egimen, escribiendo $N=n_H+n_L$,
+$H_c=h_H+h_L$, se tiene exactamente
+\[
+k_H(t_1)-k_H(t_0)=
+\frac{K(t_1-t_0)(n_Hh_L-n_Lh_H)}{(t_1N+H_c)(t_0N+H_c)}.
+\]
+La eficiencia requiere adem\'as la brecha de marginales adecuada, pues
+$dY/dk_H=M_H-M_L$. La concavidad estricta del producto agregado da
+\[
+k_H^*=K\frac{A_H^{1/(1-\alpha)}}{A_H^{1/(1-\alpha)}+A_L^{1/(1-\alpha)}}.
+\]
+Si $k_H<k_H^*$, transferir capital a H sin sobrepasar ese punto aumenta
+$Y$ y reduce la brecha absoluta de log-marginales. Si H est\'a por encima,
+la misma transferencia empeora ambos indicadores. La igualdad de ratios
+de colateral produce participaciones constantes, aunque var\'ie $R$.
+\end{proof}
+
+\begin{proposition}\label{prop:reserves}
+Bajo el supuesto \ref{ass:bank} y el r\'egimen de la proposici\'on
+\ref{prop:mixed} o \ref{prop:both}, con liquidez escasa, balance factible e
+interior bancario, aumentar reservas reduce localmente $t$, manteniendo
+fijos $\rho,E,c,\kappa,\delta$ y las primitivas reales.
+\end{proposition}
+\begin{proof}
+En el primer r\'egimen $B=h_H/t$ y en el segundo $B=(h_H+h_L)/t$,
+por lo que $B'<0$. Diferenciando la ecuaci\'on \eqref{eq:bank} se obtiene
+\[
+\left(1-\kappa\delta^2B'\right)\frac{dt}{dm}
+=-\kappa\delta(1-\delta).
+\]
+El coeficiente a la izquierda es positivo y el numerador a la derecha es
+negativo. La derivada es estrictamente negativa. Con liquidez abundante
+el costo marginal adicional es cero y $t=\rho+c$: el efecto local de $m$
+es nulo. En el umbral la respuesta debe tratarse por tramos. Si $c=0$,
+el tramo abundante permite $t=\rho$ y el lema financiero requiere revisi\'on.
+\end{proof}
+
+\section{Verificaci\'on computacional}
+El programa \texttt{code/verify.py} comprueba identidades, condiciones KKT
+y derivadas mediante soluciones num\'ericas. Usa
+10\,000 sorteos, semilla 20261007, y verificaci\'on racional del cambio finito.
+En \texttt{code/output/}, los archivos \texttt{verification.json} y
+\texttt{allocation\_cases.csv} registran resultados y casos adversos.
+El programa falla ante una violaci\'on de las condiciones. Los signos de
+eficiencia se comprueban lejos de la igualdad num\'erica de marginales; los
+casos neutrales se verifican por separado. Una simulaci\'on no prueba un
+teorema universal ni identifica causalidad.
+
+\section{Discusi\'on y limitaciones}
+El colateral ex\'ogeno terminal, $K$ fijo y la permanencia de r\'egimen hacen
+el trabajo del resultado. Un colateral end\'ogeno al precio del capital,
+el encaje activo o la acumulaci\'on patrimonial pueden cambiar los signos.
+El costo bancario no sustituye el equilibrio OTC de Bianchi y Bigio. EEA y
+ENAHO aportan motivaci\'on descriptiva sin identificar un shock monetario.
+Sus proxies y contrafactuales preliminares no son una calibraci\'on auditada.
+
+\section{Conclusi\'on}
+La reasignaci\'on causada por una ca\'ida del costo del cr\'edito depende del
+r\'egimen financiero y del colateral relativo. Su eficiencia depende adem\'as
+de los marginales iniciales. El n\'ucleo A ofrece resultados acotados para
+verificaci\'on y una extensi\'on B por desarrollar, sin una recomendaci\'on universal.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+\appendix
+\section{Pruebas y ap\'endice manuscrito}
+Las pruebas preliminares est\'an en el cuerpo. El ap\'endice manuscrito en
+\texttt{hand/} est\'a pendiente: la derivaci\'on tipografiada no lo sustituye.
+
+\section{Formalizaci\'on Lean}
+Ning\'un resultado tiene todav\'ia una declaraci\'on Lean generada ni un
+chequeo completado. Primero se fijar\'a el art\'iculo en un commit integrado.
+Se ejecutar\'a AppliedModelingLib sobre ese PDF, con la configuraci\'on del
+issue; se conservar\'a la corrida completa y su auditor\'ia.
+\begin{center}\small
+\begin{tabular}{lll}\toprule
+Resultado & Declaraci\'on y archivo & Estado \\\midrule
+Lema \ref{lem:funding} & No generados & Abierto: corrida pendiente \\
+Proposici\'on \ref{prop:mixed} & No generados & Abierto: corrida pendiente \\
+Proposici\'on \ref{prop:both} & No generados & Abierto: corrida pendiente \\
+Proposici\'on \ref{prop:reserves} & No generados & Abierto: corrida pendiente \\\bottomrule
+\end{tabular}\end{center}
+No hay hash formalizado ni salida \texttt{--fast} que reportar. Las
+hip\'otesis agregadas y cualquier resultado abierto deben quedar expl\'icitos.
+
+\section{Colaboraci\'on con IA}
+Codex redact\'o el cierre y sus derivaciones, implement\'o verificaciones y
+prepar\'o LaTeX. Alejandro Ventura a\'un debe revisar los PDF y adjudicar su
+contenido. Los prompts originales y las respuestas relevantes est\'an en
+\texttt{prompts.md}. La verificaci\'on encontr\'o una exigencia de signo estricto
+num\'erico demasiado cerca de igualdad de marginales; se delimit\'o el margen
+de precisi\'on y se conservaron casos de neutralidad y signos adversos.
+No se registra esta correcci\'on num\'erica como prueba Lean ni veredicto del autor.
+\end{document}

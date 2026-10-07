@@ -1,0 +1,214 @@
+% Official Beamer format: no overlays or paper screenshots.
+\documentclass[aspectratio=169,11pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usetheme{default}
+\usecolortheme{seahorse}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\setbeamerfont{frametitle}{size=\large}
+\title{Reservas bancarias, colateral\\y asignaci\'on de capital}
+\author{Alejandro Ventura}
+
+\subtitle{Presentaci\'on de tema: Track B, n\'ucleo A}
+\date{7 de octubre de 2026, 08:20 (Lima)}
+\begin{document}
+\begin{frame}[plain]
+ \titlepage
+ \begin{center}\footnotesize
+ \href{https://github.com/alejandroventuraventurameza-tech/ai-project}
+ {\texttt{github.com/alejandroventuraventurameza-tech/ai-project}}
+ \end{center}
+\end{frame}
+
+\begin{frame}{1. La pregunta y el alcance}
+\textquestiondown Cu\'ando una expansi\'on de reservas mejora la asignaci\'on de
+capital entre empresas heterog\'eneas?
+\medskip
+\begin{itemize}
+ \item Track B: construir el modelo econ\'omico de la tesis.
+ \item A, hoy: un banco, dos empresas y oferta de capital fija.
+ \item B, presentaci\'on final: instrumentos de precio y cantidad, encaje y
+ transiciones de r\'egimen. Din\'amica patrimonial si es tractable.
+\end{itemize}
+\medskip
+El signo depende de qui\'en recibe capital y de qui\'en est\'a restringido.
+La manufactura peruana motiva la pregunta. EEA/ENAHO aportan descripci\'on,
+sin identificar el efecto causal de pol\'itica monetaria.
+\end{frame}
+
+\begin{frame}{2. El antecedente y el modelo que falta}
+\textbf{Gonz\'alez, Nu\~no y Thaler (enero de 2026)} ya estudian
+pol\'itica monetaria y mala asignaci\'on con heterogeneidad patrimonial.
+\[
+ q_tk_t\leq\gamma q_ta_t,\qquad
+ \max_{k_t,l_t}\{m_tf_t-w_tl_t-R_tk_t\}.
+\]
+{\small Versi\'on elegida: ec.~4, p.~7; ec.~6, p.~8. Proposici\'on 1, p.~19;
+proposici\'on 2, pp.~20--21. Pruebas B.7.1--B.7.2.
+$m_t$: precio real del insumo; $R_t$: costo del capital en el paper.}
+\medskip
+
+\textbf{Bianchi y Bigio (2022)}: reservas, dep\'ositos, cr\'edito y
+gesti\'on de liquidez interbancaria.
+\medskip
+
+\textbf{Nuestro objeto}: dos empresas con rendimientos decrecientes, costo
+bancario simplificado y colateral de pago heterog\'eneo.
+El costo cuadr\'atico que sigue es propio.
+\end{frame}
+
+\begin{frame}{2. Banco: reservas escasas y costo marginal}
+\[
+ \max_{B,D\geq0}\ tB+r_m m-\rho D-C,
+ \qquad B+m=D+E,
+\]
+\[
+ C=cB+\frac{\kappa}{2}(\delta D-m)_+^2,
+ \qquad c\geq0,\;\kappa>0,\;0<\delta<1.
+\]
+\textbf{Liquidez escasa e interior bancario:}
+\[
+ t=\rho+c+\kappa\delta[\delta(B+m-E)-m].
+\]
+$B$: cr\'edito. $D$: dep\'ositos. $m$: reservas. $E$: patrimonio bancario.
+$t,\rho,r_m$: retornos brutos de cr\'edito, ahorro y reservas.
+\medskip
+
+Experimento A: m\'as $m$ con $\rho$ fijo. El hogar pasivo financia dep\'ositos
+y ofrece capital. El mercado OTC y el bienestar quedan para una extensi\'on.
+\end{frame}
+
+\begin{frame}{2. Empresa: fondos propios, deuda y colateral}
+Al inicio se alquila capital; al final se produce y se paga la deuda.
+\[
+ \max_{k_i,x_i,b_i\geq0}\ A_i k_i^\alpha-tb_i+\rho(n_i-x_i)
+\]
+\[
+ \underbrace{Rk_i=x_i+b_i}_{\text{financiamiento}},\qquad
+ 0\leq x_i\leq n_i,\qquad
+ \underbrace{tb_i\leq h_i}_{\text{pago pignorable}}.
+\]
+\begin{itemize}
+ \item $A_H>A_L>0$, $0<\alpha<1$, $n_i,h_i,K>0$, $R>0$, $t>\rho>0$.
+ \item $n_i$: fondos iniciales. $h_i$: activos terminales pignorables
+ ex\'ogenos. $b_i$: principal, $tb_i$: pago bruto.
+ \item Capital fijo: $k_H+k_L=K$. El precio $R$ ajusta.
+\end{itemize}
+\medskip
+Se usa primero patrimonio: $x_i=\min\{Rk_i,n_i\}$,
+$b_i=(Rk_i-n_i)_+$.
+\end{frame}
+
+\begin{frame}{3. Condiciones marginales y reg\'imenes}
+Sea $M_i=\alpha A_i k_i^{\alpha-1}$ y
+$\bar k_i=(n_i+h_i/t)/R$.
+\medskip
+
+\begin{tabular}{@{}ll@{}}
+\toprule
+Configuraci\'on & Condici\'on marginal \\
+\midrule
+$Rk_i<n_i$: autofinancia & $M_i=\rho R$ \\
+$Rk_i=n_i$: quiebre & $\rho R\leq M_i\leq tR$ \\
+$n_i<Rk_i<n_i+h_i/t$: deuda interior & $M_i=tR$ \\
+$k_i=\bar k_i$: colateral activo & $M_i=tR(1+\mu_i)$, $\mu_i\geq0$ \\
+\bottomrule
+\end{tabular}
+\medskip
+
+La concavidad estricta da una demanda \`unica de capital.
+Las comparaciones siguientes exigen desigualdades estrictas y permanencia
+del r\'egimen. Los quiebres requieren un an\'alisis por separado.
+\end{frame}
+
+\begin{frame}{3. P1: H limitada y L se autofinancia}
+\textbf{Condiciones}: $b_H=h_H/t$, $M_H>tR$, $Rk_L<n_L$,
+$M_L=\rho R$; primitivas y $K$ fijos.
+\[
+ \frac{n_H+h_H/t}{R}+\left(\frac{\alpha A_L}{\rho R}\right)^s=K,
+ \qquad s=\frac1{1-\alpha}.
+\]
+\[
+ \frac{dk_H}{dt}=-\frac{sk_Lh_H}{t^2R(k_H+sk_L)}<0.
+\]
+Una ca\'ida local de $t$ lleva capital de L a H.
+Como $M_H>tR>\rho R=M_L$, H est\'a subcapitalizada.
+\[
+ \frac{dY}{dt}=(M_H-M_L)\frac{dk_H}{dt}<0.
+\]
+\textbf{Resultado candidato}: producto sube y mala asignaci\'on cae,
+mientras se conserve este r\'egimen.
+\end{frame}
+
+\begin{frame}{3. P2: ambas limitadas, signo condicional}
+\textbf{Condiciones}: $b_i=h_i/t$, $M_i>tR$ para ambas,
+primitivas y $K$ fijos.
+\[
+ k_H=K\frac{tn_H+h_H}{t(n_H+n_L)+h_H+h_L},
+\]
+\[
+ \frac{dk_H}{dt}=\frac{K(n_Hh_L-n_Lh_H)}{[t(n_H+n_L)+h_H+h_L]^2}.
+\]
+Al caer $t$, H recibe m\'as capital si y solo si
+\[
+ \frac{h_H}{n_H}>\frac{h_L}{n_L}.
+\]
+\textbf{Eficiencia}: requiere adem\'as $M_H>M_L$, equivalente a $k_H<k_H^*$,
+y no sobrepasar $k_H^*$ en una intervenci\'on finita.
+La igualdad de ratios da neutralidad; el orden inverso revierte la reasignaci\'on.
+\end{frame}
+
+\begin{frame}{3. Reservas, equilibrio bancario y eficiencia}
+En P1: $B=h_H/t$. En P2: $B=(h_H+h_L)/t$. En ambos, $B'<0$.
+\[
+ \frac{dt}{dm}=\frac{-\kappa\delta(1-\delta)}{1-\kappa\delta^2B'(t)}<0
+ \quad\text{si escasea liquidez}.
+\]
+Con reservas abundantes, $t=\rho+c$: m\'as $m$ es neutral en este cierre.
+\[
+ k_H^*=K\frac{A_H^s}{A_H^s+A_L^s},\qquad
+ \mathcal L=1-\frac{Y}{Y^*},\qquad G=|\log M_H-\log M_L|.
+\]
+Una mejora debe elevar $Y$ y acercar los productos marginales.
+El ratio de colateral decide la direcci\'on del capital; la brecha inicial
+decide si esa direcci\'on mejora eficiencia.
+\end{frame}
+
+\begin{frame}{4. B\'usqueda y contribuci\'on por evaluar}
+\begin{itemize}
+ \item Antecedente principal: enero 2026, 173 p\'aginas PDF. Ec.~4 y 6,
+ proposiciones 1--2 y pruebas B.7.1--B.7.2.
+ \item Gonz\'alez, Nu\~no y Thaler reconocen a Albrizio y retiran el bloque
+ emp\'irico anterior. Versiones 2023 y BdE 2021: contexto hist\'orico.
+ \item Bianchi--Bigio: versi\'on local marzo 2021, publicada en 2022.
+ Revisi\'on de balances y gesti\'on de liquidez.
+ \item Trabajo relacionado localizado: \emph{A tale of two margins}
+ (European Economic Review, 2026). B\'usqueda de citantes a\'un parcial.
+\end{itemize}
+\medskip
+\textbf{Aporte por evaluar}: condiciones transparentes para reasignaci\'on
+con colateral de pago y dos reg\'imenes. La relaci\'on dinero--mala asignaci\'on
+ya es conocida. A no replica su din\'amica ni Ramsey; la novedad sigue en revisi\'on.
+\end{frame}
+
+\begin{frame}{5. Plan, Lean y riesgo principal}
+\begin{itemize}
+ \item \textbf{A}: derivaci\'on completa, KKT en cuatro regiones, equilibrio
+ bancario y real; sorteos, casos l\'imite y contraejemplos reproducibles.
+ \item \textbf{B, 30 de octubre}: precio, reservas y encaje, transiciones
+ financieras; acumulaci\'on patrimonial si el cierre es tractable.
+ \item \textbf{Lean despu\'es}: fijar el PDF del art\'iculo en un commit;
+ AppliedModelingLib, \texttt{gpt-5.6-sol/xhigh}, carpeta
+ \texttt{Ventura26ReservesAllocation}; chequeo \texttt{--fast}.
+ \item Copiar corrida completa a \texttt{lean/}; registrar declaraci\'on,
+ archivo, commit e hip\'otesis de cada resultado. Sin pruebas Lean terminadas hoy.
+\end{itemize}
+\medskip
+\textbf{Riesgo}: colateral ex\'ogeno y cambios de r\'egimen pueden romper el
+signo. La simulaci\'on verifica casos, no demuestra causalidad ni reemplaza la prueba.
+\end{frame}
+\end{document}

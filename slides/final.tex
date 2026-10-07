@@ -1,0 +1,138 @@
+% Preliminary final-presentation draft; no completed Lean proof is claimed.
+\documentclass[aspectratio=169,11pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{newunicodechar}
+\newunicodechar{∀}{\ensuremath{\forall}}
+\newunicodechar{ℝ}{\ensuremath{\mathbb{R}}}
+\newunicodechar{≤}{\ensuremath{\le}}
+\newunicodechar{→}{\ensuremath{\to}}
+\usetheme{default}
+\usecolortheme{seahorse}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\setbeamerfont{frametitle}{size=\large}
+\title{Reservas bancarias, colateral\\y asignaci\'on de capital}
+\subtitle{Borrador para la presentaci\'on final: extensi\'on B pendiente}
+\author{Alejandro Ventura}
+\date{Preparado el 7 de octubre; presentaci\'on final: 30 de octubre de 2026}
+\begin{document}
+\begin{frame}[plain]
+\titlepage
+\begin{center}\footnotesize
+\href{https://github.com/alejandroventuraventurameza-tech/ai-project}
+{\texttt{github.com/alejandroventuraventurameza-tech/ai-project}}
+\end{center}
+\end{frame}
+\begin{frame}{1. Pregunta y respuesta condicional}
+\textquestiondown Cu\'ando una expansi\'on de reservas mejora la asignaci\'on?
+\medskip
+
+Con H limitada y L autofinanciada, un abaratamiento local del cr\'edito mejora
+asignaci\'on si se conserva el r\'egimen. Con ambas limitadas, el signo depende
+del colateral relativo y de la brecha inicial de marginales.
+\medskip
+
+Este borrador contiene el n\'ucleo A. La extensi\'on B y la evidencia final
+siguen pendientes. Track B del curso.
+\end{frame}
+\begin{frame}{2. Modelo y extensi\'on prevista}
+\[
+\max A_i k_i^\alpha-tb_i+\rho(n_i-x_i),\quad
+Rk_i=x_i+b_i,\quad tb_i\leq h_i,\quad0\leq x_i\leq n_i.
+\]
+\[
+B+m=D+E,\quad C=cB+\tfrac\kappa2(\delta D-m)_+^2,\quad k_H+k_L=K.
+\]
+Primitivas positivas, $A_H>A_L$, $0<\alpha<1$, $t>\rho$, $0<\delta<1$.
+El costo de liquidez es una aproximaci\'on propia.
+\medskip
+
+B estudiar\'a instrumentos de precio y cantidad, encaje, y transiciones;
+la din\'amica patrimonial depende de tractabilidad. No se ha resuelto a\'un.
+\end{frame}
+\begin{frame}{3. Proposiciones y condiciones}
+En el r\'egimen mixto: $M_H>tR$, $Rk_L<n_L$, $M_L=\rho R$.
+\[
+\frac{dk_H}{dt}=-\frac{sk_Lh_H}{t^2R(k_H+sk_L)}<0.
+\]
+Si ambas est\'an limitadas y $M_i>tR$:
+\[
+k_H=K\frac{tn_H+h_H}{t(n_H+n_L)+h_H+h_L}.
+\]
+H gana capital al caer $t$ si y solo si $h_H/n_H>h_L/n_L$.
+La mejora de eficiencia requiere H subcapitalizada y no cruzar el \`optimo.
+Se mantienen primitivas, $K$ y r\'egimen.
+\end{frame}
+\begin{frame}{4. Derivaci\'on: avances y pendientes}
+\begin{itemize}
+\item Avance: financiamiento \`optimo, cuatro condiciones marginales,
+vaciado de capital y derivadas de los dos reg\'imenes.
+\item Avance: respuesta bancaria con cr\'edito end\'ogeno y neutralidad con
+reservas abundantes.
+\item Pendiente: comprobaci\'on personal manuscrita, transiciones,
+encaje activo y microfundamento OTC de la extensi\'on B.
+\end{itemize}
+\medskip
+El paso sensible es preservar el r\'egimen: una derivada interior no vale
+autom\'aticamente al cruzar una restricci\'on.
+\end{frame}
+\begin{frame}{5. Verificaci\'on computacional}
+\texttt{code/verify.py}: 10\,000 sorteos con semilla fija.
+\begin{itemize}
+\item KKT y presupuesto en cuatro regiones; derivadas por soluciones num\'ericas.
+\item Identidad racional del cambio finito cuando ambas est\'an limitadas.
+\item Ejemplos favorables, ratios inversos, H sobrecapitalizada y neutralidad.
+\item Equilibrio bancario con $B(t)$ end\'ogeno; reservas abundantes.
+\end{itemize}
+\medskip
+Los resultados viven en \texttt{code/output/}. Verifican el modelo bajo sus
+supuestos; no prueban un teorema general ni efectos causales en EEA/ENAHO.
+\end{frame}
+\begin{frame}{6. Lean: objetivo y estado actual}
+\textbf{En el art\'iculo:}
+\[
+k_H(t_1)-k_H(t_0)=
+\frac{K(t_1-t_0)(n_Hh_L-n_Lh_H)}{(t_1N+H_c)(t_0N+H_c)}.
+\]
+\textbf{En Lean}: declaraci\'on y fragmento de prueba pendientes de la corrida.
+No se presenta c\'odigo como si estuviera verificado.
+\medskip
+
+Se fijar\'a el PDF en un commit antes de AppliedModelingLib; corrida con
+\texttt{gpt-5.6-sol/xhigh}, chequeo por art\'iculo \texttt{--fast} y carpeta
+generada completa en \texttt{lean/}. La tabla reportar\'a archivo, declaraci\'on,
+estado y cualquier hip\'otesis adicional. Esta diapositiva debe completarse
+con evidencia real antes de la presentaci\'on final.
+\end{frame}
+\begin{frame}{7. Control de afirmaciones de IA}
+\textbf{Afirmaci\'on a rechazar}: bajar el costo del cr\'edito siempre reduce
+mala asignaci\'on.
+\[
+\frac{dk_H}{dt}=\frac{K(n_Hh_L-n_Lh_H)}{[t(n_H+n_L)+h_H+h_L]^2},
+\quad\frac{dY}{dt}=(M_H-M_L)\frac{dk_H}{dt}.
+\]
+Son necesarias dos condiciones de signo y la permanencia del r\'egimen.
+\medskip
+
+La derivaci\'on personal manuscrita a mostrar y el veredicto de Alejandro
+siguen pendientes. El registro num\'erico tambi\'en documenta una correcci\'on
+de tolerancia cerca de marginales iguales.
+\end{frame}
+\begin{frame}{8. Preguntas para la cr\'itica}
+\begin{itemize}
+\item \textquestiondown Qu\'e condici\'on de signo sobrevive al hacer el
+colateral dependiente del precio del capital?
+\item \textquestiondown Conviene priorizar encaje y transiciones antes de
+a\~nadir din\'amica patrimonial?
+\item \textquestiondown Qu\'e aporte queda frente a Gonz\'alez y coautores (2026),
+m\'as all\'a de hacer el mecanismo transparente y verificable?
+\end{itemize}
+\medskip
+Estos puntos orientar\'an B; el borrador actual a\'un no satisface toda la
+evidencia requerida para la presentaci\'on final.
+\end{frame}
+\end{document}

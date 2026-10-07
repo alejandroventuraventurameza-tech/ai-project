@@ -1,0 +1,22 @@
+{
+  "seed": 20261007,
+  "draws": 10000,
+  "firm_regimes": {
+    "self": 6658,
+    "kink": 1008,
+    "interior": 771,
+    "capped": 1563
+  },
+  "two_capped_signs": {
+    "H_gains": 4988,
+    "H_loses": 5012,
+    "neutral": 1
+  },
+  "strict_two_capped_efficiency_checks": 7423,
+  "max_mixed_derivative_error": 1.112234193634265e-10,
+  "max_bank_derivative_error": 1.7795318745336705e-09,
+  "exact_identity": "passed",
+  "counterexamples": "passed",
+  "abundant_reserve_neutrality": "passed",
+  "limitation": "Numerical verification, not a Lean proof or causal empirical evidence"
+}
