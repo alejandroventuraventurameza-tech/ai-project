@@ -1,124 +1,59 @@
-# Term project — template
+# Reservas bancarias, colateral y asignación de capital
 
-**Artificial Intelligence and Economic Modeling · UP 2026-II**
+**Alejandro Ventura · AI Econ Modeling, UP 2026-II · Track B (modelo de tesis)**
 
-> **This is the template for the term project.** Press **Use this template**,
-> name your repository **`ai-project`**, and replace the content. Every project
-> in the course has this structure, so that anyone can open any repository and
-> find the paper, the slides, the code and the Lean proofs in the same place.
->
-> Dates, page limits and what is graded are in the
-> [project issue](https://github.com/alexanderquispe/AI-Econ-Modeling/issues/7)
-> of the course repository. **Delete this block and the next two sections when
-> you write your own README.**
+Repositorio público: https://github.com/alejandroventuraventurameza-tech/ai-project
+Consigna: https://github.com/alexanderquispe/AI-Econ-Modeling/issues/7
+Tema: 7 de octubre, 08:20 (Lima); entrega en main antes de 07:30.
+Presentación final: 30 de octubre, 07:30 (Lima). Artículo: 26 de noviembre, 22:00.
 
-## What goes where
+## Pregunta y modelo
 
-One repository for the whole project: it grows from the topic presentation to
-the final paper.
+¿Cuándo una expansión de reservas mejora la asignación de capital entre empresas
+heterogéneas en productividad, patrimonio y colateral? A es el núcleo estático
+demostrable; B es la extensión objetivo de la presentación final. Ambos siguen Track B.
 
-| Path | What it holds | Needed for |
-|---|---|---|
-| `README.md` | One page: the question, the model, the main result with all its conditions, and the status of the project | always |
-| `proposal/proposal.tex` · `.pdf` | The topic document, **2–4 pages** | topic presentation |
-| `slides/topic.tex` · `.pdf` | Deck for the 20-minute topic presentation | topic presentation |
-| `slides/final.tex` · `.pdf` | Deck for the final presentation | final presentation |
-| `paper/paper.tex` · `references.bib` · `paper.pdf` | The final paper, **8–20 pages**, in LaTeX with its compiled PDF | final paper |
-| `code/` | Simulations and symbolic checks; `code/verify.py` runs them all and **fails** if a claim does not hold | final paper |
-| `lean/` | The Lean formalization of **your** paper, generated with AppliedModelingLib | final paper |
-| `hand/` | The handwritten appendix: every derivation, step by step | final paper |
-| `prompts.md` | Your prompts and the relevant answers, raw | always |
-| `.github/workflows/build.yml` | Compiles the PDFs and runs `code/verify.py` on every push | — leave it as it is |
+Un banco elige crédito B y depósitos D, con B+m=D+E y costo propio
+C=cB+κ(δD−m)₊²/2. Las empresas maximizan Aᵢkᵢ^α−tbᵢ+ρ(nᵢ−xᵢ),
+sujeto a Rkᵢ=xᵢ+bᵢ, 0≤xᵢ≤nᵢ y tbᵢ≤hᵢ. R ajusta para k_H+k_L=K.
+Supuestos: A_H>A_L>0, 0<α<1, nᵢ,hᵢ,K>0, t>ρ>0, κ>0,
+0<δ<1, c≥0, E≥0 y balance bancario factible. El costo cuadrático es una
+simplificación propia, inspirada por la importancia de la liquidez bancaria,
+sin atribuir su forma a Bianchi y Bigio.
 
-Keep the file names. If a script, figure or section needs more files, add them
-inside the folder where they belong.
+## Resultados candidatos y condiciones
 
-Work as in the weekly repositories: **branch → pull request → merge**. Nothing
-is written directly to `main`, and what is graded is what is on `main` at the
-deadline.
+En liquidez escasa, más reservas reducen t dentro de los regímenes estudiados,
+incluyendo la respuesta endógena del crédito. Con reservas abundantes son neutrales.
+Si H está estrictamente limitada y L se autofinancia en el interior, una caída
+local de t eleva k_H y producto y reduce la brecha de MRPK y la pérdida 1−Y/Y*.
+Se mantienen K y primitivas y no se cambia de régimen.
 
-## Building
+Si ambas están estrictamente limitadas,
+k_H=K(tn_H+h_H)/[t(n_H+n_L)+h_H+h_L]. Al caer t, H recibe más capital
+si y solo si h_H/n_H>h_L/n_L. Eso mejora eficiencia únicamente si H estaba
+subcapitalizada y la intervención no sobrepasa la asignación eficiente.
+La igualdad de ratios es neutral; el orden inverso cambia el signo.
 
-```bash
-python3 -m pip install -r code/requirements.txt
-python3 code/verify.py                      # checks + figures
+El antecedente principal es González, Nuño y Thaler (enero de 2026), que reconoce
+el aporte previo de Albrizio. Ya estudia política monetaria y mala asignación.
+La novedad del cierre particular sigue bajo revisión. EEA/ENAHO
+son motivación descriptiva: no identifican efectos monetarios causales.
 
-cd paper    && latexmk -pdf paper.tex       # or: tectonic paper.tex
-cd proposal && latexmk -pdf proposal.tex
-cd slides   && latexmk -pdf topic.tex final.tex
-```
+## Estado y reproducción
 
-**Commit the compiled PDFs** next to their sources. The workflow in
-`.github/workflows/` recompiles everything from source on every push: the
-green check on your repository is the evidence that the PDF you committed is
-the one your LaTeX produces. If the check is red, the Actions tab shows the
-LaTeX error.
-
-Every orange **Replace** box in the PDFs is an instruction to you. A submitted
-document has none left.
-
-## The Lean component
-
-The target is that **every numbered result of your paper is stated and proved
-in Lean**, with no `sorry` and no hypothesis that smuggles in the conclusion.
-It is the same workflow as in the weekly repositories, pointed at your own
-paper instead of a published one.
-
-1. Merge the version of `paper/paper.pdf` you want formalized and copy the
-   commit hash.
-2. From the root of your [AppliedModelingLib](https://gargnikhil.com/AppliedModelingLib/)
-   clone (`git pull` first), with the same agent configuration as in the weekly
-   repositories, give the agent this task:
-
-   ```text
-   Please formalize my own paper, an unpublished manuscript with no arXiv
-   record: https://github.com/<your-user>/ai-project/blob/<commit>/paper/paper.pdf
-   (pinned at commit <commit>), using the paper-formalization skill and
-   workflow in this repository.
-   Use <Surname>26<ShortTitle> as the paper folder.
-   ```
-
-3. Run the paper-scoped check and keep its output:
-
-   ```bash
-   python3 scripts/paper_contribution.py check <Surname>26<ShortTitle> --fast
-   ```
-
-4. Copy the **entire** generated `papers/<Surname>26<ShortTitle>/` folder,
-   exactly as generated, into this repository as `lean/`. Stage it with
-   `git add lean/` and respect the generated `.gitignore` — never `git add -f`.
-5. Fill in the *Lean formalization* appendix of the paper: one row per numbered
-   result, the Lean declaration that proves it, and its status.
-
-If you change a proposition after the run, the Lean folder no longer matches
-the paper: run the workflow again. If a result is still open at the deadline,
-say exactly which one and what blocks it — an honest partial result is graded,
-a hidden gap is not.
-
----
-
-# Your title
-
-**Replace everything below with your own README — one page.**
-
-*Track A (extension of …) or Track B (thesis model).*
-
-## The question
-
-## The model
-
-The agent's problem, written formally: what is maximised, over which variable,
-under which constraints.
-
-## The main result, with all its conditions
-
-## Status
-
-| Component | State |
+| Componente | Estado |
 |---|---|
-| Topic document and slides | |
-| Final slides | |
-| Paper | |
-| Simulations (`python3 code/verify.py`) | |
-| Lean (`check --fast` result, paper commit formalized) | |
-| Handwritten appendix | |
+| Propuesta y slides de tema | Preparadas para revisión; fuentes y PDF en proposal/ y slides/topic.* |
+| Simulaciones | `python code/verify.py`; biblioteca estándar, semilla fija y errores fatales |
+| Artículo y slides finales | Borradores propios preliminares, no entrega final de 8–20 páginas |
+| Lean | Pendiente de fijar artículo en commit y ejecutar AppliedModelingLib |
+| Apéndice manuscrito | Pendiente de elaboración personal |
+| Integración y comentario del issue | Pendientes de revisión de PDF y Actions verde |
+
+Compilar desde cada carpeta con `pdflatex` (o `latexmk -pdf`), usar `bibtex`
+en propuesta y artículo y repetir `pdflatex` dos veces. Los cuatro PDF se
+versionan. `.github/workflows/build.yml` conserva el flujo oficial.
+El plan Lean y sus controles están en `lean/README.md`. Las fuentes y el alcance
+de la búsqueda bibliográfica están en `research-audit.md`; los prompts originales
+y respuestas relevantes permanecen en `prompts.md`.

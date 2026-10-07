@@ -1,8 +1,8 @@
-# `hand/` — placeholder
+# Handwritten appendix — pending
 
-Delete this file when you add your derivations. This folder holds the
-**handwritten appendix**: every derivation of the paper, step by step and with
-no skipped steps — each algebraic manipulation written out, each rule named,
-each condition checked where it is used. Photographed or scanned, as long as it
-is legible. Name the files so the order is obvious (`01-foc.pdf`,
-`02-proposition-1.pdf`, …).
+Alejandro Ventura will write every derivation by hand, naming each rule and
+checking its assumptions. Planned derivations: firm KKT conditions and four
+regions; mixed-regime implicit derivatives; two-constrained market clearing and
+finite-difference identity; banking derivative with endogenous loan demand;
+efficient allocation and the direction of the output and MRPK-gap changes.
+The typed preliminary derivation is not a substitute for this appendix.
