@@ -1,0 +1,58 @@
+# LaTeX build artefacts (the compiled PDFs ARE committed)
+*.aux
+*.log
+*.out
+*.toc
+*.nav
+*.snm
+*.vrb
+*.bbl
+*.blg
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Lean build cache -- never commit it
+.lake/
+
+# macOS
+.DS_Store
+
+# Never commit personal documents to a public repository
+DNI*
+*_DNI*
+
+# Research inputs remain in the parent IE_project directory
+bd_EEA/
+bd_ENAHO/
+data/raw/
+microdata/
+papers/
+*.dta
+*.sav
+*.por
+*.parquet
+
+# Local environments and credentials
+venv/
+env/
+.env
+.env.*
+!.env.example
+credentials*.json
+client_secret*.json
+*.pem
+*.key
+
+# Additional LaTeX temporary files
+*.lof
+*.lot
+*.bcf
+*.run.xml
+*.xdv
+*.latexmk
