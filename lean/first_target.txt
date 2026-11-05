@@ -1,0 +1,109 @@
+PRIMER OBJETIVO: CANCELACIÓN INTERBANCARIA DEL CANDIDATO CONCRETO
+Autor: Alejandro Ventura. Preparación de continuidad: 5 de noviembre de 2026.
+
+Este archivo propone una tarea; no contiene una nueva prueba compilada ni
+supone que la instancia completa del modelo sea válida. Leer primero
+CONTINUE_IN_CHAT.txt y el manifiesto de lean/checkpoint/.
+
+1. ARCHIVO Y HUECO LOCALIZADO
+
+Archivo base:
+lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean
+Namespace: Ventura26LiquidityAllocation.
+
+Ya existe localSlackLiteralAllocation_settlementClears. Recibe, además de
+tightness positiva, la premisa
+  hinterbank : forall t h, FirmHistoryAdmissible P t h ->
+                localSlackExpectedInterbank P d t h = 0.
+La meta nueva consiste en DERIVAR esa igualdad para el plan construido, a partir
+de la ley de pagos y las fórmulas del candidato, y después aplicar el teorema.
+Un wrapper que vuelve a recibir hinterbank no resuelve esta tarea.
+
+2. DECLARACIONES EXISTENTES QUE SE DEBEN CONSULTAR
+
+En EconomicModel.lean buscar exactamente estos nombres y leer sus tipos:
+- BinarySymmetricPaymentLaw
+- finiteSupportExpectation
+- finiteSupportExpectation_eq_average_of_binarySymmetric
+- bankSettlementSurplus
+- otcDeficitMatchFraction
+- otcSurplusMatchFraction
+- bankTypeOTCInterbankAt
+- bankTypeOTCInterbankAt_eq_matchFractions
+- bankTypeSettlementClearsAt_of_bilateral
+- bankPopulationExpectedInterbankAt_eq_zero_of_otcRegime
+- fullRetentionCommonBankPlan
+- fullRetentionCommonBankPlan_candidateFlows
+- localPrefixMeanAbsolutePaymentShock_eq_of_binarySymmetric
+- localPrefixReserveDepositRatio
+- localPrefixReducedBankDeposits
+- localSlackPrivateBankCore
+- localSlackExpectedInterbank
+- localSlackSettlementAllocation
+- localSlackLiteralAllocation_settlementClears
+
+Hay lemas genéricos útiles, pero una premisa de régimen OTC o de mercado
+bilateral debe construirse para nuestro candidato antes de invocarlos.
+La lista orienta una lectura dirigida; no exige desplegar todo el módulo.
+
+3. ARGUMENTO MATEMÁTICO PROPUESTO PARA REVISAR
+
+Fijar una fecha t y una historia h admisible. Usar:
+  tau  = (d t).controls.tightness,
+  RR   = (d t).currentReserveRate,
+  RD   = (d t).controls.depositRate,
+  M    = (d t).currentReservesPre,
+  rho  = (d t).reserveRequirement,
+  xi   = RD/RR,
+  rMD  = localPrefixReserveDepositRatio P (d t),
+  D    = localPrefixReducedBankDeposits P (d t) = M/rMD,
+  zeta = tamaño positivo de la ley de pagos binaria simétrica.
+
+El objetivo se propone inicialmente con tau>0, M>0, rMD>0, RR>0 y xi>rho.
+Se debe identificar rho con P.reserveRequirementPath t h, porque la función
+de liquidación usa ese encaje efectivo y la razón reducida usa el de d t.
+Las premisas se explicitan en un lema condicional: todavía deberá probarse
+que las satisface la secuencia exacta de la rama, no solo una trayectoria flotante.
+
+Por la ley binaria, E|omega|=zeta. De la definición de rMD:
+  rMD = rho + (xi-rho)*zeta*(1-tau)/(1+tau).
+De D=M/rMD y los no ceros se obtiene M=rMD*D y D>0. No añadir la igualdad
+M/D=rMD como una hipótesis independiente si se deriva de esa definición.
+
+Definir a=(xi-rho)*zeta*D>0. La fórmula literal de exceso de reservas da:
+  s_minus = M-rho*D-(xi-rho)*zeta*D = -2*a*tau/(1+tau) < 0,
+  s_plus  = M-rho*D+(xi-rho)*zeta*D =  2*a/(1+tau) > 0.
+Con pesos 1/2, los déficits y excedentes satisfacen S_minus=tau*S_plus.
+Las fracciones de matching satisfacen psi_minus*tau=psi_plus para tau>0;
+verificar las dos ramas de la definición, incluido tau=1. De ahí:
+  E[f] = (psi_minus*(-s_minus)-psi_plus*s_plus)/2 = 0.
+
+Estos casos de tau son regímenes del mercado interbancario. No representan
+las ramas macroeconómicas S y B de colateral empresarial. La primera tarea
+aplica la identidad a la construcción S existente; no selecciona S como único
+equilibrio ni elimina el estudio de B.
+
+4. TRES ENTREGABLES ACOTADOS
+
+A. Demostración matemática revisable: todos los signos, denominadores,
+   realizaciones de pagos y casos de matching que se utilizan.
+B. Candidato Lean en un módulo adicional que importe
+   Ventura26LiquidityAllocation.EconomicModel. Su nombre y los nuevos lemas
+   deben marcarse como propuestos. Reutilizar primero las declaraciones existentes.
+C. Elevación a todas las historias admisibles y aplicación del teorema
+   settlementClears, seguida de la lista de premisas aún por descargar sobre
+   la secuencia exacta. Justificar cualquier debilitamiento de las hipótesis.
+
+5. CRITERIO DE CIERRE Y LÍMITES
+
+Si no hay herramienta de ejecución, entregar B como CANDIDATO SIN COMPILAR.
+Una comprobación Lean real debe registrar versiones, archivos e importación
+efectiva del resultado; revisar errores completos y los axiomas de los teoremas
+nuevos. Mantener separada la comprobación del código de la revisión semántica
+que corresponda según el protocolo de AppliedModelingLib.
+
+No modificar hipótesis para asumir E[f]=0, un régimen ya compatible o equilibrio
+completo. Si el argumento falla, mostrar el paso exacto y sus consecuencias.
+No reabrir la ley general de pagos ni todos los endpoints en esta tarea.
+El resultado no prueba por sí solo existencia de una secuencia exacta,
+terminalidad, optimalidad dinámica ni correspondencia completa de equilibrio.

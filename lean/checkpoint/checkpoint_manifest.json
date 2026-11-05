@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "author": "Alejandro Ventura",
+  "prepared_date_lima": "2026-11-05",
+  "purpose": "preliminary_project_source_checkpoint_for_author_review",
+  "upstream": {
+    "url": "https://github.com/nikhgarg/AppliedModelingLib.git",
+    "base_commit": "194edcc95df74806a39b961d10dedddc6e730cce",
+    "project_id": "Ventura26LiquidityAllocation",
+    "project_modules_committed_in_upstream": false
+  },
+  "toolchain": "leanprover/lean4:v4.30.0-rc2",
+  "source_identity": {
+    "preliminary_campaign_source_sha256": "a89e83f02cb8745a6c59eeb3c047bcb335033a18eae4b0ea538ce47a61cf7764",
+    "current_article_path": "paper/paper.tex",
+    "current_article_sha256": "3457ae3ff2c3b83e672b0709f5ad453ca976ec99c3a0bc5e6e25aeecc56c2dc4",
+    "same_source_bytes": false,
+    "private_frozen_source_exported": false
+  },
+  "validation_scope": {
+    "new_lean_checks_in_this_step": false,
+    "full_equilibrium_validated": false,
+    "complete_numbered_source_coverage": false,
+    "remote_executor_configured": false,
+    "open_endpoints_retained": true
+  },
+  "files": [
+    {
+      "path": "lean/checkpoint/modules/Ventura26LiquidityAllocation/FinancialCore.lean",
+      "restore_path_in_applied_modeling_lib": "papers/Ventura26LiquidityAllocation/FinancialCore.lean",
+      "sha256": "4130b338183b3e5e659df7a7f2f517fc356967404c2571a82cea0154f9fc58fa",
+      "bytes": 28150,
+      "role": "preliminary_project_module_not_upstream_committed",
+      "copied_byte_for_byte": true
+    },
+    {
+      "path": "lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean",
+      "restore_path_in_applied_modeling_lib": "papers/Ventura26LiquidityAllocation/EconomicModel.lean",
+      "sha256": "d5e9bb95aad09ff515cc1418778c241d1b91ca3095c02b31eb369f496ea38d86",
+      "bytes": 560766,
+      "role": "preliminary_project_module_not_upstream_committed",
+      "copied_byte_for_byte": true
+    },
+    {
+      "path": "lean/checkpoint/modules/Ventura26LiquidityAllocation/MainTheorems.lean",
+      "restore_path_in_applied_modeling_lib": "papers/Ventura26LiquidityAllocation/MainTheorems.lean",
+      "sha256": "cbfe2cb1ddb5d4beda9732944a6295ddc3646171877fc98d148f3a1c4c74c18e",
+      "bytes": 1041,
+      "role": "preliminary_project_module_not_upstream_committed",
+      "copied_byte_for_byte": true
+    },
+    {
+      "path": "lean/checkpoint/modules/Ventura26LiquidityAllocation/Assumptions.lean",
+      "restore_path_in_applied_modeling_lib": "papers/Ventura26LiquidityAllocation/Assumptions.lean",
+      "sha256": "f31687fe8747cd0604e635023b280f1db2e74bc64ca66ea009978977c28db743",
+      "bytes": 1071,
+      "role": "preliminary_project_module_not_upstream_committed",
+      "copied_byte_for_byte": true
+    },
+    {
+      "path": "lean/checkpoint/modules/Ventura26LiquidityAllocation/PaperInterface.lean",
+      "restore_path_in_applied_modeling_lib": "papers/Ventura26LiquidityAllocation/PaperInterface.lean",
+      "sha256": "4594e2974a395e88ead195b46df0426166d60cf451e779afab14cf657268442b",
+      "bytes": 47876,
+      "role": "preliminary_project_module_not_upstream_committed",
+      "copied_byte_for_byte": true
+    },
+    {
+      "path": "lean/checkpoint/modules/Ventura26LiquidityAllocation/ProofInterface.lean",
+      "restore_path_in_applied_modeling_lib": "papers/Ventura26LiquidityAllocation/ProofInterface.lean",
+      "sha256": "588034a296c7085ea643b14beac064ff07dea17727a86ca9680c9004b9d4b81f",
+      "bytes": 8973,
+      "role": "preliminary_project_module_not_upstream_committed",
+      "copied_byte_for_byte": true
+    },
+    {
+      "path": "lean/checkpoint/module_root.lean",
+      "restore_path_in_applied_modeling_lib": "papers/Ventura26LiquidityAllocation.lean",
+      "sha256": "56ad4983af4e9369fe2b553e1ed589dc09fc1c4e4d25f37117a484d66ca58d2c",
+      "bytes": 51,
+      "role": "root_imports_proof_interface_with_open_endpoints",
+      "copied_byte_for_byte": true
+    },
+    {
+      "path": "lean/checkpoint/dependencies/lean-toolchain",
+      "restore_path_in_applied_modeling_lib": "lean-toolchain",
+      "sha256": "ce4c4e3d87434b9663f46de25ce34b48a0cf0d392e0a320a0787b4674a2d7b61",
+      "bytes": 29,
+      "role": "pinned_configuration_with_project_library_registration",
+      "copied_byte_for_byte": true
+    },
+    {
+      "path": "lean/checkpoint/dependencies/lake-manifest.json",
+      "restore_path_in_applied_modeling_lib": "lake-manifest.json",
+      "sha256": "c7206c457249666dc92ca18a5198bafb7d70f19b5d8b73e9a2f2f21a1adcac04",
+      "bytes": 3870,
+      "role": "pinned_configuration_with_project_library_registration",
+      "copied_byte_for_byte": true
+    },
+    {
+      "path": "lean/checkpoint/dependencies/lakefile.toml",
+      "restore_path_in_applied_modeling_lib": "lakefile.toml",
+      "sha256": "3ae539ce0d8e6e49098bdf5f473154686798dcb30a9b698f1c4f1390a39e564c",
+      "bytes": 5418,
+      "role": "pinned_configuration_with_project_library_registration",
+      "copied_byte_for_byte": true
+    },
+    {
+      "path": "lean/checkpoint/UPSTREAM_LICENSE",
+      "restore_path_in_applied_modeling_lib": "LICENSE",
+      "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+      "bytes": 11357,
+      "role": "upstream_license",
+      "copied_byte_for_byte": true
+    }
+  ]
+}
