@@ -1,0 +1,89 @@
+{
+  "status": "passed_scoped_identity_checks",
+  "full_equilibrium_validated": false,
+  "impact": {
+    "slack": {
+      "output_log_pct": -3.5797571985807056e-05,
+      "joint_identity_contributions": {
+        "input_price_log_pct": -0.00020423461451474898,
+        "worker_consumption_log_pct": 0.00016843704255224237
+      },
+      "NKPC_accounting_contributions": {
+        "current_inflation_component_output_log_pct": 0.005051306292467185,
+        "future_pricing_component_output_log_pct": -0.005255540906716581,
+        "worker_consumption_component_output_log_pct": 0.00016843704255224237
+      },
+      "identity_errors": {
+        "labor_supply": 5.560059791048788e-16,
+        "labor_demand": 1.6723818510588906e-17,
+        "production": 4.209462580278254e-17,
+        "joint_output": 2.330045230482323e-16,
+        "NKPC_levels": 6.6338265176241196e-15,
+        "decomposition": 2.8865396807823893e-13
+      },
+      "warning": "Accounting decomposition, not independent causal counterfactuals"
+    },
+    "binding": {
+      "output_log_pct": -0.004142551019065471,
+      "joint_identity_contributions": {
+        "input_price_log_pct": -0.004303723648110358,
+        "worker_consumption_log_pct": 0.00016117262905506217
+      },
+      "NKPC_accounting_contributions": {
+        "current_inflation_component_output_log_pct": 0.004830103679809929,
+        "future_pricing_component_output_log_pct": -0.00913382732812557,
+        "worker_consumption_component_output_log_pct": 0.00016117262905506217
+      },
+      "identity_errors": {
+        "labor_supply": 4.048919131829226e-16,
+        "labor_demand": 6.669198613501459e-17,
+        "production": 1.0984323259993767e-17,
+        "joint_output": 1.0174559762418656e-16,
+        "NKPC_levels": 5.131772827862702e-15,
+        "decomposition": 1.9510781879006345e-13
+      },
+      "warning": "Accounting decomposition, not independent causal counterfactuals"
+    }
+  },
+  "sensitivities": {
+    "half_shock": {
+      "shock": -5e-06,
+      "jacobian_step": 2e-06,
+      "impact_output_log_pct": {
+        "slack": -1.7788482481544893e-05,
+        "binding": -0.00207115288241248
+      }
+    },
+    "tenth_shock": {
+      "shock": -1e-06,
+      "jacobian_step": 2e-06,
+      "impact_output_log_pct": {
+        "slack": -3.540051614557787e-06,
+        "binding": -0.0004142109617797015
+      }
+    },
+    "smaller_jacobian_step": {
+      "shock": -1e-05,
+      "jacobian_step": 5e-07,
+      "impact_output_log_pct": {
+        "slack": -3.5797572019113753e-05,
+        "binding": -0.004142551018776802
+      }
+    },
+    "larger_jacobian_step": {
+      "shock": -1e-05,
+      "jacobian_step": 8e-06,
+      "impact_output_log_pct": {
+        "slack": -3.5797572052420465e-05,
+        "binding": -0.004142551019065471
+      }
+    }
+  },
+  "negative_in_all_tested_cases": true,
+  "unresolved": [
+    "Independent nonlinear continuation comparison",
+    "Complete reduced-to-economic-equilibrium sufficiency and dynamic optimality",
+    "Full 33-row source-to-code audit beyond the displayed block"
+  ],
+  "horizon_caution": "Extending forward simulation does not change the local-linear terminal graph used to solve the prefix."
+}

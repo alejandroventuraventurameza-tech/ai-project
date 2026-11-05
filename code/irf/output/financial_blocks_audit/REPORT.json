@@ -1,0 +1,382 @@
+{
+  "status": "passed_scoped_financial_block_audit",
+  "full_equilibrium_validated": false,
+  "branches": {
+    "slack": {
+      "max_absolute_errors": {
+        "capital_KKT_error": 8.569533971325427e-16,
+        "budget_error": 1.687538997430238e-14,
+        "complementarity_error": 1.2476946798290638e-16,
+        "funding_KKT_error": 2.220446049250313e-16,
+        "labor_error": 4.440892098500626e-16,
+        "balance_error": 3.552713678800501e-15,
+        "expected_interbank_error": 5.551115123125783e-17,
+        "expected_return_error": 2.6645352591003757e-15,
+        "expected_renewal_face_error": 2.886579864025407e-15,
+        "loan_support_coefficient": 5.741934705483231e-16,
+        "deposit_support_coefficient": 8.265957363029486e-16,
+        "equity_support_error": 6.661338147750939e-16,
+        "SDF_return_ratio_error": 1.9984014443252818e-15,
+        "compact_return_error": 1.5543122344752192e-15
+      },
+      "min_margins": {
+        "net_worth": 10.717196824903969,
+        "own_investible": 10.111534356071079,
+        "effective_price": 0.6223180931583072,
+        "deposit_corner_dual": 0.001891983140099529,
+        "credit": 1.6797178117403078,
+        "dual_nonnegative": 1.1102230246251565e-16,
+        "collateral_feasible": -4.440892098500626e-15,
+        "deposit_cap_margin": 3.4045206221215345,
+        "loan_cap_margin": 5.652923104021892,
+        "slope_order_margin": 0.012247326743968057,
+        "reserve_requirement_margin": -1.6653345369377348e-16,
+        "real_bank_return": 1.7478353183401556,
+        "facility_nonnegative": 0.0
+      },
+      "impact_H": {
+        "credit_log_pct": 0.001095170561115502,
+        "capital_next_log_pct": 0.00016409131646376543,
+        "normalized_multiplier_change": -1.2167440958110731e-06,
+        "utility_multiplier_change": -2.0302483539017674e-06,
+        "capital_identity_contributions": {
+          "own_investible_resources": 2.734755478940108e-05,
+          "negative_effective_price": 0.0001367437616385515
+        },
+        "own_resources_identity_contributions_log_pct": {
+          "operating_profit": -5.90473084583321e-05,
+          "resale_value_installed_capital": 1.68259982491964e-05,
+          "negative_inherited_real_repayment": 8.337307031732372e-05,
+          "negative_consumption": -1.3804205313319414e-05
+        },
+        "credit_identity_contributions": {
+          "pledge_value_per_capital": 0.0003126776833835149,
+          "capital_next": 0.00016409131646376543,
+          "negative_loan_rate": 0.0006184015612756062
+        }
+      },
+      "L_date0_normalized_dual": 1.1102230246251565e-16,
+      "L_date0_collateral_gap": 0.0001037178273142203,
+      "min_L_dual_after_date0": 0.02807590474307675,
+      "solver_final_residual": 4.6640805367176297e-14,
+      "entry_seed_fraction_implied_by_renewal_factor": 0.8809519524130893
+    },
+    "binding": {
+      "max_absolute_errors": {
+        "capital_KKT_error": 8.916478666520788e-16,
+        "budget_error": 1.5987211554602254e-14,
+        "complementarity_error": 1.4972127668542633e-16,
+        "funding_KKT_error": 2.220446049250313e-16,
+        "labor_error": 4.440892098500626e-16,
+        "balance_error": 3.1086244689504383e-15,
+        "expected_interbank_error": 5.551115123125783e-17,
+        "expected_return_error": 2.6645352591003757e-15,
+        "expected_renewal_face_error": 3.3306690738754696e-15,
+        "loan_support_coefficient": 5.325601071248798e-16,
+        "deposit_support_coefficient": 5.640019701269594e-16,
+        "equity_support_error": 4.440892098500626e-16,
+        "SDF_return_ratio_error": 1.7763568394002505e-15,
+        "compact_return_error": 1.5543122344752192e-15
+      },
+      "min_margins": {
+        "net_worth": 10.717230443225281,
+        "own_investible": 10.111565866918713,
+        "effective_price": 0.6223195336555143,
+        "deposit_corner_dual": 0.0019250485743030898,
+        "credit": 1.6797135364343547,
+        "dual_nonnegative": 3.2187240462722144e-05,
+        "collateral_feasible": -4.440892098500626e-15,
+        "deposit_cap_margin": 3.4044482972992336,
+        "loan_cap_margin": 5.652851156420561,
+        "slope_order_margin": 0.012247326634714891,
+        "reserve_requirement_margin": -1.6653345369377348e-16,
+        "real_bank_return": 1.7478323169376893,
+        "facility_nonnegative": 0.0
+      },
+      "impact_H": {
+        "credit_log_pct": 0.0008406449875867411,
+        "capital_next_log_pct": -0.0010726391691746433,
+        "normalized_multiplier_change": 2.3081359880050556e-05,
+        "utility_multiplier_change": 3.811785312433924e-05,
+        "capital_identity_contributions": {
+          "own_investible_resources": -0.0017419800896085115,
+          "negative_effective_price": 0.0006693409204293604
+        },
+        "own_resources_identity_contributions_log_pct": {
+          "operating_profit": -0.0015548484854207183,
+          "resale_value_installed_capital": -0.00034322920942205567,
+          "negative_inherited_real_repayment": 7.971510478781367e-05,
+          "negative_consumption": 7.638250044098111e-05
+        },
+        "credit_identity_contributions": {
+          "pledge_value_per_capital": 0.0010298438706736472,
+          "capital_next": -0.0010726391691746433,
+          "negative_loan_rate": 0.0008834402861361446
+        }
+      },
+      "L_date0_normalized_dual": 3.2187240462722144e-05,
+      "L_date0_collateral_gap": 1.7763568394002505e-15,
+      "min_L_dual_after_date0": 0.028074956638095228,
+      "solver_final_residual": 4.5132381989651527e-14,
+      "entry_seed_fraction_implied_by_renewal_factor": 0.8809519524130893
+    }
+  },
+  "scope": "Literal numerical firm KKT, deposit corner, bank balance and two-atom settlement on the deterministic reduced nonlinear T=640 path. Necessary conditions and a conditional one-period concavity bound; no global dynamic sufficiency claim.",
+  "source_row_inventory": {
+    "firm_budget_0_H": {
+      "paper_labels": [
+        "eq:firmbudget",
+        "eq:wealth"
+      ],
+      "interpretation": "Budget with inherited nominal face and no firm deposits",
+      "global_sufficiency_proved_here": false
+    },
+    "firm_capital_euler_0_H": {
+      "paper_labels": [
+        "eq:capitalFOC",
+        "eq:loanFOC"
+      ],
+      "interpretation": "Capital FOC after eliminating normalized collateral dual",
+      "global_sufficiency_proved_here": false
+    },
+    "firm_regime_0_H": {
+      "paper_labels": [
+        "eq:collateral",
+        "eq:complementarity",
+        "eq:loanFOC"
+      ],
+      "interpretation": "H binding; L slack only at date 0 in S, binding in B",
+      "global_sufficiency_proved_here": false
+    },
+    "firm_budget_0_L": {
+      "paper_labels": [
+        "eq:firmbudget",
+        "eq:wealth"
+      ],
+      "interpretation": "Budget with inherited nominal face and no firm deposits",
+      "global_sufficiency_proved_here": false
+    },
+    "firm_capital_euler_0_L": {
+      "paper_labels": [
+        "eq:capitalFOC",
+        "eq:loanFOC"
+      ],
+      "interpretation": "Capital FOC after eliminating normalized collateral dual",
+      "global_sufficiency_proved_here": false
+    },
+    "firm_regime_0_L": {
+      "paper_labels": [
+        "eq:collateral",
+        "eq:complementarity",
+        "eq:loanFOC"
+      ],
+      "interpretation": "H binding; L slack only at date 0 in S, binding in B",
+      "global_sufficiency_proved_here": false
+    },
+    "bank_equity_0": {
+      "paper_labels": [
+        "eq:bankwealth",
+        "eq:equityidentity"
+      ],
+      "interpretation": "Expected return plus exit/entry renewal, full retention",
+      "global_sufficiency_proved_here": false
+    },
+    "capital_supply_0": {
+      "paper_labels": [
+        "eq:q"
+      ],
+      "interpretation": "Interior capital production",
+      "global_sufficiency_proved_here": false
+    },
+    "resources_0": {
+      "paper_labels": [
+        "eq:resources"
+      ],
+      "interpretation": "Aggregate resource identity",
+      "global_sufficiency_proved_here": false
+    },
+    "worker_labor_0": {
+      "paper_labels": [
+        "eq:household"
+      ],
+      "interpretation": "Labor FOC displayed after household budget",
+      "global_sufficiency_proved_here": false
+    },
+    "household_euler_0": {
+      "paper_labels": [
+        "eq:household"
+      ],
+      "interpretation": "Interior deposit Euler displayed after household budget",
+      "global_sufficiency_proved_here": false
+    },
+    "nkpc_0": {
+      "paper_labels": [
+        "eq:nkpc"
+      ],
+      "interpretation": "Symmetric price FOC; sufficiency separate",
+      "global_sufficiency_proved_here": false
+    },
+    "reserve_rate_rule_0": {
+      "paper_labels": [
+        "sec:v0m_source_11"
+      ],
+      "interpretation": "Instrument rule with inherited lag and announced innovation",
+      "global_sufficiency_proved_here": false
+    },
+    "reserve_quantity_rule_0": {
+      "paper_labels": [
+        "sec:v0m_source_11"
+      ],
+      "interpretation": "Instrument rule with inherited lag and announced innovation",
+      "global_sufficiency_proved_here": false
+    },
+    "loan_pricing_0": {
+      "paper_labels": [
+        "eq:bankFOCL"
+      ],
+      "interpretation": "Bank FOC, inactive caps, no atom at settlement kink",
+      "global_sufficiency_proved_here": false
+    },
+    "deposit_pricing_0": {
+      "paper_labels": [
+        "eq:bankFOCD"
+      ],
+      "interpretation": "Bank FOC, inactive caps, two mean-zero payment atoms",
+      "global_sufficiency_proved_here": false
+    },
+    "bank_balance_0": {
+      "paper_labels": [
+        "eq:bankbalance",
+        "eq:IBclearing"
+      ],
+      "interpretation": "Balance after eliminating deposits through OTC clearing",
+      "global_sufficiency_proved_here": false
+    },
+    "firm_budget_1_H": {
+      "paper_labels": [
+        "eq:firmbudget",
+        "eq:wealth"
+      ],
+      "interpretation": "Budget with inherited nominal face and no firm deposits",
+      "global_sufficiency_proved_here": false
+    },
+    "firm_capital_euler_1_H": {
+      "paper_labels": [
+        "eq:capitalFOC",
+        "eq:loanFOC"
+      ],
+      "interpretation": "Capital FOC after eliminating normalized collateral dual",
+      "global_sufficiency_proved_here": false
+    },
+    "firm_budget_1_L": {
+      "paper_labels": [
+        "eq:firmbudget",
+        "eq:wealth"
+      ],
+      "interpretation": "Budget with inherited nominal face and no firm deposits",
+      "global_sufficiency_proved_here": false
+    },
+    "firm_capital_euler_1_L": {
+      "paper_labels": [
+        "eq:capitalFOC",
+        "eq:loanFOC"
+      ],
+      "interpretation": "Capital FOC after eliminating normalized collateral dual",
+      "global_sufficiency_proved_here": false
+    },
+    "common_pledge_1": {
+      "paper_labels": [
+        "eq:H",
+        "eq:initial_faces_manifold"
+      ],
+      "interpretation": "Common future pledge value on the regenerated binding manifold",
+      "global_sufficiency_proved_here": false
+    },
+    "bank_equity_1": {
+      "paper_labels": [
+        "eq:bankwealth",
+        "eq:equityidentity"
+      ],
+      "interpretation": "Expected return plus exit/entry renewal, full retention",
+      "global_sufficiency_proved_here": false
+    },
+    "capital_supply_1": {
+      "paper_labels": [
+        "eq:q"
+      ],
+      "interpretation": "Interior capital production",
+      "global_sufficiency_proved_here": false
+    },
+    "resources_1": {
+      "paper_labels": [
+        "eq:resources"
+      ],
+      "interpretation": "Aggregate resource identity",
+      "global_sufficiency_proved_here": false
+    },
+    "worker_labor_1": {
+      "paper_labels": [
+        "eq:household"
+      ],
+      "interpretation": "Labor FOC displayed after household budget",
+      "global_sufficiency_proved_here": false
+    },
+    "household_euler_1": {
+      "paper_labels": [
+        "eq:household"
+      ],
+      "interpretation": "Interior deposit Euler displayed after household budget",
+      "global_sufficiency_proved_here": false
+    },
+    "nkpc_1": {
+      "paper_labels": [
+        "eq:nkpc"
+      ],
+      "interpretation": "Symmetric price FOC; sufficiency separate",
+      "global_sufficiency_proved_here": false
+    },
+    "reserve_rate_rule_1": {
+      "paper_labels": [
+        "sec:v0m_source_11"
+      ],
+      "interpretation": "Instrument rule with inherited lag and announced innovation",
+      "global_sufficiency_proved_here": false
+    },
+    "reserve_quantity_rule_1": {
+      "paper_labels": [
+        "sec:v0m_source_11"
+      ],
+      "interpretation": "Instrument rule with inherited lag and announced innovation",
+      "global_sufficiency_proved_here": false
+    },
+    "loan_pricing_1": {
+      "paper_labels": [
+        "eq:bankFOCL"
+      ],
+      "interpretation": "Bank FOC, inactive caps, no atom at settlement kink",
+      "global_sufficiency_proved_here": false
+    },
+    "deposit_pricing_1": {
+      "paper_labels": [
+        "eq:bankFOCD"
+      ],
+      "interpretation": "Bank FOC, inactive caps, two mean-zero payment atoms",
+      "global_sufficiency_proved_here": false
+    },
+    "bank_balance_1": {
+      "paper_labels": [
+        "eq:bankbalance",
+        "eq:IBclearing"
+      ],
+      "interpretation": "Balance after eliminating deposits through OTC clearing",
+      "global_sufficiency_proved_here": false
+    }
+  },
+  "input_sha256": {
+    "code\\irf\\audit_financial_blocks.py": "dc09b3f166183323b7e921be0ef3d30e76962f6d0d8011dcc9794ed22d3faee6",
+    "code\\irf\\finite_irf.py": "159db3022f3f6f3e2bf388fd3ba5ccf79d4b0ff8068b4c5b974df2b83cc55445",
+    "code\\irf\\compare_nonlinear_tail.py": "71770ce7f441cce9ce223d7bbb9cdf2f22115c877a600726e85c061414e3d4b0",
+    "code\\irf\\inputs\\rational_preconditioners.json": "d0cef14050de9f4725e51e5cd28b1ea77e33733dfb2c78d2e38a193200337e94",
+    "paper\\paper.tex": "3457ae3ff2c3b83e672b0709f5ad453ca976ec99c3a0bc5e6e25aeecc56c2dc4"
+  }
+}

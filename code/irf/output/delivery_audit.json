@@ -1,0 +1,61 @@
+{
+  "status": "passed_internal_numerical_checks",
+  "full_equilibrium_validated": false,
+  "external_data": false,
+  "illustrative_parameters": true,
+  "main_input_hashes": {
+    "finite_bridge.py": "e3523811b5433a076e13fe51479a4a518e338386498898d46549b2b6929063fa",
+    "rational_preconditioners.json": "d0cef14050de9f4725e51e5cd28b1ea77e33733dfb2c78d2e38a193200337e94",
+    "verified_linear_operator.py": "1369e9c04ed9774297d957ea27d8dad893f99fc17fb08c9819fa9a378ca6400b"
+  },
+  "impact": {
+    "slack": {
+      "loan_rate_bp": -0.0636317548163845,
+      "interbank_rate_bp": -0.06363253604257935,
+      "output_log_pct": -3.5797571985807056e-05,
+      "credit_H_log_pct": 0.0010951823092780668,
+      "credit_L_log_pct": -0.00047389790761945234,
+      "loss_100_log_difference": -2.4807181490428543e-06,
+      "wage_log_pct": -0.0005769062715643218,
+      "input_price_log_pct": -0.0006127038435442471,
+      "labor_log_pct": -7.159514396319519e-05,
+      "resource_decomposition": {
+        "output": -9.828889622198744e-07,
+        "consumption": -5.710858690832765e-06,
+        "capital_resources": 4.722715456983995e-06,
+        "price_resources": 5.254270542091991e-09,
+        "error": 1.0868041435485451e-15
+      }
+    },
+    "binding": {
+      "loan_rate_bp": -0.09090760271890375,
+      "interbank_rate_bp": -0.09117145051140696,
+      "output_log_pct": -0.004142551019065471,
+      "credit_H_log_pct": 0.0008406476316494648,
+      "credit_L_log_pct": 0.0015781080973366576,
+      "loss_100_log_difference": 8.519897816156724e-06,
+      "wage_log_pct": -0.008768619925257836,
+      "input_price_log_pct": -0.012911170944331075,
+      "labor_log_pct": -0.008285102038133138,
+      "resource_decomposition": {
+        "output": -0.00011373911248302448,
+        "consumption": -1.7324897345627477e-05,
+        "capital_resources": -9.64190185180902e-05,
+        "price_resources": 4.8033792370211914e-09,
+        "error": 1.4561756655682709e-15
+      }
+    }
+  },
+  "common_horizon_max_level_deviation_difference": {
+    "tight_tolerance": 0.0,
+    "long_horizon": 0.0
+  },
+  "large_shock_expected_tail_gate_failure": true,
+  "limitations": [
+    "Nonlinear two-date prefix; local-linear recurrent path",
+    "Backward value recursion does not prove bank policy optimality",
+    "No global determinacy or branch selection",
+    "Public debt remains uncalibrated",
+    "Conditional allocation loss is a next-period production benchmark, not welfare"
+  ]
+}

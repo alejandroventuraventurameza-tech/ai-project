@@ -1,0 +1,12 @@
+{
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "numpy": "2.5.4",
+  "scipy": "1.18.1",
+  "comparison_status": "completed_finite_horizon_comparison",
+  "sha256": {
+    "compare_nonlinear_tail.py": "71770ce7f441cce9ce223d7bbb9cdf2f22115c877a600726e85c061414e3d4b0",
+    "finite_irf.py": "159db3022f3f6f3e2bf388fd3ba5ccf79d4b0ff8068b4c5b974df2b83cc55445",
+    "inputs\\rational_preconditioners.json": "d0cef14050de9f4725e51e5cd28b1ea77e33733dfb2c78d2e38a193200337e94"
+  },
+  "report_sha256": "febdf48b147156c00850cd6bb4278b7be0eeaff54ff6939a30747613228471b4"
+}
