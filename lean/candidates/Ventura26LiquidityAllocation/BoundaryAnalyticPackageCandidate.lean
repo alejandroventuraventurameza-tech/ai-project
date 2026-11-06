@@ -1,3 +1,4 @@
+import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
 import Ventura26LiquidityAllocation.BoundaryWorkerLaborCandidate
 
 /-!
