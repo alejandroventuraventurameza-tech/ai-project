@@ -628,9 +628,7 @@ structure BoundaryWorkerLaborPackage (G R : ℝ) : Prop where
   change localReducedPrefixResidual branch (boundaryPrimitives G R)
     (boundaryInitialState G R) (boundaryCoordinates R) .dateOne .recurrent
       boundaryTail equation = 0
-  rw [show localPrefixDateZeroData (boundaryPrimitives G R) (boundaryInitialState G R)
-      (boundaryCoordinates R) .dateOne = boundaryZeroData G R from
-        boundary_dateZeroData_eq G R]
+  simp only [localReducedPrefixResidual, boundary_dateZeroData_eq]
   change (match equation with
     | .firmBudgetZeroH => localReducedFirmBudgetResidual (boundaryPrimitives G R) (boundaryZeroData G R) .H
     | .firmBudgetZeroL => localReducedFirmBudgetResidual (boundaryPrimitives G R) (boundaryZeroData G R) .L
