@@ -336,6 +336,13 @@ theorem bankValueSlope_identity :
     nlinarith only [hzero]
   unfold bankValueSlope
   field_simp [hden, hdenScaled] <;> ring
+  have hcancel :
+      (1000 - ProposedStationaryBank.loanRate * 891 : ℝ) *
+        (1000 - ProposedStationaryBank.loanRate * 891)⁻¹ = 1 :=
+    mul_inv_cancel₀ hdenScaled
+  have hscaled := congrArg
+    (fun x : ℝ ↦ ProposedStationaryBank.loanRate * x) hcancel
+  nlinarith only [hscaled]
 
 theorem bank_continuation_weight_pos :
     0 < (99 / 100 : ℝ) * ((9 / 10) * bankValueSlope + 1 / 10) := by
