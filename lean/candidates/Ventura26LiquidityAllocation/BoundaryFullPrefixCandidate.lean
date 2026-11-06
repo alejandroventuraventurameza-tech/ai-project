@@ -408,7 +408,7 @@ noncomputable def boundaryOneData (G R : ℝ) : LocalPrefixDateData :=
       boundaryCapitalScale R *
         ((39 / 40 : ℝ) + (boundaryCapitalPrice R - 1) / (1 / 2)) = 1 := by
     unfold boundaryCapitalScale
-    exact inv_mul_cancel₀ hden
+    simpa only [one_div] using (inv_mul_cancel₀ hden)
   unfold boundaryInvestment boundaryAggregateCapital
   field_simp [ne_of_gt hK, ne_of_gt hs0]
   nlinarith only [hscale]
