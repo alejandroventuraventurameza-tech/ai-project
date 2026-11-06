@@ -59,9 +59,9 @@ open ProposedBoundaryBridge
 
 /-! ## Intervalo y formulas cerradas del enlace -/
 
-def boundaryLo : ℝ := 41 / 40
+noncomputable def boundaryLo : ℝ := 41 / 40
 
-def boundaryHi : ℝ := 129 / 125
+noncomputable def boundaryHi : ℝ := 129 / 125
 
 def boundaryInterval : Set ℝ := Set.Icc boundaryLo boundaryHi
 
@@ -177,16 +177,100 @@ theorem boundary_row_two_eq_neg_literal (G R : ℝ) :
     funcion Phi libre del contrato del articulo. -/
 theorem boundary_literal_eq_closed (G R : ℝ) :
     boundaryLiteralResourceResidual G R = boundaryResourceResidual R := by
-  unfold boundaryLiteralResourceResidual boundaryResourceResidual
-    boundaryAggregateOutput boundaryOutput boundaryLabor boundaryCapitalCost
-    boundaryInvestment boundaryAggregateCapital boundaryCapital boundaryWage
-    boundaryWorkerConsumption boundaryDateData boundaryDateTemplate boundaryControls
-    boundaryFirmDateData boundaryFirmDateSeed boundaryFirmControls
-    localPrefixAggregateOutput localPrefixOutput localPrefixLabor
-    localPrefixCapitalCost localPrefixInvestment localPrefixAggregateCapital
-    capitalCreationTechnology average
-  simp [primitives, localPrefixFirmConsumption]
-  ring
+  -- The source reduced system uses literal weighted sums.  The closed
+  -- residual uses the same two-point mean, but its inputs have first
+  -- been reconstructed from the reduced candidate.
+  have hcapitalCurrent :
+      localPrefixAggregateCapital (primitives G)
+          (boundaryDateData G R).currentCapital =
+        boundaryAggregateCapital R := by
+    unfold localPrefixAggregateCapital
+    rw [sum_firmType_eq_H_add_L]
+    change (1 / 2 : ℝ) * boundaryCapital R .H +
+      (1 / 2 : ℝ) * boundaryCapital R .L = boundaryAggregateCapital R
+    unfold boundaryAggregateCapital boundaryCapital aggregateCapital average
+    ring
+  have hcapitalNext :
+      localPrefixAggregateCapital (primitives G)
+          (boundaryDateData G R).nextCapital = aggregateCapital := by
+    unfold localPrefixAggregateCapital
+    rw [sum_firmType_eq_H_add_L]
+    change (1 / 2 : ℝ) * capital .H +
+      (1 / 2 : ℝ) * capital .L = aggregateCapital
+    unfold aggregateCapital average
+    ring
+  have hinvestment :
+      localPrefixInvestment (primitives G) (boundaryDateData G R) =
+        boundaryInvestment R := by
+    unfold localPrefixInvestment
+    rw [hcapitalNext, hcapitalCurrent]
+    change aggregateCapital - (1 - (1 / 40 : ℝ)) *
+      boundaryAggregateCapital R = boundaryInvestment R
+    unfold boundaryInvestment
+    ring
+  have hcapitalCost :
+      localPrefixCapitalCost (primitives G) (boundaryDateData G R) =
+        boundaryCapitalCost R := by
+    unfold localPrefixCapitalCost capitalCreationTechnology
+    rw [hinvestment, hcapitalCurrent]
+    change boundaryInvestment R +
+      (1 / 2 : ℝ) * boundaryInvestment R ^ (2 : ℕ) /
+        (2 * boundaryAggregateCapital R) = boundaryCapitalCost R
+    rfl
+  have hlabor (i : FirmType) :
+      localPrefixLabor (primitives G) (boundaryDateData G R) i =
+        boundaryLabor R i := by
+    change
+      ((1 / 2 : ℝ) * (5 / 6) * 1 * technology i *
+        boundaryCapital R i ^ (2 / 5 : ℝ) / boundaryWage R) ^
+        (1 / (1 - (1 / 2 : ℝ)) : ℝ) = boundaryLabor R i
+    unfold boundaryLabor
+    congr 1 <;> ring
+  have houtput (i : FirmType) :
+      localPrefixOutput (primitives G) (boundaryDateData G R) i =
+        boundaryOutput R i := by
+    unfold localPrefixOutput boundaryOutput
+    rw [hlabor i]
+    change operatingOutput (1 * technology i) (boundaryCapital R i)
+        (boundaryLabor R i) (2 / 5) (1 / 2) =
+      operatingOutput (technology i) (boundaryCapital R i)
+        (boundaryLabor R i) (2 / 5) (1 / 2)
+    simp only [one_mul]
+  have haggregateOutput :
+      localPrefixAggregateOutput (primitives G) (boundaryDateData G R) =
+        boundaryAggregateOutput R := by
+    unfold localPrefixAggregateOutput
+    rw [sum_firmType_eq_H_add_L]
+    change (1 / 2 : ℝ) *
+        localPrefixOutput (primitives G) (boundaryDateData G R) .H +
+      (1 / 2 : ℝ) *
+        localPrefixOutput (primitives G) (boundaryDateData G R) .L =
+      boundaryAggregateOutput R
+    rw [houtput .H, houtput .L]
+    unfold boundaryAggregateOutput average
+    ring
+  have hfirmAbsorption :
+      (∑ i, (primitives G).mass i *
+        localPrefixFirmConsumption (boundaryDateData G R).controls i) =
+        average (boundaryConsumption R) := by
+    rw [sum_firmType_eq_H_add_L]
+    change (1 / 2 : ℝ) * boundaryConsumption R .H +
+      (1 / 2 : ℝ) * boundaryConsumption R .L =
+        average (boundaryConsumption R)
+    unfold average
+    ring
+  change
+    localPrefixAggregateOutput (primitives G) (boundaryDateData G R) -
+      (boundaryDateData G R).controls.workerConsumption -
+      (∑ i, (primitives G).mass i *
+        localPrefixFirmConsumption (boundaryDateData G R).controls i) -
+      localPrefixCapitalCost (primitives G) (boundaryDateData G R) =
+      boundaryResourceResidual R
+  rw [haggregateOutput, hfirmAbsorption, hcapitalCost]
+  change boundaryAggregateOutput R - boundaryWorkerConsumption R -
+      average (boundaryConsumption R) - boundaryCapitalCost R =
+        boundaryResourceResidual R
+  rfl
 
 /-! ## Cotas de dominio y reescrituras monotonas -/
 
@@ -197,7 +281,7 @@ theorem continuationReturn_L_gt_boundaryHi :
   have hR := loanRate_gt_one
   have hR0 := loanRate_pos
   have hinv : 1 / ProposedStationaryBank.loanRate < 1 :=
-    (one_div_lt_one hR0).2 hR
+    (div_lt_iff₀ hR0).2 (by simpa using hR)
   have hfrac :
       (2 / 5 : ℝ) * (39 / 40) / ProposedStationaryBank.loanRate < 39 / 100 := by
     have hpos : 0 < (2 / 5 : ℝ) * (39 / 40) := by norm_num
@@ -277,14 +361,18 @@ theorem boundary_scale_and_investment_domain {R : ℝ}
     positivity
   have hs0 : 0 < boundaryCapitalScale R := by
     unfold boundaryCapitalScale
-    positivity
+    exact one_div_pos.mpr hden
   have hs1 : boundaryCapitalScale R < 40 / 39 := by
     unfold boundaryCapitalScale
     have hbase : (39 / 40 : ℝ) <
         (39 / 40) + (boundaryCapitalPrice R - 1) / (1 / 2) := by
       have : 0 < (boundaryCapitalPrice R - 1) / (1 / 2) := by positivity
       linarith
-    exact (one_div_lt_one_div_of_lt (by norm_num) hbase)
+    calc
+      1 / ((39 / 40 : ℝ) + (boundaryCapitalPrice R - 1) / (1 / 2)) <
+          1 / (39 / 40 : ℝ) :=
+        one_div_lt_one_div_of_lt (by norm_num) hbase
+      _ = 40 / 39 := by norm_num
   have hK := aggregates_pos.1
   have hgap : 0 < 1 - (39 / 40 : ℝ) * boundaryCapitalScale R := by
     nlinarith
@@ -331,11 +419,11 @@ theorem exactRootOn_of_continuous_strictMono
   intro y hy
   have hyI : y ∈ Set.Icc a b := ⟨hy.1, hy.2.1⟩
   by_contra hne
-  rcases lt_or_gt_of_ne hne with hxy | hyx
-  · have hlt := hmono hx hyI hxy
+  rcases lt_or_gt_of_ne hne with hy_lt_x | hx_lt_y
+  · have hlt := hmono hyI hx hy_lt_x
     rw [hfx, hy.2.2] at hlt
     exact (lt_irrefl (0 : ℝ)) hlt
-  · have hlt := hmono hyI hx hyx
+  · have hlt := hmono hx hyI hx_lt_y
     rw [hfx, hy.2.2] at hlt
     exact (lt_irrefl (0 : ℝ)) hlt
 
