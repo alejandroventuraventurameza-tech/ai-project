@@ -43,7 +43,7 @@ theorem boundaryDepositRate_pos {R : ℝ} (hR : R ∈ boundaryInterval) :
       ((9 / 10 : ℝ) * (meanSlope - boundaryPaymentTerm)) *
         boundaryReserveRate R /
           (boundaryReserveRate R + boundaryPaymentTerm) := by
-    unfold boundaryPaymentTerm at hmgap ⊢
+    unfold boundaryPaymentTerm
     positivity
   linarith
 
@@ -119,9 +119,10 @@ theorem boundary_localAggregateLabor_eq {G R : ℝ} :
       boundaryAggregateLabor R := by
   unfold localPrefixAggregateLabor boundaryAggregateLabor average
   rw [sum_firmType_eq_H_add_L]
-  simp [boundaryPrimitives, boundaryZeroData, boundaryZeroSeed,
-    boundaryFirmDateData, boundaryFirmDateSeed, boundaryFirmControls,
-    boundaryControls, localPrefixLabor, boundaryLabor]
+  simp [boundaryPrimitives, ProposedStationaryPrimitives.primitives,
+    boundaryZeroData, boundaryZeroSeed, boundaryFirmDateData,
+    boundaryFirmDateSeed, boundaryFirmControls, boundaryControls,
+    localPrefixLabor, boundaryLabor] <;> ring
 
 /-- El factor cubico dentro del salario. -/
 noncomputable def boundaryWageCubeFactor (R : ℝ) : ℝ :=
