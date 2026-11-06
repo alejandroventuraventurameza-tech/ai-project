@@ -491,7 +491,7 @@ theorem recurrent_dateData_eq
     cases i <;> rfl
   have hfaces := stateSix_faces P hpledge
   simp only [localRecurrentDateData, hcapital, hfaces, hproductivity,
-    hrateInnovation, hquantityInnovation, hrequirement, hwidth, stateSix, dateData]
+    hrateInnovation, hquantityInnovation, hrequirement, hwidth, dateData]
 
 /-- PROPUESTO, SIN COMPILAR. La razon eliminada coincide con la razon
 exacta del bloque bancario; se utiliza el lema conservado del momento binario. -/
@@ -501,6 +501,7 @@ theorem reducedReserveDepositRatio_eq
     (hbinary : BinarySymmetricPaymentLaw P paymentMinus paymentPlus (1 / 5)) :
     localPrefixReserveDepositRatio P dateData =
       ProposedStationaryBank.reserveDepositRatio := by
+  classical
   rw [localPrefixReserveDepositRatio,
     localPrefixMeanAbsolutePaymentShock_eq_of_binarySymmetric
       P paymentMinus paymentPlus (1 / 5) hbinary]
