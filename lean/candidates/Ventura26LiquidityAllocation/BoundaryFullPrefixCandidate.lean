@@ -510,8 +510,13 @@ noncomputable def boundaryOneData (G R : ℝ) : LocalPrefixDateData :=
           localPrefixBankSurplusSlope (boundaryPrimitives G R) (boundaryZeroData G R)) / 2 -
       boundaryDepositRate R = 0
     rw [hmean, hgap, hmoment]
-    unfold boundaryDepositRate boundaryPaymentTerm
-    field_simp [ne_of_gt hrr0]
+    have hb0 : 0 < boundaryPaymentTerm := by
+      unfold boundaryPaymentTerm
+      exact div_pos slope_bounds.2.2.1 (by norm_num)
+    have hsum0 : 0 < boundaryReserveRate R + boundaryPaymentTerm :=
+      add_pos hrr0 hb0
+    rw [boundaryDepositRate_rewrite R (ne_of_gt hrr0) (ne_of_gt hsum0)]
+    field_simp [ne_of_gt hrr0, ne_of_gt hsum0]
     ring
 
  theorem boundary_zero_reserveDepositRatio (G R : ℝ) :
@@ -541,10 +546,11 @@ noncomputable def boundaryOneData (G R : ℝ) : LocalPrefixDateData :=
       localPrefixReducedBankLoans (boundaryPrimitives G R) (boundaryZeroData G R) =
         boundaryBankLoans R := by
     unfold localPrefixReducedBankLoans boundaryBankLoans
-    simp [boundaryZeroData, boundaryZeroSeed, boundaryFirmDateData,
-      boundaryFirmDateSeed, boundaryFirmControls, boundaryControls]
-    rw [hfaces]
-    field_simp [ne_of_gt hR0] <;> ring
+    change (∑ i, (boundaryPrimitives G R).mass i * firmFace i / R) =
+      aggregateCredit * ProposedStationaryBank.loanRate / R
+    rw [sum_firmType_eq_H_add_L] at hfaces ⊢
+    rw [← add_div, hfaces]
+    ring
   have hequity :
       localPrefixReducedBankEquity (boundaryZeroData G R) = boundaryBankEquity R := by
     simp [localPrefixReducedBankEquity, boundaryZeroData, boundaryZeroSeed,
@@ -567,7 +573,8 @@ noncomputable def boundaryOneData (G R : ℝ) : LocalPrefixDateData :=
       localReducedRemainingResidual (boundaryPrimitives G R) (boundaryOneData G R) 7 = 0 := by
   rw [boundary_oneData_fields]
   constructor
-  · change Real.log ProposedStationaryBank.reserveRate -
+  · simp only [localReducedRemainingResidual]
+    change Real.log ProposedStationaryBank.reserveRate -
       ((1 / 2) * Real.log (boundaryReserveRate R) +
         (1 - (1 / 2 : ℝ)) *
           (Real.log ProposedStationaryBank.reserveRate +
@@ -577,7 +584,8 @@ noncomputable def boundaryOneData (G R : ℝ) : LocalPrefixDateData :=
     simp only [div_self (ne_of_gt hY), Real.log_one, mul_zero, add_zero]
     unfold boundaryReserveRateInnovationOne
     ring
-  · change Real.log reservesPre -
+  · simp only [localReducedRemainingResidual]
+    change Real.log reservesPre -
       ((1 / 2) * Real.log (boundaryReservesPre R) +
         (1 - (1 / 2 : ℝ)) * Real.log reservesPre +
         boundaryReserveQuantityInnovationOne R) = 0
