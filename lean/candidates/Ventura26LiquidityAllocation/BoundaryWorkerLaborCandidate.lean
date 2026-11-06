@@ -163,8 +163,23 @@ theorem boundary_worker_labor_equation {R : ℝ}
   rw [boundaryAggregateLabor_eq_parent_mul_factor hR, hfactor, hw0,
     worker_labor_equation]
   unfold boundaryWageCubeFactor at hg3
+  have hcubeScaled :
+      workerConsumption * g ^ (3 : ℕ) =
+        boundaryWorkerConsumption R * boundaryCapitalScale R ^ (4 / 5 : ℝ) := by
+    rw [hg3]
+    field_simp [ne_of_gt workerConsumption_pos] <;> ring
+  have hscaled :
+      workerConsumption * aggregateLabor * g ^ (3 : ℕ) =
+        aggregateLabor * boundaryWorkerConsumption R *
+          boundaryCapitalScale R ^ (4 / 5 : ℝ) := by
+    calc
+      _ = aggregateLabor * (workerConsumption * g ^ (3 : ℕ)) := by ring
+      _ = aggregateLabor *
+          (boundaryWorkerConsumption R * boundaryCapitalScale R ^ (4 / 5 : ℝ)) := by
+            rw [hcubeScaled]
+      _ = _ := by ring
   field_simp [ne_of_gt workerConsumption_pos, ne_of_gt hg0]
-  nlinarith
+  nlinarith only [hscaled]
 
 /-- Descarga la fila 3 literal del sistema reducido. -/
 theorem boundary_workerLabor_row_zero (G : ℝ) {R : ℝ}
