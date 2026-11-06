@@ -227,7 +227,7 @@ theorem parent_bankContinuation_equity_bounds
     0 < (parentBankContinuation G t h).equity n future payments ∧
       (parentBankContinuation G t h).equity n future payments ≤
         bankEquity * (21 / 20 : ℝ) ^ n := by
-  induction n generalizing future payments with
+  induction n with
   | zero =>
       change 0 < (parentAllocation G).bankEquity t h ∧
         (parentAllocation G).bankEquity t h ≤ bankEquity * (21 / 20 : ℝ) ^ 0
@@ -267,6 +267,7 @@ theorem parent_bankContinuation_equity_bounds
         rw [← fullRetentionCommonBankPlan_grossReturn_eq_detailed
           (primitives G) (parentAllocation G) (t + n) H
           (payments 0) (payments 0).property]
+        rfl
       have hg0 := commonBankPlan_grossReturn_pos G (t + n) H
         (payments 0) (payments 0).property
       have hgUpper := commonBankPlan_grossReturn_upper G (t + n) H
