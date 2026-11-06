@@ -172,10 +172,25 @@ theorem retailer_exp_neg_nat_mul (x : ℝ) (n : ℕ) :
   have harg : -(n : ℝ) * x = (n : ℝ) * (-x) := by ring
   rw [harg, Real.exp_nat_mul]
 
+/-- Normalize the literal numeric coefficient before rewriting Real.exp. -/
+private theorem retailer_exp_neg_five (x : ℝ) :
+    Real.exp (-5 * x) = (Real.exp (-x)) ^ (5 : ℕ) := by
+  calc
+    Real.exp (-5 * x) = Real.exp (-(5 : ℝ) * x) := by
+      congr 1 <;> ring
+    _ = _ := retailer_exp_neg_nat_mul x 5
+
+private theorem retailer_exp_neg_six (x : ℝ) :
+    Real.exp (-6 * x) = (Real.exp (-x)) ^ (6 : ℕ) := by
+  calc
+    Real.exp (-6 * x) = Real.exp (-(6 : ℝ) * x) := by
+      congr 1 <;> ring
+    _ = _ := retailer_exp_neg_nat_mul x 6
+
 /-- La parte CES tiene soporte global 1/6 en todo logaritmo real. -/
 theorem retailer_ces_six_upper (x : ℝ) :
     Real.exp (-5 * x) - (5 / 6 : ℝ) * Real.exp (-6 * x) ≤ (1 / 6 : ℝ) := by
-  rw [retailer_exp_neg_nat_mul x 5, retailer_exp_neg_nat_mul x 6]
+  rw [retailer_exp_neg_five x, retailer_exp_neg_six x]
   exact sub_nonneg.mp
     (retailer_ces_gap_nonneg (Real.exp (-x)) (Real.exp_pos (-x)).le)
 
@@ -189,7 +204,7 @@ theorem retailer_stationary_unit_gap_identity (x previous : ℝ) :
           (5 * (Real.exp (-x)) ^ 4 + 4 * (Real.exp (-x)) ^ 3 +
             3 * (Real.exp (-x)) ^ 2 + 2 * Real.exp (-x) + 1) / 6 +
         75 * (Real.exp (x - previous) - 1) ^ 2 := by
-  rw [retailer_exp_neg_nat_mul x 5, retailer_exp_neg_nat_mul x 6]
+  rw [retailer_exp_neg_five x, retailer_exp_neg_six x]
   ring
 
 /-- Restar un costo cuadratico no negativo conserva el soporte global.
@@ -290,6 +305,7 @@ theorem parent_retailerPayoffTerm_path (G : ℝ)
   unfold retailerPayoffTerm
   rw [primitives_expectationAt_eq]
   rw [parent_retailerDiscountRatio, one_mul]
+  rfl
 
 theorem parent_retailerPayoffTerm (G : ℝ) (t : ℕ) :
     retailerPayoffTerm (primitives G) (parentAllocation G)
@@ -301,11 +317,17 @@ theorem parent_retailerPayoffTerm (G : ℝ) (t : ℕ) :
 theorem parent_retailObjectiveWellDefined (G : ℝ) :
     RetailObjectiveWellDefined (primitives G) (parentAllocation G)
       (retailerPlanOfAllocation (parentAllocation G)) := by
+  have hfn :
+      retailerPayoffTerm (primitives G) (parentAllocation G)
+        (retailerPlanOfAllocation (parentAllocation G)) =
+        (fun t : ℕ ↦ (99 / 100 : ℝ) ^ t * (aggregateOutput / 6)) := by
+    funext t
+    exact parent_retailerPayoffTerm G t
   change Summable (retailerPayoffTerm (primitives G) (parentAllocation G)
     (retailerPlanOfAllocation (parentAllocation G)))
-  simpa only [parent_retailerPayoffTerm] using
-    (fixed_beta_geometric (99 / 100 : ℝ) (aggregateOutput / 6)
-      (by norm_num) (by norm_num)).1
+  rw [hfn]
+  exact (fixed_beta_geometric (99 / 100 : ℝ) (aggregateOutput / 6)
+    (by norm_num) (by norm_num)).1
 
 /-- Valor exacto del flujo constante del candidato: no se omite ningun
 descuento marginal de consumo al sumar. -/
