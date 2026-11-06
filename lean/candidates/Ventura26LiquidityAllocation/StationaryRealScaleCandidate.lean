@@ -492,6 +492,7 @@ theorem recurrent_dateData_eq
   have hfaces := stateSix_faces P hpledge
   simp only [localRecurrentDateData, hcapital, hfaces, hproductivity,
     hrateInnovation, hquantityInnovation, hrequirement, hwidth, dateData]
+  rfl
 
 /-- PROPUESTO, SIN COMPILAR. La razon eliminada coincide con la razon
 exacta del bloque bancario; se utiliza el lema conservado del momento binario. -/
