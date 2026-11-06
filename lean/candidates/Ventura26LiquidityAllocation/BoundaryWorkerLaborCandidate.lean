@@ -159,10 +159,9 @@ theorem boundary_worker_labor_equation {R : ℝ}
       boundaryCapitalScale R ^ (4 / 5 : ℝ) / g ^ (2 : ℕ) := by
     unfold boundaryLaborFactor
     rw [hw0]
-    field_simp [ne_of_gt wage_pos, ne_of_gt hg0]
-    ring
-  rw [boundaryAggregateLabor_eq_parent_mul_factor hR, hfactor,
-    worker_labor_equation, hw0]
+    field_simp [ne_of_gt wage_pos, ne_of_gt hg0] <;> ring
+  rw [boundaryAggregateLabor_eq_parent_mul_factor hR, hfactor, hw0,
+    worker_labor_equation]
   unfold boundaryWageCubeFactor at hg3
   field_simp [ne_of_gt workerConsumption_pos, ne_of_gt hg0]
   nlinarith
@@ -174,8 +173,8 @@ theorem boundary_workerLabor_row_zero (G : ℝ) {R : ℝ}
   change boundaryWage R - 1 *
       boundaryWorkerConsumption R ^ (1 : ℝ) *
         localPrefixAggregateLabor (boundaryPrimitives G R) (boundaryZeroData G R) ^ (1 : ℝ) = 0
-  rw [Real.rpow_one, one_mul, boundary_localAggregateLabor_eq,
-    boundary_worker_labor_equation hR]
+  simp only [Real.rpow_one, one_mul]
+  rw [boundary_localAggregateLabor_eq, boundary_worker_labor_equation hR]
   ring
 
  theorem boundary_workerLabor_package (G : ℝ) {R : ℝ}
