@@ -227,13 +227,16 @@ theorem parent_bankContinuation_equity_bounds
     0 < (parentBankContinuation G t h).equity n future payments ∧
       (parentBankContinuation G t h).equity n future payments ≤
         bankEquity * (21 / 20 : ℝ) ^ n := by
+  revert future payments
   induction n with
   | zero =>
+      intro future payments
       change 0 < (parentAllocation G).bankEquity t h ∧
         (parentAllocation G).bankEquity t h ≤ bankEquity * (21 / 20 : ℝ) ^ 0
       rw [parent_bankEquity, pow_zero, mul_one]
       exact ⟨bank_scale_pos.1, le_rfl⟩
   | succ n ih =>
+      intro future payments
       let previousFuture : Fin n → LocalBridgePhase := fun j ↦ future j.succ
       let previousPayments : Fin n → (primitives G).paymentSupport :=
         fun j ↦ payments j.succ
@@ -267,7 +270,7 @@ theorem parent_bankContinuation_equity_bounds
         rw [← fullRetentionCommonBankPlan_grossReturn_eq_detailed
           (primitives G) (parentAllocation G) (t + n) H
           (payments 0) (payments 0).property]
-        rfl
+        simpa only [commonBankPlan]
       have hg0 := commonBankPlan_grossReturn_pos G (t + n) H
         (payments 0) (payments 0).property
       have hgUpper := commonBankPlan_grossReturn_upper G (t + n) H
