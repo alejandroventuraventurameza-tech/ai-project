@@ -313,7 +313,10 @@ noncomputable def boundaryTail : LocalPrefixContinuationRule := fun _ ↦ contro
   simp [localPrefixDateZeroData, boundaryPrimitives, boundaryInitialState,
     boundaryCoordinates, boundaryStateOne, boundaryZeroData, boundaryZeroSeed,
     boundaryFirmDateData, boundaryFirmDateSeed, boundaryFirmControls,
-    boundaryControls]
+    boundaryControls, primitives, localPrefixStateSevenCapital,
+    localPrefixStateSevenFace, localBridgeTree] <;>
+    (repeat' constructor) <;>
+    (first | rfl | (funext i; cases i <;> rfl))
 
 noncomputable def boundaryOneData (G R : ℝ) : LocalPrefixDateData :=
   localPrefixDateOneData (boundaryPrimitives G R) (boundaryCoordinates R)
@@ -328,7 +331,11 @@ noncomputable def boundaryOneData (G R : ℝ) : LocalPrefixDateData :=
         reserveQuantityInnovation := boundaryReserveQuantityInnovationOne R } := by
   simp [boundaryOneData, localPrefixDateOneData, boundaryPrimitives,
     boundaryCoordinates, boundaryStateOne, boundaryStateTwo, boundaryTail,
-    dateData, stateSix, controls]
+    dateData, stateSix, controls, primitives, localPrefixStateSevenCapital,
+    localPrefixStateSevenFace, localPrefixStateSixCapital,
+    localPrefixStateSixFace] <;>
+    (repeat' constructor) <;>
+    (first | rfl | (funext i; cases i <;> rfl))
 
 /-! ## Filas de fecha cero que no usan la raiz de recursos -/
 
@@ -388,9 +395,23 @@ noncomputable def boundaryOneData (G R : ℝ) : LocalPrefixDateData :=
       localPrefixAggregateCapital (boundaryPrimitives G R)
         (boundaryZeroData G R).currentCapital = 0
   rw [hinvestment, hcapitalCurrent]
-  unfold boundaryInvestment boundaryAggregateCapital boundaryCapitalScale
+  have hden :
+      (39 / 40 : ℝ) +
+          (boundaryCapitalPrice R - 1) / (1 / 2) ≠ 0 := by
+    intro hz
+    have hzero : boundaryCapitalScale R = 0 := by
+      simp [boundaryCapitalScale, hz]
+    exact (ne_of_gt hs0) hzero
+  have hscale :
+      boundaryCapitalScale R *
+        ((39 / 40 : ℝ) + (boundaryCapitalPrice R - 1) / (1 / 2)) = 1 := by
+    unfold boundaryCapitalScale
+    field_simp [hden]
+  have hscaleK :=
+    congrArg (fun x : ℝ => x * aggregateCapital) hscale
+  unfold boundaryInvestment boundaryAggregateCapital
   field_simp [ne_of_gt hK, ne_of_gt hs0]
-  ring
+  nlinarith only [hscaleK]
 
  theorem boundary_zero_householdEuler (G R : ℝ)
     (hR : R ∈ boundaryInterval) :
@@ -517,6 +538,7 @@ noncomputable def boundaryOneData (G R : ℝ) : LocalPrefixDateData :=
       add_pos hrr0 hb0
     rw [boundaryDepositRate_rewrite R (ne_of_gt hrr0) (ne_of_gt hsum0)]
     field_simp [ne_of_gt hrr0, ne_of_gt hsum0]
+    unfold boundaryPaymentTerm
     ring
 
  theorem boundary_zero_reserveDepositRatio (G R : ℝ) :
@@ -571,9 +593,22 @@ noncomputable def boundaryOneData (G R : ℝ) : LocalPrefixDateData :=
  theorem boundary_one_policy_rows (G R : ℝ) :
     localReducedRemainingResidual (boundaryPrimitives G R) (boundaryOneData G R) 6 = 0 ∧
       localReducedRemainingResidual (boundaryPrimitives G R) (boundaryOneData G R) 7 = 0 := by
+  have hY :
+      localPrefixAggregateOutput (boundaryPrimitives G R)
+        ({ dateData with
+          lagReserveRate := boundaryReserveRate R
+          lagReservesPre := boundaryReservesPre R
+          reserveRateInnovation := boundaryReserveRateInnovationOne R
+          reserveQuantityInnovation := boundaryReserveQuantityInnovationOne R } :
+          LocalPrefixDateData) = aggregateOutput := by
+    change localPrefixAggregateOutput (boundaryPrimitives G R) dateData =
+      aggregateOutput
+    exact localPrefixAggregateOutput_eq (boundaryPrimitives G R)
+      (boundary_stationary_parameters G R).toStationaryRealParameters
   rw [boundary_oneData_fields]
   constructor
   · simp only [localReducedRemainingResidual]
+    rw [hY]
     change Real.log ProposedStationaryBank.reserveRate -
       ((1 / 2) * Real.log (boundaryReserveRate R) +
         (1 - (1 / 2 : ℝ)) *
