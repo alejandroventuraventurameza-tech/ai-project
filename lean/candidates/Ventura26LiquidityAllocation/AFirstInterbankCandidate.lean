@@ -1,8 +1,13 @@
 import Ventura26LiquidityAllocation.InterbankCancellationCandidate
 
 /-!
-Temporary CI-only import gate. Because the pinned workflow visits candidate
-modules in topological/alphabetical order, this file compiles the existing
-InterbankCancellationCandidate before unrelated boundary-package obligations.
-No mathematical claims, axioms, sorry or checkpoint changes are introduced.
+Isolated CI import and axiom-inspection gate for previously compiled
+interbank cancellation proofs. This is not a source-facing result and does
+not modify the pinned checkpoint, base library, or any theorem statement.
+The output of the following Lean commands must be inspected for sorryAx.
 -/
+
+#print axioms Ventura26LiquidityAllocation.proposed_otcBinaryPair_cancel
+#print axioms Ventura26LiquidityAllocation.proposed_localSlackExpectedInterbank_eq_zero_of_binarySymmetric
+#print axioms Ventura26LiquidityAllocation.proposed_localSlackLiteralAllocation_settlementClears_of_binarySymmetric
+#print axioms Ventura26LiquidityAllocation.proposed_localSlackExactDateData_settlementClears
