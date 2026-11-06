@@ -586,13 +586,28 @@ structure BoundaryWorkerLaborPackage (G R : ℝ) : Prop where
  theorem boundary_zero_resources_eq_neg (G R : ℝ) :
     localReducedRemainingResidual (boundaryPrimitives G R) (boundaryZeroData G R) 2 =
       - boundaryResourceResidual R := by
-  unfold localReducedRemainingResidual boundaryResourceResidual boundaryCapitalCost
-    boundaryInvestment boundaryAggregateCapital boundaryAggregateOutput average
-    boundaryZeroData boundaryZeroSeed boundaryFirmDateData boundaryFirmDateSeed
-    boundaryFirmControls boundaryControls
-  simp [boundaryPrimitives, localPrefixRotembergCost, localPrefixCapitalCost,
-    localPrefixInvestment, localPrefixAggregateCapital, localPrefixFirmConsumption,
-    boundaryCapital]
+  have hrot :
+      localPrefixRotembergCost (boundaryPrimitives G R) (boundaryZeroData G R) = 0 := by
+    simp [localPrefixRotembergCost, boundaryZeroData, boundaryZeroSeed,
+      boundaryFirmDateData, boundaryFirmDateSeed, boundaryFirmControls,
+      boundaryControls]
+  have hliteral :
+      boundaryLiteralResourceResidual G R =
+        localPrefixAggregateOutput (boundaryPrimitives G R) (boundaryZeroData G R) -
+        (boundaryZeroData G R).controls.workerConsumption -
+        (∑ i, (boundaryPrimitives G R).mass i *
+          localPrefixFirmConsumption (boundaryZeroData G R).controls i) -
+        localPrefixCapitalCost (boundaryPrimitives G R) (boundaryZeroData G R) := by
+    rfl
+  change
+    (boundaryZeroData G R).controls.workerConsumption +
+      (∑ i, (boundaryPrimitives G R).mass i *
+        localPrefixFirmConsumption (boundaryZeroData G R).controls i) +
+      localPrefixCapitalCost (boundaryPrimitives G R) (boundaryZeroData G R) +
+      localPrefixRotembergCost (boundaryPrimitives G R) (boundaryZeroData G R) -
+      localPrefixAggregateOutput (boundaryPrimitives G R) (boundaryZeroData G R) =
+        - boundaryResourceResidual R
+  rw [hrot, ← boundary_literal_eq_closed G R, hliteral]
   ring
 
  theorem boundary_zero_resources (G R : ℝ)
