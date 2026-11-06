@@ -39,8 +39,18 @@ jobs:
           git -C upstream checkout --quiet --detach "$UPSTREAM_SHA"
           test "$(git -C upstream rev-parse HEAD)" = "$UPSTREAM_SHA"
           cmp lean/checkpoint/dependencies/lean-toolchain upstream/lean-toolchain
-          cmp lean/checkpoint/dependencies/lakefile.toml upstream/lakefile.toml
+          # The pinned overlay has exactly one additional library declaration.
+          python3 - <<'PY'
+          from pathlib import Path
+          original = Path('upstream/lakefile.toml').read_bytes()
+          overlay = Path('lean/checkpoint/dependencies/lakefile.toml').read_bytes()
+          expected = b'\n[[lean_lib]]\nname = "Ventura26LiquidityAllocation"\nsrcDir = "papers"\n'
+          assert overlay == original + expected, (
+              'Checkpoint Lake config differs from upstream by more than the Ventura library declaration'
+          )
+          PY
           cmp lean/checkpoint/dependencies/lake-manifest.json upstream/lake-manifest.json
+          cp lean/checkpoint/dependencies/lakefile.toml upstream/lakefile.toml
           mkdir -p upstream/papers/Ventura26LiquidityAllocation
           cp lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean upstream/papers/Ventura26LiquidityAllocation/
           cp lean/checkpoint/module_root.lean upstream/papers/Ventura26LiquidityAllocation.lean
