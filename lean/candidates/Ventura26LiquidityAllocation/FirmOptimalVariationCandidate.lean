@@ -25,6 +25,7 @@ No original source/checkpoint edits, sorry, admit or added axioms.
 namespace Ventura26LiquidityAllocation
 namespace ProposedFirmOptimalVariation
 
+open Filter Topology
 open ProposedContinuationContractAudit
 open ProposedProposition42KKTIdentification
 
