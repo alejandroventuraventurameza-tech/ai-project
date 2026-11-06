@@ -36,7 +36,7 @@ theorem normalized_worker_eq (R : ℝ) :
       normalizedWorkerConsumption R := by
   unfold boundaryWorkerConsumption normalizedWorkerConsumption
   rw [workerConsumption_scale]
-  field_simp [ne_of_gt (pow_pos wage_pos (5 : ℕ))] <;> ring
+  field_simp [ne_of_gt wage_pos, ne_of_gt (pow_pos wage_pos (5 : ℕ))] <;> ring
 
 /-- The entrepreneur coefficients scale with wage^-5, while their
     initial-date consumption response is a rational function of R. -/
@@ -63,7 +63,7 @@ theorem normalized_capitalCost_eq (R : ℝ)
       normalizedCapitalCost R := by
   rw [boundaryCapitalCost_scale_formula hscale, aggregateCapital_scale]
   unfold normalizedCapitalCost
-  field_simp [ne_of_gt (pow_pos wage_pos (5 : ℕ)),
+  field_simp [ne_of_gt wage_pos, ne_of_gt (pow_pos wage_pos (5 : ℕ)),
     ne_of_gt hscale] <;> ring
 
 /-- All five source-normalization fields follow once the one remaining
