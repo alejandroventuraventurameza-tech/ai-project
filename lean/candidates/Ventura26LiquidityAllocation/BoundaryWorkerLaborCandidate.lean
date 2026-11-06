@@ -20,8 +20,10 @@ open Set
 namespace Ventura26LiquidityAllocation
 namespace ProposedBoundaryWorkerLabor
 
+open ProposedStationaryBank
 open ProposedStationaryRealScale
 open ProposedStationaryProductionBridge
+open ProposedBoundaryBridge
 open ProposedBoundaryResourceRoot
 open ProposedBoundaryFullPrefix
 
@@ -96,8 +98,7 @@ theorem boundaryLabor_eq_parent_mul_factor {R : ℝ}
   unfold laborInput at hparent
   rw [← hparent]
   rw [← hsPow]
-  field_simp [ne_of_gt hw0, ne_of_gt hw]
-  ring
+  field_simp [ne_of_gt hw0, ne_of_gt hw] <;> ring
 
 noncomputable def boundaryAggregateLabor (R : ℝ) : ℝ :=
   average (boundaryLabor R)
