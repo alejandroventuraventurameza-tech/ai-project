@@ -89,8 +89,9 @@ theorem boundaryReserveDepositRatio_bounds {R : ℝ}
     unfold boundaryPaymentTerm
     positivity
   have hc0 : 0 < (9 / 10 : ℝ) * (meanSlope - boundaryPaymentTerm) := by
-    unfold boundaryPaymentTerm at hmgap ⊢
-    positivity
+    have hcGap : 0 < meanSlope - boundaryPaymentTerm := by
+      simpa only [boundaryPaymentTerm] using hmgap
+    exact mul_pos (by norm_num) hcGap
   have hrd : boundaryReserveRate R < boundaryDepositRate R := by
     rw [boundaryDepositRate_rewrite R (ne_of_gt hrr0) (ne_of_gt (add_pos hrr0 hb0))]
     have hden : 0 < boundaryReserveRate R + boundaryPaymentTerm :=
@@ -105,7 +106,9 @@ theorem boundaryReserveDepositRatio_bounds {R : ℝ}
     (one_lt_div hrr0).2 hrd
   have hrr1 : 1 < boundaryReserveRate R := by
     have hlo := hR.1
-    unfold boundaryReserveRate boundaryLo
+    have hloBound : (1 : ℝ) + 7 / 800 < boundaryLo := by
+      norm_num [boundaryLo]
+    unfold boundaryReserveRate
     linarith
   have hc_lt_rr :
       (9 / 10 : ℝ) * (meanSlope - boundaryPaymentTerm) <
@@ -158,10 +161,17 @@ theorem boundaryReserveDepositRatio_bounds {R : ℝ}
   have hBE : bankEquity < aggregateCredit := by
     have hbal := bank_balance
     linarith
-  unfold boundaryBankEquity boundaryBankLoans
   have hfactor : 0 < ProposedStationaryBank.loanRate / R :=
     div_pos hRbar hR0
-  nlinarith
+  calc
+    boundaryBankEquity R = bankEquity * (ProposedStationaryBank.loanRate / R) := by
+      unfold boundaryBankEquity
+      ring
+    _ < aggregateCredit * (ProposedStationaryBank.loanRate / R) :=
+      mul_lt_mul_of_pos_right hBE hfactor
+    _ = boundaryBankLoans R := by
+      unfold boundaryBankLoans
+      ring
 
  theorem boundaryBankScale_pos {R : ℝ} (hR : R ∈ boundaryInterval) :
     0 < boundaryBankEquity R ∧ 0 < boundaryBankDeposits R ∧
@@ -170,7 +180,7 @@ theorem boundaryReserveDepositRatio_bounds {R : ℝ}
   rcases boundaryReserveDepositRatio_bounds hR with ⟨hh0, hh1⟩
   have hE : 0 < boundaryBankEquity R := by
     unfold boundaryBankEquity
-    positivity
+    exact div_pos (mul_pos bank_scale_pos.1 loanRate_pos) hR0
   have hgap : 0 < boundaryBankLoans R - boundaryBankEquity R :=
     sub_pos.mpr (boundaryBankLoans_gt_equity hR)
   have hD : 0 < boundaryBankDeposits R := by
@@ -219,7 +229,27 @@ noncomputable def boundaryPrimitives (G R : ℝ) : Primitives LocalBridgePhase :
 
  theorem boundary_stationary_parameters (G R : ℝ) :
     StationaryParameters (boundaryPrimitives G R) := by
-  simpa [boundaryPrimitives] using stationary_parameters G
+  exact
+    { toStationaryRealParameters :=
+        { alpha_eq := rfl
+          beta_eq := rfl
+          productivity_eq := fun _ ↦ rfl
+          mass_eq := fun _ ↦ rfl
+          depreciation_eq := rfl
+          pledgeability_eq := fun _ ↦ rfl
+          entrepreneurDiscount_eq := rfl
+          workerDiscount_eq := rfl
+          laborScale_eq := rfl
+          workerRiskAversion_eq := rfl
+          laborCurvature_eq := rfl
+          capitalAdjustmentCost_eq := rfl
+          priceElasticity_eq := rfl }
+      bankExit_eq := rfl
+      bankSeedShare_eq := rfl
+      matchingIntensity_eq := rfl
+      reserveRateSteady_eq := rfl
+      reserveQuantitySteady_eq := rfl
+      outputReference_eq := rfl }
 
  theorem boundary_binary_payment_law (G R : ℝ) :
     BinarySymmetricPaymentLaw (boundaryPrimitives G R) 0 1 (1 / 5) := by
@@ -280,7 +310,7 @@ noncomputable def boundaryTail : LocalPrefixContinuationRule := fun _ ↦ contro
  theorem boundary_dateZeroData_eq (G R : ℝ) :
     localPrefixDateZeroData (boundaryPrimitives G R) (boundaryInitialState G R)
       (boundaryCoordinates R) .dateOne = boundaryZeroData G R := by
-  ext <;> simp [localPrefixDateZeroData, boundaryPrimitives, boundaryInitialState,
+  simp [localPrefixDateZeroData, boundaryPrimitives, boundaryInitialState,
     boundaryCoordinates, boundaryStateOne, boundaryZeroData, boundaryZeroSeed,
     boundaryFirmDateData, boundaryFirmDateSeed, boundaryFirmControls,
     boundaryControls]
@@ -296,7 +326,7 @@ noncomputable def boundaryOneData (G R : ℝ) : LocalPrefixDateData :=
         lagReservesPre := boundaryReservesPre R
         reserveRateInnovation := boundaryReserveRateInnovationOne R
         reserveQuantityInnovation := boundaryReserveQuantityInnovationOne R } := by
-  ext <;> simp [boundaryOneData, localPrefixDateOneData, boundaryPrimitives,
+  simp [boundaryOneData, localPrefixDateOneData, boundaryPrimitives,
     boundaryCoordinates, boundaryStateOne, boundaryStateTwo, boundaryTail,
     dateData, stateSix, controls]
 
@@ -309,7 +339,7 @@ noncomputable def boundaryOneData (G R : ℝ) : LocalPrefixDateData :=
     localPrefixAggregateOutput localPrefixOutput localPrefixLabor
     boundaryZeroData boundaryZeroSeed boundaryFirmDateData boundaryFirmDateSeed
     boundaryFirmControls boundaryControls boundaryCapital boundaryWage
-  simp [boundaryPrimitives, primitives]
+  simp [boundaryPrimitives, primitives, sum_firmType_eq_H_add_L] <;> ring
 
  theorem boundary_zero_bankRenewal (G R : ℝ) (hR : 0 < R) :
     localReducedRemainingResidual (boundaryPrimitives G R) (boundaryZeroData G R) 0 = 0 := by
@@ -325,8 +355,39 @@ noncomputable def boundaryOneData (G R : ℝ) : LocalPrefixDateData :=
     localReducedRemainingResidual (boundaryPrimitives G R) (boundaryZeroData G R) 1 = 0 := by
   rcases boundary_scale_and_investment_domain hR with ⟨hs0, _hs1, _hI⟩
   have hK := aggregates_pos.1
+  have hcapitalCurrent :
+      localPrefixAggregateCapital (boundaryPrimitives G R)
+          (boundaryZeroData G R).currentCapital =
+        boundaryAggregateCapital R := by
+    unfold localPrefixAggregateCapital
+    rw [sum_firmType_eq_H_add_L]
+    change (1 / 2 : ℝ) * boundaryCapital R .H +
+      (1 / 2 : ℝ) * boundaryCapital R .L = boundaryAggregateCapital R
+    unfold boundaryAggregateCapital boundaryCapital aggregateCapital average
+    ring
+  have hcapitalNext :
+      localPrefixAggregateCapital (boundaryPrimitives G R)
+          (boundaryZeroData G R).nextCapital = aggregateCapital := by
+    unfold localPrefixAggregateCapital
+    rw [sum_firmType_eq_H_add_L]
+    change (1 / 2 : ℝ) * capital .H +
+      (1 / 2 : ℝ) * capital .L = aggregateCapital
+    unfold aggregateCapital average
+    ring
+  have hinvestment :
+      localPrefixInvestment (boundaryPrimitives G R) (boundaryZeroData G R) =
+        boundaryInvestment R := by
+    unfold localPrefixInvestment
+    rw [hcapitalNext, hcapitalCurrent]
+    change aggregateCapital - (1 - (1 / 40 : ℝ)) *
+      boundaryAggregateCapital R = boundaryInvestment R
+    unfold boundaryInvestment
+    ring
   change boundaryCapitalPrice R - 1 - (1 / 2 : ℝ) *
-      boundaryInvestment R / boundaryAggregateCapital R = 0
+      localPrefixInvestment (boundaryPrimitives G R) (boundaryZeroData G R) /
+      localPrefixAggregateCapital (boundaryPrimitives G R)
+        (boundaryZeroData G R).currentCapital = 0
+  rw [hinvestment, hcapitalCurrent]
   unfold boundaryInvestment boundaryAggregateCapital boundaryCapitalScale
   field_simp [ne_of_gt hK, ne_of_gt hs0]
   ring
@@ -345,8 +406,11 @@ noncomputable def boundaryOneData (G R : ℝ) : LocalPrefixDateData :=
           ((9 / 10 : ℝ) * (meanSlope - boundaryPaymentTerm)) *
             boundaryReserveRate R /
               (boundaryReserveRate R + boundaryPaymentTerm) := by
-        unfold boundaryPaymentTerm at hmgap ⊢
-        positivity
+        have hcGap : 0 < meanSlope - boundaryPaymentTerm := by
+          simpa only [boundaryPaymentTerm] using hmgap
+        exact div_pos
+          (mul_pos (mul_pos (by norm_num) hcGap) hrr)
+          (add_pos hrr hb0)
       linarith
     linarith
   have hCW := workerConsumption_pos
@@ -366,6 +430,7 @@ noncomputable def boundaryOneData (G R : ℝ) : LocalPrefixDateData :=
 
  theorem boundary_zero_reserveRateRule (G R : ℝ) :
     localReducedRemainingResidual (boundaryPrimitives G R) (boundaryZeroData G R) 6 = 0 := by
+  simp only [localReducedRemainingResidual]
   rw [boundary_zero_output_eq G R]
   change Real.log (boundaryReserveRate R) -
     ((1 / 2) * Real.log ProposedStationaryBank.reserveRate +
