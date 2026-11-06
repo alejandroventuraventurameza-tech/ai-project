@@ -321,7 +321,7 @@ theorem parent_bankFinitePayoff_le (G value : ℝ)
                 ((9 / 10 : ℝ) *
                     (value * p.equity 1 (fun _ ↦ s) (fun _ ↦ omega)) +
                   (1 / 10 : ℝ) * p.equity 1 (fun _ ↦ s) (fun _ ↦ omega)) := by
-          apply add_le_add_left
+          apply add_le_add_right
           apply Finset.sum_le_sum
           intro s _
           apply Finset.sum_le_sum
@@ -356,7 +356,7 @@ theorem parent_bankFinitePayoff_le (G value : ℝ)
         _ ≤ bankInitialDividend G p + (99 / 100 : ℝ) *
             ((9 / 10 : ℝ) * value + (1 / 10 : ℝ)) *
               (ProposedStationaryBank.loanRate * (equity - bankInitialDividend G p)) :=
-          add_le_add_left (mul_le_mul_of_nonneg_left
+          add_le_add_right (mul_le_mul_of_nonneg_left
             (parent_bankNextEquityMean_le G t h equity p hp) hcoefficient) _
         _ = bankInitialDividend G p + value * (equity - bankInitialDividend G p) := by
           rw [← mul_assoc, ← hvalue]
@@ -453,6 +453,7 @@ theorem parent_bankEquity_cons
     (e / bankEquity) hscale omega]
   rw [← fullRetentionCommonBankPlan_grossReturn_eq_detailed
     (primitives G) (parentAllocation G) (t + n) H omega omega.property]
+  rfl
 
 /-- Media sobre pagos soportados del retorno del plan comun. -/
 theorem parent_bankGrossReturn_supported_mean
@@ -479,7 +480,7 @@ theorem parent_bankPaymentMeanEquity
         (parentBankContinuation G t h).equity n future payments) =
       bankEquity * ProposedStationaryBank.loanRate ^ n := by
   classical
-  induction n generalizing future with
+  induction n with
   | zero =>
       have he : ∀ payments : Fin 0 → (primitives G).paymentSupport,
           (parentBankContinuation G t h).equity 0 future payments = bankEquity := by
