@@ -341,7 +341,8 @@ theorem parent_bankFinitePayoff_le (G value : ℝ)
                 ((primitives G).payment_probability_nonneg omega)) (by norm_num)
             exact mul_le_mul_of_nonneg_left
               (add_le_add_right
-                (mul_le_mul_of_nonneg_left htailBound (by norm_num)) _) hw
+                (mul_le_mul_of_nonneg_left htailBound
+                  (show (0 : ℝ) ≤ 9 / 10 by norm_num)) _) hw
         _ = bankInitialDividend G p + (99 / 100 : ℝ) *
             ((9 / 10 : ℝ) * value + (1 / 10 : ℝ)) * bankNextEquityMean G t h p := by
           apply congrArg (fun z : ℝ ↦ bankInitialDividend G p + z)
