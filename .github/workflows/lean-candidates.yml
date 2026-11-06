@@ -160,8 +160,15 @@ jobs:
           cat > CandidateAxioms.lean <<'LEAN'
           import Ventura26LiquidityAllocation.StationaryEquilibriumCandidate
           import Ventura26LiquidityAllocation.BoundaryAnalyticPackageCandidate
+          import Ventura26LiquidityAllocation.InterbankCancellationCandidate
+          import Ventura26LiquidityAllocation.BoundaryNormalizationBridgeCandidate
+          import Ventura26LiquidityAllocation.ContinuationContractAuditCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedStationaryEquilibrium.parent_competitiveEquilibrium
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
+          #print axioms Ventura26LiquidityAllocation.proposed_localSlackLiteralAllocation_settlementClears_of_binarySymmetric
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryEndpointBoxes.endpointSigns_of_verified_components
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.endpointSigns_of_boxes_and_output_roots
+          #print axioms Ventura26LiquidityAllocation.ProposedContinuationContractAudit.not_localExactContinuationAround
           LEAN
           lake env lean CandidateAxioms.lean > "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log" 2>&1 || {
             tail -n 140 "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log"
