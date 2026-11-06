@@ -395,23 +395,23 @@ noncomputable def boundaryOneData (G R : ℝ) : LocalPrefixDateData :=
       localPrefixAggregateCapital (boundaryPrimitives G R)
         (boundaryZeroData G R).currentCapital = 0
   rw [hinvestment, hcapitalCurrent]
+  have hdenPos :
+      0 < (39 / 40 : ℝ) +
+        (boundaryCapitalPrice R - 1) / (1 / 2) := by
+    have hs := hs0
+    unfold boundaryCapitalScale at hs
+    exact one_div_pos.mp hs
   have hden :
       (39 / 40 : ℝ) +
-          (boundaryCapitalPrice R - 1) / (1 / 2) ≠ 0 := by
-    intro hz
-    have hzero : boundaryCapitalScale R = 0 := by
-      simp [boundaryCapitalScale, hz]
-    exact (ne_of_gt hs0) hzero
+        (boundaryCapitalPrice R - 1) / (1 / 2) ≠ 0 := ne_of_gt hdenPos
   have hscale :
       boundaryCapitalScale R *
         ((39 / 40 : ℝ) + (boundaryCapitalPrice R - 1) / (1 / 2)) = 1 := by
     unfold boundaryCapitalScale
-    field_simp [hden]
-  have hscaleK :=
-    congrArg (fun x : ℝ => x * aggregateCapital) hscale
+    exact inv_mul_cancel₀ hden
   unfold boundaryInvestment boundaryAggregateCapital
   field_simp [ne_of_gt hK, ne_of_gt hs0]
-  nlinarith only [hscaleK]
+  nlinarith only [hscale]
 
  theorem boundary_zero_householdEuler (G R : ℝ)
     (hR : R ∈ boundaryInterval) :
