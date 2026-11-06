@@ -165,6 +165,7 @@ jobs:
           import Ventura26LiquidityAllocation.ContinuationContractAuditCandidate
           import Ventura26LiquidityAllocation.Proposition42RefutationCandidate
           import Ventura26LiquidityAllocation.Proposition42PrimalRepairCandidate
+          import Ventura26LiquidityAllocation.Proposition42PrimalSeparationCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedStationaryEquilibrium.parent_competitiveEquilibrium
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.proposed_localSlackLiteralAllocation_settlementClears_of_binarySymmetric
@@ -175,6 +176,10 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedProposition42PrimalRepair.different_prefixes_of_strict_slack_binding
           #print axioms Ventura26LiquidityAllocation.ProposedProposition42PrimalRepair.near_primal_replace_dual_right
           #print axioms Ventura26LiquidityAllocation.ProposedProposition42PrimalRepair.agreement_primal_replace_dual_right
+          #print axioms Ventura26LiquidityAllocation.ProposedProposition42PrimalSeparation.strict_slack_and_binding_primal_disjoint
+          #print axioms Ventura26LiquidityAllocation.ProposedProposition42PrimalSeparation.reduced_dual_unique_of_euler
+          #print axioms Ventura26LiquidityAllocation.ProposedProposition42PrimalSeparation.reduced_dual_zero_of_strict_slack
+          #print axioms Ventura26LiquidityAllocation.ProposedProposition42PrimalSeparation.reduced_slack_zero_of_positive_dual
           LEAN
           lake env lean CandidateAxioms.lean > "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log" 2>&1 || {
             tail -n 140 "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log"
