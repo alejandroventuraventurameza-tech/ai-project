@@ -366,7 +366,8 @@ theorem boundary_scale_and_investment_domain {R : ℝ}
     unfold boundaryCapitalScale
     have hbase : (39 / 40 : ℝ) <
         (39 / 40) + (boundaryCapitalPrice R - 1) / (1 / 2) := by
-      have : 0 < (boundaryCapitalPrice R - 1) / (1 / 2) := by positivity
+      have : 0 < (boundaryCapitalPrice R - 1) / (1 / 2 : ℝ) :=
+        div_pos (sub_pos.mpr hq) (by norm_num)
       linarith
     calc
       1 / ((39 / 40 : ℝ) + (boundaryCapitalPrice R - 1) / (1 / 2)) <
