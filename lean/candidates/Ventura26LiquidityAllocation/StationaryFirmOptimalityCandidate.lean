@@ -90,7 +90,11 @@ theorem firmUtilityTerm_path (G : ℝ)
     firmUtilityTerm (primitives G) p t =
       (24 / 25 : ℝ) ^ t * crraUtility 1 (firmPathConsumption p t) := by
   unfold firmUtilityTerm
-  simpa only [primitives_expectationAt_eq, firmPathConsumption, primitives]
+  rw [primitives_expectationAt_eq]
+  change (24 / 25 : ℝ) ^ t *
+    crraUtility 1 (p.consumption t (localBridgeHistory t)) =
+      (24 / 25 : ℝ) ^ t * crraUtility 1 (firmPathConsumption p t)
+  rfl
 
 /-- Soporte global de la utilidad empresarial, usando el consumo positivo
 del candidato como punto de tangencia. -/
