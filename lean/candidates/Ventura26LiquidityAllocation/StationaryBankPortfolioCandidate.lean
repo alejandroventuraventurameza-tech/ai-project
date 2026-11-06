@@ -329,8 +329,13 @@ theorem bankValueSlope_identity :
     bankValueSlope = (99 / 100 : ℝ) *
       ((9 / 10) * bankValueSlope + 1 / 10) * ProposedStationaryBank.loanRate := by
   have hden := bankValueSlope_den_pos.ne'
+  have hdenScaled :
+      (1000 - ProposedStationaryBank.loanRate * 891 : ℝ) ≠ 0 := by
+    intro hzero
+    apply hden
+    nlinarith only [hzero]
   unfold bankValueSlope
-  field_simp [hden] <;> ring
+  field_simp [hden, hdenScaled] <;> ring
 
 theorem bank_continuation_weight_pos :
     0 < (99 / 100 : ℝ) * ((9 / 10) * bankValueSlope + 1 / 10) := by
