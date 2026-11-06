@@ -267,6 +267,7 @@ theorem proposed_localSlackExactDateData_reserveRequirement_eq
     funext j
     change P.tree.initial = LocalBridgePhase.dateZero
     rw [htree]
+    rfl
   have hone : bridgeDateOneHistory P .dateOne = localBridgeHistory 1 := by
     change childHistory (bridgeDateZeroHistory P) .dateOne =
       childHistory (localBridgeHistory 0) .dateOne
@@ -377,6 +378,7 @@ theorem proposed_localPrefixReserveDepositRatio_pos_iff_binaryMargin
       0 < d.reserveRequirement * d.currentReserveRate * (1 + d.controls.tightness) +
         (d.controls.depositRate - d.reserveRequirement * d.currentReserveRate) *
           paymentSize * (1 - d.controls.tightness) := by
+  classical
   have hsum : 0 < 1 + d.controls.tightness := by linarith
   have hden : 0 < d.currentReserveRate * (1 + d.controls.tightness) :=
     mul_pos hreserveRate hsum
@@ -727,6 +729,7 @@ theorem localPrefix_bank_domain
     d.reserveRequirement < d.controls.depositRate / d.currentReserveRate ∧
     4 / 25 < localPrefixReserveDepositRatio P d ∧
     localPrefixReserveDepositRatio P d < 1 / 6 := by
+  classical
   rcases reserveRate_spec with ⟨hrlo, _hrhi, _hpoly⟩
   rcases bank_margins_and_pricing with
     ⟨hxi0, _hxiupper, hratio_lo, hratio_hi, _hpricing, _hloanlo, _hloanhi⟩
@@ -765,6 +768,7 @@ theorem localPrefix_bank_pricing_rows
     (hrequirement : d.reserveRequirement = 1 / 10) :
     localReducedRemainingResidual P d 8 = 0 ∧
     localReducedRemainingResidual P d 9 = 0 := by
+  classical
   rcases matching_specialization reserveRate with
     ⟨_hweight, _hminus, _hplus, hdeficit, hsurplus⟩
   have hdef : localPrefixBankDeficitSlope P d = (1 + weight) / 100 := by
