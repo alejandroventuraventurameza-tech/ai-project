@@ -1,0 +1,173 @@
+# Runs only on the dedicated review branch. It never edits the pinned checkpoint.
+name: Lean 4 candidate audit (pinned)
+
+on:
+  push:
+    branches:
+      - 'work/lean-ci-validation-*'
+    paths:
+      - '.github/workflows/lean-candidates.yml'
+      - 'lean/candidates/**'
+      - 'lean/checkpoint/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lean-candidates:
+    name: Build checkpoint and proposed modules
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    steps:
+      - name: Checkout the isolated review branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Verify immutable anchor and restore pinned upstream
+        shell: bash
+        env:
+          PINNED_SHA: 16e24fe828a5a0002ef13bb82bae9e295f190f86
+          UPSTREAM_SHA: 194edcc95df74806a39b961d10dedddc6e730cce
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor "$PINNED_SHA" HEAD
+          mkdir -p lean-ci-logs
+          git clone --quiet --filter=blob:none https://github.com/nikhgarg/AppliedModelingLib.git upstream
+          git -C upstream checkout --quiet --detach "$UPSTREAM_SHA"
+          test "$(git -C upstream rev-parse HEAD)" = "$UPSTREAM_SHA"
+          cmp lean/checkpoint/dependencies/lean-toolchain upstream/lean-toolchain
+          cmp lean/checkpoint/dependencies/lakefile.toml upstream/lakefile.toml
+          cmp lean/checkpoint/dependencies/lake-manifest.json upstream/lake-manifest.json
+          mkdir -p upstream/papers/Ventura26LiquidityAllocation
+          cp lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/checkpoint/module_root.lean upstream/papers/Ventura26LiquidityAllocation.lean
+          cp lean/candidates/Ventura26LiquidityAllocation/*.lean upstream/papers/Ventura26LiquidityAllocation/
+          sha256sum lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean > lean-ci-logs/checkpoint-sha256.txt
+          sha256sum lean/candidates/Ventura26LiquidityAllocation/*.lean > lean-ci-logs/candidate-sha256.txt
+          git -C upstream status --short > lean-ci-logs/upstream-overlay-status.txt
+          echo "Original checkpoint and upstream commit left unchanged."
+
+      - name: Install the pinned Lean toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o "$RUNNER_TEMP/elan-init.sh"
+          sh "$RUNNER_TEMP/elan-init.sh" -y --no-modify-path
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Record exact compiler and dependency revisions
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          lean --version
+          lake --version
+          grep -Fx 'leanprover/lean4:v4.30.0-rc2' lean-toolchain
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('lake-manifest.json').read_text())
+          refs = {x['name']: x['rev'] for x in p['packages']}
+          assert refs['mathlib'] == '5450b53e5ddc75d46418fabb605edbf36bd0beb6', refs
+          assert refs['cslib'] == '95fdc7dc863ff83e9d6c3a68fcb2505540462a4d'
+          print('Pinned mathlib:', refs['mathlib'])
+          print('Pinned cslib:', refs['cslib'])
+          PY
+
+      - name: Restore precompiled Mathlib artifacts
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          lake exe cache get > "$GITHUB_WORKSPACE/lean-ci-logs/mathlib-cache.log" 2>&1 || {
+            tail -n 120 "$GITHUB_WORKSPACE/lean-ci-logs/mathlib-cache.log"
+            exit 1
+          }
+          tail -n 12 "$GITHUB_WORKSPACE/lean-ci-logs/mathlib-cache.log"
+
+      - name: Compile source and all candidate modules in dependency order
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          export LOG_DIR="$GITHUB_WORKSPACE/lean-ci-logs"
+          python3 - <<'PY' > "$LOG_DIR/module-order.txt"
+          import re
+          from pathlib import Path
+          root = Path('papers/Ventura26LiquidityAllocation')
+          candidates = {p.stem: p for p in root.glob('*Candidate.lean')}
+          assert len(candidates) >= 29, f'Expected 29 proposed modules, found {len(candidates)}'
+          dependencies = {}
+          for name, source in candidates.items():
+              imports = re.findall(r'^import Ventura26LiquidityAllocation\.(\w+Candidate)\s*$', source.read_text(), re.M)
+              missing = sorted(set(imports) - candidates.keys())
+              if missing:
+                  raise RuntimeError(f'{name} imports missing proposed modules: {missing}')
+              dependencies[name] = imports
+          order, visited, active = [], set(), set()
+          def visit(name):
+              if name in active:
+                  raise RuntimeError(f'Cycle at {name}')
+              if name in visited:
+                  return
+              active.add(name)
+              for dependency in dependencies[name]:
+                  visit(dependency)
+              active.remove(name)
+              visited.add(name)
+              order.append(name)
+          for name in sorted(candidates):
+              visit(name)
+          print('\n'.join(order))
+          PY
+          echo "Compiling pinned EconomicModel first."
+          if ! lake build Ventura26LiquidityAllocation.EconomicModel > "$LOG_DIR/EconomicModel.log" 2>&1; then
+            tail -n 140 "$LOG_DIR/EconomicModel.log"
+            exit 1
+          fi
+          echo "CHECKED baseline: EconomicModel"
+          while IFS= read -r module; do
+            echo "::group::Compile $module"
+            if lake build "Ventura26LiquidityAllocation.$module" > "$LOG_DIR/$module.log" 2>&1; then
+              echo "COMPILED $module" | tee -a "$LOG_DIR/results.txt"
+            else
+              echo "FAILED $module" | tee -a "$LOG_DIR/results.txt"
+              tail -n 140 "$LOG_DIR/$module.log"
+              echo "::endgroup::"
+              exit 1
+            fi
+            echo "::endgroup::"
+          done < "$LOG_DIR/module-order.txt"
+
+      - name: Inspect axioms of principal proposed claims
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          cat > CandidateAxioms.lean <<'LEAN'
+          import Ventura26LiquidityAllocation.StationaryEquilibriumCandidate
+          import Ventura26LiquidityAllocation.BoundaryAnalyticPackageCandidate
+          #print axioms Ventura26LiquidityAllocation.ProposedStationaryEquilibrium.parent_competitiveEquilibrium
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
+          LEAN
+          lake env lean CandidateAxioms.lean > "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log" 2>&1 || {
+            tail -n 140 "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log"
+            exit 1
+          }
+          cat "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log"
+          if grep -E '(sorryAx|Lean\.sorryAx)' "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log"; then
+            echo "ERROR: an audited claim depends on sorryAx."
+            exit 1
+          fi
+
+      - name: Save full compiler logs even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lean-candidate-audit-logs
+          path: lean-ci-logs/
+          if-no-files-found: warn
+          retention-days: 30
