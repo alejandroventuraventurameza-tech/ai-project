@@ -340,7 +340,7 @@ theorem parent_bankFinitePayoff_le (G value : ℝ)
               mul_nonneg (mul_nonneg ((primitives G).tree.transition_nonneg _ _)
                 ((primitives G).payment_probability_nonneg omega)) (by norm_num)
             exact mul_le_mul_of_nonneg_left
-              (add_le_add_right
+              (add_le_add_left
                 (mul_le_mul_of_nonneg_left htailBound
                   (show (0 : ℝ) ≤ 9 / 10 by norm_num)) _) hw
         _ = bankInitialDividend G p + (99 / 100 : ℝ) *
