@@ -43,12 +43,18 @@ theorem fifteenth_root_between (a b x : ℝ)
   constructor
   · have h := Real.rpow_le_rpow (pow_nonneg ha _) hlo
       (by norm_num : (0 : ℝ) ≤ 1 / 15)
-    rw [Real.pow_rpow_inv_natCast ha (by norm_num : (15 : ℕ) ≠ 0)] at h
-    exact h
+    calc
+      a = (a ^ (15 : ℕ)) ^ (1 / 15 : ℝ) := by
+        simpa only [one_div] using
+          (Real.pow_rpow_inv_natCast ha (by norm_num : (15 : ℕ) ≠ 0)).symm
+      _ ≤ x ^ (1 / 15 : ℝ) := h
   · have h := Real.rpow_le_rpow hx hhi
       (by norm_num : (0 : ℝ) ≤ 1 / 15)
-    rw [Real.pow_rpow_inv_natCast hb (by norm_num : (15 : ℕ) ≠ 0)] at h
-    exact h
+    calc
+      x ^ (1 / 15 : ℝ) ≤ (b ^ (15 : ℕ)) ^ (1 / 15 : ℝ) := h
+      _ = b := by
+        simpa only [one_div] using
+          (Real.pow_rpow_inv_natCast hb (by norm_num : (15 : ℕ) ≠ 0))
 
 /-- Same positive parent coefficient used by the exact rational audit.
     The stationary consumption times wage^5. -/

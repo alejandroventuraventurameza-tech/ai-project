@@ -1,3 +1,4 @@
+import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
 import Ventura26LiquidityAllocation.BoundaryWorkerLaborCandidate
 
 /-!
@@ -80,8 +81,8 @@ theorem depositRate_strictMonoOn :
   rw [boundaryDepositRate_rewrite x (ne_of_gt hxx) (ne_of_gt hz1),
     boundaryDepositRate_rewrite y (ne_of_gt hyy) (ne_of_gt hz2)]
   have hterm := mul_lt_mul_of_pos_left hfrac depositExtra_pos
-  -- Reagrupar c*x/(x+b) como c*(x/(x+b)).
-  nlinarith
+  -- Explicit polynomial rearrangement of c*x/(x+b) = c*(x/(x+b)).
+  convert add_lt_add hbase hterm using 1 <;> ring
 
 /-- Los denominadores relevantes del consumo trabajador son positivos. -/
 private theorem depositRate_pos {R : ℝ} (hR : R ∈ boundaryInterval) :
@@ -139,20 +140,19 @@ private theorem firmConsumption_eq_numerator_div {R : ℝ}
   | H =>
       unfold boundaryConsumption firmConsumptionNumerator
       rw [boundaryEffectivePrice_eq]
-      field_simp [ne_of_gt hR, ne_of_gt (parentEffectivePrice_pos .H)]
-      ring
+      field_simp [ne_of_gt hR, ne_of_gt (parentEffectivePrice_pos .H)] <;> ring
   | L =>
       unfold boundaryConsumption firmConsumptionNumerator
-      field_simp [ne_of_gt hR]
-      ring
+      field_simp [ne_of_gt hR] <;> ring
 
 theorem firmConsumption_strictAntiOn (i : FirmType) :
     StrictAntiOn (fun R => boundaryConsumption R i) boundaryInterval := by
   intro x hx y hy hxy
   have hxpos := (boundary_rate_domain hx).1
   have hypos := (boundary_rate_domain hy).1
-  rw [firmConsumption_eq_numerator_div hxpos i,
-    firmConsumption_eq_numerator_div hypos i]
+  change boundaryConsumption y i < boundaryConsumption x i
+  rw [firmConsumption_eq_numerator_div hypos i,
+    firmConsumption_eq_numerator_div hxpos i]
   apply (div_lt_div_iff₀ hypos hxpos).2
   exact mul_lt_mul_of_pos_left hxy (firmConsumptionNumerator_pos i)
 
@@ -242,7 +242,10 @@ theorem output_scaling {R : ℝ} (hR : R ∈ boundaryInterval)
   have hcf := boundaryCapital_two_fifths hR i
   have hlf := boundaryLabor_eq_parent_mul_factor hR i
   have hhalf := laborFactor_half_power hR
-  have hpow := Real.mul_rpow (labor_pos i).le (laborFactor_pos hR).le (1 / 2 : ℝ)
+  have hpow :
+      (labor i * boundaryLaborFactor R) ^ (1 / 2 : ℝ) =
+        labor i ^ (1 / 2 : ℝ) * boundaryLaborFactor R ^ (1 / 2 : ℝ) :=
+    Real.mul_rpow (labor_pos i).le (laborFactor_pos hR).le
   change technology i * boundaryCapital R i ^ (2 / 5 : ℝ) *
       boundaryLabor R i ^ (1 / 2 : ℝ) = _
   rw [hcf, hlf, hpow, hhalf]
@@ -303,9 +306,9 @@ private theorem output_ratio_eq {R : ℝ} (hR : R ∈ boundaryInterval) :
   have hY := aggregateOutput_scaling hR
   have hw : boundaryWage R = wage * wageRoot R := by rfl
   rw [hY, hw]
+  unfold scalePow
   field_simp [ne_of_gt aggregates_pos.2.1, ne_of_gt wage_pos,
-    ne_of_gt (wageRoot_pos hR)]
-  ring
+    ne_of_gt (wageRoot_pos hR)] <;> ring
 
 /-- La identidad cubica evita manipular directamente una potencia 8/15. -/
 private theorem output_ratio_cube {R : ℝ} (hR : R ∈ boundaryInterval) :
@@ -320,8 +323,7 @@ private theorem output_ratio_cube {R : ℝ} (hR : R ∈ boundaryInterval) :
         scalePow R ^ (3 : ℕ) / wageRoot R ^ (3 : ℕ) := by ring
     _ = scalePow R ^ (3 : ℕ) / (workerRatio R * scalePow R) := by rw [hg]
     _ = scalePow R ^ (2 : ℕ) / workerRatio R := by
-      field_simp [ne_of_gt hu, ne_of_gt hz]
-      ring
+      field_simp [ne_of_gt hu, ne_of_gt hz] <;> ring
 
 private theorem scalePow_strictMonoOn :
     StrictMonoOn scalePow boundaryInterval := by
@@ -463,7 +465,7 @@ theorem firmConsumption_continuousOn (i : FirmType) :
       exact ne_of_gt (boundary_rate_domain hR).1)
   exact hq.congr (by
     intro R hR
-    exact (firmConsumption_eq_numerator_div (boundary_rate_domain hR).1 i).symm)
+    exact firmConsumption_eq_numerator_div (boundary_rate_domain hR).1 i)
 
 theorem capitalCost_continuousOn :
     ContinuousOn boundaryCapitalCost boundaryInterval := by
@@ -484,8 +486,8 @@ theorem capitalCost_continuousOn :
     exact continuousOn_const.mul hlinear
   exact hright.congr (by
     intro R hR
-    exact (boundaryCapitalCost_scale_formula
-      (boundary_scale_and_investment_domain hR).1).symm)
+    exact boundaryCapitalCost_scale_formula
+      (boundary_scale_and_investment_domain hR).1)
 
 theorem aggregateOutput_continuousOn :
     ContinuousOn boundaryAggregateOutput boundaryInterval := by
@@ -493,7 +495,9 @@ theorem aggregateOutput_continuousOn :
   have hc := workerConsumption_continuousOn
   have hpow : ContinuousOn (fun R => boundaryCapitalScale R ^ (4 / 5 : ℝ))
       boundaryInterval :=
-    (Real.continuous_rpow_const (by norm_num : (0 : ℝ) ≤ 4 / 5)).comp_continuousOn hs
+    hs.rpow_const (by
+      intro R hR
+      exact Or.inr (by norm_num))
   have hinner : ContinuousOn
       (fun R => (boundaryWorkerConsumption R / workerConsumption) *
         boundaryCapitalScale R ^ (4 / 5 : ℝ)) boundaryInterval := by
@@ -508,7 +512,9 @@ theorem aggregateOutput_continuousOn :
       (fun R => ((boundaryWorkerConsumption R / workerConsumption) *
         boundaryCapitalScale R ^ (4 / 5 : ℝ)) ^ (1 / 3 : ℝ))
       boundaryInterval :=
-    (Real.continuous_rpow_const (by norm_num : (0 : ℝ) ≤ 1 / 3)).comp_continuousOn hinner
+    hinner.rpow_const (by
+      intro R hR
+      exact Or.inr (by norm_num))
   have hw : ContinuousOn boundaryWage boundaryInterval := by
     unfold boundaryWage
     exact continuousOn_const.mul hroot
@@ -522,7 +528,7 @@ theorem aggregateOutput_continuousOn :
     exact (continuousOn_const.mul hpow).mul hratio
   exact hright.congr (by
     intro R hR
-    exact (aggregateOutput_scaling hR).symm)
+    exact aggregateOutput_scaling hR)
 
 theorem resourceResidual_continuousOn :
     ContinuousOn boundaryResourceResidual boundaryInterval := by
