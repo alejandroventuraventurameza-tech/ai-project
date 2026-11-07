@@ -17,6 +17,8 @@ proves the scalar real algebra, not the model-specific history sums.
 namespace Ventura26LiquidityAllocation
 namespace ProposedDateZeroJointTangentGapBalanceAlgebra
 
+open ProposedDateZeroJointCapitalLoanTangentAlgebra
+
 /-- Exact normalization of the joint derivative by current marginal utility.
     It is not a separate state-by-state Euler equation. -/
 theorem tangentGradient_zero_implies_margin_balance
