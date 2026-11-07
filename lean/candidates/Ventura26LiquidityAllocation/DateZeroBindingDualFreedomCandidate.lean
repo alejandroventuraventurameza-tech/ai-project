@@ -44,8 +44,8 @@ theorem bindingBorrower_shiftCollateralDual_of_nonneg
   change DateZeroBindingBorrower P
     (replaceCollateralDual X
       (fun j t h => X.collateralDual j t h + epsilon)) i
-  apply bindingBorrower_replaceCollateralDual_of_positive P X
-    (fun j t h => X.collateralDual j t h + epsilon) i hbinding
+  apply bindingBorrower_replaceCollateralDual_of_positive P X i
+    (fun j t h => X.collateralDual j t h + epsilon) hbinding
   intro h
   have hp : 0 < X.collateralDual i 0 h := (hbinding h).2.1
   linarith
