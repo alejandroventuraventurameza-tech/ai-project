@@ -49,7 +49,7 @@ theorem exists_sparse_nonnegative_statewise_multiplier
     · simp [hs]
   · rw [Finset.sum_eq_single sStar]
     · have hcancel : (gap / gamma sStar) * gamma sStar = gap := by
-        field_simp [ne_of_gt hgamma]
+        field_simp [ne_of_gt hgamma] <;> ring
       simpa using hcancel
     · intro s _ hs
       simp [hs]
