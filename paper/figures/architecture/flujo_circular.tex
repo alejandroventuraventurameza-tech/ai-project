@@ -33,13 +33,13 @@
   node[lab,right] {repagos} (bancos.north east);
 \draw[financial] (bancos.east) to[bend left=13] (otc.west);
 \draw[financial] (otc.west) to[bend left=13] (bancos.east);
-\node[font=\tiny,text=blue!75!black] at (.03,-1.03) {reservas};
+\node[font=\tiny,text=blue!75!black] at (.03,-.92) {reservas};
 \draw[policy] (central.west) -- node[lab,above] {corredor} (otc.east);
 \draw[policy] (tesoro.north) -- node[lab,left] {bonos/tributos} (hogar.south);
-\draw[policy] (central.south west) to[out=-130,in=-40,looseness=.90] (bancos.south east);
+\draw[policy] (central.south west) to[out=-130,in=-40,looseness=.57] (bancos.south east);
 
-\node[anchor=west,font=\tiny,text=black!72] at (-5.8,-2.65)
+\node[anchor=west,font=\tiny,text=black!72] at (-5.8,-2.95)
  {Verde: bienes y trabajo \quad Azul: contratos y depósitos \quad Naranja: sector público};
-\node[anchor=west,font=\tiny,text=black!72] at (-5.8,-2.99)
+\node[anchor=west,font=\tiny,text=black!72] at (-5.8,-3.27)
  {Hogar $\to$ bancos: depósitos; bancos $\to$ empresas: créditos; productor de capital $\to$ firmas: capital nuevo; BC $\to$ bancos: facilidad $W$.};
 \end{tikzpicture}
