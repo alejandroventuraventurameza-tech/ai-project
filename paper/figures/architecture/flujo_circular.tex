@@ -1,41 +1,48 @@
 \begin{tikzpicture}[
- >=Latex, font=\scriptsize,
- actor/.style={draw=teal!65!black,fill=teal!6,rounded corners=3pt,
-   align=center,minimum height=.83cm,minimum width=2.25cm,inner sep=3pt,
-   text=black!85},
- finactor/.style={actor,draw=blue!65!black,fill=blue!6},
- publicactor/.style={actor,draw=orange!75!black,fill=orange!8},
- real/.style={-{Latex[length=2.4mm]},line width=.7pt,draw=teal!73!black},
- fin/.style={-{Latex[length=2.4mm]},line width=.7pt,draw=blue!72!black},
- public/.style={-{Latex[length=2.4mm]},line width=.7pt,draw=orange!85!black,densely dashed},
- alabel/.style={fill=white,inner sep=1pt,align=center,font=\tiny}
+ >=Latex,font=\scriptsize,
+ actor/.style={draw=teal!60!black,fill=teal!5,rounded corners=3pt,
+   align=center,minimum width=2.27cm,minimum height=.82cm,
+   inner sep=3pt,text=black!87},
+ bank/.style={actor,draw=blue!65!black,fill=blue!6},
+ public/.style={actor,draw=orange!73!black,fill=orange!8},
+ real/.style={-{Latex[length=2mm]},draw=teal!75!black,line width=.75pt},
+ financial/.style={-{Latex[length=2mm]},draw=blue!68!black,line width=.75pt},
+ policy/.style={-{Latex[length=2mm]},draw=orange!82!black,line width=.72pt,densely dashed},
+ lab/.style={fill=white,inner sep=1.2pt,font=\tiny,align=center}
 ]
-\node[actor] (hogar) at (-5.1,.55) {Hogar trabajador\\$C^W,L,D^W,G^H$};
-\node[actor] (firms) at (-1.85,2.22) {Empresas H y L\\$k_t,\ell_t,c^E,k_{t+1},b_t,a_t$};
-\node[actor] (retail) at (1.75,2.22) {Minoristas\\CES, precios y bienes finales};
-\node[actor] (capital) at (5.0,.55) {Productor de capital\\$\Gamma(I_t,K_t)$ y $q_t$};
-\node[finactor] (bancos) at (-1.85,-1.85) {Bancos comerciales\\$l^B,m^B,d^D,e$};
-\node[finactor] (otc) at (1.60,-1.85) {OTC interbancario\\$S^-,S^+,\vartheta,R^F$};
-\node[publicactor] (publico) at (5.0,-1.85) {Banco central y Tesoro\\$R^R,M^{pre},\rho,\Delta,G$};
+\node[actor] (hogar) at (-4.7,1.72) {\textbf{Hogar}\\$C_t^W,L_t,D_t^W,G_t^H$};
+\node[actor] (firmas) at (-1.52,1.72) {\textbf{Empresas H/L}\\$k_{i,t},\ell_{i,t},k_{i,t+1},b_{it}$};
+\node[actor] (minoristas) at (1.67,1.72) {\textbf{Minoristas}\\$m_t,Y_t,\Pi_t$};
+\node[actor] (capital) at (4.86,1.72) {\textbf{Productor de capital}\\$q_t,\Gamma(I_t,K_t)$};
+\node[public] (tesoro) at (-4.7,-1.54) {\textbf{Tesoro}\\bonos $G_t$; impuestos $T_t$};
+\node[bank] (bancos) at (-1.52,-1.54) {\textbf{Bancos}\\$l^B,m^B,d^D,e$};
+\node[bank] (otc) at (1.67,-1.54) {\textbf{OTC entre bancos}\\$S^-,S^+,\vartheta,R^F$};
+\node[public] (central) at (4.86,-1.54) {\textbf{Banco central}\\$R^R,M^{pre},\rho,\Delta,W$};
 
-% Real transactions at the top and right.
-\draw[real] (hogar.north east) to[out=42,in=180] node[alabel,above] {trabajo $\ell$} (firms.west);
-\draw[real] (firms.east) -- node[alabel,above] {insumo $F_i$} (retail.west);
-\draw[real] (retail.north) to[out=118,in=65] node[alabel,above] {consumo, bienes finales} (hogar.north);
-\draw[real] (retail.east) to[out=0,in=95] node[alabel,right] {bienes de inversión} (capital.north);
-\draw[real] (capital.west) to[out=202,in=-37] node[alabel,below] {$k_{i,t+1}$, precio $q_t$} (firms.south east);
+% Upper real-economy cycle.
+\draw[real] (hogar.east) -- node[lab,above] {trabajo} (firmas.west);
+\draw[real] (firmas.east) -- node[lab,above] {insumo} (minoristas.west);
+\draw[real] (minoristas.east) -- node[lab,above] {bien final} (capital.west);
+\draw[real] (minoristas.north) to[out=145,in=35,looseness=1.32]
+  node[lab,above] {consumo final} (hogar.north);
 
-% Financial circuit (deposits, credit and settlement).
-\draw[fin] (hogar.south east) to[out=-50,in=180] node[alabel,left] {depósitos} (bancos.west);
-\draw[fin] (bancos.north west) to[out=105,in=-110] node[alabel,left] {crédito $b_i$} (firms.south west);
-\draw[fin,dashed] (firms.south) to[out=-70,in=60] node[alabel,right] {repago heredado} (bancos.north east);
-\draw[fin] (bancos.east) to[bend left=14] node[alabel,above] {reservas: posición neta} (otc.west);
-\draw[fin] (otc.west) to[bend left=14] node[alabel,below] {liquidación entre bancos} (bancos.east);
-\draw[public] (publico.west) to[bend right=10] node[alabel,below] {piso y techo $R^R,R^W$} (otc.east);
-\draw[public] (publico.south) to[out=-135,in=-45,looseness=1.1]
- node[alabel,below] {bonos / transferencias públicas} (hogar.south);
-\node[font=\tiny,align=left,anchor=west,text=black!65] at (-5.95,-3.05)
- {$\color{teal!73!black}{\longrightarrow}$ flujo real \quad
-  $\color{blue!72!black}{\longrightarrow}$ contrato/redistribución financiera \quad
-  $\color{orange!85!black}{\dashrightarrow}$ sector público};
+% Intertemporal financial loop and state payments.
+\draw[financial] (hogar.south east) to[out=-47,in=145]
+  node[lab,above left] {depósitos} (bancos.west);
+\draw[financial] (bancos.north west) to[bend left=10]
+  node[lab,left] {préstamos} (firmas.south west);
+\draw[financial,densely dashed] (firmas.south east) to[bend left=10]
+  node[lab,right] {repagos} (bancos.north east);
+\draw[financial] (bancos.east) to[bend left=13] (otc.west);
+\draw[financial] (otc.west) to[bend left=13] (bancos.east);
+\node[font=\tiny,text=blue!75!black] at (.03,-1.03) {reservas};
+\draw[policy] (central.west) -- node[lab,above] {corredor} (otc.east);
+\draw[policy] (tesoro.north) -- node[lab,left] {bonos/tributos} (hogar.south);
+\draw[policy] (central.south west) to[out=-130,in=-40,looseness=.90]
+  node[lab,below] {facilidad $W$ a bancos} (bancos.south east);
+
+\node[anchor=west,font=\tiny,text=black!65] at (-5.9,-2.65)
+ {Real (verde) $\rightarrow$ bienes y trabajo \qquad
+  Financiero (azul) $\rightarrow$ derechos \qquad
+  Público (naranja) $\dashrightarrow$ implementación};
 \end{tikzpicture}
