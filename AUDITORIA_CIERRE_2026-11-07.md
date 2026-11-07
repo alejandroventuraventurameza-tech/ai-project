@@ -2,6 +2,15 @@
 
 **Revision auditada:** rama `work/lean-ci-validation-otc-20261106` a partir de `6a4362ad6e9f13f5a934748dc7a04e8f968e5037`. El ultimo estado de CI registrado antes de extender el Beamer fue `a78f7a75`: build general y auditoria Lean especializados exitosos. Este informe diferencia validez numerica, compilacion y suficiencia economica.
 
+## Comprobación normativa: issue #7
+
+- **Turno final:** viernes 30 de octubre de 2026, 07:30–08:15, ya transcurrido; 30 minutos de exposición y 15 de discusión.
+- **Fecha límite del paper:** jueves **26 de noviembre a las 22:00 (Lima)**.
+- **Cuerpo 8–20 páginas:** el PDF actual tiene 132 páginas y sus apéndices comienzan en la página 46; el cuerpo es excesivo y requiere compactación sin cambiar la geometría oficial (11 pt, 1 pulgada).
+- **Slide Lean y cotejo manuscrito:** requeridos por la consigna; continúan pendientes como entregables específicos.
+- **Workflow oficial:** `.github/workflows/build.yml` restaurado sin cambios; controles extra se alojan en `.github/workflows/editorial-qa.yml`.
+- **Entrega:** solo lo fusionado en `main` cuenta; `hand/` y `prompts.md` son obligatorios.
+
 ## Inventario y hallazgos
 
 | Puerta | Evidencia | Estado |
@@ -15,7 +24,7 @@
 | Paper vs Lean | `paper/result_ledger.json` incluye 57 resultados `not_run` y no se ha conciliado su alcance con los 71 modulos | **Bloqueo para declarar teoremas finales** |
 | Equilibrio | `full_infinite_equilibrium_established=false` y `full_equilibrium_validated=false` en auditorias numericas | **Bloqueo cientifico** |
 | Diseno | Presentacion Beamer ampliada desde 13 a 21 diapositivas, ecuaciones de OTC, regla monetaria, complementariedad, KKT, Euler y robustez | Nueva compilacion/inspeccion visual por cerrar |
-| Duracion | Guia historica `slides/topic-notes.md`: 18+2 minutos, 7 de octubre | Confirmar duracion de exposicion final |
+| Duracion | Presentación de tema: 18+2; exposición final oficial: 30+15, 30 de octubre | Verificado en issue #7 y PRESENTATIONS.md |
 | Codigo | Reproduccion sobre entorno Python 3.12; nuevas puertas de sintaxis y logs finales de LaTeX | Validacion CI del nuevo commit por cerrar |
 
 ## Resultado defendible ahora
