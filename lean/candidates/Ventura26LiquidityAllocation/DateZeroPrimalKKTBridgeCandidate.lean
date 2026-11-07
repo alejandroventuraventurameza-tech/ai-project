@@ -118,5 +118,25 @@ theorem exists_zeroDual_carrier_rootEuler
     0 * capitalEulerCollateralUnit P X i 0 (rootHistory P.tree) s = 0
   simpa using hgap
 
+/-- In the SOURCE strict-slack regime, collateralDual is already zero.
+    Thus the original (not replaced) capital Euler residual vanishes at root. -/
+theorem firmOptimal_deterministic_slack_sourceCapitalEulerResidual_zero
+    (P : Primitives S) (I : InheritedState)
+    (X : Allocation S) (i : FirmType) (s : S)
+    (hopt : FirmOptimal P I X i)
+    (hcapital : ∀ h : History S 0,
+      FirmHistoryAdmissible P 0 h → 0 < X.capital i 0 h)
+    (hslack : DateZeroSlackBorrower P X i)
+    (htrans : P.tree.transition P.tree.initial s = 1)
+    (hothers : ∀ v : S, v ≠ s →
+      P.tree.transition P.tree.initial v = 0) :
+    localFirmCapitalEulerResidual P X i 0 (rootHistory P.tree) s = 0 := by
+  have hgap := firmOptimal_deterministic_root_primalGap_zero
+    P I X i s hopt hcapital hslack htrans hothers
+  have hdual : X.collateralDual i 0 (rootHistory P.tree) = 0 :=
+    (hslack (rootHistory P.tree)).2.1
+  rw [capitalEulerResidual_eq_primalGap_sub_dual, hdual]
+  simpa using hgap
+
 end ProposedDateZeroPrimalKKTBridge
 end Ventura26LiquidityAllocation
