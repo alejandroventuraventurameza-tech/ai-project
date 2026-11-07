@@ -14,6 +14,8 @@ jobs:
         with:
           python-version: "3.12"
       - run: python -m compileall -q code
+      - name: Audit illustrative firm scale without changing calibration
+        run: python code/irf/audit_firm_scale.py
 
   latex-logs:
     name: Final LaTeX references and layout
