@@ -1208,6 +1208,20 @@ Si $h>0$, $\mathcal M(0,h)<0$; ningún $s\geq0$ cercano puede volverlo no negati
 Para $h<0$, continuidad preserva todos los filtros estrictos verificados en el enlace. Complementariedad distingue las dos raíces, y la proposición \ref{prop:finite_prefix_equilibrium} convierte los planes en equilibrios con decisiones óptimas.
 \end{proof}
 
+\paragraph{Alcance de la elevación al equilibrio.}
+El argumento de complementariedad y los certificados numéricos
+identifican dos raíces locales del \emph{sistema reducido}, bajo
+las hipótesis de regularidad y de conjunto activo expuestas.
+La afirmación adicional de que ambas raíces representan equilibrios
+competitivos infinitos utiliza la proposición
+\ref{prop:finite_prefix_equilibrium}, incluida su suficiencia
+empresarial, bancaria y de precios y sus condiciones terminales.
+Las comprobaciones actuales de las 33 filas y de la cola finita no
+constituyen una verificación independiente de todas esas premisas,
+ni una formalización Lean del enunciado completo.
+Por esta razón, las IRF posteriores se identifican explícitamente
+como soluciones numéricas reducidas condicionadas a S o B.
+
 Más generalmente, una dirección transversal $\mathbf v=\tau\mathbf d$, $\tau>0$, con $\mathbf a^\top\mathbf d>0$ admite las dos ramas cercanas. La condición opuesta excluye equilibrio en ese entorno, sin una afirmación global. La existencia no es uniforme sobre todos los instrumentos, estados o distribuciones de shocks.
 
 Las ramas no son refinamientos numéricos de una misma solución: difieren en consumo, crédito, precios y capital. Seleccionar S solo porque su asignación es favorable escondería la multiplicidad. La decisión del autor es conservar ambas.
@@ -1558,6 +1572,49 @@ se usa la gráfica recurrente local lineal almacenada. Los CSV contienen 161
 observaciones por rama, de $t=0$ a $160$; las figuras muestran $0$ a $20$.
 No imponemos selección ni promediamos las ramas.
 
+\paragraph{De las condiciones de los agentes al sistema computacional.}
+El prefijo de dos fechas no se obtiene mediante una solución
+analítica cerrada de las decisiones simultáneas. Para cada régimen
+$r\in\{S,B\}$, definimos
+\[
+Z=(X_1,u_0,x_2,u_1),\qquad
+\dim Z=7+10+6+10=33,\qquad
+F_r(Z,v_R)=
+\begin{pmatrix}F_{r,0}^{(17)}\\ F_{r,1}^{(16)}\end{pmatrix}=0.
+\]
+En fecha cero, seis filas expresan presupuesto, Euler de capital y
+condición de régimen de H y L; otras once recogen banco, capital,
+recursos, hogar, precios, reglas monetarias y limpieza financiera.
+En fecha uno, cuatro filas empresariales y una condición de garantía
+común acompañan las once relaciones agregadas. La diferencia esencial
+entre S y B aparece en las filas de L de fecha cero: cuando su
+garantía tiene holgura, rige la condición de préstamo interior con
+multiplicador nulo; en B se exige cobertura activa. Desde fecha uno
+ambas firmas originan préstamos restringidos. El orden y la fórmula
+individual de las 33 filas se registran en
+\texttt{docs/MATRIZ\_33\_ECUACIONES\_IRF.md}; un test independiente
+contrasta ese orden con \texttt{prefix\_residual()}.
+
+La solución emplea Newton amortiguado:
+\[
+J_r(Z^{(n)})\,dZ^{(n)}=-F_r(Z^{(n)},v_R),
+\qquad Z^{(n+1)}=Z^{(n)}+\alpha_n dZ^{(n)},
+\quad 0<\alpha_n\leq1.
+\]
+El Jacobiano se calcula por diferencias finitas centradas, mientras
+que $\alpha_n$ se reduce por búsqueda de paso hasta disminuir el
+residuo máximo. La inicialización de la trayectoria perturbada
+aprovecha la derivada direccional del sistema respecto de $v_R$.
+Desde $t=2$, el reproductor principal propaga la gráfica estable
+\emph{local lineal} $P_0,F_0$; una auditoría separada resuelve un
+sistema no lineal finito apilado hasta $T=640$. Por tanto, no utilizamos
+iteración de función de valor ni descenso de gradiente estocástico
+para producir estas IRF. La recursión numérica del valor bancario
+tampoco demuestra por sí misma optimalidad de la política de cartera.
+La correspondencia de soluciones reducidas con un equilibrio
+dinámico competitivo requiere verificar, además, las hipótesis
+de \ref{prop:finite_prefix_equilibrium}.
+
 Las tasas se expresan como $10^4(R_t-R_t^0)$, sin anualizar; las cantidades
 positivas como $100\log(x_t/x_t^0)$. Las decisiones $k_{i,t+1}$ se muestran en
 la fecha $t$ en que se eligen. La pérdida asignativa es
@@ -1586,6 +1643,51 @@ La restricción limita repago: al bajar $R^L$, la capacidad de endeudamiento
 puede aumentar para un mismo valor pignorable. Pero $q$, inflación, patrimonio
 y demandas también cambian. El efecto final requiere resolver conjuntamente
 los mercados y conservar el conjunto activo.
+
+\paragraph{Descomposición verificable de crédito y capital de H.}
+Para la firma H, restringida en ambas ramas, escriba
+$n_{Ht}=N_{Ht}-c_{Ht}>0$ y
+$p_{Ht}^{\mathrm{eff}}=q_t-H_{Ht}/R_t^L>0$.
+Con depósitos empresariales nulos, presupuesto y cobertura activa
+implican \emph{exactamente}, en cada trayectoria,
+\[
+k_{H,t+1}=\frac{n_{Ht}}{p_{Ht}^{\mathrm{eff}}},\qquad
+b_{Ht}=\frac{H_{Ht}k_{H,t+1}}{R_t^L}.
+\]
+Comparar la trayectoria perturbada con la referencia, manteniendo
+el mismo estado heredado y el mismo régimen, produce dos identidades:
+\begin{align}
+100\Delta\log k_{H,t+1}
+&=100\Delta\log n_{Ht}
+-100\Delta\log p_{Ht}^{\mathrm{eff}},
+\label{eq:irf_decomposition_capital}\\
+100\Delta\log b_{Ht}
+&=100\Delta\log H_{Ht}
++100\Delta\log k_{H,t+1}-100\Delta\log R^L_t.
+\label{eq:irf_decomposition_credit}
+\end{align}
+En particular, el segundo término de la primera igualdad es positivo
+cuando cae el precio efectivo. Sin embargo, su signo favorable no
+basta para determinar la inversión: en B, la contracción de recursos
+propios domina. En S, en cambio, ambos componentes se suman
+positivamente. La Tabla \ref{tab:mechanism_decomposition} presenta las
+contribuciones calculadas de forma reproducible para el sistema
+no lineal finito de $T=640$; su última fila muestra que la respuesta
+del dual normalizado de H también difiere de signo.
+
+\begin{table}[htbp]\centering\small
+\caption{Descomposición de identidades de H al impacto,
+solución no lineal finita $T=640$. Los valores de capital y crédito
+son contribuciones logarítmicas escaladas por 100;
+el dual se muestra multiplicado por $10^6$.}
+\label{tab:mechanism_decomposition}
+\input{irf_mechanism_table}
+\end{table}
+Estas cifras no deben interpretarse como efectos causales aislados:
+precio efectivo, recursos propios, garantía y préstamo se determinan
+conjuntamente. Además, la tabla no establece optimalidad económica
+global ni asigna probabilidades de selección a S y B; explica
+por qué las curvas verificadas pueden moverse en sentidos distintos.
 
 \begin{figure}[p]\centering
 \includegraphics[width=\textwidth]{figures/irf_transmission.pdf}

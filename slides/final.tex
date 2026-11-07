@@ -205,6 +205,64 @@ correspondencia con equilibrio competitivo completo no está cerrada.
 \end{itemize}
 \end{frame}
 
+\begin{frame}{De las condiciones de los agentes a 33 filas}
+\small
+La reducción de las FOC, los balances y la limpieza de mercados da
+\[
+F_r(Z,v_R)=0,\qquad
+Z=(X_1^{(7)},u_0^{(10)},x_2^{(6)},u_1^{(10)}).
+\]
+\begin{center}
+\begin{tabular}{@{}lccc@{}}\toprule
+Bloque & Empresa & Resto de mercados & Total\\\midrule
+Fecha 0 & 6 & 11 & 17\\
+Fecha 1 & 5 & 11 & 16\\\bottomrule
+\end{tabular}
+\end{center}
+\[
+F^{H,\mathrm{caja}}_{0}
+=c_{H0}+q_0k_{H1}-F_{H1}/R^L_0-N_{H0}=0.
+\]
+\[
+F^{L,S}_{0,\mathrm{préstamo}}
+=\log\left(\frac{R_0^L\beta_E c_{L0}}
+{\Pi_1c_{L1}}\right)=0.
+\]
+\footnotesize
+En B, la última fila se sustituye por la \emph{igualdad de colateral}
+de L. En fecha uno ambos tipos están restringidos. Catálogo R01--R33:
+\texttt{docs/MATRIZ\_33\_ECUACIONES\_IRF.md}.
+\end{frame}
+
+\begin{frame}[fragile]{De las 33 ecuaciones a las curvas: Newton y continuación}
+\small
+La solución se calcula separadamente para $r\in\{S,B\}$:
+\[
+J_r(Z^{(n)})\,\Delta Z^{(n)}=-F_r(Z^{(n)},v_R),\qquad
+Z^{(n+1)}=Z^{(n)}+\alpha_n\Delta Z^{(n)}.
+\]
+\footnotesize
+Jacobiano por diferencias finitas \emph{centradas};
+$\alpha_n$ se determina mediante búsqueda amortiguada.
+\medskip
+\scriptsize
+\begin{verbatim}
+f_shock = lambda z, b=branch: prefix_residual(
+    base, p0, b, args.shock, z)
+shocked, history, jac = newton(
+    f_shock, initial, tolerance=args.solver_tolerance)
+\end{verbatim}
+\footnotesize
+\textbf{Código fuente:} \texttt{code/irf/finite\_irf.py}, función
+\texttt{main()}. Tras resolver el prefijo, la versión principal
+propaga la gráfica estable local $P_0,F_0$ desde $t=2$; una
+comparación separada resuelve trayectorias finitas no lineales
+hasta $T=640$.
+
+No utilizamos VFI ni SGD. La validación numérica no es por sí
+misma una prueba de equilibrio competitivo infinito.
+\end{frame}
+
 \begin{frame}{IRF: mapa de ecuaciones que conecta las flechas}
 \centering
 \resizebox{\linewidth}{!}{\input{../paper/figures/architecture/transmision_irf.tex}}
@@ -222,6 +280,30 @@ El shock es de \emph{remuneración de reservas}, no de encaje.
 
 \begin{frame}{Capital, producción y pérdida asignativa}
 \centering\includegraphics[height=.79\textheight,width=\textwidth,keepaspectratio]{../paper/figures/irf_real_allocation.pdf}
+\end{frame}
+
+\begin{frame}{El mismo crédito puede financiar menos capital}
+\footnotesize
+Para H con garantía activa, $n_H=N_H-c_H$ y
+$p_H^{\mathrm{eff}}=q-H_H/R^L>0$:
+\[
+100\Delta\log k'_H=100\Delta\log n_H
+-100\Delta\log p_H^{\mathrm{eff}},
+\]
+\[
+100\Delta\log b_H=
+100\Delta\log H_H+100\Delta\log k'_H-100\Delta\log R^L.
+\]
+\begin{center}
+\resizebox{.96\linewidth}{!}{\input{../paper/irf_mechanism_table.tex}}
+\end{center}
+\scriptsize
+\textbf{Fuente:} \texttt{audit\_financial\_blocks.py} y
+\texttt{render\_mechanism\_table.py}, solución no lineal finita $T=640$.
+En B cae el recurso invertible lo suficiente para superar la
+reducción del precio efectivo; por eso $k'_H$ cae aunque $b_H$ suba.
+Estas contribuciones son identidades en equilibrio conjunto,
+no intervenciones causales separadas.
 \end{frame}
 
 \begin{frame}{Condiciones KKT conjuntas de capital y préstamo}
