@@ -121,5 +121,42 @@ theorem firmOptimal_sourceCalendar_binding_scalarComplementarity_of_posUnit
   exact firmOptimal_sourceCalendar_binding_scalarComplementarity
     P I X i dateOne recurrent hcalendar hopt hbinding hcapital hcoeff hunit
 
+/-- Conditional identification of the ACTUAL source dual. The missing
+    source capital Euler row is stated as an explicit premise: it does not
+    follow merely from FirmOptimal because the Allocation carries a free
+    collateralDual field. Under that premise, the scalar witness equals
+    the existing positive source multiplier at the root. -/
+theorem firmOptimal_binding_actualDual_identified_of_sourceRow
+    (P : Primitives S) (I : InheritedState)
+    (X : Allocation S) (i : FirmType)
+    (dateOne recurrent : S)
+    (hcalendar : DeterministicBridgeCalendar P dateOne recurrent)
+    (hopt : FirmOptimal P I X i)
+    (hbinding : DateZeroBindingBorrower P X i)
+    (hcapital : ∀ h : History S 0,
+      FirmHistoryAdmissible P 0 h → 0 < X.capital i 0 h)
+    (hunit : 0 < capitalEulerCollateralUnit
+      P X i 0 (rootHistory P.tree) dateOne)
+    (hsourceRow :
+      localFirmCapitalEulerResidual P X i 0
+        (rootHistory P.tree) dateOne = 0) :
+    ∃ mu : ℝ, 0 < mu ∧
+      X.collateralDual i 0 (rootHistory P.tree) = mu ∧
+      localFirmCapitalEulerResidual P
+        (replaceCollateralDual X (fun _ _ _ => mu))
+        i 0 (rootHistory P.tree) dateOne = 0 ∧
+      mu * rootCollateralSlack P X i dateOne = 0 := by
+  obtain ⟨mu, _hmu, hrow, _hslack, hcompl⟩ :=
+    firmOptimal_sourceCalendar_binding_scalarComplementarity_of_posUnit
+      P I X i dateOne recurrent hcalendar hopt hbinding hcapital hunit
+  have heq : X.collateralDual i 0 (rootHistory P.tree) = mu :=
+    capitalEuler_dual_unique_of_same_primal P X
+      (fun _ _ _ => mu) i 0 (rootHistory P.tree) dateOne
+      hsourceRow hrow (ne_of_gt hunit)
+  have hpositive : 0 < X.collateralDual i 0 (rootHistory P.tree) :=
+    (hbinding (rootHistory P.tree)).2.1
+  rw [heq] at hpositive
+  exact ⟨mu, hpositive, heq, hrow, hcompl⟩
+
 end ProposedDateZeroCalendarScalarKKT
 end Ventura26LiquidityAllocation
