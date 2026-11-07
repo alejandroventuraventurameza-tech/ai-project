@@ -94,9 +94,15 @@ theorem jointUtilityTerm_zero_hasDerivAt
             (Gamma - X.capitalPrice 0 h * R)).const_add
             (p.consumption 0 h)
         convert hl using 1 <;> ring
-      have hd := ((crraUtility_hasDerivAt
-        P.entrepreneurRiskAversion (p.consumption 0 h) hc).comp
-        0 hinner).const_mul (P.tree.historyWeight 0 h)
+      have hbase :
+          HasDerivAt (fun z : ℝ => crraUtility P.entrepreneurRiskAversion z)
+            (crraMarginal P.entrepreneurRiskAversion (p.consumption 0 h))
+            (p.consumption 0 h -
+              X.capitalPrice 0 h * (R * (0 : ℝ)) + Gamma * 0) := by
+        simpa using crraUtility_hasDerivAt
+          P.entrepreneurRiskAversion (p.consumption 0 h) hc
+      have hd := (hbase.comp 0 hinner).const_mul
+        (P.tree.historyWeight 0 h)
       simpa using hd
   simpa only [firmUtilityTerm, pow_zero, one_mul,
     FiniteMarkovTree.expectationAt, joint_consumption_zero] using hsum
@@ -151,10 +157,19 @@ theorem jointUtilityTerm_one_hasDerivAt
               X.inflation 1 h) 0 :=
         (dateOneJointGain_hasDerivAt_zero_along_tangent
           P X i p h R Gamma hK).const_add (p.consumption 1 h)
-      have hd := ((crraUtility_hasDerivAt
-        P.entrepreneurRiskAversion (p.consumption 1 h) hc).comp
-        0 hinner).const_mul (P.tree.historyWeight 1 h)
-      simpa [dateOneJointGain, dateOneCapitalGain] using hd
+      have hgainZero :
+          dateOneJointGain P X i p (R * (0 : ℝ)) (Gamma * 0) h = 0 := by
+        simp [dateOneJointGain, dateOneCapitalGain]
+      have hbase :
+          HasDerivAt (fun z : ℝ => crraUtility P.entrepreneurRiskAversion z)
+            (crraMarginal P.entrepreneurRiskAversion (p.consumption 1 h))
+            (p.consumption 1 h +
+              dateOneJointGain P X i p (R * (0 : ℝ)) (Gamma * 0) h) := by
+        simpa [hgainZero] using crraUtility_hasDerivAt
+          P.entrepreneurRiskAversion (p.consumption 1 h) hc
+      have hd := (hbase.comp 0 hinner).const_mul
+        (P.tree.historyWeight 1 h)
+      simpa [hgainZero] using hd
   have hscaled := hsum.const_mul P.entrepreneurDiscount
   simpa only [firmUtilityTerm, pow_one,
     FiniteMarkovTree.expectationAt, joint_consumption_one] using hscaled

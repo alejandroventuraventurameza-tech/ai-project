@@ -126,10 +126,14 @@ theorem exists_twoSided_binding_jointTangent_radius
         exact hcapital _ hprev
       have hmap : ContinuousAt (fun epsilon : ℝ => R * epsilon) 0 := by
         fun_prop
+      have hgainAt :
+          ContinuousAt (fun z : ℝ => dateOneCapitalGain P X i p z h)
+            (R * (0 : ℝ)) := by
+        simpa using
+          dateOneCapitalGain_continuousAt_zero P X i p h hposcap
       have hgain : ContinuousAt (fun epsilon : ℝ =>
           dateOneCapitalGain P X i p (R * epsilon) h) 0 :=
-        (dateOneCapitalGain_continuousAt_zero P X i p h hposcap).comp
-          0 hmap
+        hgainAt.comp 0 hmap
       have hloan : ContinuousAt (fun epsilon : ℝ =>
           X.loanRate 0 (previousHistory h) *
             (Gamma * epsilon) / X.inflation 1 h) 0 := by
