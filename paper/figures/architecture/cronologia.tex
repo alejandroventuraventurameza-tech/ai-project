@@ -1,0 +1,24 @@
+\begin{tikzpicture}[
+ >=Latex,font=\scriptsize,
+ stage/.style={draw=teal!65!black,fill=teal!6,rounded corners=3pt,
+  align=center,minimum width=3.2cm,minimum height=1.14cm,inner sep=4pt},
+ later/.style={stage,draw=blue!65!black,fill=blue!6},
+ shock/.style={stage,draw=orange!80!black,fill=orange!7},
+ path/.style={-{Latex[length=2.4mm]},draw=black!65,line width=.9pt}
+]
+\node[shock] (a) at (-4.25,1.55) {\textbf{1. Estado y anuncio}\\$s_t$, política, $k_{i,t}$ y deuda\\heredada predeterminados};
+\node[stage] (b) at (0,1.55) {\textbf{2. Operación y repagos}\\$\ell_{i,t}$, $F_{i,t}$, salarios,\\$N_{i,t}$ tras inflación};
+\node[stage] (c) at (4.25,1.55) {\textbf{3. Contratación nueva}\\$c^E,k_{i,t+1},b_{i,t},a_{i,t}$;\\cartera bancaria y precios};
+\node[later] (d) at (4.25,-1.17) {\textbf{4. Pagos idiosincráticos}\\$\omega_{jt}$ desplaza depósitos\\y exceso de reservas $s^B$};
+\node[later] (e) at (0,-1.17) {\textbf{5. Liquidación OTC}\\matching, $R^F$, facilidad $W$;\\reservas posteriores a pagos};
+\node[stage] (f) at (-4.25,-1.17) {\textbf{6. Transición a $t+1$}\\reparto/renovación bancaria;\\$k_{i,t+1}$ se instala};
+\draw[path] (a.east) -- node[above,font=\tiny] {producción} (b.west);
+\draw[path] (b.east) -- node[above,font=\tiny] {riqueza corriente} (c.west);
+\draw[path] (c.south) -- node[right,font=\tiny,align=left] {riesgo\\de pagos} (d.north);
+\draw[path] (d.west) -- node[above,font=\tiny] {déficit y excedente} (e.east);
+\draw[path] (e.west) -- node[above,font=\tiny] {clearing y valoración} (f.east);
+\draw[path,densely dotted] (f.north) to[out=125,in=-125]
+ node[left,font=\tiny,align=center] {nuevo estado\\$s_{t+1}$} (a.south);
+\node[anchor=west,font=\tiny,text=black!70] at (-5.85,-2.55)
+ {Toda tasa $R_t$ es bruta por período; deuda de $t$ se repaga en $t+1$ como $R_t^Lb_{i,t}/\Pi_{t+1}$.};
+\end{tikzpicture}

@@ -1,0 +1,41 @@
+\begin{tikzpicture}[
+ >=Latex, font=\scriptsize,
+ actor/.style={draw=teal!65!black,fill=teal!6,rounded corners=3pt,
+   align=center,minimum height=.83cm,minimum width=2.25cm,inner sep=3pt,
+   text=black!85},
+ finactor/.style={actor,draw=blue!65!black,fill=blue!6},
+ publicactor/.style={actor,draw=orange!75!black,fill=orange!8},
+ real/.style={-{Latex[length=2.4mm]},line width=.7pt,draw=teal!73!black},
+ fin/.style={-{Latex[length=2.4mm]},line width=.7pt,draw=blue!72!black},
+ public/.style={-{Latex[length=2.4mm]},line width=.7pt,draw=orange!85!black,densely dashed},
+ alabel/.style={fill=white,inner sep=1pt,align=center,font=\tiny}
+]
+\node[actor] (hogar) at (-5.1,.55) {Hogar trabajador\\$C^W,L,D^W,G^H$};
+\node[actor] (firms) at (-1.85,2.22) {Empresas H y L\\$k_t,\ell_t,c^E,k_{t+1},b_t,a_t$};
+\node[actor] (retail) at (1.75,2.22) {Minoristas\\CES, precios y bienes finales};
+\node[actor] (capital) at (5.0,.55) {Productor de capital\\$\Gamma(I_t,K_t)$ y $q_t$};
+\node[finactor] (bancos) at (-1.85,-1.85) {Bancos comerciales\\$l^B,m^B,d^D,e$};
+\node[finactor] (otc) at (1.60,-1.85) {OTC interbancario\\$S^-,S^+,\vartheta,R^F$};
+\node[publicactor] (publico) at (5.0,-1.85) {Banco central y Tesoro\\$R^R,M^{pre},\rho,\Delta,G$};
+
+% Real transactions at the top and right.
+\draw[real] (hogar.north east) to[out=42,in=180] node[alabel,above] {trabajo $\ell$} (firms.west);
+\draw[real] (firms.east) -- node[alabel,above] {insumo $F_i$} (retail.west);
+\draw[real] (retail.north) to[out=118,in=65] node[alabel,above] {consumo, bienes finales} (hogar.north);
+\draw[real] (retail.east) to[out=0,in=95] node[alabel,right] {bienes de inversión} (capital.north);
+\draw[real] (capital.west) to[out=202,in=-37] node[alabel,below] {$k_{i,t+1}$, precio $q_t$} (firms.south east);
+
+% Financial circuit (deposits, credit and settlement).
+\draw[fin] (hogar.south east) to[out=-50,in=180] node[alabel,left] {depósitos} (bancos.west);
+\draw[fin] (bancos.north west) to[out=105,in=-110] node[alabel,left] {crédito $b_i$} (firms.south west);
+\draw[fin,dashed] (firms.south) to[out=-70,in=60] node[alabel,right] {repago heredado} (bancos.north east);
+\draw[fin] (bancos.east) to[bend left=14] node[alabel,above] {reservas: posición neta} (otc.west);
+\draw[fin] (otc.west) to[bend left=14] node[alabel,below] {liquidación entre bancos} (bancos.east);
+\draw[public] (publico.west) to[bend right=10] node[alabel,below] {facilidad residual $W$} (otc.east);
+\draw[public] (publico.south) to[out=-135,in=-45,looseness=1.1]
+ node[alabel,below] {bonos / transferencias públicas} (hogar.south);
+\node[font=\tiny,align=left,anchor=west,text=black!65] at (-5.95,-3.05)
+ {$\color{teal!73!black}{\longrightarrow}$ flujo real \quad
+  $\color{blue!72!black}{\longrightarrow}$ contrato/redistribución financiera \quad
+  $\color{orange!85!black}{\dashrightarrow}$ sector público};
+\end{tikzpicture}

@@ -1,0 +1,28 @@
+\begin{tikzpicture}[
+ >=Latex,font=\scriptsize,
+ main/.style={draw=blue!62!black,fill=blue!5,rounded corners=3pt,
+   align=center,minimum width=2.45cm,minimum height=.83cm,inner sep=3pt},
+ outcomeS/.style={main,fill=teal!10,draw=teal!68!black,minimum width=3.10cm},
+ outcomeB/.style={main,fill=orange!12,draw=orange!75!black,minimum width=3.10cm},
+ arrow/.style={-{Latex[length=2.5mm]},draw=blue!70!black,line width=.9pt},
+ lab/.style={fill=white,font=\tiny,inner sep=1pt,align=center}
+]
+\node[main] (policy) at (-4.65,1.6) {Innovación $v_{R,0}<0$\\regla de $R^R$};
+\node[main] (otc) at (-1.5,1.6) {OTC: $S^-/S^+$\\$R^F$ y corredor};
+\node[main] (bank) at (1.55,1.6) {Cartera bancaria\\$R^L,R^D$};
+\node[main] (firm) at (4.8,1.6) {Firma H restringida\\$N_H,c_H,H_H,R^L$};
+\draw[arrow] (policy.east) -- node[lab,above] {regla monetaria} (otc.west);
+\draw[arrow] (otc.east) -- node[lab,above] {eq:bankFOCL} (bank.west);
+\draw[arrow] (bank.east) -- node[lab,above] {eq:firmbudget} (firm.west);
+\node[outcomeS] (s) at (2.85,-.52) {\textbf{S: L con holgura}\\$b_H\uparrow,\ k_{H,t+1}\uparrow$\\pérdida asignativa futura $\downarrow$};
+\node[outcomeB] (bb) at (6.35,-.52) {\textbf{B: ambas restringidas}\\$b_H\uparrow,\ k_{H,t+1}\downarrow$\\pérdida asignativa futura $\uparrow$};
+\draw[arrow] (firm.south) to[out=-105,in=95] node[lab,left] {colateral y $N_H-c_H$} (s.north);
+\draw[arrow] (firm.south) to[out=-55,in=85] node[lab,right] {eq:collateral; KKT} (bb.north);
+\node[main,draw=black!40,fill=black!3] (nk) at (-4.4,-.63) {Euler + Phillips\\precios y trabajo};
+\draw[arrow,densely dashed] (policy.south) -- node[lab,right] {política y equilibrio} (nk.north);
+\node[main,draw=black!40,fill=black!3] (y) at (-1.10,-.63) {Producción $Y_{0}$\\disminuye en S y B};
+\draw[arrow] (nk.east) -- node[lab,above] {eq:nkpc; FOC trabajo} (y.west);
+\node[font=\tiny,anchor=west,text=black!70,align=left] at (-5.92,-2.12)
+ {Las flechas muestran relaciones de la solución conjunta, no efectos causales parciales de signo garantizado.\\
+  Un solo choque de remuneración; $\rho=0.10$ permanece fijo. El capital elegido en $t$ se instala en $t+1$.};
+\end{tikzpicture}
