@@ -317,6 +317,79 @@ Reproducción: \texttt{python code/verify.py}.
 \par Artículo extenso, tablas automáticas y figuras disponibles para revisión.
 \end{frame}
 
+\begin{frame}[fragile]{Qué demuestra Lean: correspondencia y alcance}
+\footnotesize
+\textbf{Enunciado del artículo (proposición de multiplicidad).}
+Para $h=v_R<0$ suficientemente pequeño y bajo las hipótesis de
+continuación y régimen, se postulan dos equilibrios locales, S y B,
+con las mismas posiciones heredadas. El resultado exige optimalidad
+y suficiencia dinámica, no solo condiciones marginales.
+
+\medskip
+\textbf{Lean: lema auxiliar compilado, no equivalencia con la proposición.}
+\begin{verbatim}
+(hcalendar : DeterministicBridgeCalendar P dateOne recurrent)
+(hopt : FirmOptimal P I X i)
+(hbinding : DateZeroBindingBorrower P X i)
+\end{verbatim}
+La conclusión es la existencia de un único escalar
+$\mu\geq0$ \emph{compartido por las ecuaciones de capital y préstamo},
+con complementariedad. Fragmento literal de la prueba:
+\begin{verbatim}
+  have hbalance :
+      R * capitalEulerPrimalGap P X i 0 h0 dateOne =
+        Gamma * dateZeroLoanPrimalGap P X i dateOne :=
+    firmOptimal_sourceCalendar_binding_capitalLoanGap_balance
+\end{verbatim}
+\textbf{Veredicto:} el lema exige además capital interior, $R^L>0$,
+$\Gamma>0$ e inflación futura no nula. \emph{No verifica todavía}
+existencia y unicidad de dos equilibrios completos.
+\end{frame}
+
+\begin{frame}{Derivación independiente: crédito no equivale a inversión}
+\small
+Si H está restringida con depósitos empresariales nulos, el
+presupuesto y la cobertura activa son
+\[
+c_H+qk'_H=N_H+b_H,\qquad R^L b_H=\Gamma_H k'_H.
+\]
+\textbf{Paso 1:} despejar la promesa de préstamo y sustituir:
+\[
+b_H=\frac{\Gamma_H}{R^L}k'_H,\qquad
+c_H+\left(q-\frac{\Gamma_H}{R^L}\right)k'_H=N_H.
+\]
+\textbf{Paso 2:} si $R^L>0$ y $q-\Gamma_H/R^L>0$,
+\[
+k'_H=\frac{N_H-c_H}{q-\Gamma_H/R^L}.
+\]
+\textbf{Juicio crítico:} una caída de $R^L$ no impone
+$\Delta k'_H>0$, porque $N_H-c_H$, $q$ y $\Gamma_H$
+también cambian endógenamente.
+\medskip
+\footnotesize
+\textbf{Cotejo manuscrito exigido por el curso: pendiente del autor.}
+Esta derivación tipografiada no se presenta como evidencia manuscrita.
+\end{frame}
+
+\begin{frame}{Tres preguntas para la crítica del curso}
+\small
+\begin{enumerate}
+\item \textbf{Suficiencia.} ¿Cuáles son las condiciones mínimas para
+convertir las soluciones reducidas S/B en políticas globalmente
+óptimas y equilibrios competitivos infinitos?
+\item \textbf{Multiplicadores.} ¿La normalización del multiplicador
+de colateral es una elección inocua del dual o modifica la definición
+de prestatario restringido?
+\item \textbf{Validez cuantitativa.} ¿Qué datos, calibración y
+experimento adicional permitirían distinguir transmisión estructural
+de una respuesta numérica de tamaño extremadamente pequeño?
+\end{enumerate}
+\medskip
+\textbf{Delimitación del resultado:} dos soluciones numéricas locales
+con respuestas asignativas opuestas, sin selección de rama ni
+inferencia causal para la economía peruana.
+\end{frame}
+
 \appendix
 \begin{frame}{Anexo A. Descomposición financiera de H}
 \small
