@@ -134,18 +134,83 @@ El shock cambia $R^R$; la respuesta de $R^F,R^L,R^D$
 depende del ajuste simultáneo de matching, pagos y carteras.
 \end{frame}
 
-\begin{frame}{Antecedentes y contribución que buscamos}
-\begin{itemize}
-\item González, Nuño y Thaler, enero de 2026: política monetaria, heterogeneidad
-empresarial y mala asignación. Esa relación general ya existe en la literatura.
-\item Bianchi y Bigio (2022): reservas, depósitos y gestión de liquidez bancaria.
-\item Nuestro candidato conecta implementación monetaria, liquidación,
-contrato nominal de colateral y dos respuestas asignativas locales.
-\end{itemize}
+\begin{frame}{Literatura I: ¿por qué la política podría reasignar capital?}
+\small
+\textbf{González, Nuño y Thaler (enero de 2026):}
+modelo NK con empresas heterogéneas y dinámica patrimonial.
+La política monetaria afecta asignación; la relación general
+ya estaba en la literatura.
 \medskip
-La contribución debe evaluarse con las hipótesis y la revisión de literatura.
-El costo cuadrático del laboratorio estático anterior es una simplificación
-propia; no se atribuye directamente a Bianchi y Bigio.
+
+\[
+qk\leq\gamma qa
+\quad\Longrightarrow\quad k\leq\gamma a
+\]
+en su restricción ilustrada, mientras que nuestro contrato compara
+$\ R^L b\ $ con el valor liquidable de capital
+$\ H_{it} k_{i,t+1}$.
+
+\medskip
+\textbf{Implicación:} la tasa nominal de préstamo y el precio
+futuro de la garantía pueden afectar directamente la
+capacidad financiable. No basta, sin embargo, para probar
+que la inversión o la eficiencia aumentarán.
+\end{frame}
+
+\begin{frame}{Literatura II: del banco central a la tasa de préstamo}
+\footnotesize
+\begin{tabular}{@{}p{2.7cm}p{5.1cm}p{4cm}@{}}\toprule
+Referencia & Mecanismo que recuperamos & Límite al transferir\\\midrule
+Bianchi y Bigio (2022) &
+Cartera, pagos, reservas, OTC y facilidad; prima por tramos &
+No es directamente nuestro cierre NK con empresas H/L.\\
+Bigio y Sannikov (2023) &
+Separación de remuneración y cantidad de reservas &
+Crédito del núcleo a hogares, no inversión empresarial.\\
+Bianchi y Bigio (2026) &
+Matching y tasa del corredor, no promedio arbitrario &
+Requiere hipótesis Leontief y negociación simétrica.\\
+\bottomrule
+\end{tabular}
+\medskip
+
+\small
+\[
+R^R,\ M^{pre},\rho,\Delta
+\ \longrightarrow\ {\rm OTC}
+\ \longrightarrow\ R^L,R^D
+\ \longrightarrow\ b_i,k_{i,t+1}.
+\]
+\footnotesize
+Solo la innovación de remuneración dispone hoy de una IRF
+dinámica validada. Los demás instrumentos siguen siendo
+márgenes de política que debemos experimentar por separado.
+\end{frame}
+
+\begin{frame}{Qué aportamos y qué todavía no hemos demostrado}
+\small
+La contribución \emph{candidata} consiste en conectar
+\[
+\underbrace{\text{implementación monetaria y OTC}}_{\text{bancos}}
+\quad\Longrightarrow\quad
+\underbrace{\text{contrato nominal de colateral}}_{\text{firmas H/L}}
+\quad\Longrightarrow\quad
+\underbrace{\text{capital y pérdida asignativa}}_{\text{dinámica}}.
+\]
+\medskip
+
+\begin{itemize}
+\item Asriyan y coautores (2025): las respuestas de
+precios de capital pueden revertir una mejora asignativa.
+\item Gopinath y coautores (2017), Midrigan y Xu (2014):
+MRPK, tamaño, expectativas y autoseguro no son la misma fricción.
+\item Peters (2020) y Cavenaile y coautores (2023):
+el crecimiento sostenido requiere mecanismos adicionales,
+como innovación o márgenes de competencia.
+\end{itemize}
+\footnotesize
+El resultado actual es reducido y con parámetros ilustrativos;
+no certifica una nueva teoría general ni crecimiento endógeno.
 \end{frame}
 
 \begin{frame}{Experimento reproducible y significado de las ramas}

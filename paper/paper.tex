@@ -117,16 +117,111 @@ Las pruebas técnicas y los laboratorios anteriores se mantienen separados para
 que sus distintos supuestos no se atribuyan al modelo vigente.
 
 \section{Literatura relacionada}\label{sec:v0m_source_02}
-Las páginas citadas son posiciones del PDF de la versión consultada, incluida su portada. La reconstrucción se concentra en los bloques que sustentan nuestras decisiones de modelación y sus apéndices pertinentes; no equivale a una auditoría de todos los suplementos. Se conserva como antecedente principal la versión de enero de 2026 de González, Nuño y Thaler, con tres autores. La bibliografía distingue versiones consultadas y publicaciones posteriores.
+La pregunta de este artículo se sitúa en la intersección de dos
+tradiciones: una estudia cómo las fricciones de financiación distorsionan
+la distribución del capital entre empresas heterogéneas; la otra
+analiza cómo bancos, reservas y sistemas de pago transmiten la política
+monetaria. La conexión entre ambas no es inmediata. En particular,
+que el banco central reduzca el rendimiento de un activo líquido no
+demuestra, por sí solo, que el capital adicional alcance a la firma con
+mayor productividad marginal. Para establecerlo es necesario reconstruir
+el precio del préstamo, la restricción contractual y las decisiones
+de inversión en un mismo equilibrio.
 
-\subsection{Tres antecedentes centrales y un complemento de liquidación}
-\textbf{\citet{gonzalez2026}, enero de 2026.} Modelo NK cerrado en tiempo continuo con heterogeneidad empresarial y dinámica de patrimonio. Las empresas financian capital directamente, no a través de bancos; el capital agregado se mantiene fijo y la incertidumbre agregada no es recurrente. Su límite $qk\leq\gamma qa$ cancela el precio $q$. La expansión monetaria modifica precios relativos y acumulación de patrimonio, no aumenta mecánicamente $\gamma$. PDF 6--17 y 20--25; HJB y cierre 55, 63--66. La portada tiene tres autores: Albrizio contribuyó a una versión previa, cuyo bloque empírico fue retirado.
+La revisión distingue los mecanismos propuestos por cada referencia,
+las hipótesis bajo las cuales operan y la parte que utilizamos para
+construir nuestra especificación.\footnote{Las páginas indicadas en
+esta revisión corresponden a posiciones dentro del PDF de las versiones
+efectivamente consultadas, incluida la portada, y no necesariamente
+a la paginación de una revista. Se conservan las versiones de 2026
+cuando difieren de revisiones posteriores.}
 
-\textbf{\citet{bianchi2022}.} Usamos el manuscrito local fechado marzo de 2021 del trabajo publicado en 2022. Préstamos, depósitos, reservas y pagos conforman un problema bancario por etapas. OTC y facilidad determinan una función de liquidez por tramos, no nuestro anterior costo cuadrático. La homogeneidad permite agregar riqueza bancaria bajo supuestos específicos. Su sector real y su protocolo fiscal no son intercambiables con los de un NK estándar. PDF 6--21, 50--52 y 68--74.
+\subsection{Heterogeneidad productiva y transmisión monetaria}
+El antecedente más próximo para la relación entre política monetaria y
+mala asignación es \citet{gonzalez2026}, en su manuscrito de enero
+de 2026. Los autores construyen una economía neokeynesiana cerrada en
+tiempo continuo donde las firmas difieren y su patrimonio evoluciona
+endógenamente. Por tanto, ya muestran que la transmisión monetaria
+puede tener una dimensión asignativa que no se reduce a la respuesta
+del producto agregado. Su arquitectura, sin embargo, no incorpora
+nuestro sistema bancario de depósitos, reservas y liquidación:
+las empresas financian capital directamente, el capital agregado es
+fijo y la incertidumbre agregada no es recurrente en la versión
+consultada. Además, bajo su restricción $qk\leq\gamma qa$,
+el precio $q$ se cancela en el límite financiero. En nuestro
+contrato de \eqref{eq:collateral}, por el contrario, el repago
+$\RL b$ se compara con el valor liquidable nominal del capital
+en los estados futuros admisibles. Esta diferencia es sustantiva:
+introduce una vía a través de la cual tasa de préstamo, inflación y
+precio futuro del capital afectan conjuntamente la capacidad de
+financiación, sin modificar mecánicamente la pignorabilidad $\theta_i$.
+Las secciones relevantes de la versión consultada son sus PDF
+6--17, 20--25 y los desarrollos HJB y de cierre en 55, 63--66.
+La autoría de esa versión corresponde a González, Nuño y Thaler;
+la contribución de Albrizio a una versión previa no convierte
+la fuente de enero de 2026 en un documento de cuatro autores.
 
-\textbf{\citet{bigioSannikov2023}, abril de 2023.} Es una referencia para instrumentos e implementación NK, pero el crédito del núcleo es a hogares con riesgo de desempleo, no a empresas heterogéneas que invierten. Remuneración y cantidad de reservas son controles distintos. El cuerpo y el apéndice muestran fórmulas distintas de probabilidades OTC: conservamos únicamente las que respetan probabilidades y clearing. PDF 5--18 y 52--53.
+Este punto de partida delimita el problema que nuestro modelo todavía
+debe resolver. La diferencia entre productividad y patrimonio
+inicial no garantiza por sí sola una reasignación eficiente, porque
+los recursos propios y el precio de la garantía responden
+endógenamente. De ahí que el modelo conserve tanto una rama S,
+en la cual la empresa L mantiene holgura, como una rama B,
+en la cual ambas empresas están restringidas. El contraste entre
+ambas permite cuestionar la interpretación automática de una tasa
+menor como alivio de la fricción financiera.
 
-\textbf{\citet{bianchiSettlement2026}, 26 de marzo de 2026.} Reconstruye emparejamiento repetido, negociación y rendimientos de conveniencia. Usamos la sección de implementación para verificar las fracciones negociadas y la tasa media del corredor. PDF 6--8, 11--22. Las fórmulas utilizadas abajo corresponden a esa versión y a sus hipótesis; no a un promedio arbitrario del piso y el techo.
+\subsection{Reservas, cartera bancaria y liquidación}
+Para explicar cómo llega esa tasa a las firmas necesitamos un segundo
+bloque de literatura. \citet{bianchi2022}, utilizando para esta
+reconstrucción el manuscrito de marzo de 2021 de su trabajo publicado
+en 2022, modelan el balance bancario mediante decisiones de préstamos,
+depósitos, reservas y pagos en distintas etapas. La negociación
+interbancaria OTC y el acceso a la facilidad de liquidez producen
+un rendimiento de cartera por tramos. Es precisamente esa distinción
+entre bancos excedentarios y deficitarios la que justifica reemplazar
+el costo cuadrático del laboratorio preliminar por la función
+$\chi(s^B)$ de \eqref{eq:bankwealth}. No obstante, su sector real
+y su cierre fiscal tienen hipótesis propias; no podemos incorporar
+una fórmula de liquidez y suponer que el resto de su equilibrio
+es idéntico al neokeynesiano que desarrollamos aquí (PDF 6--21,
+50--52 y 68--74 de la versión consultada).
+
+La implementación monetaria plantea, además, una cuestión de
+identificación de instrumentos. \citet{bigioSannikov2023}, en la
+versión de abril de 2023, distinguen remuneración y cantidad de
+reservas en un entorno de crédito, dinero y precios. Esta separación
+motiva nuestras reglas de precio y de cantidad. Su bloque de
+prestatarios, sin embargo, se centra en hogares con riesgo de
+desempleo, no en empresas productivas que eligen capital sujeto a
+garantías. Por ello no tomamos de ese modelo el resultado asignativo
+que aquí queremos estudiar. Asimismo, la diferencia entre fórmulas
+de encuentros OTC en cuerpo y apéndice exige comprobar probabilidades
+y conservación antes de trasladar cualquier expresión a nuestro
+mercado (PDF 5--18 y 52--53).
+
+Finalmente, \citet{bianchiSettlement2026}, en la versión de
+26 de marzo de 2026, proporcionan una microfundamentación más
+detallada del emparejamiento repetido, la negociación y los
+rendimientos de conveniencia. Bajo el mecanismo Leontief y la
+negociación simétrica que adoptamos, la fracción de encuentros y
+la tasa promedio del corredor deben satisfacer simultáneamente
+\eqref{eq:IBclearing} y \eqref{eq:IBrate}. Su análisis no autoriza
+sustituir la tasa OTC por el promedio simple entre techo y piso.
+Las hipótesis y derivaciones que utilizamos se localizan en el
+PDF 6--8 y 11--22 de dicha versión.
+
+La unión de estos antecedentes determina una contribución
+\emph{candidata}, que no debe exagerarse: especificamos un mecanismo
+de implementación monetaria con balances y liquidación bancaria,
+y lo conectamos con empresas de productividad, patrimonio y
+pignorabilidad heterogéneos. El paso adicional que investigamos
+es si la transmisión a la tasa de crédito altera la asignación
+intertemporal del capital. El resultado numérico actual responde
+a esa pregunta solo bajo parámetros ilustrativos y una innovación
+de remuneración de reservas; todavía no compara empíricamente
+el conjunto de instrumentos ni demuestra un cambio permanente
+de la tasa de crecimiento.
 
 \subsection{Qué añade cada uno de los nueve trabajos examinados}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{3.1cm}>{\raggedright\arraybackslash}p{5.4cm}>{\raggedright\arraybackslash}p{6.5cm}@{}}
@@ -142,7 +237,49 @@ Las páginas citadas son posiciones del PDF de la versión consultada, incluida 
 \citet{cespedes2016} & Medición productiva y selección en datos formales; capítulo 3, PDF 77--94. & Productividad estimada depende de simultaneidad, deflactores y selección. No proporciona identificación causal de fricciones con EEA o ENAHO.\\\bottomrule
 \end{longtable}
 
-Esta lectura motiva separar mecanismos. No incluimos innovación, entrada, mora y dolarización de forma simultánea en la primera especificación porque cada uno altera estados, presupuestos y resultados; su incorporación debe responder a una hipótesis concreta. Tampoco afirmamos haber agotado todas las carpetas de bibliografía del proyecto: estos son los bloques reconstruidos que sustentan esta iteración.
+Los trabajos complementarios refuerzan tres precauciones. La primera es
+de identificación: \citet{gopinath2017} muestran por qué el momento
+de inversión frente a la realización de productividad y las
+restricciones dependientes del tamaño afectan la lectura de la
+dispersión de rendimientos marginales. \citet{midrigan2014}
+destacan, a su vez, que autoseguro, adopción y entrada pueden
+modificar la persistencia de las fricciones. En consecuencia,
+nuestro índice de pérdida condicional permite estudiar la
+asignación dentro del modelo, pero no equivale a una medición
+empírica directa de la restricción financiera.
+
+La segunda cautela concierne al signo y al horizonte del
+resultado. \citet{asriyan2025} advierten que menores tasas
+pueden alterar el precio del capital y producir reasignaciones
+desfavorables en equilibrio general. Esta posibilidad hace
+especialmente importante no eliminar la rama B por resultar
+menos intuitiva. Por otra parte, \citet{peters2020} y
+\citet{cavenaile2023} investigan mecanismos de márgenes
+heterogéneos, competencia e innovación que permiten discutir
+crecimiento y bienestar intertemporal. Nuestro núcleo no
+incorpora esos motores: una ganancia transitoria de inversión
+o un nuevo nivel de producto no demostraría, sin extensión
+adicional, crecimiento endógeno sostenido.
+
+La tercera cautela es financiera y empírica. Los mecanismos
+de duración y repricing de préstamos estudiados por
+\citet{abad2025}, las respuestas de inversión, deuda y entrada
+analizadas por \citet{albrizio2023} y la toma de riesgo bancario
+examinada por \citet{jimenez2014} no son márgenes intercambiables.
+La medición de productividad y la selección de firmas discutidas
+en \citet{cespedes2016} añaden problemas de observación que
+nuestros parámetros ilustrativos no resuelven. Precisamente
+por ello, no equiparamos mayor MRPK con productividad tecnológica
+observada sin supuestos, ni presentamos estas simulaciones
+como identificación causal del caso peruano.
+
+En síntesis, estos antecedentes aconsejan avanzar en dos pasos:
+primero, especificar y verificar el mecanismo monetario y
+financiero con todas sus identidades de balance; después,
+calcular las consecuencias asignativas distinguiendo
+productividad, colateral, recursos propios, precio del capital
+y régimen. Esa secuencia organiza el modelo de la sección
+siguiente y las comprobaciones de las IRF.
 
 El tratamiento de sistemas lineales de expectativas usa a \citet{sims2002} como antecedente metodológico, no como certificación de nuestras matrices singulares. Los espacios de sucesiones de \citet{abbondandolo2005} orientan la construcción, sin importar hipótesis de difeomorfismo que aquí no se cumplen. La aproximación suave de \citet{schmitt2004} tampoco resuelve por sí sola un mínimo contractual empatado. El redondeo de la implementación se documenta con \citet{pythonDecimal}; esa documentación no prueba la corrección de nuestras ecuaciones.
 
