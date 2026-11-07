@@ -108,5 +108,14 @@ theorem firmOptimal_sourceCalendar_slackCapitalEulerResidual_zero
     P I X i dateOne hopt hcapital hslack htrans
       (all_other_transitions_zero P.tree dateOne htrans)
 
+/-- Public source-calendar interface: all successors except dateOne have
+    zero probability, using only the existing Markov row-sum axioms. -/
+theorem sourceCalendar_other_transitions_zero
+    (P : Primitives S) (dateOne recurrent : S)
+    (hcalendar : DeterministicBridgeCalendar P dateOne recurrent) :
+    ∀ v : S, v ≠ dateOne →
+      P.tree.transition P.tree.initial v = 0 := by
+  exact all_other_transitions_zero P.tree dateOne hcalendar.2.2.2.1
+
 end ProposedDateZeroCalendarEulerBridge
 end Ventura26LiquidityAllocation
