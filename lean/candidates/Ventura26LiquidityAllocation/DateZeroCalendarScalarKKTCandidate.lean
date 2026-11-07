@@ -158,5 +158,35 @@ theorem firmOptimal_binding_actualDual_identified_of_sourceRow
   rw [heq] at hpositive
   exact ⟨mu, hpositive, heq, hrow, hcompl⟩
 
+/-- An economically transparent sufficient condition: positive pledgeability,
+    inflation and next-period capital price, plus the SOURCE depreciation
+    restriction, imply a positive collateral-unit coefficient. -/
+theorem firmOptimal_sourceCalendar_binding_scalarComplementarity_of_positive_prices
+    (P : Primitives S) (I : InheritedState)
+    (X : Allocation S) (i : FirmType)
+    (dateOne recurrent : S)
+    (hcalendar : DeterministicBridgeCalendar P dateOne recurrent)
+    (hopt : FirmOptimal P I X i)
+    (hbinding : DateZeroBindingBorrower P X i)
+    (hcapital : ∀ h : History S 0,
+      FirmHistoryAdmissible P 0 h → 0 < X.capital i 0 h)
+    (htheta : 0 < P.pledgeability i)
+    (hinfl : 0 < X.inflation 1
+      (childHistory (rootHistory P.tree) dateOne))
+    (hq : 0 < X.capitalPrice 1
+      (childHistory (rootHistory P.tree) dateOne)) :
+    ∃ mu : ℝ, 0 ≤ mu ∧
+      localFirmCapitalEulerResidual P
+        (replaceCollateralDual X (fun _ _ _ => mu))
+        i 0 (rootHistory P.tree) dateOne = 0 ∧
+      0 ≤ rootCollateralSlack P X i dateOne ∧
+      mu * rootCollateralSlack P X i dateOne = 0 := by
+  have hunit : 0 < capitalEulerCollateralUnit P X i 0
+      (rootHistory P.tree) dateOne :=
+    capitalEulerCollateralUnit_pos P X i 0 (rootHistory P.tree)
+      dateOne htheta P.depreciation_mem.2 hinfl hq
+  exact firmOptimal_sourceCalendar_binding_scalarComplementarity_of_posUnit
+    P I X i dateOne recurrent hcalendar hopt hbinding hcapital hunit
+
 end ProposedDateZeroCalendarScalarKKT
 end Ventura26LiquidityAllocation
