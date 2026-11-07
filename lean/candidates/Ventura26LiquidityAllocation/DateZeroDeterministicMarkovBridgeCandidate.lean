@@ -106,5 +106,24 @@ theorem firmOptimal_deterministicTransition_capitalEuler
     hopt hcapital hslack (root_weight_one P) (root_weight_zero_other P)
     (child_weight_one P s htrans) (child_weight_zero_other P s hothers)
 
+/-- Public interface: the root and its deterministic successor exhaust the
+    date-zero and date-one history weights. All four facts are derived from
+    the literal FiniteMarkovTree historyWeight definition. -/
+theorem deterministic_historyWeight_package
+    (P : Primitives S) (s : S)
+    (htrans : P.tree.transition P.tree.initial s = 1)
+    (hothers : ∀ v : S, v ≠ s →
+      P.tree.transition P.tree.initial v = 0) :
+    P.tree.historyWeight 0 (rootHistory P.tree) = 1 ∧
+    (∀ h : History S 0, h ≠ rootHistory P.tree →
+      P.tree.historyWeight 0 h = 0) ∧
+    P.tree.historyWeight 1
+      (childHistory (rootHistory P.tree) s) = 1 ∧
+    (∀ h : History S 1,
+      h ≠ childHistory (rootHistory P.tree) s →
+        P.tree.historyWeight 1 h = 0) := by
+  exact ⟨root_weight_one P, root_weight_zero_other P,
+    child_weight_one P s htrans, child_weight_zero_other P s hothers⟩
+
 end ProposedDateZeroDeterministicMarkovBridge
 end Ventura26LiquidityAllocation
