@@ -35,9 +35,11 @@ theorem dateOneJointGain_hasDerivAt_zero_along_tangent
   have hscale :
       HasDerivAt (fun epsilon : ℝ => R * epsilon) R 0 := by
     simpa using ((hasDerivAt_id (0 : ℝ)).const_mul R)
-  have hprofit :=
-    (dateOneCapitalGain_hasDerivAt_zero P X i p h hcapital).comp
-      (0 : ℝ) hscale
+  have hprofitAt :
+      HasDerivAt (fun z : ℝ => dateOneCapitalGain P X i p z h)
+        (dateOneMarginalCapitalPayoff P X i p h) (R * (0 : ℝ)) := by
+    simpa using dateOneCapitalGain_hasDerivAt_zero P X i p h hcapital
+  have hprofit := hprofitAt.comp (0 : ℝ) hscale
   have hloan :
       HasDerivAt (fun epsilon : ℝ =>
         X.loanRate 0 (previousHistory h) * (Gamma * epsilon) /
@@ -67,7 +69,11 @@ theorem jointConsumption_zero_hasDerivAt_along_tangent
         (Gamma - X.capitalPrice 0 h * R) 0 := by
     have hl := ((hasDerivAt_id (0 : ℝ)).const_mul
       (Gamma - X.capitalPrice 0 h * R)).const_add (p.consumption 0 h)
-    convert hl using 1 <;> ring
+    convert hl using 1
+    · ext epsilon
+      dsimp [id]
+      ring
+    · ring
   simpa only [joint_consumption_zero] using hlin
 
 end ProposedDateZeroJointCapitalLoanTangentDerivative
