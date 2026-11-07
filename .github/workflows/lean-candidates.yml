@@ -239,6 +239,7 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroScalarBindingComplementarity.firmOptimal_binding_exists_scalarEulerComplementarity
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroCalendarScalarKKT.firmOptimal_sourceCalendar_binding_scalarComplementarity
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroCalendarScalarKKT.firmOptimal_sourceCalendar_binding_scalarComplementarity_of_posUnit
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroCalendarScalarKKT.firmOptimal_binding_actualDual_identified_of_sourceRow
           LEAN
           lake env lean CandidateAxioms.lean > "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log" 2>&1 || {
             tail -n 140 "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log"
