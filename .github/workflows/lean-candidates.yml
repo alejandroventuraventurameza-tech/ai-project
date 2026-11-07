@@ -251,6 +251,7 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointCapitalLoanDeviation.joint_signed_face_zero
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointCapitalLoanDeviation.joint_budget_zero
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointCapitalLoanDeviation.joint_budget_one
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointCapitalLoanDeviation.joint_wealth_transition_one
           LEAN
           lake env lean CandidateAxioms.lean > "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log" 2>&1 || {
             tail -n 140 "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log"
