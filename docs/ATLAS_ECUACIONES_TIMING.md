@@ -108,7 +108,7 @@ La pérdida asignativa condicional está definida por eq:dynamic_loss_at_optimal
 
 ## V. Método que genera la IRF
 
-Para cada rama r del sistema reducido, el prefijo satisface \(F_r(Z,\mathbf v)=0\), con 33 logincógnitas divididas en \(7+10+6+10\) componentes. Un paso de Newton resuelve \(J_r(Z_n)\Delta Z=-F_r(Z_n,\mathbf v)\) y aplica \(Z_{n+1}=Z_n+\alpha_n\Delta Z\), con Jacobiano por diferencias finitas centradas y búsqueda amortiguada. La continuación principal desde t=2 utiliza una gráfica local lineal validada; la comparación no lineal finita emplea Newton disperso hasta T=640.
+Para cada rama r del sistema reducido, el prefijo satisface \(F_r(Z,\mathbf v)=0\), con 33 incógnitas expresadas en coordenadas logarítmicas divididas en \(7+10+6+10\) componentes. Un paso de Newton resuelve \(J_r(Z_n)\Delta Z=-F_r(Z_n,\mathbf v)\) y aplica \(Z_{n+1}=Z_n+\alpha_n\Delta Z\), con Jacobiano por diferencias finitas centradas y búsqueda amortiguada. La continuación principal desde t=2 utiliza una gráfica local lineal validada; la comparación no lineal finita emplea Newton disperso hasta T=640.
 
 Los CSV de code/irf/output/main y las figuras de paper/figures son generados por code/irf/reproduce.py. Las tasas se reportan como \(10^4(R_t-R_t^0)\) puntos básicos sin anualizar, y las cantidades positivas como \(100\log(x_t/x_t^0)\). **No** se utilizó stochastic gradient descent ni value function iteration para obtener estas IRF.
 

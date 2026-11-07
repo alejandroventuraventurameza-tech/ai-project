@@ -31,7 +31,7 @@
 \draw[fin,dashed] (firms.south) to[out=-70,in=60] node[alabel,right] {repago heredado} (bancos.north east);
 \draw[fin] (bancos.east) to[bend left=14] node[alabel,above] {reservas: posición neta} (otc.west);
 \draw[fin] (otc.west) to[bend left=14] node[alabel,below] {liquidación entre bancos} (bancos.east);
-\draw[public] (publico.west) to[bend right=10] node[alabel,below] {facilidad residual $W$} (otc.east);
+\draw[public] (publico.west) to[bend right=10] node[alabel,below] {piso y techo $R^R,R^W$} (otc.east);
 \draw[public] (publico.south) to[out=-135,in=-45,looseness=1.1]
  node[alabel,below] {bonos / transferencias públicas} (hogar.south);
 \node[font=\tiny,align=left,anchor=west,text=black!65] at (-5.95,-3.05)
