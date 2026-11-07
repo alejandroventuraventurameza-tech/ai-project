@@ -549,3 +549,10 @@ laborales y contables, sin imponer un signo favorable. Se distingue el certifica
 externo reducido de la validación completa y de las pruebas Lean preliminares.
 No se usaron datos reales, no se asignó deuda pública, y no se hicieron commits,
 push ni integración. La revisión y aceptación científica del autor siguen pendientes.
+
+
+## Observaciones recuperadas de Desktop (7 de noviembre)
+
+El autor suministró en la conversación del 7 de noviembre de 2026 una transcripción de instrucciones anteriores a su migración de Desktop a la nube. Su texto, incluidas erratas, queda conservado en [docs/OBSERVACIONES_DESKTOP_2026-11-07.md](docs/OBSERVACIONES_DESKTOP_2026-11-07.md). No se ha comprobado el historial local original de esas instrucciones ni su fecha de emisión anterior. Esta referencia **no** afirma que se hayan ejecutado esos encargos.
+
+La interpretación científica, la evidencia disponible en código y las obligaciones de modelación, simulación, visualización y escritura se distinguen en [docs/PROTOCOLO_CIENTIFICO_DESKTOP_2026-11-07.md](docs/PROTOCOLO_CIENTIFICO_DESKTOP_2026-11-07.md). El plan maestro vigente es [PLAN_REFINAMIENTO_EDITORIAL_VISUAL.md](PLAN_REFINAMIENTO_EDITORIAL_VISUAL.md).
