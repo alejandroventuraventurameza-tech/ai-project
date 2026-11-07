@@ -277,3 +277,5 @@ if __name__ == "__main__":
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "trace_transmission.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_financial_blocks.py")], check=True)
+
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "render_mechanism_table.py")], check=True)
