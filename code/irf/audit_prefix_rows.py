@@ -148,7 +148,7 @@ def main():
         for label in SOURCE_LABELS[group]:
             assert "\\label{"+label+"}" in text, f"Broken source label {name}: {label}"
     p=json.loads((HERE/"inputs/rational_preconditioners.json").read_text())
-    p0=p["P0"]
+    p0=[[float(value) for value in row] for row in p["P0"]]
     assert len(p0)==16 and all(len(row)==6 for row in p0)
     s=model.steady_case()
     base=model.make_boundary(s)
