@@ -20,6 +20,7 @@ namespace ProposedDateZeroJointBindingFermat
 
 open Filter Topology
 open ProposedDateZeroJointCapitalLoanDeviation
+open ProposedDateZeroJointCapitalLoanFeasibility
 open ProposedDateZeroJointCapitalLoanDelta
 open ProposedDateZeroJointCapitalLoanUtility
 open ProposedDateZeroJointBindingNeighborhood
