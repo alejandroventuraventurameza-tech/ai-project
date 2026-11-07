@@ -18,6 +18,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: python -m pip install --quiet -r code/requirements.txt
+      - run: python -m compileall -q code
       - run: python code/verify.py
 
   pdfs:
@@ -34,6 +35,8 @@ jobs:
             slides/final.tex
             paper/paper.tex
           work_in_root_file_dir: true
+      - name: Audit final LaTeX logs and reference resolution
+        run: python code/audit_latex_logs.py
       - name: The compiled PDFs must also be committed
         run: >
           git ls-files --error-unmatch
