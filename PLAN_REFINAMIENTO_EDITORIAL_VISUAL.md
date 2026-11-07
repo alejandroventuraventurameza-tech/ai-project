@@ -4,6 +4,18 @@
 > **Rama de trabajo:** `work/lean-ci-validation-otc-20261106` · **Integración propuesta:** [PR #2](https://github.com/alejandroventuraventurameza-tech/ai-project/pull/2) (borrador, no fusionar sin pasar compuertas).  
 > **Norma vinculante:** [issue #7](https://github.com/alexanderquispe/AI-Econ-Modeling/issues/7), entrega final 26 de noviembre de 2026, 22:00, Lima. Cuerpo del paper 8–20 páginas, referencias y anexos excluidos; 11 pt y márgenes de 1 pulgada. Presentación final originalmente programada el 30 de octubre (30 minutos de exposición + 15 de discusión); esa fecha ya pasó.
 
+## Requisitos recuperados del trabajo en Desktop
+
+El autor aportó sus observaciones originales en [docs/OBSERVACIONES_DESKTOP_2026-11-07.md](docs/OBSERVACIONES_DESKTOP_2026-11-07.md), conservadas como transcripción proporcionada en el chat, sin atribuirles una fecha original no recuperada. Su traducción a pruebas verificables está en [docs/PROTOCOLO_CIENTIFICO_DESKTOP_2026-11-07.md](docs/PROTOCOLO_CIENTIFICO_DESKTOP_2026-11-07.md).
+
+**Corrección de alcance:** el proyecto pretende estudiar el conjunto de instrumentos monetarios y su interacción con el colateral y la asignación dinámica, no únicamente la IRF vigente de remuneración. Dicho conjunto debe separarse entre controles implementados, precios endógenos, derivadas locales y experimentos dinámicos realmente calculados. El vínculo entre mala asignación y crecimiento endógeno sostenido está por demostrar; no lo inferiremos de una transición de niveles.
+
+**Corrección metodológica:** las IRF actuales se basan en Newton para un prefijo no lineal de 33 incógnitas, continuación lineal local y validación adicional con Newton disperso hasta T=640. No se generaron por stochastic gradient descent ni por value function iteration. Estos métodos, las tolerancias y los archivos del solver deben explicarse en la exposición.
+
+**Corrección de diseño:** construir **sin tope predeterminado de diapositivas** una presentación maestra con todos los paradigmas de optimización, ecuaciones, timing, diagramas, código y pruebas. Solo al finalizar se derivará una versión oral para el turno de aproximadamente 30 minutos más 15 de discusión. No se fija la estructura de la investigación por conveniencia estética.
+
+**Corrección editorial:** la skill de disección de voces se aplicará mediante reescritura efectiva, controlando concordancia, lógica interparrafal, conectores, definiciones y transición entre secciones; su instalación sola no cuenta como revisión.
+
 ## Diagnóstico documentado
 
 | Material actual | Evidencia y brecha |
@@ -92,8 +104,8 @@ No elevar una identidad contable a descomposición causal; no elevar una soluci�
 
 ### F6 · Beamer formal y diseño de exposición
 
-La consigna prescribe una exposición de **aprox. 30 minutos** con **15 para discusión**. El deck actual (24 cuadros) es punto de partida, no límite estético.
-- [ ] Diseñar **22–28 diapositivas principales** según tiempos reales y **8–12 de respaldo**; priorizar legibilidad y una pregunta/derivación por diapositiva.
+La consigna histórica establece **aprox. 30 minutos de exposición y 15 de discusión**, pero el autor pidió explícitamente **no limitar de antemano el número de diapositivas**. El deck actual (24 cuadros) es punto de partida, no límite estético.
+- [ ] Diseñar primero un atlas maestro de tantas diapositivas como requiera la exposición completa: primitivas y objetivos de cada agente, ecuaciones, timing, mercado OTC, instrumentos, pruebas, métodos numéricos, IRF, literatura y código. Después preparar una edición oral y anexos sin sacrificar legibilidad.
 - [ ] Secuencia sugerida: pregunta–contribución; 2–3 slides de literatura; flujo circular; cronología; optimización y balances; OTC y tasas; definición de equilibrio; proposición y prueba; shock; IRF con mecanismo y ecuaciones por flecha; simulaciones y robustez; Lean literal; revisión manuscrita real; críticas; conclusión.
 - [ ] Mantener *notación idéntica* al paper; no recrear números a mano; no reducir tamaño de letra para encajar varias pruebas en una página.
 - [ ] Cotejar literalmente el enunciado del paper y el enunciado Lean, con hipótesis añadidas visiblemente distintas.
@@ -109,6 +121,16 @@ La consigna prescribe una exposición de **aprox. 30 minutos** con **15 para dis
 - [ ] Revisión de PR #2, resolver conflictos, fusionar a `main` solo cuando las compuertas críticas estén cerradas.
 - **Salida:** artefactos finales y manifiesto de reproducibilidad por SHA y fecha.
 - **Aceptación:** lo publicado en `main` reproduce todas las afirmaciones que declara y cumple el issue #7; vacíos no demostrables se muestran sin ambigüedad.
+
+## Compuertas adicionales que recuperan el objetivo macroeconómico
+
+- **Instrumentos:** no llamar «policy rate» a la tasa interbancaria endógena sin definición. Explicar la regla de remuneración R^R, facilidad R^W=R^R+Delta, cantidad de reservas, OMO, balance, encaje rho y shocks diferenciados. Exigir IRF propias antes de afirmar efectos de otros instrumentos.
+- **Firmas pequeñas y productivas:** constatar escalas y patrimonios antes de dar por hecho que la firma más productiva es más pequeña; presentar la restricción de colateral y duales por rama.
+- **Mala asignación y crecimiento:** seguir K_t, distribución de capital, patrimonio, Y_t, pérdida condicional y g_t en toda la trayectoria; distinguir transitorios, diferencias de nivel, bienestar y crecimiento sostenido; este último no está demostrado actualmente.
+- **Mecanismos:** una flecha solo se acepta si está identificada una ecuación, sus supuestos, una derivación, una prueba o identidad numérica y un signo condicional verificable.
+- **No linealidad y solver:** derivar F_r(Z,v)=0, inversión local de Jacobianos, Newton amortiguado, continuación, comprobación de residuo y robustez con horizonte T=640, vinculando el código exacto y las figuras.
+- **Producto inicial negativo:** mantener el signo, contrastar Euler–Phillips–trabajo y todas las condiciones pendientes; no modificar parámetros para conseguir una IRF más agradable.
+- **Prosa:** revisar primero estructura del argumento y transiciones; luego sintaxis, concordancia, conectores y estilo. No cambiar por intuición ninguna proposición o ecuación validada.
 
 ## Prioridad inmediata
 
