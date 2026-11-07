@@ -156,7 +156,8 @@ theorem exists_twoSided_binding_jointTangent_radius
       have hc0 :
           0 < X.firmConsumption i 1 h +
             dateOneJointGain P X i p (R * (0 : ℝ)) (Gamma * 0) h := by
-        simpa [hzero] using (hopt.1.1 1 h hh).1
+        rw [hzero]
+        simpa [p, firmPlanOfAllocation] using (hopt.1.1 1 h hh).1
       exact (hc.eventually (eventually_gt_nhds hc0)).mono
         (fun _ hpos _ => hpos)
     · exact Filter.Eventually.of_forall
