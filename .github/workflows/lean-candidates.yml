@@ -174,6 +174,18 @@ jobs:
           import Ventura26LiquidityAllocation.DateZeroCapitalGainContinuityCandidate
           import Ventura26LiquidityAllocation.DateZeroCapitalEulerDerivativeCandidate
           import Ventura26LiquidityAllocation.DateZeroCapitalExpectedEulerCandidate
+          import Ventura26LiquidityAllocation.DateZeroDeterministicEulerBridgeCandidate
+          import Ventura26LiquidityAllocation.DateZeroDeterministicMarkovBridgeCandidate
+          import Ventura26LiquidityAllocation.OneSidedCollateralMonotonicityCandidate
+          import Ventura26LiquidityAllocation.ScalarKKTMultiplierConstructionCandidate
+          import Ventura26LiquidityAllocation.RightSidedFermatCandidate
+          import Ventura26LiquidityAllocation.DateZeroOneSidedFeasibilityCandidate
+          import Ventura26LiquidityAllocation.DateZeroOneSidedEulerInequalityCandidate
+          import Ventura26LiquidityAllocation.DateZeroOneSidedDeterministicCostCandidate
+          import Ventura26LiquidityAllocation.DateZeroPrimalKKTBridgeCandidate
+          import Ventura26LiquidityAllocation.DateZeroCalendarEulerBridgeCandidate
+          import Ventura26LiquidityAllocation.DateZeroOneSidedPrimalGapCandidate
+          import Ventura26LiquidityAllocation.DateZeroScalarKKTFromOptimalCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedStationaryEquilibrium.parent_competitiveEquilibrium
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.proposed_localSlackLiteralAllocation_settlementClears_of_binarySymmetric
@@ -208,6 +220,20 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroCapitalEulerDerivative.discountedFirmUtility_capitalVariation_delta_eq
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroCapitalExpectedEuler.discountedFirmUtility_dateZeroCapital_hasDerivAt
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroCapitalExpectedEuler.firmOptimal_expectedCapitalEuler
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroDeterministicEulerBridge.firmOptimal_singleSuccessor_capitalEuler
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroDeterministicMarkovBridge.firmOptimal_deterministicTransition_capitalEuler
+          #print axioms Ventura26LiquidityAllocation.ProposedOneSidedCollateralMonotonicity.robustCollateral_capital_mono
+          #print axioms Ventura26LiquidityAllocation.ProposedScalarKKTMultiplierConstruction.exists_nonnegative_scalar_capitalDual
+          #print axioms Ventura26LiquidityAllocation.ProposedRightSidedFermat.hasDerivAt_nonpos_of_local_right_max
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroOneSidedFeasibility.exists_right_feasible_optimality_radius
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroOneSidedEulerInequality.firmOptimal_expectedCapitalEuler_gradient_nonpos
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroOneSidedDeterministicCost.firmOptimal_oneSided_singleSuccessor_cost_ge_benefit
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroPrimalKKTBridge.firmOptimal_deterministic_root_primalGap_zero
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroPrimalKKTBridge.firmOptimal_deterministic_slack_sourceCapitalEulerResidual_zero
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroCalendarEulerBridge.firmOptimal_sourceCalendar_capitalEuler
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroCalendarEulerBridge.firmOptimal_sourceCalendar_slackCapitalEulerResidual_zero
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroOneSidedPrimalGap.firmOptimal_oneSided_root_primalGap_nonneg
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroScalarKKTFromOptimal.firmOptimal_oneSided_exists_nonnegative_scalarCapitalMultiplier
           LEAN
           lake env lean CandidateAxioms.lean > "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log" 2>&1 || {
             tail -n 140 "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log"
