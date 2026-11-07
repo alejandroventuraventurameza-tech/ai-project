@@ -4,6 +4,8 @@
 \usepackage[T1]{fontenc}
 \usepackage[spanish,es-nodecimaldot]{babel}
 \usepackage{lmodern,amsmath,amssymb,booktabs,graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,positioning}
 \usetheme{default}
 \usecolortheme{seahorse}
 \setbeamertemplate{navigation symbols}{}
@@ -52,6 +54,29 @@ productores de capital, minoristas con ajuste de precios y sector público.
 \end{enumerate}
 El modelo general incluye incertidumbre agregada. Estas IRF condicionan los
 shocks agregados futuros a cero; conservan pagos idiosincráticos binarios.
+\end{frame}
+
+\begin{frame}{Flujo circular: agentes, bienes y derechos financieros}
+\centering
+\resizebox{.98\linewidth}{!}{\input{../paper/figures/architecture/flujo_circular.tex}}
+
+\smallskip
+\scriptsize
+Los flujos reales se distinguen de préstamos, depósitos y reservas.
+La garantía limita financiación, pero no constituye un bien final ni un
+pago ejecutado automáticamente.
+\end{frame}
+
+\begin{frame}{Timing: estados heredados, elecciones y liquidación}
+\centering
+\resizebox{\linewidth}{!}{\input{../paper/figures/architecture/cronologia.tex}}
+
+\medskip
+\small
+El capital $k_{i,t}$ produce \emph{hoy}; $k_{i,t+1}$ se elige hoy para
+producir \emph{mañana}. El préstamo $b_{i,t}$ promete
+$R_t^L b_{i,t}/\Pi_{t+1}$ bienes del período siguiente.
+La fase OTC es una subetapa de la misma fecha macro.
 \end{frame}
 
 \begin{frame}{Empresa: qué maximiza y qué la limita}
@@ -184,6 +209,17 @@ $b\in(-2.376742673,-2.376742670)$.
 \item Estas son soluciones locales del \emph{sistema reducido}; la
 correspondencia con equilibrio competitivo completo no está cerrada.
 \end{itemize}
+\end{frame}
+
+\begin{frame}{IRF: mapa de ecuaciones que conecta las flechas}
+\centering
+\resizebox{\linewidth}{!}{\input{../paper/figures/architecture/transmision_irf.tex}}
+
+\medskip
+\scriptsize
+Cada trayectoria se determina conjuntamente por el residual no lineal
+$F_r(Z,\mathbf v)=0$: no se impone una derivada causal parcial de signo fijo.
+El shock es de \emph{remuneración de reservas}, no de encaje.
 \end{frame}
 
 \begin{frame}{Transmisión financiera: las dos respuestas}

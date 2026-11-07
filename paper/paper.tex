@@ -7,7 +7,8 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,amsthm,mathtools,mathrsfs}
 \usepackage{booktabs,longtable,array,enumitem}
-\usepackage{graphicx,fancyhdr,xcolor,etoolbox}
+\usepackage{graphicx,fancyhdr,xcolor,etoolbox,tikz}
+\usetikzlibrary{arrows.meta,calc,positioning}
 \usepackage[round]{natbib}
 \usepackage{hyperref}
 \definecolor{ink}{HTML}{16354A}
@@ -210,6 +211,21 @@ Los retornos decrecientes representan un factor empresarial fijo y permiten una 
 
 El estado exógeno $s_t$ sigue una cadena de Markov finita con matriz $\mathcal P$. Determina productividad $z_t>0$ y perturbaciones monetarias recurrentes. La información al elegir $k_{i,t+1}$ incluye $s_t$ y la distribución condicional de $s_{t+1}$, no su realización. Elegimos soporte acotado para poder discutir un contrato robusto sin usar un proceso gaussiano no acotado y después ignorar sus colas. La matriz, amplitudes y correlaciones todavía no están calibradas.
 
+La arquitectura contable de la Figura \ref{fig:flujo_circular} organiza
+la interacción entre las decisiones reales y las promesas financieras.
+Las flechas monetarias no representan recursos productivos: un préstamo
+financia una compra de capital, pero la creación o transferencia de
+reservas no añade máquinas a la restricción de recursos.
+\begin{figure}[htbp]
+\centering
+\resizebox{.98\textwidth}{!}{\input{figures/architecture/flujo_circular.tex}}
+\caption{Flujo circular macrofinanciero del modelo: hogar,
+empresas heterogéneas, minoristas, productor de capital, bancos,
+mercado interbancario y sector público. Elaboración propia a partir
+de los balances y mercados de esta sección; no es una IRF.}
+\label{fig:flujo_circular}
+\end{figure}
+
 \subsubsection{Orden de acontecimientos}
 \begin{enumerate}
 \item Se realiza $s_t$. Capital $k_{it}$ y promesas nominales heredadas están predeterminados. Precios corrientes, incluida inflación, son variables del equilibrio.
@@ -221,6 +237,20 @@ El estado exógeno $s_t$ sigue una cadena de Markov finita con matriz $\mathcal 
 Es una convención de periodicidad: el bloque de liquidación es una subetapa del periodo macro. Todas las tasas de esta versión se expresan con la misma unidad temporal. Para mapear overnight a un trimestre habrá que fijar duración, capitalización y frecuencia de pagos; no se pueden insertar tasas diarias sin conversión.
 
 Las transferencias se interpretan como redistribución de cuentas entre bancos de clientes que mantienen sus derechos agregados, no como shocks de riqueza de los empresarios. El continuo de pagos cumple una ley de grandes números condicional; esta es una hipótesis explícita del espacio probabilístico, no consecuencia automática de escribir una integral.
+
+La Figura \ref{fig:cronologia} representa estas cinco decisiones económicas
+y la transición posterior, separando el estado predeterminado de las
+variables elegidas durante la fecha. Esta distinción será necesaria
+cuando comparemos la producción de impacto con el capital escogido para
+el período siguiente.
+\begin{figure}[htbp]
+\centering
+\resizebox{.98\textwidth}{!}{\input{figures/architecture/cronologia.tex}}
+\caption{Cronología contractual y de liquidación dentro de cada período.
+La política y los precios son determinados con la información de $t$;
+la realización siguiente y el repago pertenecen a $t+1$.}
+\label{fig:cronologia}
+\end{figure}
 
 \subsubsection{Unidades}
 $P_t$ es el precio nominal del bien final y $\Pi_t=P_t/P_{t-1}$. Stocks financieros nuevos se miden en bienes finales de $t$; un préstamo $b_{it}$ representa principal nominal $P_t b_{it}$ y promete $P_t\RL_t b_{it}$ en $t+1$. Su repago real es $\RL_t b_{it}/\Pi_{t+1}$. Todas las $R$ son rendimientos \emph{brutos}. El tipo neto correspondiente es $r^a_t=R^a_t-1$; $R=1$ no significa interés de cien por ciento.
@@ -1477,6 +1507,23 @@ El modelo permite varios instrumentos; este experimento identifica únicamente
 una innovación en la regla de remuneración. No equivale a una expansión
 exógena de la cantidad de reservas ni permite comparar todavía todo el conjunto
 de herramientas del banco central.
+
+La Figura \ref{fig:irf_mecanismo} anticipa los dos canales que
+necesitamos identificar en el código: la cartera y el contrato
+empresarial determinan el capital escogido para el período siguiente;
+por otra parte, Euler, la ecuación de Phillips y la demanda de trabajo
+contribuyen a la producción corriente. Por ello, el sentido económico
+de la IRF no se agota en una respuesta de crédito o en el signo de la
+tasa interbancaria.
+\begin{figure}[htbp]
+\centering
+\resizebox{.98\textwidth}{!}{\input{figures/architecture/transmision_irf.tex}}
+\caption{Mapa de transmisión para la innovación negativa en la regla
+de remuneración. Los signos de S/B son respuestas del sistema reducido
+auditoras: no constituyen derivadas de equilibrio general de signo
+incondicional ni pruebas de equilibrio infinito.}
+\label{fig:irf_mecanismo}
+\end{figure}
 
 \paragraph{Choque y trayectoria de referencia.}
 Aplicamos $v_{R,0}=-10^{-5}$, aproximadamente $-0.1$ puntos básicos (pb) en el
