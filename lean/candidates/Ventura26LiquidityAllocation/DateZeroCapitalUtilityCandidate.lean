@@ -55,11 +55,12 @@ theorem capitalVariation_objectiveWellDefined_iff
     by_cases hn0 : n = 0
     · subst n
       simp [middle]
-    · have hk : ∃ k : ℕ, n = k + 2 := by omega
-      obtain ⟨k, rfl⟩ := hk
-      change f (k + 2) = if k + 2 = 0 then f (k + 2) else g (k + 2)
-      simp only [if_neg (by omega : k + 2 ≠ 0)]
-      exact utilityTerm_later_eq P X i p epsilon k
+    · change f n = if n = 0 then f n else g n
+      simp only [if_neg hn0]
+      have hnmin : 2 ≤ n := by omega
+      have hnidentity : n - 2 + 2 = n := Nat.sub_add_cancel hnmin
+      simpa only [hnidentity] using
+        (utilityTerm_later_eq P X i p epsilon (n - 2))
   have hsecond : Summable middle ↔ Summable g := by
     apply summable_iff_of_eq_off_one middle g 0
     intro n hn
