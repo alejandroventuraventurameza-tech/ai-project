@@ -94,7 +94,11 @@ theorem jointUtilityTerm_zero_hasDerivAt
           ((hasDerivAt_id (0 : ℝ)).const_mul
             (Gamma - X.capitalPrice 0 h * R)).const_add
             (p.consumption 0 h)
-        convert hl using 1 <;> ring
+        convert hl using 1
+        · ext epsilon
+          dsimp [id]
+          ring
+        · ring
       have hbase :
           HasDerivAt (fun z : ℝ => crraUtility P.entrepreneurRiskAversion z)
             (crraMarginal P.entrepreneurRiskAversion (p.consumption 0 h))
@@ -166,7 +170,8 @@ theorem jointUtilityTerm_one_hasDerivAt
             (crraMarginal P.entrepreneurRiskAversion (p.consumption 1 h))
             (p.consumption 1 h +
               dateOneJointGain P X i p (R * (0 : ℝ)) (Gamma * 0) h) := by
-        simpa [hgainZero] using crraUtility_hasDerivAt
+        rw [hgainZero]
+        simpa using crraUtility_hasDerivAt
           P.entrepreneurRiskAversion (p.consumption 1 h) hc
       have hd := (hbase.comp 0 hinner).const_mul
         (P.tree.historyWeight 1 h)

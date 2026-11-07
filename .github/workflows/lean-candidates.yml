@@ -98,6 +98,13 @@ jobs:
           }
           tail -n 12 "$GITHUB_WORKSPACE/lean-ci-logs/mathlib-cache.log"
 
+      - name: Restore checked Lean module cache for incremental candidate checks
+        uses: actions/cache/restore@v4
+        with:
+          path: upstream/.lake/build
+          key: lean-ventura26-${{ runner.os }}-pinned-v4.30.0-rc2-u194edcc-${{ hashFiles('lean/checkpoint/dependencies/lean-toolchain', 'lean/checkpoint/dependencies/lake-manifest.json', 'lean/checkpoint/dependencies/lakefile.toml', 'lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean', 'lean/candidates/Ventura26LiquidityAllocation/*.lean') }}
+          restore-keys: |
+            lean-ventura26-${{ runner.os }}-pinned-v4.30.0-rc2-u194edcc-
       - name: Compile source and all candidate modules in dependency order
         shell: bash
         working-directory: upstream
@@ -287,6 +294,12 @@ jobs:
             exit 1
           fi
 
+      - name: Save incremental Lean build artifacts, including partial builds
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: upstream/.lake/build
+          key: lean-ventura26-${{ runner.os }}-pinned-v4.30.0-rc2-u194edcc-${{ hashFiles('lean/checkpoint/dependencies/lean-toolchain', 'lean/checkpoint/dependencies/lake-manifest.json', 'lean/checkpoint/dependencies/lakefile.toml', 'lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean', 'lean/candidates/Ventura26LiquidityAllocation/*.lean') }}
       - name: Save full compiler logs even on failure
         if: always()
         uses: actions/upload-artifact@v4
