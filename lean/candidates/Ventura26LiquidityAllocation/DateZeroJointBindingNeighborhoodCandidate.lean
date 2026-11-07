@@ -134,7 +134,7 @@ theorem exists_twoSided_binding_jointTangent_radius
           dateOneCapitalGain_continuousAt_zero P X i p h hposcap
       have hgain : ContinuousAt (fun epsilon : ℝ =>
           dateOneCapitalGain P X i p (R * epsilon) h) 0 :=
-        hgainAt.comp 0 hmap
+        hgainAt.comp hmap
       have hloan : ContinuousAt (fun epsilon : ℝ =>
           X.loanRate 0 (previousHistory h) *
             (Gamma * epsilon) / X.inflation 1 h) 0 := by
