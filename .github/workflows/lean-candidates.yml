@@ -195,6 +195,7 @@ jobs:
           import Ventura26LiquidityAllocation.DateZeroJointCapitalLoanDeviationCandidate
           import Ventura26LiquidityAllocation.DateZeroJointCapitalLoanFeasibilityCandidate
           import Ventura26LiquidityAllocation.DateZeroJointCapitalLoanUtilityCandidate
+          import Ventura26LiquidityAllocation.DateZeroJointCapitalLoanDeltaCandidate
           import Ventura26LiquidityAllocation.DateZeroJointCapitalLoanTangentDerivativeCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedStationaryEquilibrium.parent_competitiveEquilibrium
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
@@ -262,6 +263,7 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointCapitalLoanFeasibility.jointDateZeroVariation_feasible
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointCapitalLoanUtility.jointVariation_objectiveWellDefined_iff
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointCapitalLoanUtility.firmOptimal_dominates_jointDeviation
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointCapitalLoanDelta.discountedFirmUtility_jointVariation_delta_eq
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointCapitalLoanTangentDerivative.dateOneJointGain_hasDerivAt_zero_along_tangent
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointCapitalLoanTangentDerivative.jointConsumption_zero_hasDerivAt_along_tangent
           LEAN
