@@ -113,10 +113,9 @@ theorem utilityTerm_zero_hasDerivAt
         (fun epsilon : ℝ =>
           p.consumption 0 h - X.capitalPrice 0 h * epsilon)
         (-X.capitalPrice 0 h) 0 := by
-      have hi :=
-        ((hasDerivAt_id (0 : ℝ)).const_mul (-X.capitalPrice 0 h)).const_add
-          (p.consumption 0 h)
-      convert hi using 1 <;> ring
+      simpa only [id_eq, mul_one, neg_mul, sub_eq_add_neg] using
+        (((hasDerivAt_id (0 : ℝ)).const_mul (-X.capitalPrice 0 h)).const_add
+          (p.consumption 0 h))
     apply weightedCrra_hasDerivAt P.entrepreneurRiskAversion
       (P.tree.historyWeight 0 h) (p.consumption 0 h)
       (-X.capitalPrice 0 h)
