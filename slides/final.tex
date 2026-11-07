@@ -8,11 +8,15 @@
 \usecolortheme{seahorse}
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{footline}[frame number]
+\setbeamersize{text margin left=0.85cm,text margin right=0.85cm}
+\definecolor{deepnavy}{RGB}{24,47,74}
+\setbeamercolor{structure}{fg=deepnavy}
+\setbeamercolor{frametitle}{fg=deepnavy,bg=white}
 \setbeamerfont{frametitle}{size=\large}
 \title{Política monetaria, liquidez bancaria\\y asignación de capital}
-\subtitle{Entorno NK cerrado y respuestas dinámicas internas}
+\subtitle{Modelo NK, colateral nominal y respuestas locales condicionadas}
 \author{Alejandro Ventura}
-\date{Borrador para revisión: 2 de noviembre de 2026}
+\date{Revisión técnica: 7 de noviembre de 2026}
 \begin{document}
 \begin{frame}[plain]\titlepage
 \centering\footnotesize
@@ -86,6 +90,31 @@ Los instrumentos son remuneración y cantidad de reservas, encaje y corredor.
 Aquí variamos solo la innovación de remuneración.
 \end{frame}
 
+\begin{frame}{Mercado OTC y formación endógena de tasas}
+\small
+\[
+S^-=\sum_j u_j\mathbb E_\omega(-s_j^B)^+,\quad
+S^+=\sum_j u_j\mathbb E_\omega(s_j^B)^+,\quad
+\vartheta=S^-/S^+.
+\]
+La negociación y el corredor determinan la tasa interbancaria:
+\[
+R^F_t=R^R_t+(R^W_t-R^R_t)v(\vartheta_t).
+\]
+Las condiciones interiores de precios bancarios auditadas implican
+\[
+R^L_t=R^R_t+\bar\chi_t,
+\]
+\[
+R^D_t=R^R_t+(1-\rho)\bar\chi_t-
+\left(\frac{R^D_t}{R^R_t}-\rho\right)
+\frac{\zeta(\chi^-_t-\chi^+_t)}{2}.
+\]
+\footnotesize
+El shock cambia $R^R$; la respuesta de $R^F,R^L,R^D$
+depende del ajuste simultáneo de matching, pagos y carteras.
+\end{frame}
+
 \begin{frame}{Antecedentes y contribución que buscamos}
 \begin{itemize}
 \item González, Nuño y Thaler, enero de 2026: política monetaria, heterogeneidad
@@ -113,6 +142,50 @@ trayectoria de referencia, no necesariamente estacionaria en el prefijo.
 Tasas: diferencias en pb por período, sin anualizar. Cantidades: log \%.
 \end{frame}
 
+\begin{frame}{Regla monetaria y experimento identificado}
+\small
+El experimento cambia una sola innovación de la regla de remuneración:
+\[
+\Delta\log R^R_t
+=0.5\Delta\log R^R_{t-1}
++0.75\Delta\log\Pi_t+0.0625\Delta\log Y_t+v_t.
+\]
+\[
+v_0=-10^{-5},\quad v_t=0\ (t\geq1),\quad
+\rho=0.10\text{ fijo.}
+\]
+La tasa efectiva responde endógenamente a inflación y producto, por lo
+que su movimiento total no es igual al shock de regla.
+\medskip
+\begin{itemize}
+\item Aproximadamente $-0.1$ pb como innovación inicial; sin shocks futuros.
+\item Es un shock a la \emph{remuneración}, no al coeficiente de encaje.
+\item Se conservan las mismas posiciones heredadas y las dos ramas S/B.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Sistema reducido, regiones financieras y multiplicidad}
+\small
+El problema computacional usa 33 logvariables y 33 relaciones
+(17 en fecha 0 y 16 en fecha 1):
+\[
+F_r(Z,\mathbf v)=0,\quad Z\in\mathbb R^{33},\quad r\in\{S,B\}.
+\]
+Con H restringida, la condición de L se reduce localmente a
+\[
+0\leq s_{L0}\perp\mathcal M(s_{L0},\mathbf v)\geq0,\qquad
+\mathcal M(s,\mathbf v)=\mathbf a^\top\mathbf v+bs
++o(\|(s,\mathbf v)\|).
+\]
+En la calibración ilustrativa, $a_R\simeq-3.219277533$ y
+$b\in(-2.376742673,-2.376742670)$.
+\begin{itemize}
+\item S: $s_{L0}>0$ y dual de L nulo; B: $s_{L0}=0$ y dual no negativo.
+\item Estas son soluciones locales del \emph{sistema reducido}; la
+correspondencia con equilibrio competitivo completo no está cerrada.
+\end{itemize}
+\end{frame}
+
 \begin{frame}{Transmisión financiera: las dos respuestas}
 \centering\includegraphics[height=.79\textheight,width=\textwidth,keepaspectratio]{../paper/figures/irf_transmission.pdf}
 \end{frame}
@@ -121,11 +194,57 @@ Tasas: diferencias en pb por período, sin anualizar. Cantidades: log \%.
 \centering\includegraphics[height=.79\textheight,width=\textwidth,keepaspectratio]{../paper/figures/irf_real_allocation.pdf}
 \end{frame}
 
+\begin{frame}{Condiciones KKT conjuntas de capital y préstamo}
+\small
+Si la restricción de colateral de H está activa,
+$R^L_tb_{H,t}=\Gamma_{H,t+1}k_{H,t+1}$, la dirección
+\[
+dk_{H,t+1}=R^L_t\,d\varepsilon,\qquad
+db_{H,t}=\Gamma_{H,t+1}\,d\varepsilon
+\]
+conserva la igualdad exactamente. Con factibilidad bilateral local y
+optimalidad se obtiene un multiplicador común:
+\[
+G_K=\mu\Gamma_{H,t+1},\qquad G_b=\mu R^L_t,\qquad\mu\geq0,
+\]
+\[
+\mu(\Gamma_{H,t+1}k_{H,t+1}-R^L_tb_{H,t})=0.
+\]
+\footnotesize
+La prueba Lean construye este escalar bajo hipótesis explícitas, pero
+no identifica automáticamente el dual previamente almacenado en la
+asignación original.
+\end{frame}
+
 \begin{frame}{Qué ocurre al impacto}
 \centering\small\input{../paper/irf_impact_table}
 \medskip\par\raggedright
 La pérdida es $\log(Y^{ef}_{t+1}/Y_{t+1})$ a recursos agregados dados del período
 siguiente. No mide bienestar ni identifica una fricción financiera con datos.
+\end{frame}
+
+\begin{frame}{Euler del hogar, curva de Phillips y actividad}
+\small
+La ecuación de Euler implica
+\[
+\Delta\log C^W_{t+1}-\Delta\log C^W_t
+=\Delta\log R^D_t-\Delta\log\Pi_{t+1}.
+\]
+En el experimento determinista auditado, la ecuación de precios es
+\[
+m_t=\frac56+25\Pi_t(\Pi_t-1)
+-25\frac{Y_{t+1}}{Y_t}
+\frac{\Pi_{t+1}^{\,2}(\Pi_{t+1}-1)}{R^D_t}.
+\]
+Con capital instalado predeterminado:
+\[
+\boxed{\Delta\log Y_0=
+\frac{\Delta\log m_0-\Delta\log C^W_0}{3}}.
+\]
+\footnotesize
+El término de precios futuros domina al contemporáneo al impacto.
+La descomposición es contable sobre una solución conjunta, no un
+contrafactual causal aislado.
 \end{frame}
 
 \begin{frame}{La producción cae inicialmente: resultado que debemos explicar}
@@ -146,12 +265,37 @@ completa requiere cerrar optimalidad y equilibrio. No imponemos el signo.
 \end{itemize}
 \end{frame}
 
+\begin{frame}{Robustez frente al cierre de la continuación}
+\small
+Producción al impacto (log \%) al comparar la IRF híbrida y soluciones
+no lineales con horizonte $T=640$:
+\medskip
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+Trayectoria & Rama S & Rama B\\
+\midrule
+IRF principal & $-0.00003580$ & $-0.00414255$\\
+No lineal: gráfica terminal & $-0.00003559$ & $-0.00414222$\\
+No lineal: controles de referencia & $-0.00003568$ & $-0.00414219$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{itemize}
+\item Persisten signos y márgenes en horizontes largos auditados.
+\item Los residuos interiores alcanzan órdenes de $10^{-14}$.
+\item Las condiciones terminales siguen siendo aproximaciones finitas,
+no una prueba de existencia en horizonte infinito.
+\end{itemize}
+\end{frame}
+
 \begin{frame}{Qué comprobamos y qué no está cerrado}
 \begin{itemize}
 \item Pasan residuos del prefijo, márgenes de régimen y error de cola del choque pequeño.
 \item Tolerancia más estricta y horizonte 320 conservan las respuestas comunes.
 \item Choque $-1$ pb: falla el umbral de error de aproximación; no se promueve.
-\item Lean: pruebas auxiliares y construcciones condicionales en campaña preliminar.
+\item Lean: 71 módulos candidatos compilados y auditoría principal de axiomas
+sin \texttt{sorryAx}, en una rama de validación separada.
 \item Certificado externo de existencia reducida $\neq$ equilibrio completo probado.
 \end{itemize}
 \medskip
@@ -171,5 +315,44 @@ asignativas opuestas según la rama, aunque ambas abaraten el crédito.
 \medskip
 Reproducción: \texttt{python code/verify.py}.
 \par Artículo extenso, tablas automáticas y figuras disponibles para revisión.
+\end{frame}
+
+\appendix
+\begin{frame}{Anexo A. Descomposición financiera de H}
+\small
+Para H restringida sin depósitos empresariales,
+\[
+c_{H,t}+q_t k_{H,t+1}=N_{H,t}+b_{H,t},\qquad
+R^L_t b_{H,t}=\Gamma_{H,t+1} k_{H,t+1}.
+\]
+Por sustitución,
+\[
+\boxed{k_{H,t+1}=
+\frac{N_{H,t}-c_{H,t}}{q_t-\Gamma_{H,t+1}/R^L_t}},
+\qquad
+b_{H,t}=\frac{\Gamma_{H,t+1}k_{H,t+1}}{R^L_t}.
+\]
+En B puede aumentar el crédito mientras disminuye la inversión: la
+caída de recursos propios supera la mejora del costo efectivo. En S,
+los recursos propios aumentan ligeramente y el capital elegido crece.
+\end{frame}
+
+\begin{frame}{Anexo B. La condición reducida en las dos ramas}
+\small
+Para $v_R=h<0$ y $a_R,b<0$:
+\[
+\mathcal M(s,h)=a_R h+bs+o(|h|+|s|).
+\]
+Los dos candidatos locales del sistema reducido satisfacen
+\[
+\begin{aligned}
+B:&\ s=0,\qquad \mathcal M(0,h)\simeq a_R h>0,\\
+S:&\ \mathcal M(s(h),h)=0,\quad
+s(h)\simeq-\frac{a_R}{b}h>0.
+\end{aligned}
+\]
+Esta cuenta explica la coexistencia \emph{condicional} de las dos
+regiones en el reducido. No reemplaza la demostración de optimalidad
+y equilibrio dinámico completo.
 \end{frame}
 \end{document}
