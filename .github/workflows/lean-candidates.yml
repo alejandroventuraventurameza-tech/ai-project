@@ -190,6 +190,7 @@ jobs:
           import Ventura26LiquidityAllocation.DateZeroCalendarScalarKKTCandidate
           import Ventura26LiquidityAllocation.DateZeroStatewiseCapitalMultiplierCandidate
           import Ventura26LiquidityAllocation.DateZeroJointCapitalLoanTangentAlgebraCandidate
+          import Ventura26LiquidityAllocation.DateZeroJointTangentGapBalanceAlgebraCandidate
           import Ventura26LiquidityAllocation.DateZeroJointBindingCollateralCandidate
           import Ventura26LiquidityAllocation.DateZeroJointBindingNeighborhoodCandidate
           import Ventura26LiquidityAllocation.DateZeroJointCapitalLoanDeviationCandidate
@@ -258,6 +259,7 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointBindingCollateral.binding_sourceCalendar_robustCollateral_joint_tangent
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointBindingNeighborhood.exists_twoSided_binding_jointTangent_radius
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointCapitalLoanTangentAlgebra.exists_shared_scalarMultiplier_of_tangent_balance
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointTangentGapBalanceAlgebra.exists_shared_scalarMultiplier_of_tangent_gradient
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointCapitalLoanDeviation.joint_signed_face_zero
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointCapitalLoanDeviation.joint_budget_zero
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointCapitalLoanDeviation.joint_budget_one
