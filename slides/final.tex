@@ -157,60 +157,77 @@ capacidad financiable. No basta, sin embargo, para probar
 que la inversión o la eficiencia aumentarán.
 \end{frame}
 
-\begin{frame}{Literatura II: del banco central a la tasa de préstamo}
-\footnotesize
-\begin{tabular}{@{}p{2.7cm}p{5.1cm}p{4cm}@{}}\toprule
-Referencia & Mecanismo que recuperamos & Límite al transferir\\\midrule
-Bianchi y Bigio (2022) &
-Cartera, pagos, reservas, OTC y facilidad; prima por tramos &
-No es directamente nuestro cierre NK con empresas H/L.\\
-Bigio y Sannikov (2023) &
-Separación de remuneración y cantidad de reservas &
-Crédito del núcleo a hogares, no inversión empresarial.\\
-Bianchi y Bigio (2026) &
-Matching y tasa del corredor, no promedio arbitrario &
-Requiere hipótesis Leontief y negociación simétrica.\\
-\bottomrule
-\end{tabular}
+\begin{frame}{Literatura II: los bancos transmiten costos de liquidez}
+\small
+\textbf{Bianchi y Bigio (2022)} modelan cartera, pagos, reservas,
+mercado interbancario y facilidad del banco central.
 \medskip
 
-\small
 \[
-R^R,\ M^{pre},\rho,\Delta
-\ \longrightarrow\ {\rm OTC}
-\ \longrightarrow\ R^L,R^D
-\ \longrightarrow\ b_i,k_{i,t+1}.
+l^B+m^B=d^D+x,\qquad
+s^B=m^B-\rho d^D+(\xi-\rho)\omega d^D.
+\]
+
+La transferencia de depósitos crea bancos con exceso y déficit
+de reservas. El banco valora esa posición mediante la función
+de rendimiento por tramos $\chi(s^B)$; por consiguiente,
+su condición interior para préstamos es
+\[
+\boxed{R^L-R^R=\mathbb E[\chi'(s^B)]+\nu_L}.
 \]
 \footnotesize
-Solo la innovación de remuneración dispone hoy de una IRF
-dinámica validada. Los demás instrumentos siguen siendo
-márgenes de política que debemos experimentar por separado.
+El dual $\nu_L$ mide el límite de cartera: no podemos eliminarlo
+si el límite está activo. El cierre real de Bianchi y Bigio
+no se trasplanta automáticamente al nuestro.
+\end{frame}
+
+\begin{frame}{Literatura III: instrumentos y precio interbancario}
+\small
+\textbf{Bigio y Sannikov (2023)} distinguen remuneración
+y cantidad de reservas. Esta distinción motiva controles separados:
+\[
+\left(R^R_t,M_t^{pre},\rho_t,\Delta_t\right),\qquad
+R^W_t=R^R_t+\Delta_t.
+\]
+\textbf{Bianchi y Bigio (2026)} permiten microfundamentar
+la negociación bilateral OTC:
+\[
+\boxed{R^F_t=R^R_t+\left(R^W_t-R^R_t\right)v(\vartheta_t)},
+\qquad \vartheta_t=S^-_t/S^+_t.
+\]
+\footnotesize
+La tasa $R^F$ resulta del matching; no es otra tasa de
+política elegida exógenamente. El resultado exige los supuestos
+de encuentro y negociación adoptados. Hasta ahora solo
+tenemos una IRF dinámica validada de la innovación en $R^R$.
 \end{frame}
 
 \begin{frame}{Qué aportamos y qué todavía no hemos demostrado}
 \small
-La contribución \emph{candidata} consiste en conectar
+La contribución \emph{candidata} es una cadena macrofinanciera:
 \[
-\underbrace{\text{implementación monetaria y OTC}}_{\text{bancos}}
-\quad\Longrightarrow\quad
-\underbrace{\text{contrato nominal de colateral}}_{\text{firmas H/L}}
-\quad\Longrightarrow\quad
-\underbrace{\text{capital y pérdida asignativa}}_{\text{dinámica}}.
+\begin{aligned}
+\underbrace{(R^R,M^{pre},\rho,\Delta)}_{\text{implementación monetaria}}
+&\longrightarrow
+\underbrace{(s^B,R^F,R^L)}_{\text{intermediación}},\\
+&\longrightarrow
+\underbrace{(N_H,H_H,b_H,k'_H)}_{\text{empresas}}
+\longrightarrow
+\underbrace{\mathscr L_{t}}_{\text{asignación}}.
+\end{aligned}
 \]
 \medskip
-
 \begin{itemize}
-\item Asriyan y coautores (2025): las respuestas de
-precios de capital pueden revertir una mejora asignativa.
-\item Gopinath y coautores (2017), Midrigan y Xu (2014):
-MRPK, tamaño, expectativas y autoseguro no son la misma fricción.
-\item Peters (2020) y Cavenaile y coautores (2023):
-el crecimiento sostenido requiere mecanismos adicionales,
-como innovación o márgenes de competencia.
+\item \textbf{Asriyan y coautores (2025):} el cambio del precio del
+capital puede revertir una mejora asignativa.
+\item \textbf{Gopinath y coautores (2017); Midrigan y Xu (2014):}
+MRPK, tamaño, expectativas y autoseguro deben distinguirse.
+\item \textbf{Peters (2020); Cavenaile y coautores (2023):}
+la tasa de crecimiento de largo plazo requiere otros mecanismos.
 \end{itemize}
 \footnotesize
-El resultado actual es reducido y con parámetros ilustrativos;
-no certifica una nueva teoría general ni crecimiento endógeno.
+El resultado actual es numérico y reducido; no demuestra
+crecimiento endógeno ni identifica la política óptima.
 \end{frame}
 
 \begin{frame}{Experimento reproducible y significado de las ramas}
@@ -246,6 +263,36 @@ que su movimiento total no es igual al shock de regla.
 \item Es un shock a la \emph{remuneración}, no al coeficiente de encaje.
 \item Se conservan las mismas posiciones heredadas y las dos ramas S/B.
 \end{itemize}
+\end{frame}
+
+\begin{frame}{El conjunto de instrumentos: estática local, no cuatro IRF}
+\small
+La complementariedad reducida cumple, cerca del enlace,
+\[
+\mathcal M(s,\mathbf v)=\mathbf a^\top\mathbf v+bs+o(\|(s,\mathbf v)\|),
+\quad b\simeq-2.37674,
+\]
+\[
+\mathbf v=(v_R,v_M,v_\rho,v_\Delta),\quad
+\mathbf a\simeq(-3.21928,\ 0.00753,\ -0.05773,\ -1.47704).
+\]
+\begin{center}
+\small
+\begin{tabular}{@{}lcl@{}}\toprule
+Instrumento & Unidad de intervención & Dirección con $a_jv_j>0$\\\midrule
+Remuneración $R^R$ & innovación log & $v_R<0$\\
+Reservas $M^{pre}$ & innovación log & $v_M>0$\\
+Encaje $\rho$ & cambio de nivel & $v_\rho<0$\\
+Corredor $\Delta$ & cambio de nivel & $v_\Delta<0$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\footnotesize
+La condición $a_jv_j>0$ identifica el lado de dos ramas
+locales del \emph{sistema reducido}, bajo los supuestos,
+la factibilidad y los márgenes de régimen. \textbf{No} es
+una respuesta dinámica IRF, ni un ranking comparable de
+instrumentos: sus unidades son distintas.
 \end{frame}
 
 \begin{frame}{Sistema reducido, regiones financieras y multiplicidad}
