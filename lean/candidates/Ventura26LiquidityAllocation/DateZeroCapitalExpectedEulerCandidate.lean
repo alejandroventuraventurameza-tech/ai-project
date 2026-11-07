@@ -90,7 +90,8 @@ noncomputable def expectedCapitalEulerGradient
 
 theorem utilityTerm_zero_hasDerivAt
     (P : Primitives S) (X : Allocation S) (i : FirmType)
-    (p : FirmPlan S) (hfeas : FirmFeasible P I X i p) :
+    (I : InheritedState) (p : FirmPlan S)
+    (hfeas : FirmFeasible P I X i p) :
     HasDerivAt
       (fun epsilon : ℝ =>
         firmUtilityTerm P (capitalDateZeroVariation P X i p epsilon) 0)
@@ -131,7 +132,8 @@ theorem utilityTerm_zero_hasDerivAt
 
 theorem utilityTerm_one_hasDerivAt
     (P : Primitives S) (X : Allocation S) (i : FirmType)
-    (p : FirmPlan S) (hfeas : FirmFeasible P I X i p)
+    (I : InheritedState) (p : FirmPlan S)
+    (hfeas : FirmFeasible P I X i p)
     (hcapital : ∀ h : History S 0, FirmHistoryAdmissible P 0 h →
       0 < p.capital 0 h) :
     HasDerivAt
@@ -188,8 +190,8 @@ theorem discountedFirmUtility_dateZeroCapital_hasDerivAt
     HasDerivAt (fun epsilon : ℝ =>
       discountedFirmUtility P (capitalDateZeroVariation P X i p epsilon))
       (expectedCapitalEulerGradient P X i p) 0 := by
-  have hzero := utilityTerm_zero_hasDerivAt P X i p hfeas
-  have hone := utilityTerm_one_hasDerivAt P X i p hfeas hcapital
+  have hzero := utilityTerm_zero_hasDerivAt P X i I p hfeas
+  have hone := utilityTerm_one_hasDerivAt P X i I p hfeas hcapital
   let C : ℝ := discountedFirmUtility P p -
     firmUtilityTerm P p 0 - firmUtilityTerm P p 1
   have hfinite : HasDerivAt (fun epsilon : ℝ =>
