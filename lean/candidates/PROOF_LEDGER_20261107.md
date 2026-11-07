@@ -6,7 +6,7 @@
 - Review branch: `work/lean-ci-validation-otc-20261106`.
 - The pinned source and checkpoint are NOT edited in this branch.
 - Lean toolchain: `leanprover/lean4:v4.30.0-rc2`; upstream and mathlib revisions are checked by `.github/workflows/lean-candidates.yml`.
-- Last fully verified candidate checkpoint when this ledger was written: `4c21af66032d67056db5aae082836c3a8cffd460`, workflow run `42352834967` (success).
+- Last verified candidate-code commit: `5719e8432cee4a9cd96ca32b4e12947a9f5b27e4`, workflow run `42352997659` (success, including the stochastic vector theorem and its axioms).
 - Stochastic vector candidate and subsequent changes must be verified separately using the run corresponding to their exact SHA. Do not inherit a green status from an older commit.
 
 ## Source-model limitation: the stored dual is not automatically endogenous
@@ -76,7 +76,7 @@ This limitation is logical/economic, not a Lean tactic deficiency.
    residual is explicitly assumed zero. That premise remains a missing
    economic derivation for the binding regime.
 
-## Stochastic statewise candidate (validation required)
+## Stochastic statewise candidate (validated on run 42352997659)
 
 `DateZeroStatewiseCapitalMultiplierCandidate.lean` represents the
 nonpositive expected capital-direction gradient with a *vector* of
@@ -85,14 +85,16 @@ constraint is active with positive coefficient, a sparse nonnegative vector
 can satisfy the expected stationarity identity and per-state complementary
 slackness. The construction does not assert a per-state Euler equation,
 a complete multi-control KKT system, or identification with the source
-`Allocation.collateralDual`. Check its exact SHA in GitHub Actions before
-calling these theorems compiled.
+`Allocation.collateralDual`. The candidate compiled on the specified run and its principal theorem's
+printed axioms were `propext`, `Classical.choice`, and `Quot.sound`.
 
 ## Remaining mathematical proof obligations
 
-- Derive the binding-case **source** multiplier from appropriate constrained
-  optimization/constraint qualification and establish its normalization;
-  do not infer the freely stored source dual from `FirmOptimal`.
+- Derive the binding-case **source** multiplier from joint capital-and-loan
+  perturbations, the loan first-order condition, and an explicit constraint
+  qualification/normalization. The existing capital-only scalar certificate
+  does not by itself prove all firm KKT conditions. Never infer the freely
+  stored source dual from `FirmOptimal` alone.
 - For genuinely stochastic aggregate transitions, preserve expectation
   structure and distinguish statewise constraint multipliers from a single
   stored scalar dual.
