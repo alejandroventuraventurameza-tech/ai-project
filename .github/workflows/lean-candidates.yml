@@ -209,6 +209,8 @@ jobs:
           import Ventura26LiquidityAllocation.DateZeroJointBindingFermatCandidate
           import Ventura26LiquidityAllocation.DateZeroJointBindingMarginalBalanceCandidate
           import Ventura26LiquidityAllocation.DateZeroJointBindingSharedDualCandidate
+          import Ventura26LiquidityAllocation.DateZeroBindingDualFreedomCandidate
+          import Ventura26LiquidityAllocation.DateZeroBindingDualRepairCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedStationaryEquilibrium.parent_competitiveEquilibrium
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.proposed_localSlackLiteralAllocation_settlementClears_of_binarySymmetric
@@ -283,6 +285,11 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointBindingFermat.firmOptimal_sourceCalendar_binding_jointTangent_gradient_zero
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointBindingMarginalBalance.firmOptimal_sourceCalendar_binding_capitalLoanGap_balance
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointBindingSharedDual.firmOptimal_sourceCalendar_binding_exists_shared_capitalLoanMultiplier
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroBindingDualFreedom.exists_bindingFirmOptimal_primalSame_without_sourceCapitalEuler
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroBindingDualFreedom.not_all_bindingFirmOptimal_have_sourceCapitalEuler
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroBindingDualRepair.firmOptimal_binding_exists_primalEquivalent_jointKKT_carrier
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroBindingDualRepair.normalized_rootCapitalDual_unique
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroBindingDualRepair.firmOptimal_strictPrimalGap_exists_binding_jointKKT_carrier
           LEAN
           lake env lean CandidateAxioms.lean > "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log" 2>&1 || {
             tail -n 140 "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log"
