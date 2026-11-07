@@ -18,6 +18,7 @@ namespace Ventura26LiquidityAllocation
 namespace ProposedDateZeroScalarKKTFromOptimal
 
 open ProposedDateZeroOneSidedPrimalGap
+open ProposedContinuationContractAudit
 open ProposedScalarKKTMultiplierConstruction
 open ProposedProposition42KKTIdentification
 

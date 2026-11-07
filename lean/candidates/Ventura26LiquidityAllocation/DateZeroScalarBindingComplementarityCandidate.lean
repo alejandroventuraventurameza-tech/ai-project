@@ -19,6 +19,7 @@ namespace Ventura26LiquidityAllocation
 namespace ProposedDateZeroScalarBindingComplementarity
 
 open ProposedDateZeroScalarKKTFromOptimal
+open ProposedContinuationContractAudit
 
 variable {S : Type*} [Fintype S] [DecidableEq S]
 

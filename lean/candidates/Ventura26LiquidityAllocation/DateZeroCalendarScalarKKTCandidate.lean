@@ -19,6 +19,7 @@ namespace Ventura26LiquidityAllocation
 namespace ProposedDateZeroCalendarScalarKKT
 
 open ProposedDateZeroCalendarEulerBridge
+open ProposedContinuationContractAudit
 open ProposedDateZeroDeterministicMarkovBridge
 open ProposedDateZeroScalarBindingComplementarity
 open ProposedProposition42KKTIdentification
