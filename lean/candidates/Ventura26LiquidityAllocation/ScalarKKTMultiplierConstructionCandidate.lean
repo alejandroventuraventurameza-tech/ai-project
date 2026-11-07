@@ -41,6 +41,7 @@ theorem normalizedCapitalCollateralDual_capitalRow
         capitalEulerCollateralUnit P X i t h s = 0 := by
   unfold normalizedCapitalCollateralDual
   field_simp [hunit]
+  ring
 
 theorem exists_nonnegative_scalar_capitalDual
     (P : Primitives S) (X : Allocation S) (i : FirmType)
