@@ -145,5 +145,47 @@ theorem joint_budget_one
     p.wealth 1 h + dateOneJointGain P X i p dk db h + p.loan 1 h
   linarith [hbudget]
 
+/-- The date-one nonlinear wealth transition is preserved EXACTLY after
+    changing both installed capital and nominal loan repayment. There is no
+    linear approximation of operating profits or of real repayment. -/
+theorem joint_wealth_transition_one
+    (P : Primitives S) (X : Allocation S) (i : FirmType)
+    (p : FirmPlan S) (dk db : ℝ) (h : History S 0) (s : S)
+    (hwealth :
+      p.wealth 1 (childHistory h s) =
+        operatingProfit (X.inputPrice 1 (childHistory h s))
+          (P.aggregateProductivity s * P.productivity i)
+          (p.capital 0 h)
+          (p.labor 1 (childHistory h s))
+          P.alpha P.beta (X.wage 1 (childHistory h s)) +
+        X.capitalPrice 1 (childHistory h s) *
+          (1 - P.depreciation) * p.capital 0 h -
+        realRepayment (p.face 0 h)
+          (X.inflation 1 (childHistory h s))) :
+    (jointDateZeroVariation P X i p dk db).wealth 1 (childHistory h s) =
+      operatingProfit (X.inputPrice 1 (childHistory h s))
+        (P.aggregateProductivity s * P.productivity i)
+        ((jointDateZeroVariation P X i p dk db).capital 0 h)
+        ((jointDateZeroVariation P X i p dk db).labor 1 (childHistory h s))
+        P.alpha P.beta (X.wage 1 (childHistory h s)) +
+      X.capitalPrice 1 (childHistory h s) *
+        (1 - P.depreciation) *
+          ((jointDateZeroVariation P X i p dk db).capital 0 h) -
+      realRepayment
+        ((jointDateZeroVariation P X i p dk db).face 0 h)
+        (X.inflation 1 (childHistory h s)) := by
+  rw [joint_wealth_one, joint_capital_zero, joint_face_zero]
+  change p.wealth 1 (childHistory h s) +
+      dateOneJointGain P X i p dk db (childHistory h s) = _
+  rw [hwealth]
+  have hprev : previousHistory (childHistory h s) = h := by
+    funext j
+    rfl
+  have hcur : currentState (childHistory h s) = s := by
+    rfl
+  simp only [dateOneJointGain, dateOneCapitalGain, hprev, hcur]
+  simp only [jointDateZeroVariation, realRepayment]
+  ring
+
 end ProposedDateZeroJointCapitalLoanDeviation
 end Ventura26LiquidityAllocation
