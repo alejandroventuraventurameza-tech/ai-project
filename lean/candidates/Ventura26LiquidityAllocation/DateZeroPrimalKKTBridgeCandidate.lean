@@ -44,8 +44,9 @@ private theorem gain_is_primal_return (P : Primitives S) (X : Allocation S)
       rootHistory P.tree := by
     funext j
     rfl
-  simp only [dateOneMarginalCapitalPayoff, firmPlanOfAllocation, hp,
-    currentState, childHistory]
+  have hcur : currentState (childHistory (rootHistory P.tree) s) = s := by
+    rfl
+  simp only [dateOneMarginalCapitalPayoff, firmPlanOfAllocation, hp, hcur]
 
 /-- Primal Euler gap at the genuine root node: source optimality implies
     zero under slack collateral and deterministic aggregate state. -/
