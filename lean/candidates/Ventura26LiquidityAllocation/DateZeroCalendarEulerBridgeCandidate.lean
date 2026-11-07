@@ -1,4 +1,5 @@
 import Ventura26LiquidityAllocation.DateZeroDeterministicMarkovBridgeCandidate
+import Ventura26LiquidityAllocation.DateZeroPrimalKKTBridgeCandidate
 
 /-!
 # Eliminate redundant off-path transition assumptions from source Markov laws
@@ -86,6 +87,26 @@ theorem firmOptimal_sourceCalendar_capitalEuler
   apply firmOptimal_deterministicTransition_capitalEuler_of_unitTransition
     P I X i dateOne hopt hcapital hslack
   exact hcalendar.2.2.2.1
+
+
+/-- In the literal source bridge calendar, source optimality plus the
+    strict-slack regime entails the ORIGINAL capital Euler residual at date 0.
+    The source DateZeroSlackBorrower assumption supplies dual = 0. -/
+theorem firmOptimal_sourceCalendar_slackCapitalEulerResidual_zero
+    (P : Primitives S) (I : InheritedState)
+    (X : Allocation S) (i : FirmType)
+    (dateOne recurrent : S)
+    (hcalendar : DeterministicBridgeCalendar P dateOne recurrent)
+    (hopt : FirmOptimal P I X i)
+    (hcapital : ∀ h : History S 0,
+      FirmHistoryAdmissible P 0 h → 0 < X.capital i 0 h)
+    (hslack : DateZeroSlackBorrower P X i) :
+    localFirmCapitalEulerResidual P X i 0 (rootHistory P.tree) dateOne = 0 := by
+  have htrans : P.tree.transition P.tree.initial dateOne = 1 :=
+    hcalendar.2.2.2.1
+  exact ProposedDateZeroPrimalKKTBridge.firmOptimal_deterministic_slack_sourceCapitalEulerResidual_zero
+    P I X i dateOne hopt hcapital hslack htrans
+      (all_other_transitions_zero P.tree dateOne htrans)
 
 end ProposedDateZeroCalendarEulerBridge
 end Ventura26LiquidityAllocation
