@@ -88,10 +88,7 @@ theorem dateOneCapitalGain_hasDerivAt_zero
   have hpow :
       HasDerivAt (fun epsilon : ℝ => (K + epsilon) ^ P.alpha)
         (P.alpha * K ^ (P.alpha - 1)) 0 := by
-    convert hbase.rpow_const (Or.inl (by simpa using hK)) using 1
-    · ext epsilon
-      rfl
-    · simp
+    simpa using (hbase.rpow_const (Or.inl (by simpa using hK)))
   have hprofit :
       HasDerivAt
         (fun epsilon : ℝ =>
@@ -106,13 +103,8 @@ theorem dateOneCapitalGain_hasDerivAt_zero
   have hgain :=
     (hprofit.sub_const (operatingProfit Q A K L P.alpha P.beta W)).add
       ((hasDerivAt_id (0 : ℝ)).const_mul (q * (1 - P.depreciation)))
-  convert hgain using 1
-  · ext epsilon
-    simp only [dateOneCapitalGain]
-    dsimp [K, A, Q, L, W, q]
-    ring
-  · dsimp [dateOneMarginalCapitalPayoff, K, A, Q, L, q]
-    ring
+  convert hgain using 1 <;>
+    dsimp [dateOneMarginalCapitalPayoff, K, A, Q, L, W, q] <;> ring
 
 /-- General two-term expansion of an absolutely convergent infinite series.
     The remaining tail has not been truncated or approximated. -/
