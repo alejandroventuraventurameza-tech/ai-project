@@ -169,6 +169,7 @@ jobs:
           import Ventura26LiquidityAllocation.Proposition42KKTIdentificationCandidate
           import Ventura26LiquidityAllocation.FirmOptimalVariationCandidate
           import Ventura26LiquidityAllocation.DateZeroCapitalDeviationCandidate
+          import Ventura26LiquidityAllocation.DateZeroCapitalUtilityCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedStationaryEquilibrium.parent_competitiveEquilibrium
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.proposed_localSlackLiteralAllocation_settlementClears_of_binarySymmetric
@@ -192,6 +193,8 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedFirmOptimalVariation.firmOptimal_twoSidedVariation_derivative_zero
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroCapitalDeviation.variation_wealth_transition_one
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroCapitalDeviation.capitalDateZeroVariation_feasible
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroCapitalUtility.capitalVariation_objectiveWellDefined_iff
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroCapitalUtility.firmOptimal_dominates_capitalDeviation
           LEAN
           lake env lean CandidateAxioms.lean > "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log" 2>&1 || {
             tail -n 140 "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log"
