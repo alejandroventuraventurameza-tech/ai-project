@@ -22,6 +22,7 @@ namespace ProposedDateZeroJointBindingNeighborhood
 
 open Filter Topology
 open ProposedDateZeroJointCapitalLoanDeviation
+open ProposedDateZeroCapitalDeviation
 open ProposedDateZeroJointCapitalLoanFeasibility
 open ProposedDateZeroJointBindingCollateral
 open ProposedDateZeroCapitalGainContinuity

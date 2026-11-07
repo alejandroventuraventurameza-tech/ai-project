@@ -17,6 +17,7 @@ namespace Ventura26LiquidityAllocation
 namespace ProposedDateZeroJointCapitalLoanTangentDerivative
 
 open ProposedDateZeroJointCapitalLoanDeviation
+open ProposedDateZeroCapitalDeviation
 open ProposedDateZeroCapitalEulerDerivative
 
 variable {S : Type*} [Fintype S] [DecidableEq S]
