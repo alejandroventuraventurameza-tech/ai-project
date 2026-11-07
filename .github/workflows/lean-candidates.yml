@@ -189,6 +189,7 @@ jobs:
           import Ventura26LiquidityAllocation.DateZeroScalarBindingComplementarityCandidate
           import Ventura26LiquidityAllocation.DateZeroCalendarScalarKKTCandidate
           import Ventura26LiquidityAllocation.DateZeroStatewiseCapitalMultiplierCandidate
+          import Ventura26LiquidityAllocation.DateZeroJointCapitalLoanTangentAlgebraCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedStationaryEquilibrium.parent_competitiveEquilibrium
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.proposed_localSlackLiteralAllocation_settlementClears_of_binarySymmetric
@@ -244,6 +245,8 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroCalendarScalarKKT.firmOptimal_sourceCalendar_binding_scalarComplementarity_of_positive_prices
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroStatewiseCapitalMultiplier.exists_sparse_nonnegative_statewise_multiplier
           #print axioms Ventura26LiquidityAllocation.ProposedDateZeroStatewiseCapitalMultiplier.firmOptimal_binding_exists_statewise_capitalDirectionMultiplier
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointCapitalLoanTangentAlgebra.bindingCollateral_joint_tangent
+          #print axioms Ventura26LiquidityAllocation.ProposedDateZeroJointCapitalLoanTangentAlgebra.exists_shared_scalarMultiplier_of_tangent_balance
           LEAN
           lake env lean CandidateAxioms.lean > "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log" 2>&1 || {
             tail -n 140 "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log"
