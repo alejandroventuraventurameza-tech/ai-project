@@ -76,7 +76,7 @@ def independent_common(s, x, u, xp, up, aux, axp, date):
         f"worker_labor_{date}": math.log(wage/(s.chiW*aux["L"]*c_w)),
         f"household_euler_{date}": math.log(r_d * sdf / up[5]),
         f"nkpc_{date}": (1-s.eps+s.eps*m
-            - s.phiI*0 + -150*pi*(pi-1)
+            - 150*pi*(pi-1)
             + 150*sdf*axp["Y"]/aux["Y"] * up[5]*(up[5]-1)),
         f"reserve_rate_rule_{date}": math.log(xp[5]/aux["rr"]),
         f"reserve_quantity_rule_{date}": math.log(xp[6]/aux["money"]),

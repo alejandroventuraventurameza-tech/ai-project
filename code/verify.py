@@ -266,6 +266,8 @@ if __name__ == "__main__":
     import sys
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "v0m" / "verify_v0m.py")], check=True)
 
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_prefix_rows.py")], check=True)
+
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "reproduce.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "diagnose_impact.py")], check=True)
