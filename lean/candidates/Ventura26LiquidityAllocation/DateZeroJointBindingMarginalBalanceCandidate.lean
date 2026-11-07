@@ -135,7 +135,8 @@ theorem sourceCalendar_jointTangent_gradient_zero_implies_gap_balance
       m0 m1 (X.capitalPrice 0 h0) R Gamma
       (dateOneMarginalCapitalPayoff P X i p h1)
       P.entrepreneurDiscount (X.inflation 1 h1)
-      hm0 hpi hgradient
+      hm0 hpi (by
+        simpa only [mul_assoc] using hgradient)
   have hpay :
       dateOneMarginalCapitalPayoff P X i p h1 =
       X.inputPrice 1 h1 *
@@ -152,7 +153,6 @@ theorem sourceCalendar_jointTangent_gradient_zero_implies_gap_balance
           dateOneMarginalCapitalPayoff P X i p h1 := by
     rw [hpay]
     dsimp [capitalEulerPrimalGap, m0, m1, h0, h1]
-    ring
   have hloanGap :
       dateZeroLoanPrimalGap P X i dateOne =
         1 - P.entrepreneurDiscount * m1 / m0 *
