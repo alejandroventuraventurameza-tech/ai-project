@@ -194,22 +194,8 @@ theorem variation_wealth_transition_one
     rfl
   have hcur : currentState (childHistory h s) = s := by rfl
   simp only [dateOneCapitalGain, hprev, hcur]
-  change
-    operatingProfit (X.inputPrice 1 (childHistory h s))
-        (P.aggregateProductivity s * P.productivity i)
-        (p.capital 0 h + ε) (p.labor 1 (childHistory h s))
-        P.alpha P.beta (X.wage 1 (childHistory h s)) +
-      X.capitalPrice 1 (childHistory h s) *
-        (1 - P.depreciation) * (p.capital 0 h + ε) -
-      realRepayment (p.face 0 h) (X.inflation 1 (childHistory h s)) =
-    operatingProfit (X.inputPrice 1 (childHistory h s))
-        (P.aggregateProductivity s * P.productivity i)
-        (p.capital 0 h + ε) (p.labor 1 (childHistory h s))
-        P.alpha P.beta (X.wage 1 (childHistory h s)) +
-      X.capitalPrice 1 (childHistory h s) *
-        (1 - P.depreciation) * (p.capital 0 h + ε) -
-      realRepayment (p.face 0 h) (X.inflation 1 (childHistory h s))
-  rfl
+  simp only [capitalDateZeroVariation]
+  ring
 
 /-- All adjusted inequalities, and ONLY the adjusted inequalities, are
     explicitly isolated. Date-one wealth, budgets and capital laws are
