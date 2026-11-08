@@ -23,7 +23,7 @@ jobs:
       - name: Verify Python arithmetic tests
         run: |
           set -euo pipefail
-          python3 -m unittest discover -s code/v0m/certified_ift -p 'test_quantitative_ift.py' -v
+          python3 -m unittest discover -s code/v0m/certified_ift -p 'test_*.py' -v
       - name: Record non-economic scope
         run: |
           echo 'Only synthetic exact-rational arithmetic tested.'
