@@ -1,7 +1,7 @@
 # Lema 4.3 — puente desde la tecnología micro hasta el óptimo laboral global
 
 **Fecha de revisión:** 8 de noviembre de 2026. **Rama:** `work/lean-ci-validation-otc-20261106`.
-**Estado de compilación comprobado:** los cinco teoremas de producción microagregada y cuatro del óptimo laboral normalizado superaron compilación y auditoría de axiomas sin `sorryAx` en [CI focalizada #42500091118](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42500091118), commit `e9ec2024da991768115ecb70e39acdfb647f8b9a`. El nuevo puente de **toda asignación laboral física** en `PaperOriginalLaborGlobalCandidate.lean` sigue **pendiente de validación CI**; no contabilizarlo aún.
+**Estado de compilación comprobado:** los cinco teoremas de producción microagregada y cuatro del óptimo laboral normalizado superaron compilación y auditoría de axiomas sin `sorryAx` en [CI focalizada #42500091118](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42500091118), commit `e9ec2024da991768115ecb70e39acdfb647f8b9a`. El puente desde **toda asignación laboral física** en `PaperOriginalLaborGlobalCandidate.lean` también quedó **compilado y auditado sin `sorryAx`** en [CI focalizada #42500721984](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42500721984), commit `548911a4b763f8d75ad635338d27752253d71231`. Son **11 teoremas auxiliares nuevos** añadidos a los 9 anteriores (20 en total).
 
 ## 1. Primitivas económicas
 
@@ -100,15 +100,15 @@ sum_i v_i A_i k_i^alpha ell_i^beta <= L^beta G^(1-beta).
 ```
 
 También se registra `original_labor_candidate_attains_global_bound`,
-que proporciona igualdad en `ell_i*=L g_i/G`. **Estado:** los
-nuevos objetivos de este módulo NO se promocionan hasta que
-la CI focalizada del commit que los contiene y la auditoría
-de axiomas resulten exitosas. La demostración sigue siendo de
+que proporciona igualdad en `ell_i*=L g_i/G`. **Estado:** ambos resultados de este módulo **VERIFICADOS**
+por el kernel Lean y por auditoría explícita de axiomas,
+[run #42500721984](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42500721984)
+en commit `548911a4`. No establecen óptimo conjunto de capital y trabajo. La demostración sigue siendo de
 óptimo laboral **con capital fijo**.
 
 ## 5. Brechas restantes para el lema académico completo
 
-1. Auditar el nuevo candidato `original_two_type_labor_global_bound` que transporta cualquier alternativa física `ell_i>=0` a `x_i` y el presupuesto normalizado, y distinguir su cota global (capital fijo) de la prueba eficiente de capital **y** trabajo. No se promueve hasta compilación y `#print axioms` verdes.
+1. **Ya cerrado en Lean:** toda alternativa laboral física factible se transporta a la normalización y queda bajo la cota global con capital fijo (#42500721984). **Abierto:** identificar la frontera eficiente cuando capital y trabajo pueden redistribuirse conjuntamente desde la tecnología original.
 2. Conectar la cota global de capital y trabajo (AM–GM ya verificada en módulo separado) con `Yeff = K^alpha L^beta ZA^(1-alpha-beta)` desde producción física y presupuestos originales.
 3. Derivar formalmente `d log G` y `d log K` desde sus funciones reales diferenciables para llegar a `dLoss = alpha(kappaH-omegaH)d log(kH/kL)`. El álgebra **condicional** de coeficientes ya está verificada.
 4. Corregir la interfaz `allocationLossIdentitySpec` en un módulo nuevo (no mutar el checkpoint), haciendo explícitos los exponentes comunes y la producción `sum_i v_i y_i` que actualmente falta.

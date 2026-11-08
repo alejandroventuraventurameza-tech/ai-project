@@ -5,8 +5,8 @@
   "checked_branch": "work/lean-ci-validation-otc-20261106",
   "reviewed_date": "2026-11-08",
   "claim_count": 57,
-  "status_policy": "For 4.3, eighteen scoped mathematical lemmas are Lean kernel-verified: 3 differential/share/sign (#42458449121), 4 normalized global efficiency (#42459394970), 2 positive-power/log source algebra (#42459648021), and 9 micro-output/optimal-labor bridges (#42500091118). No full economic statement, joint K/L source efficiency, loss derivative, or dynamic equilibrium is thereby proved; 57 numbered paper claims conservatively remain not_established, with 24/57 directed comparisons.",
-  "source_module_check": "24/57 targeted semantic comparisons (14 main plus 10 annex); remaining 33 annex results not individually reviewed. Physical-output/labor-optimality auxiliary proofs are kernel checked on pinned run #42500091118; arbitrary physical allocations and the original Yeff efficient frontier remain distinct tasks.",
+  "status_policy": "For 4.3, twenty scoped mathematical lemmas are Lean kernel-verified: 3 differential/share/sign (#42458449121), 4 normalized global efficiency (#42459394970), 2 positive-power/log source algebra (#42459648021), 9 micro-output/normalized-optimal-labor bridges (#42500091118), and 2 arbitrary-physical-labor results (#42500721984). No full economic statement, joint K/L source efficiency, loss derivative, or dynamic equilibrium is thereby proved; all 57 numbered paper claims conservatively remain not_established, with 24/57 directed comparisons.",
+  "source_module_check": "24/57 targeted semantic comparisons (14 main plus 10 annex); remaining 33 annex results not individually reviewed. Physical-output and global labor optimum for arbitrary nonnegative allocations with fixed capital are kernel checked in #42500721984. Original joint K/L Yeff efficiency and loss derivative are not.",
   "scope": "57 numbered claims including historical appendices; current PDF page numbers in the original ledger are stale after compact layout.",
   "entries": [
     {
@@ -488,9 +488,27 @@
           "lean_ci_run_id": 42500091118,
           "lean_ci_commit": "e9ec2024da991768115ecb70e39acdfb647f8b9a",
           "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperOriginalLaborGlobalCandidate.lean",
+          "declaration": "original_two_type_labor_global_bound",
+          "relationship": "original_labor_kernel_verified",
+          "note": "Demuestra a partir de cualquier asignación física no negativa que satisface el presupuesto laboral total la cota global original, con capital fijo; el presupuesto normalizado se DERIVA en la prueba. CI focalizada verde #42500721984, commit 548911a4, sin sorryAx. No establece todavía eficiencia conjunta de K/L ni derivada total de pérdida.",
+          "lean_ci_run_id": 42500721984,
+          "lean_ci_commit": "548911a4b763f8d75ad635338d27752253d71231",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperOriginalLaborGlobalCandidate.lean",
+          "declaration": "original_labor_candidate_attains_global_bound",
+          "relationship": "original_labor_kernel_verified",
+          "note": "La asignación laboral candidata alcanza esa cota de producto físico, estableciendo el óptimo global del subproblema de trabajo, con capital fijo. CI focalizada verde #42500721984, commit 548911a4, sin sorryAx. No establece todavía eficiencia conjunta de K/L ni derivada total de pérdida.",
+          "lean_ci_run_id": 42500721984,
+          "lean_ci_commit": "548911a4b763f8d75ad635338d27752253d71231",
+          "lean_axiom_audit": "passed_no_sorryAx"
         }
       ],
-      "semantic_gap": "Se verificaron en Lean 18 lemas auxiliares vinculados con 4.3, incluyendo nueve puentes de producción física y óptimo laboral condicional a capital fijo (#42500091118), cuatro de AM-GM normalizado, tres de pérdida/participaciones y dos de potencia/log. La cobertura nueva demuestra la producción agregada desde las dos tecnologías y una desigualdad laboral global bajo presupuesto normalizado; el teorema sobre todas las alternativas originales está en candidato pendiente. Siguen sin demostrarse íntegramente en el kernel el enlace de Yeff con la frontera eficiente original de capital y trabajo, la derivada dLoss desde las funciones fuente y la interfaz literal original, que omite igualdad de exponentes entre H/L. Nada de ello acredita equilibrio dinámico ni shock causal.",
+      "semantic_gap": "Existen 20 lemas auxiliares Lean verificados relacionados con 4.3: tres de diferencial/participaciones, cuatro de AM-GM normalizado, dos de potencias/logaritmos, nueve de producción física y reparto laboral normalizado, y dos que demostraron globalmente el óptimo de trabajo para cualquier asignación física factible bajo capital fijo (#42500721984). Aún no están kernel-demostrados el puente del referente Yeff eficiente conjuntamente en K y L desde la fuente, la derivada dLoss desde G y K diferenciables, ni la especificación literal original (que no declara elasticidades comunes ni la derivada). Ninguna prueba acredita equilibrio dinámico, shocks causales o crecimiento persistente.",
       "numerical_context": [
         "paper/irf_mechanism_table.tex"
       ]

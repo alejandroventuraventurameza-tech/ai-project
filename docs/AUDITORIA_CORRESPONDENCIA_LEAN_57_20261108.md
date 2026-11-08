@@ -10,14 +10,16 @@ trabajo, factibilidad y cota global con capital fijo. La
 en commit `e9ec2024da991768115ecb70e39acdfb647f8b9a` compiló y realizó
 `#print axioms` sin `sorryAx`. Se agregaron nueve entradas
 `source_labor_kernel_verified` a la matriz y una validación de conjuntos,
-SHA y run al auditor `code/audit_lean_crosswalk.py`. **Total auxiliar 4.3:
-18 teoremas**, de ellos nueve anteriores y nueve nuevos; **0 de los 57
+SHA y run al auditor `code/audit_lean_crosswalk.py`. **Total auxiliar 4.3: 20 teoremas**, de ellos nueve anteriores y nueve nuevos; **0 de los 57
 resultados del paper** elevados a equivalencia formal completa.
 
-Permanece pendiente la cota para **cualquier** asignación laboral original
-sin presupuesto normalizado asumido: hay candidato en
-`PaperOriginalLaborGlobalCandidate.lean` pero no se le atribuye verificación
-hasta CI verde. También faltan frontera eficiente conjunta de K/L desde la
+La cota para **cualquier** asignación laboral original factible
+sin presupuesto normalizado supuesto ahora está **kernel-checked**:
+`original_two_type_labor_global_bound` y
+`original_labor_candidate_attains_global_bound` compilaron y pasaron
+`#print axioms` sin `sorryAx` en la
+[CI focalizada #42500721984](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42500721984),
+commit `548911a4b763f8d75ad635338d27752253d71231`. También faltan frontera eficiente conjunta de K/L desde la
 fuente, la derivada de Loss y la equivalencia con los predicados económicos.
 
 
