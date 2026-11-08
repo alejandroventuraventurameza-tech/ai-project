@@ -3,14 +3,15 @@ import Ventura26LiquidityAllocation.PaperInterface
 /-!
 # Exact source-facing paper financial results 3.2, 3.3 and corrected 3.5
 
-Unlike auxiliary financial lemmas, these prove the LITERAL propositions
-declared in the pinned PaperInterface, with their original quantifiers
-and assumptions. No new assumptions are added to the target specs.
+Financial lemmas 3.2 and 3.3 target their LITERAL pinned PaperInterface
+specifications. The literal PaperInterface Lemma 3.5 is REFUTED due to
+the implication/iff precedence error: its rate assumptions apply only
+to the left side of iff. The corrected version makes the rate-domain
+assumptions guard the entire iff; no upstream source is changed.
 
-- 3.2: both positive gross positions contradict loan/deposit KKT when
-  the gross lending rate exceeds the safe deposit rate;
-- 3.3: the signed derivative of capacity at fixed funds/prices/collateral;
-- 3.5: all three branches of the exact financing superdifferential.
+- 3.2: both positive gross positions contradict loan/deposit KKT;
+- 3.3: the signed derivative of capacity at fixed funds and prices;
+- 3.5: original literal false, corrected three-branch statement proved.
 
 These are isolated financial propositions. They do not prove the
 global firm optimality/terminality of Lemma 3.4 or equilibrium multiplicity.
