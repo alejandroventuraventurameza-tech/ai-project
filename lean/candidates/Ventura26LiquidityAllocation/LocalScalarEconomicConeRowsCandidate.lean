@@ -59,7 +59,7 @@ theorem reserveRemunerationSlice_cone_inside_ball
     rw [abs_of_nonneg hs0, abs_of_neg hneg]
     nlinarith only [hsK, hprod]
   have hnorm : ‖reserveRemunerationSlice s h‖ < radius :=
-    lt_of_le (reserveRemunerationSlice_norm_bound s h) hsum
+    lt_of_le_of_lt (reserveRemunerationSlice_norm_bound s h) hsum
   simpa only [Metric.mem_ball, dist_zero_right] using hnorm
 
 /-- The actual source implicit-reduction predicate is enough to
