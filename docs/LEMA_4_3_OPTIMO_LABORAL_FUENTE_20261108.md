@@ -1,7 +1,7 @@
 # Lema 4.3 — puente desde la tecnología micro hasta el óptimo laboral global
 
 **Fecha de revisión:** 8 de noviembre de 2026. **Rama:** `work/lean-ci-validation-otc-20261106`.
-**Estado al escribir esta nota:** demostración analítica completa bajo las hipótesis indicadas; los nuevos teoremas Lean son **CANDIDATOS EN COMPILACIÓN**, no aún pruebas auditadas del kernel.
+**Estado de compilación comprobado:** los cinco teoremas de producción microagregada y cuatro del óptimo laboral normalizado superaron compilación y auditoría de axiomas sin `sorryAx` en [CI focalizada #42500091118](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42500091118), commit `e9ec2024da991768115ecb70e39acdfb647f8b9a`. El nuevo puente de **toda asignación laboral física** en `PaperOriginalLaborGlobalCandidate.lean` sigue **pendiente de validación CI**; no contabilizarlo aún.
 
 ## 1. Primitivas económicas
 
@@ -76,7 +76,35 @@ El candidato `x_H=x_L=1` alcanza igualdad: **óptimo global en trabajo a capital
 - `PaperOptimalLaborCandidate.lean`: `normalized_labor_global_bound`, `source_output_with_scaled_labor`, `source_two_type_global_labor_optimality`, `source_labor_global_bound_attained`.
 - `.github/workflows/lean-focused-paper-claims.yml`: copiado, compilación, `#print axioms` y rechazo de `sorryAx` para los módulos.
 
-**Advertencia sobre la verificación:** [focalizada #42499827416](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42499827416) **falló** porque un `ring` se ejecutó tras `field_simp` ya terminal (línea 208 del módulo fuente). Se corrigió con `<;> ring` en commit `e9ec2024`. [Nueva ejecución focalizada #42500091118](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42500091118) iniciada; su resultado debe consultarse antes de cambiar cualquier relación de `kernel_verified` en el ledger. La primera falla dejó un `sorryAx` en un teorema: no puede contarse como demostración.
+**Advertencia sobre la verificación:** [focalizada #42499827416](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42499827416) **falló** porque un `ring` se ejecutó tras `field_simp` ya terminal (línea 208 del módulo fuente). Se corrigió con `<;> ring` en commit `e9ec2024`; la [ejecución focalizada #42500091118](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42500091118) **aprobó compilación y revisión de axiomas**. Los 9 teoremas auxiliares nuevos quedaron así verificados en ese commit. La primera falla dejó un `sorryAx` en un teorema: no puede contarse como demostración.
+
+
+## 4 bis. Eliminación de la hipótesis de presupuesto normalizado
+
+En el módulo candidato \`PaperOriginalLaborGlobalCandidate.lean\` se parte
+de cualquier \`ell_H,ell_L >= 0\` con \`v_H ell_H+v_L ell_L=L\`.
+Con \`g_i>0\`, \`G>0\` y \`L>0\` se define
+\`x_i=ell_i G/(L g_i)\`. Entonces
+
+\`\`\`text
+(L g_i/G) x_i = ell_i,
+sum_i v_i g_i x_i = (G/L) sum_i v_i ell_i = G.
+\`\`\`
+
+El teorema fuente \`original_two_type_labor_global_bound\` intenta
+transportar el resultado ya verificado sobre coordenadas normalizadas
+a producción física para todas las alternativas no negativas:
+
+\`\`\`text
+sum_i v_i A_i k_i^alpha ell_i^beta <= L^beta G^(1-beta).
+\`\`\`
+
+También se registra \`original_labor_candidate_attains_global_bound\`,
+que proporciona igualdad en \`ell_i*=L g_i/G\`. **Estado:** los
+nuevos objetivos de este módulo NO se promocionan hasta que
+la CI focalizada del commit que los contiene y la auditoría
+de axiomas resulten exitosas. La demostración sigue siendo de
+óptimo laboral **con capital fijo**.
 
 ## 5. Brechas restantes para el lema académico completo
 
