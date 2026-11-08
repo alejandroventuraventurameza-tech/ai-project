@@ -635,3 +635,68 @@ dominios de potencias o la correspondencia de todas las primitivas.
 34x34 + conclusion de existencia matematica condicional a la
 representacion de fuente; NO prueba Lean de `H`, NO equilibrio
 competitivo global, NO multiplicidad del DSGE.
+
+
+## 14. Reconciliacion de la raiz aumentada con el KKT de L
+
+La definicion literal de `H` en Lean vive en
+`LocalScalarAugmented34SourceCandidate.lean`, compilada en
+[CI 42447228580](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42447228580)
+(`success`). La implementacion tiene como ultima ecuacion
+`localNormalizedCollateralDualL P (localPrefixLogChart Z0 z)`;
+la remuneracion `h` modifica directamente la regla monetaria,
+pero no esa ultima formula a coordenadas `z` fijas.
+
+### 14.1 Lo que se sigue de un cero literal
+
+Si para `y=(s=0,v_R=h,v_M=0,v_rho=0,v_Delta=0)` se demuestra
+literalmente `H(z,h)=0`, entonces las filas modificadas se anulan,
+la fila 5 fuerza `localNormalizedSlackL Pv Z=0`, y la ultima fila
+fuerza `localNormalizedCollateralDualL Pv Z=0` porque el dual
+normalizado es invariante a la intervencion **a estado fijo**.
+Por tanto `s_L >= 0`, `mu_L >= 0` y `s_L mu_L=0`.
+Si ademas el denominador de pignoracion y la tasa bruta del prestamo
+no son cero, se recuperan del mismo punto tanto la fila de colateral
+original B como las filas originales S de financiamiento y Euler
+de capital (esta ultima usa el Euler B del sistema auxiliar).
+
+Se introdujeron los candidatos:
+- `LocalScalarAugmented34KktCandidate.lean`: implicacion del cero
+  aumentado a las filas KKT originales bajo denominadores no nulos.
+- `LocalScalarAugmented34PositiveKktCandidate.lean`: sustituye
+  denominadores no nulos por condiciones economicas interpretables,
+  `LocalPrefixCoordinatesPositive Z0`,
+  `0 < P.pledgeability FirmType.L` y `P.depreciation < 1`,
+  utilizando el dominio positivo del chart probado anteriormente.
+
+**No confundir el punto de interseccion con multiplicidad.** Un punto
+con holgura de L y dual simultaneamente cero puede satisfacer las
+condiciones originales de ambos conjuntos activos siendo exactamente
+el mismo vector de variables. Dos raices economicamente distintas
+requieren el argumento escalar bajo un shock, sus signos C1/Schur y
+la reconstruccion de soluciones originales, con condiciones de
+factibilidad y dominio comprobadas.
+
+### 14.2 Recentrado geometrico y de politica
+
+`LocalScalarAugmented34LogRecenterCandidate.lean` documenta y
+formula para verificacion Lean la identidad coordenada a coordenada
+
+```text
+chart(chart(Z0,z*),u) = chart(Z0,z*+u),
+```
+
+junto con `chart(chart(Z0,z*),0)=chart(Z0,z*)` y la
+preservacion de positividad. Estas igualdades no trasladan
+automaticamente la politica basal: si el cero aumentado tiene
+`h* != 0`, es indispensable reconstruir las primitivas
+intervenidas en la base y probar correspondencia de los
+residuos y sus derivadas en el nuevo origen.
+
+**Estado de auditoria al introducir esta seccion:** los tres
+ultimos candidatos KKT/positividad/recentrado estan enviados
+al workflow `lean-candidates.yml`, pero no se promueven
+a pruebas verificadas hasta disponer de un resultado de
+compilacion y `#print axioms` en la revision correspondiente.
+Esto no modifica el caracter CONDICIONAL del certificado
+intervalar 34x34 ni cierra `CompetitiveEquilibrium`.
