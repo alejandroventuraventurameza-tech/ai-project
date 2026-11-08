@@ -284,14 +284,23 @@ def remaining(s, X, U, Xnext, Unext, a, anext):
     ]
 
 
-def evaluate_bridge(base, P, branch, policy_inputs=True, point_capture=None):
+def evaluate_bridge(base, P, branch, policy_inputs=True,
+                    point_capture=None, box_capture=None):
     s, z, X0b, U0b, X1b, U1b, X2b, e0b, e1b, *_ = base
     AD.size = 37
     eps = []
     for j in range(37):
         d = bd.zeros((37,))
         d[j] = I(1)
-        eps.append(AD(0, d))
+        if box_capture is None:
+            eps.append(AD(0, d))
+        else:
+            from decimal import Decimal
+            width = Decimal(box_capture["state_radius"] if j < 33
+                            else box_capture["parameter_radius"])
+            if width <= 0:
+                raise ValueError("Uniform source box radii must be positive")
+            eps.append(AD(I(-width, width), d))
     X1 = [X1b[j] * eps[j].exp() for j in range(7)]
     U0 = [U0b[j] * eps[7 + j].exp() for j in range(10)]
     x2 = eps[17:23]
@@ -369,6 +378,38 @@ def evaluate_bridge(base, P, branch, policy_inputs=True, point_capture=None):
         * a1["L"].root(2)
     )
     metrics["conditional_misallocation_loss"] = (effective_output / a1["Y"]).ln()
+    if box_capture is not None:
+        if branch != "binding":
+            raise ValueError("The source modified 33-row box uses binding auxiliary equations")
+        # Independent interval AD evaluation of the *whole product box*.
+        # Each epsilon is an interval in its full coordinate range;
+        # its AD derivative propagates an enclosing derivative interval.
+        source_rows_box = {
+            4: X1[2] - s.pledge[0] * J1 * X1[0],
+            5: 1 - X1[3] / (s.pledge[1] * J1 * X1[1]),
+            21: J2 - s.ad * U2[5] * U2[6],
+        }
+        perm = [0, 3, 1, 4, 2, 5, *range(6, 17),
+                17, 19, 18, 20, *range(21, 33)]
+        assert len(perm) == 33 and sorted(perm) == list(range(33))
+        box_capture["jacobian_ball"] = [
+            [enclosure(source_rows_box[i].d[j] if i in source_rows_box
+                       else residuals[perm[i]].d[j])
+             for j in range(33)] for i in range(33)
+        ]
+        box_capture["fy_ball"] = [
+            ([["-1", "-1"]] if i == 5 else [["0", "0"]]) +
+            [enclosure(source_rows_box[i].d[33 + j] if i in source_rows_box
+                       else residuals[perm[i]].d[33 + j])
+             for j in range(4)] for i in range(33)
+        ]
+        box_capture["source_box_residual_enclosure"] = [
+            enclosure(source_rows_box[i] if i in source_rows_box
+                      else residuals[perm[i]]) for i in range(33)
+        ]
+        box_capture["source_to_legacy_row_permutation"] = perm
+        box_capture["recomputed_lean_source_style_rows"] = [4, 5, 21]
+        return None
     solution = bd.solve(J, -forcing)
     inverse = bd.solve(J, bd.eye(33))
     inverse_error = bd.upper_norm(J @ inverse - bd.eye(33))
@@ -535,6 +576,48 @@ def main():
             json.dumps(point_capture, indent=2) + "\n",
             encoding="utf-8", newline="\n")
         print("EXPORTED POINT ONLY: binding_source_point_jacobian_CANDIDATE.json")
+        if os.environ.get("VENTURA_EXPORT_UNIFORM_BOX") == "1":
+            state_radius = os.environ.get("VENTURA_STATE_LOG_RADIUS", "1e-10")
+            policy_radius = os.environ.get("VENTURA_POLICY_RADIUS", "1e-15")
+            uniform_box = {
+                "state_radius": state_radius,
+                "parameter_radius": policy_radius,
+            }
+            evaluate_bridge(base, P, "binding", box_capture=uniform_box)
+            candidate = {
+                "schema": "ie-quantitative-ift-v1",
+                "metadata": {
+                    "source_commit": os.environ.get("GITHUB_SHA", "LOCAL-REVISION-UNSET"),
+                    "candidate_branch": "binding",
+                    "producer": "finite_bridge.py optional interval automatic differentiation",
+                    "source_Lean_semantic_identity_proved": False,
+                    "uniform_box_contains_Lean_actual_derivatives_proved": False,
+                    "exact_zero_center_proved": False,
+                    "formal_Lean_IFT_witness_established": False,
+                    "note": "Numerical interval box of Python formulas, NOT a Lean verified source enclosure",
+                },
+                "dimension": 33,
+                "parameter_dimension": 5,
+                "center": ["0"] * 33,
+                "radius": state_radius,
+                "parameter_radius": policy_radius,
+                "preconditioner": point_capture["preconditioner"],
+                "f_center": point_capture["point_center_residual_box"],
+                "jacobian_ball": uniform_box["jacobian_ball"],
+                "fy_ball": uniform_box["fy_ball"],
+                "source_box_residual_enclosure": uniform_box["source_box_residual_enclosure"],
+                "source_to_legacy_row_permutation": uniform_box["source_to_legacy_row_permutation"],
+                "rows_recomputed_as_source_style": [4, 5, 21],
+                "source_Lean_semantic_identity_proved": False,
+                "uniform_box_contains_Lean_actual_derivatives_proved": False,
+                "exact_zero_center_proved": False,
+                "formal_Lean_IFT_witness_established": False,
+            }
+            (HERE / "binding_source_uniform_box_CANDIDATE.json").write_text(
+                json.dumps(candidate, indent=2) + "\n", encoding="utf-8", newline="\n"
+            )
+            print("EXPORTED conditional product-box interval AD candidate:",state_radius,policy_radius)
+
     # Check the policy-sign conclusions used in the text in both branches.
     for name, info in branches.items():
         responses = info["response_enclosures"]
