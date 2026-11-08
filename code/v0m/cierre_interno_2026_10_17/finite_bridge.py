@@ -2,6 +2,7 @@
 from pathlib import Path
 import importlib.util
 import json
+import os
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
@@ -283,7 +284,7 @@ def remaining(s, X, U, Xnext, Unext, a, anext):
     ]
 
 
-def evaluate_bridge(base, P, branch, policy_inputs=True):
+def evaluate_bridge(base, P, branch, policy_inputs=True, point_capture=None):
     s, z, X0b, U0b, X1b, U1b, X2b, e0b, e1b, *_ = base
     AD.size = 37
     eps = []
@@ -372,6 +373,55 @@ def evaluate_bridge(base, P, branch, policy_inputs=True):
     inverse = bd.solve(J, bd.eye(33))
     inverse_error = bd.upper_norm(J @ inverse - bd.eye(33))
     assert inverse_error < D("1e-32"), inverse_error
+    # OPTIONAL point-only export; default generated economic certificate unchanged.
+    # The exact Lean modified row 5 is 1 - coverage - prescribed_slack,
+    # NOT the legacy binding log(coverage) row at finite deviations.
+    if point_capture is not None and branch == "binding":
+        source_row5 = 1 - X1[3] / (s.pledge[1] * J1 * X1[1])
+        source_J = bd.arr([
+            [source_row5.d[j] if i == 5 else J[i, j] for j in range(33)]
+            for i in range(33)
+        ])
+        # The old logarithmic-row inverse with column 5 flipped is a
+        # sensible POINT preconditioner, not an interval inverse.
+        source_R = bd.arr([
+            [I(-inverse[i, j].midpoint() if j == 5 else
+               inverse[i, j].midpoint()) for j in range(33)]
+            for i in range(33)
+        ])
+        source_F0 = [
+            enclosure(source_row5 if i == 5 else residuals[i])
+            for i in range(33)
+        ]
+        source_G0 = [
+            ([["-1", "-1"]] if i == 5 else [["0", "0"]]) +
+            [enclosure(source_row5.d[33 + j] if i == 5
+                       else forcing[i, j]) for j in range(4)]
+            for i in range(33)
+        ]
+        point_defect_upper = bd.upper_norm(source_R @ source_J - bd.eye(33))
+        assert point_defect_upper < D("0.5"), point_defect_upper
+        point_capture.update({
+            "schema": "ventura-source-point-jacobian-CANDIDATE-v1",
+            "scope": "POINT-ONLY. NOT a product-ball IFT enclosure or Lean proof.",
+            "branch": "binding",
+            "parameters_order": ["s", "v_R", "v_M", "v_rho", "v_Delta"],
+            "state_dimension": 33,
+            "parameter_dimension": 5,
+            "source_residual": "localBindingResidualWithSlack (SEMANTIC ROW MAP STILL TO BE PROVED)",
+            "source_row5": "1-coverage-s (direct interval automatic differentiation)",
+            "preconditioner": [[str(source_R[i, j].midpoint()) for j in range(33)]
+                               for i in range(33)],
+            "point_jacobian_box": [[enclosure(source_J[i, j]) for j in range(33)]
+                                   for i in range(33)],
+            "point_policy_derivative_box": source_G0,
+            "point_center_residual_box": source_F0,
+            "point_preconditioned_defect_upper": str(point_defect_upper),
+            "uniform_ball_jacobian_enclosures_proven": False,
+            "exact_zero_center_proven": False,
+            "economic_source_row_map_proven": False,
+            "formal_Lean_witness_established": False,
+        })
     responses = {
         name: metric.d[:33] @ solution + metric.d[33:]
         for name, metric in metrics.items()
@@ -425,10 +475,18 @@ def main():
         [I(value) + (I(-error, error) if i >= 6 else I(0)) for value in row]
         for i, row in enumerate(raw["P0"])
     ])
+    point_capture = {} if os.environ.get("VENTURA_EXPORT_POINT_MATRICES") == "1" else None
     branches = {
-        branch: evaluate_bridge(base, P, branch)
+        branch: evaluate_bridge(base, P, branch,
+                 point_capture=(point_capture if branch == "binding" else None))
         for branch in ("slack", "binding")
     }
+    if point_capture is not None:
+        assert point_capture["state_dimension"] == 33
+        (HERE / "binding_source_point_jacobian_CANDIDATE.json").write_text(
+            json.dumps(point_capture, indent=2) + "\n",
+            encoding="utf-8", newline="\n")
+        print("EXPORTED POINT ONLY: binding_source_point_jacobian_CANDIDATE.json")
     # Check the policy-sign conclusions used in the text in both branches.
     for name, info in branches.items():
         responses = info["response_enclosures"]
