@@ -210,6 +210,7 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedPaperBankStaticSupergradientSufficiency.source_bank_static_portfolio_optimal_of_supergradients
           #print axioms Ventura26LiquidityAllocation.ProposedPaperBankStaticSupergradientSufficiency.source_bank_static_portfolio_optimal_of_selected_marginal
           #print axioms Ventura26LiquidityAllocation.ProposedPaperBankBellmanStaticSufficiency.source_bellman_portfolio_ranking_of_static_global_optimality
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperBankBellmanStaticSufficiency.source_bellman_portfolio_ranking_with_derived_weight
           LEAN
           lake env lean FocusedPaperAxioms.lean > "$GITHUB_WORKSPACE/lean-focused-logs/axioms.log" 2>&1 || {
             tail -n 120 "$GITHUB_WORKSPACE/lean-focused-logs/axioms.log"
