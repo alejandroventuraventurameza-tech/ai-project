@@ -342,5 +342,44 @@ theorem weighted_conditional_bound_on_active_support
 #print axioms weighted_sum_eq_active_support
 #print axioms weighted_conditional_bound_on_active_support
 
+
+/-!
+## Conditional zero-equity boundary
+
+This algebraic lemma is intended to be instantiated using the literal
+`zeroBoundary` clause of `BankContinuationFeasibleAt`, *after*
+showing that that clause provides the stated upper bound for supported
+children. It is NOT itself a proof of that source instantiation.
+-/
+
+/-- If source feasibility bounds next equity by a finite multiple of
+current equity, and next equity is nonnegative, zero current equity
+is absorbing. The economic upper bound is an explicit premise. -/
+theorem zero_equity_absorbing_of_scaled_upper_bound
+    (parent child factor : ℝ)
+    (hparent : parent = 0)
+    (hchild : 0 ≤ child)
+    (hupper : child ≤ factor * parent) :
+    child = 0 := by
+  apply le_antisymm
+  · simpa [hparent] using hupper
+  · exact hchild
+
+/-- A supported child of zero equity has zero weighted discounted
+contribution, provided its own nonnegative-equity absorbing condition
+has been established. No assumption about the child SDF is needed. -/
+theorem zero_parent_child_discounted_contribution
+    (parent child factor pathProbability childSDF : ℝ)
+    (hparent : parent = 0)
+    (hchild : 0 ≤ child)
+    (hupper : child ≤ factor * parent) :
+    pathProbability * (childSDF * child) = 0 := by
+  have heq := zero_equity_absorbing_of_scaled_upper_bound
+    parent child factor hparent hchild hupper
+  simp [heq]
+
+#print axioms zero_equity_absorbing_of_scaled_upper_bound
+#print axioms zero_parent_child_discounted_contribution
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
