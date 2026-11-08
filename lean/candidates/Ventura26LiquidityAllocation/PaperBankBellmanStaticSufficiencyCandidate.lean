@@ -63,6 +63,53 @@ theorem source_bellman_portfolio_ranking_of_static_global_optimality
     (hstaticOptimal loans reserves deposits hfeasible)
     hpositiveWeight.le
 
+
+/-- The common continuation weight is not an arbitrary assumed positive
+constant. The source theorem derives its positivity from supported
+consumption/inflation, positive bank exit and nonnegative unit
+franchise values. This closes the scalar-sign premise in the one-step
+Bellman comparison while exposing those economic requirements. -/
+theorem source_bellman_portfolio_ranking_with_derived_weight
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (deficitSlope surplusSlope retainedEquity : ℝ)
+    (candidateLoans candidateReserves candidateDeposits : ℝ)
+    (bankValue : BankValueProcess S)
+    (hhomogeneous : BankValueHomogeneousAt P t h bankValue)
+    (hcurrent : 0 < X.workerConsumption t h)
+    (hchild : ∀ s, 0 < P.tree.transition (currentState h) s →
+      0 < X.workerConsumption (t + 1) (childHistory h s))
+    (hinflation : ∀ s, 0 < P.tree.transition (currentState h) s →
+      0 < X.inflation (t + 1) (childHistory h s))
+    (hexit : 0 < P.bankExit)
+    (hvalue : ∀ s, 0 < P.tree.transition (currentState h) s →
+      0 ≤ bankValue (t + 1) 1 (childHistory h s))
+    (hcandidateFeasible : BankStaticPortfolioFeasibleAt P X t h
+      deficitSlope surplusSlope retainedEquity
+      candidateLoans candidateReserves candidateDeposits)
+    (hstaticOptimal : BankStaticPortfolioOptimalAt P X t h
+      deficitSlope surplusSlope retainedEquity
+      candidateLoans candidateReserves candidateDeposits) :
+    ∀ loans reserves deposits,
+      BankStaticPortfolioFeasibleAt P X t h
+        deficitSlope surplusSlope retainedEquity
+        loans reserves deposits →
+      bankBellmanContinuationAt P X t h deficitSlope surplusSlope
+        loans reserves deposits (bankValue (t + 1)) ≤
+      bankBellmanContinuationAt P X t h deficitSlope surplusSlope
+        candidateLoans candidateReserves candidateDeposits
+        (bankValue (t + 1)) := by
+  have hweight : 0 < bankBellmanContinuationWeightAt P X t h
+      (bankValue (t + 1)) :=
+    bankBellmanContinuationWeightAt_pos_of_finiteValue
+      P X t h bankValue hcurrent hchild hinflation hexit hvalue
+  exact source_bellman_portfolio_ranking_of_static_global_optimality
+    P X t h deficitSlope surplusSlope retainedEquity
+    candidateLoans candidateReserves candidateDeposits
+    bankValue hhomogeneous hweight hcandidateFeasible hstaticOptimal
+
+#print axioms source_bellman_portfolio_ranking_with_derived_weight
+
 #print axioms source_bellman_portfolio_ranking_of_static_global_optimality
 
 end ProposedPaperBankBellmanStaticSufficiency
