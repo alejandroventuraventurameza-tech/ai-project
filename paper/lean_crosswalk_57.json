@@ -5,8 +5,8 @@
   "checked_branch": "work/lean-ci-validation-otc-20261106",
   "reviewed_date": "2026-11-08",
   "claim_count": 57,
-  "status_policy": "All 57 numbered claims retained. Source functions and exact PaperInterface proof candidates are NOT counted as kernel verified until the matching CI run passes. Do not infer economic equilibrium or full program completion from these bridges.",
-  "source_module_check": "Targeted mathematical inspection for all 14 main-text numbered claims, with seven new comparisons; theorem references verified syntactically and exact PaperInterface bridge remains CI-pending.",
+  "status_policy": "A related Lean module or source definition is not proof equivalence. The pinned Lemma 3.5 literal interface is mathematically false due to precedence; the separate economically corrected conditional and its counterexample remain pending Lean CI. No incorrect exact-interface promotion.",
+  "source_module_check": "19 targeted semantic comparisons, including a falsified original funding-supergradient interface and its corrected candidate under RD>0, RD<RL; full dynamic equilibrium not certified.",
   "scope": "57 numbered claims including historical appendices; current PDF page numbers in the original ledger are stale after compact layout.",
   "entries": [
     {
@@ -134,12 +134,18 @@
         },
         {
           "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperFinancialMainExactCandidate.lean",
-          "declaration": "exact_fundingSupergradientSpec",
-          "relationship": "exact_interface_claim_candidate_ci_pending",
-          "note": "Candidato de prueba exactamente del predicado fundingSupergradientSpec."
+          "declaration": "original_fundingSupergradientSpec_false",
+          "relationship": "counterexample_to_malformed_literal_interface",
+          "note": "Refuta la especificación original debido a precedencia de → respecto de ↔; tasas iguales RL=RD=1 y cara=0, pendiente=2 dan RHS falso y LHS vacuamente verdadero. Requiere CI."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperFinancialMainExactCandidate.lean",
+          "declaration": "corrected_fundingSupergradientSpec",
+          "relationship": "corrected_economic_claim_ci_pending",
+          "note": "Demuestra condicional sobre RD>0, RD<RL que engloba ambas caras de ↔; coincide con las tres ramas matemáticas del paper, sujeto al kernel y auditoría de axiomas."
         }
       ],
-      "semantic_gap": "La equivalencia entre la desigualdad global de supergradiente y las tres ramas, incluido todo el intervalo en la esquina cero, coincide con la definición fuente. El nuevo módulo prueba el objeto literal fundingSupergradientSpec, pero todavía no se eleva a verificado hasta su compilación y auditoría de axiomas."
+      "semantic_gap": "Se detectó que PaperInterface.fundingSupergradientSpec, tal como está escrito, tiene un error de alcance lógico: (tasas positivas → definición supergradiente) ↔ casos, en lugar de tasas positivas → (definición ↔ casos). Es falso fuera del dominio económico. El módulo nuevo lo refuta y propone una versión corregida sin editar el checkpoint. Todavía falta compilación y auditoría de axiomas, por eso no se promueve el estatus del ledger."
     },
     {
       "paper_number": "3.6",
