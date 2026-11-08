@@ -77,6 +77,13 @@ theorem augmented_zero_implies_all_original_S_and_B_prefix_rows
   obtain ⟨_hKKT, _hBface, hSfunding, hSEuler⟩ :=
     augmented_source_zero_recovers_original_L_under_positive_domain
       P I Z0 dateOne recurrent tail z h hbase hpledge hdepr hroot
+  change
+    (∀ row : Fin 33,
+      localReducedPrefixResidual LocalPrefixBranch.binding Pv I Z
+        dateOne recurrent tail (localPrefixEquationOfIndex row) = 0) ∧
+    (∀ row : Fin 33,
+      localReducedPrefixResidual LocalPrefixBranch.slack Pv I Z
+        dateOne recurrent tail (localPrefixEquationOfIndex row) = 0)
   refine ⟨hBall, ?_⟩
   intro row
   by_cases hEuler : localPrefixEquationOfIndex row =
