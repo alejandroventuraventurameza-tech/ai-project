@@ -33,6 +33,8 @@ jobs:
         run: python code/irf/render_mechanism_table.py --check
       - name: Audit proposition scope, 57-row ledger and Lean obstruction
         run: python code/audit_claim_scope.py
+      - name: Audit all 57 Lean correspondence pointers without promoting theorem coverage
+        run: python code/audit_lean_crosswalk.py
 
   latex-logs:
     name: Final LaTeX references and layout
