@@ -532,5 +532,77 @@ theorem parent_child_mass_le_of_supported_growth
 #print axioms parent_child_mass_eq_of_active_and_zero
 #print axioms parent_child_mass_le_of_supported_growth
 
+
+/-!
+## Exact source weighted child contribution at a zero-equity parent
+
+The Markov transition is allowed to vanish. On a zero-probability edge,
+the weighted term vanishes algebraically; on a positive edge, the
+SOURCE absorption theorem forces child equity to zero. This avoids
+assuming positivity on unsupported successors or dividing by equity.
+-/
+
+/-- Every probability-weighted one-step child contribution vanishes
+when its parent has zero equity and the source candidate is feasible.
+No assumption about the payment probability or child SDF is needed. -/
+theorem source_full_retention_zero_parent_weighted_child_eq_zero
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (hfeasible : BankContinuationFeasibleAt P X t h
+      (X.bankEquity t h) (sourceFullRetentionCandidate P X t h))
+    (n : ℕ) (future : Fin n → S)
+    (payments : Fin n → P.paymentSupport)
+    (hpath : FuturePathSupported P.tree (currentState h) n future)
+    (hzero : (sourceFullRetentionCandidate P X t h).equity
+      n future payments = 0)
+    (s : S) (omega : P.paymentSupport) :
+    (P.tree.transition
+      (currentState (continuationHistory h future)) s *
+        P.paymentProbability omega) *
+      (bankCumulativeSDFAt P X t h (childFutureHistory future s) *
+        (sourceFullRetentionCandidate P X t h).equity (n + 1)
+          (childFutureHistory future s)
+          (childPaymentHistory payments omega)) = 0 := by
+  by_cases ht : P.tree.transition
+      (currentState (continuationHistory h future)) s = 0
+  · simp [ht]
+  · have hpositive : 0 < P.tree.transition
+        (currentState (continuationHistory h future)) s :=
+      lt_of_le_of_ne (P.tree.transition_nonneg _ _) (Ne.symm ht)
+    have heq := source_full_retention_supported_zero_equity_absorbing
+      P X t h hfeasible n future payments hpath hzero s omega hpositive
+    simp [heq]
+
+/-- The sum of all one-step weighted child contributions from a
+supported parent with zero source bank equity is exactly zero. -/
+theorem source_full_retention_zero_parent_weighted_children_sum_eq_zero
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (hfeasible : BankContinuationFeasibleAt P X t h
+      (X.bankEquity t h) (sourceFullRetentionCandidate P X t h))
+    (n : ℕ) (future : Fin n → S)
+    (payments : Fin n → P.paymentSupport)
+    (hpath : FuturePathSupported P.tree (currentState h) n future)
+    (hzero : (sourceFullRetentionCandidate P X t h).equity
+      n future payments = 0) :
+    (∑ s : S, ∑ omega : P.paymentSupport,
+      (P.tree.transition
+        (currentState (continuationHistory h future)) s *
+          P.paymentProbability omega) *
+        (bankCumulativeSDFAt P X t h (childFutureHistory future s) *
+          (sourceFullRetentionCandidate P X t h).equity (n + 1)
+            (childFutureHistory future s)
+            (childPaymentHistory payments omega))) = 0 := by
+  classical
+  apply Finset.sum_eq_zero
+  intro s _hs
+  apply Finset.sum_eq_zero
+  intro omega _ho
+  exact source_full_retention_zero_parent_weighted_child_eq_zero
+    P X t h hfeasible n future payments hpath hzero s omega
+
+#print axioms source_full_retention_zero_parent_weighted_child_eq_zero
+#print axioms source_full_retention_zero_parent_weighted_children_sum_eq_zero
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
