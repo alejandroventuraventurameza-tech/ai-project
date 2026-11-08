@@ -377,25 +377,44 @@ def evaluate_bridge(base, P, branch, policy_inputs=True, point_capture=None):
     # The exact Lean modified row 5 is 1 - coverage - prescribed_slack,
     # NOT the legacy binding log(coverage) row at finite deviations.
     if point_capture is not None and branch == "binding":
-        source_row5 = 1 - X1[3] / (s.pledge[1] * J1 * X1[1])
+        # Exact source-style expressions at the candidate reference.
+        # Legacy rows 4, 5 and 21 use log ratios, but the Lean source
+        # uses level-H-face, normalized-L-slack, level-common-pledge.
+        source_rows = {
+            4: X1[2] - s.pledge[0] * J1 * X1[0],
+            5: 1 - X1[3] / (s.pledge[1] * J1 * X1[1]),
+            21: J2 - s.ad * U2[5] * U2[6],
+        }
         source_J = bd.arr([
-            [source_row5.d[j] if i == 5 else J[i, j] for j in range(33)]
-            for i in range(33)
+            [source_rows[i].d[j] if i in source_rows else J[i, j]
+             for j in range(33)] for i in range(33)
         ])
-        # The old logarithmic-row inverse with column 5 flipped is a
-        # sensible POINT preconditioner, not an interval inverse.
+        # At a *binding frontier* rows 4 and 21 are related to the
+        # legacy logarithmic rows by positive local pledge scales,
+        # while row 5 is related by a negative sign. Using midpoint
+        # pledge scales defines a rational POINT preconditioner only.
+        scale_h = (s.pledge[0] * J1 * X1[0]).x.midpoint()
+        scale_common = (s.ad * U2[5] * U2[6]).x.midpoint()
+        assert scale_h > 0 and scale_common > 0
+        def precond_entry(i, j):
+            value = inverse[i, j].midpoint()
+            if j == 4:
+                return I(value / scale_h)
+            if j == 5:
+                return I(-value)
+            if j == 21:
+                return I(value / scale_common)
+            return I(value)
         source_R = bd.arr([
-            [I(-inverse[i, j].midpoint() if j == 5 else
-               inverse[i, j].midpoint()) for j in range(33)]
-            for i in range(33)
+            [precond_entry(i, j) for j in range(33)] for i in range(33)
         ])
         source_F0 = [
-            enclosure(source_row5 if i == 5 else residuals[i])
+            enclosure(source_rows[i] if i in source_rows else residuals[i])
             for i in range(33)
         ]
         source_G0 = [
             ([["-1", "-1"]] if i == 5 else [["0", "0"]]) +
-            [enclosure(source_row5.d[33 + j] if i == 5
+            [enclosure(source_rows[i].d[33 + j] if i in source_rows
                        else forcing[i, j]) for j in range(4)]
             for i in range(33)
         ]
@@ -408,8 +427,8 @@ def evaluate_bridge(base, P, branch, policy_inputs=True, point_capture=None):
             "parameters_order": ["s", "v_R", "v_M", "v_rho", "v_Delta"],
             "state_dimension": 33,
             "parameter_dimension": 5,
-            "source_residual": "localBindingResidualWithSlack (SEMANTIC ROW MAP STILL TO BE PROVED)",
-            "source_row5": "1-coverage-s (direct interval automatic differentiation)",
+            "rows_recomputed_as_source_style": [4, 5, 21],
+            "source_residual": "localBindingResidualWithSlack (FULL SEMANTIC ROW MAP STILL OPEN)",
             "preconditioner": [[str(source_R[i, j].midpoint()) for j in range(33)]
                                for i in range(33)],
             "point_jacobian_box": [[enclosure(source_J[i, j]) for j in range(33)]
