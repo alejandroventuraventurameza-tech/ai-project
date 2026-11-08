@@ -693,10 +693,54 @@ automaticamente la politica basal: si el cero aumentado tiene
 intervenidas en la base y probar correspondencia de los
 residuos y sus derivadas en el nuevo origen.
 
-**Estado de auditoria al introducir esta seccion:** los tres
-ultimos candidatos KKT/positividad/recentrado estan enviados
-al workflow `lean-candidates.yml`, pero no se promueven
-a pruebas verificadas hasta disponer de un resultado de
-compilacion y `#print axioms` en la revision correspondiente.
-Esto no modifica el caracter CONDICIONAL del certificado
-intervalar 34x34 ni cierra `CompetitiveEquilibrium`.
+**Estado verificado de Lean:** la recuperacion del KKT
+original de L y su version con dominio positivo compilaron
+sin `sorryAx` en
+[CI 42448009715](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42448009715).
+El re-centrado coordenada por coordenada compilo en
+[CI 42448099697](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42448099697)
+y se incluyo en el control ampliado de axiomas de
+[CI 42448127463](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42448127463).
+Ninguno de estos lemas construye por si mismo la raiz numerica en Lean.
+
+
+### 14.3. Las 33 filas originales de ambos regimenes en un solo punto
+
+El modulo `LocalScalarAugmented34FullBindingCandidate.lean` prueba
+desde una raiz literal de `H` y bajo las hipotesis de dominio
+economico positivo que se anulan las **33 ecuaciones de fuente B**.
+La fila de regimen de L, unica modificada en `H`, se recupera de
+su holgura exactamente cero y de la no anulacion del denominador
+de colateral. Las otras 32 filas coinciden con el sistema B sin
+alteraciones. El siguiente modulo,
+`LocalScalarAugmented34FullBothCandidate.lean`, demuestra
+que los residuos S y B solo difieren en las dos filas de L de
+fecha cero: Euler de capital y financiamiento. Como el dual de
+L es cero y se cumplen las filas recuperadas, se anulan
+tambien las **33 ecuaciones originales de S**.
+
+Los dos modulos compilaron con `#print axioms` en
+[CI 42448545998](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42448545998)
+(comision sobre commit `6786fc90d5d0b83cdc6838963b6da759cf70c9b5`),
+sin `sorryAx` en los teoremas pertinentes. La revision posterior
+`82dddd13001281c32f97f193ccdfaae24e276e7a` explicita el
+tipo `Fin 33` tambien en el segundo modulo; requiere su propia
+lectura de CI antes de ser promovida como cabeza final validada.
+
+**Proposicion CONDICIONAL exacta (fuente Lean):**
+```text
+H(z*,h*) = 0
+ AND LocalPrefixCoordinatesPositive Z0
+ AND pledgeability(L) > 0
+ AND depreciation < 1
+ => F_binding(P(h*), chart(Z0,z*)) = 0 (33 filas)
+ AND F_slack(P(h*), chart(Z0,z*))   = 0 (33 filas).
+```
+
+Ambos sistemas se satisfacen EN EL MISMO `(z*,h*)`.
+No hay un testigo separado `zS != zB` ni dos asignaciones
+`CompetitiveEquilibrium`. La futura separacion dinamica
+requiere el signo local de la marginal reducida, una referencia
+recentrada exacta, una seleccion de conjuntos activos y
+los puentes de optimalidad, estados, anuncios, clearing y cola
+infinita que siguen abiertos.
