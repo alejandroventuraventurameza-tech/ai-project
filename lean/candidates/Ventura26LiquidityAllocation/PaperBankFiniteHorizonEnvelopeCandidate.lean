@@ -39,9 +39,9 @@ theorem finite_horizon_le_value
       calc
         flow t + discount t * finiteHorizon flow discount value n (t + 1)
             ≤ flow t + discount t * value (t + 1) := by
-              exact add_le_add_left
-                (mul_le_mul_of_nonneg_left (ih (t + 1)) (hdiscount t))
-                (flow t)
+              have hstep :=
+                mul_le_mul_of_nonneg_left (ih (t + 1)) (hdiscount t)
+              linarith
         _ ≤ value t := hsuper t
 
 /-- A nodewise Bellman equality propagates through finite horizons.
