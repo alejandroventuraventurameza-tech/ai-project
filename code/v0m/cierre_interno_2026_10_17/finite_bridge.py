@@ -389,24 +389,13 @@ def evaluate_bridge(base, P, branch, policy_inputs=True, point_capture=None):
             [source_rows[i].d[j] if i in source_rows else J[i, j]
              for j in range(33)] for i in range(33)
         ])
-        # At a *binding frontier* rows 4 and 21 are related to the
-        # legacy logarithmic rows by positive local pledge scales,
-        # while row 5 is related by a negative sign. Using midpoint
-        # pledge scales defines a rational POINT preconditioner only.
-        scale_h = (s.pledge[0] * J1 * X1[0]).x.midpoint()
-        scale_common = (s.ad * U2[5] * U2[6]).x.midpoint()
-        assert scale_h > 0 and scale_common > 0
-        def precond_entry(i, j):
-            value = inverse[i, j].midpoint()
-            if j == 4:
-                return I(value / scale_h)
-            if j == 5:
-                return I(-value)
-            if j == 21:
-                return I(value / scale_common)
-            return I(value)
+        # The legacy Jacobian inverse cannot be transported by simple
+        # column scaling across all source-style rows. Recompute an
+        # interval inverse of this exact-AD POINT matrix directly.
+        source_inverse = bd.solve(source_J, bd.eye(33))
         source_R = bd.arr([
-            [precond_entry(i, j) for j in range(33)] for i in range(33)
+            [I(source_inverse[i, j].midpoint()) for j in range(33)]
+            for i in range(33)
         ])
         source_F0 = [
             enclosure(source_rows[i] if i in source_rows else residuals[i])
@@ -429,6 +418,7 @@ def evaluate_bridge(base, P, branch, policy_inputs=True, point_capture=None):
             "parameter_dimension": 5,
             "rows_recomputed_as_source_style": [4, 5, 21],
             "source_residual": "localBindingResidualWithSlack (FULL SEMANTIC ROW MAP STILL OPEN)",
+            "preconditioner_method": "pointwise interval Gauss-Jordan on source-style 33x33 AD candidate; rational midpoint",
             "preconditioner": [[str(source_R[i, j].midpoint()) for j in range(33)]
                                for i in range(33)],
             "point_jacobian_box": [[enclosure(source_J[i, j]) for j in range(33)]
