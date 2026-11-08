@@ -8,8 +8,11 @@ condicional**, no una afirmación sobre utilidad o crecimiento permanente.
 **Fuente interna:** `paper/paper.tex`, Lema
 `lem:allocation_loss_identity` y ecuación
 `eq:loss_relative_capital_derivative`.
-**Formalización en curso:** `PaperAllocationLossElasticityCandidate.lean`;
-la compilación y `#print axioms` deberán confirmar su alcance.
+**Prueba auxiliar verificada:** `PaperAllocationLossElasticityCandidate.lean`
+compiló y pasó `#print axioms` sin `sorryAx` en
+[Lean focalizado 42458449121](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42458449121),
+commit `1e797f886dea03a6fdea135338e6408a3e8ab91b`.
+No se ha probado el Lema 4.3 integral.
 
 ## 1. Problema que se maximiza
 
@@ -142,14 +145,20 @@ la restricción activa puede absorber recursos endógenos.
 | Objeto | Estado real |
 |---|---|
 | `allocationLossIdentitySpec` en `PaperInterface.lean` | Especificación formal del referente y `Loss≥0`, pero **no contiene la derivada ni la comparación de MPK** |
-| `allocation_loss_log_differential_algebra` | Candidato Lean: álgebra de coeficientes diferenciales a partir de los pesos de `d log K` y `d log G` |
-| `output_share_gt_capital_share_iff_productivity` | Candidato Lean: equivalencia exacta de participaciones y cocientes `y_i/k_i` con masas/valores positivos |
-| `loss_direction_negative_of_reallocation` | Candidato Lean: signo negativo dado `alpha>0`, `omega_H>kappa_H` y crecimiento relativo de capital |
+| `allocation_loss_log_differential_algebra` | **DEMOSTRADO en Lean**, como álgebra de coeficientes si los pesos de `d log K` y `d log G` ya se han obtenido |
+| `output_share_gt_capital_share_iff_productivity` | **DEMOSTRADO en Lean** para masas y niveles positivos: equivalencia exacta de participaciones y cocientes `y_i/k_i` |
+| `loss_direction_negative_of_reallocation` | **DEMOSTRADO en Lean**: signo negativo dado `alpha>0`, `omega_H>kappa_H` y desplazamiento relativo positivo |
 | `lem:allocation_loss_identity` entero | **PENDIENTE**: recuperar la fórmula laboral desde FOC, optimalidad global del referente, desigualdad `Loss≥0` y derivadas de agregadores Cobb–Douglas como tales |
 
-Una corrida verde de los tres candidatos **no** convierte toda la
-especificación económica o el lema 4.3 del paper en demostrados
-por Lean; solo verifica sus fragmentos matemáticos enunciados.
+La corrida verde de estos tres teoremas **no** convierte toda la
+especificación económica o el Lema 4.3 del paper en demostrados
+por Lean; solo verifica los fragmentos matemáticos especificados.
+La comparación de las cifras impresas en la tabla de derivadas
+entrega `dLoss/dLogRatio = -0.0115529615840` en S y
+`-0.0115529612567` en B, una discrepancia relativa
+aproximada de `2.83e-8` debida al redondeo reportado.
+Este último cotejo lo reproduce `code/audit_allocation_loss_table.py`;
+no reestima parámetros ni ejecuta de nuevo el solucionador dinámico.
 
 ## 6. Aplicación a las ramas S y B
 
