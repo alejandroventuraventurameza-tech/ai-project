@@ -98,6 +98,23 @@ cotejar numeros, unidades, estados y dominio en cada fila.
   agentes, clearing de todos los mercados ni terminalidad
   infinita. La multiplicidad de equilibrios sigue pendiente.
 
+## Condicion necesaria y suficiente del factor de renovacion bancaria
+
+El ejemplo Python fija `aB=1/s.rate`. En la fuente Lean
+`bankRenewalFactor(P)=1-P.bankExit+P.bankExit*P.bankSeedShare`.
+La identificacion de la fila bancaria exige por tanto la
+compatibilidad cuantitativa **exacta**:
+
+```text
+P.bankExit*(1-P.bankSeedShare) = 1 - 1/s.rate.
+```
+
+Esta equivalencia se deduce algebraicamente de las definiciones;
+no demuestra que los datos ilustrativos satisfagan dicha condicion.
+Se requiere una instancia concreta de `P` y cotejar los valores
+de `s.rate`, `P.bankExit` y `P.bankSeedShare` antes de marcar
+las filas 6 y 22 como numericamente compatibles.
+
 **Regla de actualizacion:** un candidato solo pasa a
 "verificado" si el run especifico del commit lo compila y
 `#print axioms` no presenta `sorryAx`; este inventario
