@@ -389,9 +389,21 @@
           "lean_ci_run_id": 42459394970,
           "lean_ci_commit": "8e883b7993f39d29ae431c44a6a14e45ca55707d",
           "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperAllocationSourceAlgebraBridgeCandidate.lean",
+          "declaration": "productivity_weight_recovers_A",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "El puente de potencia (A^(1/d))^d=A bajo A,d>0 es necesario para identificar productividad, pero por sí solo no transporta producción microagregada; pendiente kernel."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperAllocationSourceAlgebraBridgeCandidate.lean",
+          "declaration": "positive_aggregate_loss_log_formula",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "La diferencia de logaritmos del output eficiente y de Y=L^beta G^(1-beta) reproduce exactamente alpha log K+d log ZA-(1-beta)log G si todos los agregados son positivos; pendiente kernel."
         }
       ],
-      "semantic_gap": "En Lean #42459394970 quedaron verificadas 4 proposiciones globales: cota normalizada AM–GM de producción para recursos agregados fijos, igualdad en el candidato eficiente, no negatividad de pérdida logarítmica normalizada y factibilidad de recursos del candidato. Ya se verificaron además 3 lemas anteriores sobre coeficientes del diferencial, shares/MPK y signo. PENDIENTE del Lema 4.3 académico: demostrar en Lean el cambio de variables desde tecnología individual Cobb–Douglas y elasticidades comunes, la asignación óptima de trabajo y su agregado G, la identidad de Y físico y Yeff eficiente, y la derivada total de la pérdida desde esas funciones. La interfaz original define Y/Yeff por fórmulas, omite igualdad de elasticidades L/H y no contiene la derivada; por tanto no atribuirle equivalencia literal.",
+      "semantic_gap": "En Lean #42459394970 quedaron verificadas 4 proposiciones globales: cota normalizada AM–GM de producción para recursos agregados fijos, igualdad en el candidato eficiente, no negatividad de pérdida logarítmica normalizada y factibilidad de recursos del candidato. Ya se verificaron además 3 lemas anteriores sobre coeficientes del diferencial, shares/MPK y signo. PENDIENTE del Lema 4.3 académico: demostrar en Lean el cambio de variables desde tecnología individual Cobb–Douglas y elasticidades comunes, la asignación óptima de trabajo y su agregado G, la identidad de Y físico y Yeff eficiente, y la derivada total de la pérdida desde esas funciones. La interfaz original define Y/Yeff por fórmulas, omite igualdad de elasticidades L/H y no contiene la derivada; por tanto no atribuirle equivalencia literal. Nuevo paquete de dos puentes algebraicos fuente de potencias reales y logaritmos registrado como candidato pendiente del kernel. No iguala la tecnología microagregada ni deriva óptimo laboral.",
       "numerical_context": [
         "paper/irf_mechanism_table.tex"
       ]
