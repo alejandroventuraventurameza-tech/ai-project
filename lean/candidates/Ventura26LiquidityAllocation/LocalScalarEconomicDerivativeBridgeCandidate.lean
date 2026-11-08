@@ -42,7 +42,7 @@ theorem reserveRemunerationSlice_transverse_hasDerivAt (K : ℝ) :
       (fun h : ℝ => (-K * h) • localScalarSlackDirection)
       ((-K) • localScalarSlackDirection) 0 :=
     (((hasDerivAt_id (0 : ℝ)).const_mul (-K)).smul_const
-      localScalarSlackDirection
+      localScalarSlackDirection)
   have hr : HasDerivAt
       (fun h : ℝ => h • localScalarReserveRateDirection)
       localScalarReserveRateDirection 0 :=
