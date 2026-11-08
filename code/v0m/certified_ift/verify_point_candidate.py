@@ -17,6 +17,10 @@ def verify(data):
         raise ValueError("Expected 33 states and 5 policy parameters")
     if data.get("rows_recomputed_as_source_style") != [4, 5, 21]:
         raise ValueError("Expected source-style AD in rows 4, 5 and 21; legacy hybrid is rejected")
+    expected_row_map = [0, 3, 1, 4, 2, 5, *range(6, 17),
+                        17, 19, 18, 20, *range(21, 33)]
+    if data.get("source_to_legacy_row_permutation") != expected_row_map:
+        raise ValueError("Missing Lean-to-legacy equation row permutation")
     for key in ("uniform_ball_jacobian_enclosures_proven",
                 "exact_zero_center_proven",
                 "economic_source_row_map_proven",
