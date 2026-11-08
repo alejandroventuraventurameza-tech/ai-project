@@ -476,3 +476,44 @@ y `M(z*,0)=0` (la proximidad a cero no equivale a igualdad);
 testigo `LocalScalarImplicitReduction` real;
 (iv) validar la continuation economica, los KKT completos
 de agentes y la cola de horizonte infinito.
+
+## 12. Ruta de normalizacion exacta: sistema aumentado 34x34
+
+El certificado de contraccion en 33 incognitas entrega una raiz
+exacta **cercana** a la referencia numerica, pero no implica
+`F(0,0)=0`, `M(0,0)=0` ni `solutionLog(0)=0`.
+La diferencia no debe ocultarse con redondeos.
+
+Se propone resolver **simultaneamente** un sistema ampliado
+con 34 incognitas: los 33 logaritmos economicos `z` y una
+innovacion de remuneracion `h`:
+
+```text
+H(z,h) = ( F(z, (s=0, v_R=h, v_M=0, v_rho=0, v_Delta=0)),
+           localNormalizedCollateralDualL(P, logChart(Z0,z)) ) = 0.
+```
+
+Su derivada en el punto de referencia tiene el bloque:
+
+```text
+       [ J      F_vR ]
+J34 =  [             ]
+       [ mu_z      0 ]
+```
+
+Si `J` es invertible, el complemento de Schur de `J34`
+es `-mu_z * J^(-1) * F_vR = a_R`. Los intervalos de
+la auditoria puntual y uniforme del modulo B mantienen
+`a_R<0` **condicionalmente a la identidad de operadores**.
+Por consiguiente, `J34` es algebraicamente invertible
+bajo las mismas hipotesis. Esto NO prueba aun existencia
+de un cero exacto de `H`.
+
+**Nueva compuerta:** construir una caja intervalar y un
+precondicionador para `J34`, verificar con aritmetica
+racional su contraccion y su residuo basal, y obtener una
+solucion exacta `(z*,h*)`. Solo entonces recentrar la
+referencia y adaptar correctamente `LocalScalarImplicitReduction`;
+un `h*\neq0` corresponde a una base de politica desplazada,
+no a una prueba de que el viejo valor numerico `h=0`
+ya era exactamente la interseccion de las ramas.
