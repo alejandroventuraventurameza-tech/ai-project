@@ -517,3 +517,104 @@ referencia y adaptar correctamente `LocalScalarImplicitReduction`;
 un `h*\neq0` corresponde a una base de politica desplazada,
 no a una prueba de que el viejo valor numerico `h=0`
 ya era exactamente la interseccion de las ramas.
+
+
+## 13. Sistema aumentado 34x34: puerta racional verificada, puente de fuente abierto
+
+**Revision de codigo probada:** `1006d73334a2bfd29b57e887adc9a6d676d57b6d`.
+**Ejecucion real de GitHub Actions:**
+[42447037264](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42447037264),
+**success**, incluyendo el paso `Conditional augmented 34x34 exact-rational root arithmetic`.
+Se archivo el informe `binding_augmented34_arithmetic_CANDIDATE.json`
+junto con los intervalos de entrada. Las diez pruebas sintéticas de
+`test_augmented_34.py` pasaron por CI en
+[42447027291](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42447027291).
+
+### 13.1 Ecuaciones y condicion suficiente
+
+Sea `z in R^33` el vector de log-desviaciones y
+`h=v_R` la innovacion de la regla de remuneracion de reservas.
+Con `s=v_M=v_rho=v_Delta=0`, se define el operador aumentado
+
+```text
+H(z,h) = (F(z, (0,h,0,0,0)), mu_L(z)) in R^34.
+DH     = [ J       F_vR ]
+         [ D_z mu  0    ].
+```
+
+La ultima derivada directa es cero **a estado endogeno fijo**:
+no equivale a ausencia de efecto total de `v_R` sobre el dual.
+Las 33 filas usan la permutacion de fuente y las filas 4, 5, 21
+recalculadas en niveles. La caja de la marginal usa exactamente el
+mismo evaluador intervalar que las derivadas del prefijo.
+
+En vez de imponer un radio comun a variables de distinta escala, se fija
+`W = diag(r_z,...,r_z,r_h)` con 33 radios `r_z=1e-10` y
+`r_h=1e-15`. Dado un precondicionador racional candidato `B`
+construido a partir del bloque 33x33 y del complemento de Schur, definimos
+
+```text
+q   = sup_(x in box) || W^(-1) (I - B DH(x)) W ||_infty
+eta =                   || W^(-1) B H(0) ||_infty.
+```
+
+El script `code/v0m/certified_ift/audit_augmented_34.py`
+calcula cotas superiores para `q` y `eta` usando exclusivamente
+`fractions.Fraction` a partir del JSON de intervalos;
+rechaza dimensiones, permutaciones, derivadas directas incompatibles,
+centros faltantes y banderas de procedencia promovidas sin evidencia.
+La condicion cuantitativa es `q<1` y `eta+q<1`.
+Si **los intervalos suministrados son envolventes correctas de un
+operador H de clase C1 en toda la caja**, el mapa
+`T(x)=x-B H(x)` envia la caja cerrada ponderada a su interior y es
+contractivo. El punto fijo unico satisface `B H(x*)=0`; el propio
+defecto `q<1` implica invertibilidad de `B DH` y por tanto de la
+matriz cuadrada `B`, de modo que `H(x*)=0`. Ademas,
+
+```text
+|| W^(-1) x* ||_infty <= eta / (1-q).
+```
+
+### 13.2 Resultado ejecutado y lectura precisa
+
+La ejecucion del generador fuente y el verificador de 34 dimensiones
+reporta, a precision mostrada en el log:
+
+```text
+r_z                      1e-10
+r_h                      1e-15
+q                        0.004156677924539059
+eta                      3.54434692385473e-41
+eta/(1-q)                aproximadamente 3.55914113e-41
+r_h * eta/(1-q)          aproximadamente 3.55914113e-56
+34x34 arithmetic gate     PASS
+```
+
+Este resultado es **aritmetica racional de caja CONDICIONAL a las
+envolventes Python**. La cercania excepcional al centro no prueba
+que `H(0,0)=0`: una raiz `(z*,h*)` cercana podria tener
+`h* != 0`. En consecuencia, la normalizacion literal del shock
+en la base antigua sigue sin estar probada. No se altero ninguna IRF
+ni se interpreto la perturbacion `h` como cambio de encaje o de la
+tasa interbancaria.
+
+### 13.3 Brechas cientificas que siguen siendo bloqueantes
+
+1. Certificar **fila a fila**, bajo definiciones Lean y no solo
+   identidades Python, `F`, `mu_L`, las cotas uniformes de
+   `DH` y las hipotesis analiticas `C1`/dominio.
+2. Construir en Lean un testigo exacto del sistema aumentado y
+   recentrar correctamente alrededor de `(z*,h*)`;
+   si `h*!=0`, la politica basal cambia.
+3. Obtener la funcion `solutionLog` para las 33 filas,
+   el signo economico y la continuidad de la marginal reducida
+   en el nuevo centro, con igualdad de objetos y no solo de nombres.
+4. Recuperar todas las KKT, la suficiencia, la dinamica, el clearing,
+   la cola y las condiciones terminales para dos asignaciones;
+   nada de esta puerta establece dos equilibrios infinitos o
+   mayor crecimiento tendencial.
+
+**Estatus autorizado:** prueba exacta de aritmetica de un candidato
+34x34 + conclusion de existencia matematica condicional a la
+representacion de fuente; NO prueba Lean de `H`, NO equilibrio
+competitivo global, NO multiplicidad del DSGE.
