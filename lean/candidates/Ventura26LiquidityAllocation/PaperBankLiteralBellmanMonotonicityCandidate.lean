@@ -61,7 +61,7 @@ theorem bankBellmanContinuationAt_monotone_of_consumption
             loans reserves deposits ω s) (childHistory h s) :=
       mul_le_mul_of_nonneg_left (hVW ω hω s) hsurvival
     exact mul_le_mul_of_nonneg_left
-      (add_le_add_right hV
+      (add_le_add_left hV
         (P.bankExit * bankRealPortfolioReturnAt P X t h deficitSlope
           surplusSlope loans reserves deposits ω s))
       hweight
