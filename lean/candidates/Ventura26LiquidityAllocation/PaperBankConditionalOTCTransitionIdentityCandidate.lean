@@ -666,5 +666,57 @@ theorem source_full_retention_active_parent_child_identity
 
 #print axioms source_full_retention_active_parent_child_identity
 
+
+/-- Unified SOURCE one-child identity with only NONNEGATIVE
+individual bank equity. A supported zero-equity parent is absorbing;
+an active parent uses the literal source OTC discounted-return lemma.
+The aggregate bank equity is required positive only at active parents.
+This is not yet the full path-summed stochastic mass identity. -/
+theorem source_full_retention_nonnegative_parent_child_identity
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (hfeasible : BankContinuationFeasibleAt P X t h
+      (X.bankEquity t h) (sourceFullRetentionCandidate P X t h))
+    (n : ℕ) (future : Fin n → S)
+    (payments : Fin n → P.paymentSupport)
+    (hpath : FuturePathSupported P.tree (currentState h) n future)
+    (s : S) (omega : P.paymentSupport)
+    (hrisk : P.workerRiskAversion = 1)
+    (hconsumption : 0 <
+      X.workerConsumption (t + n) (continuationHistory h future))
+    (hchildConsumption : 0 <
+      X.workerConsumption (t + n + 1)
+        (childHistory (continuationHistory h future) s))
+    (hnonneg : 0 ≤
+      (sourceFullRetentionCandidate P X t h).equity n future payments)
+    (haggregate : 0 <
+      X.bankEquity (t + n) (continuationHistory h future)) :
+    (P.tree.transition
+      (currentState (continuationHistory h future)) s *
+        P.paymentProbability omega) *
+      (bankCumulativeSDFAt P X t h (childFutureHistory future s) *
+        (sourceFullRetentionCandidate P X t h).equity (n + 1)
+          (childFutureHistory future s)
+          (childPaymentHistory payments omega)) =
+      (P.tree.transition
+        (currentState (continuationHistory h future)) s *
+          P.paymentProbability omega) *
+        ((bankCumulativeSDFAt P X t h future *
+          (sourceFullRetentionCandidate P X t h).equity
+            n future payments) *
+          sourceDiscountedEquityGrowthFactor P X t h n future s omega) := by
+  by_cases hzero :
+      (sourceFullRetentionCandidate P X t h).equity n future payments = 0
+  · have hleft := source_full_retention_zero_parent_weighted_child_eq_zero
+      P X t h hfeasible n future payments hpath hzero s omega
+    rw [hleft, hzero]
+    simp
+  · exact source_full_retention_active_parent_child_identity
+      P X t h n future payments s omega
+      hrisk hconsumption hchildConsumption
+      (lt_of_le_of_ne hnonneg (Ne.symm hzero)) haggregate
+
+#print axioms source_full_retention_nonnegative_parent_child_identity
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
