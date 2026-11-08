@@ -937,5 +937,132 @@ theorem source_weighted_child_identity_without_offsupport_hypotheses
 #print axioms source_zero_probability_parent_weighted_child
 #print axioms source_weighted_child_identity_without_offsupport_hypotheses
 
+
+/-- SOURCE finite mass transition using NONNEGATIVE individual equity
+and supported-path feasibility. Unsupported Markov histories contribute
+zero automatically. Consumption and aggregate bank equity remain
+strictly positive on all histories for this intermediate bridge;
+weakening these requirements to the supported subset is separate. -/
+theorem source_discounted_bank_mass_next_of_nonnegative_equity
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (hfeasible : BankContinuationFeasibleAt P X t h
+      (X.bankEquity t h) (sourceFullRetentionCandidate P X t h))
+    (hrisk : P.workerRiskAversion = 1)
+    (hconsumption : ∀ n (future : Fin n → S),
+      0 < X.workerConsumption (t + n) (continuationHistory h future))
+    (hchildConsumption : ∀ n (future : Fin n → S) s,
+      0 < X.workerConsumption (t + n + 1)
+        (childHistory (continuationHistory h future) s))
+    (haggregate : ∀ n (future : Fin n → S),
+      0 < X.bankEquity (t + n) (continuationHistory h future)) :
+    ∀ n,
+      sourceDiscountedBankEquityMassAt P X t h (n + 1) =
+        ∑ future : Fin n → S, ∑ payments : Fin n → P.paymentSupport,
+          ((continuationTransitionWeight P.tree (currentState h) n future *
+            continuationPaymentWeight P payments) *
+            (bankCumulativeSDFAt P X t h future *
+              (sourceFullRetentionCandidate P X t h).equity n future payments)) *
+              sourceConditionalOTCGrowthFactor P X t h n future := by
+  classical
+  intro n
+  let W : (Fin n → S) → (Fin n → P.paymentSupport) → ℝ :=
+    fun future payments =>
+      (continuationTransitionWeight P.tree (currentState h) n future *
+        continuationPaymentWeight P payments) *
+        (bankCumulativeSDFAt P X t h future *
+          (sourceFullRetentionCandidate P X t h).equity n future payments)
+  let K : (Fin n → S) → S → P.paymentSupport → ℝ :=
+    fun future s omega =>
+      (P.tree.transition (currentState (continuationHistory h future)) s *
+        P.paymentProbability omega) *
+        sourceDiscountedEquityGrowthFactor P X t h n future s omega
+  unfold sourceDiscountedBankEquityMassAt
+  calc
+    (∑ newFuture : Fin (n + 1) → S,
+      ∑ newPayments : Fin (n + 1) → P.paymentSupport,
+        (continuationTransitionWeight P.tree (currentState h) (n + 1)
+            newFuture * continuationPaymentWeight P newPayments) *
+          (bankCumulativeSDFAt P X t h newFuture *
+            (sourceFullRetentionCandidate P X t h).equity
+              (n + 1) newFuture newPayments)) =
+      ∑ s : S, ∑ future : Fin n → S,
+        ∑ omega : P.paymentSupport,
+        ∑ payments : Fin n → P.paymentSupport,
+          W future payments * K future s omega := by
+      rw [sum_pi_cons]
+      apply Finset.sum_congr rfl
+      intro s _hs
+      apply Finset.sum_congr rfl
+      intro future _hf
+      rw [sum_pi_cons]
+      apply Finset.sum_congr rfl
+      intro omega _ho
+      apply Finset.sum_congr rfl
+      intro payments _hp
+      have htrans := source_transition_weight_child P X t h n future s
+      change continuationTransitionWeight P.tree (currentState h) (n + 1)
+        (Fin.cons s future) =
+        continuationTransitionWeight P.tree (currentState h) n future *
+          P.tree.transition
+            (currentState (continuationHistory h future)) s at htrans
+      rw [htrans]
+      have hpayment := source_payment_weight_child P payments omega
+      change continuationPaymentWeight P (Fin.cons omega payments) =
+        continuationPaymentWeight P payments * P.paymentProbability omega
+        at hpayment
+      rw [hpayment]
+      have hweighted :=
+        source_weighted_child_identity_without_offsupport_hypotheses
+          P X t h hfeasible n future payments s omega
+          hrisk (hconsumption n future)
+          (hchildConsumption n future s) (haggregate n future)
+      change (continuationTransitionWeight P.tree (currentState h) n future *
+        P.tree.transition (currentState (continuationHistory h future)) s *
+        (continuationPaymentWeight P payments * P.paymentProbability omega)) *
+        (bankCumulativeSDFAt P X t h (Fin.cons s future) *
+          (sourceFullRetentionCandidate P X t h).equity (n + 1)
+            (Fin.cons s future) (Fin.cons omega payments)) =
+        W future payments * K future s omega
+      calc
+        _ = (continuationTransitionWeight P.tree (currentState h) n future *
+          continuationPaymentWeight P payments) *
+          ((P.tree.transition
+            (currentState (continuationHistory h future)) s *
+            P.paymentProbability omega) *
+            (bankCumulativeSDFAt P X t h (childFutureHistory future s) *
+              (sourceFullRetentionCandidate P X t h).equity (n + 1)
+                (childFutureHistory future s)
+                (childPaymentHistory payments omega))) := by
+            dsimp [childFutureHistory, childPaymentHistory]
+            ring
+        _ = (continuationTransitionWeight P.tree (currentState h) n future *
+          continuationPaymentWeight P payments) *
+          ((P.tree.transition
+            (currentState (continuationHistory h future)) s *
+              P.paymentProbability omega) *
+            ((bankCumulativeSDFAt P X t h future *
+              (sourceFullRetentionCandidate P X t h).equity n future payments) *
+              sourceDiscountedEquityGrowthFactor P X t h n future s omega)) :=
+            hweighted
+        _ = W future payments * K future s omega := by
+            dsimp [W, K]
+            ring
+    _ = ∑ future : Fin n → S,
+          ∑ payments : Fin n → P.paymentSupport,
+          W future payments * (∑ s : S,
+            ∑ omega : P.paymentSupport, K future s omega) :=
+      weighted_finite_conditional_factorization W K
+    _ = ∑ future : Fin n → S,
+        ∑ payments : Fin n → P.paymentSupport,
+          ((continuationTransitionWeight P.tree (currentState h) n future *
+            continuationPaymentWeight P payments) *
+            (bankCumulativeSDFAt P X t h future *
+              (sourceFullRetentionCandidate P X t h).equity n future payments)) *
+            sourceConditionalOTCGrowthFactor P X t h n future := by
+      dsimp [W, K, sourceConditionalOTCGrowthFactor]
+
+#print axioms source_discounted_bank_mass_next_of_nonnegative_equity
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
