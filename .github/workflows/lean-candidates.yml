@@ -184,6 +184,7 @@ jobs:
           import Ventura26LiquidityAllocation.LocalScalarAugmented34MonetaryRowsCandidate
           import Ventura26LiquidityAllocation.LocalScalarAugmented34BankFaceRowsCandidate
           import Ventura26LiquidityAllocation.LocalScalarAugmented34PledgeDualRowsCandidate
+          import Ventura26LiquidityAllocation.LocalScalarStationaryPythonCalibrationCandidate
           import Ventura26LiquidityAllocation.StationaryEquilibriumCandidate
           import Ventura26LiquidityAllocation.BoundaryAnalyticPackageCandidate
           import Ventura26LiquidityAllocation.InterbankCancellationCandidate
@@ -301,6 +302,17 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34BankFaceRows.augmented_bank_face_rows_log_zero_iff
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34PledgeDualRows.augmented_common_pledge_log_zero_iff
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34PledgeDualRows.augmented_funding_dual_sigma_one
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarStationaryPythonCalibration.illustrative_mean_slope_eq_source
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarStationaryPythonCalibration.illustrative_slope_gap_eq_source
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarStationaryPythonCalibration.illustrative_root_coefficient_eq_source
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarStationaryPythonCalibration.illustrative_reserve_rate_eq_source
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarStationaryPythonCalibration.illustrative_loan_rate_eq_source
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarStationaryPythonCalibration.stationary_source_rate_calibration
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarStationaryPythonCalibration.stationary_source_quantity_calibration
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarStationaryPythonCalibration.stationary_source_bank_renewal_compatibility
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarStationaryPythonCalibration.stationary_source_bank_factor_eq_illustrative
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarStationaryPythonCalibration.stationary_source_entrepreneur_sigma_one
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarStationaryPythonCalibration.stationary_source_reference_positive
           #print axioms Ventura26LiquidityAllocation.ProposedStationaryEquilibrium.parent_competitiveEquilibrium
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.proposed_localSlackLiteralAllocation_settlementClears_of_binarySymmetric
