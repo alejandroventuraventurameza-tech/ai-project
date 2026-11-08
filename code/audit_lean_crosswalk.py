@@ -52,6 +52,7 @@ ALLOWED_RELATIONS = {
     "source_dynamic_integrated_kernel_verified",
     "source_complete_integrated_kernel_verified",
     "source_physical_mpk_kernel_verified",
+    "bank_static_bellman_sufficiency_kernel_verified",
 }
 GREEN_SOURCE_FINANCIAL_RUN = 42457259796
 GREEN_SOURCE_FINANCIAL_SHA = "c006e00c437243c3f6f44ec3c102df4286c545e0"
@@ -89,6 +90,16 @@ GREEN_SOURCE_COMPLETE_RUN = 42505264161
 GREEN_SOURCE_COMPLETE_SHA = "b132b91df59eb3e64b6aefb77621bd62084c8054"
 GREEN_PHYSICAL_MPK_RUN = 42505447150
 GREEN_PHYSICAL_MPK_SHA = "17a56a00f5ce372039f00cada55d6f185891bdff"
+GREEN_BANK_SUFFICIENCY_PROOFS = {
+    "source_bank_static_portfolio_optimal_of_supergradients":
+        (42506496740, "d42f9325709189ea87af4c686361c41ad816b8f0"),
+    "source_bank_static_portfolio_optimal_of_selected_marginal":
+        (42506614812, "51b18f81c847e20a866850df5435a4a501de9682"),
+    "source_bellman_portfolio_ranking_of_static_global_optimality":
+        (42506650961, "164c20e3f64b451a142bd11749ca9c86355e8f9c"),
+    "source_bellman_portfolio_ranking_with_derived_weight":
+        (42506762177, "ded39799ec6bb747ebfba5898ce229528c628ccd"),
+}
 EXPECTED_VERIFIED_PHYSICAL_MPK = {
     "original_firm_production_hasDerivAt_capital",
     "original_firm_mpk_equals_elasticity_times_output_per_capital",
@@ -212,6 +223,7 @@ def main() -> None:
     green_dynamic_integrated = set()
     green_source_complete = set()
     green_physical_mpk = set()
+    green_bank_sufficiency = set()
     for row in data["entries"]:
         label = row["label"]
         old = original[label]
@@ -241,6 +253,20 @@ def main() -> None:
                     f"{label}: invalid theorem relation {rel}")
             if rel == "counterexample_to_stronger_literal_interface":
                 refutations += 1
+            if rel == "bank_static_bellman_sufficiency_kernel_verified":
+                require(label == "prop:v0m_original_10_1",
+                        "Bank static sufficiency proofs attached to wrong claim")
+                decl = item["declaration"]
+                require(decl in GREEN_BANK_SUFFICIENCY_PROOFS,
+                        "Unknown banking sufficiency theorem")
+                require(decl not in green_bank_sufficiency,
+                        "Duplicate bank sufficiency theorem")
+                run, commit = GREEN_BANK_SUFFICIENCY_PROOFS[decl]
+                require(item.get("lean_ci_run_id") == run
+                        and item.get("lean_ci_commit") == commit
+                        and item.get("lean_axiom_audit") == "passed_no_sorryAx",
+                        "Bank sufficiency theorem not pinned to exact green CI")
+                green_bank_sufficiency.add(decl)
             if rel == "source_algebra_kernel_verified":
                 require(label == "lem:allocation_loss_identity",
                         "Source power/log bridge attached to wrong paper lemma")
@@ -551,6 +577,8 @@ def main() -> None:
             f"Complete 11-claim source theorem incomplete: {green_source_complete}")
     require(green_physical_mpk == EXPECTED_VERIFIED_PHYSICAL_MPK,
             f"Original physical MPK proofs incomplete: {green_physical_mpk}")
+    require(green_bank_sufficiency == set(GREEN_BANK_SUFFICIENCY_PROOFS),
+            f"Source bank static/Bellman sufficiency proofs incomplete: {green_bank_sufficiency}")
     require(green_exact == {
         "lem:repayment": "exact_repaymentSpec",
         "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
@@ -623,6 +651,7 @@ def main() -> None:
         "verified_source_complete_lemmas": len(green_source_complete),
         "verified_physical_mpk_run": GREEN_PHYSICAL_MPK_RUN,
         "verified_physical_mpk_lemmas": len(green_physical_mpk),
+        "verified_conditional_bank_static_bellman_lemmas": len(green_bank_sufficiency),
         "unproved_source_specifications": source_specifications,
         "complete_paper_theorems_proved_in_lean_by_this_audit": 0,
         "full_equilibrium_confirmed": False,

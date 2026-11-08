@@ -5,8 +5,8 @@
   "checked_branch": "work/lean-ci-validation-otc-20261106",
   "reviewed_date": "2026-11-08",
   "claim_count": 57,
-  "status_policy": "Forty-two scoped declarations tied to Lemma 4.3 are Lean kernel-verified: 37 previous auxiliary claims, 3 source-integrated static/pathwise/11-claim theorems (#42505059048, #42505126404, #42505264161), and 2 physical Cobb-Douglas marginal capital product lemmas (#42505447150). The three integrators consolidate existing results and must not be counted as independent new economic mechanisms. The original 57 source-paper claim specifications conservatively remain at 0/57 full literal equivalence with 24/57 directed semantic comparisons; the new source-level complete predicate is proved, but the older allocationLossIdentitySpec is materially weaker. Dynamic equilibrium/monetary shock causal implications not established.",
-  "source_module_check": "24/57 semantic comparisons performed, 33 not individually audited. Eleven-claim source-integrated static/differential theorem proved; physical MPK differentiation and alpha*Y/k bridge proved at CI #42505447150. Legacy FirmType interface still mismatched; numerical IRFs conditional and infinite-horizon equilibrium unverified.",
+  "status_policy": "Forty-two scoped declarations tied to Lemma 4.3 are Lean kernel-verified: 37 previous auxiliary claims, 3 source-integrated static/pathwise/11-claim theorems (#42505059048, #42505126404, #42505264161), and 2 physical Cobb-Douglas marginal capital product lemmas (#42505447150). The three integrators consolidate existing results and must not be counted as independent new economic mechanisms. The original 57 source-paper claim specifications conservatively remain at 0/57 full literal equivalence with 24/57 directed semantic comparisons; the new source-level complete predicate is proved, but the older allocationLossIdentitySpec is materially weaker. Dynamic equilibrium/monetary shock causal implications not established. Four conditional source bank static/Bellman comparison declarations now have pinned green Lean runs (#42506496740, #42506614812, #42506650961, #42506762177), associated with Proposition 3.8 only as supporting lemmas. They do not establish full BankOptimal, bank-value terminality, macro equilibrium, or complete literal paper theorem equivalence.",
+  "source_module_check": "24/57 semantic comparisons performed, 33 not individually audited. Eleven-claim source-integrated static/differential theorem proved; physical MPK differentiation and alpha*Y/k bridge proved at CI #42505447150. Legacy FirmType interface still mismatched; numerical IRFs conditional and infinite-horizon equilibrium unverified. New global one-history bank portfolio sufficiency from source OTC payoff and a one-step Bellman comparison compiled without sorryAx; economic hypotheses explicit and not discharged by the numerical paths.",
   "scope": "57 numbered claims including historical appendices; current PDF page numbers in the original ledger are stale after compact layout.",
   "entries": [
     {
@@ -224,9 +224,45 @@
           "declaration": "bank_margins_and_pricing",
           "relationship": "auxiliary_or_conditional_only",
           "note": "Identidades y desigualdades de tasas para parámetros bancarios estacionarios particulares."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperBankStaticSupergradientSufficiencyCandidate.lean",
+          "declaration": "source_bank_static_portfolio_optimal_of_supergradients",
+          "relationship": "bank_static_bellman_sufficiency_kernel_verified",
+          "note": "Suficiencia GLOBAL de la cartera bancaria a una fecha: supergradientes de chi, factibilidad literal candidata y alternativa, y precios sin duales de caps; no prueba optimalidad intertemporal. CI #42506496740 PASS, SHA exacto d42f9325, #print axioms sin sorryAx. No hay equivalencia plena con Proposición 3.8.",
+          "lean_ci_run_id": 42506496740,
+          "lean_ci_commit": "d42f9325709189ea87af4c686361c41ad816b8f0",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperBankStaticSupergradientSufficiencyCandidate.lean",
+          "declaration": "source_bank_static_portfolio_optimal_of_selected_marginal",
+          "relationship": "bank_static_bellman_sufficiency_kernel_verified",
+          "note": "Construye el supergradiente exacto con selectedOTCLiquidityMarginal incluso si un pago produce s=0; con precios y factibilidad explícitos implica dominancia estática. CI #42506614812 PASS, SHA exacto 51b18f81, #print axioms sin sorryAx. No hay equivalencia plena con Proposición 3.8.",
+          "lean_ci_run_id": 42506614812,
+          "lean_ci_commit": "51b18f81c847e20a866850df5435a4a501de9682",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperBankBellmanStaticSufficiencyCandidate.lean",
+          "declaration": "source_bellman_portfolio_ranking_of_static_global_optimality",
+          "relationship": "bank_static_bellman_sufficiency_kernel_verified",
+          "note": "Para cualquier cartera alternativa factible, transfiere la desigualdad de payoff estático al operador Bellman de una fecha, con valor futuro homogéneo y peso positivo. CI #42506650961 PASS, SHA exacto 164c20e3, #print axioms sin sorryAx. No hay equivalencia plena con Proposición 3.8.",
+          "lean_ci_run_id": 42506650961,
+          "lean_ci_commit": "164c20e3f64b451a142bd11749ca9c86355e8f9c",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperBankBellmanStaticSufficiencyCandidate.lean",
+          "declaration": "source_bellman_portfolio_ranking_with_derived_weight",
+          "relationship": "bank_static_bellman_sufficiency_kernel_verified",
+          "note": "Construye la positividad del factor Bellman con consumo/inflación de sucesores, salida bancaria positiva y valor unitario futuro no negativo; NO prueba la política óptima infinita. CI #42506762177 PASS, SHA exacto ded39799, #print axioms sin sorryAx. No hay equivalencia plena con Proposición 3.8.",
+          "lean_ci_run_id": 42506762177,
+          "lean_ci_commit": "ded39799ec6bb747ebfba5898ce229528c628ccd",
+          "lean_axiom_audit": "passed_no_sorryAx"
         }
       ],
-      "semantic_gap": "La cota/orden de tasas en el testigo bancario estacionario no sustituye la prueba general de spread no negativo por covarianza con pagos y duales."
+      "semantic_gap": "La cota/orden de tasas en el testigo bancario estacionario no sustituye la prueba general de spread no negativo por covarianza con pagos y duales. [Campaña 2026-11-08] Cuatro declaraciones bancarias fuente con CI verde y sin sorryAx: dominancia global de cartera en una fecha bajo supergradientes y precios de caps no activos (#42506496740), selección de pendiente en quiebre (#42506614812), transferencia a comparación de continuación Bellman con valor homogéneo y peso positivo (#42506650961), y derivación del peso positivo bajo consumo/inflación/salida/valor unitario válidos (#42506762177). Son resultados CONDICIONALES: no prueban el entorno óptimo intertemporal completo ni el spread no negativo integrado de la Proposición 3.8; identidad de renovación con aB e instanciación en IRF quedan pendientes."
     },
     {
       "paper_number": "3.9",

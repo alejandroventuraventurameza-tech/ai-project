@@ -1,5 +1,12 @@
 # Matriz de correspondencia entre los 57 resultados y Lean
 
+## Nueva compuerta: suficiencia bancaria condicional y Bellman local
+
+La [CI #42506496740](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506496740) verificó `source_bank_static_portfolio_optimal_of_supergradients`; [#42506614812](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506614812) verificó la selección kink-aware `source_bank_static_portfolio_optimal_of_selected_marginal`; [#42506650961](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506650961) verificó la dominancia de una fecha para el valor de continuación Bellman; y [#42506762177](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506762177) verificó la derivación del factor Bellman positivo desde consumo/inflación, salida y valor unitario. Todos pasaron `#print axioms` sin `sorryAx`.
+
+**Cuatro declaraciones bancarias nuevas, condicionales y relacionadas con la Proposición 3.8**, no con el Lema 4.3; por ello el contador del Lema 4.3 sigue en **42**. **0/57 equivalencias completas** continúan correctamente como `not_established`. Los enunciados bancarios no demuestran optimalidad bancaria de horizonte infinito, selección S/B ni equivalencia del prefijo de 33 filas con un equilibrio completo.
+
+
 ## Puente fisico del producto marginal de capital
 
 La [CI focalizada #42505447150](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42505447150), commit `17a56a00f5ce372039f00cada55d6f185891bdff`, verifico dos teoremas adicionales de la tecnologia original: `original_firm_production_hasDerivAt_capital` y `original_firm_mpk_equals_elasticity_times_output_per_capital`. El kernel y `#print axioms` no reportaron `sorryAx`. La igualdad MPK = alpha*Y/k se deduce de Cobb-Douglas, con k>0 y empleo individual fijo en la derivacion.

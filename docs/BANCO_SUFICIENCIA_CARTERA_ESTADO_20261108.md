@@ -110,3 +110,14 @@ donde `w_t(V_{t+1})` es independiente de la cartera individual cuando los precio
 El nuevo teorema invoca esa igualdad **separadamente para la candidata y la desviación factible**, y usa `w_t>0` para preservar la desigualdad estática. De este modo, la candidata domina cualquier desviación en la comparación de continuación de **una fecha**. No se deduce una condición terminal ni se construye un selector de estrategias para toda historia; ambos siguen pendientes.
 
 **Estado:** candidato en GitHub Actions hasta que la compilación fijada y la auditoría de axiomas concluyan. Evitar llamar a esto `BankOptimal` o equilibrio completo mientras esos objetos no se demuestren.
+
+## 7. Evidencia final de la campaña bancaria
+
+**DEMOSTRADO en Lean (enunciados condicionales originales de cartera y Bellman):**
+
+- `source_bank_static_portfolio_optimal_of_supergradients`: [CI #42506496740](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506496740), SHA `d42f9325709189ea87af4c686361c41ad816b8f0`.
+- `source_bank_static_portfolio_optimal_of_selected_marginal`: [CI #42506614812](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506614812), SHA `51b18f81c847e20a866850df5435a4a501de9682`.
+- `source_bellman_portfolio_ranking_of_static_global_optimality`: [CI #42506650961](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506650961), SHA `164c20e3f64b451a142bd11749ca9c86355e8f9c`.
+- `source_bellman_portfolio_ranking_with_derived_weight`: [CI #42506762177](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506762177), SHA `ded39799ec6bb747ebfba5898ce229528c628ccd`.
+
+**Comprobación:** los cuatro `#print axioms` son compatibles con el kernel y no presentan `sorryAx`. Las dos últimas declaraciones no afirman que el banco haya maximizado su valor a lo largo de todas las historias, sino que en cada historia la comparación Bellman preserva una dominancia estática si el valor de continuación presenta las propiedades de homogeneidad requeridas. El diagnóstico de 33 ecuaciones y la auditoría de KKT del banco siguen siendo `NUMERICO`, no una instancia de `BankOptimal`. No cerrar la Proposición 3.8 original o la existencia de equilibrio completo sobre la base de estas declaraciones por separado.
