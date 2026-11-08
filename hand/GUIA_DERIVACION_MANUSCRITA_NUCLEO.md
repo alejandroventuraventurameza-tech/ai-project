@@ -177,3 +177,107 @@ notación y fecha; adjuntar escaneo legible al directorio `hand/`.
 Escribir además un párrafo de juicio personal sobre las
 coincidencias y diferencias con el lema Lean. No presentar
 esta guía tipografiada como el escaneo solicitado por el curso.
+
+## 10. Verificación manuscrita del Lema 4.3 — PENDIENTE DEL AUTOR
+
+Esta sección es una **guía tipografiada**, NO el cotejo a mano.
+Revisar antes `docs/LEMA_4_3_MECANISMO_ASIGNATIVO_20261108.md`
+y el enunciado exacto `lem:allocation_loss_identity` del paper.
+
+**Paso A: obtener la asignación interior de trabajo.**
+Maximizar, a `K` por tipo y empleo agregado `L` dados,
+
+    Y=sum_i v_i A_i k_i^alpha ell_i^beta,
+    sum_i v_i ell_i=L.
+
+El lagrangiano y sus derivadas producen
+
+    beta A_i k_i^alpha ell_i^(beta-1)=lambda,
+    ell_i=L*g_i/G,
+    g_i=A_i^(1/(1-beta))*k_i^(alpha/(1-beta)),
+    G=sum_i v_i*g_i.
+
+Verificar `sum_i v_i ell_i=L` y sustitución
+`Y=L^beta G^(1-beta)`. No sustituir una
+condición de primer orden por optimalidad sin escribir
+la concavidad para `0<beta<1`.
+
+**Paso B: justificar el referente eficiente.**
+Con `d=1-alpha-beta>0`, demostrar
+`Z_A=sum_i v_i A_i^(1/d)` y que
+
+    k_i*=K A_i^(1/d)/Z_A,
+    ell_i*=L A_i^(1/d)/Z_A
+
+respetan ambas dotaciones y hacen comunes los productos
+marginales de capital y trabajo. Verificar que
+`alpha+beta<1` implica concavidad de cada
+producción Cobb–Douglas, por lo que el plano de soporte
+garantiza el máximo global. Derivar
+
+    Yeff=K^alpha L^beta Z_A^d ≥ Y.
+
+La desigualdad no sale simplemente de definir
+`Yeff`; requiere el argumento de optimalidad.
+
+**Paso C: definir pérdida y diferenciar.**
+
+    Loss=alpha*log K + d*log Z_A -(1-beta)*log G.
+    kappa_H=v_H*k_H/K; omega_H=v_H*g_H/G.
+
+Con `v_i,A_i,alpha,beta` fijos y capital positivo:
+
+    d log K = kappa_H*d log k_H
+              +(1-kappa_H)*d log k_L,
+    d log G = alpha/(1-beta) *
+              (omega_H*d log k_H
+               +(1-omega_H)*d log k_L).
+
+Sustituir y cancelar `(1-beta)*alpha/(1-beta)=alpha`
+para obtener, sin saltarse términos:
+
+    d Loss=alpha*(kappa_H-omega_H)
+           *d log(k_H/k_L).
+
+Especificar por qué la variación del empleo agregado
+no aparece: `L^beta` se cancela en el cociente.
+
+**Paso D: interpretar la desigualdad en MPK.**
+Demostrar algebraicamente
+
+    omega_H>kappa_H
+      <=> (v_H*y_H)/(v_H*y_H+v_L*y_L)>
+          (v_H*k_H)/(v_H*k_H+v_L*k_L)
+      <=> y_H/k_H > y_L/k_L
+      <=> MPK_H > MPK_L,
+
+donde la última equivalencia requiere
+`MPK_i=alpha*y_i/k_i` con
+la misma elasticidad `alpha>0`.
+No inferir `MPK_H>MPK_L` exclusivamente de `A_H>A_L`.
+
+**Paso E: comprobar el experimento numérico, no confundirlo
+con una prueba universal.** En la tabla de derivadas del paper,
+con innovación remunerada `v_R=-1e-5`, S implica
+aumento de `log(k_H/k_L)` y caída de la pérdida,
+mientras B implica lo contrario. Calcular a mano
+el cociente de ambas derivadas de pérdida sobre capital
+y compararlo con un mismo factor
+`alpha*(kappa_H-omega_H)`. Un script
+`code/audit_allocation_loss_table.py` automatiza solo
+el cotejo decimal de la tabla publicada.
+
+**Paso F: emitir juicio crítico sobre Lean.**
+El módulo `PaperAllocationLossElasticityCandidate.lean`
+comprueba, si pasa kernel y auditoría de axiomas, álgebra
+de coeficientes, comparación de cocientes positivos y signo.
+No prueba por sí mismo los pasos A–B, la desigualdad
+de eficiencia, las derivadas de las funciones no lineales
+fuente ni un equilibrio dinámico completo.
+
+**Tarea que debes ejecutar personalmente:** escribir A–F
+en hojas manuscritas, sin referencias que sustituyan
+derivaciones; fechar, escanear legiblemente y añadir
+un veredicto propio sobre las hipótesis del Lema 4.3.
+No incluir una declaración de ejecución manuscrita
+hasta que exista ese material.
