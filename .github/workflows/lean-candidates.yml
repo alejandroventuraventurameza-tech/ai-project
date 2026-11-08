@@ -189,6 +189,7 @@ jobs:
           import Ventura26LiquidityAllocation.PaperRepaymentExactCandidate
           import Ventura26LiquidityAllocation.PaperAllocationLossElasticityCandidate
           import Ventura26LiquidityAllocation.PaperAllocationEfficiencySupportCandidate
+          import Ventura26LiquidityAllocation.PaperAllocationSourceAlgebraBridgeCandidate
           import Ventura26LiquidityAllocation.StationaryEquilibriumCandidate
           import Ventura26LiquidityAllocation.BoundaryAnalyticPackageCandidate
           import Ventura26LiquidityAllocation.InterbankCancellationCandidate
@@ -329,6 +330,8 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationEfficiencySupport.normalized_benchmark_attained
           #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationEfficiencySupport.normalized_log_loss_nonneg
           #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationEfficiencySupport.efficient_candidate_clears_resources
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationSourceAlgebraBridge.productivity_weight_recovers_A
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationSourceAlgebraBridge.positive_aggregate_loss_log_formula
           #print axioms Ventura26LiquidityAllocation.ProposedStationaryEquilibrium.parent_competitiveEquilibrium
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.proposed_localSlackLiteralAllocation_settlementClears_of_binarySymmetric
