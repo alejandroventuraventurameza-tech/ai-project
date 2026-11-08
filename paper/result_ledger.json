@@ -1,6 +1,6 @@
 {
   "author": "Alejandro Ventura",
-  "paper_sha256": "cdd49a9ecdd9fc3cf9cd3ed8574b750f082bdf6c673a99d46e369685cfffdf5f",
+  "paper_sha256": "ec8ccc168f33ab9bed915dbdd8d2cfba31df135eb86f71e8385b6c55cdcab6be",
   "numbered_results": 57,
   "formalization_started": true,
   "results": [
@@ -823,10 +823,23 @@
   ],
   "formalization_scope": "Preliminary isolated campaign on the previous source; no numbered result promoted to integrated source-matched Lean coverage.",
   "source_before_irf_revision_sha256": "a89e83f02cb8745a6c59eeb3c047bcb335033a18eae4b0ea538ce47a61cf7764",
-  "page_numbers_scope": "Historical locations in the pre-IRF PDF; use labels in the current PDF.",
+  "page_numbers_scope": "Historical numbers and PDF pages from the pre-compaction 57-result ledger are stale: the original technical text is now explicitly in the appendix, and the main conditional proposition was moved unchanged. Re-index against the compiled compact PDF before delivery.",
   "editorial_scope_revision": {
     "date": "2026-11-07",
     "status": "conditional_reduced",
     "note": "Propositions 4.2 and 4.5 narrowed to conditional reduced claims. Current statement/proof hashes verified by the exact 57-result extractor; prior hashes preserved in edited rows. Complete-equilibrium bridge and original Lean literal uniqueness remain open/refuted respectively."
+  },
+  "editorial_compaction": {
+    "date": "2026-11-08",
+    "manuscript_source_sha256": "ec8ccc168f33ab9bed915dbdd8d2cfba31df135eb86f71e8385b6c55cdcab6be",
+    "exact_reduced_theorem_moved_to_body": "prop:local_macro_multiplicity",
+    "prior_results_retained": 57,
+    "main_body_files": [
+      "paper/body_compact_intro.tex",
+      "paper/body_compact_after.tex"
+    ],
+    "archive_status": "technical historical dossier retained in paper/paper.tex after bibliography",
+    "formalization_status": "No result promoted from not_run by layout revision",
+    "caveat": "Length in compiled PDF and ledger page numbers require verification; preserving 57 theorem statements does not imply 57 source-matched Lean proofs."
   }
 }
