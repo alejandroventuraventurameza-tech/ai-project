@@ -167,6 +167,7 @@ jobs:
           cat > CandidateAxioms.lean <<'LEAN'
           import Ventura26LiquidityAllocation.LocalScalarAugmented34PositiveKktCandidate
           import Ventura26LiquidityAllocation.LocalScalarAugmented34LogRecenterCandidate
+          import Ventura26LiquidityAllocation.LocalScalarAugmented34FullBothCandidate
           import Ventura26LiquidityAllocation.StationaryEquilibriumCandidate
           import Ventura26LiquidityAllocation.BoundaryAnalyticPackageCandidate
           import Ventura26LiquidityAllocation.InterbankCancellationCandidate
@@ -222,6 +223,9 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34LogRecenter.source_log_chart_recenter_coordinate
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34LogRecenter.source_recentered_zero_is_shifted_reference
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34LogRecenter.source_recentered_reference_positive
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34FullBinding.augmented_zero_implies_all_original_binding_prefix_rows
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34FullBoth.original_prefix_rows_agree_except_date_zero_L
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34FullBoth.augmented_zero_implies_all_original_S_and_B_prefix_rows
           #print axioms Ventura26LiquidityAllocation.ProposedStationaryEquilibrium.parent_competitiveEquilibrium
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.proposed_localSlackLiteralAllocation_settlementClears_of_binarySymmetric
