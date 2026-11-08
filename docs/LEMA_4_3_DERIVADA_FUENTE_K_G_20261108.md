@@ -1,7 +1,7 @@
 # Lema 4.3 — diferenciación de capital agregado y producción ajustada desde las funciones fuente
 
 **Fecha de trabajo:** 8 de noviembre de 2026. **Rama:** `work/lean-ci-validation-otc-20261106`.  
-**Criterio de evidencia:** la demostración escrita se presenta a continuación. Seis pruebas nuevas sobre las derivadas de K/G y sus cuotas ya pasaron CI exacta sin `sorryAx` (#42503513399 y #42503571340), sumadas a 28 declaraciones anteriores (**34 auxiliares verificados**). La regla de cadena compuesta, cuota de producto y log cociente de capitales **siguen como candidatos** hasta terminar CI en sus SHA respectivos.
+**Criterio de evidencia:** la demostración escrita y las **nueve declaraciones nuevas** de derivadas/participaciones/regla compuesta, cuota de output físico y log cociente de capitales fueron validadas en corridas Lean con `#print axioms` sin `sorryAx`: #42503513399, #42503571340 y #42504364485. Sumadas a 28 auxiliares previos, hay **37 teoremas verificados** sobre 4.3. La equivalencia formal del enunciado económico íntegro, y la validación del equilibrio dinámico, permanecen pendientes.
 
 ## 1. Objetivo y alcance
 
@@ -113,3 +113,16 @@ El workflow `.github/workflows/lean-focused-paper-claims.yml` copia los módulos
 ## 7. Exclusiones del resultado
 
 Este lema no demuestra por sí solo: (i) la existencia de equilibrio competitivo estocástico del sistema completo de 34 ecuaciones; (ii) la selección de una rama S/B después de un shock de encaje o remuneración de reservas; (iii) la identificación causal de una IRF; (iv) un efecto positivo de crecimiento sostenido. La prueba de mecanismo productivo es necesaria, pero no suficiente, para esas proposiciones.
+
+## 8. Verificación final de esta campaña diferencial
+
+La CI focalizada [#42504364485](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42504364485), commit `eaa08a328974c9462e8b5cdaa85a33f0dd88546b`, mostró:
+
+```text
+COMPILED PaperSourceLossChainRuleCandidate
+COMPILED PaperSourceOutputShareCandidate
+COMPILED PaperSourceLogCapitalRatioCandidate
+PASS focused Lean kernel and axiom audit
+```
+
+Los tres `#print axioms` fueron aceptados sin `sorryAx`. La identidad diferencial fuente, la correspondencia con cuota de producción física y la derivada de `log(kH/kL)` están **DEMOSTRADAS** bajo las hipótesis exactas de los archivos Lean. No declarar equivalencia literal plena con los 57 resultados hasta cotejar y corregir los predicados del checkpoint; en especial, una prueba estática de reasignación no proporciona una IRF de política monetaria ni crecimiento de largo plazo.

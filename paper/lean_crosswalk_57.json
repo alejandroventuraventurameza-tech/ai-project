@@ -5,8 +5,8 @@
   "checked_branch": "work/lean-ci-validation-otc-20261106",
   "reviewed_date": "2026-11-08",
   "claim_count": 57,
-  "status_policy": "For 4.3, thirty-four scoped mathematical lemmas are Lean kernel-verified: 28 prior, 4 source K/G HasDerivAt (+ log) claims (#42503513399), and 2 source K/G share identities (#42503571340). Composite source loss chain-rule, physical output share and log-capital ratio are pending green CI; 57 numbered paper claims remain not_established, with 24/57 directed comparisons.",
-  "source_module_check": "24/57 targeted semantic comparisons; 33 pending. Exact source K,G and log differentiations along positive paths plus share decomposition proved kernel-checked at pinned CI #42503513399 and #42503571340; composite loss derivative and output-share semantics not certified yet.",
+  "status_policy": "For 4.3, thirty-seven scoped auxiliary mathematical lemmas are Lean kernel-verified: 28 earlier production/loss helpers, 4 source K/G derivatives (#42503513399), 2 source share identities (#42503571340), plus full source loss chain, physical output-share bridge and actual log-capital-ratio derivative (#42504364485). Composite static source differential is verified under stated hypotheses, but the full original paper specification, dynamic monetary equilibrium and causal growth effects are not. All 57 numbered paper claims remain not_established for integrated literal equivalence; 24/57 semantically compared.",
+  "source_module_check": "24/57 targeted semantic comparisons (14 main plus 10 annex), 33 pending. New source differentiation, share decompositions, composite loss chain, physical output-share identification and log ratio derivative have pinned green runs without sorryAx. Full literal source interface/paper statement not yet certified as one theorem; dynamic model not checked.",
   "scope": "57 numbered claims including historical appendices; current PDF page numbers in the original ledger are stale after compact layout.",
   "entries": [
     {
@@ -632,9 +632,36 @@
           "lean_ci_run_id": 42503571340,
           "lean_ci_commit": "4cf594547fa63dc0435d90b7dd4c07b93b56fe28",
           "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperSourceLossChainRuleCandidate.lean",
+          "declaration": "original_source_loss_hasDerivAt_relative_capital",
+          "relationship": "source_chain_kernel_verified",
+          "note": "Demuestra la regla de la cadena completa de la expresión fuente de Loss: alpha(kappaH-omegaH)(dkH/kH-dkL/kL), con k_i(t)>0 y trayectorias diferenciables. CI focalizada #42504364485 verde, SHA eaa08a32, #print axioms sin sorryAx. Solo mecanismo estático condicional, sin prueba de equilibrio monetario.",
+          "lean_ci_run_id": 42504364485,
+          "lean_ci_commit": "eaa08a328974c9462e8b5cdaa85a33f0dd88546b",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperSourceOutputShareCandidate.lean",
+          "declaration": "original_output_share_equals_adjusted_weight",
+          "relationship": "source_output_share_kernel_verified",
+          "note": "Identifica omegaH=vH*gH/G exactamente con cuota de producto físico vH*yH/Y bajo trabajo óptimo derivado. CI focalizada #42504364485 verde, SHA eaa08a32, #print axioms sin sorryAx. Solo mecanismo estático condicional, sin prueba de equilibrio monetario.",
+          "lean_ci_run_id": 42504364485,
+          "lean_ci_commit": "eaa08a328974c9462e8b5cdaa85a33f0dd88546b",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperSourceLogCapitalRatioCandidate.lean",
+          "declaration": "original_log_capital_ratio_hasDerivAt",
+          "relationship": "source_log_ratio_kernel_verified",
+          "note": "Demuestra HasDerivAt del logaritmo del cociente capital físico kH/kL, no solo igualdad algebraica de diferenciales libres. CI focalizada #42504364485 verde, SHA eaa08a32, #print axioms sin sorryAx. Solo mecanismo estático condicional, sin prueba de equilibrio monetario.",
+          "lean_ci_run_id": 42504364485,
+          "lean_ci_commit": "eaa08a328974c9462e8b5cdaa85a33f0dd88546b",
+          "lean_axiom_audit": "passed_no_sorryAx"
         }
       ],
-      "semantic_gap": "34 lemas auxiliares de 4.3 kernel-checked: 28 previos, cuatro nuevas derivadas fuente HasDerivAt de K,G,logK,logG a lo largo de trayectorias positivas (CI #42503513399) y dos identidades de participaciones de capital y producción ajustada calculadas desde las funciones originales (CI #42503571340). La combinación completa dLoss=alpha(kappaH-omegaH)dlog(kH/kL) aún espera el CI del módulo de cadena, igual que omegaH=cuota física de producción y log cociente de capitales. La interfaz original no incluye todas las hipótesis de elasticidades comunes y no se ha demostrado equilibrio monetario dinámico.",
+      "semantic_gap": "37 auxiliares del Lema 4.3 kernel-checked: junto a 28 pruebas anteriores de eficiencia/loss, se añadieron cuatro derivadas source HasDerivAt de K,G,logK,logG (#42503513399), dos identidades de cuotas kappaH,omegaH desde K/G (#42503571340), y tres puentes definitivos de regla de la cadena del diferencial de la pérdida, omegaH como cuota de output físico al óptimo laboral, y derivada de log(kH/kL) (#42504364485). Todas son afirmaciones matemáticas genuinas pero aún no equivalen a un teorema integrado con todos los enunciados del Lema 4.3 académico; la interfaz original mantiene brechas de hipótesis y no se ha verificado equilibrio dinámico, ramas monetarias o crecimiento permanente.",
       "numerical_context": [
         "paper/irf_mechanism_table.tex"
       ]

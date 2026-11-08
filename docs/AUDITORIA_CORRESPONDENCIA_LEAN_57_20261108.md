@@ -1,5 +1,12 @@
 # Matriz de correspondencia entre los 57 resultados y Lean
 
+## Regla de cadena fuente cerrada en Lean, con cuota física y cociente de capitales
+
+La [CI focalizada #42504364485](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42504364485), SHA exacto `eaa08a328974c9462e8b5cdaa85a33f0dd88546b`, compiló `PaperSourceLossChainRuleCandidate.lean`, `PaperSourceOutputShareCandidate.lean` y `PaperSourceLogCapitalRatioCandidate.lean` y auditó **tres teoremas adicionales sin `sorryAx`**. La primera tentativa falló por `import` faltante ([#42503619169](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42503619169)); la segunda por mera asociación de productos ([#42503922235](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42503922235)); ambas incidencias fueron corregidas antes del run verde.
+
+**Total auxiliar Lema 4.3: 37 teoremas Lean verificados**. La derivada de la pérdida `alpha*(kappaH-omegaH)*d log(kH/kL)` ahora se obtiene de `K(k)`, `G(k)` y la diferenciación de las funciones de capital positivas. Se verificó `omegaH=vH*YH/Y` con la distribución óptima de trabajo, y el diferencial logarítmico del cociente físico. No se eleva ningún resultado numerado a equivalencia completa hasta revisar el enunciado literal integral y la economía dinámica.
+
+
 ## Derivadas fuente K/G verificadas, regla completa pendiente
 
 La [CI #42503513399](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42503513399), commit `a6f83b4e`, verificó por kernel cuatro teoremas `HasDerivAt` para `K(t)`, `G(t)`, `log K(t)` y `log G(t)` desde los capitales y productividades fuente. La [CI #42503571340](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42503571340), commit `4cf59454`, verificó dos identidades exactas de `kappa_H` y `omega_H` en esos diferenciales. Ambas ejecuciones `#print axioms` sin `sorryAx`.

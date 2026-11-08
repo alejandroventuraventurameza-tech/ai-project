@@ -45,6 +45,9 @@ ALLOWED_RELATIONS = {
     "source_log_loss_kernel_verified",
     "source_derivative_kernel_verified",
     "source_derivative_share_kernel_verified",
+    "source_chain_kernel_verified",
+    "source_output_share_kernel_verified",
+    "source_log_ratio_kernel_verified",
 }
 GREEN_SOURCE_FINANCIAL_RUN = 42457259796
 GREEN_SOURCE_FINANCIAL_SHA = "c006e00c437243c3f6f44ec3c102df4286c545e0"
@@ -72,6 +75,11 @@ GREEN_DERIVATIVE_RUN = 42503513399
 GREEN_DERIVATIVE_SHA = "a6f83b4e821067ca9d295ad22c25b7fb49211876"
 GREEN_DERIVATIVE_SHARE_RUN = 42503571340
 GREEN_DERIVATIVE_SHARE_SHA = "4cf594547fa63dc0435d90b7dd4c07b93b56fe28"
+GREEN_FULL_SOURCE_CHAIN_RUN = 42504364485
+GREEN_FULL_SOURCE_CHAIN_SHA = "eaa08a328974c9462e8b5cdaa85a33f0dd88546b"
+EXPECTED_VERIFIED_SOURCE_CHAIN = {"original_source_loss_hasDerivAt_relative_capital"}
+EXPECTED_VERIFIED_OUTPUT_SHARE = {"original_output_share_equals_adjusted_weight"}
+EXPECTED_VERIFIED_LOG_RATIO = {"original_log_capital_ratio_hasDerivAt"}
 EXPECTED_VERIFIED_DERIVATIVE = {
     "source_total_capital_hasDerivAt",
     "source_productivity_aggregate_hasDerivAt",
@@ -178,6 +186,9 @@ def main() -> None:
     green_source_log = set()
     green_derivative = set()
     green_derivative_share = set()
+    green_source_chain = set()
+    green_output_share = set()
+    green_log_ratio = set()
     for row in data["entries"]:
         label = row["label"]
         old = original[label]
@@ -315,6 +326,30 @@ def main() -> None:
                         and item.get("lean_axiom_audit") == "passed_no_sorryAx",
                         "Source derivative-share theorem not pinned to verified run")
                 green_derivative_share.add(item["declaration"])
+            if rel in ("source_chain_kernel_verified",
+                       "source_output_share_kernel_verified",
+                       "source_log_ratio_kernel_verified"):
+                require(label == "lem:allocation_loss_identity",
+                        "Final source-chain theorem attached to wrong lemma")
+                expected_by_rel = {
+                    "source_chain_kernel_verified": EXPECTED_VERIFIED_SOURCE_CHAIN,
+                    "source_output_share_kernel_verified": EXPECTED_VERIFIED_OUTPUT_SHARE,
+                    "source_log_ratio_kernel_verified": EXPECTED_VERIFIED_LOG_RATIO,
+                }
+                seen_by_rel = {
+                    "source_chain_kernel_verified": green_source_chain,
+                    "source_output_share_kernel_verified": green_output_share,
+                    "source_log_ratio_kernel_verified": green_log_ratio,
+                }
+                require(item["declaration"] in expected_by_rel[rel],
+                        "Unexpected final source chain theorem")
+                require(item["declaration"] not in seen_by_rel[rel],
+                        "Duplicate final source chain theorem")
+                require(item.get("lean_ci_run_id") == GREEN_FULL_SOURCE_CHAIN_RUN
+                        and item.get("lean_ci_commit") == GREEN_FULL_SOURCE_CHAIN_SHA
+                        and item.get("lean_axiom_audit") == "passed_no_sorryAx",
+                        "Source chain theorem not pinned to exact green CI")
+                seen_by_rel[rel].add(item["declaration"])
             if rel == "efficiency_support_kernel_verified":
                 require(label == "lem:allocation_loss_identity",
                         "Efficiency support theorem mapped to wrong source claim")
@@ -433,6 +468,12 @@ def main() -> None:
             f"Source derivative proofs incomplete: {green_derivative}")
     require(green_derivative_share == EXPECTED_VERIFIED_DERIVATIVE_SHARE,
             f"Source derivative-share proofs incomplete: {green_derivative_share}")
+    require(green_source_chain == EXPECTED_VERIFIED_SOURCE_CHAIN,
+            f"Composite source chain proof incomplete: {green_source_chain}")
+    require(green_output_share == EXPECTED_VERIFIED_OUTPUT_SHARE,
+            f"Physical output-share bridge incomplete: {green_output_share}")
+    require(green_log_ratio == EXPECTED_VERIFIED_LOG_RATIO,
+            f"Original log capital ratio proof incomplete: {green_log_ratio}")
     require(green_exact == {
         "lem:repayment": "exact_repaymentSpec",
         "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
@@ -493,6 +534,10 @@ def main() -> None:
         "verified_source_derivative_lemmas": len(green_derivative),
         "verified_source_derivative_share_run": GREEN_DERIVATIVE_SHARE_RUN,
         "verified_source_derivative_share_lemmas": len(green_derivative_share),
+        "verified_full_source_chain_run": GREEN_FULL_SOURCE_CHAIN_RUN,
+        "verified_source_chain_lemmas": len(green_source_chain),
+        "verified_source_output_share_lemmas": len(green_output_share),
+        "verified_source_log_ratio_lemmas": len(green_log_ratio),
         "unproved_source_specifications": source_specifications,
         "complete_paper_theorems_proved_in_lean_by_this_audit": 0,
         "full_equilibrium_confirmed": False,
