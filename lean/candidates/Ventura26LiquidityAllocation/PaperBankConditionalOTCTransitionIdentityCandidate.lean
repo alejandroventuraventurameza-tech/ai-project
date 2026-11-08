@@ -718,5 +718,98 @@ theorem source_full_retention_nonnegative_parent_child_identity
 
 #print axioms source_full_retention_nonnegative_parent_child_identity
 
+
+/-- Exact SOURCE conditional aggregation of all one-step children at
+a SUPPORTED parent, allowing individual equity to equal zero.
+The only growth factor is the source's literal OTC conditional mean;
+this is a local identity and does not yet sum over all parent paths. -/
+theorem source_full_retention_nonnegative_parent_conditional_child_sum
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (hfeasible : BankContinuationFeasibleAt P X t h
+      (X.bankEquity t h) (sourceFullRetentionCandidate P X t h))
+    (n : ℕ) (future : Fin n → S)
+    (payments : Fin n → P.paymentSupport)
+    (hpath : FuturePathSupported P.tree (currentState h) n future)
+    (hrisk : P.workerRiskAversion = 1)
+    (hconsumption : 0 <
+      X.workerConsumption (t + n) (continuationHistory h future))
+    (hchildConsumption : ∀ s, 0 <
+      X.workerConsumption (t + n + 1)
+        (childHistory (continuationHistory h future) s))
+    (haggregate : 0 <
+      X.bankEquity (t + n) (continuationHistory h future)) :
+    (∑ s : S, ∑ omega : P.paymentSupport,
+      (P.tree.transition
+        (currentState (continuationHistory h future)) s *
+          P.paymentProbability omega) *
+        (bankCumulativeSDFAt P X t h (childFutureHistory future s) *
+          (sourceFullRetentionCandidate P X t h).equity (n + 1)
+            (childFutureHistory future s)
+            (childPaymentHistory payments omega))) =
+      (bankCumulativeSDFAt P X t h future *
+        (sourceFullRetentionCandidate P X t h).equity n future payments) *
+          sourceConditionalOTCGrowthFactor P X t h n future := by
+  classical
+  have hn := (hfeasible.2 n future payments hpath).1
+  have hterm : ∀ s : S, ∀ omega : P.paymentSupport,
+      (P.tree.transition
+        (currentState (continuationHistory h future)) s *
+          P.paymentProbability omega) *
+        (bankCumulativeSDFAt P X t h (childFutureHistory future s) *
+          (sourceFullRetentionCandidate P X t h).equity (n + 1)
+            (childFutureHistory future s)
+            (childPaymentHistory payments omega)) =
+      (bankCumulativeSDFAt P X t h future *
+        (sourceFullRetentionCandidate P X t h).equity n future payments) *
+          (P.tree.transition
+            (currentState (continuationHistory h future)) s *
+              P.paymentProbability omega *
+              sourceDiscountedEquityGrowthFactor P X t h n future s omega) := by
+    intro s omega
+    have hidentity := source_full_retention_nonnegative_parent_child_identity
+      P X t h hfeasible n future payments hpath s omega
+      hrisk hconsumption (hchildConsumption s) hn haggregate
+    calc
+      _ = (P.tree.transition
+          (currentState (continuationHistory h future)) s *
+            P.paymentProbability omega) *
+          ((bankCumulativeSDFAt P X t h future *
+            (sourceFullRetentionCandidate P X t h).equity n future payments) *
+            sourceDiscountedEquityGrowthFactor P X t h n future s omega) :=
+        hidentity
+      _ = _ := by ring
+  calc
+    (∑ s : S, ∑ omega : P.paymentSupport,
+      (P.tree.transition
+        (currentState (continuationHistory h future)) s *
+          P.paymentProbability omega) *
+        (bankCumulativeSDFAt P X t h (childFutureHistory future s) *
+          (sourceFullRetentionCandidate P X t h).equity (n + 1)
+            (childFutureHistory future s)
+            (childPaymentHistory payments omega))) =
+      ∑ s : S, ∑ omega : P.paymentSupport,
+        (bankCumulativeSDFAt P X t h future *
+          (sourceFullRetentionCandidate P X t h).equity n future payments) *
+          (P.tree.transition
+            (currentState (continuationHistory h future)) s *
+              P.paymentProbability omega *
+              sourceDiscountedEquityGrowthFactor P X t h n future s omega) := by
+        apply Finset.sum_congr rfl
+        intro s _hs
+        apply Finset.sum_congr rfl
+        intro omega _ho
+        exact hterm s omega
+    _ = (bankCumulativeSDFAt P X t h future *
+          (sourceFullRetentionCandidate P X t h).equity n future payments) *
+          sourceConditionalOTCGrowthFactor P X t h n future := by
+        rw [Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro s _hs
+        rw [Finset.mul_sum]
+        rfl
+
+#print axioms source_full_retention_nonnegative_parent_conditional_child_sum
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
