@@ -55,7 +55,40 @@ theorem sourceSurvivalContinuation_monotone
     mul_le_mul_of_nonneg_left (hfg s) hsurvival
   exact mul_le_mul_of_nonneg_left hcontinuation hweight
 
+
+/-- Source consumption assumptions discharge the SDF sign condition
+on supported successors. Zero-probability labels are handled separately,
+so no consumption restriction is imposed on unreachable children. -/
+theorem sourceSurvivalContinuation_monotone_of_consumption
+    (P : Primitives S) (X : Allocation S) (t : ℕ) (h : History S t)
+    (f g : S → ℝ)
+    (hcurrent : 0 < X.workerConsumption t h)
+    (hchild : ∀ s, 0 < P.tree.transition (currentState h) s →
+      0 < X.workerConsumption (t + 1) (childHistory h s))
+    (hfg : ∀ s, f s ≤ g s) :
+    sourceSurvivalContinuation P X t h f ≤
+      sourceSurvivalContinuation P X t h g := by
+  unfold sourceSurvivalContinuation
+  apply Finset.sum_le_sum
+  intro s hs
+  by_cases hzero : P.tree.transition (currentState h) s = 0
+  · simp [hzero]
+  have htrans : 0 < P.tree.transition (currentState h) s :=
+    lt_of_le_of_ne (P.tree.transition_nonneg _ _) (Ne.symm hzero)
+  have hSDF : 0 < bankStochasticDiscountAt P X t h s :=
+    bankStochasticDiscountAt_pos_of_consumption P X t h s
+      hcurrent (hchild s htrans)
+  have hsurvival : 0 ≤ 1 - P.bankExit :=
+    sub_nonneg.mpr P.bank_exit_mem.2
+  have hweight : 0 ≤
+      P.tree.transition (currentState h) s *
+        bankStochasticDiscountAt P X t h s :=
+    mul_nonneg htrans.le hSDF.le
+  exact mul_le_mul_of_nonneg_left
+    (mul_le_mul_of_nonneg_left (hfg s) hsurvival) hweight
+
 #print axioms sourceSurvivalContinuation_monotone
+#print axioms sourceSurvivalContinuation_monotone_of_consumption
 
 end ProposedBankSourceTransitionMonotonicity
 end Ventura26LiquidityAllocation
