@@ -97,6 +97,7 @@ theorem source_reduction_rows_on_local_remuneration_cone
 /-- Strengthen the source-specific two-root theorem: at both the
 boundary root s=0 and positive interior root s=r(h), all 33
 MODIFIED prefix rows hold exactly for their recovered log choices.
+Local slice regularity is required only at a K-dependent shock radius.
 This is the full local source reduced-system implication, NOT a
 competitive-equilibrium existence theorem. -/
 theorem economic_two_scalar_roots_satisfy_source_33_rows
@@ -106,14 +107,14 @@ theorem economic_two_scalar_roots_satisfy_source_33_rows
     (hred : LocalScalarImplicitReduction P I Z0 dateOne recurrent tail solutionLog)
     (hzero : localScalarReducedMap P Z0 solutionLog (0 : Fin 5 → ℝ) = 0)
     (rho : ℝ) (hrho : 0 < rho)
-    (hcont : ∀ K : ℝ, 0 < K →
-      ∀ h : ℝ, -rho < h → h < 0 →
-        ContinuousOn (fun s => economicReserveRemunerationMarginal
-          P Z0 solutionLog s h) (Set.Icc (0 : ℝ) (-K * h)))
-    (hanti : ∀ K : ℝ, 0 < K →
-      ∀ h : ℝ, -rho < h → h < 0 →
-        StrictAntiOn (fun s => economicReserveRemunerationMarginal
-          P Z0 solutionLog s h) (Set.Icc (0 : ℝ) (-K * h))) :
+    (hreg : ∀ K : ℝ, 0 < K →
+      ∃ rhoK : ℝ, 0 < rhoK ∧
+        (∀ h : ℝ, -rhoK < h → h < 0 →
+          ContinuousOn (fun s => economicReserveRemunerationMarginal
+            P Z0 solutionLog s h) (Set.Icc (0 : ℝ) (-K * h))) ∧
+        (∀ h : ℝ, -rhoK < h → h < 0 →
+          StrictAntiOn (fun s => economicReserveRemunerationMarginal
+            P Z0 solutionLog s h) (Set.Icc (0 : ℝ) (-K * h)))) :
     ∃ K : ℝ, 0 < K ∧
       ∃ delta : ℝ, 0 < delta ∧
         ∀ h : ℝ, -delta < h → h < 0 →
@@ -134,7 +135,7 @@ theorem economic_two_scalar_roots_satisfy_source_33_rows
   obtain ⟨K, hK, delta0, hdelta0, _hle, hroots⟩ :=
     source_economic_negative_remuneration_shock_two_roots
       P I Z0 dateOne recurrent tail solutionLog hred hzero
-      rho hrho hcont hanti
+      rho hrho hreg
   obtain ⟨rhoRows, hrhoRows, hrows⟩ :=
     source_reduction_rows_on_local_remuneration_cone
       P I Z0 dateOne recurrent tail solutionLog hred K hK
