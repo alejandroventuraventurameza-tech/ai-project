@@ -77,7 +77,7 @@ theorem no_scalar_complementarity_of_negative_boundary
   rcases eq_or_lt_of_le hsnonneg with hzero | hpos
   · rw [← hzero] at hmnonneg
     linarith
-  · have hzmem : (0 : ℝ) ∈ Set.Ici (0 : ℝ) := le_refl _
+  · have hzmem : (0 : ℝ) ∈ Set.Ici (0 : ℝ) := by simp
     have hsmem : s ∈ Set.Ici (0 : ℝ) := hsnonneg
     have hlt : M s < M 0 := hanti hzmem hsmem hpos
     linarith
