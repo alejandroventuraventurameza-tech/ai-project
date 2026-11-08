@@ -83,6 +83,27 @@ el Lema 4.3 integral.
 Véase `docs/LEMA_4_3_PUENTE_EFICIENCIA_AMGM_20261108.md`
 para la reconstrucción analítica y los puentes pendientes.
 
+## Actualización: potencia y pérdida agregada ahora kernel-checked
+
+`PaperAllocationSourceAlgebraBridgeCandidate.lean` contiene
+dos nuevas declaraciones que superaron
+[Lean focalizado #42459648021](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42459648021),
+commit `aef180ba9595e426c32236a2941731837151fdcc`,
+con `#print axioms` sin `sorryAx`:
+`productivity_weight_recovers_A` y
+`positive_aggregate_loss_log_formula`. Se registraron
+en `paper/lean_crosswalk_57.json` como auxiliares
+verificados, no como equivalencia integral del Lema 4.3.
+
+Así se dispone de **9 lemas auxiliares formalmente verificados
+para el Lema 4.3** (3 de derivadas/participaciones/signo,
+4 de eficiencia global normalizada, 2 de potencias/logaritmos).
+Faltan la igualdad de la producción original
+microagregada con la fórmula `L^b G^(1-b)`,
+la optimalidad laboral y la formalización explícita
+de la derivada de `G` a partir de `k_i` con
+exponentes comunes en ambas firmas.
+
 ## 1. Veredicto general sin sobredeclaración
 
 Se han inspeccionado de manera dirigida **24 de 57** afirmaciones:
