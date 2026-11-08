@@ -9,6 +9,8 @@ def synthetic_source_point():
     d["schema"]="ventura-source-point-jacobian-CANDIDATE-v1"
     d["state_dimension"]=33
     d["parameter_dimension"]=5
+    d["point_jacobian_box"]=d["jacobian_ball"]
+    d["point_preconditioned_defect_upper"]="1/10000"
     d["rows_recomputed_as_source_style"]=[4,5,21]
     d["source_to_legacy_row_permutation"]=[
         0,3,1,4,2,5,*range(6,17),17,19,18,20,*range(21,33)]
