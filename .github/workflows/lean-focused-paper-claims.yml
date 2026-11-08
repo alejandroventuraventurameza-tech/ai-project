@@ -11,6 +11,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/PaperRepaymentExactCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/PaperAllocationLossElasticityCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/PaperAllocationEfficiencySupportCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperAllocationSourceAlgebraBridgeCandidate.lean'
       - 'lean/checkpoint/**'
   workflow_dispatch:
 
@@ -56,6 +57,7 @@ jobs:
           cp lean/candidates/Ventura26LiquidityAllocation/PaperRepaymentExactCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
           cp lean/candidates/Ventura26LiquidityAllocation/PaperAllocationLossElasticityCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
           cp lean/candidates/Ventura26LiquidityAllocation/PaperAllocationEfficiencySupportCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperAllocationSourceAlgebraBridgeCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
           sha256sum lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean > lean-focused-logs/checkpoint-sha256.txt
           sha256sum lean/candidates/Ventura26LiquidityAllocation/Paper*Candidate.lean > lean-focused-logs/paper-candidates-sha256.txt
       - name: Install exact Lean toolchain
@@ -89,7 +91,7 @@ jobs:
         working-directory: upstream
         run: |
           set -euo pipefail
-          for module in PaperRepaymentExactCandidate PaperAllocationLossElasticityCandidate PaperAllocationEfficiencySupportCandidate; do
+          for module in PaperRepaymentExactCandidate PaperAllocationLossElasticityCandidate PaperAllocationEfficiencySupportCandidate PaperAllocationSourceAlgebraBridgeCandidate; do
             echo "::group::Compile $module"
             if lake build "Ventura26LiquidityAllocation.$module" > "$GITHUB_WORKSPACE/lean-focused-logs/$module.log" 2>&1; then
               echo "COMPILED $module"
@@ -109,6 +111,7 @@ jobs:
           import Ventura26LiquidityAllocation.PaperRepaymentExactCandidate
           import Ventura26LiquidityAllocation.PaperAllocationLossElasticityCandidate
           import Ventura26LiquidityAllocation.PaperAllocationEfficiencySupportCandidate
+          import Ventura26LiquidityAllocation.PaperAllocationSourceAlgebraBridgeCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedPaperRepaymentExact.exact_repaymentSpec
           #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationLossElasticity.allocation_loss_log_differential_algebra
           #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationLossElasticity.output_share_gt_capital_share_iff_productivity
@@ -117,6 +120,8 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationEfficiencySupport.normalized_benchmark_attained
           #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationEfficiencySupport.normalized_log_loss_nonneg
           #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationEfficiencySupport.efficient_candidate_clears_resources
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationSourceAlgebraBridge.productivity_weight_recovers_A
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationSourceAlgebraBridge.positive_aggregate_loss_log_formula
           LEAN
           lake env lean FocusedPaperAxioms.lean > "$GITHUB_WORKSPACE/lean-focused-logs/axioms.log" 2>&1 || {
             tail -n 120 "$GITHUB_WORKSPACE/lean-focused-logs/axioms.log"
