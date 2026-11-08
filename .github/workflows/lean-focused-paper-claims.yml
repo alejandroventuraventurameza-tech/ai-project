@@ -62,6 +62,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankScaledCandidateAttainmentCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankConcreteFullRetentionOptimalityCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankFullRetentionTerminalEnvelopeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankSurvivingContractionCandidate.lean'
       - 'lean/checkpoint/**'
   workflow_dispatch:
 
@@ -145,6 +146,7 @@ jobs:
           cp lean/candidates/Ventura26LiquidityAllocation/PaperBankScaledCandidateAttainmentCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
           cp lean/candidates/Ventura26LiquidityAllocation/PaperBankConcreteFullRetentionOptimalityCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
           cp lean/candidates/Ventura26LiquidityAllocation/PaperBankFullRetentionTerminalEnvelopeCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankSurvivingContractionCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
           sha256sum lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean > lean-focused-logs/checkpoint-sha256.txt
           sha256sum lean/candidates/Ventura26LiquidityAllocation/Paper*Candidate.lean > lean-focused-logs/paper-candidates-sha256.txt
       - name: Install exact Lean toolchain
@@ -178,7 +180,7 @@ jobs:
         working-directory: upstream
         run: |
           set -euo pipefail
-          for module in PaperBankSourceNextEquityBridgeCandidate PaperBankDividendRetentionDominanceCandidate PaperBankNormalizedPortfolioEnvelopeCandidate PaperBankGlobalDividendBoundFromNormalizedCandidate PaperBankZeroEquityBoundaryCandidate PaperBankUnitKKTAllEquityBridgeCandidate PaperBankDynamicOptimalityFromEnvelopeCandidate PaperBankScaledCandidateAttainmentCandidate PaperBankConcreteFullRetentionOptimalityCandidate PaperBankFullRetentionTerminalEnvelopeCandidate PaperBankLiteralBellmanMonotonicityCandidate PaperBankJointContinuationMonotonicityCandidate PaperBankFiniteSupportContinuationCandidate PaperBankMonotoneBellmanEnvelopeCandidate PaperBankFiniteHorizonEnvelopeCandidate PaperBankSourceOneStepEnvelopeCandidate PaperBankSourceTransitionMonotonicityCandidate PaperRepaymentExactCandidate PaperAllocationLossElasticityCandidate PaperAllocationEfficiencySupportCandidate PaperAllocationSourceAlgebraBridgeCandidate PaperOptimalLaborCandidate PaperOriginalLaborGlobalCandidate PaperJointEfficiencySourceCandidate PaperJointEfficiencyBoundCandidate PaperJointEfficiencyPhysicalCandidate PaperOriginalLogLossCandidate PaperSourceDifferentiationCandidate PaperSourceDifferentialSharesCandidate PaperSourceLossChainRuleCandidate PaperSourceOutputShareCandidate PaperSourceLogCapitalRatioCandidate PaperLemma43StaticIntegratedCandidate PaperLemma43DynamicIntegratedCandidate PaperLemma43SourceCompleteCandidate PaperLemma43PhysicalMPKCandidate PaperBankStaticSupergradientSufficiencyCandidate PaperBankBellmanStaticSufficiencyCandidate PaperBankKKTGlobalSufficiencyCandidate PaperBankBellmanEnvironmentFromStaticCandidate PaperBankKKTFullCornerCandidate; do
+          for module in PaperBankSourceNextEquityBridgeCandidate PaperBankDividendRetentionDominanceCandidate PaperBankNormalizedPortfolioEnvelopeCandidate PaperBankGlobalDividendBoundFromNormalizedCandidate PaperBankZeroEquityBoundaryCandidate PaperBankUnitKKTAllEquityBridgeCandidate PaperBankDynamicOptimalityFromEnvelopeCandidate PaperBankScaledCandidateAttainmentCandidate PaperBankConcreteFullRetentionOptimalityCandidate PaperBankFullRetentionTerminalEnvelopeCandidate PaperBankSurvivingContractionCandidate PaperBankLiteralBellmanMonotonicityCandidate PaperBankJointContinuationMonotonicityCandidate PaperBankFiniteSupportContinuationCandidate PaperBankMonotoneBellmanEnvelopeCandidate PaperBankFiniteHorizonEnvelopeCandidate PaperBankSourceOneStepEnvelopeCandidate PaperBankSourceTransitionMonotonicityCandidate PaperRepaymentExactCandidate PaperAllocationLossElasticityCandidate PaperAllocationEfficiencySupportCandidate PaperAllocationSourceAlgebraBridgeCandidate PaperOptimalLaborCandidate PaperOriginalLaborGlobalCandidate PaperJointEfficiencySourceCandidate PaperJointEfficiencyBoundCandidate PaperJointEfficiencyPhysicalCandidate PaperOriginalLogLossCandidate PaperSourceDifferentiationCandidate PaperSourceDifferentialSharesCandidate PaperSourceLossChainRuleCandidate PaperSourceOutputShareCandidate PaperSourceLogCapitalRatioCandidate PaperLemma43StaticIntegratedCandidate PaperLemma43DynamicIntegratedCandidate PaperLemma43SourceCompleteCandidate PaperLemma43PhysicalMPKCandidate PaperBankStaticSupergradientSufficiencyCandidate PaperBankBellmanStaticSufficiencyCandidate PaperBankKKTGlobalSufficiencyCandidate PaperBankBellmanEnvironmentFromStaticCandidate PaperBankKKTFullCornerCandidate; do
             echo "::group::Compile $module"
             if lake build "Ventura26LiquidityAllocation.$module" > "$GITHUB_WORKSPACE/lean-focused-logs/$module.log" 2>&1; then
               echo "COMPILED $module"
@@ -235,6 +237,7 @@ jobs:
           import Ventura26LiquidityAllocation.PaperBankScaledCandidateAttainmentCandidate
           import Ventura26LiquidityAllocation.PaperBankConcreteFullRetentionOptimalityCandidate
           import Ventura26LiquidityAllocation.PaperBankFullRetentionTerminalEnvelopeCandidate
+          import Ventura26LiquidityAllocation.PaperBankSurvivingContractionCandidate
           import Ventura26LiquidityAllocation.PaperBankFiniteHorizonEnvelopeCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedPaperRepaymentExact.exact_repaymentSpec
           #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationLossElasticity.allocation_loss_log_differential_algebra
@@ -327,6 +330,9 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBankFullRetentionTerminalEnvelope.zero_dividend_objective_summable_of_survivor_summable
           #print axioms Ventura26LiquidityAllocation.ProposedBankFullRetentionTerminalEnvelope.source_full_retention_dividends_zero
           #print axioms Ventura26LiquidityAllocation.ProposedBankFullRetentionTerminalEnvelope.source_full_retention_objective_and_terminal_of_surviving_envelope
+          #print axioms Ventura26LiquidityAllocation.ProposedBankSurvivingContraction.nonnegative_contraction_gives_geometric_bound
+          #print axioms Ventura26LiquidityAllocation.ProposedBankSurvivingContraction.full_retention_analytic_conditions_of_survivor_contraction
+          #print axioms Ventura26LiquidityAllocation.ProposedBankSurvivingContraction.full_retention_analytic_conditions_of_survival_return_bound
           #print axioms Ventura26LiquidityAllocation.ProposedBankFiniteHorizonEnvelope.finite_horizon_le_value
           #print axioms Ventura26LiquidityAllocation.ProposedBankFiniteHorizonEnvelope.finite_horizon_eq_value
           LEAN
