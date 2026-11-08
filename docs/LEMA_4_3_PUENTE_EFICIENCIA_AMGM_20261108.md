@@ -128,6 +128,34 @@ No demuestra pérdida de bienestar, causalidad de
 instrumentos monetarios, persistencia ergódica,
 crecimiento sostenido ni equilibrio competitivo pleno.
 
+## 4 bis. Defecto semántico de la interfaz literal del checkpoint
+
+El predicado `allocationLossIdentitySpec` de `PaperInterface.lean`
+no es todavía una traducción completa del Lema 4.3 del manuscrito.
+En particular, recibe `alpha,beta : FirmType → ℝ`, pero define
+`a=alpha H`, `b=beta H` y no requiere
+`alpha L=alpha H`, `beta L=beta H`.
+La coincidencia de elasticidades entre empresas es una
+**hipótesis tecnológica real** que debe figurar explícitamente
+para identificar producción individual con el agregado del paper.
+
+Más importante, el `Spec` **define** `Y` como
+`L^b*G^(1-b)` y `Yeff` como
+`K^a*L^b*ZA^d` y luego exige esas mismas
+igualdades. Las dos conjunciones son, por construcción,
+**reflexivas**: la interfaz no está probando que
+`Y = sum_i v_i A_i k_i^a ell_i^b`
+a partir de tecnología y asignación laboral óptima.
+Tampoco enuncia la identidad de derivada de reasignación.
+
+En consecuencia, aun una prueba kernel-checked del
+`allocationLossIdentitySpec` literal sería insuficiente
+para declarar el Lema 4.3 académico íntegramente
+formalizado. El puente fuente debe incorporar los
+exponentes comunes, la producción desagregada,
+la optimalidad del empleo, el referente eficiente y
+la derivada. No se cambia silenciosamente el checkpoint.
+
 ## 5. Matriz de cierre de esta proposición
 
 | Paso | Matemática escrita | Estado Lean |
