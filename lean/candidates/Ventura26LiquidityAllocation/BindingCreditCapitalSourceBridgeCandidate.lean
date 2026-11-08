@@ -21,7 +21,7 @@ namespace ProposedBindingCreditCapitalSourceBridge
 
 open ProposedBindingCreditCapitalTransmission
 
-variable {S : Type*} [Fintype S]
+variable {S : Type*} [Fintype S] [DecidableEq S]
 
 /-- A binding promise evaluated at a legitimate supported worst child.
 This is a regime-specific condition, NOT a consequence of FirmFeasible. -/
