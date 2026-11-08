@@ -179,6 +179,7 @@ jobs:
           import Ventura26LiquidityAllocation.LocalScalarPythonMonetaryRuleBridgeCandidate
           import Ventura26LiquidityAllocation.LocalScalarPythonMonetaryExpTargetsCandidate
           import Ventura26LiquidityAllocation.LocalScalarPythonMonetaryFullRowsCandidate
+          import Ventura26LiquidityAllocation.LocalScalarCommonPledgeLogZeroCandidate
           import Ventura26LiquidityAllocation.StationaryEquilibriumCandidate
           import Ventura26LiquidityAllocation.BoundaryAnalyticPackageCandidate
           import Ventura26LiquidityAllocation.InterbankCancellationCandidate
@@ -280,6 +281,10 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarPythonMonetaryFullRows.source_reserve_quantity_row_eq_python_auxiliary_log_ratio
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarPythonMonetaryFullRows.source_rate_row_zero_iff_python_auxiliary_log_ratio_zero
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarPythonMonetaryFullRows.source_quantity_row_zero_iff_python_auxiliary_log_ratio_zero
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarCommonPledgeLogZero.source_common_pledge_level_row
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarCommonPledgeLogZero.source_common_pledge_log_zero_iff
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarCommonPledgeLogZero.source_common_pledge_valuation_pos
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarCommonPledgeLogZero.source_common_pledge_log_zero_iff_of_positive
           #print axioms Ventura26LiquidityAllocation.ProposedStationaryEquilibrium.parent_competitiveEquilibrium
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.proposed_localSlackLiteralAllocation_settlementClears_of_binarySymmetric
