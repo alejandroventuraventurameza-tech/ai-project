@@ -381,5 +381,26 @@ theorem zero_parent_child_discounted_contribution
 #print axioms zero_equity_absorbing_of_scaled_upper_bound
 #print axioms zero_parent_child_discounted_contribution
 
+
+/-- Once the source-equity transition has a supported-child scaled
+upper bound, zero equity is absorbing at every subsequent step along
+that supported path. This is an induction theorem for a nonnegative
+sequence; source instantiation remains a separate obligation. -/
+theorem zero_equity_absorbing_along_supported_path
+    (equity factor : ℕ → ℝ)
+    (hinitial : equity 0 = 0)
+    (hnonneg : ∀ n, 0 ≤ equity (n + 1))
+    (hupper : ∀ n, equity (n + 1) ≤ factor n * equity n) :
+    ∀ n, equity n = 0 := by
+  intro n
+  induction n with
+  | zero => exact hinitial
+  | succ n ih =>
+      exact zero_equity_absorbing_of_scaled_upper_bound
+        (equity n) (equity (n + 1)) (factor n)
+        ih (hnonneg n) (hupper n)
+
+#print axioms zero_equity_absorbing_along_supported_path
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
