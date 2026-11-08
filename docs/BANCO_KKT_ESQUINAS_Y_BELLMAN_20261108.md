@@ -1,7 +1,7 @@
 # IE project — Certificado KKT global del banco y compuerta Bellman
 
 **Rama de trabajo:** `work/lean-ci-validation-otc-20261106`.  
-**Estado al crear esta nota:** demostraciones candidatas enviadas a GitHub Actions; ninguna promoción de evidencia antes de CI focalizada y auditoría `#print axioms`.  
+**Estado actualizado:** dos declaraciones KKT con límites de préstamos/depósitos pasaron [CI #42515365119](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42515365119), commit `f81f3756b234a3d2249a0529735bc2c2efa80ebe`, y `#print axioms` sin `sorryAx`. La extensión con reservas nulas y el predicado completo del entorno local de Bellman siguen como candidatos mientras la ejecución focalizada correspondiente no sea verde.  
 **Objeto:** economía fuente `EconomicModel.lean`, no una función objetivo alternativa.
 
 ## I. Fuente y distinción institucional

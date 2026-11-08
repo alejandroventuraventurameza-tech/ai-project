@@ -5,7 +5,7 @@
   "checked_branch": "work/lean-ci-validation-otc-20261106",
   "reviewed_date": "2026-11-08",
   "claim_count": 57,
-  "status_policy": "Forty-two scoped declarations tied to Lemma 4.3 are Lean kernel-verified: 37 previous auxiliary claims, 3 source-integrated static/pathwise/11-claim theorems (#42505059048, #42505126404, #42505264161), and 2 physical Cobb-Douglas marginal capital product lemmas (#42505447150). The three integrators consolidate existing results and must not be counted as independent new economic mechanisms. The original 57 source-paper claim specifications conservatively remain at 0/57 full literal equivalence with 24/57 directed semantic comparisons; the new source-level complete predicate is proved, but the older allocationLossIdentitySpec is materially weaker. Dynamic equilibrium/monetary shock causal implications not established. Four conditional source bank static/Bellman comparison declarations now have pinned green Lean runs (#42506496740, #42506614812, #42506650961, #42506762177), associated with Proposition 3.8 only as supporting lemmas. They do not establish full BankOptimal, bank-value terminality, macro equilibrium, or complete literal paper theorem equivalence.",
+  "status_policy": "Forty-two scoped declarations tied to Lemma 4.3 are Lean kernel-verified: 37 previous auxiliary claims, 3 source-integrated static/pathwise/11-claim theorems (#42505059048, #42505126404, #42505264161), and 2 physical Cobb-Douglas marginal capital product lemmas (#42505447150). The three integrators consolidate existing results and must not be counted as independent new economic mechanisms. The original 57 source-paper claim specifications conservatively remain at 0/57 full literal equivalence with 24/57 directed semantic comparisons; the new source-level complete predicate is proved, but the older allocationLossIdentitySpec is materially weaker. Dynamic equilibrium/monetary shock causal implications not established. Four conditional source bank static/Bellman comparison declarations now have pinned green Lean runs (#42506496740, #42506614812, #42506650961, #42506762177), associated with Proposition 3.8 only as supporting lemmas. They do not establish full BankOptimal, bank-value terminality, macro equilibrium, or complete literal paper theorem equivalence. Two bank KKT cap/corner sufficiency declarations additionally verified in CI #42515365119. They are supporting conditional claims related to Proposition 3.8, not full literal equivalence.",
   "source_module_check": "24/57 semantic comparisons performed, 33 not individually audited. Eleven-claim source-integrated static/differential theorem proved; physical MPK differentiation and alpha*Y/k bridge proved at CI #42505447150. Legacy FirmType interface still mismatched; numerical IRFs conditional and infinite-horizon equilibrium unverified. New global one-history bank portfolio sufficiency from source OTC payoff and a one-step Bellman comparison compiled without sorryAx; economic hypotheses explicit and not discharged by the numerical paths.",
   "scope": "57 numbered claims including historical appendices; current PDF page numbers in the original ledger are stale after compact layout.",
   "entries": [
@@ -260,9 +260,27 @@
           "lean_ci_run_id": 42506762177,
           "lean_ci_commit": "ded39799ec6bb747ebfba5898ce229528c628ccd",
           "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperBankKKTGlobalSufficiencyCandidate.lean",
+          "declaration": "bank_cap_corner_global_direction",
+          "relationship": "bank_static_bellman_sufficiency_kernel_verified",
+          "note": "Lema de soporte del cono normal a restricciones no negativas y topes de credito y depositos, sin suponer interioridad; complemento del banco, no colateral empresarial. CI #42515365119 verde y #print axioms sin sorryAx. No demuestra BankOptimal ni toda la Proposicion 3.8.",
+          "lean_ci_run_id": 42515365119,
+          "lean_ci_commit": "f81f3756b234a3d2249a0529735bc2c2efa80ebe",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperBankKKTGlobalSufficiencyCandidate.lean",
+          "declaration": "source_bank_static_optimal_with_bank_caps_and_corners",
+          "relationship": "bank_static_bellman_sufficiency_kernel_verified",
+          "note": "Dominancia global de cartera individual en una fecha desde payoff OTC fuente y condiciones KKT exactas con cuatro duales de caps y no negatividad de prestamos/depositos. La esquina reservas=0 con dual positivo permanece fuera de este enunciado. CI #42515365119 verde y #print axioms sin sorryAx. No demuestra BankOptimal ni toda la Proposicion 3.8.",
+          "lean_ci_run_id": 42515365119,
+          "lean_ci_commit": "f81f3756b234a3d2249a0529735bc2c2efa80ebe",
+          "lean_axiom_audit": "passed_no_sorryAx"
         }
       ],
-      "semantic_gap": "La cota/orden de tasas en el testigo bancario estacionario no sustituye la prueba general de spread no negativo por covarianza con pagos y duales. [Campaña 2026-11-08] Cuatro declaraciones bancarias fuente con CI verde y sin sorryAx: dominancia global de cartera en una fecha bajo supergradientes y precios de caps no activos (#42506496740), selección de pendiente en quiebre (#42506614812), transferencia a comparación de continuación Bellman con valor homogéneo y peso positivo (#42506650961), y derivación del peso positivo bajo consumo/inflación/salida/valor unitario válidos (#42506762177). Son resultados CONDICIONALES: no prueban el entorno óptimo intertemporal completo ni el spread no negativo integrado de la Proposición 3.8; identidad de renovación con aB e instanciación en IRF quedan pendientes."
+      "semantic_gap": "La cota/orden de tasas en el testigo bancario estacionario no sustituye la prueba general de spread no negativo por covarianza con pagos y duales. [Campaña 2026-11-08] Cuatro declaraciones bancarias fuente con CI verde y sin sorryAx: dominancia global de cartera en una fecha bajo supergradientes y precios de caps no activos (#42506496740), selección de pendiente en quiebre (#42506614812), transferencia a comparación de continuación Bellman con valor homogéneo y peso positivo (#42506650961), y derivación del peso positivo bajo consumo/inflación/salida/valor unitario válidos (#42506762177). Son resultados CONDICIONALES: no prueban el entorno óptimo intertemporal completo ni el spread no negativo integrado de la Proposición 3.8; identidad de renovación con aB e instanciación en IRF quedan pendientes. [Campana 2026-11-08 extension KKT] Se agregan dos declaraciones con CI #42515365119: soporte del cono normal y suficiencia global de cartera con loan/deposit cap y esquina cero, bajo los mismos pagos/prices de la fuente, sin resolver reservas nulas con dual positivo ni optimalidad infinita. La Proposicion 3.8 total no se declara equivalente."
     },
     {
       "paper_number": "3.9",
