@@ -181,6 +181,8 @@ jobs:
           import Ventura26LiquidityAllocation.LocalScalarPythonMonetaryFullRowsCandidate
           import Ventura26LiquidityAllocation.LocalScalarCommonPledgeLogZeroCandidate
           import Ventura26LiquidityAllocation.LocalScalarPythonMonetaryFourPrefixRowsCandidate
+          import Ventura26LiquidityAllocation.LocalScalarAugmented34MonetaryRowsCandidate
+          import Ventura26LiquidityAllocation.LocalScalarAugmented34BankFaceRowsCandidate
           import Ventura26LiquidityAllocation.StationaryEquilibriumCandidate
           import Ventura26LiquidityAllocation.BoundaryAnalyticPackageCandidate
           import Ventura26LiquidityAllocation.InterbankCancellationCandidate
@@ -288,6 +290,14 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarCommonPledgeLogZero.source_common_pledge_log_zero_iff_of_positive
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarPythonMonetaryFourPrefixRows.both_prefix_reserve_rate_rows_eq_python_log_ratios
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarPythonMonetaryFourPrefixRows.both_prefix_reserve_quantity_rows_eq_python_log_ratios
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34MonetaryRows.rate_calibration_preserved
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34MonetaryRows.quantity_calibration_preserved
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34MonetaryRows.augmented_reserve_rate_rows_eq_python_log_ratios
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34MonetaryRows.augmented_reserve_quantity_rows_eq_python_log_ratios
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34MonetaryRows.date_zero_rate_innovation_is_original_plus_shock
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34MonetaryRows.date_one_rate_innovation_is_unchanged
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34BankFaceRows.bank_renewal_compatibility_preserved
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34BankFaceRows.augmented_bank_face_rows_log_zero_iff
           #print axioms Ventura26LiquidityAllocation.ProposedStationaryEquilibrium.parent_competitiveEquilibrium
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.proposed_localSlackLiteralAllocation_settlementClears_of_binarySymmetric
