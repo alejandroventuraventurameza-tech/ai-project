@@ -1,4 +1,5 @@
 import Ventura26LiquidityAllocation.LocalScalarPythonMonetaryFourPrefixRowsCandidate
+import Ventura26LiquidityAllocation.LocalScalarAugmented34SourceCandidate
 import Ventura26LiquidityAllocation.LocalScalarAugmented34PolicyRecenterCandidate
 
 /-!
