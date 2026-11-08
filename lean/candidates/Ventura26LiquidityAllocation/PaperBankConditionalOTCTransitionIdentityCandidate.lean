@@ -186,10 +186,16 @@ theorem source_discounted_bank_mass_next_eq_conditional_growth
         (hindividual n future payments)
         (haggregate n future)
       have htrans := source_transition_weight_child P X t h n future s
-      dsimp [childFutureHistory] at htrans
+      change continuationTransitionWeight P.tree (currentState h) (n + 1)
+        (Fin.cons s future) =
+        continuationTransitionWeight P.tree (currentState h) n future *
+          P.tree.transition
+            (currentState (continuationHistory h future)) s at htrans
       rw [htrans]
       have hpayment := source_payment_weight_child P payments omega
-      dsimp [childPaymentHistory] at hpayment
+      change continuationPaymentWeight P (Fin.cons omega payments) =
+        continuationPaymentWeight P payments * P.paymentProbability omega
+        at hpayment
       rw [hpayment]
       have hsource' :
         bankCumulativeSDFAt P X t h (Fin.cons s future) *
