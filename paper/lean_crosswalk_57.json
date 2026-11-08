@@ -5,8 +5,8 @@
   "checked_branch": "work/lean-ci-validation-otc-20261106",
   "reviewed_date": "2026-11-08",
   "claim_count": 57,
-  "status_policy": "Forty scoped mathematical declarations for Lemma 4.3 are Lean kernel-verified: 37 previous helpers plus 2 integrated bundles and the new complete 11-claim source specification (green CI #42505059048, #42505126404, #42505264161). The three new declarations package previously proved source facts under shared hypotheses and are not three independent new economic mechanisms. The legacy checkpoint predicate allocationLossIdentitySpec is semantically weaker and is not automatically an equivalent formalization. All 57 original numbered claims remain not_established for literal correspondence; 24/57 directed comparisons. The monetary dynamic equilibrium and causally persistent growth are NOT proved.",
-  "source_module_check": "24/57 targeted semantic comparisons, 33 pending. Source-level static, pathwise differential and unified 11-claim theorem compiled with #print axioms without sorryAx. Legacy FirmType interface alpha/beta heterogeneous, tautological Y and Yeff and missing differential remain unmatched; physical MPK source derivative audit pending.",
+  "status_policy": "Forty-two scoped declarations tied to Lemma 4.3 are Lean kernel-verified: 37 previous auxiliary claims, 3 source-integrated static/pathwise/11-claim theorems (#42505059048, #42505126404, #42505264161), and 2 physical Cobb-Douglas marginal capital product lemmas (#42505447150). The three integrators consolidate existing results and must not be counted as independent new economic mechanisms. The original 57 source-paper claim specifications conservatively remain at 0/57 full literal equivalence with 24/57 directed semantic comparisons; the new source-level complete predicate is proved, but the older allocationLossIdentitySpec is materially weaker. Dynamic equilibrium/monetary shock causal implications not established.",
+  "source_module_check": "24/57 semantic comparisons performed, 33 not individually audited. Eleven-claim source-integrated static/differential theorem proved; physical MPK differentiation and alpha*Y/k bridge proved at CI #42505447150. Legacy FirmType interface still mismatched; numerical IRFs conditional and infinite-horizon equilibrium unverified.",
   "scope": "57 numbered claims including historical appendices; current PDF page numbers in the original ledger are stale after compact layout.",
   "entries": [
     {
@@ -686,9 +686,27 @@
           "lean_ci_run_id": 42505264161,
           "lean_ci_commit": "b132b91df59eb3e64b6aefb77621bd62084c8054",
           "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperLemma43PhysicalMPKCandidate.lean",
+          "declaration": "original_firm_production_hasDerivAt_capital",
+          "relationship": "source_physical_mpk_kernel_verified",
+          "note": "Deriva directamente la tecnologia micro Y_i=A_i k_i^alpha ell_i^beta respecto de capital fisico k_i>0, manteniendo ell_i fijo. CI #42505447150 verde, SHA 17a56a00, #print axioms sin sorryAx. Resultado condicional de una firma, sin politica monetaria.",
+          "lean_ci_run_id": 42505447150,
+          "lean_ci_commit": "17a56a00f5ce372039f00cada55d6f185891bdff",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperLemma43PhysicalMPKCandidate.lean",
+          "declaration": "original_firm_mpk_equals_elasticity_times_output_per_capital",
+          "relationship": "source_physical_mpk_kernel_verified",
+          "note": "Demuestra la identidad MPK_i=alpha*Y_i/k_i desde potencias reales positivas, no solo como interpretacion algebraica. CI #42505447150 verde, SHA 17a56a00, #print axioms sin sorryAx. Resultado condicional de una firma, sin politica monetaria.",
+          "lean_ci_run_id": 42505447150,
+          "lean_ci_commit": "17a56a00f5ce372039f00cada55d6f185891bdff",
+          "lean_axiom_audit": "passed_no_sorryAx"
         }
       ],
-      "semantic_gap": "El nuevo sourceLemma43CompleteSpec_proved (CI #42505264161) junta once afirmaciones matematicas originales: siete estaticas (CI #42505059048) y cuatro sobre trayectorias capital positivo (CI #42505126404). Se demostraron con tecnologia fisica original, dos recursos presupuestarios, log-loss y derivada fuente, sin sorryAx. Es un predicado NUEVO, no el viejo allocationLossIdentitySpec del checkpoint, que solo menciona las elasticidades de H, define Y/Yeff como tautologias y omite derivada/MPK/optimos; la equivalencia literal integral sigue no establecida. No acredita shocks, selector S/B ni equilibrio monetario dinamico.",
+      "semantic_gap": "42 declaraciones Lean relacionadas con 4.3 verificados: 37 auxiliares, tres teoremas integradores (sourceLemma43CompleteSpec_proved prueba 11 clausulas bajo hipotesis comunes) y dos lemas fisicos de MPK desde Cobb-Douglas (CI #42505447150). Se verifica la identidad alpha*Y_i/k_i para derivada de producto respecto de k_i>0 con ell_i fijo. El nuevo predicado fuente NO es equivalente por nombre a allocationLossIdentitySpec: este ultimo omite el diferencial, MPK y cierre no tautologico Y/Yeff, y no exige elasticidades comunes. No hay prueba de equilibrio monetario de horizonte infinito, selector S/B ni causalidad de crecimiento.",
       "numerical_context": [
         "paper/irf_mechanism_table.tex"
       ]

@@ -51,6 +51,7 @@ ALLOWED_RELATIONS = {
     "source_static_integrated_kernel_verified",
     "source_dynamic_integrated_kernel_verified",
     "source_complete_integrated_kernel_verified",
+    "source_physical_mpk_kernel_verified",
 }
 GREEN_SOURCE_FINANCIAL_RUN = 42457259796
 GREEN_SOURCE_FINANCIAL_SHA = "c006e00c437243c3f6f44ec3c102df4286c545e0"
@@ -86,6 +87,12 @@ GREEN_DYNAMIC_INTEGRATED_RUN = 42505126404
 GREEN_DYNAMIC_INTEGRATED_SHA = "5f40787041c96d96b980e87e72fb9cf5b181501a"
 GREEN_SOURCE_COMPLETE_RUN = 42505264161
 GREEN_SOURCE_COMPLETE_SHA = "b132b91df59eb3e64b6aefb77621bd62084c8054"
+GREEN_PHYSICAL_MPK_RUN = 42505447150
+GREEN_PHYSICAL_MPK_SHA = "17a56a00f5ce372039f00cada55d6f185891bdff"
+EXPECTED_VERIFIED_PHYSICAL_MPK = {
+    "original_firm_production_hasDerivAt_capital",
+    "original_firm_mpk_equals_elasticity_times_output_per_capital",
+}
 EXPECTED_VERIFIED_STATIC_INTEGRATED = {"original_source_static_lemma43_bundle"}
 EXPECTED_VERIFIED_DYNAMIC_INTEGRATED = {"original_source_dynamic_lemma43_bundle"}
 EXPECTED_VERIFIED_SOURCE_COMPLETE = {"sourceLemma43CompleteSpec_proved"}
@@ -204,6 +211,7 @@ def main() -> None:
     green_static_integrated = set()
     green_dynamic_integrated = set()
     green_source_complete = set()
+    green_physical_mpk = set()
     for row in data["entries"]:
         label = row["label"]
         old = original[label]
@@ -399,6 +407,18 @@ def main() -> None:
                         and item.get("lean_axiom_audit") == "passed_no_sorryAx",
                         "Integrated source theorem not pinned to green CI")
                 seen_by_rel[rel].add(item["declaration"])
+            if rel == "source_physical_mpk_kernel_verified":
+                require(label == "lem:allocation_loss_identity",
+                        "Source MPK proof attached to wrong result")
+                require(item["declaration"] in EXPECTED_VERIFIED_PHYSICAL_MPK,
+                        "Unknown original physical MPK theorem")
+                require(item["declaration"] not in green_physical_mpk,
+                        "Duplicate physical MPK theorem")
+                require(item.get("lean_ci_run_id") == GREEN_PHYSICAL_MPK_RUN
+                        and item.get("lean_ci_commit") == GREEN_PHYSICAL_MPK_SHA
+                        and item.get("lean_axiom_audit") == "passed_no_sorryAx",
+                        "Original physical MPK theorem lacks exact CI pin")
+                green_physical_mpk.add(item["declaration"])
             if rel == "efficiency_support_kernel_verified":
                 require(label == "lem:allocation_loss_identity",
                         "Efficiency support theorem mapped to wrong source claim")
@@ -529,6 +549,8 @@ def main() -> None:
             f"Dynamic integrated source theorem incomplete: {green_dynamic_integrated}")
     require(green_source_complete == EXPECTED_VERIFIED_SOURCE_COMPLETE,
             f"Complete 11-claim source theorem incomplete: {green_source_complete}")
+    require(green_physical_mpk == EXPECTED_VERIFIED_PHYSICAL_MPK,
+            f"Original physical MPK proofs incomplete: {green_physical_mpk}")
     require(green_exact == {
         "lem:repayment": "exact_repaymentSpec",
         "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
@@ -599,6 +621,8 @@ def main() -> None:
         "verified_dynamic_integrated_lemmas": len(green_dynamic_integrated),
         "verified_source_complete_run": GREEN_SOURCE_COMPLETE_RUN,
         "verified_source_complete_lemmas": len(green_source_complete),
+        "verified_physical_mpk_run": GREEN_PHYSICAL_MPK_RUN,
+        "verified_physical_mpk_lemmas": len(green_physical_mpk),
         "unproved_source_specifications": source_specifications,
         "complete_paper_theorems_proved_in_lean_by_this_audit": 0,
         "full_equilibrium_confirmed": False,

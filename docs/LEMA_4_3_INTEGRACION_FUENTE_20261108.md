@@ -70,3 +70,9 @@ Una vez cerrada esta interfaz, quedarán fuera del alcance del lema estático: d
 - `PaperLemma43SourceCompleteCandidate.lean`: [run #42505264161](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42505264161), commit `b132b91df59eb3e64b6aefb77621bd62084c8054`.
 
 Las tres corridas verificaron los teoremas citados en el kernel, sin `sorryAx`. Una nueva interfaz de fuente no subsana por identidad nominal la brecha del `allocationLossIdentitySpec` del checkpoint, ni implica optimalidad bancaria intertemporal.
+
+## 6. Producto marginal fisico: cierre del concepto MPK
+
+El modulo `PaperLemma43PhysicalMPKCandidate.lean` prueba directamente la derivada `HasDerivAt` de `A*k^a*ell^b` en un capital fisico positivo `k`, manteniendo `ell` fijo. Prueba tambien, sin postulaciones, que `a*(A*k^a*ell^b/k)=a*(A*k^(a-1)*ell^b)`. La [CI #42505447150](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42505447150), commit `17a56a00f5ce372039f00cada55d6f185891bdff`, compilo ambas declaraciones y ejecuto `#print axioms` sin `sorryAx`.
+
+Este resultado justifica interpretar el ordenamiento de `a*YH/kH` y `a*YL/kL` del predicado integrado como ordenamiento de productos marginales fisicos, con elasticidad comun positiva. No extiende la conclusion a inversion elegida bajo colateral activo ni demuestra un shock de politica monetaria.

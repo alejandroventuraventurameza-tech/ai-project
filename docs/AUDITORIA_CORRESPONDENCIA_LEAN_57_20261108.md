@@ -1,5 +1,12 @@
 # Matriz de correspondencia entre los 57 resultados y Lean
 
+## Puente fisico del producto marginal de capital
+
+La [CI focalizada #42505447150](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42505447150), commit `17a56a00f5ce372039f00cada55d6f185891bdff`, verifico dos teoremas adicionales de la tecnologia original: `original_firm_production_hasDerivAt_capital` y `original_firm_mpk_equals_elasticity_times_output_per_capital`. El kernel y `#print axioms` no reportaron `sorryAx`. La igualdad MPK = alpha*Y/k se deduce de Cobb-Douglas, con k>0 y empleo individual fijo en la derivacion.
+
+**42 declaraciones Lean relacionadas con 4.3** (37 auxiliares previos, 3 integradores, 2 MPK fisicos); no confundir declaraciones de composicion con mecanismos independientes. **0/57 equivalencias formales integrales** respecto a la vieja interfaz fuente. La prueba de once clausulas es un predicado nuevo y mas fiel al manuscrito, no una traduccion literal auditada del checkpoint.
+
+
 ## Integracion de las once afirmaciones fuente del Lema 4.3
 
 El teorema `original_source_static_lemma43_bundle` paso compilacion y auditoria de axiomas sin `sorryAx` en [CI #42505059048](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42505059048), SHA `0cb2bb63`. Su equivalente diferenciable `original_source_dynamic_lemma43_bundle` paso [CI #42505126404](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42505126404), SHA `5f407870`.
