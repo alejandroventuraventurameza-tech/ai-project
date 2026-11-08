@@ -88,8 +88,11 @@ Python usa `betaE * C0L / C1L`.
 La especializacion `sigmaE=1` y consumos positivos permite
 la igualdad algebraica del termino de descuento, pero aun se
 deben identificar los niveles, el prestamo bruto y la inflacion.
-`LocalScalarDualSigmaOneBridgeCandidate.lean` es un candidato
-enviado a compilacion para este sublema exacto.
+`LocalScalarDualSigmaOneBridgeCandidate.lean` demostro esta igualdad
+CON HIPOTESIS explicitas en
+[Lean CI 42449527116](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42449527116):
+compilacion y `#print axioms` satisfactorios, sin `sorryAx`.
+La igualdad de primitivas del ejemplo economico sigue abierta.
 
 Las otras filas no quedan declaradas iguales ni equivalentes por
 omision. Deben someterse a pruebas independientes, en particular
@@ -139,3 +142,26 @@ prueba exacta de equivalencia de ceros en Lean (por ejemplo,
 la fila bancaria 6) y establecer la condicion de parametros
 del factor de renovacion; despues automatizar el inventario
 de las 34 filas con testigos de equivalencia.
+
+
+## 5. Nuevo puente exacto para la politica monetaria basal
+
+El modulo `LocalScalarAugmented34PolicyRecenterCandidate.lean`
+compilo y paso auditoria de axiomas en
+[Lean CI 42449468217](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42449468217).
+Prueba, para cada estado `s`, que dos intervenciones consecutivas
+de remuneracion `hStar` y `dh` producen la misma regla
+`reserveRateInnovation` que una sola intervencion `hStar+dh`.
+Demuestra asimismo invariancia de `reserveQuantityInnovation`,
+`reserveRequirementPath` y `corridorWidthPath` en ambos calendarios.
+El modelo Lean por tanto distingue exactamente una referencia
+politica desplazada de la nueva perturbacion marginal, sin
+reinterpretarla como shock de encaje ni como cambio de corredor.
+
+El modulo `LocalScalarBankFaceLogZeroCandidate.lean` contiene
+una primera prueba propuesta de igualdad de conjuntos de ceros
+entre un log-cociente y el residual EN NIVELES de renovacion
+bancaria en Lean, bajo positividad. El factor de renovacion
+PYTHON vs Lean sigue sin estar identificado sin una hipotesis
+sobre parametros; se exige auditoria de Lean antes de llamar
+este sublema demostrado.
