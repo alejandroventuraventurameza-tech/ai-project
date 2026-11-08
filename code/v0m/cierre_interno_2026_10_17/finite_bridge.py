@@ -501,6 +501,7 @@ def evaluate_bridge(base, P, branch, policy_inputs=True,
             "point_jacobian_box": [[enclosure(source_J[i, j]) for j in range(33)]
                                    for i in range(33)],
             "point_policy_derivative_box": source_G0,
+            "funding_dual_center_box": enclosure(metrics["L_dual"]),
             "funding_dual_state_gradient_box": [
                 enclosure(metrics["L_dual"].d[i]) for i in range(33)
             ],
@@ -612,6 +613,7 @@ def main():
                 "jacobian_ball": uniform_box["jacobian_ball"],
                 "fy_ball": uniform_box["fy_ball"],
                 "source_box_residual_enclosure": uniform_box["source_box_residual_enclosure"],
+                "funding_dual_center_box": point_capture["funding_dual_center_box"],
                 "funding_dual_state_gradient_ball": uniform_box["funding_dual_state_gradient_ball"],
                 "funding_dual_direct_parameter_derivatives_ball":
                     uniform_box["funding_dual_direct_parameter_derivatives_ball"],
