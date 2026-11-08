@@ -35,6 +35,7 @@ ALLOWED_RELATIONS = {
     "corrected_economic_claim_kernel_verified",
     "counterexample_malformed_interface_kernel_verified",
     "auxiliary_claim_kernel_verified",
+    "efficiency_support_kernel_verified",
 }
 GREEN_SOURCE_FINANCIAL_RUN = 42457259796
 GREEN_SOURCE_FINANCIAL_SHA = "c006e00c437243c3f6f44ec3c102df4286c545e0"
@@ -42,6 +43,14 @@ GREEN_REPAYMENT_RUN = 42458034938
 GREEN_REPAYMENT_SHA = "acc4263a2c60c6ec3a90c3331aef9cb522e4427a"
 GREEN_LOSS_AUX_RUN = 42458449121
 GREEN_LOSS_AUX_SHA = "1e797f886dea03a6fdea135338e6408a3e8ab91b"
+GREEN_EFFICIENCY_RUN = 42459394970
+GREEN_EFFICIENCY_SHA = "8e883b7993f39d29ae431c44a6a14e45ca55707d"
+EXPECTED_VERIFIED_EFFICIENCY = {
+    "normalized_two_type_output_le_benchmark",
+    "normalized_benchmark_attained",
+    "normalized_log_loss_nonneg",
+    "efficient_candidate_clears_resources",
+}
 EXPECTED_VERIFIED_LOSS_AUX = {
     "allocation_loss_log_differential_algebra",
     "output_share_gt_capital_share_iff_productivity",
@@ -87,6 +96,7 @@ def main() -> None:
     green_corrected = {}
     green_refutations = {}
     green_loss_aux = set()
+    green_efficiency_aux = set()
     for row in data["entries"]:
         label = row["label"]
         old = original[label]
@@ -116,6 +126,18 @@ def main() -> None:
                     f"{label}: invalid theorem relation {rel}")
             if rel == "counterexample_to_stronger_literal_interface":
                 refutations += 1
+            if rel == "efficiency_support_kernel_verified":
+                require(label == "lem:allocation_loss_identity",
+                        "Efficiency support theorem mapped to wrong source claim")
+                require(item["declaration"] in EXPECTED_VERIFIED_EFFICIENCY,
+                        "Unexpected normalized efficiency theorem promoted")
+                require(item["declaration"] not in green_efficiency_aux,
+                        "Duplicate verified efficiency-support theorem")
+                require(item.get("lean_ci_run_id") == GREEN_EFFICIENCY_RUN
+                        and item.get("lean_ci_commit") == GREEN_EFFICIENCY_SHA
+                        and item.get("lean_axiom_audit") == "passed_no_sorryAx",
+                        "Efficiency theorem missing its exact green Lean run")
+                green_efficiency_aux.add(item["declaration"])
             if rel == "auxiliary_claim_kernel_verified":
                 require(label == "lem:allocation_loss_identity",
                         "Loss auxiliary theorem attached to wrong claim")
@@ -202,6 +224,8 @@ def main() -> None:
     require(refutations == 1, "Expected exactly one literal specification refutation.")
     require(green_loss_aux == EXPECTED_VERIFIED_LOSS_AUX,
             f"Loss auxiliary proof set incomplete: {green_loss_aux}")
+    require(green_efficiency_aux == EXPECTED_VERIFIED_EFFICIENCY,
+            f"Global efficiency proof set incomplete: {green_efficiency_aux}")
     require(green_exact == {
         "lem:repayment": "exact_repaymentSpec",
         "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
@@ -242,6 +266,8 @@ def main() -> None:
         "verified_repayment_run": GREEN_REPAYMENT_RUN,
         "verified_loss_auxiliary_run": GREEN_LOSS_AUX_RUN,
         "verified_loss_auxiliary_lemmas": len(green_loss_aux),
+        "verified_global_efficiency_run": GREEN_EFFICIENCY_RUN,
+        "verified_global_efficiency_lemmas": len(green_efficiency_aux),
         "unproved_source_specifications": source_specifications,
         "complete_paper_theorems_proved_in_lean_by_this_audit": 0,
         "full_equilibrium_confirmed": False,
