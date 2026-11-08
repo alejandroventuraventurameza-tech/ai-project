@@ -591,34 +591,65 @@ primales sobre historias admisibles.
 \textbf{Aún no hay dos testigos de equilibrio completo.}
 \end{frame}
 
-\begin{frame}[fragile]{Qué demuestra Lean: correspondencia y alcance}
+\begin{frame}[fragile]{Proposición del paper frente al enunciado literal en Lean}
 \footnotesize
-\textbf{Proposición 4.2 revisada: multiplicidad reducida.}
-Para $h=v_R<0$ suficientemente pequeño, bajo regularidad y
-complementariedad, existen dos soluciones escalares locales
-S y B. Recuperar los controles del prefijo requiere además
-invertibilidad; elevarlos a equilibrios completos exigiría
-optimalidad, suficiencia y terminalidad, aún pendientes.
+\textbf{Paper, Prop. de complementariedad reducida:}
+Suponiendo $\mathcal M\in C^1$, $\mathcal M(0,0)=0$,
+$\partial_s\mathcal M(0,0)=b<0$ y
+$\partial_h\mathcal M(0,0)=a_R<0$,
+para $h<0$ pequeño existen exactamente las
+raíces locales $s=0$ y $s(h)>0$; para $h>0$ pequeño no
+hay raíces locales no negativas.
 
 \medskip
-\textbf{Lean: lema auxiliar compilado, no equivalencia con la proposición.}
+\textbf{Lean, \texttt{scalar\_complementarity\_exactly\_two}:}
 \begin{verbatim}
-(hcalendar : DeterministicBridgeCalendar P dateOne recurrent)
-(hopt : FirmOptimal P I X i)
-(hbinding : DateZeroBindingBorrower P X i)
+theorem scalar_complementarity_exactly_two
+    (M : ℝ → ℝ) (r : ℝ)
+    (hanti : StrictAntiOn M (Set.Ici (0 : ℝ)))
+    (hr : 0 < r) (hM0 : 0 < M 0)
+    (hroot : M r = 0) :
+    ∀ s : ℝ, ScalarComplementarity M s
+      ↔ s = 0 ∨ s = r := by
 \end{verbatim}
-La conclusión es la existencia de un único escalar
-$\mu\geq0$ \emph{compartido por las ecuaciones de capital y préstamo},
-con complementariedad. Fragmento literal de la prueba:
+\textbf{Correspondencia exacta:} Lean verifica el conteo de
+raíces si ya suponemos monotonicidad, $r>0$, $M(0)>0$
+y $M(r)=0$. \emph{No} deriva $r(h)$ por IFT, los signos
+del Schur económico, ni la correspondencia con
+equilibrios competitivos de horizonte infinito.
+\end{frame}
+
+\begin{frame}[fragile]{Fragmento de prueba Lean y juicio sobre las hipótesis}
+\footnotesize
+\textbf{Archivo fuente:}
+\texttt{ScalarComplementarityMultiplicityCandidate.lean}.
+El siguiente fragmento está reproducido literalmente:
 \begin{verbatim}
-  have hbalance :
-      R * capitalEulerPrimalGap P X i 0 h0 dateOne =
-        Gamma * dateZeroLoanPrimalGap P X i dateOne :=
-    firmOptimal_sourceCalendar_binding_capitalLoanGap_balance
+  intro s
+  constructor
+  · exact scalar_solution_is_boundary_or_positive_root
+      M r hanti hr hroot s
+  · intro h
+    rcases h with h0 | h1
+    · subst s
+      exact ⟨le_refl (0 : ℝ), le_of_lt hM0, by simp⟩
+    · subst s
+      exact ⟨le_of_lt hr, by simp [hroot],
+        by simp [hroot]⟩
 \end{verbatim}
-\textbf{Veredicto:} el lema exige además capital interior, $R^L>0$,
-$\Gamma>0$ e inflación futura no nula. \emph{No verifica todavía}
-existencia y unicidad de dos equilibrios completos.
+\textbf{Qué falta para el enunciado del paper:}
+justificar desde $C^1$ la monotonía \emph{local},
+producir $r(h)$ por función implícita y
+demostrar que la eliminación de las otras
+33 condiciones corresponde al modelo económico original.
+
+\medskip
+\textbf{Juicio crítico:} la demostración Lean utiliza
+\texttt{StrictAntiOn} sobre todo el semieje no negativo
+y supone la raíz $r$; el paper solo requiere
+monotonía y existencia local derivadas bajo hipótesis.
+El lema es correcto en su alcance, pero \emph{no}
+prueba literalmente la proposición dinámica completa.
 \end{frame}
 
 \begin{frame}{Derivación independiente: crédito no equivale a inversión}
