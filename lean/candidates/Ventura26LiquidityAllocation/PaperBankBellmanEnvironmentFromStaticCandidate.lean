@@ -62,8 +62,7 @@ theorem source_bank_bellman_environment_of_static_optimality
     bankBellmanContinuationWeightAt_pos_of_finiteValue
       P X t h bankValue hcurrent hchild hinflation hexit hunitValue
   have hglobalBellman :=
-    ProposedPaperBankBellmanStaticSufficiency.
-      source_bellman_portfolio_ranking_with_derived_weight
+    ProposedPaperBankBellmanStaticSufficiency.source_bellman_portfolio_ranking_with_derived_weight
         P X t h
         (bankOTCDeficitSlopeAt P X t h (X.bankTightness t h))
         (bankOTCSurplusSlopeAt P X t h (X.bankTightness t h))
