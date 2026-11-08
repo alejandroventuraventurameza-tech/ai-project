@@ -160,3 +160,111 @@ La Proposicion 4.2 conserva por tanto el estatus de
 **argumento condicional de multiplicidad reducida** con una
 subcadena escalar parametrica ahora verificada en Lean. No se
 promueve su afirmacion economica completa a teorema Lean cerrado.
+
+## 8. Puentes economicos exactos de S/B (auditoria del 7 de noviembre de 2026)
+
+**Revision de codigo auditada:** `99a0d16cb2ba585873cd9f95a2252ad5b9c62df0`.
+GitHub Actions:
+[Lean 4 candidate audit 42440990139](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42440990139)
+(`success`).
+Artefacto `lean-candidate-audit-logs`, ID `13601423778`.
+Se inspeccionaron los logs individuales de todos los modulos `LocalScalar*`
+y `axioms.log`: sin `sorryAx` y sin errores de compilacion.
+Este cierre **no es un certificado de las hipotesis economicas de entrada**.
+
+### 8.1 Identidad de fuente y derivadas
+
+- `LocalScalarEconomicSliceCandidate.lean` construye el vector
+  `y(s,h)=(s,h,0,0,0)`, donde `h=v_R` es innovacion de la
+  **regla de remuneracion de reservas**. La funcion
+  `economicReserveRemunerationMarginal` es literalmente
+  `localScalarReducedMap P Z0 solutionLog (reserveRemunerationSlice s h)`,
+  esto es el dual de la firma L en las coordenadas de las 33 filas.
+  A partir de `LocalScalarImplicitReduction` se extraen las filas
+  modificadas, no se prueba existencia de un `solutionLog`.
+- `LocalScalarEconomicDerivativeBridgeCandidate.lean` prueba que
+  las derivadas sobre el eje `(0,h)` y la trayectoria
+  `(-K h,h)` provienen del `fderiv` de la unica funcion
+  economica `localScalarReducedMap`.
+- `LocalScalarEconomicPolicyCertificateCandidate.lean` construye
+  `K>0` desde los signos `b<0` y `a_R<0` y demuestra
+  dos raices complementarias bajo las premisas locales. Se corrigio
+  una hipotesis excesivamente fuerte: **el radio de continuidad y
+  antitonicidad puede depender de `K`**, en vez de imponer un
+  radio comun para todas las pendientes transversales. Se mantiene
+  una cota externa `rho>0` sobre el shock.
+
+### 8.2 Recuperacion de las 33 filas modificadas
+
+`LocalScalarEconomicConeRowsCandidate.lean` prueba para el
+vector economico de cinco coordenadas la cota
+`norm(y(s,h)) <= abs(s)+abs(h)`.
+Con `0<=s<=-K*h` y `h<0`, una innovacion
+`-h<radius/(K+1)` deja `y(s,h)` dentro de la bola
+donde el predicado `LocalScalarImplicitReduction` asegura el
+cumplimiento de las **33 filas modificadas**.
+En particular, se cubren tanto `s=0` como la raiz
+interior `0<r(h)<-K*h`. La fila 5 modificada prescribe
+la holgura; no es automaticamente una fila original de B o S.
+
+### 8.3 Recuperacion de condiciones originales de L
+
+- `LocalScalarEulerRegimeReconciliationCandidate.lean` prueba
+  exactamente la identidad
+  `Euler_B(L)-Euler_S(L) = -pledgeUnit(L)*fundingDual(L)`.
+  Si el dual se anula, ambos Euler coinciden. Con tasa de
+  prestamo no nula, el dual cero tambien satisface la fila
+  de financiamiento de S.
+- `LocalScalarOriginalEulerRowsCandidate.lean` identifica ese
+  dual con `localNormalizedCollateralDualL` del mismo modelo
+  original y prueba las dos implicaciones sobre las **filas fuente**
+  de S (financiamiento y Euler del capital).
+- `LocalScalarOriginalCollateralKktBridgeCandidate.lean`
+  muestra que las primitivas de la intervencion no cambian
+  directamente las formulas de holgura y dual, recupera la
+  holgura original de L desde la fila 5 y demuestra la
+  complementariedad original `LocalScalarComplementarityL`
+  desde la complementariedad escalar.
+- `LocalScalarOriginalInteriorSBranchCandidate.lean`
+  utiliza `s>0`, filas modificadas 3 y 5, complementariedad
+  escalar y `loanRate != 0` para recuperar el KKT de L y
+  las dos filas originales propias de S.
+- `LocalScalarOriginalBoundaryBBranchCandidate.lean`
+  utiliza `s=0` y un **denominador de colateral no nulo**
+  para reconstruir la fila original de promesa nominal
+  vinculante de B. No se divide por un factor cuyo signo
+  o no anulacion no haya sido supuesto.
+
+### 8.4 Compuertas pendientes
+
+Estos son teoremas **condicionales** compilados sobre funciones
+fuente exactas; siguen sin demostrarse las siguientes premisas
+y consecuencias para el modelo numerico:
+
+1. **Existencia y dominio:** construir la referencia `Z0` y
+   `solutionLog` con `LocalScalarImplicitReduction`,
+   incluidas las 33 ecuaciones, unicidad y diferenciabilidad.
+2. **Certificacion del Schur:** enlazar el Jacobiano economico
+   real con la inversa intervalar certificada y comprobar los
+   signos numericos de `a_R` y `b`, no asumirlos.
+3. **Regularidad local:** derivar de una fuente `C^1`
+   verificable el radio `rho_K`, la monotonia del residual
+   en los cortes y `M(0,0)=0`, en lugar de introducirlos
+   como premisas aun sin testigo.
+4. **Dominio y ramas:** derivar positividad de tasas de
+   prestamo, no anulacion del denominador de colateral y
+   trasladar las otras filas del sistema auxiliar a las
+   ecuaciones originales de cada regimen, comprobando
+   condiciones activas y factibilidad.
+5. **Equilibrio infinito:** construir `Allocation`,
+   verificar `FirmOptimal`, `BankPopulationEquilibrium`,
+   KKT de todos los agentes, clearing, condiciones terminales
+   y continuidad de la cola. No inferir de estos lemas
+   resultados de crecimiento sostenido, bienestar o
+   unicidad global.
+
+**Veredicto de calidad:** el puente desde la marginal fuente
+al KKT local de L es una cadena de pruebas Lean *bajo
+hipotesis explicitas*. La Proposicion 4.2 **no** debe
+promoverse aun a prueba de dos equilibrios competitivos
+completos ni de crecimiento de largo plazo.
