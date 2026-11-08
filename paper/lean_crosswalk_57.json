@@ -6,7 +6,7 @@
   "reviewed_date": "2026-11-08",
   "claim_count": 57,
   "status_policy": "Source-financial literal 3.1 3.2 3.3 verified, 3.5 malformed interface refuted and corrected; 4.3 three scoped auxiliary identities kernel verified in focused CI 42458449121. None of 57 numbered paper results promoted to full-semantic equivalence without source-to-paper mapping and proof of all clauses; equilibrium and growth unproven.",
-  "source_module_check": "19 targeted semantic comparisons, including a falsified original funding-supergradient interface and its corrected candidate under RD>0, RD<RL; full dynamic equilibrium not certified.",
+  "source_module_check": "24/57 targeted semantic comparisons (14 main plus 10 annex); remaining 33 annex results not individually reviewed. New global efficiency AM-GM candidate is kept separate until Lean CI confirms it; full-equilibrium and source-rpow bridge are unproved.",
   "scope": "57 numbered claims including historical appendices; current PDF page numbers in the original ledger are stale after compact layout.",
   "entries": [
     {
@@ -660,10 +660,17 @@
       "title": "Solución no lineal local del núcleo determinista",
       "paper_statement_sha256": "3aaacfdae0324b5cbea0167469add9080b65f1010d3d4b063429235a40699274",
       "source_ledger_formalization_status": "not_run",
-      "review_state": "not_yet_semantically_reviewed",
+      "review_state": "targeted_semantic_comparison",
       "paper_proof_equivalent_in_lean": "not_established",
-      "related_lean_declarations": [],
-      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/LocalScalarEconomicPolicyCertificateCandidate.lean",
+          "declaration": "source_economic_negative_remuneration_shock_two_roots",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Dos raíces locales de complementariedad reducida bajo reducción implícita, no familia de órbitas deterministas con inversa acotada."
+        }
+      ],
+      "semantic_gap": "La proposición formula existencia y unicidad de trayectoria determinista no lineal acotada bajo inversa lineal, derivabilidad C1 y contracción sobre el espacio infinito de sucesiones. El lema Lean examinado prueba bifurcación de una función reducida de finitas coordenadas *suponiendo* la reducción implícita; no formaliza la inversa de frontera ni un punto fijo de las trayectorias completas."
     },
     {
       "paper_number": "A.17.1",
@@ -671,10 +678,23 @@
       "title": "Optimalidad empresarial y término terminal",
       "paper_statement_sha256": "abcfc833d8a2a54ba9c2d429b26028650e5bc60690556cc5a164fcd72c5e361b",
       "source_ledger_formalization_status": "not_run",
-      "review_state": "not_yet_semantically_reviewed",
+      "review_state": "targeted_semantic_comparison",
       "paper_proof_equivalent_in_lean": "not_established",
-      "related_lean_declarations": [],
-      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/StationaryFirmOptimalityCandidate.lean",
+          "declaration": "parent_firmOptimal",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Optimalidad global de cada firma bajo el testigo estacionario parametrizado G, no lema universal."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/FirmOptimalVariationCandidate.lean",
+          "declaration": "firmOptimal_twoSidedVariation_derivative_zero",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Implicación desde optimalidad hacia derivada nula en variación admisible; dirección inversa no demostrada."
+        }
+      ],
+      "semantic_gap": "La proposición del anexo exige suficiencia frente a planes adaptados arbitrarios con precios positivos, KKT, concavidad y transversalidad terminal. El theorem parent_firmOptimal acredita una instancia estacionaria específica (primitives G); firmOptimal_twoSidedVariation_derivative_zero solo demuestra una condición necesaria para desviaciones diferenciables. No equivalen a una prueba general de suficiencia estocástica ni al cierre terminal bajo toda historia."
     },
     {
       "paper_number": "A.18.1",
@@ -759,10 +779,23 @@
       "title": "Certificado local de riesgo positivo para el testigo D",
       "paper_statement_sha256": "55b1cd3c692b0aef6f800f3518042ee28f11b29b36bb1b30f4cbc1bd835927b7",
       "source_ledger_formalization_status": "not_run",
-      "review_state": "not_yet_semantically_reviewed",
+      "review_state": "targeted_semantic_comparison",
       "paper_proof_equivalent_in_lean": "not_established",
-      "related_lean_declarations": [],
-      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/StationaryEquilibriumCandidate.lean",
+          "declaration": "parent_competitiveEquilibrium",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Equilibrio estacionario determinista con reservas Pre≤G, no testigo estocástico de eta positiva."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/LocalScalarEconomicPolicyCertificateCandidate.lean",
+          "declaration": "source_economic_negative_remuneration_shock_two_roots",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Raíces escalares condicionales bajo reducción implícita; sin certificación integral de contracción con riesgo positivo."
+        }
+      ],
+      "semantic_gap": "La afirmación del paper certifica un equilibrio estocástico exacto del testigo D con 0<eta≤1e-31 mediante cota intervalar, contracción y selección del mínimo, junto con optimalidad privada. La demostración Lean de equilibrio estacionario no incorpora esa continuación de riesgo positivo; el lema escalar de shock monetario supone LocalScalarImplicitReduction y no verifica el contrato estocástico ni cotas de redondeo dirigido. Los certificados Python no se elevan a teoremas del kernel."
     },
     {
       "paper_number": "A.30.2",
@@ -803,10 +836,23 @@
       "title": "Suficiencia para el sistema empresarial general",
       "paper_statement_sha256": "ac8a52f3e5c0e7efdf5801bdc66531051c2c5ab6082d5ecd917da695d7cb827d",
       "source_ledger_formalization_status": "not_run",
-      "review_state": "not_yet_semantically_reviewed",
+      "review_state": "targeted_semantic_comparison",
       "paper_proof_equivalent_in_lean": "not_established",
-      "related_lean_declarations": [],
-      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/StationaryFirmOptimalityCandidate.lean",
+          "declaration": "parent_firm_dominates",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Dominancia de utilidad del plan estacionario frente a cualquier alternativa factible bien definida para la instancia específica."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/FirmOptimalVariationCandidate.lean",
+          "declaration": "firmOptimal_twoSidedVariation_derivative_zero",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Variaciones locales necesarias bajo optimalidad; no suficiencia global de KKT."
+        }
+      ],
+      "semantic_gap": "La proposición requiere suficiencia intertemporal para carteras que pueden cambiar de región, con acotaciones terminales e integrabilidad. Los lemas de comparación de firma demostrados para un testigo estacionario no transportan automáticamente el resultado a todas las historias y regímenes. Falta derivar la comparación descontada y su límite para el árbol estocástico original."
     },
     {
       "paper_number": "A.32.2",
@@ -814,10 +860,23 @@
       "title": "Enlace de un prefijo con una continuación óptima",
       "paper_statement_sha256": "7cbdeb5295edb4a8d624711df2bb918436e318ab1f02567a78fbb21a6b020c46",
       "source_ledger_formalization_status": "not_run",
-      "review_state": "not_yet_semantically_reviewed",
+      "review_state": "targeted_semantic_comparison",
       "paper_proof_equivalent_in_lean": "not_established",
-      "related_lean_declarations": [],
-      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/BoundaryFullPrefixCandidate.lean",
+          "declaration": "boundaryRoot_spec",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Construye una raíz de residual de recursos para un prefijo bajo paquetes de signos; no prueba continuación óptima completa."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/StationaryEquilibriumCandidate.lean",
+          "declaration": "parent_competitiveEquilibrium",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Testigo estacionario sí satisface CompetitiveEquilibrium sujeto a reservesPre≤G; no implica unión con un prefijo perturbado arbitrario."
+        }
+      ],
+      "semantic_gap": "El manuscrito exige prefijo finito con todas las ecuaciones originales más continuación exacta uniformemente acotada y óptima para empresas/hogar/bancos/minoristas. Un prefijo de 33 filas o un testigo estacionario aislado no prueba la composición global ni la recuperación de expectativas/terminalidad. El carrier dual y la condición de colateral deben identificarse por una KKT fuente válida."
     },
     {
       "paper_number": "A.32.3",
