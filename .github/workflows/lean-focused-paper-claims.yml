@@ -241,6 +241,7 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBankFiniteSupportContinuation.weightedContinuation_monotone
           #print axioms Ventura26LiquidityAllocation.ProposedBankFiniteSupportContinuation.weightedContinuation_finite_horizon_bound
           #print axioms Ventura26LiquidityAllocation.ProposedBankSourceTransitionMonotonicity.sourceSurvivalContinuation_monotone
+          #print axioms Ventura26LiquidityAllocation.ProposedBankSourceTransitionMonotonicity.sourceSurvivalContinuation_monotone_of_consumption
           #print axioms Ventura26LiquidityAllocation.ProposedBankFiniteHorizonEnvelope.finite_horizon_le_value
           #print axioms Ventura26LiquidityAllocation.ProposedBankFiniteHorizonEnvelope.finite_horizon_eq_value
           LEAN
