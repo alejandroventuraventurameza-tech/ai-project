@@ -24,6 +24,8 @@ nor the source reduction witness, is proved by this module.
 namespace Ventura26LiquidityAllocation
 namespace ProposedLocalScalarEconomicC1Monotonicity
 
+open scoped Topology
+
 open ProposedLocalScalarEconomicSlice
 open ProposedLocalScalarEconomicConeRows
 
