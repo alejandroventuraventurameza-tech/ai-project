@@ -8,6 +8,7 @@ on:
       - 'code/v0m/cierre_interno_2026_10_17/finite_bridge.py'
       - 'code/v0m/certified_ift/verify_point_candidate.py'
       - 'code/v0m/certified_ift/audit_point_schur.py'
+      - 'code/v0m/certified_ift/audit_uniform_schur.py'
       - '.github/workflows/finite-source-point-export.yml'
   workflow_dispatch:
 
@@ -80,6 +81,12 @@ jobs:
           python3 code/v0m/certified_ift/check_quantitative_ift.py \
             --certificate code/v0m/cierre_interno_2026_10_17/binding_source_uniform_box_CANDIDATE.json \
             --output code/v0m/cierre_interno_2026_10_17/binding_uniform_ball_arithmetic_audit_CANDIDATE.json
+      - name: Conditional uniform Schur signs over product box
+        run: |
+          python3 code/v0m/certified_ift/audit_uniform_schur.py \
+            --ball code/v0m/cierre_interno_2026_10_17/binding_source_uniform_box_CANDIDATE.json \
+            --arithmetic-report code/v0m/cierre_interno_2026_10_17/binding_uniform_ball_arithmetic_audit_CANDIDATE.json \
+            --output code/v0m/cierre_interno_2026_10_17/binding_uniform_schur_audit_CANDIDATE.json
       - name: Upload point-only candidate matrices even when inverse gate fails
         if: always()
         uses: actions/upload-artifact@v4
@@ -90,4 +97,5 @@ jobs:
             code/v0m/cierre_interno_2026_10_17/binding_point_schur_audit_CANDIDATE.json
             code/v0m/cierre_interno_2026_10_17/binding_source_uniform_box_CANDIDATE.json
             code/v0m/cierre_interno_2026_10_17/binding_uniform_ball_arithmetic_audit_CANDIDATE.json
+            code/v0m/cierre_interno_2026_10_17/binding_uniform_schur_audit_CANDIDATE.json
           retention-days: 30
