@@ -323,9 +323,27 @@
           "declaration": "allocationLossIdentitySpec",
           "relationship": "unproved_source_specification",
           "note": "Especificación Lean de parte del resultado: Y, Yeff y pérdida≥0; no incluye derivada de reasignación."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperAllocationLossElasticityCandidate.lean",
+          "declaration": "allocation_loss_log_differential_algebra",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Identidad de coeficientes de dlogK y dlogG suponiendo las expresiones de participaciones y gamma = alpha/(1-beta); no demuestra la diferenciabilidad de los agregadores originales. Pendiente CI Lean."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperAllocationLossElasticityCandidate.lean",
+          "declaration": "output_share_gt_capital_share_iff_productivity",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Orden de participaciones equivale al orden yH/kH frente a yL/kL con masas y niveles positivos; equivale al MPK bajo elasticidad alfa común y positiva. Pendiente CI Lean."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperAllocationLossElasticityCandidate.lean",
+          "declaration": "loss_direction_negative_of_reallocation",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "El signo negativo de alfa(kappaH-omegaH)dlog(kH/kL) bajo alfa>0, omegaH>kappaH y reallocation positiva. Pendiente CI Lean."
         }
       ],
-      "semantic_gap": "El PaperInterface define allocationLossIdentitySpec pero no se encontró un teorema que pruebe simultáneamente óptimo laboral, referente eficiente, no negatividad de pérdida y derivada dL/dlog(kH/kL); no confundir con un cálculo numérico de pérdida.",
+      "semantic_gap": "La especificación fuente allocationLossIdentitySpec exige no negatividad de la pérdida condicional y fórmulas del referente eficiente bajo reparto óptimo del empleo, pero omite la derivada de reasignación y la equivalencia de MPK del paper. Un nuevo módulo descompone la identidad algebraica del diferencial, la equivalencia de shares y el signo de reallocation, pero NO demuestra concavidad/optimalidad ni derivadas de las funciones Cobb-Douglas originales. Hasta compilar y cotejar las hipótesis, ninguna formalización integral se acredita.",
       "numerical_context": [
         "paper/irf_mechanism_table.tex"
       ]
