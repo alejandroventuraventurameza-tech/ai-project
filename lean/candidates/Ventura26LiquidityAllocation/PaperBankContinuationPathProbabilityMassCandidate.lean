@@ -55,8 +55,9 @@ theorem source_payment_future_path_mass_one
     (∑ payments : Fin n → P.paymentSupport,
       continuationPaymentWeight P payments) = 1 := by
   have hprob : (∑ ω : P.paymentSupport, P.paymentProbability ω) = 1 := by
-    rw [Finset.sum_subtype P.paymentSupport (fun x => Iff.rfl)]
-    exact P.payment_probability_sum_one
+    have hsource := P.payment_probability_sum_one
+    rw [Finset.sum_subtype P.paymentSupport (fun x => Iff.rfl)] at hsource
+    exact hsource
   induction n with
   | zero =>
       simp [continuationPaymentWeight]
