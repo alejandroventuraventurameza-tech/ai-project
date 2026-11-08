@@ -19,11 +19,25 @@ la versión mal parentizada de 3.5) y
 3.5 no se declara probada: está refutada. El checkpoint
 `PaperInterface.lean` permanece intacto.
 
-Se ha incorporado además
-`PaperRepaymentExactCandidate.exact_repaymentSpec`,
-dirigido al resultado 3.1 completo (cobertura real, desigualdad
-de patrimonio y signo), pero su compilación y auditoría de
-axiomas **siguen pendientes** del run que lo contiene.
+El Lema 3.1 también quedó **DEMOSTRADO como especificación literal
+Lean**: `PaperRepaymentExactCandidate.exact_repaymentSpec`
+compiló y pasó `#print axioms` sin `sorryAx` en
+[42458034938](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42458034938),
+commit `acc4263a2c60c6ec3a90c3331aef9cb522e4427a`.
+Cubre por estado la cota de repago real, la desigualdad de
+patrimonio, su no negatividad y su positividad si hay capital o
+depósito positivo. No acredita suficiencia dinámica ni
+solvencia bancaria en presencia de retiradas.
+
+El Lema 4.3 se está contrastando por separado con
+`PaperAllocationLossElasticityCandidate.lean`, un candidato
+de **identidades algebraicas condicionales** de diferencial y MPK;
+el resultado completo `allocationLossIdentitySpec`, incluida
+la no negatividad de la pérdida a partir de optimalidad
+productiva, sigue fuera de ese alcance. Véase
+`docs/LEMA_4_3_MECANISMO_ASIGNATIVO_20261108.md`.
+Los resultados del candidato 4.3 no se promocionarán
+hasta que exista auditoría Lean verde del commit que los contiene.
 
 La matriz `paper/lean_crosswalk_57.json` registra
 la evidencia verde de estos cuatro objetos, pero
