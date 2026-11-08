@@ -49,6 +49,10 @@ jobs:
           assert d['formal_Lean_witness_established'] is False
           print('Point-only data validated. NO economic IFT witness asserted.')
           PY
+      - name: Independently check the exact rational point inverse defect
+        run: |
+          python3 code/v0m/certified_ift/verify_point_candidate.py \
+            code/v0m/cierre_interno_2026_10_17/binding_source_point_jacobian_CANDIDATE.json
       - name: Upload point-only candidate matrices
         uses: actions/upload-artifact@v4
         with:
