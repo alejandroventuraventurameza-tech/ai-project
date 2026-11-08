@@ -369,3 +369,110 @@ cota normada; enlazarlo mediante IFT a una funcion
 `solutionLog` realmente `ContDiffAt R 1`; comprobar el
 dual basal y los signos `b<0, a_R<0` sobre la misma
 calibracion, sin atribuir un certificado de B a S.
+
+## 11. Candidato cuantitativo 33x5 con pruebas exactas y uniformes
+
+**Alcance y veredicto:** se produjo un paquete NUMERICO reproducible
+de cajas intervalares para la representacion de fuente del bloque
+binding de 33 filas y 5 parametros. GitHub Actions confirma la
+**aritmetica exacta del criterio de Banach** y los signos del
+complemento de Schur en esa caja. AUN NO se ha probado en Lean que
+el evaluador Python reproduzca literalmente todas las definiciones
+de `EconomicModel.lean`, ni que la marginal basal sea exactamente
+cero, ni una cola dinamica de equilibrio. Los atributos de
+proveniencia `source_Lean_semantic_identity_proved`,
+`verified_economic_source_enclosures`,
+`exact_zero_center_proved` y
+`formal_Lean_IFT_witness_established` permanecen `false`.
+
+### Fuentes, pruebas y normalizacion
+
+- Codigo generador: `code/v0m/cierre_interno_2026_10_17/finite_bridge.py`
+  y modo opcional `VENTURA_EXPORT_POINT_MATRICES=1`,
+  `VENTURA_EXPORT_UNIFORM_BOX=1`. El calculo legado por defecto
+  no cambia.
+- Los residuos fuente requieren permutacion explicita de filas
+  `[0,3,1,4,2,5,6,...,16,17,19,18,20,21,...,32]`.
+  Las filas 4, 5 y 21 se recalculan por AD a partir de
+  las ecuaciones en niveles/holgura normalizada, evitando
+  reutilizar sus logaritmos de cobertura antiguos.
+- `LocalScalarSourceRow5DerivativeCandidate.lean` fue compilado
+  y auditado sin `sorryAx`:
+  [Lean 42444244484](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42444244484).
+  Demuestra el signo opuesto de la derivada de `1-u` y `log u`
+  cuando `u=1`, y la derivada directa `-1` de `-s`.
+  No demuestra identidad de las 33 filas Python/Lean.
+- `check_quantitative_ift.py` verifica operaciones matriciales
+  en `fractions.Fraction`, prohíbe floats binarios y falla
+  cuando no pasa la familia de 5 parametros aunque pase el
+  punto basal. `verify_point_candidate.py`,
+  `audit_point_schur.py` y `audit_uniform_schur.py` hacen
+  controles independientes de permutacion, norma e intervalos.
+  Pruebas sintéticas del verificador:
+  [GitHub 42444892636](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42444892636),
+  12 pruebas con `success`.
+- Auditoria no lineal uniformemente exitosa:
+  [GitHub 42445058589](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42445058589)
+  y auditoria uniforme del Schur:
+  [GitHub 42445157133](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42445157133),
+  ambas con `success`.
+  Artefacto archivado por Actions en esta ultima ejecucion,
+  `binding-33x33-source-point-CANDIDATE`, ID `13603750440`,
+  contiene las matrices, el informe aritmetico y el informe
+  uniforme de derivadas. Los archivos se generan en cada workflow;
+  no se afirman certificados persistentes de equilibrio.
+
+### Resultado aritmetico uniforme (valores redondeados)
+
+Usando la norma supremo en los 33 estados logaritmicos y las
+cinco direcciones de politica, el candidato calcula:
+
+```text
+radio_estado       rz = 1e-10
+radio_parametros   ry = 1e-15
+norma_defecto       q = 5.10242364342418e-7
+residuo_basal     eta = 7.30346700137707e-55
+cota_Dy_R_F        Ly = 26.8870134971716
+cota_residuo_fam      = 2.68870134971716e-14
+cota_distancia_raiz   = 2.6887027216072e-14
+```
+
+Las desigualdades `q<1` y
+`eta + Ly*ry + q*rz < rz` pasan como comparaciones
+**racionales exactas**, dado el JSON intervalar.
+El esquema de prueba es Banach sobre
+`T_y(z) = z - R*F(z,y)` en una bola completa.
+La funcion exacta `F` y su dominio C1, asi como la
+correspondencia con las definiciones Lean, son obligaciones
+de proveniencia separadas.
+
+### Derivadas de Schur sobre la caja (condicionales)
+
+Los intervalos del informe uniforme permiten afirmar,
+**para las expresiones Python encerradas**, que:
+
+```text
+b = d_s M                  in [-2.376891, -2.376594]
+a_R = d_vR M               in [-3.219489, -3.219066]
+d_vM M                     in [ 0.007104,  0.007951]
+d_vrho M                   in [-0.060659, -0.054793]
+d_vDelta M                 in [-1.477104, -1.476979]
+- a_R / b (pendiente rama) in [-1.354665, -1.354318]
+```
+
+Esto respalda la monotonia local condicional exigida por
+la Proposicion 4.2, sin proporcionar aun una raiz S/B exacta
+o dos equilibrios infinitos. El signo de `d_vM M` es
+positivo; no generalizar la conclusion de `v_R` a todos
+los instrumentos monetarios.
+
+**Compuertas pendientes estrictas:**
+(i) equivalencia fila por fila, incluyendo funciones
+auxiliares, parametros y unidades, entre Python y Lean;
+(ii) construir un punto de referencia exacto `F(z*,0)=0`
+y `M(z*,0)=0` (la proximidad a cero no equivale a igualdad);
+(iii) aportar en Lean las cotas uniformes para
+`localBindingResidualWithSlack` y derivar un
+testigo `LocalScalarImplicitReduction` real;
+(iv) validar la continuation economica, los KKT completos
+de agentes y la cola de horizonte infinito.
