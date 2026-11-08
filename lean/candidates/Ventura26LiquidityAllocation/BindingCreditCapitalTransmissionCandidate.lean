@@ -80,7 +80,7 @@ theorem rate_cut_raises_capacity_given_same_funds
   have hD0 : 0 < effectivePrice q gamma R0 := lt_trans hD1 hD
   unfold bindingCapital
   apply (div_lt_div_iff₀ hD0 hD1).2
-  exact (mul_lt_mul_left hX).2 hD
+  exact mul_lt_mul_of_pos_left hD hX
 
 /-- Exact necessary and sufficient threshold for declining capital:
 X1/D1 < X0/D0 precisely when X1*D0 < X0*D1 (for D0,D1 > 0).
@@ -102,7 +102,15 @@ theorem credit_rises_iff_capital_rate_threshold
           div_lt_div_iff₀ hR0 hR1
     _ ↔ gamma * (k0 * R1) < gamma * (k1 * R0) := by
           simp only [mul_assoc]
-    _ ↔ k0 * R1 < k1 * R0 := mul_lt_mul_left hgamma
+    _ ↔ k0 * R1 < k1 * R0 := by
+          constructor
+          · intro h
+            by_contra hc
+            have hle : k1 * R0 ≤ k0 * R1 := le_of_not_gt hc
+            have hm := mul_le_mul_of_nonneg_left hle hgamma.le
+            exact (not_lt_of_ge hm) h
+          · intro h
+            exact mul_lt_mul_of_pos_left h hgamma
 
 /-- Concrete, exact rational witness: R falls 2 -> 3/2 and internal funds
 fall 3/4 -> 3/5. Capital falls 1 -> 9/10 while credit rises 1/4 -> 3/10.
