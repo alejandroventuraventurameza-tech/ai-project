@@ -77,7 +77,7 @@ los números de PDF antiguos no deben usarse como localizadores.
 | 4.4 — asignación opuesta S/B | Existe una cuenta numérica reproducible y lemas de raíces escalares | No existe prueba Lean de los signos de capital, pérdida y soluciones de equilibrio |
 | 4.5 — persistencia bajo riesgo | Todavía no se cotejó con declaración de mismo alcance | Revisión prioritaria pendiente |
 
-Los demás seis resultados principales de los catorce históricos se
+Los otros siete resultados principales de los catorce históricos se
 mantienen `not_yet_semantically_reviewed` y no se interpretan
 como falsos ni como demostrados.
 
