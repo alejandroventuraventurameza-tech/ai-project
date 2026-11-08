@@ -1,4 +1,5 @@
 import Ventura26LiquidityAllocation.PaperBankConditionalExpectedContractionCandidate
+import Ventura26LiquidityAllocation.PaperBankZeroEquityAbsorptionCandidate
 
 /-!
 # EXACT SOURCE conditional OTC mass transition
@@ -401,6 +402,44 @@ theorem zero_equity_absorbing_along_supported_path
         ih (hnonneg n) (hupper n)
 
 #print axioms zero_equity_absorbing_along_supported_path
+
+
+/-!
+## Direct source boundary: no artificial scaled-upper-bound premise
+
+The source already proves `source_feasible_zero_equity_is_absorbing`
+using the literal `zeroBoundary` feasibility clause and detailed OTC
+portfolio homogeneity. The following theorem specializes that source
+result to the named full-retention policy. Its sole feasibility premise
+still has to be obtained for the candidate and economic allocation.
+-/
+
+/-- For the literal source full-retention candidate, zero individual
+bank equity remains zero at each supported successor, assuming the
+named candidate is SOURCE-feasible. No positive-equity ratio or
+additional multiplicative growth enclosure is used here. -/
+theorem source_full_retention_supported_zero_equity_absorbing
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (hfeasible : BankContinuationFeasibleAt P X t h
+      (X.bankEquity t h) (sourceFullRetentionCandidate P X t h))
+    (n : ℕ) (future : Fin n → S)
+    (payments : Fin n → P.paymentSupport)
+    (hpath : FuturePathSupported P.tree (currentState h) n future)
+    (hzero : (sourceFullRetentionCandidate P X t h).equity
+      n future payments = 0)
+    (s : S) (omega : P.paymentSupport)
+    (htrans : 0 < P.tree.transition
+      (currentState (continuationHistory h future)) s) :
+    (sourceFullRetentionCandidate P X t h).equity (n + 1)
+      (childFutureHistory future s)
+      (childPaymentHistory payments omega) = 0 := by
+  exact ProposedBankZeroEquityAbsorption.source_feasible_zero_equity_is_absorbing
+    P X t h (X.bankEquity t h)
+    (sourceFullRetentionCandidate P X t h) hfeasible
+    n future payments hpath hzero s omega htrans
+
+#print axioms source_full_retention_supported_zero_equity_absorbing
 
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
