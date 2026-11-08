@@ -130,6 +130,33 @@ No demuestra pérdida de bienestar, causalidad de
 instrumentos monetarios, persistencia ergódica,
 crecimiento sostenido ni equilibrio competitivo pleno.
 
+## 4.a. Dos pasos adicionales del puente fuente ya formalizados
+
+El módulo `PaperAllocationSourceAlgebraBridgeCandidate.lean`
+**compiló y pasó auditoría de axiomas sin `sorryAx`**
+en [GitHub Actions #42459648021](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42459648021),
+commit `aef180ba9595e426c32236a2941731837151fdcc`.
+
+- `productivity_weight_recovers_A` prueba para `A,d>0`
+  la identidad `(A^(1/d))^d=A`, necesaria para recuperar
+  productividad de los pesos de eficiencia.
+- `positive_aggregate_loss_log_formula` prueba, con
+  `K,L,ZA,G>0`, que la diferencia de logaritmos
+  `log(K^a L^b ZA^d)-log(L^b G^(1-b))`
+  es exactamente `a log K+d log ZA-(1-b)log G`.
+
+Estas son **pruebas algebraicas del objeto definido**, no
+una prueba de que la producción `Y` del modelo original
+se obtenga como `sum_i v_i A_i k_i^a ell_i^b`
+después de asignar laboralmente; ni que el agregado de
+productividades implícito en el `Spec` original sea
+el mismo objeto de la tecnología fuente.
+En la interfaz de fuente todavía faltan:
+`alpha H=alpha L`, `beta H=beta L`,
+identidades de potencias de cada producción,
+restricción agregada de `L`, FOC de trabajo y
+justificación de optimalidad por concavidad.
+
 ## 4 bis. Defecto semántico de la interfaz literal del checkpoint
 
 El predicado `allocationLossIdentitySpec` de `PaperInterface.lean`
@@ -167,7 +194,7 @@ la derivada. No se cambia silenciosamente el checkpoint.
 | Cota alcanzada en `x_i=t_i=1` | Sí | **Lean verificado** `normalized_benchmark_attained` |
 | No negatividad de la pérdida normalizada | Sí | **Lean verificado** `normalized_log_loss_nonneg` |
 | Recursos de la asignación propuesta | Sí | **Lean verificado** `efficient_candidate_clears_resources` |
-| Puente de potencias `A_i=z_i^d` y producción `Y` | Sí | **PENDIENTE** |
+| Puente de potencias `A_i=z_i^d` y producción `Y` | Sí | Potencia **verificada**; igualdad completa de producción **PENDIENTE** |
 | Derivación del reparto óptimo de trabajo y `G` | Sí, en paper | **PENDIENTE** |
 | Prueba literal del `allocationLossIdentitySpec` | Implícita analíticamente | **PENDIENTE** |
 | Derivada `dLoss/d log(kH/kL)` desde las funciones originales | Sí, en paper | **PENDIENTE**; álgebra de coeficientes auxiliar ya verificada |
