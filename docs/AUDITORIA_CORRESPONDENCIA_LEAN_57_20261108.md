@@ -1,5 +1,12 @@
 # Matriz de correspondencia entre los 57 resultados y Lean
 
+## Progreso adicional: puente de eficiencia conjunta K/L verificado parcialmente
+
+Se verificaron en el kernel **cuatro lemas nuevos** para la frontera productiva conjunta: `normalized_source_firm_output` y `normalized_joint_scale_identity` ([CI focalizada #42501665345](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42501665345), commit `c578e398`), más `normalized_two_type_source_output_le_efficient` y `source_resource_budget_normalizes` ([CI #42501725491](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42501725491), commit `f8e1125b`). Cada ejecución confirmó `#print axioms` sin `sorryAx`.
+
+**Total auxiliar 4.3 en este corte: 24 teoremas.** La cota íntegra del producto físico para cualquier asignación no negativa, la alcanzabilidad y el log-loss físico permanecen bajo auditoría (no se promocionan por su similitud con los cuatro lemas verificados). Ninguno de los 57 resultados del paper se acredita completo por estas pruebas auxiliares.
+
+
 ## Avance verificable adicional: nueve lemas de producción física y trabajo
 
 Los módulos `PaperAllocationSourceAlgebraBridgeCandidate.lean` y

@@ -1,7 +1,7 @@
 # Lema 4.3 — frontera eficiente conjunta de capital y trabajo desde la tecnología fuente
 
 **Fecha:** 8 de noviembre de 2026. **Rama de revisión:** `work/lean-ci-validation-otc-20261106`.  
-**Estado:** demostración analítica bajo las hipótesis indicadas; **candidatos Lean pendientes de CI** para las cuatro pruebas nuevas de normalización, cota y alcanzabilidad. Ninguna se considera kernel-checked antes del resultado del workflow focalizado correspondiente.
+**Estado verificado:** cuatro puentes auxiliares de normalización y cota AM–GM pasaron compilación y `#print axioms` sin `sorryAx`: [CI #42501665345](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42501665345), commit `c578e398`, y [CI #42501725491](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42501725491), commit `f8e1125b`. Los teoremas originales de frontera conjunta y log-loss siguen **PENDIENTES de CI**.
 
 ## 1. Problema exactamente demostrado
 
@@ -112,7 +112,7 @@ Las nuevas declaraciones candidatas se dividen en tres módulos:
 - `PaperJointEfficiencyBoundCandidate.lean`: `normalized_two_type_source_output_le_efficient` y `source_resource_budget_normalizes`.
 - `PaperJointEfficiencyPhysicalCandidate.lean`: `original_physical_two_type_joint_output_bound` y `original_physical_joint_candidate_attains_frontier`.
 
-**Nota de estado:** hasta que CI devuelva `success` para los módulos exactos y audite `#print axioms` sin `sorryAx`, las seis nuevas declaraciones siguen siendo **candidatas**, aunque la demostración escrita sea válida matemáticamente.
+**Nota de estado:** los cuatro objetivos auxiliares de los dos primeros módulos están verificados en CI y auditados sin `sorryAx`. Las dos declaraciones físicas end-to-end en `PaperJointEfficiencyPhysicalCandidate.lean` permanecen pendientes de CI verde del commit corregido; la demostración analítica de esta nota no constituye una prueba Lean hasta entonces.
 
 ## 6. Qué faltará incluso después de CI verde
 

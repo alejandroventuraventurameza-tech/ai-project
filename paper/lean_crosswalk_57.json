@@ -5,8 +5,8 @@
   "checked_branch": "work/lean-ci-validation-otc-20261106",
   "reviewed_date": "2026-11-08",
   "claim_count": 57,
-  "status_policy": "For 4.3, twenty scoped mathematical lemmas are Lean kernel-verified: 3 differential/share/sign (#42458449121), 4 normalized global efficiency (#42459394970), 2 positive-power/log source algebra (#42459648021), 9 micro-output/normalized-optimal-labor bridges (#42500091118), and 2 arbitrary-physical-labor results (#42500721984). No full economic statement, joint K/L source efficiency, loss derivative, or dynamic equilibrium is thereby proved; all 57 numbered paper claims conservatively remain not_established, with 24/57 directed comparisons.",
-  "source_module_check": "24/57 targeted semantic comparisons (14 main plus 10 annex); remaining 33 annex results not individually reviewed. Physical-output and global labor optimum for arbitrary nonnegative allocations with fixed capital are kernel checked in #42500721984. Original joint K/L Yeff efficiency and loss derivative are not.",
+  "status_policy": "For 4.3, twenty-four scoped mathematical lemmas are Lean kernel-verified: 20 earlier helpers plus 2 source joint-power/scale bridges (CI #42501665345) and 2 joint-AMGM/budget bridges (CI #42501725491). Physical arbitrary-allocation joint frontier and exact log loss are candidates pending green CI; full loss derivative/dynamic equilibrium not proved. All 57 numbered paper claims remain not_established; 24/57 targeted semantic comparisons.",
+  "source_module_check": "24/57 targeted semantic comparisons (14 main plus 10 annex), 33 still not individually reviewed. Four new source joint efficiency auxiliary claims are pinned to green exact SHA; arbitrary physical end-to-end joint efficiency proof remains CI pending.",
   "scope": "57 numbered claims including historical appendices; current PDF page numbers in the original ledger are stale after compact layout.",
   "entries": [
     {
@@ -506,9 +506,45 @@
           "lean_ci_run_id": 42500721984,
           "lean_ci_commit": "548911a4b763f8d75ad635338d27752253d71231",
           "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperJointEfficiencySourceCandidate.lean",
+          "declaration": "normalized_source_firm_output",
+          "relationship": "joint_source_kernel_verified",
+          "note": "Identidad física-individual tras normalizar conjuntamente capital y trabajo con exponentes comunes, admite factores normalizados nulos. CI #42501665345 verde con #print axioms sin sorryAx. Aún no demuestra sola el enunciado económico 4.3 completo.",
+          "lean_ci_run_id": 42501665345,
+          "lean_ci_commit": "c578e39845709b8f08451a807b3ea45d129c911c",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperJointEfficiencySourceCandidate.lean",
+          "declaration": "normalized_joint_scale_identity",
+          "relationship": "joint_source_kernel_verified",
+          "note": "Igualdad de escala exacta que recupera K^a L^b Z^d desde cocientes positivos. CI #42501665345 verde con #print axioms sin sorryAx. Aún no demuestra sola el enunciado económico 4.3 completo.",
+          "lean_ci_run_id": 42501665345,
+          "lean_ci_commit": "c578e39845709b8f08451a807b3ea45d129c911c",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperJointEfficiencyBoundCandidate.lean",
+          "declaration": "normalized_two_type_source_output_le_efficient",
+          "relationship": "joint_bound_kernel_verified",
+          "note": "Cota global combinando el puente de potencia física y AM-GM bajo presupuestos normalizados de ambos factores. CI #42501725491 verde con #print axioms sin sorryAx. Aún no demuestra sola el enunciado económico 4.3 completo.",
+          "lean_ci_run_id": 42501725491,
+          "lean_ci_commit": "f8e1125b657ce8ecd551233dea18a66810309614",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperJointEfficiencyBoundCandidate.lean",
+          "declaration": "source_resource_budget_normalizes",
+          "relationship": "joint_bound_kernel_verified",
+          "note": "Transporta cualquier presupuesto agregado físico a su restricción ponderada de normalización. CI #42501725491 verde con #print axioms sin sorryAx. Aún no demuestra sola el enunciado económico 4.3 completo.",
+          "lean_ci_run_id": 42501725491,
+          "lean_ci_commit": "f8e1125b657ce8ecd551233dea18a66810309614",
+          "lean_axiom_audit": "passed_no_sorryAx"
         }
       ],
-      "semantic_gap": "Existen 20 lemas auxiliares Lean verificados relacionados con 4.3: tres de diferencial/participaciones, cuatro de AM-GM normalizado, dos de potencias/logaritmos, nueve de producción física y reparto laboral normalizado, y dos que demostraron globalmente el óptimo de trabajo para cualquier asignación física factible bajo capital fijo (#42500721984). Aún no están kernel-demostrados el puente del referente Yeff eficiente conjuntamente en K y L desde la fuente, la derivada dLoss desde G y K diferenciables, ni la especificación literal original (que no declara elasticidades comunes ni la derivada). Ninguna prueba acredita equilibrio dinámico, shocks causales o crecimiento persistente.",
+      "semantic_gap": "24 lemas auxiliares Lean kernel-checked se vinculan con 4.3: 20 anteriores y cuatro nuevos sobre potencia/escala del modelo fuente y cota AM–GM bajo presupuestos normalizados de K/L y transporte algebraico de recursos (CI #42501665345 y #42501725491). El resultado end-to-end para toda asignación física no negativa de ambos factores aún requiere compilación exitosa en el nuevo SHA; también queda pendiente el log-loss desde la fuente y diferenciación total de K/G. La interfaz antigua no incluye exponentes H=L ni derivada, y no hay prueba de equilibrio dinámico.",
       "numerical_context": [
         "paper/irf_mechanism_table.tex"
       ]

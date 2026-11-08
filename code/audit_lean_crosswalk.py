@@ -39,6 +39,8 @@ ALLOWED_RELATIONS = {
     "source_algebra_kernel_verified",
     "source_labor_kernel_verified",
     "original_labor_kernel_verified",
+    "joint_source_kernel_verified",
+    "joint_bound_kernel_verified",
 }
 GREEN_SOURCE_FINANCIAL_RUN = 42457259796
 GREEN_SOURCE_FINANCIAL_SHA = "c006e00c437243c3f6f44ec3c102df4286c545e0"
@@ -54,6 +56,18 @@ GREEN_SOURCE_LABOR_RUN = 42500091118
 GREEN_SOURCE_LABOR_SHA = "e9ec2024da991768115ecb70e39acdfb647f8b9a"
 GREEN_ORIGINAL_LABOR_RUN = 42500721984
 GREEN_ORIGINAL_LABOR_SHA = "548911a4b763f8d75ad635338d27752253d71231"
+GREEN_JOINT_SOURCE_RUN = 42501665345
+GREEN_JOINT_SOURCE_SHA = "c578e39845709b8f08451a807b3ea45d129c911c"
+GREEN_JOINT_BOUND_RUN = 42501725491
+GREEN_JOINT_BOUND_SHA = "f8e1125b657ce8ecd551233dea18a66810309614"
+EXPECTED_VERIFIED_JOINT_SOURCE = {
+    "normalized_source_firm_output",
+    "normalized_joint_scale_identity",
+}
+EXPECTED_VERIFIED_JOINT_BOUND = {
+    "normalized_two_type_source_output_le_efficient",
+    "source_resource_budget_normalizes",
+}
 EXPECTED_VERIFIED_ORIGINAL_LABOR = {
     "original_two_type_labor_global_bound",
     "original_labor_candidate_attains_global_bound",
@@ -128,6 +142,8 @@ def main() -> None:
     green_source_bridge = set()
     green_source_labor = set()
     green_original_labor = set()
+    green_joint_source = set()
+    green_joint_bound = set()
     for row in data["entries"]:
         label = row["label"]
         old = original[label]
@@ -193,6 +209,30 @@ def main() -> None:
                         and item.get("lean_axiom_audit") == "passed_no_sorryAx",
                         "Original labor theorem not pinned to the exact green run")
                 green_original_labor.add(item["declaration"])
+            if rel == "joint_source_kernel_verified":
+                require(label == "lem:allocation_loss_identity",
+                        "Source joint efficiency bridge attached to wrong paper claim")
+                require(item["declaration"] in EXPECTED_VERIFIED_JOINT_SOURCE,
+                        "Unknown joint source identity theorem")
+                require(item["declaration"] not in green_joint_source,
+                        "Duplicate joint source identity theorem")
+                require(item.get("lean_ci_run_id") == GREEN_JOINT_SOURCE_RUN
+                        and item.get("lean_ci_commit") == GREEN_JOINT_SOURCE_SHA
+                        and item.get("lean_axiom_audit") == "passed_no_sorryAx",
+                        "Joint source theorem not pinned to green compiler run")
+                green_joint_source.add(item["declaration"])
+            if rel == "joint_bound_kernel_verified":
+                require(label == "lem:allocation_loss_identity",
+                        "Joint source efficiency bound attached to wrong paper claim")
+                require(item["declaration"] in EXPECTED_VERIFIED_JOINT_BOUND,
+                        "Unknown joint source bound theorem")
+                require(item["declaration"] not in green_joint_bound,
+                        "Duplicate joint source bound theorem")
+                require(item.get("lean_ci_run_id") == GREEN_JOINT_BOUND_RUN
+                        and item.get("lean_ci_commit") == GREEN_JOINT_BOUND_SHA
+                        and item.get("lean_axiom_audit") == "passed_no_sorryAx",
+                        "Joint bound theorem not pinned to green compiler run")
+                green_joint_bound.add(item["declaration"])
             if rel == "efficiency_support_kernel_verified":
                 require(label == "lem:allocation_loss_identity",
                         "Efficiency support theorem mapped to wrong source claim")
@@ -299,6 +339,10 @@ def main() -> None:
             f"Physical production/conditional labor proof set incomplete: {green_source_labor}")
     require(green_original_labor == EXPECTED_VERIFIED_ORIGINAL_LABOR,
             f"Arbitrary original labor proof set incomplete: {green_original_labor}")
+    require(green_joint_source == EXPECTED_VERIFIED_JOINT_SOURCE,
+            f"Joint source power/scale proofs incomplete: {green_joint_source}")
+    require(green_joint_bound == EXPECTED_VERIFIED_JOINT_BOUND,
+            f"Joint source AM-GM/budget proofs incomplete: {green_joint_bound}")
     require(green_exact == {
         "lem:repayment": "exact_repaymentSpec",
         "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
@@ -347,6 +391,10 @@ def main() -> None:
         "verified_source_labor_lemmas": len(green_source_labor),
         "verified_original_labor_run": GREEN_ORIGINAL_LABOR_RUN,
         "verified_original_labor_lemmas": len(green_original_labor),
+        "verified_joint_source_run": GREEN_JOINT_SOURCE_RUN,
+        "verified_joint_source_lemmas": len(green_joint_source),
+        "verified_joint_bound_run": GREEN_JOINT_BOUND_RUN,
+        "verified_joint_bound_lemmas": len(green_joint_bound),
         "unproved_source_specifications": source_specifications,
         "complete_paper_theorems_proved_in_lean_by_this_audit": 0,
         "full_equilibrium_confirmed": False,
