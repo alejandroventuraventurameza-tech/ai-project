@@ -62,8 +62,9 @@ theorem exact_repaymentSpec : repaymentSpec := by
           have hsub :=
             sub_le_sub_left hrealCover
               ((1 - depreciation) * qNext * capitalNext)
-          exact add_le_add_right (add_le_add_left hsub operatingProfit)
-            (depositRate * deposit / inflationNext)
+          convert
+            (add_le_add_right (add_le_add_left hsub operatingProfit)
+              (depositRate * deposit / inflationNext)) using 1 <;> ring
       _ = operatingProfit + (1 - depreciation) * qNext * capitalNext -
             loanRate * loan / inflationNext +
             depositRate * deposit / inflationNext := by ring
