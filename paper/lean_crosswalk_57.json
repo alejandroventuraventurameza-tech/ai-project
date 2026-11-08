@@ -5,7 +5,7 @@
   "checked_branch": "work/lean-ci-validation-otc-20261106",
   "reviewed_date": "2026-11-08",
   "claim_count": 57,
-  "status_policy": "A related Lean module or source definition is not proof equivalence. The pinned Lemma 3.5 literal interface is mathematically false due to precedence; the separate economically corrected conditional and its counterexample remain pending Lean CI. No incorrect exact-interface promotion.",
+  "status_policy": "Literal paper financial spec 3.1, 3.2, 3.3 proof candidates are CI-pending; the original 3.5 funding Spec is false and the corrected conditional proof is CI-pending. No result is promoted absent kernel and exact scope checking.",
   "source_module_check": "19 targeted semantic comparisons, including a falsified original funding-supergradient interface and its corrected candidate under RD>0, RD<RL; full dynamic equilibrium not certified.",
   "scope": "57 numbered claims including historical appendices; current PDF page numbers in the original ledger are stale after compact layout.",
   "entries": [
@@ -29,9 +29,15 @@
           "declaration": "robustCollateral_capital_mono_of_nonneg_prices",
           "relationship": "auxiliary_or_conditional_only",
           "note": "Preserva garantía por hijo ante un incremento de capital, no prueba riqueza futura."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperRepaymentExactCandidate.lean",
+          "declaration": "exact_repaymentSpec",
+          "relationship": "exact_interface_claim_candidate_ci_pending",
+          "note": "Prueba candidata literal de repaymentSpec: cobertura real, patrimonio mínimo no negativo y positividad bajo capital o depósito positivos; todavía requiere compilación del kernel y auditoría de axiomas."
         }
       ],
-      "semantic_gap": "RobustCollateral impone una desigualdad por hijo y los lemas auxiliares preservan cobertura, pero no se ha localizado una prueba de todas las conclusiones de patrimonio no negativo en repaymentSpec. Los dividendos/beneficios, depósitos, tasa bruta y soporte deben cotejarse."
+      "semantic_gap": "El candidato PaperRepaymentExactCandidate demuestra exactamente el objeto fuente repaymentSpec, incluidas cobertura robusta normalizada, cota inferior del patrimonio y positividad estricta bajo tenencias positivas; aun pendiente de compilar y auditar axiomas. No implica solvencia bancaria, óptimo empresarial ni inexistencia de incumplimiento fuera de las hipótesis."
     },
     {
       "paper_number": "3.2",
