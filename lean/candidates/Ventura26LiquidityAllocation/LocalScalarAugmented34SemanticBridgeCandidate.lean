@@ -6,7 +6,8 @@ import Ventura26LiquidityAllocation.LocalScalarAugmented34FullBothCandidate
 A validated numerical interval box may yield a zero of a surrogate G
 different from Lean's literal source residual H. The correct bridge is
 pointwise equality of ZERO SETS for all 33 economic rows and the extra
-firm-L funding dual, over the relevant positive parameter domain.
+firm-L funding dual, ONLY inside an explicit domain predicate. It
+must include the certified Banach root and the positive source box.
 
 This module DOES NOT assume or prove that the current Python G obeys
 this contract. The contract remains an explicit, unfilled hypothesis.
@@ -30,8 +31,9 @@ row; the numerical source mapping must justify EVERY component. -/
 def SourceAugmented34ZeroSetAgreement
     (P : Primitives S) (I : InheritedState) (Z0 : LocalPrefixCoordinates)
     (dateOne recurrent : S) (tail : LocalPrefixContinuationRule)
+    (Domain : (Fin 33 → ℝ) → ℝ → Prop)
     (G : (Fin 33 → ℝ) → ℝ → (Fin 33 → ℝ) × ℝ) : Prop :=
-  ∀ z h,
+  ∀ z h, Domain z h →
     (∀ row : Fin 33,
       (G z h).1 row = 0 ↔
         (augmentedBoundaryZeroResidual
@@ -47,14 +49,16 @@ formal Lean witness. -/
 theorem source_augmented_zero_of_surrogate_zero
     (P : Primitives S) (I : InheritedState) (Z0 : LocalPrefixCoordinates)
     (dateOne recurrent : S) (tail : LocalPrefixContinuationRule)
+    (Domain : (Fin 33 → ℝ) → ℝ → Prop)
     (G : (Fin 33 → ℝ) → ℝ → (Fin 33 → ℝ) × ℝ)
     (hmatch : SourceAugmented34ZeroSetAgreement
-      P I Z0 dateOne recurrent tail G)
+      P I Z0 dateOne recurrent tail Domain G)
     (z : Fin 33 → ℝ) (h : ℝ)
+    (hDomain : Domain z h)
     (hG : G z h = (0, 0)) :
     augmentedBoundaryZeroResidual P I Z0
       dateOne recurrent tail z h = (0, 0) := by
-  obtain ⟨hrows, hdual⟩ := hmatch z h
+  obtain ⟨hrows, hdual⟩ := hmatch z h hDomain
   apply Prod.ext
   · funext row
     have hzero : (G z h).1 row = 0 := by
@@ -71,10 +75,12 @@ slack prefix equations. Both sets hold AT THE SAME POINT. -/
 theorem original_S_B_prefix_from_surrogate_zero
     (P : Primitives S) (I : InheritedState) (Z0 : LocalPrefixCoordinates)
     (dateOne recurrent : S) (tail : LocalPrefixContinuationRule)
+    (Domain : (Fin 33 → ℝ) → ℝ → Prop)
     (G : (Fin 33 → ℝ) → ℝ → (Fin 33 → ℝ) × ℝ)
     (hmatch : SourceAugmented34ZeroSetAgreement
-      P I Z0 dateOne recurrent tail G)
+      P I Z0 dateOne recurrent tail Domain G)
     (z : Fin 33 → ℝ) (h : ℝ)
+    (hDomain : Domain z h)
     (hG : G z h = (0, 0))
     (hbase : LocalPrefixCoordinatesPositive Z0)
     (hpledge : 0 < P.pledgeability FirmType.L)
@@ -89,7 +95,7 @@ theorem original_S_B_prefix_from_surrogate_zero
       localReducedPrefixResidual LocalPrefixBranch.slack Pv I Z
         dateOne recurrent tail (localPrefixEquationOfIndex row) = 0) := by
   have hsource := source_augmented_zero_of_surrogate_zero
-    P I Z0 dateOne recurrent tail G hmatch z h hG
+    P I Z0 dateOne recurrent tail Domain G hmatch z h hDomain hG
   exact augmented_zero_implies_all_original_S_and_B_prefix_rows
     P I Z0 dateOne recurrent tail z h hbase hpledge hdepr hsource
 
