@@ -5,7 +5,7 @@
   "checked_branch": "work/lean-ci-validation-otc-20261106",
   "reviewed_date": "2026-11-08",
   "claim_count": 57,
-  "status_policy": "Source-financial literal 3.1 3.2 3.3 verified, 3.5 malformed interface refuted and corrected; 4.3 three scoped auxiliary identities kernel verified in focused CI 42458449121. None of 57 numbered paper results promoted to full-semantic equivalence without source-to-paper mapping and proof of all clauses; equilibrium and growth unproven.",
+  "status_policy": "Main source financial specs 3.1/3.2/3.3 verified; malformed 3.5 refuted, corrected version verified. Three scoped allocation-loss 4.3 algebra lemmas verified, four global AM–GM and budget-clearance statements pending Lean CI. No full original source 4.3 proved; 24/57 reviewed; source reduced-equilibrium and full dynamic claims unproven.",
   "source_module_check": "24/57 targeted semantic comparisons (14 main plus 10 annex); remaining 33 annex results not individually reviewed. New global efficiency AM-GM candidate is kept separate until Lean CI confirms it; full-equilibrium and source-rpow bridge are unproved.",
   "scope": "57 numbered claims including historical appendices; current PDF page numbers in the original ledger are stale after compact layout.",
   "entries": [
@@ -353,9 +353,33 @@
           "lean_ci_run_id": 42458449121,
           "lean_ci_commit": "1e797f886dea03a6fdea135338e6408a3e8ab91b",
           "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperAllocationEfficiencySupportCandidate.lean",
+          "declaration": "normalized_two_type_output_le_benchmark",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Desigualdad global AM–GM en dos tipos, con presupuestos normalizados de capital y trabajo; no establece aún las identidades de potencias de la fuente. Pendiente de auditoría del kernel en la corrida posterior al commit c79e8402."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperAllocationEfficiencySupportCandidate.lean",
+          "declaration": "normalized_benchmark_attained",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "La asignación normalizada de unidades de cada factor alcanza la cota, no solo satisface una condición marginal. Pendiente de auditoría del kernel en la corrida posterior al commit c79e8402."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperAllocationEfficiencySupportCandidate.lean",
+          "declaration": "normalized_log_loss_nonneg",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "No negatividad del logaritmo de la pérdida en producción normalizada positiva, usando el orden y la monotonicidad de log. Pendiente de auditoría del kernel en la corrida posterior al commit c79e8402."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperAllocationEfficiencySupportCandidate.lean",
+          "declaration": "efficient_candidate_clears_resources",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "La asignación proporcional a pesos z_i respeta capital y trabajo agregados cuando Z≠0; no verifica de modo aislado igualdad de MPK. Pendiente de auditoría del kernel en la corrida posterior al commit c79e8402."
         }
       ],
-      "semantic_gap": "Lean CI #42458449121 verifica sin sorryAx las tres proposiciones auxiliares: cálculo algebraico del diferencial dado log-derivadas de K y G, equivalencia entre participaciones normalizadas y ratios y/k, y signo bajo reasignación. Sigue pendiente el Lema 4.3 integral: derivar condiciones de trabajo óptimo, la identidad G y el referente eficiente desde tecnología fuente y probar la desigualdad loss≥0 bajo concavidad, además de los puentes de funciones Cobb-Douglas. El PaperInterface.allocationLossIdentitySpec tampoco incluye la derivada del paper.",
+      "semantic_gap": "El Lema 4.3 completo no se sigue de la identidad de elasticidades. Los tres lemas previos de diferencial, shares-MPK y signo ya están formalmente verificados. El nuevo paquete global AM–GM ofrece cuatro candidatos (cota productiva normalizada global, attainment, log-loss≥0 y cierre de recursos), pero siguen sin quedar demostrados dentro de Lean el cambio de potencias desde las tecnologías A_i k_i^a ell_i^b, el reparto óptimo laboral que produce G, y la igualdad explícita con el referente fuente. Hasta CI verde, estas cuatro declaraciones continúan como candidatas.",
       "numerical_context": [
         "paper/irf_mechanism_table.tex"
       ]
