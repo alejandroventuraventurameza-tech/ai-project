@@ -37,6 +37,8 @@ ALLOWED_RELATIONS = {
 }
 GREEN_SOURCE_FINANCIAL_RUN = 42457259796
 GREEN_SOURCE_FINANCIAL_SHA = "c006e00c437243c3f6f44ec3c102df4286c545e0"
+GREEN_REPAYMENT_RUN = 42458034938
+GREEN_REPAYMENT_SHA = "acc4263a2c60c6ec3a90c3331aef9cb522e4427a"
 EXPECTED_EXACT_CANDIDATES = {
     "lem:repayment": "exact_repaymentSpec",
     "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
@@ -143,9 +145,14 @@ def main() -> None:
                 "corrected_economic_claim_kernel_verified",
                 "counterexample_malformed_interface_kernel_verified",
             ):
-                require(item.get("lean_ci_run_id") == GREEN_SOURCE_FINANCIAL_RUN,
+                expected_run, expected_sha = (
+                    (GREEN_REPAYMENT_RUN, GREEN_REPAYMENT_SHA)
+                    if label == "lem:repayment"
+                    else (GREEN_SOURCE_FINANCIAL_RUN, GREEN_SOURCE_FINANCIAL_SHA)
+                )
+                require(item.get("lean_ci_run_id") == expected_run,
                         f"{label}: unrecognized green Lean run")
-                require(item.get("lean_ci_commit") == GREEN_SOURCE_FINANCIAL_SHA,
+                require(item.get("lean_ci_commit") == expected_sha,
                         f"{label}: pinned theorem commit mismatch")
                 require(item.get("lean_axiom_audit") == "passed_no_sorryAx",
                         f"{label}: source proof not shown axiom-audited")
@@ -173,6 +180,7 @@ def main() -> None:
                     f"{label}: missing numerical evidence {target}")
     require(refutations == 1, "Expected exactly one literal specification refutation.")
     require(green_exact == {
+        "lem:repayment": "exact_repaymentSpec",
         "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
         "prop:v0m_original_6_3": "exact_financingCapacityComparativeSpec",
     }, f"Wrong kernel-verified exact source claims: {green_exact}")
@@ -208,6 +216,7 @@ def main() -> None:
         "corrected_economic_financial_theorems_kernel_verified": len(green_corrected),
         "malformed_source_specifications_kernel_refuted": len(green_refutations),
         "verified_financial_run": GREEN_SOURCE_FINANCIAL_RUN,
+        "verified_repayment_run": GREEN_REPAYMENT_RUN,
         "unproved_source_specifications": source_specifications,
         "complete_paper_theorems_proved_in_lean_by_this_audit": 0,
         "full_equilibrium_confirmed": False,
