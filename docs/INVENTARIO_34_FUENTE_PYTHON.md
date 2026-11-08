@@ -24,8 +24,8 @@ parametros concretos de Python.
 | 9 | Oferta de trabajo, t=0 | Equivalencia log/niveles; `sigmaW=phi=1` | Lema Lean verificado; instancia y dominio pendientes |
 | 10 | Euler de depositos del hogar, t=0 | Equivalencia log/niveles; `sigmaW=1` | Lema Lean verificado; instancia y dominio pendientes |
 | 11 | Phillips Rotemberg, t=0 | Descuento del hogar, `phiP`, inflacion y output | Pendiente |
-| 12 | Regla de tasa de reservas, t=0 | Regla fuente, objetivo exp y log-residuo de `auxiliary()` | Objetivo y formula exp verificados; ratio realizado/objetivo candidato; datos pendientes |
-| 13 | Regla de cantidad de reservas, t=0 | Regla fuente, objetivo exp y log-residuo de `auxiliary()` | Objetivo y formula exp verificados; ratio realizado/objetivo candidato; datos pendientes |
+| 12 | Regla de tasa de reservas, t=0 | Regla fuente, objetivo exp y log-residuo de `auxiliary()` | Residuo logaritmico completo fuente verificado bajo restricciones explicitas; identificacion de datos concretos pendiente |
+| 13 | Regla de cantidad de reservas, t=0 | Regla fuente, objetivo exp y log-residuo de `auxiliary()` | Residuo logaritmico completo fuente verificado bajo restricciones explicitas; identificacion de datos concretos pendiente |
 | 14 | Precio del prestamo, t=0 | Formula OTC y media de pendientes | Pendiente |
 | 15 | Precio del deposito, t=0 | Formula OTC, cantidad y shocks de pagos | Pendiente |
 | 16 | Balance bancario, t=0 | Ratio reservas/depositos, faces e inflacion | Pendiente |
@@ -33,15 +33,15 @@ parametros concretos de Python.
 | 18 | Presupuesto empresarial L, t=1 | Mismo cotejo de fuente, datos fecha 1 | Pendiente |
 | 19 | Euler de capital H, t=1 | Producto marginal y continuation t=2 | Pendiente |
 | 20 | Euler de capital L, t=1 | Producto marginal y continuation t=2 | Pendiente |
-| 21 | Garantia comun de capital t=1 | Equivalencia logaritmo/nivel del compromiso a t=2 | Lema fuente candidato bajo colateral y denominador positivos |
+| 21 | Garantia comun de capital t=1 | Equivalencia logaritmo/nivel del compromiso a t=2 | Equivalencia de ceros fuente verificada bajo positividad; mapeo Python concreto y terminalidad pendientes |
 | 22 | Renovacion nominal bancaria, t=1 | Lema generico log/niveles para fuente `d1` | Lemas fuente y compatibilidad algebraica verificados; datos `d1` pendientes |
 | 23 | Oferta de capital, t=1 | Datos t=1 y continuation t=2 | Pendiente |
 | 24 | Recursos, t=1 | Datos t=1 y continuation t=2 | Pendiente |
 | 25 | Oferta de trabajo, t=1 | Lema generico log/niveles para fuente `d1` | Lema Lean verificado; instancia `d1` pendiente |
 | 26 | Euler del hogar, t=1 | Lema generico log/niveles para fuente `d1` | Lema Lean verificado; instancia `d1` pendiente |
 | 27 | Phillips, t=1 | Datos t=1, indexacion y continuation | Pendiente |
-| 28 | Regla tasa reservas, t=1 | Regla generica reusada en datos de t=1 | Objetivo y formula exp verificados; ratio candidato; calendario pendiente |
-| 29 | Regla cantidad reservas, t=1 | Regla generica reusada en datos de t=1 | Objetivo y formula exp verificados; ratio candidato; calendario pendiente |
+| 28 | Regla tasa reservas, t=1 | Regla generica reusada en datos de t=1 | Residuo completo fuente verificado bajo restricciones; calendario y datos concretos pendientes |
+| 29 | Regla cantidad reservas, t=1 | Regla generica reusada en datos de t=1 | Residuo completo fuente verificado bajo restricciones; calendario y datos concretos pendientes |
 | 30 | Precio prestamos, t=1 | OTC y estado heredado t=1 | Pendiente |
 | 31 | Precio depositos, t=1 | OTC y estado heredado t=1 | Pendiente |
 | 32 | Balance bancario, t=1 | Ratio reservas/depositos y faces t=1 | Pendiente |
@@ -154,9 +154,10 @@ NO su instancia numerica.
 verifico los objetivos exponenciales de la fuente monetaria,
 NO su identidad con el codigo Python.
 Los puentes de residual logaritmico y objetivos de
-`auxiliary()` se mantienen CANDIDATOS hasta aprobar
-sus propias campañas Lean; no se alteraron las 34
-banderas de procedencia numerica.
+`auxiliary()` se verificaron bajo sus premisas matematicas en
+[CI 42452978755](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42452978755).
+Esto no demuestra la igualdad de todos los parametros, estados ni derivadas
+entre Python y la fuente Lean. No se alteraron las banderas de procedencia.
 
 **Regla de actualizacion:** un candidato solo pasa a
 "verificado" si el run especifico del commit lo compila y
@@ -213,13 +214,13 @@ incluido el control de axiomas sin `sorryAx`. Los objetivos exponenciales fuente
 formulas `auxiliary()` en las hipotesis formales probadas por
 `LocalScalarPythonMonetaryExpTargetsCandidate.lean` en
 [CI 42451786387](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42451786387),
-sin `sorryAx`. El modulo propuesto
-`LocalScalarPythonMonetaryFullRowsCandidate.lean`
-une adicionalmente los residuos completos `log(realized/target)`
-a las filas monetarias fuente 12/13 y 28/29; su compilacion
-propia es PENDIENTE. Sigue abierta la identificacion concreta
-de las columnas del vector, los anuncios y el calendario
-entre Python y Lean en ambas fechas.
+sin `sorryAx`. El modulo `LocalScalarPythonMonetaryFullRowsCandidate.lean` y el
+modulo `LocalScalarPythonMonetaryFourPrefixRowsCandidate.lean`
+compilaron en [CI 42452978755](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42452978755),
+con auditoria de axiomas sin `sorryAx`. El primero prueba igualdad de
+residuos logaritmicos completos, y el segundo aplica el resultado a las
+cuatro filas fuente 12/13 y 28/29. Sigue abierta la identificacion concreta
+de columnas, parametros, anuncios y calendario entre Python y Lean.
 
 **Diferencia conceptual:** `e_R` altera la regla de remuneracion
 de reservas y `e_M` su regla de cantidad. El experimento con
@@ -247,3 +248,34 @@ pasar CI Lean antes de ser promovido a demostrado.
 Tampoco la equivalencia de la fila 21 acredita una
 transicion `t=2` competitiva con cola infinita:
 el calendario y las continuaciones siguen abiertos.
+
+
+## Auditoria incrementada de las filas reales del operador aumentado (2026-11-08)
+
+- **Hecho verificado en CI 42452978755:** los cuatro residuos monetarios
+  fuente (fechas 0 y 1), incluidos los log-cocientes realizados/objetivo,
+  y la equivalencia de ceros de la garantia comun (fila 21) bajo dominio
+  positivo. La auditoria de sus axiomas no reporto `sorryAx`.
+- **Candidato en revision:**
+  `LocalScalarAugmented34MonetaryRowsCandidate.lean` une esas cuatro
+  igualdades a componentes concretos 12/13/28/29 del operador
+  `augmentedBoundaryZeroResidual`; prueba ademas el calendario de la
+  innovacion remunerada (solo modifica la innovacion inicial).
+- **Candidato en revision:**
+  `LocalScalarAugmented34BankFaceRowsCandidate.lean` conecta las filas
+  6/22 del mismo operador al conjunto de ceros de los log-cocientes de
+  renovacion bancaria, bajo compatibilidad del factor de renovacion
+  y estricta positividad de ambas fechas.
+- **Hipotesis aun no cotejadas:** `P.reserveRateSteady = s.rr`,
+  `P.reserveQuantitySteady = s.M`, coeficientes numericos, todos los
+  estados heredados, `P.bankExit*(1-P.bankSeedShare)=1-1/s.rate`,
+  y la funcion exacta de continuation terminal.
+- **Brecha decisiva abierta:** equivalencia del evaluador numerico de
+  `finite_bridge.py` con el operador fuente para cada fila restante;
+  el auditor de Banach certifica el sustituto Python, no la semantica
+  original de Lean ni su Jacobiano. El experimento ilustrativo de IRF
+  sigue fuera del radio de politica del certificado local.
+
+No promover estos dos modulos mas recientes a DEMOSTRADO hasta obtener
+un run verde del **commit que los contiene** y su auditoria expresa
+`#print axioms`; ninguna ejecucion anterior los certifica.
