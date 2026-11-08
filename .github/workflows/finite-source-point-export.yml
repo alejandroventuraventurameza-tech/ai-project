@@ -1,0 +1,57 @@
+name: Finite bridge source point-Jacobian export (NOT IFT)
+
+on:
+  push:
+    branches:
+      - 'work/lean-ci-validation-*'
+    paths:
+      - 'code/v0m/cierre_interno_2026_10_17/finite_bridge.py'
+      - '.github/workflows/finite-source-point-export.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  point-only-export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Checkout research branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install pinned Python dependency
+        run: |
+          python3 -m pip install 'numpy==2.1.3'
+      - name: Recompute finite bridge and extract point-only matrix boxes
+        env:
+          VENTURA_EXPORT_POINT_MATRICES: "1"
+        run: |
+          set -euo pipefail
+          python3 code/v0m/cierre_interno_2026_10_17/finite_bridge.py
+      - name: Reject accidental elevation to a nonlinear certificate
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('code/v0m/cierre_interno_2026_10_17/binding_source_point_jacobian_CANDIDATE.json')
+          d=json.loads(p.read_text())
+          assert d['state_dimension']==33 and d['parameter_dimension']==5
+          assert len(d['point_jacobian_box'])==33
+          assert all(len(row)==33 for row in d['point_jacobian_box'])
+          assert len(d['point_policy_derivative_box'])==33
+          assert all(len(row)==5 for row in d['point_policy_derivative_box'])
+          assert d['point_policy_derivative_box'][5][0]==['-1','-1']
+          assert d['uniform_ball_jacobian_enclosures_proven'] is False
+          assert d['exact_zero_center_proven'] is False
+          assert d['economic_source_row_map_proven'] is False
+          assert d['formal_Lean_witness_established'] is False
+          print('Point-only data validated. NO economic IFT witness asserted.')
+          PY
+      - name: Upload point-only candidate matrices
+        uses: actions/upload-artifact@v4
+        with:
+          name: binding-33x33-source-point-CANDIDATE
+          path: code/v0m/cierre_interno_2026_10_17/binding_source_point_jacobian_CANDIDATE.json
+          retention-days: 30
