@@ -856,5 +856,86 @@ theorem positive_transition_weight_implies_supported
 
 #print axioms positive_transition_weight_implies_supported
 
+
+/-- A SOURCE Markov parent with zero probability contributes nothing
+to any weighted child-equity expression. This step never invokes
+off-support banking feasibility or assumes positive consumption. -/
+theorem source_zero_probability_parent_weighted_child
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (n : ℕ) (future : Fin n → S)
+    (payments : Fin n → P.paymentSupport)
+    (s : S) (omega : P.paymentSupport)
+    (hzero : continuationTransitionWeight P.tree (currentState h)
+      n future = 0) :
+    (continuationTransitionWeight P.tree (currentState h) n future *
+      continuationPaymentWeight P payments) *
+        ((P.tree.transition
+          (currentState (continuationHistory h future)) s *
+            P.paymentProbability omega) *
+          (bankCumulativeSDFAt P X t h (childFutureHistory future s) *
+            (sourceFullRetentionCandidate P X t h).equity (n + 1)
+              (childFutureHistory future s)
+              (childPaymentHistory payments omega))) = 0 := by
+  simp [hzero]
+
+/-- Combine supported-history banking feasibility with zero-weight
+elimination. At a positive-probability parent, nonnegative bank
+equity follows from SOURCE feasibility and the one-child OTC identity
+holds without requiring *individual* equity to be positive. At an
+off-support parent, both weighted sides vanish. -/
+theorem source_weighted_child_identity_without_offsupport_hypotheses
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (hfeasible : BankContinuationFeasibleAt P X t h
+      (X.bankEquity t h) (sourceFullRetentionCandidate P X t h))
+    (n : ℕ) (future : Fin n → S)
+    (payments : Fin n → P.paymentSupport)
+    (s : S) (omega : P.paymentSupport)
+    (hrisk : P.workerRiskAversion = 1)
+    (hconsumption : 0 <
+      X.workerConsumption (t + n) (continuationHistory h future))
+    (hchildConsumption : 0 <
+      X.workerConsumption (t + n + 1)
+        (childHistory (continuationHistory h future) s))
+    (haggregate : 0 <
+      X.bankEquity (t + n) (continuationHistory h future)) :
+    (continuationTransitionWeight P.tree (currentState h) n future *
+      continuationPaymentWeight P payments) *
+      ((P.tree.transition
+        (currentState (continuationHistory h future)) s *
+          P.paymentProbability omega) *
+        (bankCumulativeSDFAt P X t h (childFutureHistory future s) *
+          (sourceFullRetentionCandidate P X t h).equity (n + 1)
+            (childFutureHistory future s)
+            (childPaymentHistory payments omega))) =
+    (continuationTransitionWeight P.tree (currentState h) n future *
+      continuationPaymentWeight P payments) *
+      ((P.tree.transition
+        (currentState (continuationHistory h future)) s *
+          P.paymentProbability omega) *
+        ((bankCumulativeSDFAt P X t h future *
+          (sourceFullRetentionCandidate P X t h).equity n future payments) *
+          sourceDiscountedEquityGrowthFactor P X t h n future s omega)) := by
+  by_cases hzero : continuationTransitionWeight P.tree (currentState h)
+      n future = 0
+  · simp [hzero]
+  · have hpositive : 0 <
+        continuationTransitionWeight P.tree (currentState h) n future :=
+      lt_of_le_of_ne
+        (ProposedBankContinuationPathProbabilityMass.source_aggregate_future_path_weight_nonneg
+          P.tree n (currentState h) future) (Ne.symm hzero)
+    have hpath := positive_transition_weight_implies_supported
+      P.tree (currentState h) n future hpositive
+    have hnonneg :=
+      (hfeasible.2 n future payments hpath).1
+    have hchild := source_full_retention_nonnegative_parent_child_identity
+      P X t h hfeasible n future payments hpath s omega
+      hrisk hconsumption hchildConsumption hnonneg haggregate
+    rw [hchild]
+
+#print axioms source_zero_probability_parent_weighted_child
+#print axioms source_weighted_child_identity_without_offsupport_hypotheses
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
