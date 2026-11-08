@@ -204,8 +204,7 @@ theorem source_labor_candidate_clears_resources
   constructor
   · exact div_pos (mul_pos hL hgL) hG
   · dsimp [G]
-    field_simp [ne_of_gt hG]
-    ring
+    field_simp [ne_of_gt hG] <;> ring
 
 #print axioms source_weight_pow_identity
 #print axioms source_output_at_weighted_labor
