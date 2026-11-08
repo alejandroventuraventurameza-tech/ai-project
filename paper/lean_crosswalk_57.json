@@ -1,0 +1,764 @@
+{
+  "schema": "ie-paper-lean-crosswalk-v1",
+  "paper_sha256": "918dae6e7214631804b2b137dda7358c7cc48f9dceb4b7947d6ae272c1f53872",
+  "ledger_source": "paper/result_ledger.json",
+  "checked_branch": "work/lean-ci-validation-otc-20261106",
+  "reviewed_date": "2026-11-08",
+  "claim_count": 57,
+  "status_policy": "No equivalence/full coverage is certified by locating or compiling a related lemma. The 57 source ledger formalization_status values stay not_run until exact statements, hypotheses, and kernel scope are proven equal.",
+  "source_module_check": "Syntactic declaration inspection only; source theorem existence is NOT theorem/paper equivalence.",
+  "scope": "57 numbered claims including historical appendices; current PDF page numbers in the original ledger are stale after compact layout.",
+  "entries": [
+    {
+      "paper_number": "3.1",
+      "label": "lem:repayment",
+      "title": "Suficiencia de la cobertura para repago",
+      "paper_statement_sha256": "7a94d9c8bb5c81183a8de8deae542ba158a29f00faf600a6495081e24817e679",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "3.2",
+      "label": "lem:v0m_original_6_2",
+      "title": "No ahorrar y endeudarse simultáneamente",
+      "paper_statement_sha256": "d44f2c87cbebcf2801541ce8152347066d49a47c49402b4cf995f81a543d5c97",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "3.3",
+      "label": "prop:v0m_original_6_3",
+      "title": "Efecto parcial de abaratar el préstamo",
+      "paper_statement_sha256": "c028253f7d641bc3fc809b642e43a7743b5e88e90e527c9920ccea6bec488533",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "targeted_semantic_comparison",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/BindingCreditCapitalTransmissionCandidate.lean",
+          "declaration": "rate_cut_raises_capacity_given_same_funds",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Prueba aumento de capital financiable bajo fondos, precios y garantía fijos."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/BindingCreditCapitalSourceBridgeCandidate.lean",
+          "declaration": "firmFeasible_binding_capital_formula",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Conecta presupuesto y garantía activa con el modelo fuente bajo depósitos empresariales nulos."
+        }
+      ],
+      "semantic_gap": "La prueba Lean es una comparación ordinal para fondos internos, q y garantía fijos; no reproduce literalmente la derivada cerrada ni una estática comparativa general de equilibrio."
+    },
+    {
+      "paper_number": "3.4",
+      "label": "lem:signed_funding_equivalence",
+      "title": "Equivalencia de la financiación con signo",
+      "paper_statement_sha256": "e47c12008123669cabba088fe9249940bb425a344e75d252ae01ccf28b3cc8b8",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "3.5",
+      "label": "lem:funding_supergradient",
+      "title": "Superdiferencial exacto de la financiación",
+      "paper_statement_sha256": "58965478503206d9e0347a817d25d72f48cd6073d3ae2e781bff1ba7ad2500bc",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "3.6",
+      "label": "lem:financial_kkt_equivalence",
+      "title": "Equivalencia de las condiciones financieras",
+      "paper_statement_sha256": "9c43174e1373a0d8c22cd76cb5750aa2a1acef86d0bd0b9e5817c70c96541007",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "targeted_semantic_comparison",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/LocalScalarOriginalCollateralKktBridgeCandidate.lean",
+          "declaration": "source_scalar_complementarity_recovers_original_L_KKT",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Identidad fuente de slack, dual y producto cero bajo la fila correspondiente."
+        }
+      ],
+      "semantic_gap": "El lema de Lean recupera complementariedad fuente para L en un prefijo, pero no establece equivalencia de todas las condiciones financieras ni suficiencia intertemporal."
+    },
+    {
+      "paper_number": "3.7",
+      "label": "lem:v0m_original_9_1",
+      "title": "Corredor y monotonía",
+      "paper_statement_sha256": "b05d283497c7da5b7abfe75704e0196c9fb2c4715100da952ecaa177aa67f4dd",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "3.8",
+      "label": "prop:v0m_original_10_1",
+      "title": "Spread no negativo en este régimen",
+      "paper_statement_sha256": "34a8d19ddb526345e18125bd56ad6bd9741db86cc1d612facf7b518be6be2c62",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "targeted_semantic_comparison",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/InterbankCancellationCandidate.lean",
+          "declaration": "bank_margins_and_pricing",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Identidades y desigualdades de tasas para parámetros bancarios estacionarios particulares."
+        }
+      ],
+      "semantic_gap": "La cota/orden de tasas en el testigo bancario estacionario no sustituye la prueba general de spread no negativo por covarianza con pagos y duales."
+    },
+    {
+      "paper_number": "3.9",
+      "label": "prop:v0m_original_12_1",
+      "title": "Consistencia de flujos agregados",
+      "paper_statement_sha256": "54a63950a5568a76bfea01d7065a1c4fa6055a825d41714f4f6a9433fc76d55d",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "targeted_semantic_comparison",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/StationaryLiteralAccountsCandidate.lean",
+          "declaration": "parent_resourceClears",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Cierre de recursos en instancia estacionaria."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/StationaryLiteralAccountsCandidate.lean",
+          "declaration": "parent_bankBalance",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Balance bancario en instancia estacionaria."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/StationaryLiteralAccountsCandidate.lean",
+          "declaration": "parent_creditClears",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Clearing de préstamos en instancia estacionaria."
+        }
+      ],
+      "semantic_gap": "Las identidades StationaryLiteralAccounts se refieren al testigo estacionario; no se ha demostrado la proposición agregada de flujos para todas las historias y regímenes del paper."
+    },
+    {
+      "paper_number": "4.1",
+      "label": "prop:boundary_equilibrium",
+      "title": "Un equilibrio en la frontera de L",
+      "paper_statement_sha256": "f86130d08e406f0effb845fb0b729311aa31de4f98ca04e2dbdf3f1f0cd844cd",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "targeted_semantic_comparison",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/BoundaryFullPrefixCandidate.lean",
+          "declaration": "boundary_zero_bankRenewal",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Una fila de renovación bancaria del prefijo construido."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/BoundaryFullPrefixCandidate.lean",
+          "declaration": "boundary_zero_householdEuler",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Una relación Euler de frontera; presupone dominio y testigo local."
+        }
+      ],
+      "semantic_gap": "La construcción de varias filas de fecha cero en un prefijo no implica todas las condiciones de equilibrio competitivo ni suficiencia/terminalidad."
+    },
+    {
+      "paper_number": "4.2",
+      "label": "prop:local_macro_multiplicity",
+      "title": "Dos soluciones locales de la complementariedad reducida",
+      "paper_statement_sha256": "4a5d01d883b3648d8337cbc11031d2589aaaabff68c8fe2ec3949228cd605017",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "targeted_semantic_comparison",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/ScalarComplementarityMultiplicityCandidate.lean",
+          "declaration": "scalar_complementarity_exactly_two",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Dada raíz positiva, valor de borde positivo y antitonicidad, prueba exactamente dos soluciones escalares."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/LocalScalarEconomicPolicyCertificateCandidate.lean",
+          "declaration": "source_economic_negative_remuneration_shock_two_roots",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Resultado económico reducido condicional a reducción implícita, dual basal y regularidad local."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/Proposition42RefutationCandidate.lean",
+          "declaration": "localMacroMultiplicitySpec_false",
+          "relationship": "counterexample_to_stronger_literal_interface",
+          "note": "Refuta la versión literal previa, no el resultado económico corregido."
+        }
+      ],
+      "semantic_gap": "El lema de conteo asume raíz positiva y antitonicidad; el puente económico fuente exige testigo de reducción, dual basal y monotonicidad local; la especificación literal más fuerte de unicidad de Allocation es refutada. No hay dos equilibrios completos."
+    },
+    {
+      "paper_number": "4.3",
+      "label": "lem:allocation_loss_identity",
+      "title": "Referencia eficiente y derivada de reasignación",
+      "paper_statement_sha256": "b69871efd0fd457e84ee03180b8ee1493acb2f6f25b162994f43006fbd6268ee",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "4.4",
+      "label": "prop:opposite_branch_allocation",
+      "title": "Condiciones de una mejora y un deterioro para el mismo instrumento",
+      "paper_statement_sha256": "b0af361a6a396a485fa27506ff14f94e10ea405fed66d8599c2fa19f7c792dbb",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "targeted_semantic_comparison",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/LocalScalarEconomicPolicyCertificateCandidate.lean",
+          "declaration": "source_economic_negative_remuneration_shock_two_roots",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Existencia condicional de dos raíces de complementariedad, sin desigualdades de capital ni pérdida."
+        }
+      ],
+      "semantic_gap": "Las IRF ilustran signos de reasignación opuestos con un mismo shock; el teorema Lean relacionado solo trata raíces escalares, no el signo de inversión ni pérdida asignativa en dos soluciones competitivas completas.",
+      "numerical_context": [
+        "code/irf/DIAGNOSIS_STATUS.md",
+        "paper/irf_mechanism_table.tex"
+      ]
+    },
+    {
+      "paper_number": "4.5",
+      "label": "prop:risky_branch_persistence",
+      "title": "Persistencia condicional de ramas reducidas bajo riesgo",
+      "paper_statement_sha256": "6d370b5ac35929562698046bd6a0adba5d638b89449f1a17a0c5978aaf3079d4",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.2.1",
+      "label": "lem:sspositive",
+      "title": "Costo de uso y consumo positivos",
+      "paper_statement_sha256": "7dda9d64942338923b4caece06b7b45ed00a384d12a236c3a5ded7164fcb464a",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.2.2",
+      "label": "prop:realclosure",
+      "title": "Cierre único del salario del bloque real",
+      "paper_statement_sha256": "d57fb0b5cc6d1a2f672b770e296a1fbaeec8524b255ebda1b71f14922e31c81c",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.3.1",
+      "label": "prop:bankretention",
+      "title": "Retención total y valor finito",
+      "paper_statement_sha256": "57be89a1511d77eeab5411d26e1c94643ef85c887d4a529b34721eec1e7af947",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.4.1",
+      "label": "prop:stationaryexistence",
+      "title": "Construcción de un equilibrio estacionario agregado",
+      "paper_statement_sha256": "fc11406fce9447f5e65aac4096288c5f78b87abf51b79d2b57dad13e436ebd65",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "targeted_semantic_comparison",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/StationaryEquilibriumCandidate.lean",
+          "declaration": "parent_competitiveEquilibrium",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Equilibrio estacionario literal bajo condición reservasPre ≤ G, no dos ramas perturbadas."
+        }
+      ],
+      "semantic_gap": "Hay un testigo de equilibrio estacionario parametrizado por G en Lean, pero aún se debe cotejar literalmente su dominio, cierres y relaciones con la proposición particular del anexo."
+    },
+    {
+      "paper_number": "A.5.1",
+      "label": "prop:v0m_original_22_1",
+      "title": "Factor de eficiencia a dotaciones dadas",
+      "paper_statement_sha256": "94e2d245e46ecd9631fe1da08764d56790c0054167b135470c8f2b4edde0f47e",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.5.2",
+      "label": "prop:negativecomparative",
+      "title": "Menor tasa y menor eficiencia relativa si H pignora menos",
+      "paper_statement_sha256": "b77fbff471ec973c55e41958b69358e610856afff56a4915d3eaa9fc33482dd8",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.5.3",
+      "label": "lem:v0m_original_22_3",
+      "title": "Extensión a cualquier orden de las dos pignorabilidades",
+      "paper_statement_sha256": "aea60ba6e65a07cf28ee1e5a2c8c9898168a197314b91947364fd8b6c34b5dfb",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.6.1",
+      "label": "prop:v0m_original_24_1",
+      "title": "Desplazamiento de crédito con capacidad de depósitos agotada",
+      "paper_statement_sha256": "49f9a4399a40bf51dda6d22c96a62be78fe8a5f2f91c8f6147fe3b0e72d04724",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.6.2",
+      "label": "lem:v0m_original_24_2",
+      "title": "Derivada del mínimo de estados",
+      "paper_statement_sha256": "a9b0bc9a71401b3de248730c40d55f639fbde98ec7cf8297dbfe1e3116d7ee99",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.7.1",
+      "label": "prop:slackcredit",
+      "title": "Capacidad de expansión con financiación holgada",
+      "paper_statement_sha256": "6544e57b24e48038bc39b3fa8da985ffa520c35a4a160e2ad2a6d1af40109b83",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.8.1",
+      "label": "prop:v0m_original_26_1",
+      "title": "Regularidad del precio de depósitos en la rama holgada",
+      "paper_statement_sha256": "7abd71cb262d8189cb1e066bb9ad1183ba9d8bb211bc06900ce0e31b1cd671e8",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.9.1",
+      "label": "lem:statewise_collateral",
+      "title": "Equivalencia del mínimo y cobertura por estado",
+      "paper_statement_sha256": "895dfe49228885a7a368322e28df5dfe0faa5a561384346feb1073cb2712090a",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "targeted_semantic_comparison",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/StationaryFirmComparisonFoundationCandidate.lean",
+          "declaration": "firm_path_collateral",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Desigualdad de colateral de la trayectoria estacionaria bajo FirmFeasible."
+        }
+      ],
+      "semantic_gap": "El lema de factibilidad estacionaria comprueba una cota bajo un estado soportado, no la equivalencia general del ínfimo y todas las restricciones por estado del paper."
+    },
+    {
+      "paper_number": "A.9.2",
+      "label": "prop:stochastic_partial_H",
+      "title": "Respuesta parcial estocástica de la firma restringida",
+      "paper_statement_sha256": "56783832343aa4087a8c213826d9e1f26e5b5f1f4a50ff0d5a33be86b5ce6940",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.10.1",
+      "label": "prop:bounded_bank_continuation",
+      "title": "Franquicia finita y retención total bajo cotas uniformes",
+      "paper_statement_sha256": "4a70f2eb6287672f87951c9738eb71e039d829594b15eba7416902a327b3cba4",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.10.2",
+      "label": "prop:no_permanent_saver",
+      "title": "No persistencia del ahorro interior en un dominio acotado",
+      "paper_statement_sha256": "2cf0c29be7cf183d49cb111a8067d3a83baefd9e8150c84e5a45d6c0390c1d3d",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.11.1",
+      "label": "lem:nominal_face_identity",
+      "title": "Identidad entre promesas nominales",
+      "paper_statement_sha256": "a896a50fe25ce899ed266b574ebbe3a0c1e38a8394e25a90849a6d626d867338",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "targeted_semantic_comparison",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/StationaryFirmComparisonFoundationCandidate.lean",
+          "declaration": "firm_path_face",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Relaciona cara nominal y posiciones de préstamo y depósito de un plan factible estacionario."
+        }
+      ],
+      "semantic_gap": "La cara nominal de un plan factible en la instancia estacionaria no equivale automáticamente a la identidad intertemporal del manuscrito completo."
+    },
+    {
+      "paper_number": "A.11.2",
+      "label": "prop:household_budget_reconstruction",
+      "title": "Cuándo recursos sustituye el presupuesto doméstico",
+      "paper_statement_sha256": "e6af97dbd7d5c7bb7923239a71ebbf28d4733bf1f310dc8a9c2b7a698c19655e",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.12.1",
+      "label": "lem:common_pledge_state",
+      "title": "Promesas por unidad pignorable común",
+      "paper_statement_sha256": "6d2c62fa1e44e26ad930fb74d1b5b8e6f67257a133b690adcb3a22c3914890c5",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "targeted_semantic_comparison",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/LocalScalarAugmented34PledgeDualRowsCandidate.lean",
+          "declaration": "augmented_common_pledge_log_zero_iff",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Zero-set de una fila puntual 21 del residual aumentado con hipótesis de positividad."
+        }
+      ],
+      "semantic_gap": "La equivalencia de ceros entre fila de fuente y logaritmo de garantía común exige positividad y no prueba todas las igualdades de estados/pignorabilidad prometidas por el lema."
+    },
+    {
+      "paper_number": "A.14.1",
+      "label": "prop:stable_projection",
+      "title": "Proyección del subespacio estable sobre estados",
+      "paper_statement_sha256": "d9f077f2ecd6ef67ea7d27c8d5bfeaf1449c9c2264c72f1bc71a7290e192e693",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.15.1",
+      "label": "lem:bounded_boundary_inverse",
+      "title": "Inversa acotada de la frontera lineal",
+      "paper_statement_sha256": "c91bcb74a487ca004620b0ed831242fdad6247aff8921146b3b2ac204147204b",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.15.2",
+      "label": "prop:nonlinear_local_path",
+      "title": "Solución no lineal local del núcleo determinista",
+      "paper_statement_sha256": "3aaacfdae0324b5cbea0167469add9080b65f1010d3d4b063429235a40699274",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.17.1",
+      "label": "prop:firm_sufficiency_infinite",
+      "title": "Optimalidad empresarial y término terminal",
+      "paper_statement_sha256": "abcfc833d8a2a54ba9c2d429b26028650e5bc60690556cc5a164fcd72c5e361b",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.18.1",
+      "label": "prop:retail_local_sufficiency",
+      "title": "Optimalidad local de precios simétricos",
+      "paper_statement_sha256": "356debb5c61fe495f9245497c1915d3d936ceb626a6c1abdd4581aa65bba77a8",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.20.1",
+      "label": "prop:affine_risk_candidate",
+      "title": "Construcción afín coherente con garantía y expectativas",
+      "paper_statement_sha256": "ce0c5961bbbdb896c7c3c89c654cc5847d74df9d2c0f37bf5e56da1bc3a41746",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.24.1",
+      "label": "lem:tree_comparison_bound",
+      "title": "Cota uniforme sobre todos los descendientes",
+      "paper_statement_sha256": "0bd53606c5285bb5692b518fc93ec03b64fa4f63de330ed424d38a6e4a2151e3",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.24.2",
+      "label": "prop:stochastic_selected_inverse",
+      "title": "Inversa en el espacio de historias",
+      "paper_statement_sha256": "f2d90f0ec21f9c20e4b14ae2a1170f166b81d79db58a4c2d3e50d1109ca64557",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.25.1",
+      "label": "prop:selected_nonlinear_family",
+      "title": "Familia local exacta en la rama seleccionada",
+      "paper_statement_sha256": "235761efe5639578b87710ab13d29f9ab264f3d05db888cc5482bd108de3127a",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.27.1",
+      "label": "prop:global_stochastic_price_optimality",
+      "title": "Suficiencia global para el minorista, $\\varepsilon=6$",
+      "paper_statement_sha256": "83d65cc58657355d34c0cba5287ab4044ce7d763a8515bdb152186390ae837c0",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.28.1",
+      "label": "prop:validated_tree_inverse",
+      "title": "Inversa original a partir de una gráfica con error",
+      "paper_statement_sha256": "f795812c0a1ad77deda9e1894b749ba322d88a7839507668e9e07aae068a3207",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.30.1",
+      "label": "prop:certified_small_risk_equilibrium",
+      "title": "Certificado local de riesgo positivo para el testigo D",
+      "paper_statement_sha256": "55b1cd3c692b0aef6f800f3518042ee28f11b29b36bb1b30f4cbc1bd835927b7",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.30.2",
+      "label": "lem:minimum_uniform_inverse",
+      "title": "Inversa Lipschitz con mínimo endógeno",
+      "paper_statement_sha256": "050549b12e1bf53ecc9c3559bc2d3bafff8cd7d698fa29172a0fa2470c0b2a6d",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.30.3",
+      "label": "prop:certified_endogenous_minimum",
+      "title": "Existencia certificada con selección endógena",
+      "paper_statement_sha256": "6ba1f9c19b554c26199eed5ccf85b248a7339ddf3106fd8dc74674d925941174",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.31.1",
+      "label": "prop:regime_tube",
+      "title": "Un entorno que no permite cambiar el régimen financiero",
+      "paper_statement_sha256": "4555a17eb683011a18db57c507e49388551a372a932978745bbbb7be5d25450b",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.32.1",
+      "label": "prop:general_regime_sufficiency",
+      "title": "Suficiencia para el sistema empresarial general",
+      "paper_statement_sha256": "ac8a52f3e5c0e7efdf5801bdc66531051c2c5ab6082d5ecd917da695d7cb827d",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.32.2",
+      "label": "prop:finite_prefix_equilibrium",
+      "title": "Enlace de un prefijo con una continuación óptima",
+      "paper_statement_sha256": "7cbdeb5295edb4a8d624711df2bb918436e318ab1f02567a78fbb21a6b020c46",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.32.3",
+      "label": "prop:finite_slack_spell",
+      "title": "Retorno a un colateral de valor marginal positivo",
+      "paper_statement_sha256": "8193a17b0cdbc7b138be7f78e717f9ec4a419228f3eaf9b7b786d3300ee3008c",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.33.1",
+      "label": "prop:v0m_original_14_1",
+      "title": "Selección por pignorabilidad con dos límites activos",
+      "paper_statement_sha256": "ae28c133d26be838a957b57381888a211f35dd39c234882666b9e4c55f6b12d7",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.35.1",
+      "label": "prop:positive_mixed_channel",
+      "title": "Canal asignativo favorable con solo H limitada",
+      "paper_statement_sha256": "39f6a3ddd17f8bb905f7aa7075c25eb9be8f4ffd05b8b56e4dc33f713b4e1c5f",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.35.2",
+      "label": "prop:v0m_original_27_2",
+      "title": "Canal favorable con creación de capital",
+      "paper_statement_sha256": "ca1dac7c5230d32d1503824c3195f3bbc049256d802fe4779ccb06f486ecf895",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.37.1",
+      "label": "lem:CRRA_H_demand",
+      "title": "Demanda de capital restringida con consumo endógeno",
+      "paper_statement_sha256": "f28a3288f75833b6cecb325281dc90189186b3fea1bd2293a291d05c0658ae94",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "targeted_semantic_comparison",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/BindingCreditCapitalSourceBridgeCandidate.lean",
+          "declaration": "firmFeasible_binding_capital_formula",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Capital financiable dado presupuesto y límite activo, sin ecuación CRRA ni suficiencia."
+        }
+      ],
+      "semantic_gap": "El álgebra de presupuesto/garantía activa es parte de la demanda, pero no deriva optimalidad de consumo CRRA endógeno ni las Euler de este lema."
+    },
+    {
+      "paper_number": "A.37.2",
+      "label": "prop:CRRA_positive_mixed",
+      "title": "Reasignación favorable sin comprometer consumo",
+      "paper_statement_sha256": "f9a0ffe039b8e1fd3ef56fda2bb6a6cd4bf74381e6f31b3dc7995f1328ff4f56",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.39.1",
+      "label": "lem:v0m_original_32_1",
+      "title": "Implementación de dos tasas dadas en el bloque bancario",
+      "paper_statement_sha256": "1ad752098d222d0fd9759550784dbcf82b07b633dd1162fc5339520e4a2a1687",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    },
+    {
+      "paper_number": "A.39.2",
+      "label": "prop:closed_two_date_equilibrium",
+      "title": "Existencia de un equilibrio cerrado mixto de dos fechas",
+      "paper_statement_sha256": "c8f207538f821f8e1bf719636ad0ab27e621d8448fb9115d129f17040cc32fc7",
+      "source_ledger_formalization_status": "not_run",
+      "review_state": "not_yet_semantically_reviewed",
+      "paper_proof_equivalent_in_lean": "not_established",
+      "related_lean_declarations": [],
+      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+    }
+  ]
+}
