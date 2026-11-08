@@ -26,6 +26,14 @@ ALLOWED_REVIEW_STATES = {
 ALLOWED_RELATIONS = {
     "auxiliary_or_conditional_only",
     "counterexample_to_stronger_literal_interface",
+    "source_financial_proof_related",
+    "unproved_source_specification",
+    "exact_interface_claim_candidate_ci_pending",
+}
+EXPECTED_EXACT_CANDIDATES = {
+    "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
+    "prop:v0m_original_6_3": "exact_financingCapacityComparativeSpec",
+    "lem:funding_supergradient": "exact_fundingSupergradientSpec",
 }
 
 
@@ -54,6 +62,8 @@ def main() -> None:
     reviewed = 0
     related = 0
     refutations = 0
+    exact_candidates = {}
+    source_specifications = 0
     for row in data["entries"]:
         label = row["label"]
         old = original[label]
@@ -83,11 +93,26 @@ def main() -> None:
                     f"{label}: invalid theorem relation {rel}")
             if rel == "counterexample_to_stronger_literal_interface":
                 refutations += 1
+            if rel == "exact_interface_claim_candidate_ci_pending":
+                require(label in EXPECTED_EXACT_CANDIDATES,
+                        f"{label}: cannot self-designate an exact proof candidate")
+                require(item["declaration"] == EXPECTED_EXACT_CANDIDATES[label],
+                        f"{label}: wrong literal PaperInterface theorem")
+                require(label not in exact_candidates,
+                        f"{label}: multiple exact proof candidates")
+                exact_candidates[label] = item["declaration"]
+            if rel == "unproved_source_specification":
+                source_specifications += 1
             require(bool(item.get("note")), f"{label}: no evidence scope note")
             p = ROOT / item["relative_path"]
+            permitted_roots = (
+                ROOT / "lean" / "candidates" / "Ventura26LiquidityAllocation",
+                ROOT / "lean" / "checkpoint" / "modules"
+                / "Ventura26LiquidityAllocation",
+            )
             require(p.is_file() and p.suffix == ".lean"
-                    and "lean/candidates/" in p.as_posix(),
-                    f"{label}: missing candidate Lean file {p}")
+                    and p.parent in permitted_roots,
+                    f"{label}: missing or untrusted Lean file {p}")
             decl = item["declaration"]
             require(re.fullmatch(r"[a-zA-Z][A-Za-z0-9_']*", decl) is not None,
                     f"{label}: invalid theorem name")
@@ -99,6 +124,8 @@ def main() -> None:
             require((ROOT / target).is_file(),
                     f"{label}: missing numerical evidence {target}")
     require(refutations == 1, "Expected exactly one literal specification refutation.")
+    require(exact_candidates == EXPECTED_EXACT_CANDIDATES,
+            f"Wrong set of pending literal proof candidates: {exact_candidates}")
     require(original["prop:local_macro_multiplicity"].get("scope_review") ==
             "conditional_reduced_not_full_competitive_equilibrium",
             "Proposition 4.2 must remain explicitly reduced/conditional")
@@ -112,6 +139,8 @@ def main() -> None:
         "not_yet_reviewed": len(labels) - reviewed,
         "related_declaration_pointers": related,
         "literal_spec_refutations": refutations,
+        "exact_paper_interface_candidates_still_pending_lean_ci": len(exact_candidates),
+        "unproved_source_specifications": source_specifications,
         "complete_paper_theorems_proved_in_lean_by_this_audit": 0,
         "full_equilibrium_confirmed": False,
     }, ensure_ascii=False, indent=2))
