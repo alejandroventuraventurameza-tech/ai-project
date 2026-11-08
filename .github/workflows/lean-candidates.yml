@@ -168,6 +168,7 @@ jobs:
           import Ventura26LiquidityAllocation.LocalScalarAugmented34PositiveKktCandidate
           import Ventura26LiquidityAllocation.LocalScalarAugmented34LogRecenterCandidate
           import Ventura26LiquidityAllocation.LocalScalarAugmented34FullBothCandidate
+          import Ventura26LiquidityAllocation.LocalScalarAugmented34PolicyRecenterCandidate
           import Ventura26LiquidityAllocation.StationaryEquilibriumCandidate
           import Ventura26LiquidityAllocation.BoundaryAnalyticPackageCandidate
           import Ventura26LiquidityAllocation.InterbankCancellationCandidate
@@ -226,6 +227,15 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34FullBinding.augmented_zero_implies_all_original_binding_prefix_rows
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34FullBoth.original_prefix_rows_agree_except_date_zero_L
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34FullBoth.augmented_zero_implies_all_original_S_and_B_prefix_rows
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34PolicyRecenter.reserveRemunerationSlice_shift_add
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34PolicyRecenter.reserveRemunerationShiftedPrimitives_rate
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34PolicyRecenter.reserveRemunerationShiftedPrimitives_quantity
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34PolicyRecenter.reserveRemunerationShiftedPrimitives_requirement
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34PolicyRecenter.reserveRemunerationShiftedPrimitives_corridor
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34PolicyRecenter.reserveRemunerationShiftedPrimitives_rate_add
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34PolicyRecenter.reserveRemunerationShiftedPrimitives_quantity_add
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34PolicyRecenter.reserveRemunerationShiftedPrimitives_requirement_add
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34PolicyRecenter.reserveRemunerationShiftedPrimitives_corridor_add
           #print axioms Ventura26LiquidityAllocation.ProposedStationaryEquilibrium.parent_competitiveEquilibrium
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.proposed_localSlackLiteralAllocation_settlementClears_of_binarySymmetric
