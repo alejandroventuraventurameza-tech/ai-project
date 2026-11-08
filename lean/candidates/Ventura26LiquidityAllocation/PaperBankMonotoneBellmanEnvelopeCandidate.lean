@@ -57,12 +57,10 @@ theorem recurse_le_value
         flow t s +
             continuation t (recurse flow value continuation n (t + 1)) s
             ≤ flow t s + continuation t (value (t + 1)) s := by
-                exact add_le_add_left
-                  (hmono t
-                    (recurse flow value continuation n (t + 1))
-                    (value (t + 1))
-                    (ih (t + 1)) s)
-                  (flow t s)
+                have hstep := hmono t
+                  (recurse flow value continuation n (t + 1))
+                  (value (t + 1)) (ih (t + 1)) s
+                linarith
         _ ≤ value t s := hsuper t s
 
 /-- Candidate equality is preserved by the finite recursion;
