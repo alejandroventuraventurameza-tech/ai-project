@@ -267,6 +267,7 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBankSourceNextEquityBridge.bankContinuationFeasibleAt_nextEquity_eq_realPortfolioReturn
           #print axioms Ventura26LiquidityAllocation.ProposedBankSourceNextEquityBridge.bankTailEnvelopeAt_eq_dividend_add_sourceBellman
           #print axioms Ventura26LiquidityAllocation.ProposedBankSourceNextEquityBridge.bankContinuationPayoffAt_le_sourceBellman_of_tailBound
+          #print axioms Ventura26LiquidityAllocation.ProposedBankSourceNextEquityBridge.bankContinuationFeasibleAt_initialStaticPortfolio
           #print axioms Ventura26LiquidityAllocation.ProposedBankFiniteHorizonEnvelope.finite_horizon_le_value
           #print axioms Ventura26LiquidityAllocation.ProposedBankFiniteHorizonEnvelope.finite_horizon_eq_value
           LEAN
