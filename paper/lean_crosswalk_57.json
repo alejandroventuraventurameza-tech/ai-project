@@ -5,7 +5,7 @@
   "checked_branch": "work/lean-ci-validation-otc-20261106",
   "reviewed_date": "2026-11-08",
   "claim_count": 57,
-  "status_policy": "Literal paper financial spec 3.1, 3.2, 3.3 proof candidates are CI-pending; the original 3.5 funding Spec is false and the corrected conditional proof is CI-pending. No result is promoted absent kernel and exact scope checking.",
+  "status_policy": "The exact pinned PaperInterface financial statements 3.2 and 3.3 have kernel-verified proofs in CI 42457259796; pinned 3.5 has a kernel-verified counterexample and an independently kernel-verified corrected conditional theorem. Original paper-to-Lean full semantic equivalence is not automatically asserted. Repayment 3.1 remains CI-pending.",
   "source_module_check": "19 targeted semantic comparisons, including a falsified original funding-supergradient interface and its corrected candidate under RD>0, RD<RL; full dynamic equilibrium not certified.",
   "scope": "57 numbered claims including historical appendices; current PDF page numbers in the original ledger are stale after compact layout.",
   "entries": [
@@ -57,8 +57,11 @@
         {
           "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperFinancialMainExactCandidate.lean",
           "declaration": "exact_noSimultaneousSavingBorrowingSpec",
-          "relationship": "exact_interface_claim_candidate_ci_pending",
-          "note": "Candidato que demuestra literalmente noSimultaneousSavingBorrowingSpec, sujeto al kernel y auditoría de axiomas."
+          "relationship": "exact_interface_claim_kernel_verified",
+          "note": "Candidato que demuestra literalmente noSimultaneousSavingBorrowingSpec, sujeto al kernel y auditoría de axiomas. Compilado y con #print axioms sin sorryAx en Lean CI 42457259796; validación del objeto exacto, no de equilibrio general.",
+          "lean_ci_run_id": 42457259796,
+          "lean_ci_commit": "c006e00c437243c3f6f44ec3c102df4286c545e0",
+          "lean_axiom_audit": "passed_no_sorryAx"
         }
       ],
       "semantic_gap": "FinancialCore prueba exclusión de posiciones brutas simultáneas bajo KKT normalizadas, tasa de préstamos superior y descuento positivo. El enunciado literal del PaperInterface incluye NormalizedFirmMarginalDiscount; el nuevo puente reproduce los cuantificadores y está pendiente de auditoría Lean antes de marcar cobertura integrada."
@@ -93,8 +96,11 @@
         {
           "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperFinancialMainExactCandidate.lean",
           "declaration": "exact_financingCapacityComparativeSpec",
-          "relationship": "exact_interface_claim_candidate_ci_pending",
-          "note": "Candidato que prueba la especificación literal del PaperInterface."
+          "relationship": "exact_interface_claim_kernel_verified",
+          "note": "Candidato que prueba la especificación literal del PaperInterface. Compilado y con #print axioms sin sorryAx en Lean CI 42457259796; validación del objeto exacto, no de equilibrio general.",
+          "lean_ci_run_id": 42457259796,
+          "lean_ci_commit": "c006e00c437243c3f6f44ec3c102df4286c545e0",
+          "lean_axiom_audit": "passed_no_sorryAx"
         }
       ],
       "semantic_gap": "El bloque FinancialCore contiene la derivada exacta de capacidad con fondos, q y colateral fijos. La nueva prueba candidata establece la especificación literal financingCapacityComparativeSpec; falta compilarla y revisar axiomas antes de promover formalización, y no constituye estática comparativa de equilibrio."
@@ -141,14 +147,20 @@
         {
           "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperFinancialMainExactCandidate.lean",
           "declaration": "original_fundingSupergradientSpec_false",
-          "relationship": "counterexample_to_malformed_literal_interface",
-          "note": "Refuta la especificación original debido a precedencia de → respecto de ↔; tasas iguales RL=RD=1 y cara=0, pendiente=2 dan RHS falso y LHS vacuamente verdadero. Requiere CI."
+          "relationship": "counterexample_malformed_interface_kernel_verified",
+          "note": "Refuta la especificación original debido a precedencia de → respecto de ↔; tasas iguales RL=RD=1 y cara=0, pendiente=2 dan RHS falso y LHS vacuamente verdadero. Requiere CI. Compilado y con #print axioms sin sorryAx en Lean CI 42457259796; validación del objeto exacto, no de equilibrio general.",
+          "lean_ci_run_id": 42457259796,
+          "lean_ci_commit": "c006e00c437243c3f6f44ec3c102df4286c545e0",
+          "lean_axiom_audit": "passed_no_sorryAx"
         },
         {
           "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperFinancialMainExactCandidate.lean",
           "declaration": "corrected_fundingSupergradientSpec",
-          "relationship": "corrected_economic_claim_ci_pending",
-          "note": "Demuestra condicional sobre RD>0, RD<RL que engloba ambas caras de ↔; coincide con las tres ramas matemáticas del paper, sujeto al kernel y auditoría de axiomas."
+          "relationship": "corrected_economic_claim_kernel_verified",
+          "note": "Demuestra condicional sobre RD>0, RD<RL que engloba ambas caras de ↔; coincide con las tres ramas matemáticas del paper, sujeto al kernel y auditoría de axiomas. Compilado y con #print axioms sin sorryAx en Lean CI 42457259796; validación del objeto exacto, no de equilibrio general.",
+          "lean_ci_run_id": 42457259796,
+          "lean_ci_commit": "c006e00c437243c3f6f44ec3c102df4286c545e0",
+          "lean_axiom_audit": "passed_no_sorryAx"
         }
       ],
       "semantic_gap": "Se detectó que PaperInterface.fundingSupergradientSpec, tal como está escrito, tiene un error de alcance lógico: (tasas positivas → definición supergradiente) ↔ casos, en lugar de tasas positivas → (definición ↔ casos). Es falso fuera del dominio económico. El módulo nuevo lo refuta y propone una versión corregida sin editar el checkpoint. Todavía falta compilación y auditoría de axiomas, por eso no se promueve el estatus del ledger."
