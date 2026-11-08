@@ -104,16 +104,48 @@ que sugerían los nombres de los módulos candidatos:
 |---|---|---|
 | Lema 3.2: no ahorrar y endeudarse simultáneamente | `no_simultaneous_saving_and_borrowing`: contradicción de KKT si `RL>RD>0` y ambos saldos positivos | `exact_noSimultaneousSavingBorrowingSpec` |
 | Proposición 3.3: efecto parcial de la tasa | `financingCapacity_hasDerivAt_and_deriv_neg`: derivada exacta de capacidad con fondos, `q` y garantía fijos | `exact_financingCapacityComparativeSpec` |
-| Lema 3.5: superdiferencial | `isFundingSupergradient_iff_cases`: equivalencia global para tres caras, incluyendo el intervalo en `f=0` | `exact_fundingSupergradientSpec` |
+| Lema 3.5: superdiferencial | `isFundingSupergradient_iff_cases`: equivalencia global para tres caras, incluyendo el intervalo en `f=0` | `original_fundingSupergradientSpec_false` + `corrected_fundingSupergradientSpec` |
 
 Los puentes se declararon en
-`lean/candidates/Ventura26LiquidityAllocation/PaperFinancialMainExactCandidate.lean`
-con objetivo literal `PaperInterface.*Spec` en cada caso.
-La auditoría de kernel y axiomas de este nuevo archivo se encuentra
-**PENDIENTE hasta el resultado de la ejecución del workflow Lean
-correspondiente al commit**; que exista una declaración no prueba
-que el archivo compile. No modificar todavía `formalization_status`
-del ledger fuente.
+`lean/candidates/Ventura26LiquidityAllocation/PaperFinancialMainExactCandidate.lean`.
+**Solo 3.2 y 3.3** tienen objetivo literal `PaperInterface.*Spec`.
+Para 3.5, la primera compilación **FALLÓ** (Lean CI
+[42456592968](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42456592968)).
+La inspección mostró que el `PaperInterface.fundingSupergradientSpec`
+fue escrito formalmente como
+
+```text
+((0 < RD -> RD < RL -> IsFundingSupergradient RL RD face slope)
+  <-> FundingSupergradientCases RL RD face slope)
+```
+
+y no como la especificación económica correcta
+
+```text
+(0 < RD -> RD < RL ->
+  (IsFundingSupergradient RL RD face slope
+   <-> FundingSupergradientCases RL RD face slope))
+```
+
+Es un error sustantivo de ámbito de `→` frente a `↔`, no
+simplemente una táctica `intro` que no compiló. Contraejemplo:
+`RL=RD=1`, `face=0`, `slope=2`. La premisa de spread
+estricto es falsa y la implicación de la izquierda resulta
+verdadera vacíamente, mientras que los casos de la derecha son
+falsos (el intervalo admisible sería `[1,1]`).
+Por tanto, el enunciado original **no puede demostrarse**
+en lógica consistente. No se modifica el checkpoint;
+se añade el teorema `original_fundingSupergradientSpec_false`
+y una proposición independiente
+`fundingSupergradientCorrectedSpec` con prueba
+`corrected_fundingSupergradientSpec`.
+La compilación y auditoría de axiomas de esas dos declaraciones
+**siguen pendientes de CI** antes de elevar su estatus.
+No modificar todavía `formalization_status` del ledger fuente.
+
+El problema no invalida la fórmula económica del paper,
+que ya contiene `R^L>R^D>0`; invalida la transcripción lógica
+del objetivo fuente cuando las tasas están fuera de ese dominio.
 
 Al cotejar **los siete últimos resultados principales**:
 el Lema 3.1 dispone del predicado fuente `RobustCollateral`,
