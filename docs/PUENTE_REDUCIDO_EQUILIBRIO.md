@@ -605,6 +605,18 @@ su sensibilidad a dicha perturbacion finita.
 
 ### 13.3 Brechas cientificas que siguen siendo bloqueantes
 
+**Cotejo parcial del dual original:** `EconomicModel.lean` define
+`crraMarginal sigma c = c^(-sigma)` y
+`localNormalizedCollateralDualL = 1/R_L -
+ beta_e * (u'(C_1L)/u'(C_0L)) / Pi_1`.
+El evaluador Python usa `le0_L=beta_e*C_0L/C_1L`,
+que corresponde a la especializacion `sigma_e=1`
+con consumos estrictamente positivos. La fuente ilustrativa
+`verified_linear_operator.py:steady()` fija `sigmaE='1'`.
+Esta coincidencia de **una** formula bajo una especializacion
+parametrica verificable no certifica todavia las 33 filas, los
+dominios de potencias o la correspondencia de todas las primitivas.
+
 1. Certificar **fila a fila**, bajo definiciones Lean y no solo
    identidades Python, `F`, `mu_L`, las cotas uniformes de
    `DH` y las hipotesis analiticas `C1`/dominio.
