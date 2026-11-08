@@ -6,6 +6,7 @@ on:
       - 'work/lean-ci-validation-*'
     paths:
       - 'code/v0m/cierre_interno_2026_10_17/finite_bridge.py'
+      - 'code/v0m/certified_ift/verify_point_candidate.py'
       - '.github/workflows/finite-source-point-export.yml'
   workflow_dispatch:
 
@@ -38,6 +39,7 @@ jobs:
           p=Path('code/v0m/cierre_interno_2026_10_17/binding_source_point_jacobian_CANDIDATE.json')
           d=json.loads(p.read_text())
           assert d['state_dimension']==33 and d['parameter_dimension']==5
+          assert d['rows_recomputed_as_source_style']==[4,5,21]
           assert len(d['point_jacobian_box'])==33
           assert all(len(row)==33 for row in d['point_jacobian_box'])
           assert len(d['point_policy_derivative_box'])==33
