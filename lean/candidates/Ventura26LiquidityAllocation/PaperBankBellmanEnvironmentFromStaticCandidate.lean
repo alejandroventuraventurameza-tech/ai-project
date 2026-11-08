@@ -78,7 +78,8 @@ theorem source_bank_bellman_environment_of_static_optimality
   · intro loans reserves deposits hfeasible
     have hdom := hglobalBellman loans reserves deposits hfeasible
     rw [hcandidateValueIdentity]
-    exact add_le_add_left hdom (p.dividend t h)
+    simpa only [add_comm] using
+      (add_le_add_left hdom (p.dividend t h))
 
 #print axioms source_bank_bellman_environment_of_static_optimality
 
