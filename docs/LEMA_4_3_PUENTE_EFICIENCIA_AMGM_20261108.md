@@ -2,8 +2,10 @@
 
 **Estado:** el argumento matemático analítico de esta nota es
 **demostración condicional** bajo sus hipótesis. La implementación
-`PaperAllocationEfficiencySupportCandidate.lean` es **candidata**
-hasta que el kernel y la auditoría de axiomas terminen satisfactoriamente.
+`PaperAllocationEfficiencySupportCandidate.lean` quedó
+**COMPILADA Y VERIFICADA EN LEAN**, sin `sorryAx`, en
+[GitHub Actions #42459394970](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42459394970),
+commit `8e883b7993f39d29ae431c44a6a14e45ca55707d`.
 El mapeo de variables normalizadas al `allocationLossIdentitySpec`
 del checkpoint aún no está completamente formalizado.
 
@@ -100,8 +102,8 @@ alternativas no negativas de frontera (con las convenciones de
 
 El módulo propuesto implementa exactamente la desigualdad
 de la suma normalizada bajo las restricciones de agregados
-en el teorema `normalized_two_type_output_le_benchmark`;
-`normalized_benchmark_attained` verifica la igualdad
+en el teorema **verificado** `normalized_two_type_output_le_benchmark`;
+`normalized_benchmark_attained` verifica formalmente la igualdad
 en `x_H=x_L=t_H=t_L=1`.
 
 ## 4. Pérdida de producto condicional
@@ -114,7 +116,7 @@ Si el producto es positivo, el logaritmo es creciente:
 => Loss = log Yeff - log Y ≥ 0.
 ```
 
-En variables normalizadas el módulo Lean propone
+En variables normalizadas el módulo Lean **demostró**
 `normalized_log_loss_nonneg`, que es la desigualdad
 `log Z - log(sum_i w_i*x_i^a*t_i^b) ≥ 0`.
 El término de escala común de `Y` y `Yeff`
@@ -161,10 +163,10 @@ la derivada. No se cambia silenciosamente el checkpoint.
 | Paso | Matemática escrita | Estado Lean |
 |---|---|---|
 | Pesos positivos y `a+b+d=1` | Hipótesis explícitas | Hipótesis explícitas |
-| Cota global normalizada AM–GM | Sí | Candidato `normalized_two_type_output_le_benchmark` |
-| Cota alcanzada en `x_i=t_i=1` | Sí | Candidato `normalized_benchmark_attained` |
-| No negatividad de la pérdida normalizada | Sí | Candidato `normalized_log_loss_nonneg` |
-| Recursos de la asignación propuesta | Sí | Candidato `efficient_candidate_clears_resources` |
+| Cota global normalizada AM–GM | Sí | **Lean verificado** `normalized_two_type_output_le_benchmark` |
+| Cota alcanzada en `x_i=t_i=1` | Sí | **Lean verificado** `normalized_benchmark_attained` |
+| No negatividad de la pérdida normalizada | Sí | **Lean verificado** `normalized_log_loss_nonneg` |
+| Recursos de la asignación propuesta | Sí | **Lean verificado** `efficient_candidate_clears_resources` |
 | Puente de potencias `A_i=z_i^d` y producción `Y` | Sí | **PENDIENTE** |
 | Derivación del reparto óptimo de trabajo y `G` | Sí, en paper | **PENDIENTE** |
 | Prueba literal del `allocationLossIdentitySpec` | Implícita analíticamente | **PENDIENTE** |
