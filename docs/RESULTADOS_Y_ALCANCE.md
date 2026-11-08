@@ -56,6 +56,10 @@ R_t^L-R_t^R=\mathbb E[\chi'_t(s_t^B)]+\nu_{L,t}.
 
 Por tanto, la igualdad abreviada \(R^L=R^R+\overline{\chi}\) exige declarar \(\nu_L=0\); no es una identidad válida para toda esquina. Distinguimos el rendimiento interbancario \(R^F\), la remuneración \(R^R\) y la tasa bancaria \(R^L\), que son objetos distintos.
 
+## 5. Prueba escalar Lean compilada y alcance exacto
+
+La ejecución [Lean 42430587348](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42430587348) compiló el módulo `ScalarComplementarityMultiplicityCandidate.lean` (commit `ab86ddfc0b9220ff7aa7f8fe8fa3856cfe4f182b`), incluidos `scalar_complementarity_exactly_two` y `no_scalar_complementarity_of_negative_boundary`. Los axiomas impresos fueron exclusivamente `propext`, `Classical.choice` y `Quot.sound`. Estos son lemas de orden **condicionales sobre la marginal escalar**; su monotonía exigida en `[0,+∞)` es más fuerte que el dominio local del enunciado de la Proposición 4.2. El enlace con el residual económico, la existencia de su raíz interior y la construcción de las asignaciones competitivas siguen pendientes.
+
 ## 5. Corrección de alcance de 7 de noviembre de 2026
 
 La versión posterior a la primera compuerta reformuló la Proposición 4.2 como afirmación local sobre la complementariedad escalar y la Proposición 4.5 como persistencia **condicional** de ramas reducidas. Ya no se presentan como teoremas de existencia y unicidad de equilibrios competitivos infinitos. El resultado del módulo Lean Proposition42RefutationCandidate se refiere a la especificación literal de unicidad de Allocation, inconsistente por libertad del campo collateralDual, y **no** refuta la existencia económica de S y B. La reparación primal está propuesta pero sin testigos completos.

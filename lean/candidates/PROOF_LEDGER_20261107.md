@@ -115,3 +115,7 @@ all `*Candidate.lean` files, and prints principal theorem axioms.
 Inspect the **candidate-audit** workflow rather than the generic `build`
 workflow and use the run with the exact head commit SHA. A previous green run
 does not certify subsequent commits.
+
+## Adenda verificable — complementariedad escalar (7 de noviembre de 2026)
+
+Nuevo módulo independiente: `ScalarComplementarityMultiplicityCandidate.lean`, recompilado en [GitHub Actions 42430587348](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42430587348) al commit `ab86ddfc0b9220ff7aa7f8fe8fa3856cfe4f182b`. Ambos resultados `scalar_complementarity_exactly_two` y `no_scalar_complementarity_of_negative_boundary` compilan y su `#print axioms` retorna `[propext, Classical.choice, Quot.sound]`. **Alcance:** argumento escalar con `StrictAntiOn M (Set.Ici 0)` y raíz interior asumida; no demuestra monotonía de la marginal de 33 ecuaciones, existencia real del régimen, `CompetitiveEquilibriumWithInitialIntervention`, ni corrige la unicidad literal de `Allocation`. La interfaz del paper original sigue sin testigo completo. Las referencias históricas de esta bitácora a trabajos anteriores permanecen deliberadamente conservadas.
