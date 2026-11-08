@@ -59,7 +59,7 @@ theorem bankContinuationPayoffAt_le_tailEnvelope
     bankContinuationPayoffAt P X t h q ≤ bankTailEnvelopeAt P X t h q V := by
   rw [bankContinuationPayoffAt_first_step P X t h q hcurrent hchild htails]
   unfold bankTailEnvelopeAt
-  apply add_le_add_left
+  apply add_le_add_right
   apply Finset.sum_le_sum
   intro s hs
   apply Finset.sum_le_sum
