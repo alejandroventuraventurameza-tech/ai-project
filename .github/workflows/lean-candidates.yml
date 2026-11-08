@@ -316,7 +316,8 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarStationaryPythonCalibration.stationary_source_reference_positive
           #print axioms Ventura26LiquidityAllocation.ProposedPaperFinancialMainExact.exact_noSimultaneousSavingBorrowingSpec
           #print axioms Ventura26LiquidityAllocation.ProposedPaperFinancialMainExact.exact_financingCapacityComparativeSpec
-          #print axioms Ventura26LiquidityAllocation.ProposedPaperFinancialMainExact.exact_fundingSupergradientSpec
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperFinancialMainExact.original_fundingSupergradientSpec_false
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperFinancialMainExact.corrected_fundingSupergradientSpec
           #print axioms Ventura26LiquidityAllocation.ProposedStationaryEquilibrium.parent_competitiveEquilibrium
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.proposed_localSlackLiteralAllocation_settlementClears_of_binarySymmetric
