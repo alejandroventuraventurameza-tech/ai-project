@@ -1,4 +1,5 @@
 # Quick kernel gate for the paper's newest financial/allocative claims.
+# source-chain-rule-20261108: rerun complete kernel/axiom gate after fixed imports and association.
 # The complete Lean audit must still pass before delivery.
 name: Lean paper claims (focused, pinned)
 
