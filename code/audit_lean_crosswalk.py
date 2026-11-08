@@ -91,6 +91,10 @@ GREEN_SOURCE_COMPLETE_SHA = "b132b91df59eb3e64b6aefb77621bd62084c8054"
 GREEN_PHYSICAL_MPK_RUN = 42505447150
 GREEN_PHYSICAL_MPK_SHA = "17a56a00f5ce372039f00cada55d6f185891bdff"
 GREEN_BANK_SUFFICIENCY_PROOFS = {
+    "source_bank_static_optimal_with_all_bank_nonneg_corners":
+        (42515897038, "b9dedab51a1df6136d9888e76aec55130702e430"),
+    "source_bank_bellman_environment_of_static_optimality":
+        (42515897038, "b9dedab51a1df6136d9888e76aec55130702e430"),
     "bank_cap_corner_global_direction":
         (42515365119, "f81f3756b234a3d2249a0529735bc2c2efa80ebe"),
     "source_bank_static_optimal_with_bank_caps_and_corners":

@@ -1,7 +1,7 @@
 # IE project — Certificado KKT global del banco y compuerta Bellman
 
 **Rama de trabajo:** `work/lean-ci-validation-otc-20261106`.  
-**Estado actualizado:** dos declaraciones KKT con límites de préstamos/depósitos pasaron [CI #42515365119](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42515365119), commit `f81f3756b234a3d2249a0529735bc2c2efa80ebe`, y `#print axioms` sin `sorryAx`. La extensión con reservas nulas y el predicado completo del entorno local de Bellman siguen como candidatos mientras la ejecución focalizada correspondiente no sea verde.  
+**Estado actualizado:** dos declaraciones KKT con límites de préstamos/depósitos pasaron [CI #42515365119](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42515365119), commit `f81f3756b234a3d2249a0529735bc2c2efa80ebe`, y `#print axioms` sin `sorryAx`. La extensión con reservas nulas y el predicado literal local `BankBellmanLocalEnvironmentAt` superaron [CI #42515897038](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42515897038), SHA `b9dedab51a1df6136d9888e76aec55130702e430`, sin `sorryAx`. Siguen pendientes la función de valor de las ramas S/B y la política óptima de horizonte infinito.  
 **Objeto:** economía fuente `EconomicModel.lean`, no una función objetivo alternativa.
 
 ## I. Fuente y distinción institucional
@@ -64,7 +64,7 @@ El balance impone `delta b+delta m-delta d=0`. Por factibilidad de la desviació
 
 De ello sigue **suficiencia global de cartera en una fecha** para toda cartera literalmente factible, con independencia del signo del saldo de liquidación de la alternativa. Los `sorry` o postulados de optimalidad final están prohibidos.
 
-**Alcance importante:** el certificado cubre ceros de préstamos/depósitos y sus caps, pero **no** incluye un multiplicador no nulo para el límite inferior de reservas. Si la candidata tiene `m*=0`, las condiciones de precios escritas son suficientes pero pueden no ser necesarias; no declararlas como KKT exhaustivo de toda esquina posible. Tampoco se han eliminado restricciones de solvencia, cuyo papel es restringir el conjunto factible y no reemplazar la cota de concavidad.
+**Dos versiones de KKT auditadas:** el primer certificado de cuatro duales cubre préstamos y depósitos nulos o en sus caps, pero fija el multiplicador de reservas nulas en cero. La versión adicional `source_bank_static_optimal_with_all_bank_nonneg_corners` incluye expresamente el quinto dual `reserveZeroDual ≥ 0` y la complementariedad `reserveZeroDual*m*=0`; por ello **también cubre reservas nulas**. Ambos mantienen las restricciones de solvencia de la fuente en el dominio de desviaciones factibles.
 
 El objetivo de Lean está en `PaperBankKKTGlobalSufficiencyCandidate.lean`.
 
@@ -130,3 +130,7 @@ lim_{T->infinity} E_0[A_{0,T}*V_T(e_T(candidate),h_T)] = 0.
 La fuente contiene un criterio de terminalidad de patrimonio `bankContinuationTerminalConditionAt_of_weightedEnvelope` y otro distinto de sumabilidad de pagos. Para inferir el límite de `V_T` a partir del de `e_T` todavía hace falta una cota apropiada de la pendiente de valor `V_T(e,h)/e` a lo largo de la continuación candidata; no debe confundirse `e_T` con `V_T`.
 
 **Estatus:** esquema matemático de prueba y obligaciones para el siguiente módulo Lean, **no** un resultado ya compilado. Por esta razón, aprobar `BankBellmanLocalEnvironmentAt` en una fecha no permite promocionar `BankContinuationOptimalAt` sin este argumento y la realización efectiva de `V`.
+
+## VI. Resultado Lean de las dos ampliaciones
+
+La [ejecución focalizada #42515897038](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42515897038) en commit `b9dedab51a1df6136d9888e76aec55130702e430` compiló el teorema estático con cinco duales y el teorema de reconstrucción del entorno local de Bellman, con auditoría `#print axioms` sin `sorryAx`. **Ocho declaraciones bancarias condicionales verificadas en total**, incluyendo cuatro de la campaña anterior y cuatro de las extensiones con KKT; no son ocho mecanismos económicos independientes. El valor de la candidata y el horizonte infinito no se consideran certificados.

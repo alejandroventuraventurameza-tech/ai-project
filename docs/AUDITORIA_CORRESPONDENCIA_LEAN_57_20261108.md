@@ -1,5 +1,12 @@
 # Matriz de correspondencia entre los 57 resultados y Lean
 
+## Ampliacion bancaria con reservas nulas y entorno local de Bellman
+
+Los resultados `source_bank_static_optimal_with_all_bank_nonneg_corners` y `source_bank_bellman_environment_of_static_optimality` pasaron [CI #42515897038](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42515897038), SHA `b9dedab51a1df6136d9888e76aec55130702e430`, sin `sorryAx`. El primero prueba suficiencia global de cartera con los cinco multiplicadores, incluida la esquina de reservas nulas. El segundo demuestra el predicado literal **local** `BankBellmanLocalEnvironmentAt` desde una optimalidad estática ya establecida y una identidad puntual de valor que sigue siendo premisa, no resultado construido.
+
+**Contadores de alcance:** 8 declaraciones bancarias condicionales relacionadas con Proposición 3.8; 42 declaraciones de apoyo al Lema 4.3; 0/57 enunciados literales originales con equivalencia integral certificada. `BankOptimal` global, selección S/B e IRF de equilibrio completo siguen pendientes.
+
+
 ## Nueva compuerta: suficiencia bancaria condicional y Bellman local
 
 La [CI #42506496740](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506496740) verificó `source_bank_static_portfolio_optimal_of_supergradients`; [#42506614812](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506614812) verificó la selección kink-aware `source_bank_static_portfolio_optimal_of_selected_marginal`; [#42506650961](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506650961) verificó la dominancia de una fecha para el valor de continuación Bellman; y [#42506762177](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506762177) verificó la derivación del factor Bellman positivo desde consumo/inflación, salida y valor unitario. Todos pasaron `#print axioms` sin `sorryAx`.
