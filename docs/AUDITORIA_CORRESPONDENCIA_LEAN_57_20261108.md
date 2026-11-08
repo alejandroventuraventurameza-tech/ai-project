@@ -6,10 +6,10 @@
 
 ## 1. Veredicto general sin sobredeclaración
 
-Se han inspeccionado de manera dirigida **12 de 57** afirmaciones:
+Se han inspeccionado de manera dirigida **19 de 57** afirmaciones:
 se localizó al menos una declaración Lean con objeto relacionado, y
 se describió explícitamente por qué no alcanza, todavía, a demostrar
-el enunciado completo del paper. **45 resultados** siguen pendientes
+el enunciado completo del paper. **38 resultados** siguen pendientes
 de cotejo semántico individual. El identificador histórico de cada
 resultado, su título y el hash de su enunciado son trazables en JSON.
 
@@ -77,9 +77,9 @@ los números de PDF antiguos no deben usarse como localizadores.
 | 4.4 — asignación opuesta S/B | Existe una cuenta numérica reproducible y lemas de raíces escalares | No existe prueba Lean de los signos de capital, pérdida y soluciones de equilibrio |
 | 4.5 — persistencia bajo riesgo | Todavía no se cotejó con declaración de mismo alcance | Revisión prioritaria pendiente |
 
-Los otros siete resultados principales de los catorce históricos se
-mantienen `not_yet_semantically_reviewed` y no se interpretan
-como falsos ni como demostrados.
+Los **14 resultados numerados del cuerpo histórico** ya tienen cotejo
+semántico dirigido. Esto no acredita cobertura integrada: para cada
+resultado se han registrado las hipótesis y las brechas.
 
 ## 4. Cinco relaciones auxiliares del anexo
 
@@ -92,6 +92,52 @@ Se localizaron relaciones parciales relevantes para
 y `lem:CRRA_H_demand` (identidad de presupuesto y cobertura,
 sin derivar utilidad CRRA). Ninguna ha sido promovida a
 igualdad literal con el lema del anexo.
+
+## 4 bis. Hallazgo del módulo fuente `FinancialCore.lean`
+
+La segunda revisión reveló una omisión metodológica del primer inventario:
+en `lean/checkpoint/modules/Ventura26LiquidityAllocation/FinancialCore.lean`
+hay **tres teoremas fuente** mucho más cercanos al paper de lo
+que sugerían los nombres de los módulos candidatos:
+
+| Resultado | Prueba fuente ya declarada | Nuevo puente exacto candidato |
+|---|---|---|
+| Lema 3.2: no ahorrar y endeudarse simultáneamente | `no_simultaneous_saving_and_borrowing`: contradicción de KKT si `RL>RD>0` y ambos saldos positivos | `exact_noSimultaneousSavingBorrowingSpec` |
+| Proposición 3.3: efecto parcial de la tasa | `financingCapacity_hasDerivAt_and_deriv_neg`: derivada exacta de capacidad con fondos, `q` y garantía fijos | `exact_financingCapacityComparativeSpec` |
+| Lema 3.5: superdiferencial | `isFundingSupergradient_iff_cases`: equivalencia global para tres caras, incluyendo el intervalo en `f=0` | `exact_fundingSupergradientSpec` |
+
+Los puentes se declararon en
+`lean/candidates/Ventura26LiquidityAllocation/PaperFinancialMainExactCandidate.lean`
+con objetivo literal `PaperInterface.*Spec` en cada caso.
+La auditoría de kernel y axiomas de este nuevo archivo se encuentra
+**PENDIENTE hasta el resultado de la ejecución del workflow Lean
+correspondiente al commit**; que exista una declaración no prueba
+que el archivo compile. No modificar todavía `formalization_status`
+del ledger fuente.
+
+Al cotejar **los siete últimos resultados principales**:
+el Lema 3.1 dispone del predicado fuente `RobustCollateral`,
+pero no se ha cerrado la implicación de patrimonio futuro no negativo;
+el Lema 3.4 tiene un teorema fuente de recuperación de cartera
+`signedFundingEquivalence` que no eleva por sí solo óptimos
+intertemporales; el Lema 3.7 tiene la cota de tasa interbancaria
+`otcCorridorWeight_mem` pero no la monotonicidad global prometida
+en `tightness`; y los resultados 4.3 y 4.5 siguen sin prueba
+completa equivalente a su enunciado histórico.
+
+**Brecha especialmente relevante para 4.3:** `allocationLossIdentitySpec`
+en `PaperInterface.lean` enuncia parte del referente eficiente y
+la no negatividad de la pérdida, pero **no** contiene la derivada
+`d𝓛 = α(κ_H-ω_H)d log(k_H/k_L)` incluida en el paper.
+Aun una prueba exitosa de ese `Spec` sería estrictamente más débil
+que el lema académico completo.
+
+**Brecha especialmente relevante para 4.5:** el `Spec` Lean original
+requiere dos equilibrios competitivos estocásticos completos para
+riesgos positivos pequeños, mientras que el paper vigente enuncia
+solo persistencia de soluciones reducidas **suponiendo** que
+la continuación es contractiva. No puede reutilizarse el resultado
+reducido para afirmar verdadero el `Spec` más fuerte.
 
 ## 5. Obligaciones antes de promover cualquier resultado
 
