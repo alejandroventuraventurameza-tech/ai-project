@@ -43,6 +43,7 @@ def audit(data):
     mone=sum(magnitude(x) for x in m)
     Rinf=max(sum(abs(x) for x in row) for row in R)
     result=[]
+    signed_bounds=[]
     for j in range(K):
         # Directional policy forcing G_j and candidate z'=-R G_j.
         vg=[sum_interval(scale(R[i][k],G[k][j]) for k in range(N))
@@ -52,6 +53,7 @@ def audit(data):
         ginf=max(magnitude(G[i][j]) for i in range(N))
         err=mone * (q/(1-q)) * Rinf * ginf
         bound=(nominal[0]-err,nominal[1]+err)
+        signed_bounds.append(bound)
         result.append({
             "parameter":["collateral_slack","reserve_remuneration",
                          "reserve_quantity","reserve_requirement",
@@ -63,6 +65,22 @@ def audit(data):
             "nominal_upper_rational":fraction(nominal[1]),
             "neumann_error_rational":fraction(err)
         })
+    b, a = signed_bounds[0], signed_bounds[1]
+    # Only a conditional local IFT slope. This does NOT construct a
+    # root, a C1 solutionLog or the required zero baseline dual.
+    if b[0] < 0 and b[1] < 0:
+        reciprocal_b=(Q(1)/b[1],Q(1)/b[0])
+        minus_a=(-a[1],-a[0])
+        slope=interval_multiply(minus_a, reciprocal_b)
+        root_slope_report={
+            "conditional_dslack_dvR_lower_rational":fraction(slope[0]),
+            "conditional_dslack_dvR_upper_rational":fraction(slope[1]),
+            "strict_negative":slope[1]<0,
+            "requires_exact_zero_baseline_and_C1_IFT":True,
+            "equilibrium_root_existence_established":False,
+        }
+    else:
+        root_slope_report=None
     return {
         "schema":"ventura-conditional-point-schur-audit-v1",
         "source_point_inverse_interval_gate_pass":True,
@@ -76,6 +94,7 @@ def audit(data):
         "root_normalization_exactly_zero_proved":False,
         "meaning":"If all source AD enclosures are sound for one common exact reference, these signs are rigorous at that point only.",
         "policy_derivative_enclosures":result,
+        "conditional_interior_root_slope":root_slope_report,
     }
 
 
@@ -102,6 +121,11 @@ def main():
         ok=(z["policy_derivative_enclosures"][0]["strict_negative_given_semantic_inputs"]
              and z["policy_derivative_enclosures"][1]["strict_negative_given_semantic_inputs"])
         print("CONDITIONAL POINT SCHUR SIGN GATE:", "PASS" if ok else "FAIL")
+        slope=z.get("conditional_interior_root_slope")
+        if slope is not None:
+            print("CONDITIONAL d(s*)/d(v_R) enclosure:",
+                  float(Q(slope["conditional_dslack_dvR_lower_rational"])),
+                  float(Q(slope["conditional_dslack_dvR_upper_rational"])))
         print("FULL ECONOMIC SOURCE IDENTITY & IFT: NOT PROVED")
         return 0 if ok else 2
     except (ValueError,KeyError,OSError,ZeroDivisionError) as e:
