@@ -77,14 +77,14 @@ theorem output_share_gt_capital_share_iff_productivity
         (vH * vL) * (yL * kH) < (vH * vL) * (yH * kL) := by
       nlinarith [hcross]
     have hraw : yL * kH < yH * kL :=
-      (mul_lt_mul_left hw).mp hweighted
+      (mul_lt_mul_iff_of_pos_left hw).mp hweighted
     exact (div_lt_div_iff₀ hkL hkH).2 (by nlinarith [hraw])
   · intro h
     have hraw : yL * kH < yH * kL :=
       (div_lt_div_iff₀ hkL hkH).mp h
     have hweighted :
         (vH * vL) * (yL * kH) < (vH * vL) * (yH * kL) :=
-      (mul_lt_mul_left hw).2 hraw
+      (mul_lt_mul_iff_of_pos_left hw).2 hraw
     have hcross :
         (vH * kH) * (vH * yH + vL * yL) <
           (vH * yH) * (vH * kH + vL * kL) := by
