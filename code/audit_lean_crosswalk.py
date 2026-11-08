@@ -31,7 +31,12 @@ ALLOWED_RELATIONS = {
     "exact_interface_claim_candidate_ci_pending",
     "corrected_economic_claim_ci_pending",
     "counterexample_to_malformed_literal_interface",
+    "exact_interface_claim_kernel_verified",
+    "corrected_economic_claim_kernel_verified",
+    "counterexample_malformed_interface_kernel_verified",
 }
+GREEN_SOURCE_FINANCIAL_RUN = 42457259796
+GREEN_SOURCE_FINANCIAL_SHA = "c006e00c437243c3f6f44ec3c102df4286c545e0"
 EXPECTED_EXACT_CANDIDATES = {
     "lem:repayment": "exact_repaymentSpec",
     "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
@@ -68,6 +73,9 @@ def main() -> None:
     source_specifications = 0
     corrected_candidates = {}
     malformed_interface_refutations = {}
+    green_exact = {}
+    green_corrected = {}
+    green_refutations = {}
     for row in data["entries"]:
         label = row["label"]
         old = original[label]
@@ -97,7 +105,8 @@ def main() -> None:
                     f"{label}: invalid theorem relation {rel}")
             if rel == "counterexample_to_stronger_literal_interface":
                 refutations += 1
-            if rel == "exact_interface_claim_candidate_ci_pending":
+            if rel in ("exact_interface_claim_candidate_ci_pending",
+                       "exact_interface_claim_kernel_verified"):
                 require(label in EXPECTED_EXACT_CANDIDATES,
                         f"{label}: cannot self-designate an exact proof candidate")
                 require(item["declaration"] == EXPECTED_EXACT_CANDIDATES[label],
@@ -105,7 +114,10 @@ def main() -> None:
                 require(label not in exact_candidates,
                         f"{label}: multiple exact proof candidates")
                 exact_candidates[label] = item["declaration"]
-            if rel == "corrected_economic_claim_ci_pending":
+                if rel == "exact_interface_claim_kernel_verified":
+                    green_exact[label] = item["declaration"]
+            if rel in ("corrected_economic_claim_ci_pending",
+                       "corrected_economic_claim_kernel_verified"):
                 require(label == "lem:funding_supergradient",
                         "Wrong corrected claim mapping")
                 require(item["declaration"] == "corrected_fundingSupergradientSpec",
@@ -113,7 +125,10 @@ def main() -> None:
                 require(label not in corrected_candidates,
                         "Duplicate corrected 3.5 theorem")
                 corrected_candidates[label] = item["declaration"]
-            if rel == "counterexample_to_malformed_literal_interface":
+                if rel == "corrected_economic_claim_kernel_verified":
+                    green_corrected[label] = item["declaration"]
+            if rel in ("counterexample_to_malformed_literal_interface",
+                       "counterexample_malformed_interface_kernel_verified"):
                 require(label == "lem:funding_supergradient",
                         "Malformed Spec counterexample on wrong result")
                 require(item["declaration"] == "original_fundingSupergradientSpec_false",
@@ -121,6 +136,19 @@ def main() -> None:
                 require(label not in malformed_interface_refutations,
                         "Duplicate malformed interface refutation")
                 malformed_interface_refutations[label] = item["declaration"]
+                if rel == "counterexample_malformed_interface_kernel_verified":
+                    green_refutations[label] = item["declaration"]
+            if rel in (
+                "exact_interface_claim_kernel_verified",
+                "corrected_economic_claim_kernel_verified",
+                "counterexample_malformed_interface_kernel_verified",
+            ):
+                require(item.get("lean_ci_run_id") == GREEN_SOURCE_FINANCIAL_RUN,
+                        f"{label}: unrecognized green Lean run")
+                require(item.get("lean_ci_commit") == GREEN_SOURCE_FINANCIAL_SHA,
+                        f"{label}: pinned theorem commit mismatch")
+                require(item.get("lean_axiom_audit") == "passed_no_sorryAx",
+                        f"{label}: source proof not shown axiom-audited")
             if rel == "unproved_source_specification":
                 source_specifications += 1
             require(bool(item.get("note")), f"{label}: no evidence scope note")
@@ -144,6 +172,16 @@ def main() -> None:
             require((ROOT / target).is_file(),
                     f"{label}: missing numerical evidence {target}")
     require(refutations == 1, "Expected exactly one literal specification refutation.")
+    require(green_exact == {
+        "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
+        "prop:v0m_original_6_3": "exact_financingCapacityComparativeSpec",
+    }, f"Wrong kernel-verified exact source claims: {green_exact}")
+    require(green_corrected == {
+        "lem:funding_supergradient": "corrected_fundingSupergradientSpec"
+    }, f"Wrong verified corrected funding theorem: {green_corrected}")
+    require(green_refutations == {
+        "lem:funding_supergradient": "original_fundingSupergradientSpec_false"
+    }, f"Wrong verified refutation: {green_refutations}")
     require(exact_candidates == EXPECTED_EXACT_CANDIDATES,
             f"Wrong set of pending literal proof candidates: {exact_candidates}")
     require(corrected_candidates == {
@@ -165,9 +203,11 @@ def main() -> None:
         "not_yet_reviewed": len(labels) - reviewed,
         "related_declaration_pointers": related,
         "literal_spec_refutations": refutations,
-        "exact_paper_interface_candidates_still_pending_lean_ci": len(exact_candidates),
-        "corrected_economic_financial_theorems_pending_ci": len(corrected_candidates),
-        "malformed_pinned_interface_refutations_pending_ci": len(malformed_interface_refutations),
+        "exact_source_interfaces_kernel_verified": len(green_exact),
+        "exact_source_interfaces_pending_lean_ci": len(exact_candidates) - len(green_exact),
+        "corrected_economic_financial_theorems_kernel_verified": len(green_corrected),
+        "malformed_source_specifications_kernel_refuted": len(green_refutations),
+        "verified_financial_run": GREEN_SOURCE_FINANCIAL_RUN,
         "unproved_source_specifications": source_specifications,
         "complete_paper_theorems_proved_in_lean_by_this_audit": 0,
         "full_equilibrium_confirmed": False,
