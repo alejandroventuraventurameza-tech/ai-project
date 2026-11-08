@@ -185,6 +185,68 @@ theorem source_bank_static_portfolio_optimal_of_supergradients
   rw [hPayoff, hPayoff]
   linarith [hLiquidityBound, hPriceCollapse]
 
+
+/-- A concrete source-level implementation of the marginal selector at each
+supported payment atom. The weak ordering of liquidity slopes and ANY
+admissible kink slope imply the needed supergradient at the candidate,
+even if some settlements are exactly zero. Thus the gradient condition
+in the previous theorem is CONSTRUCTED, not assumed for this corollary.
+The two endogenous price identities and candidate feasibility remain
+explicitly necessary premises; caps and Bellman remain outside scope. -/
+theorem source_bank_static_portfolio_optimal_of_selected_marginal
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (deficitSlope surplusSlope retainedEquity kinkSlope : ℝ)
+    (candidateLoans candidateReserves candidateDeposits : ℝ)
+    (horder : surplusSlope ≤ deficitSlope)
+    (hkinkLower : surplusSlope ≤ kinkSlope)
+    (hkinkUpper : kinkSlope ≤ deficitSlope)
+    (hcandidate : BankStaticPortfolioFeasibleAt P X t h
+      deficitSlope surplusSlope retainedEquity
+      candidateLoans candidateReserves candidateDeposits)
+    (hpricingLoans :
+      X.loanRate t h = X.reserveRate t h +
+        finiteSupportExpectation P.paymentSupport P.paymentProbability
+          (fun ω => selectedOTCLiquidityMarginal deficitSlope surplusSlope kinkSlope
+            (bankSettlementSurplus candidateReserves
+              (P.reserveRequirementPath t h)
+              (X.depositRate t h / X.reserveRate t h)
+              candidateDeposits (P.paymentShock ω))))
+    (hpricingDeposits :
+      X.depositRate t h = X.reserveRate t h +
+        (1 - P.reserveRequirementPath t h) *
+          finiteSupportExpectation P.paymentSupport P.paymentProbability
+            (fun ω => selectedOTCLiquidityMarginal deficitSlope surplusSlope kinkSlope
+              (bankSettlementSurplus candidateReserves
+                (P.reserveRequirementPath t h)
+                (X.depositRate t h / X.reserveRate t h)
+                candidateDeposits (P.paymentShock ω))) +
+        (X.depositRate t h / X.reserveRate t h -
+            P.reserveRequirementPath t h) *
+          finiteSupportExpectation P.paymentSupport P.paymentProbability
+            (fun ω =>
+              selectedOTCLiquidityMarginal deficitSlope surplusSlope kinkSlope
+                (bankSettlementSurplus candidateReserves
+                  (P.reserveRequirementPath t h)
+                  (X.depositRate t h / X.reserveRate t h)
+                  candidateDeposits (P.paymentShock ω)) * P.paymentShock ω)) :
+    BankStaticPortfolioOptimalAt P X t h deficitSlope surplusSlope
+      retainedEquity candidateLoans candidateReserves candidateDeposits := by
+  refine source_bank_static_portfolio_optimal_of_supergradients
+    P X t h deficitSlope surplusSlope retainedEquity
+    candidateLoans candidateReserves candidateDeposits
+    (fun ω => selectedOTCLiquidityMarginal deficitSlope surplusSlope kinkSlope
+      (bankSettlementSurplus candidateReserves
+        (P.reserveRequirementPath t h)
+        (X.depositRate t h / X.reserveRate t h)
+        candidateDeposits (P.paymentShock ω)))
+    hcandidate ?_ hpricingLoans hpricingDeposits
+  intro ω hω
+  exact selectedOTCLiquidityMarginal_isSupergradient
+    horder hkinkLower hkinkUpper
+
+#print axioms source_bank_static_portfolio_optimal_of_selected_marginal
+
 #print axioms source_bank_static_portfolio_optimal_of_supergradients
 
 end ProposedPaperBankStaticSupergradientSufficiency
