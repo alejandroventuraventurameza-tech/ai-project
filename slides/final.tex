@@ -703,4 +703,35 @@ Esta cuenta explica la coexistencia \emph{condicional} de las dos
 regiones en el reducido. No reemplaza la demostración de optimalidad
 y equilibrio dinámico completo.
 \end{frame}
+
+\begin{frame}{Anexo C. Demostración del cierre laboral de fecha cero}
+\small
+La firma $i$ utiliza $F_i=A_i k_i^{2/5}\ell_i^{1/2}$
+y escoge trabajo mediante
+\[
+w_0=\tfrac12\,m_0A_i k_{i0}^{2/5}\ell_{i0}^{-1/2}.
+\]
+Con $k_{i0}=s\bar k_i$, $x=w_0/\bar w$ y
+$m_0=\bar m$, se obtiene
+\[
+\frac{\ell_{i0}}{\bar\ell_i}=s^{4/5}x^{-2},
+\qquad \frac{L_0}{\bar L}=s^{4/5}x^{-2}.
+\]
+De $w_0=\chi_WC^W_0L_0$ y
+$\bar w=\chi_W\bar C^W\bar L$, con
+$y=C^W_0/\bar C^W$, se deriva
+\[
+x=y\frac{L_0}{\bar L}
+=y\,s^{4/5}x^{-2}
+\quad\Rightarrow\quad
+\boxed{x=(y\,s^{4/5})^{1/3}}.
+\]
+\footnotesize
+Esta identidad es el cierre analítico usado en el
+prefijo; la formalización Lean de
+\texttt{BoundaryWorkerLaborPackage} todavía falta.
+La nueva prueba numérica independiente verifica
+la FOC y esta ley de escala sin alterar la IRF.
+\end{frame}
+
 \end{document}

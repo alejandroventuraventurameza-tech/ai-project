@@ -268,6 +268,8 @@ if __name__ == "__main__":
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "audit_claim_scope.py")], check=True)
 
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_boundary_labor.py")], check=True)
+
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_prefix_rows.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "reproduce.py")], check=True)

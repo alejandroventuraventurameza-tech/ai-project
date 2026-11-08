@@ -1197,6 +1197,48 @@ Trabajo y salario se determinan conjuntamente:
 \end{equation}
 La expresión usa $\sigma_W=\varphi=1$ y la misma tecnología de referencia; surge al combinar $w=\chi_WC^WL$ y $L=\sum_i v_i\ell_i$, no al fijar empleo.
 
+\paragraph{Prueba algebraica del cierre laboral de fecha cero.}
+Para hacer explícito el paso que falta formalizar en la construcción
+Lean, defina $s=\gamma_K(R)>0$, $x=w_0/\bar w>0$,
+$y=C^W_0/\bar C^W>0$. Con $m_0=\bar m=5/6$,
+tecnología $A_i k_i^{2/5}\ell_i^{1/2}$ y salario común,
+la FOC laboral individual de la empresa se resuelve como
+\[
+\ell_{i0}=\left(\frac{\beta\bar m A_i
+(s\bar k_i)^{2/5}}{w_0}\right)^2,
+\qquad
+\frac{\ell_{i0}}{\bar\ell_i}
+=s^{4/5}x^{-2}.
+\]
+Al agregar con masas $v_i$ constantes, la misma escala
+multiplica al empleo de los dos tipos y, por lo tanto,
+\[
+\frac{L_0}{\bar L}=s^{4/5}x^{-2}.
+\]
+Por su parte, la FOC de trabajo del hogar para
+$\sigma_W=\varphi=1$ y $\chi_W>0$ es
+$w_0=\chi_W C^W_0 L_0$; el punto estacionario satisface
+$\bar w=\chi_W\bar C^W\bar L$. Al dividir ambas,
+\[
+x=y\frac{L_0}{\bar L}
+=y\,s^{4/5}x^{-2}
+\quad\Longleftrightarrow\quad
+\boxed{x^3=y\,s^{4/5}}.
+\label{eq:boundary_worker_cubic}
+\]
+Dado que $x,y,s>0$, la solución real positiva es única,
+$x=(y s^{4/5})^{1/3}$, exactamente la regla salarial
+empleada en la construcción anterior. Esta igualdad
+\emph{demuestra algebraicamente} la FOC laboral en el
+modelo determinista del enlace, sin fijar el empleo
+ni añadir parámetros. El script
+\texttt{code/irf/audit\_boundary\_labor.py} contrasta
+numéricamente las identidades en una malla del intervalo
+de raíz; esa auditoría no sustituye la prueba simbólica.
+En Lean la descarga desde las definiciones de potencias
+reales y las masas de ambos tipos hacia
+\texttt{BoundaryWorkerLaborPackage} continúa pendiente.
+
 Solo falta recursos:
 \begin{equation}\label{eq:scalar_bridge_root}
 \Phi(R):=Y_0(R)-C^W_0(R)-\sum_i v_i c^E_{i0}(R)
