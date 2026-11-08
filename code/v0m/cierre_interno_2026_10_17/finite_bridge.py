@@ -409,6 +409,12 @@ def evaluate_bridge(base, P, branch, policy_inputs=True,
         ]
         box_capture["source_to_legacy_row_permutation"] = perm
         box_capture["recomputed_lean_source_style_rows"] = [4, 5, 21]
+        box_capture["funding_dual_state_gradient_ball"] = [
+            enclosure(metrics["L_dual"].d[j]) for j in range(33)
+        ]
+        box_capture["funding_dual_direct_parameter_derivatives_ball"] = [
+            enclosure(metrics["L_dual"].d[33 + j]) for j in range(4)
+        ]
         return None
     solution = bd.solve(J, -forcing)
     inverse = bd.solve(J, bd.eye(33))
@@ -606,6 +612,9 @@ def main():
                 "jacobian_ball": uniform_box["jacobian_ball"],
                 "fy_ball": uniform_box["fy_ball"],
                 "source_box_residual_enclosure": uniform_box["source_box_residual_enclosure"],
+                "funding_dual_state_gradient_ball": uniform_box["funding_dual_state_gradient_ball"],
+                "funding_dual_direct_parameter_derivatives_ball":
+                    uniform_box["funding_dual_direct_parameter_derivatives_ball"],
                 "source_to_legacy_row_permutation": uniform_box["source_to_legacy_row_permutation"],
                 "rows_recomputed_as_source_style": [4, 5, 21],
                 "source_Lean_semantic_identity_proved": False,
