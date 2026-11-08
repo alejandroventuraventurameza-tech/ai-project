@@ -389,12 +389,20 @@ def evaluate_bridge(base, P, branch, policy_inputs=True, point_capture=None):
             [source_rows[i].d[j] if i in source_rows else J[i, j]
              for j in range(33)] for i in range(33)
         ])
-        # The legacy Jacobian inverse cannot be transported by simple
-        # column scaling across all source-style rows. Recompute an
-        # interval inverse of this exact-AD POINT matrix directly.
-        source_inverse = bd.solve(source_J, bd.eye(33))
+        # Use a high-precision point candidate only as a preconditioner.
+        # Interval Gauss-Jordan on a large box can overestimate pivots
+        # and report zero even when the POINT matrix is nonsingular.
+        # Rigour comes from the subsequent interval multiplication
+        # verifying I-R*J, NOT from mpmath's point inverse.
+        import mpmath as mp
+        mp.mp.dps = 110
+        mid = mp.matrix([
+            [mp.mpf(str(source_J[i, j].midpoint())) for j in range(33)]
+            for i in range(33)
+        ])
+        point_inverse = mid ** (-1)
         source_R = bd.arr([
-            [I(source_inverse[i, j].midpoint()) for j in range(33)]
+            [I(mp.nstr(point_inverse[i, j], n=95)) for j in range(33)]
             for i in range(33)
         ])
         source_F0 = [
@@ -418,7 +426,7 @@ def evaluate_bridge(base, P, branch, policy_inputs=True, point_capture=None):
             "parameter_dimension": 5,
             "rows_recomputed_as_source_style": [4, 5, 21],
             "source_residual": "localBindingResidualWithSlack (FULL SEMANTIC ROW MAP STILL OPEN)",
-            "preconditioner_method": "pointwise interval Gauss-Jordan on source-style 33x33 AD candidate; rational midpoint",
+            "preconditioner_method": "mpmath 110-digit point candidate; validated by directed interval defect",
             "preconditioner": [[str(source_R[i, j].midpoint()) for j in range(33)]
                                for i in range(33)],
             "point_jacobian_box": [[enclosure(source_J[i, j]) for j in range(33)]
