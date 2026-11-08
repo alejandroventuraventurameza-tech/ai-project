@@ -1064,5 +1064,51 @@ theorem source_discounted_bank_mass_next_of_nonnegative_equity
 
 #print axioms source_discounted_bank_mass_next_of_nonnegative_equity
 
+
+/-- Source terminal condition for a nonnegative-equity full-retention
+policy, using the newly derived source mass transition. Nonnegativity
+of individual discounted equity is stated for all finite histories
+here; replacing it with a merely weighted supported-path statement
+is the next exact-support weakening. The OTC growth bound remains an
+economic premise, not a derived equilibrium price restriction. -/
+theorem source_full_retention_tvc_of_nonnegative_equity_mass_identity
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (C grossBound : ℝ)
+    (hC : 0 ≤ C)
+    (hgross : 0 ≤ grossBound)
+    (hsurvive : 0 ≤ 1 - P.bankExit)
+    (hexit : P.bankExit < 1)
+    (hcontraction : (1 - P.bankExit) * grossBound < 1)
+    (hbase : bankSurvivingValueTermAt P X t h
+        (sourceFullRetentionCandidate P X t h) 0 ≤ C)
+    (hfeasible : BankContinuationFeasibleAt P X t h
+      (X.bankEquity t h) (sourceFullRetentionCandidate P X t h))
+    (hrisk : P.workerRiskAversion = 1)
+    (hconsumption : ∀ n (future : Fin n → S),
+      0 < X.workerConsumption (t + n) (continuationHistory h future))
+    (hchildConsumption : ∀ n (future : Fin n → S) s,
+      0 < X.workerConsumption (t + n + 1)
+        (childHistory (continuationHistory h future) s))
+    (haggregate : ∀ n (future : Fin n → S),
+      0 < X.bankEquity (t + n) (continuationHistory h future))
+    (hnonneg : ∀ n (future : Fin n → S)
+      (payments : Fin n → P.paymentSupport),
+      0 ≤ bankCumulativeSDFAt P X t h future *
+        (sourceFullRetentionCandidate P X t h).equity n future payments)
+    (hconditional : ∀ n (future : Fin n → S),
+      sourceConditionalOTCGrowthFactor P X t h n future ≤ grossBound) :
+    BankContinuationObjectiveWellDefinedAt P X t h
+      (sourceFullRetentionCandidate P X t h) ∧
+    BankContinuationTerminalConditionAt P X t h
+      (sourceFullRetentionCandidate P X t h) := by
+  have hnext := source_discounted_bank_mass_next_of_nonnegative_equity
+    P X t h hfeasible hrisk hconsumption hchildConsumption haggregate
+  exact source_full_retention_tvc_of_conditional_otc_return
+    P X t h C grossBound hC hgross hsurvive hexit
+    hcontraction hbase hnonneg hconditional hnext
+
+#print axioms source_full_retention_tvc_of_nonnegative_equity_mass_identity
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
