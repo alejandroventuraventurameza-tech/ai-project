@@ -63,17 +63,17 @@ El **sistema reducido local de 33 ecuaciones** tiene un prefijo no lineal de dos
 
 Se comprueban residuos, márgenes de régimen, KKT necesarias y liquidación bancaria en ambas ramas. La robustez se compara con soluciones reducidas **no lineales finitas hasta T=640**. En S aumenta el capital elegido por H y disminuye la pérdida asignativa; en B ocurre lo contrario, aunque su crédito también aumenta.
 
-**Límite:** no se ha demostrado que estas IRF sean equilibrios competitivos infinitos ni una respuesta empírica causal. Los **71 módulos candidatos Lean** compilados todavía **no** equivalen a la formalización exacta de los **57 enunciados inventariados en el paper**.
+**Límite:** no se ha demostrado que estas IRF sean equilibrios competitivos infinitos ni una respuesta empírica causal. La auditoría Lean más reciente verifica lemas y correspondencias condicionadas de ocho filas del operador aumentado, además de una compatibilidad estacionaria; **no** equivale a formalizar exactamente los **57 resultados inventariados en el paper**, ni las 34 derivadas del evaluador numérico.
 
 ## 04 · Archivos y reproducción
 
 | Entregable | Acceso | Estado |
 |:--|:--|:--|
-| **Paper** | [PDF](paper/paper.pdf) · [LaTeX](paper/paper.tex) · [Referencias](paper/references.bib) | Borrador extenso; **falta ajustarlo** al cuerpo de 8–20 páginas |
-| **Presentación final** | [PDF](slides/final.pdf) · [Fuente](slides/final.tex) · [Guion formal](slides/GUIA_EXPOSICION_FORMAL.md) | Compilada; falta cotejo literal Lean y prueba manuscrita |
+| **Paper** | [PDF](paper/paper.pdf) · [LaTeX](paper/paper.tex) · [Referencias](paper/references.bib) | **Cuerpo compacto de 9 páginas**, verificado por CI; dossier técnico extenso conservado en anexo, revisión científica pendiente |
+| **Presentación final** | [PDF](slides/final.pdf) · [Fuente](slides/final.tex) · [Guion formal](slides/GUIA_EXPOSICION_FORMAL.md) | Comparación literal paper–Lean y prueba de alcance añadidas; última compilación y manuscrito del autor pendientes |
 | **IRF y código** | [Reproducción](code/irf/README.md) · [Entrada única](code/verify.py) · [Auditoría](code/irf/output/delivery_audit.json) | Verificaciones internas aprobadas |
-| **Lean** | [Código](lean/README.md) · [Auditoría](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42397125883) | Candidatos compilados; mapa exacto por resultado pendiente |
-| **Derivaciones a mano** | [hand/](hand/README.md) | Pendientes del autor |
+| **Lean** | [Código](lean/README.md) · [Auditoría](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42454446386) | Candidatos compilados y axiomas auditados en módulos escogidos; mapa exacto de los 57 resultados pendiente |
+| **Derivaciones a mano** | [hand/](hand/README.md) · [Guía detallada](hand/GUIA_DERIVACION_MANUSCRITA_NUCLEO.md) | Guía tipografiada; escaneos y juicio personal del autor **pendientes** |
 | **Material de tema** | [Propuesta](proposal/proposal.pdf) · [Slides](slides/topic.pdf) | Conservados |
 | **Colaboración con IA** | [Prompts](prompts.md) · [Informe de cierre](AUDITORIA_CIERRE_2026-11-07.md) | Registro y límites documentados |
 
