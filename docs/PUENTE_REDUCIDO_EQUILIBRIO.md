@@ -724,8 +724,13 @@ Los dos modulos compilaron con `#print axioms` en
 (comision sobre commit `6786fc90d5d0b83cdc6838963b6da759cf70c9b5`),
 sin `sorryAx` en los teoremas pertinentes. La revision posterior
 `82dddd13001281c32f97f193ccdfaae24e276e7a` explicita el
-tipo `Fin 33` tambien en el segundo modulo; requiere su propia
-lectura de CI antes de ser promovida como cabeza final validada.
+tipo `Fin 33` tambien en el segundo modulo. Su compilacion
+especializada y las auditorias de axiomas fueron **success** en
+[CI 42448551069](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42448551069).
+En particular, las pruebas principales conservan unicamente
+`propext`, `Classical.choice` y `Quot.sound` como axiomas:
+no hay `sorryAx` en la auditoria. El teorema sigue siendo
+condicional a `H(z*,h*)=0`, no instancia la raiz de Banach en Lean.
 
 **Proposicion CONDICIONAL exacta (fuente Lean):**
 ```text
