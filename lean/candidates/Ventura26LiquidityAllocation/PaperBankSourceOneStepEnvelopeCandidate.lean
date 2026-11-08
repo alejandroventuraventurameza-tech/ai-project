@@ -87,7 +87,7 @@ theorem bankContinuationPayoffAt_le_tailEnvelope
             (childHistory h s) :=
     mul_le_mul_of_nonneg_left (htailUpper s hpos ω) hsurvival
   exact mul_le_mul_of_nonneg_left
-    (add_le_add_right htail
+    (add_le_add_left htail
       (P.bankExit * q.equity 1 (fun _ => s) (fun _ => ω)))
     hweight
 
