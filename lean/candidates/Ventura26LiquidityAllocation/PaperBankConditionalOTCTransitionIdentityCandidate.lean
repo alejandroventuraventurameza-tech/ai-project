@@ -185,18 +185,23 @@ theorem source_discounted_bank_mass_next_eq_conditional_growth
         (hchildConsumption n future s).ne'
         (hindividual n future payments)
         (haggregate n future)
-      rw [source_transition_weight_child P X t h n future s]
-      rw [source_payment_weight_child P payments omega]
-      rw [show
-        bankCumulativeSDFAt P X t h (childFutureHistory future s) *
+      have htrans := source_transition_weight_child P X t h n future s
+      dsimp [childFutureHistory] at htrans
+      rw [htrans]
+      have hpayment := source_payment_weight_child P payments omega
+      dsimp [childPaymentHistory] at hpayment
+      rw [hpayment]
+      have hsource' :
+        bankCumulativeSDFAt P X t h (Fin.cons s future) *
           (sourceFullRetentionCandidate P X t h).equity (n + 1)
-            (childFutureHistory future s)
-            (childPaymentHistory payments omega) =
+            (Fin.cons s future) (Fin.cons omega payments) =
         (bankCumulativeSDFAt P X t h future *
           (sourceFullRetentionCandidate P X t h).equity n future payments) *
-          sourceDiscountedEquityGrowthFactor P X t h n future s omega by
+          sourceDiscountedEquityGrowthFactor P X t h n future s omega := by
         simpa only [sourceFullRetentionCandidate,
-          sourceDiscountedEquityGrowthFactor] using hsource]
+          sourceDiscountedEquityGrowthFactor,
+          childFutureHistory, childPaymentHistory] using hsource
+      rw [hsource']
       dsimp [W, K]
       ring
     _ = ∑ future : Fin n → S,
@@ -212,7 +217,6 @@ theorem source_discounted_bank_mass_next_eq_conditional_growth
               (sourceFullRetentionCandidate P X t h).equity n future payments)) *
             sourceConditionalOTCGrowthFactor P X t h n future := by
       dsimp [W, K, sourceConditionalOTCGrowthFactor]
-      rfl
 
 /-- SOURCE owner-payoff summability and TVC under a bounded conditional
 expected OTC return, with the exact mass transition now DERIVED
