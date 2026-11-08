@@ -3,7 +3,7 @@
 **Fecha de investigación:** 2026-11-08.  
 **Rama:** `work/lean-ci-validation-otc-20261106`.  
 **Declaración Lean candidata:** `PaperBankStaticSupergradientSufficiencyCandidate.lean`.  
-**Estado de evidencia:** los dos teoremas estáticos del módulo de cartera bancaria superaron CI focalizada y auditoría `#print axioms` sin `sorryAx`: [#42506496740](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506496740) (SHA `d42f9325709189ea87af4c686361c41ad816b8f0`) y [#42506614812](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506614812) (SHA `51b18f81c847e20a866850df5435a4a501de9682`). Los teoremas Bellman posteriores permanecen pendientes hasta CI verde.
+**Estado de evidencia:** los dos teoremas estáticos del módulo de cartera bancaria superaron CI focalizada y auditoría `#print axioms` sin `sorryAx`: [#42506496740](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506496740) (SHA `d42f9325709189ea87af4c686361c41ad816b8f0`) y [#42506614812](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506614812) (SHA `51b18f81c847e20a866850df5435a4a501de9682`). Los dos teoremas bancarios de continuación Bellman también fueron verificados por CI focalizada sin `sorryAx`: [#42506650961](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506650961), SHA `164c20e3f64b451a142bd11749ca9c86355e8f9c`, y [#42506762177](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506762177), SHA `ded39799ec6bb747ebfba5898ce229528c628ccd`. Solo abarcan comparaciones de una fecha.
 
 ## 1. Pregunta económica y alcance
 
@@ -96,7 +96,7 @@ bankExit*(1-bankSeedShare) = 1 - 1/referenceLoanRate.
 
 El módulo `LocalScalarBankRenewalCalibrationBridgeCandidate.lean` prueba la equivalencia algebraica **condicional**, no la identidad de parámetros concretos. Por ello una prueba de cartera no resuelve automáticamente la correspondencia de renovación ni el prefijo numérico. Debemos reconstruir la calibración `bankSeedShare` y verificar su admisibilidad y fuente en una prueba independiente.
 
-## 6. Puente de suficiencia de una fecha hacia Bellman (candidato)
+## 6. Puente de suficiencia de una fecha hacia Bellman (verificado condicionalmente)
 
 El nuevo `PaperBankBellmanStaticSufficiencyCandidate.lean` vincula el predicado fuente `BankStaticPortfolioOptimalAt` con `bankBellmanContinuationAt`. Sea `V_{t+1}(e,s)` un valor de continuación positivamente homogéneo en patrimonio para todos los estados sucesores respaldados. La biblioteca fuente establece, para toda cartera **factible** con retorno real no negativo,
 
@@ -109,7 +109,7 @@ donde `w_t(V_{t+1})` es independiente de la cartera individual cuando los precio
 
 El nuevo teorema invoca esa igualdad **separadamente para la candidata y la desviación factible**, y usa `w_t>0` para preservar la desigualdad estática. De este modo, la candidata domina cualquier desviación en la comparación de continuación de **una fecha**. No se deduce una condición terminal ni se construye un selector de estrategias para toda historia; ambos siguen pendientes.
 
-**Estado:** candidato en GitHub Actions hasta que la compilación fijada y la auditoría de axiomas concluyan. Evitar llamar a esto `BankOptimal` o equilibrio completo mientras esos objetos no se demuestren.
+**Estado:** los dos teoremas de comparación de una fecha pasaron Lean y auditoría de axiomas sin `sorryAx`. Evitar llamar a esto `BankOptimal` o equilibrio completo: la función de valor efectiva, la política óptima infinita y el límite terminal aún no están demostrados.
 
 ## 7. Evidencia final de la campaña bancaria
 
