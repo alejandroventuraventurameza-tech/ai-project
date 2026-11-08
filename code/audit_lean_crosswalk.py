@@ -29,11 +29,12 @@ ALLOWED_RELATIONS = {
     "source_financial_proof_related",
     "unproved_source_specification",
     "exact_interface_claim_candidate_ci_pending",
+    "corrected_economic_claim_ci_pending",
+    "counterexample_to_malformed_literal_interface",
 }
 EXPECTED_EXACT_CANDIDATES = {
     "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
     "prop:v0m_original_6_3": "exact_financingCapacityComparativeSpec",
-    "lem:funding_supergradient": "exact_fundingSupergradientSpec",
 }
 
 
@@ -64,6 +65,8 @@ def main() -> None:
     refutations = 0
     exact_candidates = {}
     source_specifications = 0
+    corrected_candidates = {}
+    malformed_interface_refutations = {}
     for row in data["entries"]:
         label = row["label"]
         old = original[label]
@@ -101,6 +104,22 @@ def main() -> None:
                 require(label not in exact_candidates,
                         f"{label}: multiple exact proof candidates")
                 exact_candidates[label] = item["declaration"]
+            if rel == "corrected_economic_claim_ci_pending":
+                require(label == "lem:funding_supergradient",
+                        "Wrong corrected claim mapping")
+                require(item["declaration"] == "corrected_fundingSupergradientSpec",
+                        "Wrong corrected 3.5 theorem reference")
+                require(label not in corrected_candidates,
+                        "Duplicate corrected 3.5 theorem")
+                corrected_candidates[label] = item["declaration"]
+            if rel == "counterexample_to_malformed_literal_interface":
+                require(label == "lem:funding_supergradient",
+                        "Malformed Spec counterexample on wrong result")
+                require(item["declaration"] == "original_fundingSupergradientSpec_false",
+                        "Wrong 3.5 counterexample")
+                require(label not in malformed_interface_refutations,
+                        "Duplicate malformed interface refutation")
+                malformed_interface_refutations[label] = item["declaration"]
             if rel == "unproved_source_specification":
                 source_specifications += 1
             require(bool(item.get("note")), f"{label}: no evidence scope note")
@@ -126,6 +145,12 @@ def main() -> None:
     require(refutations == 1, "Expected exactly one literal specification refutation.")
     require(exact_candidates == EXPECTED_EXACT_CANDIDATES,
             f"Wrong set of pending literal proof candidates: {exact_candidates}")
+    require(corrected_candidates == {
+        "lem:funding_supergradient": "corrected_fundingSupergradientSpec"
+    }, f"Wrong corrected 3.5 theorem: {corrected_candidates}")
+    require(malformed_interface_refutations == {
+        "lem:funding_supergradient": "original_fundingSupergradientSpec_false"
+    }, f"Wrong malformed interface counterexample: {malformed_interface_refutations}")
     require(original["prop:local_macro_multiplicity"].get("scope_review") ==
             "conditional_reduced_not_full_competitive_equilibrium",
             "Proposition 4.2 must remain explicitly reduced/conditional")
@@ -140,6 +165,8 @@ def main() -> None:
         "related_declaration_pointers": related,
         "literal_spec_refutations": refutations,
         "exact_paper_interface_candidates_still_pending_lean_ci": len(exact_candidates),
+        "corrected_economic_financial_theorems_pending_ci": len(corrected_candidates),
+        "malformed_pinned_interface_refutations_pending_ci": len(malformed_interface_refutations),
         "unproved_source_specifications": source_specifications,
         "complete_paper_theorems_proved_in_lean_by_this_audit": 0,
         "full_equilibrium_confirmed": False,
