@@ -125,3 +125,47 @@ a constant row-sign flip. The true product-ball Jacobian still must
 be evaluated and enclosed from the Lean-modified residual itself,
 including the four direct monetary policy derivatives and the
 prescribed-slack direction in the exact order `(s,v_R,v_M,v_rho,v_Delta)`.
+
+
+## Augmented 34-by-34 boundary-zero audit (conditional)
+
+The previous numerical model returned a tiny *enclosed* residual at its
+nominal reference, **not** the exact equation `mu_L(0,0)=0`.
+To avoid confusing a near-zero residual with a normalized exact zero,
+`audit_augmented_34.py` frees the reserve-remuneration innovation
+`h=v_R` as a 34th unknown and adds the original normalized L funding
+dual as a 34th equation:
+
+```text
+H(z,h) := (F_binding_modified(z, (0,h,0,0,0)), mu_L(z))
+```
+
+The producer now exports `funding_dual_center_box` from the actual
+point interval-AD expression; the uniform derivative boxes already
+include `Dz mu_L`. The script forms a rational approximate 34x34
+block inverse from the existing 33x33 preconditioner and nominal
+Schur complement, then **independently** encloses its full defect
+against the *uniform* interval Jacobian. It uses weighted sup norm
+radii `r_z=1e-10` and `r_h=1e-15`, exactly matching the
+producer's current domain.
+
+Execute the source audit with the existing
+`.github/workflows/finite-source-point-export.yml` workflow.
+The ten toy regressions run in
+`.github/workflows/quantitative-ift-arithmetic.yml`.
+The executed candidate passed at
+[42447037264](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42447037264):
+`q ~ 0.004156677924539059` and `eta ~ 3.54434692385473e-41`.
+The exact fractions and source input SHA-256 are in the retained
+`binding_augmented34_arithmetic_CANDIDATE.json` artifact.
+
+**Conditional theorem:** For a genuinely C1 source operator enclosed
+by the supplied boxes on the anisotropic rectangle, `q<1` and
+`eta+q<1` yield a unique exact zero `(z*,h*)` in that rectangle.
+This does **not** prove `h*=0` or `F(0,0)=0`; it only supports a
+recentered base whose monetary reference may have shifted.
+The quantitative radius `1e-15` in `h` cannot justify IRFs at
+`v_R=-1e-5`. Full Python-to-Lean semantic identity, source C1,
+an exact Lean IFT witness, agent sufficiency, and a complete dynamic
+equilibrium are all **pending**, as recorded in
+`docs/PUENTE_REDUCIDO_EQUILIBRIO.md`.
