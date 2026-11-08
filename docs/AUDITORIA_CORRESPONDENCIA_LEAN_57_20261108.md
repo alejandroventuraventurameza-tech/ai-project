@@ -1,5 +1,26 @@
 # Matriz de correspondencia entre los 57 resultados y Lean
 
+## Avance verificable adicional: nueve lemas de producción física y trabajo
+
+Los módulos `PaperAllocationSourceAlgebraBridgeCandidate.lean` y
+`PaperOptimalLaborCandidate.lean` ahora cuentan con **nueve teoremas
+adicionales verificados** sobre tecnología microagregada, asignación de
+trabajo, factibilidad y cota global con capital fijo. La
+[CI focalizada #42500091118](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42500091118)
+en commit `e9ec2024da991768115ecb70e39acdfb647f8b9a` compiló y realizó
+`#print axioms` sin `sorryAx`. Se agregaron nueve entradas
+`source_labor_kernel_verified` a la matriz y una validación de conjuntos,
+SHA y run al auditor `code/audit_lean_crosswalk.py`. **Total auxiliar 4.3:
+18 teoremas**, de ellos nueve anteriores y nueve nuevos; **0 de los 57
+resultados del paper** elevados a equivalencia formal completa.
+
+Permanece pendiente la cota para **cualquier** asignación laboral original
+sin presupuesto normalizado asumido: hay candidato en
+`PaperOriginalLaborGlobalCandidate.lean` pero no se le atribuye verificación
+hasta CI verde. También faltan frontera eficiente conjunta de K/L desde la
+fuente, la derivada de Loss y la equivalencia con los predicados económicos.
+
+
 **Corte editorial:** 8 de noviembre de 2026. **Rama de investigación:**
 `work/lean-ci-validation-otc-20261106`. **Fuente de verdad:**
 `paper/result_ledger.json` y `paper/lean_crosswalk_57.json`.

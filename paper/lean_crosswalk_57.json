@@ -5,8 +5,8 @@
   "checked_branch": "work/lean-ci-validation-otc-20261106",
   "reviewed_date": "2026-11-08",
   "claim_count": 57,
-  "status_policy": "For 4.3, nine scoped mathematical lemmas are Lean kernel-verified: 3 differential/share/sign (#42458449121), 4 global normalized efficiency (#42459394970), and 2 positive-power/log source algebra (#42459648021). This does not yet prove original micro production, optimal labor and full 4.3; other 57 numbered paper claims remain conservatively not_established, 24/57 directed comparisons.",
-  "source_module_check": "24/57 targeted semantic comparisons (14 main plus 10 annex); remaining 33 annex results not individually reviewed. New global efficiency AM-GM candidate is kept separate until Lean CI confirms it; full-equilibrium and source-rpow bridge are unproved.",
+  "status_policy": "For 4.3, eighteen scoped mathematical lemmas are Lean kernel-verified: 3 differential/share/sign (#42458449121), 4 normalized global efficiency (#42459394970), 2 positive-power/log source algebra (#42459648021), and 9 micro-output/optimal-labor bridges (#42500091118). No full economic statement, joint K/L source efficiency, loss derivative, or dynamic equilibrium is thereby proved; 57 numbered paper claims conservatively remain not_established, with 24/57 directed comparisons.",
+  "source_module_check": "24/57 targeted semantic comparisons (14 main plus 10 annex); remaining 33 annex results not individually reviewed. Physical-output/labor-optimality auxiliary proofs are kernel checked on pinned run #42500091118; arbitrary physical allocations and the original Yeff efficient frontier remain distinct tasks.",
   "scope": "57 numbered claims including historical appendices; current PDF page numbers in the original ledger are stale after compact layout.",
   "entries": [
     {
@@ -407,9 +407,90 @@
           "lean_ci_run_id": 42459648021,
           "lean_ci_commit": "aef180ba9595e426c32236a2941731837151fdcc",
           "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperAllocationSourceAlgebraBridgeCandidate.lean",
+          "declaration": "source_weight_pow_identity",
+          "relationship": "source_labor_kernel_verified",
+          "note": "Recupera la productividad por la potencia del ponderador laboral, bajo cantidades estrictamente positivas. Lean focalizado #42500091118, commit e9ec2024, #print axioms sin sorryAx. No acredita derivada total ni eficiencia conjunta del Lema 4.3.",
+          "lean_ci_run_id": 42500091118,
+          "lean_ci_commit": "e9ec2024da991768115ecb70e39acdfb647f8b9a",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperAllocationSourceAlgebraBridgeCandidate.lean",
+          "declaration": "source_output_at_weighted_labor",
+          "relationship": "source_labor_kernel_verified",
+          "note": "Prueba la identidad de producción individual en el reparto laboral proporcional a g_i; no demuestra aún el óptimo conjunto. Lean focalizado #42500091118, commit e9ec2024, #print axioms sin sorryAx. No acredita derivada total ni eficiencia conjunta del Lema 4.3.",
+          "lean_ci_run_id": 42500091118,
+          "lean_ci_commit": "e9ec2024da991768115ecb70e39acdfb647f8b9a",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperAllocationSourceAlgebraBridgeCandidate.lean",
+          "declaration": "positive_labor_aggregate_power",
+          "relationship": "source_labor_kernel_verified",
+          "note": "Prueba el paso algebraico (L/G)^beta G=L^beta G^(1-beta) bajo agregados positivos. Lean focalizado #42500091118, commit e9ec2024, #print axioms sin sorryAx. No acredita derivada total ni eficiencia conjunta del Lema 4.3.",
+          "lean_ci_run_id": 42500091118,
+          "lean_ci_commit": "e9ec2024da991768115ecb70e39acdfb647f8b9a",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperAllocationSourceAlgebraBridgeCandidate.lean",
+          "declaration": "source_two_type_output_at_optimal_labor",
+          "relationship": "source_labor_kernel_verified",
+          "note": "Deriva Y físico de dos tecnologías Cobb-Douglas originales y el reparto laboral propuesto; requiere exponentes comunes. Lean focalizado #42500091118, commit e9ec2024, #print axioms sin sorryAx. No acredita derivada total ni eficiencia conjunta del Lema 4.3.",
+          "lean_ci_run_id": 42500091118,
+          "lean_ci_commit": "e9ec2024da991768115ecb70e39acdfb647f8b9a",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperAllocationSourceAlgebraBridgeCandidate.lean",
+          "declaration": "source_labor_candidate_clears_resources",
+          "relationship": "source_labor_kernel_verified",
+          "note": "Demuestra positividad y agotamiento de empleo disponible por la asignación propuesta. Lean focalizado #42500091118, commit e9ec2024, #print axioms sin sorryAx. No acredita derivada total ni eficiencia conjunta del Lema 4.3.",
+          "lean_ci_run_id": 42500091118,
+          "lean_ci_commit": "e9ec2024da991768115ecb70e39acdfb647f8b9a",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperOptimalLaborCandidate.lean",
+          "declaration": "normalized_labor_global_bound",
+          "relationship": "source_labor_kernel_verified",
+          "note": "Prueba desigualdad global AM-GM para presupuesto laboral normalizado en dos tipos. Lean focalizado #42500091118, commit e9ec2024, #print axioms sin sorryAx. No acredita derivada total ni eficiencia conjunta del Lema 4.3.",
+          "lean_ci_run_id": 42500091118,
+          "lean_ci_commit": "e9ec2024da991768115ecb70e39acdfb647f8b9a",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperOptimalLaborCandidate.lean",
+          "declaration": "source_output_with_scaled_labor",
+          "relationship": "source_labor_kernel_verified",
+          "note": "Transporta producción individual física a múltiplos laborales no negativos respecto de la candidata. Lean focalizado #42500091118, commit e9ec2024, #print axioms sin sorryAx. No acredita derivada total ni eficiencia conjunta del Lema 4.3.",
+          "lean_ci_run_id": 42500091118,
+          "lean_ci_commit": "e9ec2024da991768115ecb70e39acdfb647f8b9a",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperOptimalLaborCandidate.lean",
+          "declaration": "source_two_type_global_labor_optimality",
+          "relationship": "source_labor_kernel_verified",
+          "note": "Cota global sobre producción física con capital fijo y presupuesto laboral ya normalizado. Lean focalizado #42500091118, commit e9ec2024, #print axioms sin sorryAx. No acredita derivada total ni eficiencia conjunta del Lema 4.3.",
+          "lean_ci_run_id": 42500091118,
+          "lean_ci_commit": "e9ec2024da991768115ecb70e39acdfb647f8b9a",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperOptimalLaborCandidate.lean",
+          "declaration": "source_labor_global_bound_attained",
+          "relationship": "source_labor_kernel_verified",
+          "note": "Comprueba que los múltiplos laborales iguales a uno alcanzan la cota para capital fijo. Lean focalizado #42500091118, commit e9ec2024, #print axioms sin sorryAx. No acredita derivada total ni eficiencia conjunta del Lema 4.3.",
+          "lean_ci_run_id": 42500091118,
+          "lean_ci_commit": "e9ec2024da991768115ecb70e39acdfb647f8b9a",
+          "lean_axiom_audit": "passed_no_sorryAx"
         }
       ],
-      "semantic_gap": "En Lean #42459394970 quedaron verificadas 4 proposiciones globales: cota normalizada AM–GM de producción para recursos agregados fijos, igualdad en el candidato eficiente, no negatividad de pérdida logarítmica normalizada y factibilidad de recursos del candidato. Ya se verificaron además 3 lemas anteriores sobre coeficientes del diferencial, shares/MPK y signo. PENDIENTE del Lema 4.3 académico: demostrar en Lean el cambio de variables desde tecnología individual Cobb–Douglas y elasticidades comunes, la asignación óptima de trabajo y su agregado G, la identidad de Y físico y Yeff eficiente, y la derivada total de la pérdida desde esas funciones. La interfaz original define Y/Yeff por fórmulas, omite igualdad de elasticidades L/H y no contiene la derivada; por tanto no atribuirle equivalencia literal. Nuevo paquete de dos puentes algebraicos fuente de potencias reales y logaritmos verificado por kernel y auditoría de axiomas #42459648021. No iguala la tecnología microagregada ni deriva óptimo laboral.",
+      "semantic_gap": "Se verificaron en Lean 18 lemas auxiliares vinculados con 4.3, incluyendo nueve puentes de producción física y óptimo laboral condicional a capital fijo (#42500091118), cuatro de AM-GM normalizado, tres de pérdida/participaciones y dos de potencia/log. La cobertura nueva demuestra la producción agregada desde las dos tecnologías y una desigualdad laboral global bajo presupuesto normalizado; el teorema sobre todas las alternativas originales está en candidato pendiente. Siguen sin demostrarse íntegramente en el kernel el enlace de Yeff con la frontera eficiente original de capital y trabajo, la derivada dLoss desde las funciones fuente y la interfaz literal original, que omite igualdad de exponentes entre H/L. Nada de ello acredita equilibrio dinámico ni shock causal.",
       "numerical_context": [
         "paper/irf_mechanism_table.tex"
       ]

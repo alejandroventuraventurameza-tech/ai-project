@@ -37,6 +37,7 @@ ALLOWED_RELATIONS = {
     "auxiliary_claim_kernel_verified",
     "efficiency_support_kernel_verified",
     "source_algebra_kernel_verified",
+    "source_labor_kernel_verified",
 }
 GREEN_SOURCE_FINANCIAL_RUN = 42457259796
 GREEN_SOURCE_FINANCIAL_SHA = "c006e00c437243c3f6f44ec3c102df4286c545e0"
@@ -48,6 +49,19 @@ GREEN_EFFICIENCY_RUN = 42459394970
 GREEN_EFFICIENCY_SHA = "8e883b7993f39d29ae431c44a6a14e45ca55707d"
 GREEN_SOURCE_BRIDGE_RUN = 42459648021
 GREEN_SOURCE_BRIDGE_SHA = "aef180ba9595e426c32236a2941731837151fdcc"
+GREEN_SOURCE_LABOR_RUN = 42500091118
+GREEN_SOURCE_LABOR_SHA = "e9ec2024da991768115ecb70e39acdfb647f8b9a"
+EXPECTED_VERIFIED_SOURCE_LABOR = {
+    "source_weight_pow_identity",
+    "source_output_at_weighted_labor",
+    "positive_labor_aggregate_power",
+    "source_two_type_output_at_optimal_labor",
+    "source_labor_candidate_clears_resources",
+    "normalized_labor_global_bound",
+    "source_output_with_scaled_labor",
+    "source_two_type_global_labor_optimality",
+    "source_labor_global_bound_attained",
+}
 EXPECTED_VERIFIED_SOURCE_BRIDGE = {
     "productivity_weight_recovers_A",
     "positive_aggregate_loss_log_formula",
@@ -105,6 +119,7 @@ def main() -> None:
     green_loss_aux = set()
     green_efficiency_aux = set()
     green_source_bridge = set()
+    green_source_labor = set()
     for row in data["entries"]:
         label = row["label"]
         old = original[label]
@@ -146,6 +161,18 @@ def main() -> None:
                         and item.get("lean_axiom_audit") == "passed_no_sorryAx",
                         "Power/log source theorem not pinned to green kernel run")
                 green_source_bridge.add(item["declaration"])
+            if rel == "source_labor_kernel_verified":
+                require(label == "lem:allocation_loss_identity",
+                        "Original micro-output/labor theorem attached to wrong claim")
+                require(item["declaration"] in EXPECTED_VERIFIED_SOURCE_LABOR,
+                        "Unknown physical production/labor theorem")
+                require(item["declaration"] not in green_source_labor,
+                        "Duplicate verified source labor theorem")
+                require(item.get("lean_ci_run_id") == GREEN_SOURCE_LABOR_RUN
+                        and item.get("lean_ci_commit") == GREEN_SOURCE_LABOR_SHA
+                        and item.get("lean_axiom_audit") == "passed_no_sorryAx",
+                        "Physical production/labor theorem not pinned to exact green run")
+                green_source_labor.add(item["declaration"])
             if rel == "efficiency_support_kernel_verified":
                 require(label == "lem:allocation_loss_identity",
                         "Efficiency support theorem mapped to wrong source claim")
@@ -248,6 +275,8 @@ def main() -> None:
             f"Global efficiency proof set incomplete: {green_efficiency_aux}")
     require(green_source_bridge == EXPECTED_VERIFIED_SOURCE_BRIDGE,
             f"Source power/log proof set incomplete: {green_source_bridge}")
+    require(green_source_labor == EXPECTED_VERIFIED_SOURCE_LABOR,
+            f"Physical production/conditional labor proof set incomplete: {green_source_labor}")
     require(green_exact == {
         "lem:repayment": "exact_repaymentSpec",
         "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
@@ -292,6 +321,8 @@ def main() -> None:
         "verified_global_efficiency_lemmas": len(green_efficiency_aux),
         "verified_source_power_log_run": GREEN_SOURCE_BRIDGE_RUN,
         "verified_source_power_log_lemmas": len(green_source_bridge),
+        "verified_source_labor_run": GREEN_SOURCE_LABOR_RUN,
+        "verified_source_labor_lemmas": len(green_source_labor),
         "unproved_source_specifications": source_specifications,
         "complete_paper_theorems_proved_in_lean_by_this_audit": 0,
         "full_equilibrium_confirmed": False,
