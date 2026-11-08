@@ -41,6 +41,8 @@ ALLOWED_RELATIONS = {
     "original_labor_kernel_verified",
     "joint_source_kernel_verified",
     "joint_bound_kernel_verified",
+    "joint_physical_kernel_verified",
+    "source_log_loss_kernel_verified",
 }
 GREEN_SOURCE_FINANCIAL_RUN = 42457259796
 GREEN_SOURCE_FINANCIAL_SHA = "c006e00c437243c3f6f44ec3c102df4286c545e0"
@@ -60,6 +62,18 @@ GREEN_JOINT_SOURCE_RUN = 42501665345
 GREEN_JOINT_SOURCE_SHA = "c578e39845709b8f08451a807b3ea45d129c911c"
 GREEN_JOINT_BOUND_RUN = 42501725491
 GREEN_JOINT_BOUND_SHA = "f8e1125b657ce8ecd551233dea18a66810309614"
+GREEN_JOINT_PHYSICAL_RUN = 42502060253
+GREEN_JOINT_PHYSICAL_SHA = "5ea744a50d068d1e4efee613522f1e8b63242f67"
+GREEN_SOURCE_LOG_RUN = 42502060253
+GREEN_SOURCE_LOG_SHA = "5ea744a50d068d1e4efee613522f1e8b63242f67"
+EXPECTED_VERIFIED_JOINT_PHYSICAL = {
+    "original_physical_two_type_joint_output_bound",
+    "original_physical_joint_candidate_attains_frontier",
+}
+EXPECTED_VERIFIED_SOURCE_LOG = {
+    "original_physical_log_loss_nonnegative",
+    "original_labor_candidate_log_loss_formula",
+}
 EXPECTED_VERIFIED_JOINT_SOURCE = {
     "normalized_source_firm_output",
     "normalized_joint_scale_identity",
@@ -144,6 +158,8 @@ def main() -> None:
     green_original_labor = set()
     green_joint_source = set()
     green_joint_bound = set()
+    green_joint_physical = set()
+    green_source_log = set()
     for row in data["entries"]:
         label = row["label"]
         old = original[label]
@@ -233,6 +249,30 @@ def main() -> None:
                         and item.get("lean_axiom_audit") == "passed_no_sorryAx",
                         "Joint bound theorem not pinned to green compiler run")
                 green_joint_bound.add(item["declaration"])
+            if rel == "joint_physical_kernel_verified":
+                require(label == "lem:allocation_loss_identity",
+                        "Physical joint K/L theorem attached to wrong claim")
+                require(item["declaration"] in EXPECTED_VERIFIED_JOINT_PHYSICAL,
+                        "Unknown physical joint K/L theorem")
+                require(item["declaration"] not in green_joint_physical,
+                        "Duplicate original physical K/L theorem")
+                require(item.get("lean_ci_run_id") == GREEN_JOINT_PHYSICAL_RUN
+                        and item.get("lean_ci_commit") == GREEN_JOINT_PHYSICAL_SHA
+                        and item.get("lean_axiom_audit") == "passed_no_sorryAx",
+                        "Physical joint theorem not pinned to verified kernel run")
+                green_joint_physical.add(item["declaration"])
+            if rel == "source_log_loss_kernel_verified":
+                require(label == "lem:allocation_loss_identity",
+                        "Physical loss theorem attached to wrong claim")
+                require(item["declaration"] in EXPECTED_VERIFIED_SOURCE_LOG,
+                        "Unknown physical loss theorem")
+                require(item["declaration"] not in green_source_log,
+                        "Duplicate physical loss theorem")
+                require(item.get("lean_ci_run_id") == GREEN_SOURCE_LOG_RUN
+                        and item.get("lean_ci_commit") == GREEN_SOURCE_LOG_SHA
+                        and item.get("lean_axiom_audit") == "passed_no_sorryAx",
+                        "Physical loss theorem not pinned to verified kernel run")
+                green_source_log.add(item["declaration"])
             if rel == "efficiency_support_kernel_verified":
                 require(label == "lem:allocation_loss_identity",
                         "Efficiency support theorem mapped to wrong source claim")
@@ -343,6 +383,10 @@ def main() -> None:
             f"Joint source power/scale proofs incomplete: {green_joint_source}")
     require(green_joint_bound == EXPECTED_VERIFIED_JOINT_BOUND,
             f"Joint source AM-GM/budget proofs incomplete: {green_joint_bound}")
+    require(green_joint_physical == EXPECTED_VERIFIED_JOINT_PHYSICAL,
+            f"Original physical K/L production proof set incomplete: {green_joint_physical}")
+    require(green_source_log == EXPECTED_VERIFIED_SOURCE_LOG,
+            f"Original source loss proofs incomplete: {green_source_log}")
     require(green_exact == {
         "lem:repayment": "exact_repaymentSpec",
         "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
@@ -395,6 +439,10 @@ def main() -> None:
         "verified_joint_source_lemmas": len(green_joint_source),
         "verified_joint_bound_run": GREEN_JOINT_BOUND_RUN,
         "verified_joint_bound_lemmas": len(green_joint_bound),
+        "verified_joint_physical_run": GREEN_JOINT_PHYSICAL_RUN,
+        "verified_joint_physical_lemmas": len(green_joint_physical),
+        "verified_source_log_loss_run": GREEN_SOURCE_LOG_RUN,
+        "verified_source_log_loss_lemmas": len(green_source_log),
         "unproved_source_specifications": source_specifications,
         "complete_paper_theorems_proved_in_lean_by_this_audit": 0,
         "full_equilibrium_confirmed": False,

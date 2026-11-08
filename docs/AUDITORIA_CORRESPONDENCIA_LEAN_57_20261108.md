@@ -1,5 +1,12 @@
 # Matriz de correspondencia entre los 57 resultados y Lean
 
+## Cierre del puente físico conjunto: cuatro pruebas adicionales verificadas
+
+La [CI focalizada #42502060253](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42502060253), commit `5ea744a50d068d1e4efee613522f1e8b63242f67`, compiló los módulos `PaperJointEfficiencyPhysicalCandidate.lean` y `PaperOriginalLogLossCandidate.lean`; la auditoría `#print axioms` de **cuatro teoremas** pasó sin `sorryAx`. El resultado físico admite repartos no negativos de ambos factores, presupuestos agregados positivos y exponentes comunes; el candidato alcanza la frontera `Yeff`. En cantidades positivas, la pérdida `log(Yeff/Y)` es no negativa y, para trabajo óptimo, se recupera la fórmula exacta de logaritmos del paper.
+
+**Total auxiliar del Lema 4.3: 28 declaraciones kernel-checked** (20 previas, cuatro de puente K/L, cuatro físicas/log). **0 de 57 resultados numerados** elevados a `same_statement_proved`: la identidad diferencial de pérdida desde funciones fuente y la traducción semántica completa siguen abiertas.
+
+
 ## Progreso adicional: puente de eficiencia conjunta K/L verificado parcialmente
 
 Se verificaron en el kernel **cuatro lemas nuevos** para la frontera productiva conjunta: `normalized_source_firm_output` y `normalized_joint_scale_identity` ([CI focalizada #42501665345](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42501665345), commit `c578e398`), más `normalized_two_type_source_output_le_efficient` y `source_resource_budget_normalizes` ([CI #42501725491](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42501725491), commit `f8e1125b`). Cada ejecución confirmó `#print axioms` sin `sorryAx`.

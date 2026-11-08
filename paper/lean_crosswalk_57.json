@@ -5,8 +5,8 @@
   "checked_branch": "work/lean-ci-validation-otc-20261106",
   "reviewed_date": "2026-11-08",
   "claim_count": 57,
-  "status_policy": "For 4.3, twenty-four scoped mathematical lemmas are Lean kernel-verified: 20 earlier helpers plus 2 source joint-power/scale bridges (CI #42501665345) and 2 joint-AMGM/budget bridges (CI #42501725491). Physical arbitrary-allocation joint frontier and exact log loss are candidates pending green CI; full loss derivative/dynamic equilibrium not proved. All 57 numbered paper claims remain not_established; 24/57 targeted semantic comparisons.",
-  "source_module_check": "24/57 targeted semantic comparisons (14 main plus 10 annex), 33 still not individually reviewed. Four new source joint efficiency auxiliary claims are pinned to green exact SHA; arbitrary physical end-to-end joint efficiency proof remains CI pending.",
+  "status_policy": "For 4.3, twenty-eight scoped mathematical lemmas are Lean kernel-verified: 20 prior helpers, 4 source normalization/AM-GM bridge claims (#42501665345, #42501725491), 2 original physical joint-K/L efficiency claims and 2 source-output log loss identities (#42502060253). Complete source differential dLoss and full dynamic equilibrium are still not proved; all 57 numbered paper claims remain not_established, with 24/57 targeted semantic comparisons.",
+  "source_module_check": "24/57 targeted semantic comparisons (14 main, 10 annex), 33 pending. Exact original physical Cobb-Douglas joint K/L production upper bound and attainment, plus source physical log loss nonnegativity and optimal labor log identity, kernel-verified in #42502060253; derivative dLoss from G/K not yet verified.",
   "scope": "57 numbered claims including historical appendices; current PDF page numbers in the original ledger are stale after compact layout.",
   "entries": [
     {
@@ -542,9 +542,45 @@
           "lean_ci_run_id": 42501725491,
           "lean_ci_commit": "f8e1125b657ce8ecd551233dea18a66810309614",
           "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperJointEfficiencyPhysicalCandidate.lean",
+          "declaration": "original_physical_two_type_joint_output_bound",
+          "relationship": "joint_physical_kernel_verified",
+          "note": "Cota de máxima producción desde tecnologías Cobb-Douglas originales, todos los repartos físicos no negativos de K/L y dotaciones agregadas positivas. CI focalizada #42502060253, commit 5ea744a5, #print axioms sin sorryAx. No acredita identidad diferencial/equilibrio dinámico.",
+          "lean_ci_run_id": 42502060253,
+          "lean_ci_commit": "5ea744a50d068d1e4efee613522f1e8b63242f67",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperJointEfficiencyPhysicalCandidate.lean",
+          "declaration": "original_physical_joint_candidate_attains_frontier",
+          "relationship": "joint_physical_kernel_verified",
+          "note": "Evalúa producción física original en la asignación conjunta eficiente proporcional a A^(1/d), y demuestra que alcanza la frontera. CI focalizada #42502060253, commit 5ea744a5, #print axioms sin sorryAx. No acredita identidad diferencial/equilibrio dinámico.",
+          "lean_ci_run_id": 42502060253,
+          "lean_ci_commit": "5ea744a50d068d1e4efee613522f1e8b63242f67",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperOriginalLogLossCandidate.lean",
+          "declaration": "original_physical_log_loss_nonnegative",
+          "relationship": "source_log_loss_kernel_verified",
+          "note": "Pérdida logarítmica no negativa cuando los factores físicos individuales y la producción son positivos, usando la cota de fuente. CI focalizada #42502060253, commit 5ea744a5, #print axioms sin sorryAx. No acredita identidad diferencial/equilibrio dinámico.",
+          "lean_ci_run_id": 42502060253,
+          "lean_ci_commit": "5ea744a50d068d1e4efee613522f1e8b63242f67",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperOriginalLogLossCandidate.lean",
+          "declaration": "original_labor_candidate_log_loss_formula",
+          "relationship": "source_log_loss_kernel_verified",
+          "note": "Identidad exacta de la pérdida logarítmica del paper con producto físico al reparto laboral óptimo. No deriva su diferencial. CI focalizada #42502060253, commit 5ea744a5, #print axioms sin sorryAx. No acredita identidad diferencial/equilibrio dinámico.",
+          "lean_ci_run_id": 42502060253,
+          "lean_ci_commit": "5ea744a50d068d1e4efee613522f1e8b63242f67",
+          "lean_axiom_audit": "passed_no_sorryAx"
         }
       ],
-      "semantic_gap": "24 lemas auxiliares Lean kernel-checked se vinculan con 4.3: 20 anteriores y cuatro nuevos sobre potencia/escala del modelo fuente y cota AM–GM bajo presupuestos normalizados de K/L y transporte algebraico de recursos (CI #42501665345 y #42501725491). El resultado end-to-end para toda asignación física no negativa de ambos factores aún requiere compilación exitosa en el nuevo SHA; también queda pendiente el log-loss desde la fuente y diferenciación total de K/G. La interfaz antigua no incluye exponentes H=L ni derivada, y no hay prueba de equilibrio dinámico.",
+      "semantic_gap": "28 lemas auxiliares de 4.3 kernel-checked: incluyen ahora el puente completo de producción física para toda asignación no negativa de capital y trabajo agregados positivos, la candidata global que alcanza Yeff, la no negatividad de la pérdida logarítmica con factores físicos positivos y la identidad log-loss al reparto laboral óptimo (CI #42502060253). La prueba del enunciado académico **integral** sigue pendiente por la derivación diferenciable de K(k),G(k), dLoss=a(kappaH-omegaH)dlog(kH/kL) desde las funciones fuente, y porque la interfaz antigua no impone exponentes comunes en H/L ni incluye ese diferencial. No hay prueba de equilibrio dinámico ni efecto causal de política monetaria o crecimiento de largo plazo.",
       "numerical_context": [
         "paper/irf_mechanism_table.tex"
       ]
