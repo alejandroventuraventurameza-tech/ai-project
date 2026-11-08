@@ -147,3 +147,60 @@ a verificado antes del resultado CI de su revision.
 "verificado" si el run especifico del commit lo compila y
 `#print axioms` no presenta `sorryAx`; este inventario
 no sustituye esos registros.
+
+
+## Puente de reglas monetarias: mapeo a los instrumentos originales
+
+El generador Python `finite_bridge.py:auxiliary` calcula, con
+`e_R` y `e_M` como innovaciones de la regla nominal:
+
+```text
+RR_target = rr_ref * exp(
+  1/2 * log(RR_lag / rr_ref)
+  + 1/2 * (3/2 * log(Pi) + 1/8 * log(Y / Y_ref))
+  + e_R
+)
+M_target = M_ref * exp(1/2 * log(M_lag/M_ref) + e_M)
+```
+
+Las filas `remaining(...)[6]` y `remaining(...)[7]` son
+`log(RR_realized/RR_target)` y `log(M_realized/M_target)`.
+
+Por otro lado, `EconomicModel.lean:localReducedRemainingResidual`,
+filas de once `6` y `7`, contiene los residuos de niveles
+logaritmicos de las dos reglas economicas originales. La identificacion
+de coeficientes y referencias necesaria es:
+
+| Primitiva Lean | Fuente Python | Restriccion de fuente |
+|---|---|---|
+| `P.reserveRatePersistence` | mitad de la persistencia en `auxiliary` | `=1/2` |
+| `P.reserveQuantityPersistence` | mitad de la persistencia en `auxiliary` | `=1/2` |
+| `P.inflationResponse` | `1.5` | `=3/2` |
+| `P.outputResponse` | `0.125` | `=1/8` |
+| `P.reserveRateSteady` | `s.rr` | identidad comprobada con la instancia |
+| `P.reserveQuantitySteady` | `s.M` | identidad comprobada con la instancia |
+| `P.outputReference` | `s.Y` | identidad comprobada con la instancia |
+| `d.lagReserveRate` | `X[5]` | mismo estado heredado/fecha |
+| `d.lagReservesPre` | `X[6]` | mismo estado heredado/fecha |
+| `d.currentReserveRate` | `Xnext[5]` | misma variable bruta/fecha |
+| `d.currentReservesPre` | `Xnext[6]` | misma variable nominal/fecha |
+| `d.reserveRateInnovation` | `e[0]` | misma innovacion y calendario |
+| `d.reserveQuantityInnovation` | `e[1]` | misma innovacion y calendario |
+
+La prueba fuente `LocalScalarPolicyRuleTargetsCandidate.lean`
+compilo con auditoria de axiomas en
+[GitHub Actions 42451438040](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42451438040).
+El modulo propuesto
+`LocalScalarPythonMonetaryRuleBridgeCandidate.lean` extiende la
+coincidencia a los *residuos logaritmicos expandidos* de las
+reglas bajo las igualdades de coeficientes. El codigo Python calcula
+los objetivos con exponenciales, por lo que aun resta demostrar
+o cotejar la identidad `log(RR_target)` con el log objetivo
+especializado bajo positividad, y conectar de forma literal
+las columnas del vector fuente con las de Python en ambas fechas.
+
+**Diferencia conceptual:** `e_R` altera la regla de remuneracion
+de reservas y `e_M` su regla de cantidad. El experimento con
+`v_R` no puede identificarse con cambios en `reserveRequirementPath`
+ni `corridorWidthPath` sin nueva prueba.
+
