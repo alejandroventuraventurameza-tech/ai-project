@@ -33,6 +33,7 @@ ALLOWED_RELATIONS = {
     "counterexample_to_malformed_literal_interface",
 }
 EXPECTED_EXACT_CANDIDATES = {
+    "lem:repayment": "exact_repaymentSpec",
     "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
     "prop:v0m_original_6_3": "exact_financingCapacityComparativeSpec",
 }
