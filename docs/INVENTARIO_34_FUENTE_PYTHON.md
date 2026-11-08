@@ -18,14 +18,14 @@ parametros concretos de Python.
 | 3 | Euler de capital L, t=0 | Comparar SDF, producto marginal y garantias | Pendiente |
 | 4 | Colateral H, t=0 | Residuos en niveles, fila reescrita por Python | Pendiente |
 | 5 | Holgura normalizada L, t=0 | Fuente exige `1-F_L/(theta*J*K_L)-s`; fila reescrita | Pendiente |
-| 6 | Renovacion nominal bancaria, t=0 | Equivalencia log/niveles con factor fuente y positividad | Lema fuente verificado; identificacion de `aB` pendiente |
+| 6 | Renovacion nominal bancaria, t=0 | Equivalencia log/niveles con factor fuente y positividad | Lemas fuente y compatibilidad algebraica verificados; instancia de `aB` pendiente |
 | 7 | Precio de oferta de capital, t=0 | Definiciones de capital agregado y ajuste | Pendiente |
 | 8 | Recursos agregados, t=0 | Identidades de cantidades, masa, costos y output | Pendiente |
-| 9 | Oferta de trabajo, t=0 | Equivalencia log/niveles; `sigmaW=phi=1` | Lema Lean candidato |
-| 10 | Euler de depositos del hogar, t=0 | Equivalencia log/niveles; `sigmaW=1` | Lema Lean candidato |
+| 9 | Oferta de trabajo, t=0 | Equivalencia log/niveles; `sigmaW=phi=1` | Lema Lean verificado; instancia y dominio pendientes |
+| 10 | Euler de depositos del hogar, t=0 | Equivalencia log/niveles; `sigmaW=1` | Lema Lean verificado; instancia y dominio pendientes |
 | 11 | Phillips Rotemberg, t=0 | Descuento del hogar, `phiP`, inflacion y output | Pendiente |
-| 12 | Regla de tasa de reservas, t=0 | Logaritmos, persistencias, metas e innovacion | Pendiente |
-| 13 | Regla de cantidad de reservas, t=0 | Logaritmos, persistencias, metas e innovacion | Pendiente |
+| 12 | Regla de tasa de reservas, t=0 | Logaritmos, persistencias, metas e innovacion | Objetivo exp fuente verificado; puente con `auxiliary` candidato |
+| 13 | Regla de cantidad de reservas, t=0 | Logaritmos, persistencias, metas e innovacion | Objetivo exp fuente verificado; puente con `auxiliary` candidato |
 | 14 | Precio del prestamo, t=0 | Formula OTC y media de pendientes | Pendiente |
 | 15 | Precio del deposito, t=0 | Formula OTC, cantidad y shocks de pagos | Pendiente |
 | 16 | Balance bancario, t=0 | Ratio reservas/depositos, faces e inflacion | Pendiente |
@@ -34,14 +34,14 @@ parametros concretos de Python.
 | 19 | Euler de capital H, t=1 | Producto marginal y continuation t=2 | Pendiente |
 | 20 | Euler de capital L, t=1 | Producto marginal y continuation t=2 | Pendiente |
 | 21 | Garantia comun de capital t=1 | Residuos en niveles, fila reescrita por Python | Pendiente |
-| 22 | Renovacion nominal bancaria, t=1 | Lema generico log/niveles para fuente `d1` | Lema fuente verificado; identificacion de datos pendiente |
+| 22 | Renovacion nominal bancaria, t=1 | Lema generico log/niveles para fuente `d1` | Lemas fuente y compatibilidad algebraica verificados; datos `d1` pendientes |
 | 23 | Oferta de capital, t=1 | Datos t=1 y continuation t=2 | Pendiente |
 | 24 | Recursos, t=1 | Datos t=1 y continuation t=2 | Pendiente |
-| 25 | Oferta de trabajo, t=1 | Lema generico log/niveles para fuente `d1` | Lema Lean candidato |
-| 26 | Euler del hogar, t=1 | Lema generico log/niveles para fuente `d1` | Lema Lean candidato |
+| 25 | Oferta de trabajo, t=1 | Lema generico log/niveles para fuente `d1` | Lema Lean verificado; instancia `d1` pendiente |
+| 26 | Euler del hogar, t=1 | Lema generico log/niveles para fuente `d1` | Lema Lean verificado; instancia `d1` pendiente |
 | 27 | Phillips, t=1 | Datos t=1, indexacion y continuation | Pendiente |
-| 28 | Regla tasa reservas, t=1 | Calendario, persistencia e innovaciones t=1 | Pendiente |
-| 29 | Regla cantidad reservas, t=1 | Calendario, persistencia e innovaciones t=1 | Pendiente |
+| 28 | Regla tasa reservas, t=1 | Calendario, persistencia e innovaciones t=1 | Objetivo exp fuente verificado; calendario e instanciacion pendientes |
+| 29 | Regla cantidad reservas, t=1 | Calendario, persistencia e innovaciones t=1 | Objetivo exp fuente verificado; calendario e instanciacion pendientes |
 | 30 | Precio prestamos, t=1 | OTC y estado heredado t=1 | Pendiente |
 | 31 | Precio depositos, t=1 | OTC y estado heredado t=1 | Pendiente |
 | 32 | Balance bancario, t=1 | Ratio reservas/depositos y faces t=1 | Pendiente |
@@ -142,6 +142,21 @@ Se anadio el candidato Lean
 para demostrar el `iff` del factor de renovacion y la
 equivalencia de ceros bancaria con positividad; no promoverlo
 a verificado antes del resultado CI de su revision.
+
+**Evidencia de CI por tipo de prueba:** la campaña Lean
+[42450897067](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42450897067)
+verifico las equivalencias de cero de trabajo y Euler
+del hogar y el contrato condicional de 34 filas.
+[42451359174](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42451359174)
+verifico la compatibilidad algebraica del factor bancario,
+NO su instancia numerica.
+[42451438040](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42451438040)
+verifico los objetivos exponenciales de la fuente monetaria,
+NO su identidad con el codigo Python.
+Los puentes de residual logaritmico y objetivos de
+`auxiliary()` se mantienen CANDIDATOS hasta aprobar
+sus propias campañas Lean; no se alteraron las 34
+banderas de procedencia numerica.
 
 **Regla de actualizacion:** un candidato solo pasa a
 "verificado" si el run especifico del commit lo compila y
