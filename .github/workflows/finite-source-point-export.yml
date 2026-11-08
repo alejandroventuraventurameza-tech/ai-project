@@ -40,6 +40,8 @@ jobs:
           d=json.loads(p.read_text())
           assert d['state_dimension']==33 and d['parameter_dimension']==5
           assert d['rows_recomputed_as_source_style']==[4,5,21]
+          expected=[0,3,1,4,2,5,*range(6,17),17,19,18,20,*range(21,33)]
+          assert d['source_to_legacy_row_permutation']==expected
           assert len(d['point_jacobian_box'])==33
           assert all(len(row)==33 for row in d['point_jacobian_box'])
           assert len(d['point_policy_derivative_box'])==33
