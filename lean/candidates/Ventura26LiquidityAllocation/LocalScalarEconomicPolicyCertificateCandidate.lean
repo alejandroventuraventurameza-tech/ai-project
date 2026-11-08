@@ -13,7 +13,7 @@ LocalScalarImplicitReduction is an assumed economic predicate, not a
 verified numerical certificate. Its signed Schur partials produce a
 positive transverse ray and directional derivatives. An explicit
 zero-baseline-dual premise and LOCAL slice continuity/antitonicity
-premises remain. Under them there are exactly two complementary roots
+premises remain (with a shock radius allowed to depend on K). Under them there are exactly two complementary roots
 inside the shrinking wedge for every sufficiently small negative
 reserve-remuneration innovation. No global or infinite-horizon
 competitive equilibrium is asserted.
@@ -69,14 +69,14 @@ theorem source_economic_negative_remuneration_shock_two_roots
     (hred : LocalScalarImplicitReduction P I Z0 dateOne recurrent tail solutionLog)
     (hzero : localScalarReducedMap P Z0 solutionLog (0 : Fin 5 → ℝ) = 0)
     (rho : ℝ) (hrho : 0 < rho)
-    (hcont : ∀ K : ℝ, 0 < K →
-      ∀ h : ℝ, -rho < h → h < 0 →
-        ContinuousOn (fun s => economicReserveRemunerationMarginal
-          P Z0 solutionLog s h) (Set.Icc (0 : ℝ) (-K * h)))
-    (hanti : ∀ K : ℝ, 0 < K →
-      ∀ h : ℝ, -rho < h → h < 0 →
-        StrictAntiOn (fun s => economicReserveRemunerationMarginal
-          P Z0 solutionLog s h) (Set.Icc (0 : ℝ) (-K * h))) :
+    (hreg : ∀ K : ℝ, 0 < K →
+      ∃ rhoK : ℝ, 0 < rhoK ∧
+        (∀ h : ℝ, -rhoK < h → h < 0 →
+          ContinuousOn (fun s => economicReserveRemunerationMarginal
+            P Z0 solutionLog s h) (Set.Icc (0 : ℝ) (-K * h))) ∧
+        (∀ h : ℝ, -rhoK < h → h < 0 →
+          StrictAntiOn (fun s => economicReserveRemunerationMarginal
+            P Z0 solutionLog s h) (Set.Icc (0 : ℝ) (-K * h)))) :
     ∃ K : ℝ, 0 < K ∧
       ∃ delta : ℝ, 0 < delta ∧ delta ≤ rho ∧
         ∀ h : ℝ, -delta < h → h < 0 →
@@ -97,15 +97,35 @@ theorem source_economic_negative_remuneration_shock_two_roots
       P I Z0 dateOne recurrent tail solutionLog hred K
   have hzero' : economicReserveRemunerationMarginal P Z0 solutionLog 0 0 = 0 := by
     simpa [economicReserveRemunerationMarginal, reserveRemunerationSlice] using hzero
+  obtain ⟨rhoK, hrhoK, hcontK, hantiK⟩ := hreg K hK
+  let rhoLocal : ℝ := min rho rhoK
+  have hrhoLocal : 0 < rhoLocal := lt_min hrho hrhoK
+  have hcontLocal : ∀ h : ℝ, -rhoLocal < h → h < 0 →
+      ContinuousOn (fun s => economicReserveRemunerationMarginal
+        P Z0 solutionLog s h) (Set.Icc (0 : ℝ) (-K * h)) := by
+    intro h hlow hneg
+    have hlowK : -rhoK < h := by
+      have hbound : rhoLocal ≤ rhoK := min_le_right rho rhoK
+      linarith
+    exact hcontK h hlowK hneg
+  have hantiLocal : ∀ h : ℝ, -rhoLocal < h → h < 0 →
+      StrictAntiOn (fun s => economicReserveRemunerationMarginal
+        P Z0 solutionLog s h) (Set.Icc (0 : ℝ) (-K * h)) := by
+    intro h hlow hneg
+    have hlowK : -rhoK < h := by
+      have hbound : rhoLocal ≤ rhoK := min_le_right rho rhoK
+      linarith
+    exact hantiK h hlowK hneg
   obtain ⟨delta, hdelta, hdeltale, hroots⟩ :=
     negative_shock_creates_exactly_two_local_scalar_roots
       (economicReserveRemunerationMarginal P Z0 solutionLog)
       (dM localScalarReserveRateDirection)
       (dM ((-K) • localScalarSlackDirection +
         localScalarReserveRateDirection))
-      K rho hK hrho hzero' haxis ha hray hc
-      (hcont K hK) (hanti K hK)
-  exact ⟨K, hK, delta, hdelta, hdeltale, hroots⟩
+      K rhoLocal hK hrhoLocal hzero' haxis ha hray hc
+      hcontLocal hantiLocal
+  exact ⟨K, hK, delta, hdelta,
+    le_trans hdeltale (min_le_left rho rhoK), hroots⟩
 
 /-- A positive reserve-remuneration innovation has NO complementary
 root in the stated local interval if the source slice is strictly
