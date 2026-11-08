@@ -40,13 +40,15 @@ theorem reserveRemunerationSlice_transverse_hasDerivAt (K : ℝ) :
       ((-K) • localScalarSlackDirection + localScalarReserveRateDirection) 0 := by
   have hs : HasDerivAt
       (fun h : ℝ => (-K * h) • localScalarSlackDirection)
-      ((-K) • localScalarSlackDirection) 0 :=
-    (((hasDerivAt_id (0 : ℝ)).const_mul (-K)).smul_const
-      localScalarSlackDirection)
+      ((-K) • localScalarSlackDirection) 0 := by
+    simpa only [id_eq, mul_one] using
+      (((hasDerivAt_id (0 : ℝ)).const_mul (-K)).smul_const
+        localScalarSlackDirection)
   have hr : HasDerivAt
       (fun h : ℝ => h • localScalarReserveRateDirection)
-      localScalarReserveRateDirection 0 :=
-    ((hasDerivAt_id (0 : ℝ)).smul_const localScalarReserveRateDirection)
+      localScalarReserveRateDirection 0 := by
+    simpa only [id_eq, one_smul] using
+      ((hasDerivAt_id (0 : ℝ)).smul_const localScalarReserveRateDirection)
   simpa [reserveRemunerationSlice] using hs.add hr
 
 /-- The source's local differentiability assumption produces a Frechet
