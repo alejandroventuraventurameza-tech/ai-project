@@ -147,8 +147,8 @@
     {
       "label": "prop:local_macro_multiplicity",
       "title": "Dos soluciones locales de la complementariedad reducida",
-      "statement_sha256": "c3f664f65b23ee22533d03219746fece6cb36de461a28c12486f155d808cfd9f",
-      "proof_sha256": "3f44fb717d267c833592a68f4f8698208be8fda74afc626583eb2bd02d162100",
+      "statement_sha256": "4a5d01d883b3648d8337cbc11031d2589aaaabff68c8fe2ec3949228cd605017",
+      "proof_sha256": "1bc5c10cfd19dbeebf94a0aae1937dba072a2e89afb27469aab94f37198ece8e",
       "written_review": "scoped_conditional_argument",
       "formalization_status": "not_run",
       "lean_file": null,
@@ -160,7 +160,9 @@
       "scope_review": "conditional_reduced_not_full_competitive_equilibrium",
       "last_source_edit": "2026-11-07",
       "current_proposition_and_proof_raw_tex_sha256": "957855d47ab87980c4518188e93059c15bb733f1adf79ee50e0033fe5f9d13d4",
-      "original_statement_hash_scope": "historical snapshot; current TeX SHA tracked separately"
+      "previous_statement_sha256": "c3f664f65b23ee22533d03219746fece6cb36de461a28c12486f155d808cfd9f",
+      "previous_proof_sha256": "3f44fb717d267c833592a68f4f8698208be8fda74afc626583eb2bd02d162100",
+      "hash_revision_note": "Current verified source-body and proof-body hashes, using code/v0m/verify_v0m.py extraction; old hashes preserved as previous_*."
     },
     {
       "label": "lem:allocation_loss_identity",
@@ -193,8 +195,8 @@
     {
       "label": "prop:risky_branch_persistence",
       "title": "Persistencia condicional de ramas reducidas bajo riesgo",
-      "statement_sha256": "b7d9842cfd755c24ce22910431dda438b3f9bdaf85dacccb914426ef1539dbd4",
-      "proof_sha256": "a7bec316115fe6a074cc4e67ef1808ea1d5795224a3a1a574be027a486605113",
+      "statement_sha256": "6d370b5ac35929562698046bd6a0adba5d638b89449f1a17a0c5978aaf3079d4",
+      "proof_sha256": "3b9f849ebe137957dea035718be8ee8735bf6be59f51a1fad07fdf7b7dfc0f2a",
       "written_review": "scoped_conditional_argument",
       "formalization_status": "not_run",
       "lean_file": null,
@@ -206,7 +208,9 @@
       "scope_review": "conditional_reduced_not_full_competitive_equilibrium",
       "last_source_edit": "2026-11-07",
       "current_proposition_and_proof_raw_tex_sha256": "2474af916bf6536a61387eefd29e6fbf5642e0be879bea765f6e68ae5c88c27a",
-      "original_statement_hash_scope": "historical snapshot; current TeX SHA tracked separately"
+      "previous_statement_sha256": "b7d9842cfd755c24ce22910431dda438b3f9bdaf85dacccb914426ef1539dbd4",
+      "previous_proof_sha256": "a7bec316115fe6a074cc4e67ef1808ea1d5795224a3a1a574be027a486605113",
+      "hash_revision_note": "Current verified source-body and proof-body hashes, using code/v0m/verify_v0m.py extraction; old hashes preserved as previous_*."
     },
     {
       "label": "lem:sspositive",
@@ -823,6 +827,6 @@
   "editorial_scope_revision": {
     "date": "2026-11-07",
     "status": "conditional_reduced",
-    "note": "Two central propositions narrowed. Historical statement_sha256/proof_sha256 retained, current raw TeX hash stored per revised row. Lean free-dual uniqueness refuted; full equilibrium remains open."
+    "note": "Propositions 4.2 and 4.5 narrowed to conditional reduced claims. Current statement/proof hashes verified by the exact 57-result extractor; prior hashes preserved in edited rows. Complete-equilibrium bridge and original Lean literal uniqueness remain open/refuted respectively."
   }
 }
