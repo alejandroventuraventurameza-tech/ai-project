@@ -323,3 +323,49 @@ un certificado numerico independiente del mismo tipo.
 y `M(0)=0` conectado al Jacobiano original con
 aritmetica intervalar; despues establecer suficiencia
 de todas las condiciones originales y la cola dinamica.
+
+## 10. Dominio positivo del chart original: auditoria Lean verificada
+
+Archivo `LocalScalarPositiveLogChartDomainCandidate.lean`,
+commit `32c8a4c573cd8e5bae94f8b206d1bc0307a11be3`;
+[GitHub Actions 42442324909](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42442324909):
+`success`. Se inspeccionaron los siete `#print axioms` de este
+modulo, todos con `propext`, `Classical.choice`, `Quot.sound`,
+y ningun `sorryAx`. El `axioms.log` global tampoco incluye
+`sorryAx`.
+
+El teorema `localPrefixLogChart_positive` prueba literalmente
+`LocalPrefixCoordinatesPositive (localPrefixLogChart Z0 z)`
+para todo vector `z : Fin 33 -> R` si
+`LocalPrefixCoordinatesPositive Z0`: cada coordenada recuperada es
+`Z0_j * Real.exp(z_j)`. No hay que imponer positividad por separado
+en cada shock.
+
+Los lemas `localPrefixLogChart_loanRate_pos` y
+`economic_log_solution_loanRate_ne_zero` aseguran que la tasa
+de prestamo del prefijo en la rama S no se anula. Las coordenadas
+capital de L, inflacion de fecha uno y precio de capital
+tambien son estrictamente positivas en el chart.
+
+Con dos premisas de dominio de primitivas,
+`0 < P.pledgeability FirmType.L` y `P.depreciation < 1`,
+`economic_log_solution_B_denominator_ne_zero` demuestra
+la no anulacion del denominador de la ecuacion original de
+colateral vinculante de B para el vector de politica de fuente.
+
+**Alcance:** estos lemas satisfacen las condiciones de dominio
+que hasta ahora eran argumentos independientes en los puentes
+Euler/colateral; no construyen `Z0` ni demuestran por su
+cuenta `LocalPrefixCoordinatesPositive Z0`.
+El predicado `LocalReducedPrefixLogJacobianCertifiedAt`
+ya incluye esta positividad como condicion explicita,
+pero ese certificado de Jacobiano **no tiene testigo Lean
+construido para la calibracion**.
+
+**Proxima compuerta verificable:** producir un testigo
+`LocalReducedPrefixLogJacobianCertifiedAt` con la derivada
+de las 33 filas de fuente, las identidades de inversa y la
+cota normada; enlazarlo mediante IFT a una funcion
+`solutionLog` realmente `ContDiffAt R 1`; comprobar el
+dual basal y los signos `b<0, a_R<0` sobre la misma
+calibracion, sin atribuir un certificado de B a S.
