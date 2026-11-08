@@ -29,15 +29,25 @@ patrimonio, su no negatividad y su positividad si hay capital o
 depósito positivo. No acredita suficiencia dinámica ni
 solvencia bancaria en presencia de retiradas.
 
-El Lema 4.3 se está contrastando por separado con
-`PaperAllocationLossElasticityCandidate.lean`, un candidato
-de **identidades algebraicas condicionales** de diferencial y MPK;
-el resultado completo `allocationLossIdentitySpec`, incluida
-la no negatividad de la pérdida a partir de optimalidad
-productiva, sigue fuera de ese alcance. Véase
+El Lema 4.3 cuenta ahora con **tres identidades auxiliares
+formalmente verificadas** en
+`PaperAllocationLossElasticityCandidate.lean`. Pasaron el kernel
+y `#print axioms` sin `sorryAx` en
+[Lean focalizado #42458449121](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42458449121),
+commit `1e797f886dea03a6fdea135338e6408a3e8ab91b`:
+(1) álgebra del diferencial si se conocen las logderivadas agregadas,
+(2) orden de participaciones y producto por capital positivo,
+(3) signo negativo de la pérdida cuando se mueve capital relativo
+hacia el tipo con mayor participación de producto que de capital.
+
+El **Lema 4.3 integral sigue pendiente**: demostrar el reparto
+laboral óptimo, la referencia eficiente y su superioridad productiva
+desde los problemas originales, junto con las derivadas de
+agregadores Cobb–Douglas. La versión de `allocationLossIdentitySpec`
+tampoco contiene la ecuación diferencial completa del paper. Véase
 `docs/LEMA_4_3_MECANISMO_ASIGNATIVO_20261108.md`.
-Los resultados del candidato 4.3 no se promocionarán
-hasta que exista auditoría Lean verde del commit que los contiene.
+La matriz registra run y commit para estos fragmentos sin cambiar
+su relación a `same_statement_proved` del resultado académico.
 
 La matriz `paper/lean_crosswalk_57.json` registra
 la evidencia verde de estos cuatro objetos, pero
