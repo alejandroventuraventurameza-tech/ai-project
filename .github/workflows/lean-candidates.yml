@@ -175,6 +175,7 @@ jobs:
           import Ventura26LiquidityAllocation.LocalScalarWorkerLaborLogZeroCandidate
           import Ventura26LiquidityAllocation.LocalScalarAugmented34SemanticBridgeCandidate
           import Ventura26LiquidityAllocation.LocalScalarBankRenewalCalibrationBridgeCandidate
+          import Ventura26LiquidityAllocation.LocalScalarPolicyRuleTargetsCandidate
           import Ventura26LiquidityAllocation.StationaryEquilibriumCandidate
           import Ventura26LiquidityAllocation.BoundaryAnalyticPackageCandidate
           import Ventura26LiquidityAllocation.InterbankCancellationCandidate
@@ -262,6 +263,8 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarBankRenewalCalibrationBridge.bankRenewalFactor_eq_inverse_rate_iff
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarBankRenewalCalibrationBridge.source_bank_face_inverse_rate_log_zero_iff
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarBankRenewalCalibrationBridge.source_bank_face_inverse_rate_log_zero_iff_of_positive
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarPolicyRuleTargets.source_reserve_rate_rule_zero_iff_exp_target
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarPolicyRuleTargets.source_reserve_quantity_rule_zero_iff_exp_target
           #print axioms Ventura26LiquidityAllocation.ProposedStationaryEquilibrium.parent_competitiveEquilibrium
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.proposed_localSlackLiteralAllocation_settlementClears_of_binarySymmetric
