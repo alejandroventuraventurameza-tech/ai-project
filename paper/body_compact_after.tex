@@ -177,27 +177,23 @@ estos hechos elimina, por sí mismo, la necesidad de
 identificar los arreglos externos, las derivadas del operador
 económico completo y el calendario de su continuación.
 
-\begin{center}\small
-\begin{tabular}{@{}p{3.7cm}p{4.8cm}p{4.8cm}@{}}
-\toprule
-Objeto & Evidencia disponible & Límite no resuelto\\\midrule
-Complementariedad escalar &
-Prueba del cuerpo bajo \(C^1\) y signos; lema de orden
-formalizado en Lean con premisas visibles &
-No certifica que las raíces sean asignaciones
-competitivas infinitas.\\
-Filas 6, 12, 13, 21, 22, 28, 29, 33 &
-Teoremas condicionales sobre expresiones
-del operador aumentado, compilados y auditados &
-No existe puente de semántica/derivadas de las 34 filas.\\
-IRF S/B &
-Residuos, sensitividades y KKT necesarias comprobadas
-en soluciones finitas &
-No se ha demostrado suficiencia dinámica ni
-regla de selección de ramas.\\
-\bottomrule
-\end{tabular}
-\end{center}
+\paragraph{Complementariedad escalar (prueba matemática condicional).}
+El resultado del cuerpo demuestra dos raíces locales bajo regularidad
+y signos de derivadas. El lema Lean acredita la proposición de orden
+con premisas explícitas, pero no la recuperación de un equilibrio
+competitivo de horizonte infinito.
+
+\paragraph{Puentes fuente--Python (ocho filas identificadas).}
+Las filas 6, 12, 13, 21, 22, 28, 29 y 33 tienen teoremas de
+correspondencia condicional compilados y auditados. Falta demostrar
+el mapeo de datos y la igualdad de los operadores de derivadas
+de las 34 filas para transferir las cotas numéricas.
+
+\paragraph{IRF en los regímenes S y B (evidencia numérica).}
+Se comprueban residuos, sensibilidad y condiciones KKT
+necesarias sobre soluciones finitas. Permanecen abiertas
+la suficiencia dinámica, la continuación económica infinita y
+la regla de selección entre ramas.
 
 El comando reproducible de entrada es
 \texttt{python code/verify.py}, ejecutado desde la raíz.
