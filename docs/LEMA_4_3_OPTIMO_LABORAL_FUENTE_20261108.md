@@ -81,26 +81,26 @@ El candidato `x_H=x_L=1` alcanza igualdad: **óptimo global en trabajo a capital
 
 ## 4 bis. Eliminación de la hipótesis de presupuesto normalizado
 
-En el módulo candidato \`PaperOriginalLaborGlobalCandidate.lean\` se parte
-de cualquier \`ell_H,ell_L >= 0\` con \`v_H ell_H+v_L ell_L=L\`.
-Con \`g_i>0\`, \`G>0\` y \`L>0\` se define
-\`x_i=ell_i G/(L g_i)\`. Entonces
+En el módulo candidato `PaperOriginalLaborGlobalCandidate.lean` se parte
+de cualquier `ell_H,ell_L >= 0` con `v_H ell_H+v_L ell_L=L`.
+Con `g_i>0`, `G>0` y `L>0` se define
+`x_i=ell_i G/(L g_i)`. Entonces
 
-\`\`\`text
+```text
 (L g_i/G) x_i = ell_i,
 sum_i v_i g_i x_i = (G/L) sum_i v_i ell_i = G.
-\`\`\`
+```
 
-El teorema fuente \`original_two_type_labor_global_bound\` intenta
+El teorema fuente `original_two_type_labor_global_bound` intenta
 transportar el resultado ya verificado sobre coordenadas normalizadas
 a producción física para todas las alternativas no negativas:
 
-\`\`\`text
+```text
 sum_i v_i A_i k_i^alpha ell_i^beta <= L^beta G^(1-beta).
-\`\`\`
+```
 
-También se registra \`original_labor_candidate_attains_global_bound\`,
-que proporciona igualdad en \`ell_i*=L g_i/G\`. **Estado:** los
+También se registra `original_labor_candidate_attains_global_bound`,
+que proporciona igualdad en `ell_i*=L g_i/G`. **Estado:** los
 nuevos objetivos de este módulo NO se promocionan hasta que
 la CI focalizada del commit que los contiene y la auditoría
 de axiomas resulten exitosas. La demostración sigue siendo de
@@ -108,7 +108,7 @@ de axiomas resulten exitosas. La demostración sigue siendo de
 
 ## 5. Brechas restantes para el lema académico completo
 
-1. Transportar **en el kernel** las alternativas laborales originales `ell_i>=0` al gráfico de coordenadas normalizadas `x_i` y demostrar sus equivalencias de presupuesto, positividad y producto; ahora la desigualdad Lean sobre coordenadas exige como hipótesis el presupuesto ya normalizado.
+1. Auditar el nuevo candidato `original_two_type_labor_global_bound` que transporta cualquier alternativa física `ell_i>=0` a `x_i` y el presupuesto normalizado, y distinguir su cota global (capital fijo) de la prueba eficiente de capital **y** trabajo. No se promueve hasta compilación y `#print axioms` verdes.
 2. Conectar la cota global de capital y trabajo (AM–GM ya verificada en módulo separado) con `Yeff = K^alpha L^beta ZA^(1-alpha-beta)` desde producción física y presupuestos originales.
 3. Derivar formalmente `d log G` y `d log K` desde sus funciones reales diferenciables para llegar a `dLoss = alpha(kappaH-omegaH)d log(kH/kL)`. El álgebra **condicional** de coeficientes ya está verificada.
 4. Corregir la interfaz `allocationLossIdentitySpec` en un módulo nuevo (no mutar el checkpoint), haciendo explícitos los exponentes comunes y la producción `sum_i v_i y_i` que actualmente falta.
