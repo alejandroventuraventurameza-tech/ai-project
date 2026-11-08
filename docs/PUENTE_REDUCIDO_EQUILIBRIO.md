@@ -598,6 +598,11 @@ en la base antigua sigue sin estar probada. No se altero ninguna IRF
 ni se interpreto la perturbacion `h` como cambio de encaje o de la
 tasa interbancaria.
 
+**Escala:** la innovacion de la IRF principal es `v_R=-1e-5`, diez
+ordenes de magnitud por encima del radio `r_h=1e-15` de esta
+caja. El certificado 34x34 local no avala la IRF completa ni
+su sensibilidad a dicha perturbacion finita.
+
 ### 13.3 Brechas cientificas que siguen siendo bloqueantes
 
 1. Certificar **fila a fila**, bajo definiciones Lean y no solo
