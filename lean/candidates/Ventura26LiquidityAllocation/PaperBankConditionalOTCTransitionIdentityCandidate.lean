@@ -604,5 +604,67 @@ theorem source_full_retention_zero_parent_weighted_children_sum_eq_zero
 #print axioms source_full_retention_zero_parent_weighted_child_eq_zero
 #print axioms source_full_retention_zero_parent_weighted_children_sum_eq_zero
 
+
+/-!
+## Source active-parent OTC child identity, before stochastic aggregation
+
+This is a literal one-child identity for positive individual and
+aggregate bank equity. The zero-parent theorem immediately above
+handles the complementary solvency boundary. Both pieces still need
+a full supported-history sum and a bound on actual OTC conditional
+returns before an unrestricted terminal result can be claimed.
+-/
+
+/-- At a bank history with positive individual and aggregate equity,
+the source discounted successor equity equals its parent's
+discounted equity times the exact OTC growth factor. -/
+theorem source_full_retention_active_parent_child_identity
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (n : ℕ) (future : Fin n → S)
+    (payments : Fin n → P.paymentSupport)
+    (s : S) (omega : P.paymentSupport)
+    (hrisk : P.workerRiskAversion = 1)
+    (hconsumption : 0 <
+      X.workerConsumption (t + n) (continuationHistory h future))
+    (hchildConsumption : 0 <
+      X.workerConsumption (t + n + 1)
+        (childHistory (continuationHistory h future) s))
+    (hindividual : 0 <
+      (sourceFullRetentionCandidate P X t h).equity n future payments)
+    (haggregate : 0 <
+      X.bankEquity (t + n) (continuationHistory h future)) :
+    (P.tree.transition
+      (currentState (continuationHistory h future)) s *
+        P.paymentProbability omega) *
+      (bankCumulativeSDFAt P X t h (childFutureHistory future s) *
+        (sourceFullRetentionCandidate P X t h).equity (n + 1)
+          (childFutureHistory future s)
+          (childPaymentHistory payments omega)) =
+      (P.tree.transition
+        (currentState (continuationHistory h future)) s *
+          P.paymentProbability omega) *
+        ((bankCumulativeSDFAt P X t h future *
+          (sourceFullRetentionCandidate P X t h).equity
+            n future payments) *
+          sourceDiscountedEquityGrowthFactor P X t h n future s omega) := by
+  have hsource := fullRetentionContinuation_cumulative_joint_child
+    P X t h n future payments s omega hrisk
+    hconsumption hchildConsumption.ne' hindividual haggregate
+  have hsource' :
+      bankCumulativeSDFAt P X t h (childFutureHistory future s) *
+        (sourceFullRetentionCandidate P X t h).equity (n + 1)
+          (childFutureHistory future s)
+          (childPaymentHistory payments omega) =
+      (bankCumulativeSDFAt P X t h future *
+        (sourceFullRetentionCandidate P X t h).equity
+          n future payments) *
+        sourceDiscountedEquityGrowthFactor P X t h n future s omega := by
+    simpa only [sourceFullRetentionCandidate,
+      sourceDiscountedEquityGrowthFactor] using hsource
+  rw [hsource']
+
+#print axioms source_full_retention_active_parent_child_identity
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
