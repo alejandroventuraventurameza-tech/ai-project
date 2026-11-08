@@ -58,10 +58,10 @@ la totalidad de las obligaciones intertemporales del paper.
 
 ## 1. Veredicto general sin sobredeclaración
 
-Se han inspeccionado de manera dirigida **19 de 57** afirmaciones:
+Se han inspeccionado de manera dirigida **24 de 57** afirmaciones:
 se localizó al menos una declaración Lean con objeto relacionado, y
 se describió explícitamente por qué no alcanza, todavía, a demostrar
-el enunciado completo del paper. **38 resultados** siguen pendientes
+el enunciado completo del paper. **33 resultados** siguen pendientes
 de cotejo semántico individual. El identificador histórico de cada
 resultado, su título y el hash de su enunciado son trazables en JSON.
 
@@ -222,6 +222,42 @@ riesgos positivos pequeños, mientras que el paper vigente enuncia
 solo persistencia de soluciones reducidas **suponiendo** que
 la continuación es contractiva. No puede reutilizarse el resultado
 reducido para afirmar verdadero el `Spec` más fuerte.
+
+## 4 ter. Auditoría dirigida del núcleo de existencia y suficiencia en anexos
+
+Se amplió el cotejo a cinco proposiciones de riesgo especialmente alto:
+`prop:firm_sufficiency_infinite` (A.17.1),
+`prop:general_regime_sufficiency` (A.32.1),
+`prop:finite_prefix_equilibrium` (A.32.2),
+`prop:certified_small_risk_equilibrium` (A.30.1)
+y `prop:nonlinear_local_path` (A.15.2).
+Las cinco tienen declaraciones Lean **relacionadas pero de
+alcance insuficiente** para sus enunciados originales.
+
+- `parent_firmOptimal` y `parent_firm_dominates` demuestran
+  optimalidad de empresas en un **testigo estacionario concreto**;
+  no la suficiencia intertemporal para todo árbol y régimen financiero.
+- `firmOptimal_twoSidedVariation_derivative_zero` obtiene una
+  condición **necesaria** de optimalidad por variación, no una
+  suficiencia universal de sistemas KKT.
+- `parent_competitiveEquilibrium` acredita un equilibrio
+  estacionario literal condicionado a `reservesPre≤G`;
+  no ensambla una continuación estocástica con un prefijo perturbado.
+- `boundaryRoot_spec` exhibe una raíz del residual de
+  recursos de frontera bajo paquetes de signo, no el equilibrio
+  de todas las condiciones de empresas, hogar, bancos y precios.
+- `source_economic_negative_remuneration_shock_two_roots`
+  presupone una reducción implícita y signos locales;
+  no certifica las contracciones uniformes ni la
+  optimalidad del testigo con riesgo `0<η≤10^-31`.
+
+Esta revisión eleva el número de resultados con cotejo
+dirigido a **24/57**; los otros **33** siguen sin revisión
+individual. No significa que estas cinco proposiciones hayan
+quedado demostradas en Lean. Se conserva la marca
+`paper_proof_equivalent_in_lean=not_established`.
+El inventario exacto y las obligaciones individuales están en
+`paper/lean_crosswalk_57.json`.
 
 ## 5. Obligaciones antes de promover cualquier resultado
 
