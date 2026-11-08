@@ -4,6 +4,34 @@
 `work/lean-ci-validation-otc-20261106`. **Fuente de verdad:**
 `paper/result_ledger.json` y `paper/lean_crosswalk_57.json`.
 
+## Actualización CI: cuatro declaraciones financieras comprobadas
+
+La auditoría Lean
+[42457259796](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42457259796),
+commit `c006e00c437243c3f6f44ec3c102df4286c545e0`,
+**compiló y auditó `#print axioms` sin `sorryAx`** para
+`exact_noSimultaneousSavingBorrowingSpec` (3.2),
+`exact_financingCapacityComparativeSpec` (3.3),
+`original_fundingSupergradientSpec_false` (contraejemplo a
+la versión mal parentizada de 3.5) y
+`corrected_fundingSupergradientSpec` (superdiferencial de
+3.5 matemáticamente corregido). La especificación literal
+3.5 no se declara probada: está refutada. El checkpoint
+`PaperInterface.lean` permanece intacto.
+
+Se ha incorporado además
+`PaperRepaymentExactCandidate.exact_repaymentSpec`,
+dirigido al resultado 3.1 completo (cobertura real, desigualdad
+de patrimonio y signo), pero su compilación y auditoría de
+axiomas **siguen pendientes** del run que lo contiene.
+
+La matriz `paper/lean_crosswalk_57.json` registra
+la evidencia verde de estos cuatro objetos, pero
+`paper_proof_equivalent_in_lean` conserva el valor
+`not_established` en el registro: se certifican las
+**proposiciones Lean exactas o corregidas**, no por ello
+la totalidad de las obligaciones intertemporales del paper.
+
 ## 1. Veredicto general sin sobredeclaración
 
 Se han inspeccionado de manera dirigida **19 de 57** afirmaciones:
@@ -149,7 +177,7 @@ del objetivo fuente cuando las tasas están fuera de ese dominio.
 
 Al cotejar **los siete últimos resultados principales**:
 el Lema 3.1 dispone del predicado fuente `RobustCollateral`,
-pero no se ha cerrado la implicación de patrimonio futuro no negativo;
+y ahora existe un candidato exacto para patrimonio futuro no negativo, aún bajo prueba Lean;
 el Lema 3.4 tiene un teorema fuente de recuperación de cartera
 `signedFundingEquivalence` que no eleva por sí solo óptimos
 intertemporales; el Lema 3.7 tiene la cota de tasa interbancaria
