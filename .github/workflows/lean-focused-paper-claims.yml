@@ -46,6 +46,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankSourceTransitionMonotonicityCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankJointContinuationMonotonicityCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankLiteralBellmanMonotonicityCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankSourceOneStepEnvelopeCandidate.lean'
       - 'lean/checkpoint/**'
   workflow_dispatch:
 
@@ -118,6 +119,7 @@ jobs:
           cp lean/candidates/Ventura26LiquidityAllocation/PaperBankSourceTransitionMonotonicityCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
           cp lean/candidates/Ventura26LiquidityAllocation/PaperBankJointContinuationMonotonicityCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
           cp lean/candidates/Ventura26LiquidityAllocation/PaperBankLiteralBellmanMonotonicityCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankSourceOneStepEnvelopeCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
           sha256sum lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean > lean-focused-logs/checkpoint-sha256.txt
           sha256sum lean/candidates/Ventura26LiquidityAllocation/Paper*Candidate.lean > lean-focused-logs/paper-candidates-sha256.txt
       - name: Install exact Lean toolchain
@@ -151,7 +153,7 @@ jobs:
         working-directory: upstream
         run: |
           set -euo pipefail
-          for module in PaperRepaymentExactCandidate PaperAllocationLossElasticityCandidate PaperAllocationEfficiencySupportCandidate PaperAllocationSourceAlgebraBridgeCandidate PaperOptimalLaborCandidate PaperOriginalLaborGlobalCandidate PaperJointEfficiencySourceCandidate PaperJointEfficiencyBoundCandidate PaperJointEfficiencyPhysicalCandidate PaperOriginalLogLossCandidate PaperSourceDifferentiationCandidate PaperSourceDifferentialSharesCandidate PaperSourceLossChainRuleCandidate PaperSourceOutputShareCandidate PaperSourceLogCapitalRatioCandidate PaperLemma43StaticIntegratedCandidate PaperLemma43DynamicIntegratedCandidate PaperLemma43SourceCompleteCandidate PaperLemma43PhysicalMPKCandidate PaperBankStaticSupergradientSufficiencyCandidate PaperBankBellmanStaticSufficiencyCandidate PaperBankKKTGlobalSufficiencyCandidate PaperBankBellmanEnvironmentFromStaticCandidate PaperBankKKTFullCornerCandidate PaperBankMonotoneBellmanEnvelopeCandidate PaperBankFiniteHorizonEnvelopeCandidate PaperBankFiniteSupportContinuationCandidate PaperBankSourceTransitionMonotonicityCandidate PaperBankJointContinuationMonotonicityCandidate PaperBankLiteralBellmanMonotonicityCandidate; do
+          for module in PaperRepaymentExactCandidate PaperAllocationLossElasticityCandidate PaperAllocationEfficiencySupportCandidate PaperAllocationSourceAlgebraBridgeCandidate PaperOptimalLaborCandidate PaperOriginalLaborGlobalCandidate PaperJointEfficiencySourceCandidate PaperJointEfficiencyBoundCandidate PaperJointEfficiencyPhysicalCandidate PaperOriginalLogLossCandidate PaperSourceDifferentiationCandidate PaperSourceDifferentialSharesCandidate PaperSourceLossChainRuleCandidate PaperSourceOutputShareCandidate PaperSourceLogCapitalRatioCandidate PaperLemma43StaticIntegratedCandidate PaperLemma43DynamicIntegratedCandidate PaperLemma43SourceCompleteCandidate PaperLemma43PhysicalMPKCandidate PaperBankStaticSupergradientSufficiencyCandidate PaperBankBellmanStaticSufficiencyCandidate PaperBankKKTGlobalSufficiencyCandidate PaperBankBellmanEnvironmentFromStaticCandidate PaperBankKKTFullCornerCandidate PaperBankMonotoneBellmanEnvelopeCandidate PaperBankFiniteHorizonEnvelopeCandidate PaperBankFiniteSupportContinuationCandidate PaperBankSourceTransitionMonotonicityCandidate PaperBankJointContinuationMonotonicityCandidate PaperBankLiteralBellmanMonotonicityCandidate PaperBankSourceOneStepEnvelopeCandidate; do
             echo "::group::Compile $module"
             if lake build "Ventura26LiquidityAllocation.$module" > "$GITHUB_WORKSPACE/lean-focused-logs/$module.log" 2>&1; then
               echo "COMPILED $module"
@@ -197,6 +199,7 @@ jobs:
           import Ventura26LiquidityAllocation.PaperBankSourceTransitionMonotonicityCandidate
           import Ventura26LiquidityAllocation.PaperBankJointContinuationMonotonicityCandidate
           import Ventura26LiquidityAllocation.PaperBankLiteralBellmanMonotonicityCandidate
+          import Ventura26LiquidityAllocation.PaperBankSourceOneStepEnvelopeCandidate
           import Ventura26LiquidityAllocation.PaperBankFiniteHorizonEnvelopeCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedPaperRepaymentExact.exact_repaymentSpec
           #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationLossElasticity.allocation_loss_log_differential_algebra
@@ -257,6 +260,7 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBankSourceTransitionMonotonicity.sourceSurvivalContinuation_monotone_of_consumption
           #print axioms Ventura26LiquidityAllocation.ProposedBankJointContinuationMonotonicity.jointSurvivalContinuation_monotone_of_consumption
           #print axioms Ventura26LiquidityAllocation.ProposedBankLiteralBellmanMonotonicity.bankBellmanContinuationAt_monotone_of_consumption
+          #print axioms Ventura26LiquidityAllocation.ProposedBankSourceOneStepEnvelope.bankContinuationPayoffAt_le_tailEnvelope
           #print axioms Ventura26LiquidityAllocation.ProposedBankFiniteHorizonEnvelope.finite_horizon_le_value
           #print axioms Ventura26LiquidityAllocation.ProposedBankFiniteHorizonEnvelope.finite_horizon_eq_value
           LEAN
