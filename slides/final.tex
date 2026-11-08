@@ -591,65 +591,57 @@ primales sobre historias admisibles.
 \textbf{Aún no hay dos testigos de equilibrio completo.}
 \end{frame}
 
-\begin{frame}[fragile]{Proposición del paper frente al enunciado literal en Lean}
-\footnotesize
-\textbf{Paper, Prop. de complementariedad reducida:}
-Suponiendo $\mathcal M\in C^1$, $\mathcal M(0,0)=0$,
+\begin{frame}[fragile]{Proposición del paper y contrato matemático de Lean}
+\small
+\textbf{Paper:} supongamos $\mathcal M\in C^1$ y
+$\mathcal M(0,0)=0$, con
 $\partial_s\mathcal M(0,0)=b<0$ y
-$\partial_h\mathcal M(0,0)=a_R<0$,
-para $h<0$ pequeño existen exactamente las
-raíces locales $s=0$ y $s(h)>0$; para $h>0$ pequeño no
-hay raíces locales no negativas.
+$\partial_h\mathcal M(0,0)=a_R<0$.
+Para $h<0$ pequeño, complementariedad admite
+exactamente las raíces escalares locales $s=0$
+y $s(h)>0$. Para $h>0$ pequeño, ninguna.
 
 \medskip
-\textbf{Lean, \texttt{scalar\_complementarity\_exactly\_two}:}
-\begin{verbatim}
-theorem scalar_complementarity_exactly_two
-    (M : ℝ → ℝ) (r : ℝ)
-    (hanti : StrictAntiOn M (Set.Ici (0 : ℝ)))
-    (hr : 0 < r) (hM0 : 0 < M 0)
-    (hroot : M r = 0) :
-    ∀ s : ℝ, ScalarComplementarity M s
-      ↔ s = 0 ∨ s = r := by
-\end{verbatim}
-\textbf{Correspondencia exacta:} Lean verifica el conteo de
-raíces si ya suponemos monotonicidad, $r>0$, $M(0)>0$
-y $M(r)=0$. \emph{No} deriva $r(h)$ por IFT, los signos
-del Schur económico, ni la correspondencia con
-equilibrios competitivos de horizonte infinito.
+\textbf{Lean:}
+\texttt{scalar\_complementarity\_exactly\_two}
+asegura, para una función $M:\mathbb R\to\mathbb R$,
+\[
+\bigl[s\geq 0,\ M(s)\geq 0,\ sM(s)=0\bigr]
+\quad\Longleftrightarrow\quad
+s=0\ \lor\ s=r.
+\]
+El teorema asume $M$ estrictamente decreciente sobre
+$[0,\infty)$, una raíz $r>0$, $M(0)>0$ y $M(r)=0$.
+\emph{No} produce $r(h)$ por función implícita,
+ni prueba los signos de la economía fuente.
 \end{frame}
 
-\begin{frame}[fragile]{Fragmento de prueba Lean y juicio sobre las hipótesis}
-\footnotesize
-\textbf{Archivo fuente:}
-\texttt{ScalarComplementarityMultiplicityCandidate.lean}.
-El siguiente fragmento está reproducido literalmente:
+\begin{frame}[fragile]{Fragmento literal de prueba Lean y su alcance}
+\small
+\textbf{Archivo:}
+\texttt{ScalarComplementarityMultiplicityCandidate.lean}
+\medskip
+
+Las líneas siguientes aparecen en el código fuente;
+las elipsis indican omisiones, sin alterar el texto de
+las líneas reproducidas.
 \begin{verbatim}
+theorem scalar_complementarity_exactly_two
+    ...
   intro s
   constructor
-  · exact scalar_solution_is_boundary_or_positive_root
-      M r hanti hr hroot s
-  · intro h
+    ...
     rcases h with h0 | h1
-    · subst s
-      exact ⟨le_refl (0 : ℝ), le_of_lt hM0, by simp⟩
-    · subst s
-      exact ⟨le_of_lt hr, by simp [hroot],
-        by simp [hroot]⟩
 \end{verbatim}
-\textbf{Qué falta para el enunciado del paper:}
-justificar desde $C^1$ la monotonía \emph{local},
-producir $r(h)$ por función implícita y
-demostrar que la eliminación de las otras
-33 condiciones corresponde al modelo económico original.
 
-\medskip
-\textbf{Juicio crítico:} la demostración Lean utiliza
-\texttt{StrictAntiOn} sobre todo el semieje no negativo
-y supone la raíz $r$; el paper solo requiere
-monotonía y existencia local derivadas bajo hipótesis.
-El lema es correcto en su alcance, pero \emph{no}
-prueba literalmente la proposición dinámica completa.
+\textbf{Juicio matemático:} Lean verifica el
+\emph{conteo} de soluciones suponiendo su raíz
+positiva y monotonicidad global no negativa.
+El paper deriva localmente la raíz bajo $C^1$,
+dos signos y un teorema de función implícita.
+\textbf{No son teoremas literalmente equivalentes}.
+La recuperación de 33 controles y la optimalidad
+en horizonte infinito siguen pendientes.
 \end{frame}
 
 \begin{frame}{Derivación independiente: crédito no equivale a inversión}
