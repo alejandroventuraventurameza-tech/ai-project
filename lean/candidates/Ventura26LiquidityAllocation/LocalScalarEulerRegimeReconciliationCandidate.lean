@@ -52,8 +52,7 @@ theorem binding_euler_eq_slack_euler_of_zero_dual
     localReducedFirmCapitalEulerResidual LocalPrefixBranch.binding P d FirmType.L =
       localReducedFirmCapitalEulerResidual LocalPrefixBranch.slack P d FirmType.L := by
   have hdiff := binding_minus_slack_euler_is_pledge_times_dual P d
-  rw [hdual, mul_zero, neg_zero, sub_eq_zero] at hdiff
-  exact hdiff
+  simpa [hdual, sub_eq_zero] using hdiff
 
 /-- At a nonzero loan rate, zero funding dual also satisfies
 the source S-regime's loan Euler row, which is separately
@@ -75,7 +74,7 @@ theorem slack_funding_regime_row_zero_of_zero_dual
         (localPrefixEntrepreneurSDF P d FirmType.L /
           d.nextControls.inflation) - 1 := by ring
     _ = d.controls.loanRate * (1 / d.controls.loanRate) - 1 := by rw [heq]
-    _ = 0 := by field_simp [hR]
+    _ = 0 := by field_simp [hR] <;> ring
 
 #print axioms binding_minus_slack_euler_is_pledge_times_dual
 #print axioms binding_euler_eq_slack_euler_of_zero_dual
