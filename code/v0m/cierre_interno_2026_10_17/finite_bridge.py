@@ -454,6 +454,12 @@ def evaluate_bridge(base, P, branch, policy_inputs=True, point_capture=None):
             "point_jacobian_box": [[enclosure(source_J[i, j]) for j in range(33)]
                                    for i in range(33)],
             "point_policy_derivative_box": source_G0,
+            "funding_dual_state_gradient_box": [
+                enclosure(metrics["L_dual"].d[i]) for i in range(33)
+            ],
+            "funding_dual_direct_parameter_derivatives": [
+                enclosure(metrics["L_dual"].d[33 + j]) for j in range(4)
+            ],
             "point_center_residual_box": source_F0,
             "point_preconditioned_defect_upper": str(point_defect_upper),
             "point_inverse_gate_pass": point_gate_pass,
