@@ -185,6 +185,7 @@ jobs:
           import Ventura26LiquidityAllocation.LocalScalarAugmented34BankFaceRowsCandidate
           import Ventura26LiquidityAllocation.LocalScalarAugmented34PledgeDualRowsCandidate
           import Ventura26LiquidityAllocation.LocalScalarStationaryPythonCalibrationCandidate
+          import Ventura26LiquidityAllocation.PaperFinancialMainExactCandidate
           import Ventura26LiquidityAllocation.StationaryEquilibriumCandidate
           import Ventura26LiquidityAllocation.BoundaryAnalyticPackageCandidate
           import Ventura26LiquidityAllocation.InterbankCancellationCandidate
@@ -313,6 +314,9 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarStationaryPythonCalibration.stationary_source_bank_factor_eq_illustrative
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarStationaryPythonCalibration.stationary_source_entrepreneur_sigma_one
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarStationaryPythonCalibration.stationary_source_reference_positive
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperFinancialMainExact.exact_noSimultaneousSavingBorrowingSpec
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperFinancialMainExact.exact_financingCapacityComparativeSpec
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperFinancialMainExact.exact_fundingSupergradientSpec
           #print axioms Ventura26LiquidityAllocation.ProposedStationaryEquilibrium.parent_competitiveEquilibrium
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.proposed_localSlackLiteralAllocation_settlementClears_of_binarySymmetric
