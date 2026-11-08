@@ -165,6 +165,79 @@ theorem bankContinuationPayoffAt_le_sourceBellman_of_tailBound
       bankTailEnvelopeAt_eq_dividend_add_sourceBellman
         P X t h initialEquity q hfeasible V
 
+
+/-- Every dynamically feasible alternative also has a literally
+feasible date-zero static portfolio at ITS OWN retained equity.
+Unlike the source theorem for a named BankPlan candidate, this
+quantifies over an arbitrary continuation policy. In particular,
+this does NOT establish optimality across dividend choices. -/
+theorem bankContinuationFeasibleAt_initialStaticPortfolio
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (initialEquity : ℝ)
+    (q : BankContinuationPolicy S P.paymentSupport)
+    (hfeasible : BankContinuationFeasibleAt P X t h initialEquity q) :
+    BankStaticPortfolioFeasibleAt P X t h
+      (bankOTCDeficitSlopeAt P X t h (X.bankTightness t h))
+      (bankOTCSurplusSlopeAt P X t h (X.bankTightness t h))
+      (q.retainedEquity 0 (fun j => Fin.elim0 j) (fun j => Fin.elim0 j))
+      (q.loans 0 (fun j => Fin.elim0 j) (fun j => Fin.elim0 j))
+      (q.reserves 0 (fun j => Fin.elim0 j) (fun j => Fin.elim0 j))
+      (q.deposits 0 (fun j => Fin.elim0 j) (fun j => Fin.elim0 j)) := by
+  let emptyS : Fin 0 → S := fun j => Fin.elim0 j
+  let emptyOmega : Fin 0 → P.paymentSupport := fun j => Fin.elim0 j
+  have hzero := hfeasible.2 0 emptyS emptyOmega (by trivial)
+  rcases hzero with ⟨equityNonneg, dividendNonneg, hretainedNonneg,
+    hloansNonneg, hreservesNonneg, hdepositsNonneg, zeroBoundary,
+    retainedPos, retention, hbalance, hdepositCap, hloanCap,
+    hreserveRate, hsettlement⟩
+  have hreserveRate' : 0 < X.reserveRate t h := by
+    simpa [emptyS, continuationHistory_zero] using hreserveRate
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · simpa [emptyS, emptyOmega] using hloansNonneg
+  · simpa [emptyS, emptyOmega] using hreservesNonneg
+  · simpa [emptyS, emptyOmega] using hdepositsNonneg
+  · simpa [emptyS, emptyOmega] using hbalance
+  · simpa [emptyS, emptyOmega] using hdepositCap
+  · simpa [emptyS, emptyOmega] using hloanCap
+  · intro omega hOmega state hs
+    change 0 ≤ bankReducedPortfolioReturn P X t h
+      (bankOTCDeficitSlopeAt P X t h (X.bankTightness t h))
+      (bankOTCSurplusSlopeAt P X t h (X.bankTightness t h))
+      (q.loans 0 emptyS emptyOmega)
+      (q.reserves 0 emptyS emptyOmega)
+      (q.deposits 0 emptyS emptyOmega)
+      omega / X.inflation (t + 1) (childHistory h state)
+    let omegaS : P.paymentSupport := ⟨omega, hOmega⟩
+    have htransition := (hsettlement omegaS).2.2 state hs
+    have hsupported : FuturePathSupported P.tree (currentState h) 1
+        (fun _ => state) := by
+      simpa [FuturePathSupported] using hs
+    have hone := hfeasible.2 1 (fun _ => state)
+      (fun _ => omegaS) hsupported
+    have hEquityNonneg : 0 ≤ q.equity 1
+        (fun _ => state) (fun _ => omegaS) := hone.1
+    have hchildFuture : childFutureHistory emptyS state =
+        (fun _ => state) := by
+      funext j
+      exact Fin.eq_zero j ▸ rfl
+    have hchildPayment : childPaymentHistory emptyOmega omegaS =
+        (fun _ => omegaS) := by
+      funext j
+      exact Fin.eq_zero j ▸ rfl
+    rw [hchildFuture, hchildPayment] at htransition
+    rw [htransition] at hEquityNonneg
+    rw [← bankDetailedPortfolioReturn_eq_reduced P X t h
+      (X.bankTightness t h)
+      (q.loans 0 emptyS emptyOmega)
+      (q.reserves 0 emptyS emptyOmega)
+      (q.deposits 0 emptyS emptyOmega)
+      omega hreserveRate'.ne']
+    simpa [emptyS, emptyOmega, continuationHistory_zero]
+      using hEquityNonneg
+
+#print axioms bankContinuationFeasibleAt_initialStaticPortfolio
+
 #print axioms bankTailEnvelopeAt_eq_dividend_add_sourceBellman
 #print axioms bankContinuationPayoffAt_le_sourceBellman_of_tailBound
 
