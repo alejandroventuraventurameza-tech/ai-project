@@ -115,6 +115,34 @@ Se requiere una instancia concreta de `P` y cotejar los valores
 de `s.rate`, `P.bankExit` y `P.bankSeedShare` antes de marcar
 las filas 6 y 22 como numericamente compatibles.
 
+### Rango economicamente admisible (argumento algebraico)
+
+Si la tasa de referencia bruta satisface `R>1`, definir
+`kappa=1-1/R` implica `0<kappa<1`. Bajo
+`0<=bankExit<=1` y `0<=bankSeedShare<=1`, las soluciones
+admisibles de `bankExit*(1-bankSeedShare)=kappa` son
+
+```text
+0 <= bankSeedShare <= 1/R,
+bankExit = kappa/(1-bankSeedShare).
+```
+
+Este es un conjunto de pares de parametros, NO la identificacion
+de los parametros elegidos en la fuente economica. Evaluando
+aproximadamente la formula de `steady()` de
+`code/v0m/cotas_2026_10_15/verified_linear_operator.py`
+se obtiene `R~1.01204824`, `kappa~0.01190480`.
+Si, solo como ejemplo, se eligiera `bankSeedShare=0.5`,
+entonces `bankExit~0.02380961`. Estas cifras usan redondeo
+ordinario y NO sustituyen la verificacion de parametros ni
+las cajas intervalares originales.
+
+Se anadio el candidato Lean
+`LocalScalarBankRenewalCalibrationBridgeCandidate.lean`
+para demostrar el `iff` del factor de renovacion y la
+equivalencia de ceros bancaria con positividad; no promoverlo
+a verificado antes del resultado CI de su revision.
+
 **Regla de actualizacion:** un candidato solo pasa a
 "verificado" si el run especifico del commit lo compila y
 `#print axioms` no presenta `sorryAx`; este inventario
