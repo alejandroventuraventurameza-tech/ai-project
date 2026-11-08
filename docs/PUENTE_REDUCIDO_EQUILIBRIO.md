@@ -56,3 +56,44 @@ El padre estacionario formalizado en StationaryEquilibriumCandidate **no es** po
 5. **Edición:** resumen, proposiciones, prueba escrita, slides y ledger de 57 resultados no pueden atribuir a las IRF un teorema de equilibrio infinito que permanece abierto.
 
 **Decisión:** mantener PR en borrador y main intacta; la afirmación comprobable hoy son respuestas de dos soluciones numéricas locales del sistema reducido, no una multiplicidad de equilibrios completos certificados.
+
+## 6. Adenda de formalizacion local (7 de noviembre de 2026)
+
+El teorema abstracto anterior sobre `Set.Ici 0` sigue disponible como
+antecedente, pero ya no es el unico lema escalar:
+
+- `LocalScalarComplementarityCandidate.lean` prueba dos y solo dos soluciones
+  **dentro de** `[0, eps]`, dadas continuidad y estricta monotonia decreciente
+  en ese intervalo, signo `M(0)>0>M(eps)` y `eps>0`. La raiz interior
+  **se construye** por el teorema del valor intermedio, en lugar de suponerse.
+  Tambien prueba inexistencia local si `M(0)<0` y la funcion decrece.
+  Compilacion GitHub Actions
+  [42433535673](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42433535673),
+  commit `e4e953749d0ccd151754ff550b48c72ba1fde86f`.
+- `LocalScalarDerivativeBridgeCandidate.lean` deriva la monotonia local
+  a partir de continuidad en `[0,eps]` y `deriv M s < 0` para todos
+  los puntos `s` del intervalo abierto `(0,eps)`. Reutiliza el lema
+  local para obtener ambas conclusiones. Compilacion GitHub Actions
+  [42433852389](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42433852389),
+  commit `e997bbe043eadbe2bfcc8fdeaa91faed23ad67bb`.
+- Los registros guardados de ambos modulos muestran, en sus respectivas
+  declaraciones principales, solo `propext`, `Classical.choice` y
+  `Quot.sound`, sin `sorryAx`. La compilacion de un teorema condicional
+  no demuestra sus premisas para el residual economico especifico.
+
+La Proposicion 4.2 del manuscrito **si** declara `C^1` en torno a
+`(s,h)=(0,0)`, con derivadas parciales negativas; el argumento escrito
+es condicional a esas hipotesis. En contraste,
+`EconomicModel.LocalScalarImplicitReduction` solo especifica
+`DifferentiableOn` y cotas de `fderiv` en el origen. Todavia falta
+derivar rigurosamente el control de derivadas sobre un entorno,
+la existencia de `eps` y de signos cruzados para cada `h<0`
+pequeno a partir de una fuente `C^1` verificable del sistema de 33
+ecuaciones. Una derivada negativa en un solo punto, sin regularidad
+adicional, **no prueba** monotonia en un intervalo.
+
+**Alcance exacto:** se han cerrado lemas de analisis de la
+complementariedad escalar bajo supuestos expuestos. NO hay aun un
+teorema Lean correspondiente al enunciado completo de la
+Proposicion 4.2, no hay testigos completos de equilibrio para S y B
+y no se ha demostrado crecimiento sostenido.
