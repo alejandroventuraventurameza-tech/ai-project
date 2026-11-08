@@ -26,6 +26,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/PaperSourceLogCapitalRatioCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/PaperLemma43StaticIntegratedCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/PaperLemma43DynamicIntegratedCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperLemma43SourceCompleteCandidate.lean'
       - 'lean/checkpoint/**'
   workflow_dispatch:
 
@@ -85,6 +86,7 @@ jobs:
           cp lean/candidates/Ventura26LiquidityAllocation/PaperSourceLogCapitalRatioCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
           cp lean/candidates/Ventura26LiquidityAllocation/PaperLemma43StaticIntegratedCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
           cp lean/candidates/Ventura26LiquidityAllocation/PaperLemma43DynamicIntegratedCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperLemma43SourceCompleteCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
           sha256sum lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean > lean-focused-logs/checkpoint-sha256.txt
           sha256sum lean/candidates/Ventura26LiquidityAllocation/Paper*Candidate.lean > lean-focused-logs/paper-candidates-sha256.txt
       - name: Install exact Lean toolchain
@@ -118,7 +120,7 @@ jobs:
         working-directory: upstream
         run: |
           set -euo pipefail
-          for module in PaperRepaymentExactCandidate PaperAllocationLossElasticityCandidate PaperAllocationEfficiencySupportCandidate PaperAllocationSourceAlgebraBridgeCandidate PaperOptimalLaborCandidate PaperOriginalLaborGlobalCandidate PaperJointEfficiencySourceCandidate PaperJointEfficiencyBoundCandidate PaperJointEfficiencyPhysicalCandidate PaperOriginalLogLossCandidate PaperSourceDifferentiationCandidate PaperSourceDifferentialSharesCandidate PaperSourceLossChainRuleCandidate PaperSourceOutputShareCandidate PaperSourceLogCapitalRatioCandidate PaperLemma43StaticIntegratedCandidate PaperLemma43DynamicIntegratedCandidate; do
+          for module in PaperRepaymentExactCandidate PaperAllocationLossElasticityCandidate PaperAllocationEfficiencySupportCandidate PaperAllocationSourceAlgebraBridgeCandidate PaperOptimalLaborCandidate PaperOriginalLaborGlobalCandidate PaperJointEfficiencySourceCandidate PaperJointEfficiencyBoundCandidate PaperJointEfficiencyPhysicalCandidate PaperOriginalLogLossCandidate PaperSourceDifferentiationCandidate PaperSourceDifferentialSharesCandidate PaperSourceLossChainRuleCandidate PaperSourceOutputShareCandidate PaperSourceLogCapitalRatioCandidate PaperLemma43StaticIntegratedCandidate PaperLemma43DynamicIntegratedCandidate PaperLemma43SourceCompleteCandidate; do
             echo "::group::Compile $module"
             if lake build "Ventura26LiquidityAllocation.$module" > "$GITHUB_WORKSPACE/lean-focused-logs/$module.log" 2>&1; then
               echo "COMPILED $module"
@@ -152,6 +154,7 @@ jobs:
           import Ventura26LiquidityAllocation.PaperSourceLogCapitalRatioCandidate
           import Ventura26LiquidityAllocation.PaperLemma43StaticIntegratedCandidate
           import Ventura26LiquidityAllocation.PaperLemma43DynamicIntegratedCandidate
+          import Ventura26LiquidityAllocation.PaperLemma43SourceCompleteCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedPaperRepaymentExact.exact_repaymentSpec
           #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationLossElasticity.allocation_loss_log_differential_algebra
           #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationLossElasticity.output_share_gt_capital_share_iff_productivity
@@ -192,6 +195,7 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedPaperSourceLogCapitalRatio.original_log_capital_ratio_hasDerivAt
           #print axioms Ventura26LiquidityAllocation.ProposedPaperLemma43StaticIntegrated.original_source_static_lemma43_bundle
           #print axioms Ventura26LiquidityAllocation.ProposedPaperLemma43DynamicIntegrated.original_source_dynamic_lemma43_bundle
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperLemma43SourceComplete.sourceLemma43CompleteSpec_proved
           LEAN
           lake env lean FocusedPaperAxioms.lean > "$GITHUB_WORKSPACE/lean-focused-logs/axioms.log" 2>&1 || {
             tail -n 120 "$GITHUB_WORKSPACE/lean-focused-logs/axioms.log"
