@@ -37,6 +37,8 @@ class PointSchurAuditTests(unittest.TestCase):
         x=audit_data["policy_derivative_enclosures"]
         self.assertTrue(x[0]["strict_negative_given_semantic_inputs"])
         self.assertTrue(x[1]["strict_negative_given_semantic_inputs"])
+        self.assertTrue(audit_data["conditional_interior_root_slope"]["strict_negative"])
+        self.assertFalse(audit_data["conditional_interior_root_slope"]["equilibrium_root_existence_established"])
         self.assertFalse(audit_data["full_Lean_source_row_identity_proved"])
         self.assertFalse(audit_data["uniform_nonlinear_IFT_box_proved"])
 
