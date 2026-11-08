@@ -108,9 +108,7 @@ theorem efficient_candidate_clears_resources
         vL * (L * zL / (vH * zH + vL * zL)) = L := by
   constructor
   · field_simp [hZ]
-    ring
   · field_simp [hZ]
-    ring
 
 #print axioms normalized_two_type_output_le_benchmark
 #print axioms normalized_benchmark_attained
