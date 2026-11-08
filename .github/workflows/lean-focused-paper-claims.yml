@@ -205,6 +205,7 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedPaperLemma43PhysicalMPK.original_firm_production_hasDerivAt_capital
           #print axioms Ventura26LiquidityAllocation.ProposedPaperLemma43PhysicalMPK.original_firm_mpk_equals_elasticity_times_output_per_capital
           #print axioms Ventura26LiquidityAllocation.ProposedPaperBankStaticSupergradientSufficiency.source_bank_static_portfolio_optimal_of_supergradients
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperBankStaticSupergradientSufficiency.source_bank_static_portfolio_optimal_of_selected_marginal
           LEAN
           lake env lean FocusedPaperAxioms.lean > "$GITHUB_WORKSPACE/lean-focused-logs/axioms.log" 2>&1 || {
             tail -n 120 "$GITHUB_WORKSPACE/lean-focused-logs/axioms.log"
