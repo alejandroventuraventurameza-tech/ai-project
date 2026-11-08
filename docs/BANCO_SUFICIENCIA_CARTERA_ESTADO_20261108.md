@@ -95,3 +95,18 @@ bankExit*(1-bankSeedShare) = 1 - 1/referenceLoanRate.
 ```
 
 El módulo `LocalScalarBankRenewalCalibrationBridgeCandidate.lean` prueba la equivalencia algebraica **condicional**, no la identidad de parámetros concretos. Por ello una prueba de cartera no resuelve automáticamente la correspondencia de renovación ni el prefijo numérico. Debemos reconstruir la calibración `bankSeedShare` y verificar su admisibilidad y fuente en una prueba independiente.
+
+## 6. Puente de suficiencia de una fecha hacia Bellman (candidato)
+
+El nuevo `PaperBankBellmanStaticSufficiencyCandidate.lean` vincula el predicado fuente `BankStaticPortfolioOptimalAt` con `bankBellmanContinuationAt`. Sea `V_{t+1}(e,s)` un valor de continuación positivamente homogéneo en patrimonio para todos los estados sucesores respaldados. La biblioteca fuente establece, para toda cartera **factible** con retorno real no negativo,
+
+```text
+BellmanContinuation_t(b,m,d; V_{t+1})
+ = w_t(V_{t+1}) * bankStaticPortfolioPayoff_t(b,m,d),
+```
+
+donde `w_t(V_{t+1})` es independiente de la cartera individual cuando los precios y el estado agregado se mantienen fijos.
+
+El nuevo teorema invoca esa igualdad **separadamente para la candidata y la desviación factible**, y usa `w_t>0` para preservar la desigualdad estática. De este modo, la candidata domina cualquier desviación en la comparación de continuación de **una fecha**. No se deduce una condición terminal ni se construye un selector de estrategias para toda historia; ambos siguen pendientes.
+
+**Estado:** candidato en GitHub Actions hasta que la compilación fijada y la auditoría de axiomas concluyan. Evitar llamar a esto `BankOptimal` o equilibrio completo mientras esos objetos no se demuestren.
