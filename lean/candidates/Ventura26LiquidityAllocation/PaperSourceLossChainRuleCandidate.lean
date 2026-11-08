@@ -101,8 +101,9 @@ theorem original_source_loss_hasDerivAt_relative_capital
             cL * (gamma * (kL t) ^ (gamma - 1) * dkL))) =
         a * (kappaH - omegaH) * (dkH / kH t - dkL / kL t) := by
     rw [hshareK, hshareG]
-    exact ProposedPaperAllocationLossElasticity.allocation_loss_log_differential_algebra
-      a b kappaH omegaH (dkH / kH t) (dkL / kL t) hb
+    simpa only [mul_assoc] using
+      (ProposedPaperAllocationLossElasticity.allocation_loss_log_differential_algebra
+        a b kappaH omegaH (dkH / kH t) (dkL / kL t) hb)
   have hconst :
       HasDerivAt (fun _ : ℝ => d * Real.log ZA) 0 t :=
     hasDerivAt_const t (d * Real.log ZA)
