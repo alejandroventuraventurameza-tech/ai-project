@@ -15,6 +15,8 @@ def verify(data):
         raise ValueError("Expected point-only candidate schema")
     if data.get("state_dimension") != 33 or data.get("parameter_dimension") != 5:
         raise ValueError("Expected 33 states and 5 policy parameters")
+    if data.get("rows_recomputed_as_source_style") != [4, 5, 21]:
+        raise ValueError("Expected source-style AD in rows 4, 5 and 21; legacy hybrid is rejected")
     for key in ("uniform_ball_jacobian_enclosures_proven",
                 "exact_zero_center_proven",
                 "economic_source_row_map_proven",
