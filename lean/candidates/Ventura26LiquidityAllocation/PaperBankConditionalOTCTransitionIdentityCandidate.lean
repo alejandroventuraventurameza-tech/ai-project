@@ -811,5 +811,50 @@ theorem source_full_retention_nonnegative_parent_conditional_child_sum
 
 #print axioms source_full_retention_nonnegative_parent_conditional_child_sum
 
+
+/-- A strictly positive SOURCE Markov path probability implies the
+SOURCE feasibility support predicate. Hence a zero-probability path
+can be discarded before invoking supported-path bank feasibility. -/
+theorem positive_transition_weight_implies_supported
+    (T : FiniteMarkovTree S) (start : S) :
+    ∀ n (future : Fin n → S),
+      0 < continuationTransitionWeight T start n future →
+        FuturePathSupported T start n future := by
+  intro n
+  induction n with
+  | zero =>
+      intro future _hweight
+      trivial
+  | succ n ih =>
+      intro future hweight
+      let previous : Fin n → S := fun j => future j.succ
+      let prior : S := if hn : n = 0 then start
+        else previous ⟨0, Nat.pos_of_ne_zero hn⟩
+      have hprod :
+          0 < continuationTransitionWeight T start n previous *
+            T.transition prior (future 0) := by
+        simpa only [continuationTransitionWeight, previous, prior]
+          using hweight
+      have hpreviousNonzero :
+          continuationTransitionWeight T start n previous ≠ 0 := by
+        intro hzero
+        simp [hzero] at hprod
+      have htransitionNonzero :
+          T.transition prior (future 0) ≠ 0 := by
+        intro hzero
+        simp [hzero] at hprod
+      have hpreviousPos :
+          0 < continuationTransitionWeight T start n previous :=
+        lt_of_le_of_ne
+          (ProposedBankContinuationPathProbabilityMass.source_aggregate_future_path_weight_nonneg
+            T n start previous) (Ne.symm hpreviousNonzero)
+      have htransitionPos : 0 < T.transition prior (future 0) :=
+        lt_of_le_of_ne (T.transition_nonneg _ _) (Ne.symm htransitionNonzero)
+      change FuturePathSupported T start n previous ∧
+        0 < T.transition prior (future 0)
+      exact ⟨ih previous hpreviousPos, htransitionPos⟩
+
+#print axioms positive_transition_weight_implies_supported
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
