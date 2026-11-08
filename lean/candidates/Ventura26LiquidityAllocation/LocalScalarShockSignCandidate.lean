@@ -46,7 +46,7 @@ theorem negative_derivative_gives_opposite_local_signs
       rw [Real.dist_eq, sub_zero, abs_of_neg hhigh]
       linarith
     have hratio : f h / h < 0 := by
-      simpa only [hf0, sub_zero] using hsign h hd (ne_of_lt hhigh)
+      simpa only [hf0, sub_zero] using hsign hd (ne_of_lt hhigh)
     rcases div_neg_iff.mp hratio with ⟨hpositive, _⟩ | ⟨_, hpositive⟩
     · exact hpositive
     · exact False.elim ((not_lt_of_ge hhigh.le) hpositive)
@@ -55,7 +55,7 @@ theorem negative_derivative_gives_opposite_local_signs
       rw [Real.dist_eq, sub_zero, abs_of_pos hlow]
       exact hhigh
     have hratio : f h / h < 0 := by
-      simpa only [hf0, sub_zero] using hsign h hd (ne_of_gt hlow)
+      simpa only [hf0, sub_zero] using hsign hd (ne_of_gt hlow)
     rcases div_neg_iff.mp hratio with ⟨_, hnegative⟩ | ⟨hnegative, _⟩
     · exact False.elim ((not_lt_of_ge hlow.le) hnegative)
     · exact hnegative
