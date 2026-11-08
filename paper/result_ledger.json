@@ -1,6 +1,6 @@
 {
   "author": "Alejandro Ventura",
-  "paper_sha256": "ec8ccc168f33ab9bed915dbdd8d2cfba31df135eb86f71e8385b6c55cdcab6be",
+  "paper_sha256": "25c674b3bc0bcf4bef077a4ecf0e2e4ff4ae45ffada6c67b4eea40beebc47c9e",
   "numbered_results": 57,
   "formalization_started": true,
   "results": [
@@ -831,7 +831,7 @@
   },
   "editorial_compaction": {
     "date": "2026-11-08",
-    "manuscript_source_sha256": "ec8ccc168f33ab9bed915dbdd8d2cfba31df135eb86f71e8385b6c55cdcab6be",
+    "manuscript_source_sha256": "25c674b3bc0bcf4bef077a4ecf0e2e4ff4ae45ffada6c67b4eea40beebc47c9e",
     "exact_reduced_theorem_moved_to_body": "prop:local_macro_multiplicity",
     "prior_results_retained": 57,
     "main_body_files": [
