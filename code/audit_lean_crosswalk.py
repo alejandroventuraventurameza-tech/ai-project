@@ -48,6 +48,9 @@ ALLOWED_RELATIONS = {
     "source_chain_kernel_verified",
     "source_output_share_kernel_verified",
     "source_log_ratio_kernel_verified",
+    "source_static_integrated_kernel_verified",
+    "source_dynamic_integrated_kernel_verified",
+    "source_complete_integrated_kernel_verified",
 }
 GREEN_SOURCE_FINANCIAL_RUN = 42457259796
 GREEN_SOURCE_FINANCIAL_SHA = "c006e00c437243c3f6f44ec3c102df4286c545e0"
@@ -77,6 +80,15 @@ GREEN_DERIVATIVE_SHARE_RUN = 42503571340
 GREEN_DERIVATIVE_SHARE_SHA = "4cf594547fa63dc0435d90b7dd4c07b93b56fe28"
 GREEN_FULL_SOURCE_CHAIN_RUN = 42504364485
 GREEN_FULL_SOURCE_CHAIN_SHA = "eaa08a328974c9462e8b5cdaa85a33f0dd88546b"
+GREEN_STATIC_INTEGRATED_RUN = 42505059048
+GREEN_STATIC_INTEGRATED_SHA = "0cb2bb636836e67d54f4f02819756a49662529c5"
+GREEN_DYNAMIC_INTEGRATED_RUN = 42505126404
+GREEN_DYNAMIC_INTEGRATED_SHA = "5f40787041c96d96b980e87e72fb9cf5b181501a"
+GREEN_SOURCE_COMPLETE_RUN = 42505264161
+GREEN_SOURCE_COMPLETE_SHA = "b132b91df59eb3e64b6aefb77621bd62084c8054"
+EXPECTED_VERIFIED_STATIC_INTEGRATED = {"original_source_static_lemma43_bundle"}
+EXPECTED_VERIFIED_DYNAMIC_INTEGRATED = {"original_source_dynamic_lemma43_bundle"}
+EXPECTED_VERIFIED_SOURCE_COMPLETE = {"sourceLemma43CompleteSpec_proved"}
 EXPECTED_VERIFIED_SOURCE_CHAIN = {"original_source_loss_hasDerivAt_relative_capital"}
 EXPECTED_VERIFIED_OUTPUT_SHARE = {"original_output_share_equals_adjusted_weight"}
 EXPECTED_VERIFIED_LOG_RATIO = {"original_log_capital_ratio_hasDerivAt"}
@@ -189,6 +201,9 @@ def main() -> None:
     green_source_chain = set()
     green_output_share = set()
     green_log_ratio = set()
+    green_static_integrated = set()
+    green_dynamic_integrated = set()
+    green_source_complete = set()
     for row in data["entries"]:
         label = row["label"]
         old = original[label]
@@ -350,6 +365,40 @@ def main() -> None:
                         and item.get("lean_axiom_audit") == "passed_no_sorryAx",
                         "Source chain theorem not pinned to exact green CI")
                 seen_by_rel[rel].add(item["declaration"])
+            if rel in ("source_static_integrated_kernel_verified",
+                       "source_dynamic_integrated_kernel_verified",
+                       "source_complete_integrated_kernel_verified"):
+                require(label == "lem:allocation_loss_identity",
+                        "Integrated source theorem attached to wrong paper claim")
+                expected_by_rel = {
+                    "source_static_integrated_kernel_verified": EXPECTED_VERIFIED_STATIC_INTEGRATED,
+                    "source_dynamic_integrated_kernel_verified": EXPECTED_VERIFIED_DYNAMIC_INTEGRATED,
+                    "source_complete_integrated_kernel_verified": EXPECTED_VERIFIED_SOURCE_COMPLETE,
+                }
+                run_by_rel = {
+                    "source_static_integrated_kernel_verified": GREEN_STATIC_INTEGRATED_RUN,
+                    "source_dynamic_integrated_kernel_verified": GREEN_DYNAMIC_INTEGRATED_RUN,
+                    "source_complete_integrated_kernel_verified": GREEN_SOURCE_COMPLETE_RUN,
+                }
+                sha_by_rel = {
+                    "source_static_integrated_kernel_verified": GREEN_STATIC_INTEGRATED_SHA,
+                    "source_dynamic_integrated_kernel_verified": GREEN_DYNAMIC_INTEGRATED_SHA,
+                    "source_complete_integrated_kernel_verified": GREEN_SOURCE_COMPLETE_SHA,
+                }
+                seen_by_rel = {
+                    "source_static_integrated_kernel_verified": green_static_integrated,
+                    "source_dynamic_integrated_kernel_verified": green_dynamic_integrated,
+                    "source_complete_integrated_kernel_verified": green_source_complete,
+                }
+                require(item["declaration"] in expected_by_rel[rel],
+                        "Unknown integrated source lemma statement")
+                require(item["declaration"] not in seen_by_rel[rel],
+                        "Duplicate integrated source lemma")
+                require(item.get("lean_ci_run_id") == run_by_rel[rel]
+                        and item.get("lean_ci_commit") == sha_by_rel[rel]
+                        and item.get("lean_axiom_audit") == "passed_no_sorryAx",
+                        "Integrated source theorem not pinned to green CI")
+                seen_by_rel[rel].add(item["declaration"])
             if rel == "efficiency_support_kernel_verified":
                 require(label == "lem:allocation_loss_identity",
                         "Efficiency support theorem mapped to wrong source claim")
@@ -474,6 +523,12 @@ def main() -> None:
             f"Physical output-share bridge incomplete: {green_output_share}")
     require(green_log_ratio == EXPECTED_VERIFIED_LOG_RATIO,
             f"Original log capital ratio proof incomplete: {green_log_ratio}")
+    require(green_static_integrated == EXPECTED_VERIFIED_STATIC_INTEGRATED,
+            f"Static integrated source theorem incomplete: {green_static_integrated}")
+    require(green_dynamic_integrated == EXPECTED_VERIFIED_DYNAMIC_INTEGRATED,
+            f"Dynamic integrated source theorem incomplete: {green_dynamic_integrated}")
+    require(green_source_complete == EXPECTED_VERIFIED_SOURCE_COMPLETE,
+            f"Complete 11-claim source theorem incomplete: {green_source_complete}")
     require(green_exact == {
         "lem:repayment": "exact_repaymentSpec",
         "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
@@ -538,6 +593,12 @@ def main() -> None:
         "verified_source_chain_lemmas": len(green_source_chain),
         "verified_source_output_share_lemmas": len(green_output_share),
         "verified_source_log_ratio_lemmas": len(green_log_ratio),
+        "verified_static_integrated_run": GREEN_STATIC_INTEGRATED_RUN,
+        "verified_static_integrated_lemmas": len(green_static_integrated),
+        "verified_dynamic_integrated_run": GREEN_DYNAMIC_INTEGRATED_RUN,
+        "verified_dynamic_integrated_lemmas": len(green_dynamic_integrated),
+        "verified_source_complete_run": GREEN_SOURCE_COMPLETE_RUN,
+        "verified_source_complete_lemmas": len(green_source_complete),
         "unproved_source_specifications": source_specifications,
         "complete_paper_theorems_proved_in_lean_by_this_audit": 0,
         "full_equilibrium_confirmed": False,

@@ -1,5 +1,14 @@
 # Matriz de correspondencia entre los 57 resultados y Lean
 
+## Integracion de las once afirmaciones fuente del Lema 4.3
+
+El teorema `original_source_static_lemma43_bundle` paso compilacion y auditoria de axiomas sin `sorryAx` en [CI #42505059048](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42505059048), SHA `0cb2bb63`. Su equivalente diferenciable `original_source_dynamic_lemma43_bundle` paso [CI #42505126404](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42505126404), SHA `5f407870`.
+
+**La composicion de las once conclusiones esta formalmente demostrada** como `sourceLemma43CompleteSpec_proved`, [CI focalizada #42505264161](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42505264161), SHA `b132b91d`. No hay `sorryAx` en los tres controles. Es una demostracion de un predicado NUEVO mas fiel al manuscrito; no una equivalencia demostrada con el viejo `allocationLossIdentitySpec` ni con el equilibrio dinamico.
+
+**Total formal de declaraciones relacionadas con 4.3: 40** (37 auxiliares anteriores y 3 integradores). Las tres ultimas agrupan resultados previos: el numero de declaraciones no debe confundirse con 40 resultados economicos independientes. **Estado de los 57 enunciados numerados originales: 0 en equivalencia integral.**
+
+
 ## Regla de cadena fuente cerrada en Lean, con cuota física y cociente de capitales
 
 La [CI focalizada #42504364485](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42504364485), SHA exacto `eaa08a328974c9462e8b5cdaa85a33f0dd88546b`, compiló `PaperSourceLossChainRuleCandidate.lean`, `PaperSourceOutputShareCandidate.lean` y `PaperSourceLogCapitalRatioCandidate.lean` y auditó **tres teoremas adicionales sin `sorryAx`**. La primera tentativa falló por `import` faltante ([#42503619169](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42503619169)); la segunda por mera asociación de productos ([#42503922235](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42503922235)); ambas incidencias fueron corregidas antes del run verde.

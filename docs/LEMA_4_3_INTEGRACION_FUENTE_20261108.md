@@ -4,7 +4,7 @@
 **Rama:** `work/lean-ci-validation-otc-20261106`.  
 **Objeto de verificación:** `paper/paper.tex`, `lem:allocation_loss_identity` y la antigua interfaz `allocationLossIdentitySpec`.
 
-> **Estado al crear esta nota:** 37 auxiliares de 4.3 probados en el kernel Lean y auditados por CI, pero los **dos teoremas integradores nuevos son candidatos** hasta pasar la compilación y `#print axioms`. No hay autorización para calificarlos como pruebas completas sin CI verde.
+> **Estado verificado:** los dos teoremas integradores y el predicado fuente unificado de once afirmaciones pasaron compilación y `#print axioms` sin `sorryAx` en CI #42505059048, #42505126404 y #42505264161. **40 declaraciones formales relacionadas con 4.3** (37 previas, tres integradoras). No se presume equivalencia con el checkpoint original ni equilibrio dinámico.
 
 ## 1. Las siete cláusulas estáticas del teorema candidato
 
@@ -62,3 +62,11 @@ La reparación correcta consiste en **añadir una interfaz candidata de fuente**
 Las pruebas auxiliares anteriores son `kernel_checked` en sus corridas históricas fijadas. Los integradores nuevos **NO** incrementan el contador hasta recibir CI focalizada verde, revisar `#print axioms` y vincular SHA exacto. Una CI editorial verde no sustituye la validación Lean.
 
 Una vez cerrada esta interfaz, quedarán fuera del alcance del lema estático: definición de equilibrio monetario estocástico con horizonte infinito, continuidad, KKT financieros, raíces de ramas S/B, respuesta causal a instrumentos del banco central, IRF reproducibles, y demostración de crecimiento persistente. Ninguna de esas afirmaciones debe inferirse del teorema de eficiencia.
+
+## 5. Auditoria verde de la especificacion nueva
+
+- `PaperLemma43StaticIntegratedCandidate.lean`: [run #42505059048](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42505059048), commit `0cb2bb636836e67d54f4f02819756a49662529c5`.
+- `PaperLemma43DynamicIntegratedCandidate.lean`: [run #42505126404](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42505126404), commit `5f40787041c96d96b980e87e72fb9cf5b181501a`.
+- `PaperLemma43SourceCompleteCandidate.lean`: [run #42505264161](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42505264161), commit `b132b91df59eb3e64b6aefb77621bd62084c8054`.
+
+Las tres corridas verificaron los teoremas citados en el kernel, sin `sorryAx`. Una nueva interfaz de fuente no subsana por identidad nominal la brecha del `allocationLossIdentitySpec` del checkpoint, ni implica optimalidad bancaria intertemporal.
