@@ -1,3 +1,4 @@
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
 import Ventura26LiquidityAllocation.LocalScalarComplementarityCandidate
 
 /-!
