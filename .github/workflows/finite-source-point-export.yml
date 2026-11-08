@@ -87,6 +87,11 @@ jobs:
             --ball code/v0m/cierre_interno_2026_10_17/binding_source_uniform_box_CANDIDATE.json \
             --arithmetic-report code/v0m/cierre_interno_2026_10_17/binding_uniform_ball_arithmetic_audit_CANDIDATE.json \
             --output code/v0m/cierre_interno_2026_10_17/binding_uniform_schur_audit_CANDIDATE.json
+      - name: Conditional augmented 34x34 exact-rational root arithmetic
+        run: |
+          python3 code/v0m/certified_ift/audit_augmented_34.py \
+            --candidate code/v0m/cierre_interno_2026_10_17/binding_source_uniform_box_CANDIDATE.json \
+            --output code/v0m/cierre_interno_2026_10_17/binding_augmented34_arithmetic_CANDIDATE.json
       - name: Upload point-only candidate matrices even when inverse gate fails
         if: always()
         uses: actions/upload-artifact@v4
@@ -98,4 +103,5 @@ jobs:
             code/v0m/cierre_interno_2026_10_17/binding_source_uniform_box_CANDIDATE.json
             code/v0m/cierre_interno_2026_10_17/binding_uniform_ball_arithmetic_audit_CANDIDATE.json
             code/v0m/cierre_interno_2026_10_17/binding_uniform_schur_audit_CANDIDATE.json
+            code/v0m/cierre_interno_2026_10_17/binding_augmented34_arithmetic_CANDIDATE.json
           retention-days: 30
