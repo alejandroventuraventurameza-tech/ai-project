@@ -43,7 +43,13 @@ theorem source_productivity_aggregate_hasDerivAt
       (fun s => cH * (kH s) ^ gamma + cL * (kL s) ^ gamma)
       (cH * (gamma * (kH t) ^ (gamma - 1) * dkH) +
         cL * (gamma * (kL t) ^ (gamma - 1) * dkL)) t := by
-  intro gamma cH cL
+  let gamma : ℝ := a / (1 - b)
+  let cH : ℝ := vH * AH ^ (1 / (1 - b))
+  let cL : ℝ := vL * AL ^ (1 / (1 - b))
+  change HasDerivAt
+    (fun s => cH * (kH s) ^ gamma + cL * (kL s) ^ gamma)
+    (cH * (gamma * (kH t) ^ (gamma - 1) * dkH) +
+      cL * (gamma * (kL t) ^ (gamma - 1) * dkL)) t
   have hpH :
       HasDerivAt (fun s => (kH s) ^ gamma)
         (gamma * (kH t) ^ (gamma - 1) * dkH) t :=
@@ -89,7 +95,14 @@ theorem source_log_productivity_aggregate_hasDerivAt
       ( (cH * (kH t) ^ gamma + cL * (kL t) ^ gamma)⁻¹ *
           (cH * (gamma * (kH t) ^ (gamma - 1) * dkH) +
             cL * (gamma * (kL t) ^ (gamma - 1) * dkL))) t := by
-  intro gamma cH cL
+  let gamma : ℝ := a / (1 - b)
+  let cH : ℝ := vH * AH ^ (1 / (1 - b))
+  let cL : ℝ := vL * AL ^ (1 / (1 - b))
+  change HasDerivAt
+    (fun s => Real.log (cH * (kH s) ^ gamma + cL * (kL s) ^ gamma))
+    ((cH * (kH t) ^ gamma + cL * (kL t) ^ gamma)⁻¹ *
+      (cH * (gamma * (kH t) ^ (gamma - 1) * dkH) +
+        cL * (gamma * (kL t) ^ (gamma - 1) * dkL))) t
   have hsource := source_productivity_aggregate_hasDerivAt
     vH vL AH AL a b kH kL t dkH dkL hkH hkL hH hL
   have hlog := (Real.hasDerivAt_log (ne_of_gt hG)).comp t hsource
