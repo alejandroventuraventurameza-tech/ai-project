@@ -16,6 +16,8 @@ transversal rays h |-> M(-K*h,h) of the actual scalar reduced map.
 namespace Ventura26LiquidityAllocation
 namespace ProposedLocalScalarShockSign
 
+open scoped Topology
+
 /-- A negative first derivative at a zero gives the correct sign on
 BOTH sides of the origin, with a *single* positive radius.
 No monotonicity away from the origin is required. -/
@@ -28,9 +30,9 @@ theorem negative_derivative_gives_opposite_local_signs
       (∀ h : ℝ, 0 < h → h < delta → f h < 0) := by
   have hslope : Filter.Tendsto
       (fun h : ℝ => (f h - f 0) / (h - 0))
-      (Filter.nhdsWithin (0 : ℝ) ({(0 : ℝ)}ᶜ)) (𝓝 a) := by
+      (nhdsWithin (0 : ℝ) ({(0 : ℝ)}ᶜ)) (𝓝 a) := by
     simpa only [slope_fun_def_field] using hder.tendsto_slope
-  have hneg : ∀ᶠ h in Filter.nhdsWithin (0 : ℝ) ({(0 : ℝ)}ᶜ),
+  have hneg : ∀ᶠ h in nhdsWithin (0 : ℝ) ({(0 : ℝ)}ᶜ),
       (f h - f 0) / (h - 0) < 0 :=
     hslope.eventually_lt_const ha
   have hneighborhood : ∀ᶠ h in 𝓝 (0 : ℝ),
