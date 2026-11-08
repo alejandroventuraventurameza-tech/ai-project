@@ -3,6 +3,11 @@
 # The complete Lean audit must still pass before delivery.
 name: Lean paper claims (focused, pinned)
 
+# Retain only the newest proof gate for this review branch.
+concurrency:
+  group: lean-focused-paper-claims-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 on:
   pull_request:
     branches:
