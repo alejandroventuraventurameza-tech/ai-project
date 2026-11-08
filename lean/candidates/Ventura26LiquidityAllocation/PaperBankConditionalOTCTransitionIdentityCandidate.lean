@@ -441,5 +441,38 @@ theorem source_full_retention_supported_zero_equity_absorbing
 
 #print axioms source_full_retention_supported_zero_equity_absorbing
 
+
+/-- The preceding source-boundary absorption is obtained directly from
+the ORIGINAL equilibrium bank-feasibility and positivity premises.
+This removes the separately assumed continuation-feasibility witness,
+but it does not prove that an equilibrium satisfying these premises
+exists. -/
+theorem source_full_retention_zero_equity_absorbing_of_bank_feasible
+    (P : Primitives S) (I : InheritedState) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (hh : FirmHistoryAdmissible P t h)
+    (hbankFeasible : BankFeasible P I X (fullRetentionCommonBankPlan P X))
+    (hreserveRate : ∀ k H, FirmHistoryAdmissible P k H →
+      0 < X.reserveRate k H)
+    (htightness : ∀ k H, FirmHistoryAdmissible P k H →
+      0 < X.bankTightness k H)
+    (n : ℕ) (future : Fin n → S)
+    (payments : Fin n → P.paymentSupport)
+    (hpath : FuturePathSupported P.tree (currentState h) n future)
+    (hzero : (sourceFullRetentionCandidate P X t h).equity
+      n future payments = 0)
+    (s : S) (omega : P.paymentSupport)
+    (htrans : 0 < P.tree.transition
+      (currentState (continuationHistory h future)) s) :
+    (sourceFullRetentionCandidate P X t h).equity (n + 1)
+      (childFutureHistory future s)
+      (childPaymentHistory payments omega) = 0 := by
+  have hfeasible := source_full_retention_candidate_feasible
+    P I X t h hh hbankFeasible hreserveRate htightness
+  exact source_full_retention_supported_zero_equity_absorbing
+    P X t h hfeasible n future payments hpath hzero s omega htrans
+
+#print axioms source_full_retention_zero_equity_absorbing_of_bank_feasible
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
