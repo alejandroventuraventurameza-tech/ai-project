@@ -45,9 +45,9 @@ theorem joint_fderiv_gives_policy_and_ray_derivatives
     hleft.prodMk (hasDerivAt_id (0 : ℝ))
   constructor
   · simpa only [Function.comp_def] using
-      hjoint.comp_hasDerivAt_of_eq haxisPath (by simp)
+      hjoint.comp_hasDerivAt_of_eq (0 : ℝ) haxisPath (by simp)
   · simpa only [Function.comp_def] using
-      hjoint.comp_hasDerivAt_of_eq hrayPath (by simp)
+      hjoint.comp_hasDerivAt_of_eq (0 : ℝ) hrayPath (by simp)
 
 /-- Joint differentiability and signed directional evaluations imply
 existence of the interior root, provided the s-slices satisfy the
