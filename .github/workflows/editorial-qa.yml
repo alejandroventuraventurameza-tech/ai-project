@@ -35,6 +35,8 @@ jobs:
         run: python code/audit_claim_scope.py
       - name: Audit all 57 Lean correspondence pointers without promoting theorem coverage
         run: python code/audit_lean_crosswalk.py
+      - name: Audit printed branch S-B loss and capital derivative identity
+        run: python code/audit_allocation_loss_table.py
 
   latex-logs:
     name: Final LaTeX references and layout
