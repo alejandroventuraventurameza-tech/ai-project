@@ -16,7 +16,7 @@ El modelo describe remuneración de reservas, cantidad de reservas, corredor y e
 | Restricción crediticia permite una capacidad máxima, condicional en recursos y precios | eq:kmax y prop:v0m_original_6_3 | Derivada parcial escrita y verificable algebraicamente en paper | **ARGUMENTO ANALÍTICO CONDICIONAL.** No es derivada total del capital óptimo. |
 | Matching OTC, corredor y condiciones de precios bancarios | eq:surplus, eq:IBclearing, eq:IBrate, eq:bankFOCL, eq:bankFOCD | Diagnósticos transmission_trace y financial_blocks_audit | **NUMÉRICO** a lo largo de las trayectorias; suficiencia de la política bancaria completa pendiente. |
 | Dos soluciones cercanas con conjuntos activos S/B para una innovación negativa | eq:scalar_macro_complementarity y eq:negative_schur | Jacobianos, signos, márgenes y salidas de finite_irf_validation.json | **LOCAL/REDUCIDO CONDICIONAL.** No se identifica automáticamente con equilibrio competitivo infinito. |
-| Literal de prop:local_macro_multiplicity: exactamente dos equilibrios completos | Paper, sección La complementariedad produce dos equilibrios locales | result_ledger.json: formalization_status=not_run; IRF: full_infinite_equilibrium_established=false | **PENDIENTE DE RECONCILIACIÓN.** Demostrar el puente dinámico o enunciar un teorema reducido más débil. |
+| Proposición 4.2 revisada: dos soluciones escalares de complementariedad (no dos equilibrios completos) | paper/paper.tex, prop:local_macro_multiplicity; docs/PUENTE_REDUCIDO_EQUILIBRIO.md | Teorema escrito con hipótesis C1, signos e IFT; nueva prueba Lean condicional escalar; result_ledger.json mantiene not_run para la proposición exacta | **CONDICIONAL DEL REDUCIDO.** El puente a CompetitiveEquilibrium infinito y la unicidad primal global continúan pendientes. |
 | Capital y préstamo admiten un multiplicador común construido | DateZeroJointBindingSharedDualCandidate.lean, firmOptimal_sourceCalendar_binding_exists_shared_capitalLoanMultiplier | Compilación y auditoría de axiomas especializados de Lean | **DEMOSTRADO CONDICIONALMENTE** dado FirmOptimal, calendario determinista, capital interior, tasa positiva, unidad de garantía positiva e inflación futura no nula. No demuestra FirmOptimal para la IRF. |
 | Existe una asignación primalmente equivalente con dual KKT normalizado | DateZeroBindingDualRepairCandidate.lean, firmOptimal_binding_exists_primalEquivalent_jointKKT_carrier | Lema compilado con hipótesis literales | **DEMOSTRADO CONDICIONALMENTE**. Para conservar dual estrictamente positivo hace falta brecha marginal estricta. |
 | El campo dual almacenado no es identificado por FirmOptimal | DateZeroBindingDualFreedomCandidate.lean, not_all_bindingFirmOptimal_have_sourceCapitalEuler | Lema compilado y revisión de axiomas | **DEMOSTRADO CONDICIONALMENTE**, indicando que el dual originalmente almacenado puede variar preservando primales. |
@@ -55,6 +55,12 @@ R_t^L-R_t^R=\mathbb E[\chi'_t(s_t^B)]+\nu_{L,t}.
 \]
 
 Por tanto, la igualdad abreviada \(R^L=R^R+\overline{\chi}\) exige declarar \(\nu_L=0\); no es una identidad válida para toda esquina. Distinguimos el rendimiento interbancario \(R^F\), la remuneración \(R^R\) y la tasa bancaria \(R^L\), que son objetos distintos.
+
+## 5. Corrección de alcance de 7 de noviembre de 2026
+
+La versión posterior a la primera compuerta reformuló la Proposición 4.2 como afirmación local sobre la complementariedad escalar y la Proposición 4.5 como persistencia **condicional** de ramas reducidas. Ya no se presentan como teoremas de existencia y unicidad de equilibrios competitivos infinitos. El resultado del módulo Lean Proposition42RefutationCandidate se refiere a la especificación literal de unicidad de Allocation, inconsistente por libertad del campo collateralDual, y **no** refuta la existencia económica de S y B. La reparación primal está propuesta pero sin testigos completos.
+
+Los dos enunciados editados tienen hashes de texto y prueba actualizados mediante el extractor de 57 resultados de code/v0m/verify_v0m.py; el nuevo test code/audit_claim_scope.py verifica la correspondencia. Véase docs/PUENTE_REDUCIDO_EQUILIBRIO.md para las obligaciones pendientes.
 
 ## 5. Decisiones de cierre científico
 

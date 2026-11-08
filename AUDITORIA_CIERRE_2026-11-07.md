@@ -1,5 +1,7 @@
 # Auditoria preliminar de cierre integral - 7 de noviembre de 2026
 
+**Nota de actualización del 7 de noviembre de 2026:** este informe es un inventario histórico de un commit anterior. El manuscrito y las slides fueron revisados posteriormente: Proposiciones 4.2 y 4.5 acotadas al reducido, matriz de 33 filas, auditoría de contabilidad y una prueba escalar Lean candidata. No utilizar el número antiguo de páginas, la cantidad antigua de slides ni el estado de CI de aquí como descripción del commit actual. Estado científico vivo: docs/PUENTE_REDUCIDO_EQUILIBRIO.md y docs/RESULTADOS_Y_ALCANCE.md. El punto de equilibrio completo y selección de rama permanece abierto.
+
 **Revision auditada:** rama `work/lean-ci-validation-otc-20261106` a partir de `6a4362ad6e9f13f5a934748dc7a04e8f968e5037`. El ultimo estado de CI registrado antes de extender el Beamer fue `a78f7a75`: build general y auditoria Lean especializados exitosos. Este informe diferencia validez numerica, compilacion y suficiencia economica.
 
 ## Comprobación normativa: issue #7
