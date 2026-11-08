@@ -5,7 +5,7 @@
   "checked_branch": "work/lean-ci-validation-otc-20261106",
   "reviewed_date": "2026-11-08",
   "claim_count": 57,
-  "status_policy": "The exact pinned PaperInterface financial statements 3.2 and 3.3 have kernel-verified proofs in CI 42457259796; pinned 3.5 has a kernel-verified counterexample and an independently kernel-verified corrected conditional theorem. Original paper-to-Lean full semantic equivalence is not automatically asserted. Repayment 3.1 remains CI-pending.",
+  "status_policy": "Kernel-verified literal source financial specs: 3.1 (Lean CI 42458034938), 3.2/3.3 (Lean CI 42457259796). The original funding 3.5 interface is refuted and its corrected version kernel verified. Allocation loss 4.3 only has auxiliary candidates pending CI; full economic paper equivalence and general equilibrium unestablished.",
   "source_module_check": "19 targeted semantic comparisons, including a falsified original funding-supergradient interface and its corrected candidate under RD>0, RD<RL; full dynamic equilibrium not certified.",
   "scope": "57 numbered claims including historical appendices; current PDF page numbers in the original ledger are stale after compact layout.",
   "entries": [
@@ -33,8 +33,11 @@
         {
           "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperRepaymentExactCandidate.lean",
           "declaration": "exact_repaymentSpec",
-          "relationship": "exact_interface_claim_candidate_ci_pending",
-          "note": "Prueba candidata literal de repaymentSpec: cobertura real, patrimonio mínimo no negativo y positividad bajo capital o depósito positivos; todavía requiere compilación del kernel y auditoría de axiomas."
+          "relationship": "exact_interface_claim_kernel_verified",
+          "note": "Teorema sobre repaymentSpec literal compilado y auditado sin sorryAx en GitHub Actions 42458034938; cobertura por estado y riqueza futura condicionadas a los supuestos fuente. No constituye resultado de equilibrio bancario general.",
+          "lean_ci_run_id": 42458034938,
+          "lean_ci_commit": "acc4263a2c60c6ec3a90c3331aef9cb522e4427a",
+          "lean_axiom_audit": "passed_no_sorryAx"
         }
       ],
       "semantic_gap": "El candidato PaperRepaymentExactCandidate demuestra exactamente el objeto fuente repaymentSpec, incluidas cobertura robusta normalizada, cota inferior del patrimonio y positividad estricta bajo tenencias positivas; aun pendiente de compilar y auditar axiomas. No implica solvencia bancaria, óptimo empresarial ni inexistencia de incumplimiento fuera de las hipótesis."
