@@ -205,10 +205,11 @@ de coeficientes y referencias necesaria es:
 La prueba fuente `LocalScalarPolicyRuleTargetsCandidate.lean`
 compilo con auditoria de axiomas en
 [GitHub Actions 42451438040](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42451438040).
-El modulo propuesto
-`LocalScalarPythonMonetaryRuleBridgeCandidate.lean` extiende la
-coincidencia a los *residuos logaritmicos expandidos* de las
-reglas bajo las igualdades de coeficientes. El codigo Python calcula
+El modulo `LocalScalarPythonMonetaryRuleBridgeCandidate.lean`
+**verifico en Lean** las igualdades de *residuos logaritmicos expandidos*
+bajo las hipotesis de coeficientes y positividad en
+[CI 42451697663](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42451697663),
+incluido el control de axiomas sin `sorryAx`. El codigo Python calcula
 los objetivos con exponenciales, por lo que aun resta demostrar
 o cotejar la identidad `log(RR_target)` con el log objetivo
 especializado bajo positividad, y conectar de forma literal
