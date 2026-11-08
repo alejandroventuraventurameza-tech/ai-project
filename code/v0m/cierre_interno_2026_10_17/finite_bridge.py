@@ -385,9 +385,22 @@ def evaluate_bridge(base, P, branch, policy_inputs=True, point_capture=None):
             5: 1 - X1[3] / (s.pledge[1] * J1 * X1[1]),
             21: J2 - s.ad * U2[5] * U2[6],
         }
+        # Legacy finite_bridge.py orders each firm's three rows before
+        # the other firm's rows. EconomicModel.lean instead groups rows
+        # by equation type, both at date zero and at date one.
+        # source row i corresponds to legacy row source_to_legacy[i].
+        source_to_legacy = [
+            0, 3, 1, 4, 2, 5,
+            *range(6, 17),
+            17, 19, 18, 20,
+            *range(21, 33),
+        ]
+        assert len(source_to_legacy) == 33
+        assert sorted(source_to_legacy) == list(range(33))
         source_J = bd.arr([
-            [source_rows[i].d[j] if i in source_rows else J[i, j]
-             for j in range(33)] for i in range(33)
+            [source_rows[i].d[j] if i in source_rows
+             else J[source_to_legacy[i], j] for j in range(33)]
+            for i in range(33)
         ])
         # Use a high-precision point candidate only as a preconditioner.
         # Interval Gauss-Jordan on a large box can overestimate pivots
@@ -406,13 +419,13 @@ def evaluate_bridge(base, P, branch, policy_inputs=True, point_capture=None):
             for i in range(33)
         ])
         source_F0 = [
-            enclosure(source_rows[i] if i in source_rows else residuals[i])
+            enclosure(source_rows[i] if i in source_rows else residuals[source_to_legacy[i]])
             for i in range(33)
         ]
         source_G0 = [
             ([["-1", "-1"]] if i == 5 else [["0", "0"]]) +
             [enclosure(source_rows[i].d[33 + j] if i in source_rows
-                       else forcing[i, j]) for j in range(4)]
+                       else forcing[source_to_legacy[i], j]) for j in range(4)]
             for i in range(33)
         ]
         defect_matrix = source_R @ source_J - bd.eye(33)
@@ -433,6 +446,7 @@ def evaluate_bridge(base, P, branch, policy_inputs=True, point_capture=None):
             "state_dimension": 33,
             "parameter_dimension": 5,
             "rows_recomputed_as_source_style": [4, 5, 21],
+            "source_to_legacy_row_permutation": source_to_legacy,
             "source_residual": "localBindingResidualWithSlack (FULL SEMANTIC ROW MAP STILL OPEN)",
             "preconditioner_method": "mpmath 110-digit point candidate; validated by directed interval defect",
             "preconditioner": [[str(source_R[i, j].midpoint()) for j in range(33)]
