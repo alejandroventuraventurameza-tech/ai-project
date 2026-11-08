@@ -99,3 +99,34 @@ Esa igualdad NO queda demostrada simplemente por la cota estática: exige defini
 La esquina de depósitos empresariales, la restricción de colateral de firmas y los duales de esa restricción son **objetos diferentes**. Los errores de precios bancarios y soporte numéricos son pequeños, pero no sustituyen una realización formal de `Primitives`, `Allocation` y `BankContinuationPolicy`.
 
 **Próximas obligaciones no resueltas:** control `m*=0` con multiplicador propio si corresponde; probar la identidad puntual Bellman para la continuación efectiva; demostrar cota de valor para TODAS las políticas alternativas factibles sin imponerles TVC por decreto; obtener sumabilidad y terminalidad de la candidata; demostrar que los estados numéricos S/B inducen una asignación y un equilibrio completo. La calibración de renovación bancaria `a_B` sigue siendo una restricción adicional.
+
+## V. Obligación de verificación sobre horizonte infinito
+
+La condición local de Bellman no es el teorema global. El siguiente objetivo deberá construir un super-solucionador de valor `V_t(e,h) >= 0` válido en **cada historia soportada**, con la desigualdad para **cada dividendo y cartera individual factible**, no únicamente la cartera candidata:
+
+```
+V_t(e_t,h_t) >= D_t
+ + E_t[ Lambda_{t,t+1}*((1-eta_B)*V_{t+1}(e_{t+1},h_{t+1})
+                              +eta_B*e_{t+1}) ].
+```
+
+La inducción en horizonte finito permite comprobar el límite de la interpretación. Denotando `A_{0,t}=prod_{r=0}^{t-1}[(1-eta_B)*Lambda_{r,r+1}]`, con `A_{0,0}=1`, se pretende probar para cada política alternativa individual admisible `q`:
+
+```
+V_0(e_0,h_0) >=
+ E_0[sum_{t=0}^{T-1} A_{0,t}
+        * (D_t(q) + eta_B*Lambda_{t,t+1}*e_{t+1}(q))
+     + A_{0,T}*V_T(e_T(q),h_T)].
+```
+
+Si `V_T >= 0`, descartar el último término entrega una cota para cada pago truncado de cualquier desviación. Pasando `T -> infinity` con la sumabilidad y no negatividad de los pagos, **no hace falta imponer a cada desviación una TVC que la fuente no exige**.
+
+La igualdad de valor para la política candidata requiere en cambio una igualdad Bellman en cada nodo y un límite terminal **del valor superviviente**:
+
+```
+lim_{T->infinity} E_0[A_{0,T}*V_T(e_T(candidate),h_T)] = 0.
+```
+
+La fuente contiene un criterio de terminalidad de patrimonio `bankContinuationTerminalConditionAt_of_weightedEnvelope` y otro distinto de sumabilidad de pagos. Para inferir el límite de `V_T` a partir del de `e_T` todavía hace falta una cota apropiada de la pendiente de valor `V_T(e,h)/e` a lo largo de la continuación candidata; no debe confundirse `e_T` con `V_T`.
+
+**Estatus:** esquema matemático de prueba y obligaciones para el siguiente módulo Lean, **no** un resultado ya compilado. Por esta razón, aprobar `BankBellmanLocalEnvironmentAt` en una fecha no permite promocionar `BankContinuationOptimalAt` sin este argumento y la realización efectiva de `V`.
