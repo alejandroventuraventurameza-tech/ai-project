@@ -1,0 +1,97 @@
+# IE project — Banco: suficiencia global de cartera en una fecha
+
+**Fecha de investigación:** 2026-11-08.  
+**Rama:** `work/lean-ci-validation-otc-20261106`.  
+**Declaración Lean candidata:** `PaperBankStaticSupergradientSufficiencyCandidate.lean`.  
+**Estado de evidencia al crear esta nota:** `PENDIENTE de CI focalizada y auditoría #print axioms`. No promover a verificado hasta ver una ejecución verde en el SHA exacto.
+
+## 1. Pregunta económica y alcance
+
+La solución numérica de los regímenes S/B satisface KKT del banco y 33 ecuaciones reducidas de prefijo con residuos pequeños. Pero una condición de primer orden no equivale por sí sola a suficiencia, no demuestra optimalidad bancaria intertemporal ni justifica la selección del equilibrio.
+
+**Meta de esta campaña:** demostrar que, en una historia agregada fijada, con precios, tecnología de liquidación, soporte de pagos y patrimonio retenido dados, una cartera factible que soporte la función cóncava de liquidez y satisfaga los precios de equilibrio no puede ser superada por **ninguna cartera alternativa factible**. No se supone que cada alternativa conserve las mismas señales de liquidación de la candidata.
+
+## 2. Variables y ecuaciones originales del modelo
+
+Denotar por `b,m,d,e` el préstamo, las reservas iniciales, los depósitos y el patrimonio retenido del banco individual, con identidad
+
+```text
+b + m = d + e.
+```
+
+`R^L` es la tasa bruta de préstamo; `R^R` es la remuneración bruta de reservas; `R^D` es la tasa bruta de depósitos; `rho` es el coeficiente **de encaje** (distinto de la remuneración); `xi=R^D/R^R`; `epsilon` es el shock idiosincrático de pagos y `chi` el payoff cóncavo pieza a pieza en función del saldo de liquidación.
+
+```text
+s(m,d,epsilon) = m - rho*d + (xi-rho)*epsilon*d
+R(b,m,d,epsilon) =
+  R^L*b + R^R*m - R^D*d + chi(s(m,d,epsilon))
+E[R] = R^L*b + R^R*m - R^D*d + E[chi(s)].
+```
+
+Estas funciones son `bankSettlementSurplus`, `bankReducedPortfolioReturnWithShock` y `bankStaticPortfolioPayoffAt` del `EconomicModel.lean`. La igualdad del rendimiento **detallado** que incluye posiciones OTC/facilidad con el reducido `chi` ya está demostrada allí por `bankDetailedPortfolioReturn_eq_reduced`, bajo `R^R != 0`.
+
+## 3. Condiciones de suficiencia y demostración matemática
+
+Sean `(b*,m*,d*)` la cartera candidata factible, y `mu(epsilon)` un supergradiente de `chi` en el saldo de la candidata para cada pago respaldado por la distribución:
+
+```text
+chi(s(m,d,epsilon)) <= chi(s(m*,d*,epsilon))
+   + mu(epsilon) [s(m,d,epsilon)-s(m*,d*,epsilon)].
+```
+
+El punto de quiebre `s*=0` NO se descarta: cualquier valor de pendiente dentro del intervalo correcto es admisible. Las probabilidades no negativas permiten integrar la desigualdad.
+
+Definir `muBar=E[mu]`, `muShock=E[mu*epsilon]` y `Delta b=b-b*` etc. Por linealidad exacta del saldo,
+
+```text
+Delta s(epsilon) = Delta m - rho*Delta d
+                   + (xi-rho)*epsilon*Delta d.
+```
+
+Así,
+
+```text
+E[R(b,m,d)] - E[R(b*,m*,d*)]
+  <= R^L*Delta b + R^R*Delta m - R^D*Delta d
+     + muBar*(Delta m-rho*Delta d)
+     + (xi-rho)*muShock*Delta d.
+```
+
+Bajo **los precios de solución interior sin duales de caps**:
+
+```text
+R^L = R^R + muBar
+R^D = R^R + (1-rho)*muBar + (xi-rho)*muShock,
+```
+
+el miembro derecho se reduce exactamente a
+
+```text
+(R^R+muBar)*(Delta b+Delta m-Delta d)=0,
+```
+
+porque ambas carteras comparten `e` en sus balances. Por tanto,
+
+```text
+E[R(b,m,d)] <= E[R(b*,m*,d*)]
+```
+
+para toda alternativa factible. El teorema Lean candidato exige factibilidad literal de cartera de la fuente, soporte válido de cada supergradiente y precios exactamente enunciados; **no introduce directamente la desigualdad final como premisa**.
+
+## 4. Qué implica y qué NO implica
+
+**Si la prueba compila:** se certifica un teorema de suficiencia **estática, condicional** que se mantiene ante cambios arbitrarios del patrón déficit/superávit de la cartera alternativa. Es un avance frente a la simple verificación local KKT y complementa los diagnósticos de la cartera bancaria bajo ambas ramas.
+
+**Pendiente:** instanciar en las trayectorias numéricas exactas las condiciones de precios y gradientes como predicados `Primitives/Allocation` para cada nodo; demostrar la continuación Bellman para TODAS las alternativas admisibles; vincular el valor individual a la dinámica de equity y los pagos de salida; comprobar terminalidad; establecer factibilidad y optimalidad de todos los agentes e identificar equilibrios completos; seleccionar de forma defendible las ramas S/B. No confundir los residuos reducidos de las IRF con suficiencia de equilibrio.
+
+La auditoría numérica existente está en `code/irf/output/financial_blocks_audit/REPORT.json` y `REPORT.md`; registra los coeficientes de soporte cercanos a cero, márgenes y duales, pero el certificado numérico de las ramas **no** demuestra estos supuestos para un equilibrio de horizonte infinito.
+
+## 5. Segunda obligación: renovación bancaria de la fuente
+
+La fórmula del checkpoint usa `aB = 1-bankExit+bankExit*bankSeedShare`; el reproductor Python utiliza `aB = 1/referenceLoanRate`. Son equivalentes únicamente si
+
+```text
+bankExit*(1-bankSeedShare) = 1 - 1/referenceLoanRate.
+```
+
+El módulo `LocalScalarBankRenewalCalibrationBridgeCandidate.lean` prueba la equivalencia algebraica **condicional**, no la identidad de parámetros concretos. Por ello una prueba de cartera no resuelve automáticamente la correspondencia de renovación ni el prefijo numérico. Debemos reconstruir la calibración `bankSeedShare` y verificar su admisibilidad y fuente en una prueba independiente.
