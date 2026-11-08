@@ -43,6 +43,8 @@ ALLOWED_RELATIONS = {
     "joint_bound_kernel_verified",
     "joint_physical_kernel_verified",
     "source_log_loss_kernel_verified",
+    "source_derivative_kernel_verified",
+    "source_derivative_share_kernel_verified",
 }
 GREEN_SOURCE_FINANCIAL_RUN = 42457259796
 GREEN_SOURCE_FINANCIAL_SHA = "c006e00c437243c3f6f44ec3c102df4286c545e0"
@@ -66,6 +68,20 @@ GREEN_JOINT_PHYSICAL_RUN = 42502060253
 GREEN_JOINT_PHYSICAL_SHA = "5ea744a50d068d1e4efee613522f1e8b63242f67"
 GREEN_SOURCE_LOG_RUN = 42502060253
 GREEN_SOURCE_LOG_SHA = "5ea744a50d068d1e4efee613522f1e8b63242f67"
+GREEN_DERIVATIVE_RUN = 42503513399
+GREEN_DERIVATIVE_SHA = "a6f83b4e821067ca9d295ad22c25b7fb49211876"
+GREEN_DERIVATIVE_SHARE_RUN = 42503571340
+GREEN_DERIVATIVE_SHARE_SHA = "4cf594547fa63dc0435d90b7dd4c07b93b56fe28"
+EXPECTED_VERIFIED_DERIVATIVE = {
+    "source_total_capital_hasDerivAt",
+    "source_productivity_aggregate_hasDerivAt",
+    "source_log_total_capital_hasDerivAt",
+    "source_log_productivity_aggregate_hasDerivAt",
+}
+EXPECTED_VERIFIED_DERIVATIVE_SHARE = {
+    "original_capital_log_share_identity",
+    "original_productivity_log_share_identity",
+}
 EXPECTED_VERIFIED_JOINT_PHYSICAL = {
     "original_physical_two_type_joint_output_bound",
     "original_physical_joint_candidate_attains_frontier",
@@ -160,6 +176,8 @@ def main() -> None:
     green_joint_bound = set()
     green_joint_physical = set()
     green_source_log = set()
+    green_derivative = set()
+    green_derivative_share = set()
     for row in data["entries"]:
         label = row["label"]
         old = original[label]
@@ -273,6 +291,30 @@ def main() -> None:
                         and item.get("lean_axiom_audit") == "passed_no_sorryAx",
                         "Physical loss theorem not pinned to verified kernel run")
                 green_source_log.add(item["declaration"])
+            if rel == "source_derivative_kernel_verified":
+                require(label == "lem:allocation_loss_identity",
+                        "Original capital or G derivatives attached to wrong lemma")
+                require(item["declaration"] in EXPECTED_VERIFIED_DERIVATIVE,
+                        "Unknown source derivative theorem")
+                require(item["declaration"] not in green_derivative,
+                        "Duplicate verified source derivative")
+                require(item.get("lean_ci_run_id") == GREEN_DERIVATIVE_RUN
+                        and item.get("lean_ci_commit") == GREEN_DERIVATIVE_SHA
+                        and item.get("lean_axiom_audit") == "passed_no_sorryAx",
+                        "Source derivative not pinned to verified Lean run")
+                green_derivative.add(item["declaration"])
+            if rel == "source_derivative_share_kernel_verified":
+                require(label == "lem:allocation_loss_identity",
+                        "Source derivative-share theorem attached to wrong lemma")
+                require(item["declaration"] in EXPECTED_VERIFIED_DERIVATIVE_SHARE,
+                        "Unknown source derivative-share theorem")
+                require(item["declaration"] not in green_derivative_share,
+                        "Duplicate verified source derivative-share theorem")
+                require(item.get("lean_ci_run_id") == GREEN_DERIVATIVE_SHARE_RUN
+                        and item.get("lean_ci_commit") == GREEN_DERIVATIVE_SHARE_SHA
+                        and item.get("lean_axiom_audit") == "passed_no_sorryAx",
+                        "Source derivative-share theorem not pinned to verified run")
+                green_derivative_share.add(item["declaration"])
             if rel == "efficiency_support_kernel_verified":
                 require(label == "lem:allocation_loss_identity",
                         "Efficiency support theorem mapped to wrong source claim")
@@ -387,6 +429,10 @@ def main() -> None:
             f"Original physical K/L production proof set incomplete: {green_joint_physical}")
     require(green_source_log == EXPECTED_VERIFIED_SOURCE_LOG,
             f"Original source loss proofs incomplete: {green_source_log}")
+    require(green_derivative == EXPECTED_VERIFIED_DERIVATIVE,
+            f"Source derivative proofs incomplete: {green_derivative}")
+    require(green_derivative_share == EXPECTED_VERIFIED_DERIVATIVE_SHARE,
+            f"Source derivative-share proofs incomplete: {green_derivative_share}")
     require(green_exact == {
         "lem:repayment": "exact_repaymentSpec",
         "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
@@ -443,6 +489,10 @@ def main() -> None:
         "verified_joint_physical_lemmas": len(green_joint_physical),
         "verified_source_log_loss_run": GREEN_SOURCE_LOG_RUN,
         "verified_source_log_loss_lemmas": len(green_source_log),
+        "verified_source_derivative_run": GREEN_DERIVATIVE_RUN,
+        "verified_source_derivative_lemmas": len(green_derivative),
+        "verified_source_derivative_share_run": GREEN_DERIVATIVE_SHARE_RUN,
+        "verified_source_derivative_share_lemmas": len(green_derivative_share),
         "unproved_source_specifications": source_specifications,
         "complete_paper_theorems_proved_in_lean_by_this_audit": 0,
         "full_equilibrium_confirmed": False,

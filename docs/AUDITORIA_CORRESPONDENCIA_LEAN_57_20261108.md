@@ -1,5 +1,12 @@
 # Matriz de correspondencia entre los 57 resultados y Lean
 
+## Derivadas fuente K/G verificadas, regla completa pendiente
+
+La [CI #42503513399](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42503513399), commit `a6f83b4e`, verificó por kernel cuatro teoremas `HasDerivAt` para `K(t)`, `G(t)`, `log K(t)` y `log G(t)` desde los capitales y productividades fuente. La [CI #42503571340](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42503571340), commit `4cf59454`, verificó dos identidades exactas de `kappa_H` y `omega_H` en esos diferenciales. Ambas ejecuciones `#print axioms` sin `sorryAx`.
+
+**Total actual de pruebas auxiliares de 4.3: 34**, pero la prueba compuesta de `dLoss` sigue pendiente. La primera CI de regla de cadena [#42503619169](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42503619169) falló por falta de un `import`, corregido en commit `06ed880a`; no contar aún el teorema compuesto.
+
+
 ## Cierre del puente físico conjunto: cuatro pruebas adicionales verificadas
 
 La [CI focalizada #42502060253](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42502060253), commit `5ea744a50d068d1e4efee613522f1e8b63242f67`, compiló los módulos `PaperJointEfficiencyPhysicalCandidate.lean` y `PaperOriginalLogLossCandidate.lean`; la auditoría `#print axioms` de **cuatro teoremas** pasó sin `sorryAx`. El resultado físico admite repartos no negativos de ambos factores, presupuestos agregados positivos y exponentes comunes; el candidato alcanza la frontera `Yeff`. En cantidades positivas, la pérdida `log(Yeff/Y)` es no negativa y, para trabajo óptimo, se recupera la fórmula exacta de logaritmos del paper.

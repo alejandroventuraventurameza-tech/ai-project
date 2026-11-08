@@ -1,7 +1,7 @@
 # Lema 4.3 — diferenciación de capital agregado y producción ajustada desde las funciones fuente
 
 **Fecha de trabajo:** 8 de noviembre de 2026. **Rama:** `work/lean-ci-validation-otc-20261106`.  
-**Criterio de evidencia:** la demostración escrita se presenta a continuación. Los nuevos módulos Lean de derivadas son **candidatos** hasta compilar y superar la auditoría de axiomas en un SHA exacto. Las 28 declaraciones auxiliares anteriores ya tienen sus propias corridas Lean verdes y no se modifican.
+**Criterio de evidencia:** la demostración escrita se presenta a continuación. Seis pruebas nuevas sobre las derivadas de K/G y sus cuotas ya pasaron CI exacta sin `sorryAx` (#42503513399 y #42503571340), sumadas a 28 declaraciones anteriores (**34 auxiliares verificados**). La regla de cadena compuesta, cuota de producto y log cociente de capitales **siguen como candidatos** hasta terminar CI en sus SHA respectivos.
 
 ## 1. Objetivo y alcance
 

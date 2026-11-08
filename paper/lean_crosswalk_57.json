@@ -5,8 +5,8 @@
   "checked_branch": "work/lean-ci-validation-otc-20261106",
   "reviewed_date": "2026-11-08",
   "claim_count": 57,
-  "status_policy": "For 4.3, twenty-eight scoped mathematical lemmas are Lean kernel-verified: 20 prior helpers, 4 source normalization/AM-GM bridge claims (#42501665345, #42501725491), 2 original physical joint-K/L efficiency claims and 2 source-output log loss identities (#42502060253). Complete source differential dLoss and full dynamic equilibrium are still not proved; all 57 numbered paper claims remain not_established, with 24/57 targeted semantic comparisons.",
-  "source_module_check": "24/57 targeted semantic comparisons (14 main, 10 annex), 33 pending. Exact original physical Cobb-Douglas joint K/L production upper bound and attainment, plus source physical log loss nonnegativity and optimal labor log identity, kernel-verified in #42502060253; derivative dLoss from G/K not yet verified.",
+  "status_policy": "For 4.3, thirty-four scoped mathematical lemmas are Lean kernel-verified: 28 prior, 4 source K/G HasDerivAt (+ log) claims (#42503513399), and 2 source K/G share identities (#42503571340). Composite source loss chain-rule, physical output share and log-capital ratio are pending green CI; 57 numbered paper claims remain not_established, with 24/57 directed comparisons.",
+  "source_module_check": "24/57 targeted semantic comparisons; 33 pending. Exact source K,G and log differentiations along positive paths plus share decomposition proved kernel-checked at pinned CI #42503513399 and #42503571340; composite loss derivative and output-share semantics not certified yet.",
   "scope": "57 numbered claims including historical appendices; current PDF page numbers in the original ledger are stale after compact layout.",
   "entries": [
     {
@@ -578,9 +578,63 @@
           "lean_ci_run_id": 42502060253,
           "lean_ci_commit": "5ea744a50d068d1e4efee613522f1e8b63242f67",
           "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperSourceDifferentiationCandidate.lean",
+          "declaration": "source_total_capital_hasDerivAt",
+          "relationship": "source_derivative_kernel_verified",
+          "note": "Derivada de K(t) desde las masas y cantidades físicas de capital por firma. CI focalizada #42503513399 verde, commit exacto a6f83b4e, #print axioms sin sorryAx; no prueba por sí solo identidad diferencial integral.",
+          "lean_ci_run_id": 42503513399,
+          "lean_ci_commit": "a6f83b4e821067ca9d295ad22c25b7fb49211876",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperSourceDifferentiationCandidate.lean",
+          "declaration": "source_productivity_aggregate_hasDerivAt",
+          "relationship": "source_derivative_kernel_verified",
+          "note": "Derivada de G(t) desde los sumandos rpow de productividades fijas y capitales variables positivos. CI focalizada #42503513399 verde, commit exacto a6f83b4e, #print axioms sin sorryAx; no prueba por sí solo identidad diferencial integral.",
+          "lean_ci_run_id": 42503513399,
+          "lean_ci_commit": "a6f83b4e821067ca9d295ad22c25b7fb49211876",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperSourceDifferentiationCandidate.lean",
+          "declaration": "source_log_total_capital_hasDerivAt",
+          "relationship": "source_derivative_kernel_verified",
+          "note": "Regla de la cadena para log K(t) con K(t)>0. CI focalizada #42503513399 verde, commit exacto a6f83b4e, #print axioms sin sorryAx; no prueba por sí solo identidad diferencial integral.",
+          "lean_ci_run_id": 42503513399,
+          "lean_ci_commit": "a6f83b4e821067ca9d295ad22c25b7fb49211876",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperSourceDifferentiationCandidate.lean",
+          "declaration": "source_log_productivity_aggregate_hasDerivAt",
+          "relationship": "source_derivative_kernel_verified",
+          "note": "Regla de la cadena para log G(t) con G(t)>0 y capital de firma positivo. CI focalizada #42503513399 verde, commit exacto a6f83b4e, #print axioms sin sorryAx; no prueba por sí solo identidad diferencial integral.",
+          "lean_ci_run_id": 42503513399,
+          "lean_ci_commit": "a6f83b4e821067ca9d295ad22c25b7fb49211876",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperSourceDifferentialSharesCandidate.lean",
+          "declaration": "original_capital_log_share_identity",
+          "relationship": "source_derivative_share_kernel_verified",
+          "note": "Recupera el diferencial log K por las cuotas de capital originales. CI focalizada #42503571340 verde, commit exacto 4cf59454, #print axioms sin sorryAx; no prueba por sí solo identidad diferencial integral.",
+          "lean_ci_run_id": 42503571340,
+          "lean_ci_commit": "4cf594547fa63dc0435d90b7dd4c07b93b56fe28",
+          "lean_axiom_audit": "passed_no_sorryAx"
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperSourceDifferentialSharesCandidate.lean",
+          "declaration": "original_productivity_log_share_identity",
+          "relationship": "source_derivative_share_kernel_verified",
+          "note": "Recupera el diferencial log G con las cuotas fuente g_i/G y rpow de capital positivo. CI focalizada #42503571340 verde, commit exacto 4cf59454, #print axioms sin sorryAx; no prueba por sí solo identidad diferencial integral.",
+          "lean_ci_run_id": 42503571340,
+          "lean_ci_commit": "4cf594547fa63dc0435d90b7dd4c07b93b56fe28",
+          "lean_axiom_audit": "passed_no_sorryAx"
         }
       ],
-      "semantic_gap": "28 lemas auxiliares de 4.3 kernel-checked: incluyen ahora el puente completo de producción física para toda asignación no negativa de capital y trabajo agregados positivos, la candidata global que alcanza Yeff, la no negatividad de la pérdida logarítmica con factores físicos positivos y la identidad log-loss al reparto laboral óptimo (CI #42502060253). La prueba del enunciado académico **integral** sigue pendiente por la derivación diferenciable de K(k),G(k), dLoss=a(kappaH-omegaH)dlog(kH/kL) desde las funciones fuente, y porque la interfaz antigua no impone exponentes comunes en H/L ni incluye ese diferencial. No hay prueba de equilibrio dinámico ni efecto causal de política monetaria o crecimiento de largo plazo.",
+      "semantic_gap": "34 lemas auxiliares de 4.3 kernel-checked: 28 previos, cuatro nuevas derivadas fuente HasDerivAt de K,G,logK,logG a lo largo de trayectorias positivas (CI #42503513399) y dos identidades de participaciones de capital y producción ajustada calculadas desde las funciones originales (CI #42503571340). La combinación completa dLoss=alpha(kappaH-omegaH)dlog(kH/kL) aún espera el CI del módulo de cadena, igual que omegaH=cuota física de producción y log cociente de capitales. La interfaz original no incluye todas las hipótesis de elasticidades comunes y no se ha demostrado equilibrio monetario dinámico.",
       "numerical_context": [
         "paper/irf_mechanism_table.tex"
       ]
