@@ -1,4 +1,5 @@
 import Ventura26LiquidityAllocation.PaperSourceDifferentialSharesCandidate
+import Ventura26LiquidityAllocation.PaperAllocationLossElasticityCandidate
 
 /-!
 # Lemma 4.3: exact source chain rule for the allocative-loss differential
