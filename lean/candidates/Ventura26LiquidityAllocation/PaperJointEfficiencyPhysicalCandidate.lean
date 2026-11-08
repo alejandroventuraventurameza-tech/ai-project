@@ -176,8 +176,7 @@ theorem original_physical_joint_candidate_attains_frontier
         rw [hfirmH, hfirmL]
         ring
     _ = (K / Z) ^ a * (L / Z) ^ b * Z := by
-        dsimp [Z]
-        ring
+        dsimp [Z] <;> ring
     _ = K ^ a * L ^ b * Z ^ d :=
       ProposedPaperJointEfficiencySource.normalized_joint_scale_identity
         K L Z a b d hK hL hZ hsum
