@@ -317,6 +317,30 @@ correspondencia con equilibrio competitivo completo no está cerrada.
 \end{itemize}
 \end{frame}
 
+\begin{frame}{Derivación: exactamente dos soluciones escalares}
+\small
+Suponga que $\mathcal M(s,h)$ es $C^1$ cerca de cero,
+$\mathcal M(0,0)=0$, $a_R=\partial_h\mathcal M(0,0)<0$
+y $b=\partial_s\mathcal M(0,0)<0$.
+\[
+0\leq s\perp \mathcal M(s,h)\geq0.
+\]
+Si $h<0$, la función implícita produce una
+raíz $s(h)>0$, pues $s'(0)=-a_R/b<0$.
+\[
+\boxed{\begin{aligned}
+B:&\ s=0,\quad \mathcal M(0,h)>0,\\
+S:&\ s=s(h)>0,\quad \mathcal M(s(h),h)=0.
+\end{aligned}}
+\]
+\footnotesize
+La monotonía decreciente excluye una tercera raíz
+positiva cercana; para $h>0$, la condición de signo
+impide toda solución complementaria local.
+\textbf{Es una proposición del reducido, no de
+equilibrio competitivo infinito.}
+\end{frame}
+
 \begin{frame}{De las condiciones de los agentes a 33 filas}
 \small
 La reducción de las FOC, los balances y la limpieza de mercados da
@@ -539,6 +563,32 @@ asignativas opuestas según la rama, aunque ambas abaraten el crédito.
 \medskip
 Reproducción: \texttt{python code/verify.py}.
 \par Artículo extenso, tablas automáticas y figuras disponibles para revisión.
+\end{frame}
+
+\begin{frame}{La objeción formal a la unicidad literal}
+\small
+El predicado del modelo fuente
+$\mathrm{CompetitiveEquilibrium}(P,I,X)$ no depende
+del campo \texttt{collateralDual}.
+\[
+X\mapsto\widetilde X,\qquad
+\widetilde X^{\rm primal}=X^{\rm primal},\qquad
+\widetilde\mu\neq\mu.
+\]
+Así, exigir igualdad de toda la estructura
+$\widetilde X=X$ para contar equilibrios es
+más fuerte que exigir igualdad de decisiones y
+precios económicamente observables.
+\medskip
+
+\footnotesize
+\textbf{Lean:}
+\texttt{localMacroMultiplicitySpec\_false}
+refuta el contrato literal; no refuta la posibilidad
+económica de dos ramas S/B.
+La reparación candidata compara los campos
+primales sobre historias admisibles.
+\textbf{Aún no hay dos testigos de equilibrio completo.}
 \end{frame}
 
 \begin{frame}[fragile]{Qué demuestra Lean: correspondencia y alcance}

@@ -59,8 +59,10 @@ contrato nominal respaldado por capital en todos los estados futuros admisibles.
 Estudiamos dos ramas locales del sistema reducido para una misma intervención
 y los mismos estados heredados. Ambos reducen la tasa de préstamo y elevan el crédito de la empresa
 más productiva; sus efectos asignativos son opuestos. La complementariedad
-contractual y la continuación infinita sustentan esa multiplicidad. Presentamos
-pruebas escritas y certificados aritméticos reproducibles. La persistencia bajo
+del sistema reducido y los certificados numéricos sustentan dos ramas
+condicionadas. Presentamos derivaciones escritas y comprobaciones aritméticas;
+la identificación de dos equilibrios competitivos infinitos exige premisas
+aún no verificadas. La persistencia bajo
 riesgo recurrente es local; no es una calibración ni una respuesta única de
 política. Añadimos respuestas dinámicas internas con pagos binarios y parámetros
 ilustrativos. Su correspondencia con decisiones óptimas y un equilibrio
@@ -78,9 +80,14 @@ Una campaña de verificación independiente compiló 71 módulos Lean candidatos
 con auditoría de axiomas principales sin dependencia de \texttt{sorryAx}.
 Esta evidencia no equivale a un mapeo uno-a-uno ni a una certificación de los
 57 resultados inventariados en el registro del artículo, que aún debe conciliarse.
-En particular, la identificación del dual original, la correspondencia completa
-con equilibrio infinito y la unicidad literal de ramas requieren una revisión
-separada. Los apéndices conservan etapas históricas: sus referencias a tareas pendientes
+En particular, la identificación del dual original y el puente
+al equilibrio infinito siguen abiertos. La especificación Lean
+literal de unicidad de \texttt{Allocation} ha sido refutada por
+la libertad del campo \texttt{collateralDual}; ello no descarta
+dos ramas económicas distintas. Las proposiciones
+\ref{prop:local_macro_multiplicity} y
+\ref{prop:risky_branch_persistence} se formulan ahora
+de forma condicional sobre el sistema reducido. Los apéndices conservan etapas históricas: sus referencias a tareas pendientes
 deben leerse junto con el estado actualizado de esta versión.
 
 \tableofcontents
@@ -1223,6 +1230,16 @@ $34.7593<\Phi'(R)<37.5087$ en él. El teorema del valor intermedio prueba existe
 
 El único dual empresarial nulo por construcción es el de L en fecha 0. H tiene dual positivo y ambas esquinas de depósitos tienen signo correcto. La continuación satisface las pruebas estacionarias anteriores. $m=\bar m=5/6$ y $\Pi=1$ en todas las fechas satisfacen las bandas de precios globales; los términos terminales desaparecen. Se aplica la proposición \ref{prop:finite_prefix_equilibrium}.
 \end{proof}
+\paragraph{Alcance del enlace de frontera.}
+En Lean, \texttt{BoundaryFullPrefixCandidate} reconstruye las
+33 filas condicionadamente a la raíz, el paquete analítico
+y \texttt{BoundaryWorkerLaborPackage}: esta última contiene
+la FOC laboral de fecha cero aún no descargada en ese módulo.
+Además, el paso a equilibrio completo exige comprobar las
+premisas globales y terminales de
+\ref{prop:finite_prefix_equilibrium} en la asignación
+perturbada. La existencia de la raíz de recursos no
+certifica por sí sola ese paso.
 
 \begin{center}\small
 \begin{tabular}{@{}lr@{}}\toprule
@@ -1240,7 +1257,7 @@ Cobertura heredada holgada H, L & $0.050450672,\ 0.163132291$\\\bottomrule
 \end{center}
 Estos valores son un testigo interno, no una calibración ni una respuesta de impulso. La frontera queda fuera del entorno de la proposición \ref{prop:regime_tube}: por ejemplo, la tasa de préstamo y el consumo de L se separan de sus referencias más de lo permitido allí. No hay contradicción entre ambas pruebas.
 
-\subsection{La complementariedad produce dos equilibrios locales}\label{sec:local_multiplicity}\label{sec:v0m_source_64}
+\subsection{La complementariedad produce dos soluciones locales del sistema reducido}\label{sec:local_multiplicity}\label{sec:v0m_source_64}
 
 \subsubsection*{Orientación antes de las ecuaciones}
 Esta sección mantiene fijos capital y promesas heredadas, primitivas y
@@ -1332,17 +1349,46 @@ b&\in(-2.376742673,-2.376742670).
 \end{align}
 En particular $b<0$: al variar la holgura, también cambian todos los precios y decisiones de equilibrio. No es una derivada parcial del problema de la empresa a precios dados.
 
-\begin{proposition}[Multiplicidad y ausencia local en lados opuestos]\label{prop:local_macro_multiplicity}
-Para un cambio inicial puro $h=v_R<0$ suficientemente pequeño, con los demás componentes cero, existen exactamente dos equilibrios en el entorno del enlace y con continuación en la clase local especificada. En uno $s_{L0}>0,\upsilon_{L0}=0$; en otro $s_{L0}=0,\upsilon_{L0}>0$. H está restringida en ambos y ambos cumplen optimalidad, balances y condiciones terminales. Para $h>0$ suficientemente pequeño no existe un equilibrio en ese mismo entorno. Esta última afirmación no excluye equilibrios lejanos.
+\begin{proposition}[Dos soluciones locales de la complementariedad reducida]\label{prop:local_macro_multiplicity}
+Suponga que la eliminación del resto del prefijo define una función
+$\mathcal M(s,h)$ de clase $C^1$ en un entorno de $(0,0)$,
+con $s\geq0$, $\mathcal M(0,0)=0$ y
+\[
+\partial_s\mathcal M(0,0)=b<0,\qquad
+\partial_h\mathcal M(0,0)=a_R<0.
+\]
+Para $h=v_R<0$ suficientemente pequeño, manteniendo fijas
+las restantes innovaciones, la complementariedad
+$0\leq s\perp\mathcal M(s,h)\geq0$ tiene exactamente dos
+\emph{soluciones escalares locales}: $s=0$ y
+una raíz $s(h)>0$ con $\mathcal M(s(h),h)=0$.
+Para $h>0$ pequeño no tiene soluciones no negativas
+cercanas. Si las demás incógnitas del prefijo tienen
+recuperación local unívoca para cada $s$, esas raíces
+inducen las ramas S y B del \emph{sistema reducido}.
+No se afirma aquí existencia de dos equilibrios infinitos
+ni unicidad literal de toda la estructura \texttt{Allocation}.
 \end{proposition}
 \begin{proof}
-La inversión verificada y el teorema de la función implícita construyen $\mathcal M$ y cada rama como funciones suaves. Cerca del origen se mantienen $\partial_s\mathcal M<0$ y $\partial_h\mathcal M<0$. Si $h<0$, $\mathcal M(0,h)>0$, por lo que $s=0$ da el equilibrio B. La ecuación $\mathcal M(s,h)=0$ tiene por función implícita una raíz única
-$s(h)$ con
-$s'(0)=-\partial_h\mathcal M/\partial_s\mathcal M<0$; así $s(h)>0$ para $h<0$, y da S. La monotonía en $s$ excluye otra raíz cercana.
-
-Si $h>0$, $\mathcal M(0,h)<0$; ningún $s\geq0$ cercano puede volverlo no negativo, porque decrece con $s$. No hay solución cercana de \eqref{eq:scalar_macro_complementarity}. Los otros cambios de región están separados por márgenes estrictos: H conserva dual positivo, ambos préstamos siguen positivos, y los bancos y el hogar continúan interiores. Desde fecha 1 se mantiene la continuación activa. Por eso no se ha descartado una tercera región financiera cercana por conveniencia.
-
-Para $h<0$, continuidad preserva todos los filtros estrictos verificados en el enlace. Complementariedad distingue las dos raíces, y la proposición \ref{prop:finite_prefix_equilibrium} convierte los planes en equilibrios con decisiones óptimas.
+Por continuidad de las derivadas, $\mathcal M$ es
+estrictamente decreciente en $s\geq0$ y en $h$ en
+un entorno del origen. Para $h<0$ pequeño,
+$\mathcal M(0,h)>0$, luego $s=0$ satisface
+complementariedad. El teorema de la función implícita
+aplicado en $(0,0)$ proporciona una raíz única
+$s(h)$ cercana a cero con
+\[
+s(0)=0,\qquad s'(0)=-a_R/b<0.
+\]
+En consecuencia $s(h)>0$ para $h<0$.
+Toda solución complementaria tiene $s=0$ o
+$\mathcal M(s,h)=0$, y la monotonía impide
+una tercera raíz positiva cercana. Para $h>0$,
+$\mathcal M(0,h)<0$ y decrece al aumentar $s$:
+no puede satisfacer $\mathcal M(s,h)\geq0$.
+Estas conclusiones solo usan la función escalar;
+recuperar los 33 controles y verificar óptimos
+y terminalidad exige pasos adicionales.
 \end{proof}
 
 \paragraph{Alcance de la elevación al equilibrio.}
@@ -1359,9 +1405,9 @@ ni una formalización Lean del enunciado completo.
 Por esta razón, las IRF posteriores se identifican explícitamente
 como soluciones numéricas reducidas condicionadas a S o B.
 
-Más generalmente, una dirección transversal $\mathbf v=\tau\mathbf d$, $\tau>0$, con $\mathbf a^\top\mathbf d>0$ admite las dos ramas cercanas. La condición opuesta excluye equilibrio en ese entorno, sin una afirmación global. La existencia no es uniforme sobre todos los instrumentos, estados o distribuciones de shocks.
+Más generalmente, una dirección transversal $\mathbf v=\tau\mathbf d$, $\tau>0$, con $\mathbf a^\top\mathbf d>0$ da la misma conclusión complementaria reducida bajo las hipótesis locales. La condición opuesta excluye raíces escalares locales, sin una afirmación global. La existencia no es uniforme sobre todos los instrumentos, estados o distribuciones de shocks.
 
-Las ramas no son refinamientos numéricos de una misma solución: difieren en consumo, crédito, precios y capital. Seleccionar S solo porque su asignación es favorable escondería la multiplicidad. La decisión del autor es conservar ambas.
+Las ramas numéricas no son refinamientos de una misma solución del reducido: difieren en consumo, crédito, precios y capital. Seleccionar S por su respuesta favorable ocultaría esa dependencia de régimen. Conservamos ambas sin imputarles probabilidades de selección de equilibrio.
 
 \subsection{La misma intervención tiene efectos asignativos opuestos}\label{sec:branch_policy_results}\label{sec:v0m_source_65}
 
@@ -1577,13 +1623,32 @@ con $N_{r,\eta}(Z_b,0)=O(\eta)$ y constante Lipschitz respecto de $Z$ que tiende
 $Z\mapsto Z_b-J_r^{-1}[E_r\mathbf v+N_{r,\eta}(Z,\mathbf v)]$
 es entonces contractiva en una bola finita para parámetros suficientemente pequeños. Es una versión por contracción de la función implícita; no presupone una derivada conjunta ordinaria en $\eta=0$.
 
-\begin{proposition}[Dos equilibrios adaptados con riesgo estrictamente positivo]\label{prop:risky_branch_persistence}
-Existen $h_*>0$ y $c_*>0$ tales que, para cada $-h_*<h=v_R<0$ y $0<\eta<c_*|h|$, el experimento con riesgo recurrente desde fecha 2 admite dos equilibrios adaptados próximos al enlace: uno con L prestataria y colateral estrictamente holgado en fecha 0, otro con ambos duales positivos allí. Desde fecha 1 ambas originan préstamos restringidos. El mínimo de precios futuro se mantiene endógeno. No se proporciona aquí una amplitud cuantitativa útil para shocks empíricos.
+\begin{proposition}[Persistencia condicional de ramas reducidas bajo riesgo]\label{prop:risky_branch_persistence}
+Suponga que las dos ramas reducidas del prefijo tienen
+Jacobianos localmente invertibles y márgenes de
+complementariedad estrictos de orden $|h|$ para $-h_*<h=v_R<0$.
+Suponga además que, para $0<\eta<c_*|h|$, el operador de
+continuación estocástica es contractivo en un conjunto
+completo e invariante de trayectorias y que su punto fijo
+satisface las ecuaciones reducidas no lineales exactas,
+con perturbaciones inferiores a la mitad de esos márgenes.
+Entonces persisten dos soluciones locales
+\emph{reducidas}: una con L prestataria y colateral holgado
+al impacto, y otra con L restringida.
+La conclusión depende de esas hipótesis y no certifica
+equilibrios competitivos adaptados de horizonte infinito.
 \end{proposition}
 \begin{proof}
-La contracción anterior da un único plan por cada rama financiera especificada. Su desplazamiento frente al plan de riesgo cero es $O(\eta)$, uniformemente en un entorno pequeño. Para $h<0$, la holgura de S y el dual de L en B son mayores que una constante positiva por $|h|$, por sus derivadas estrictas verificadas. Escoja $c_*$ de modo que el desplazamiento $O(\eta)$ sea menor que la mitad de esos márgenes. Los demás márgenes son estrictos ya en el enlace; se preservan reduciendo $h_*$ y $c_*$.
-
-La fila de cobertura de fecha 1 y el contrato de fecha 0 cubren todos los estados futuros pertinentes. El punto fijo de la cola resuelve las ecuaciones exactas y permanece acotado. No se fija un hijo minimizador. Se aplican suficiencia general, continuación bancaria y precios globales. La complementariedad de fecha 0 distingue los dos planes, por lo que son dos equilibrios, no dos aproximaciones de uno.
+Por el teorema de punto fijo de Banach, cada operador
+contractivo tiene una única continuación dentro de su
+dominio reducido. Las perturbaciones admitidas conservan
+la holgura estricta en S y el valor positivo del
+multiplicador reducido de L en B. Estos márgenes son
+incompatibles para una misma asignación primal, de modo
+que las dos soluciones permanecen separadas. El resultado
+no demuestra optimalidad de todas las políticas admisibles
+de los agentes ni verifica las condiciones terminales
+de un equilibrio completo.
 \end{proof}
 
 La condición $\eta<c_*|h|$ relaciona dos objetos distintos: $h$ es la

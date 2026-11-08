@@ -1,6 +1,6 @@
 {
   "author": "Alejandro Ventura",
-  "paper_sha256": "7097c71f2516e445f806bd1015058efe1fce6f35b0155aa5dd3eac904ed77bff",
+  "paper_sha256": "9c75e627145463cc6196b9902c4754f2cd1d6fec2ec6ee093142e0a60a629cc3",
   "numbered_results": 57,
   "formalization_started": true,
   "results": [
@@ -146,17 +146,21 @@
     },
     {
       "label": "prop:local_macro_multiplicity",
-      "title": "Multiplicidad y ausencia local en lados opuestos",
+      "title": "Dos soluciones locales de la complementariedad reducida",
       "statement_sha256": "c3f664f65b23ee22533d03219746fece6cb36de461a28c12486f155d808cfd9f",
       "proof_sha256": "3f44fb717d267c833592a68f4f8698208be8fda74afc626583eb2bd02d162100",
       "written_review": "scoped_conditional_argument",
       "formalization_status": "not_run",
       "lean_file": null,
       "lean_declaration": null,
-      "disposition": "retained",
+      "disposition": "revised_narrower_scope",
       "author_full_review": false,
       "paper_number": "4.2",
-      "pdf_page": 31
+      "pdf_page": 31,
+      "scope_review": "conditional_reduced_not_full_competitive_equilibrium",
+      "last_source_edit": "2026-11-07",
+      "current_proposition_and_proof_raw_tex_sha256": "957855d47ab87980c4518188e93059c15bb733f1adf79ee50e0033fe5f9d13d4",
+      "original_statement_hash_scope": "historical snapshot; current TeX SHA tracked separately"
     },
     {
       "label": "lem:allocation_loss_identity",
@@ -188,17 +192,21 @@
     },
     {
       "label": "prop:risky_branch_persistence",
-      "title": "Dos equilibrios adaptados con riesgo estrictamente positivo",
+      "title": "Persistencia condicional de ramas reducidas bajo riesgo",
       "statement_sha256": "b7d9842cfd755c24ce22910431dda438b3f9bdaf85dacccb914426ef1539dbd4",
       "proof_sha256": "a7bec316115fe6a074cc4e67ef1808ea1d5795224a3a1a574be027a486605113",
       "written_review": "scoped_conditional_argument",
       "formalization_status": "not_run",
       "lean_file": null,
       "lean_declaration": null,
-      "disposition": "retained",
+      "disposition": "revised_narrower_scope",
       "author_full_review": false,
       "paper_number": "4.5",
-      "pdf_page": 35
+      "pdf_page": 35,
+      "scope_review": "conditional_reduced_not_full_competitive_equilibrium",
+      "last_source_edit": "2026-11-07",
+      "current_proposition_and_proof_raw_tex_sha256": "2474af916bf6536a61387eefd29e6fbf5642e0be879bea765f6e68ae5c88c27a",
+      "original_statement_hash_scope": "historical snapshot; current TeX SHA tracked separately"
     },
     {
       "label": "lem:sspositive",
@@ -811,5 +819,10 @@
   ],
   "formalization_scope": "Preliminary isolated campaign on the previous source; no numbered result promoted to integrated source-matched Lean coverage.",
   "source_before_irf_revision_sha256": "a89e83f02cb8745a6c59eeb3c047bcb335033a18eae4b0ea538ce47a61cf7764",
-  "page_numbers_scope": "Historical locations in the pre-IRF PDF; use labels in the current PDF."
+  "page_numbers_scope": "Historical locations in the pre-IRF PDF; use labels in the current PDF.",
+  "editorial_scope_revision": {
+    "date": "2026-11-07",
+    "status": "conditional_reduced",
+    "note": "Two central propositions narrowed. Historical statement_sha256/proof_sha256 retained, current raw TeX hash stored per revised row. Lean free-dual uniqueness refuted; full equilibrium remains open."
+  }
 }
