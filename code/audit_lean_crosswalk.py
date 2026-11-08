@@ -34,11 +34,19 @@ ALLOWED_RELATIONS = {
     "exact_interface_claim_kernel_verified",
     "corrected_economic_claim_kernel_verified",
     "counterexample_malformed_interface_kernel_verified",
+    "auxiliary_claim_kernel_verified",
 }
 GREEN_SOURCE_FINANCIAL_RUN = 42457259796
 GREEN_SOURCE_FINANCIAL_SHA = "c006e00c437243c3f6f44ec3c102df4286c545e0"
 GREEN_REPAYMENT_RUN = 42458034938
 GREEN_REPAYMENT_SHA = "acc4263a2c60c6ec3a90c3331aef9cb522e4427a"
+GREEN_LOSS_AUX_RUN = 42458449121
+GREEN_LOSS_AUX_SHA = "1e797f886dea03a6fdea135338e6408a3e8ab91b"
+EXPECTED_VERIFIED_LOSS_AUX = {
+    "allocation_loss_log_differential_algebra",
+    "output_share_gt_capital_share_iff_productivity",
+    "loss_direction_negative_of_reallocation",
+}
 EXPECTED_EXACT_CANDIDATES = {
     "lem:repayment": "exact_repaymentSpec",
     "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
@@ -78,6 +86,7 @@ def main() -> None:
     green_exact = {}
     green_corrected = {}
     green_refutations = {}
+    green_loss_aux = set()
     for row in data["entries"]:
         label = row["label"]
         old = original[label]
@@ -107,6 +116,18 @@ def main() -> None:
                     f"{label}: invalid theorem relation {rel}")
             if rel == "counterexample_to_stronger_literal_interface":
                 refutations += 1
+            if rel == "auxiliary_claim_kernel_verified":
+                require(label == "lem:allocation_loss_identity",
+                        "Loss auxiliary theorem attached to wrong claim")
+                require(item["declaration"] in EXPECTED_VERIFIED_LOSS_AUX,
+                        "Unexpected loss auxiliary theorem promoted")
+                require(item["declaration"] not in green_loss_aux,
+                        "Duplicate verified loss auxiliary theorem")
+                require(item.get("lean_ci_run_id") == GREEN_LOSS_AUX_RUN
+                        and item.get("lean_ci_commit") == GREEN_LOSS_AUX_SHA
+                        and item.get("lean_axiom_audit") == "passed_no_sorryAx",
+                        "Loss auxiliary theorem not pinned to verified Lean run")
+                green_loss_aux.add(item["declaration"])
             if rel in ("exact_interface_claim_candidate_ci_pending",
                        "exact_interface_claim_kernel_verified"):
                 require(label in EXPECTED_EXACT_CANDIDATES,
@@ -179,6 +200,8 @@ def main() -> None:
             require((ROOT / target).is_file(),
                     f"{label}: missing numerical evidence {target}")
     require(refutations == 1, "Expected exactly one literal specification refutation.")
+    require(green_loss_aux == EXPECTED_VERIFIED_LOSS_AUX,
+            f"Loss auxiliary proof set incomplete: {green_loss_aux}")
     require(green_exact == {
         "lem:repayment": "exact_repaymentSpec",
         "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
@@ -217,6 +240,8 @@ def main() -> None:
         "malformed_source_specifications_kernel_refuted": len(green_refutations),
         "verified_financial_run": GREEN_SOURCE_FINANCIAL_RUN,
         "verified_repayment_run": GREEN_REPAYMENT_RUN,
+        "verified_loss_auxiliary_run": GREEN_LOSS_AUX_RUN,
+        "verified_loss_auxiliary_lemmas": len(green_loss_aux),
         "unproved_source_specifications": source_specifications,
         "complete_paper_theorems_proved_in_lean_by_this_audit": 0,
         "full_equilibrium_confirmed": False,
