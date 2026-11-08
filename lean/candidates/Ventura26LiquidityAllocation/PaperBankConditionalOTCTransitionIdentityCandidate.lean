@@ -279,5 +279,68 @@ theorem source_full_retention_tvc_of_source_conditional_otc_growth
 #print axioms source_discounted_bank_mass_next_eq_conditional_growth
 #print axioms source_full_retention_tvc_of_source_conditional_otc_growth
 
+
+/-!
+## Finite support reduction (new proof obligation toward zero-equity boundary)
+
+The next two purely finite-sum results do NOT remove source positivity
+assumptions from the exact OTC transition. They show that zero-probability
+or zero-equity parent nodes contribute no mass and that a conditional
+growth enclosure is only needed at active nodes. To apply them to the
+source transition, a zero-equity absorption result for source full
+retention, and a child-mass identity on active nodes, are still needed.
+-/
+
+/-- Histories with zero probability or zero bank equity have exactly
+zero contribution to a finite discounted mass. This is an algebraic
+support reduction, not a new economic assumption. -/
+theorem weighted_sum_eq_active_support
+    {A : Type*} [Fintype A]
+    (p equity sdf : A → ℝ) :
+    (∑ a : A, p a * (equity a * sdf a)) =
+      (Finset.univ.filter (fun a => p a ≠ 0 ∧ equity a ≠ 0)).sum
+        (fun a => p a * (equity a * sdf a)) := by
+  classical
+  rw [Finset.sum_filter]
+  apply Finset.sum_congr rfl
+  intro a _ha
+  by_cases hp : p a = 0
+  · simp [hp]
+  by_cases he : equity a = 0
+  · simp [he]
+  · simp [hp, he]
+
+/-- A conditional bound on *active* histories suffices for a weighted
+expectation inequality. No return bound is required at zero-mass nodes. -/
+theorem weighted_conditional_bound_on_active_support
+    {A : Type*} [Fintype A]
+    (p equity growth : A → ℝ) (grossBound : ℝ)
+    (hp : ∀ a, 0 ≤ p a)
+    (he : ∀ a, 0 ≤ equity a)
+    (hg : ∀ a, p a ≠ 0 → equity a ≠ 0 →
+      growth a ≤ grossBound) :
+    (∑ a : A, (p a * equity a) * growth a) ≤
+      grossBound * (∑ a : A, p a * equity a) := by
+  classical
+  calc
+    (∑ a : A, (p a * equity a) * growth a) ≤
+        ∑ a : A, (p a * equity a) * grossBound := by
+      apply Finset.sum_le_sum
+      intro a _ha
+      by_cases hzeroP : p a = 0
+      · simp [hzeroP]
+      by_cases hzeroE : equity a = 0
+      · simp [hzeroE]
+      · exact mul_le_mul_of_nonneg_left
+          (hg a hzeroP hzeroE) (mul_nonneg (hp a) (he a))
+    _ = grossBound * (∑ a : A, p a * equity a) := by
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro a _ha
+      ring
+
+#print axioms weighted_sum_eq_active_support
+#print axioms weighted_conditional_bound_on_active_support
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
