@@ -56,6 +56,33 @@ la evidencia verde de estos cuatro objetos, pero
 **proposiciones Lean exactas o corregidas**, no por ello
 la totalidad de las obligaciones intertemporales del paper.
 
+## Actualización AM–GM: cota global normalizada verificada
+
+El conjunto de cuatro teoremas de
+`PaperAllocationEfficiencySupportCandidate.lean` **pasó el kernel
+Lean y `#print axioms` sin `sorryAx`** en
+[CI focalizada #42459394970](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42459394970),
+commit `8e883b7993f39d29ae431c44a6a14e45ca55707d`:
+`normalized_two_type_output_le_benchmark`,
+`normalized_benchmark_attained`,
+`normalized_log_loss_nonneg` y
+`efficient_candidate_clears_resources`.
+
+Es una prueba global bajo presupuestos normalizados,
+no solo KKT. Falta el transporte formal a la tecnología
+individual original, el reparto óptimo de trabajo,
+las definiciones físicas de `Y` y `Yeff` y la
+derivada del índice de pérdida desde los agregadores
+Cobb–Douglas. El `PaperInterface.allocationLossIdentitySpec`
+carece además de restricciones que hagan comunes los
+exponentes de H y L, define `Y` y `Yeff` por las
+igualdades que después repite, y omite la derivada
+completa del paper. Por ello **no** se declara resuelto
+el Lema 4.3 integral.
+
+Véase `docs/LEMA_4_3_PUENTE_EFICIENCIA_AMGM_20261108.md`
+para la reconstrucción analítica y los puentes pendientes.
+
 ## 1. Veredicto general sin sobredeclaración
 
 Se han inspeccionado de manera dirigida **24 de 57** afirmaciones:
