@@ -40,5 +40,22 @@ for rel in LOGS:
     else:
         print(f"PASS {rel}: no unresolved references, citations, errors or overfull boxes"
               f" (underfull informational={under})")
+# Official issue #7: the body must occupy 8--20 pages, title to conclusion.
+# The source emits a marker only AFTER a clearpage flushes pending figures,
+# and BEFORE bibliography, so neither references nor appendices are counted.
+paper_log = ROOT / "paper/paper.log"
+if paper_log.is_file():
+    source = paper_log.read_text(encoding="utf-8", errors="replace")
+    page_markers = re.findall(r"IE_COMPACT_BODY_PAGES=(\\d+)", source)
+    if not page_markers:
+        print("FAIL paper: compact body page marker missing")
+        bad = True
+    else:
+        body_pages = int(page_markers[-1])
+        if not 8 <= body_pages <= 20:
+            print(f"FAIL paper: compact body has {body_pages} pages (required: 8--20)")
+            bad = True
+        else:
+            print(f"PASS paper: compact body has {body_pages} pages (required: 8--20)")
 if bad:
     sys.exit(1)
