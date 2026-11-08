@@ -24,8 +24,8 @@ parametros concretos de Python.
 | 9 | Oferta de trabajo, t=0 | Equivalencia log/niveles; `sigmaW=phi=1` | Lema Lean verificado; instancia y dominio pendientes |
 | 10 | Euler de depositos del hogar, t=0 | Equivalencia log/niveles; `sigmaW=1` | Lema Lean verificado; instancia y dominio pendientes |
 | 11 | Phillips Rotemberg, t=0 | Descuento del hogar, `phiP`, inflacion y output | Pendiente |
-| 12 | Regla de tasa de reservas, t=0 | Logaritmos, persistencias, metas e innovacion | Objetivo exp fuente verificado; puente con `auxiliary` candidato |
-| 13 | Regla de cantidad de reservas, t=0 | Logaritmos, persistencias, metas e innovacion | Objetivo exp fuente verificado; puente con `auxiliary` candidato |
+| 12 | Regla de tasa de reservas, t=0 | Regla fuente, objetivo exp y log-residuo de `auxiliary()` | Objetivo y formula exp verificados; ratio realizado/objetivo candidato; datos pendientes |
+| 13 | Regla de cantidad de reservas, t=0 | Regla fuente, objetivo exp y log-residuo de `auxiliary()` | Objetivo y formula exp verificados; ratio realizado/objetivo candidato; datos pendientes |
 | 14 | Precio del prestamo, t=0 | Formula OTC y media de pendientes | Pendiente |
 | 15 | Precio del deposito, t=0 | Formula OTC, cantidad y shocks de pagos | Pendiente |
 | 16 | Balance bancario, t=0 | Ratio reservas/depositos, faces e inflacion | Pendiente |
@@ -33,15 +33,15 @@ parametros concretos de Python.
 | 18 | Presupuesto empresarial L, t=1 | Mismo cotejo de fuente, datos fecha 1 | Pendiente |
 | 19 | Euler de capital H, t=1 | Producto marginal y continuation t=2 | Pendiente |
 | 20 | Euler de capital L, t=1 | Producto marginal y continuation t=2 | Pendiente |
-| 21 | Garantia comun de capital t=1 | Residuos en niveles, fila reescrita por Python | Pendiente |
+| 21 | Garantia comun de capital t=1 | Equivalencia logaritmo/nivel del compromiso a t=2 | Lema fuente candidato bajo colateral y denominador positivos |
 | 22 | Renovacion nominal bancaria, t=1 | Lema generico log/niveles para fuente `d1` | Lemas fuente y compatibilidad algebraica verificados; datos `d1` pendientes |
 | 23 | Oferta de capital, t=1 | Datos t=1 y continuation t=2 | Pendiente |
 | 24 | Recursos, t=1 | Datos t=1 y continuation t=2 | Pendiente |
 | 25 | Oferta de trabajo, t=1 | Lema generico log/niveles para fuente `d1` | Lema Lean verificado; instancia `d1` pendiente |
 | 26 | Euler del hogar, t=1 | Lema generico log/niveles para fuente `d1` | Lema Lean verificado; instancia `d1` pendiente |
 | 27 | Phillips, t=1 | Datos t=1, indexacion y continuation | Pendiente |
-| 28 | Regla tasa reservas, t=1 | Calendario, persistencia e innovaciones t=1 | Objetivo exp fuente verificado; calendario e instanciacion pendientes |
-| 29 | Regla cantidad reservas, t=1 | Calendario, persistencia e innovaciones t=1 | Objetivo exp fuente verificado; calendario e instanciacion pendientes |
+| 28 | Regla tasa reservas, t=1 | Regla generica reusada en datos de t=1 | Objetivo y formula exp verificados; ratio candidato; calendario pendiente |
+| 29 | Regla cantidad reservas, t=1 | Regla generica reusada en datos de t=1 | Objetivo y formula exp verificados; ratio candidato; calendario pendiente |
 | 30 | Precio prestamos, t=1 | OTC y estado heredado t=1 | Pendiente |
 | 31 | Precio depositos, t=1 | OTC y estado heredado t=1 | Pendiente |
 | 32 | Balance bancario, t=1 | Ratio reservas/depositos y faces t=1 | Pendiente |
@@ -209,14 +209,41 @@ El modulo `LocalScalarPythonMonetaryRuleBridgeCandidate.lean`
 **verifico en Lean** las igualdades de *residuos logaritmicos expandidos*
 bajo las hipotesis de coeficientes y positividad en
 [CI 42451697663](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42451697663),
-incluido el control de axiomas sin `sorryAx`. El codigo Python calcula
-los objetivos con exponenciales, por lo que aun resta demostrar
-o cotejar la identidad `log(RR_target)` con el log objetivo
-especializado bajo positividad, y conectar de forma literal
-las columnas del vector fuente con las de Python en ambas fechas.
+incluido el control de axiomas sin `sorryAx`. Los objetivos exponenciales fuente son exactamente las
+formulas `auxiliary()` en las hipotesis formales probadas por
+`LocalScalarPythonMonetaryExpTargetsCandidate.lean` en
+[CI 42451786387](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42451786387),
+sin `sorryAx`. El modulo propuesto
+`LocalScalarPythonMonetaryFullRowsCandidate.lean`
+une adicionalmente los residuos completos `log(realized/target)`
+a las filas monetarias fuente 12/13 y 28/29; su compilacion
+propia es PENDIENTE. Sigue abierta la identificacion concreta
+de las columnas del vector, los anuncios y el calendario
+entre Python y Lean en ambas fechas.
 
 **Diferencia conceptual:** `e_R` altera la regla de remuneracion
 de reservas y `e_M` su regla de cantidad. El experimento con
 `v_R` no puede identificarse con cambios en `reserveRequirementPath`
 ni `corridorWidthPath` sin nueva prueba.
 
+## Fila 21: log de garantia comun y residuo de fuente
+
+El evaluador Python usa
+`log(J2/(ad * Pi2 * Q2))` para su ecuacion de garantia
+comun. El residual original en `EconomicModel.lean` es
+`J2-(1-depreciation)*Pi2*Q2`. La equivalencia de CEROS
+(no de jacobianos) requiere
+`J2>0`, `ad>0`, `Pi2>0`, `Q2>0` y que
+`ad=1-P.depreciation` con variables fuente
+identificadas con las de Python.
+
+El modulo candidato
+`LocalScalarCommonPledgeLogZeroCandidate.lean`
+formaliza esa equivalencia y deriva la positividad
+del denominador a partir de la depreciacion y los
+precios futuros estrictamente positivos; debe
+pasar CI Lean antes de ser promovido a demostrado.
+
+Tampoco la equivalencia de la fila 21 acredita una
+transicion `t=2` competitiva con cola infinita:
+el calendario y las continuaciones siguen abiertos.
