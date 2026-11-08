@@ -49,7 +49,10 @@ jobs:
           assert all(len(row)==5 for row in d['point_policy_derivative_box'])
           assert d['point_policy_derivative_box'][5][0]==['-1','-1']
           assert len(d['funding_dual_state_gradient_box']) == 33
-          assert d['funding_dual_direct_parameter_derivatives']==[['0','0']]*4
+          from fractions import Fraction as Q
+          assert len(d['funding_dual_direct_parameter_derivatives'])==4
+          assert all(Q(lo)==0 and Q(hi)==0 for lo,hi
+                     in d['funding_dual_direct_parameter_derivatives'])
           assert d['uniform_ball_jacobian_enclosures_proven'] is False
           assert d['exact_zero_center_proven'] is False
           assert d['economic_source_row_map_proven'] is False
