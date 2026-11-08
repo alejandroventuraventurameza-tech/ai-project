@@ -97,3 +97,66 @@ complementariedad escalar bajo supuestos expuestos. NO hay aun un
 teorema Lean correspondiente al enunciado completo de la
 Proposicion 4.2, no hay testigos completos de equilibrio para S y B
 y no se ha demostrado crecimiento sostenido.
+
+## 7. Bifurcacion parametrica local: revision Lean verificada
+
+Revision de **codigo**: `944e88493d9dec319193f82e5761ed00a605fb1b`.
+Auditoria especializada:
+[Lean 4 candidate audit 42437102498](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42437102498)
+(`success`). Se inspecciono tambien el artefacto de logs `lean-candidate-audit-logs`
+de esa ejecucion: los nueve teoremas nuevos de los siguientes cuatro
+modulos se elaboraron sin `sorryAx`. Las listas de axiomas incluyen solo
+`propext`, `Classical.choice` y `Quot.sound`.
+
+- `LocalScalarShockSignCandidate.lean`: una derivada negativa en cero
+  y valor inicial nulo producen signos estrictos opuestos a los dos
+  lados de cero, y una derivada positiva implica signo negativo bajo
+  perturbaciones negativas suficientemente pequenas.
+- `LocalScalarPolicyBifurcationCandidate.lean`: para `M(s,h)`, si
+  `d_h M(0,0)=a<0` y una trayectoria transversal `s=-K h`,
+  `K>0`, tiene derivada `c>0` en cero, continuidad y antitonicidad
+  local de cada corte `M(.,h)` implican un `delta>0` y para cada
+  `-delta<h<0` una raiz unica `0<r(h)<-K h`. Las soluciones
+  complementarias *dentro de ese intervalo* son `0` y `r(h)`.
+  Para `0<h<delta`, una condicion analoga de antitonicidad
+  excluye soluciones locales. No se presupone una raiz positiva.
+- `LocalScalarJointDerivativeBridgeCandidate.lean`: las derivadas
+  direccionales del eje de politica y de la trayectoria proceden de
+  un unico `HasFDerivAt` del mapa bivariado en `(0,0)`. Esto
+  prueba las conclusiones parametricas bajo los signos del operador
+  lineal y la regularidad de los cortes locales.
+- `LocalScalarTransverseRayCertificateCandidate.lean`: para un
+  operador lineal continuo `L` sobre `R x R`, si
+  `a=L(0,1)<0` y `b=L(1,0)<0`, se prueba
+  `exists K>0, L(-K,1)>0`. La construccion concreta
+  `K=(1-a)/(-b)` da `L(-K,1)=1`. La existencia de la
+  trayectoria no se postula.
+
+**Instrumento:** en el codigo original, `h=v_R` se inyecta mediante
+`localScalarParameterIntervention.reserveRateInnovation`.
+No se debe rebautizar automaticamente como shock a la tasa de
+politica general, coeficiente de encaje ni remuneracion sin mantener
+las etiquetas economicas y unidades exactas. Las demas innovaciones
+`v_M, v_rho, v_Delta` permanecen fijas en esta especializacion.
+
+**Puentes pendientes y no demostrados:**
+
+1. Exponer como `M(s,h)` del candidato es exactamente el
+   `localScalarReducedMap` evaluado en la perturbacion de
+   `Fin 5`, y certificar `M(0,0)=0`.
+2. Obtener la derivada conjunta de `M` desde la solucion local
+   de las 33 filas, incluyendo las derivadas firmadas y el control
+   de regularidad en un entorno; no confundir una cota de derivada
+   en el origen con la monotonia de todos los cortes.
+3. Establecer el dominio de continuacion y signos sobre el cono
+   `0<=s<=-K*h` para cada `h<0`, mas la recuperacion unica de
+   las 33 incognitas y la correspondencia correcta de las ramas S/B.
+4. Construir testigos de equilibrio infinito, optimalidad de
+   todos los agentes, transversales, clearing y estabilidad de
+   la cola para ambas ramas. Ninguno de los lemas de esta seccion
+   establece esto, crecimiento permanente ni cuantifica bienestar.
+
+La Proposicion 4.2 conserva por tanto el estatus de
+**argumento condicional de multiplicidad reducida** con una
+subcadena escalar paramatrica ahora verificada en Lean. No se
+promueve su afirmacion economica completa a teorema Lean cerrado.
