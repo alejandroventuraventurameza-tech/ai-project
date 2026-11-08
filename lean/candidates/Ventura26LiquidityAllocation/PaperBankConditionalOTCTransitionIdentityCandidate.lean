@@ -474,5 +474,63 @@ theorem source_full_retention_zero_equity_absorbing_of_bank_feasible
 
 #print axioms source_full_retention_zero_equity_absorbing_of_bank_feasible
 
+
+/-!
+## Finite parent-child mass bridge on active support
+
+These two statements isolate the remaining aggregation obligation.
+In particular, a zero parent only needs a zero *weighted* child
+contribution; it need not have a well-defined return ratio.
+To instantiate them for SOURCE OTC, the child identity must be
+derived using supported transitions and the source zero-equity
+absorption theorem. No economic result is promoted here.
+-/
+
+/-- A parent-child mass identity only needs to be checked separately
+at active and zero-equity parents. This is a finite-sum statement,
+not an assertion that source equilibrium supplies the premises. -/
+theorem parent_child_mass_eq_of_active_and_zero
+    {A B : Type*} [Fintype A] [Fintype B]
+    (weight equity growth : A → ℝ) (childMass : A → B → ℝ)
+    (hactive : ∀ a, equity a ≠ 0 →
+      (∑ b : B, childMass a b) =
+        (weight a * equity a) * growth a)
+    (hzero : ∀ a, equity a = 0 →
+      ∀ b : B, childMass a b = 0) :
+    (∑ a : A, ∑ b : B, childMass a b) =
+      ∑ a : A, (weight a * equity a) * growth a := by
+  classical
+  apply Finset.sum_congr rfl
+  intro a _ha
+  by_cases he : equity a = 0
+  · simp [hzero a he, he]
+  · exact hactive a he
+
+/-- Under nonnegative parent mass and an active-only bound on
+conditional growth, the full child mass is bounded by the parent mass.
+This avoids any return-ratio hypothesis at the zero-equity boundary. -/
+theorem parent_child_mass_le_of_supported_growth
+    {A B : Type*} [Fintype A] [Fintype B]
+    (weight equity growth : A → ℝ) (childMass : A → B → ℝ)
+    (grossBound : ℝ)
+    (hw : ∀ a, 0 ≤ weight a)
+    (he : ∀ a, 0 ≤ equity a)
+    (hactive : ∀ a, equity a ≠ 0 →
+      (∑ b : B, childMass a b) =
+        (weight a * equity a) * growth a)
+    (hzero : ∀ a, equity a = 0 →
+      ∀ b : B, childMass a b = 0)
+    (hbound : ∀ a, weight a ≠ 0 → equity a ≠ 0 →
+      growth a ≤ grossBound) :
+    (∑ a : A, ∑ b : B, childMass a b) ≤
+      grossBound * (∑ a : A, weight a * equity a) := by
+  rw [parent_child_mass_eq_of_active_and_zero
+    weight equity growth childMass hactive hzero]
+  exact weighted_conditional_bound_on_active_support
+    weight equity growth grossBound hw he hbound
+
+#print axioms parent_child_mass_eq_of_active_and_zero
+#print axioms parent_child_mass_le_of_supported_growth
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
