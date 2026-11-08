@@ -46,7 +46,7 @@ for rel in LOGS:
 paper_log = ROOT / "paper/paper.log"
 if paper_log.is_file():
     source = paper_log.read_text(encoding="utf-8", errors="replace")
-    page_markers = re.findall(r"IE_COMPACT_BODY_PAGES=(\\d+)", source)
+    page_markers = re.findall(r"IE_COMPACT_BODY_PAGES=(\d+)", source)
     if not page_markers:
         print("FAIL paper: compact body page marker missing")
         bad = True
