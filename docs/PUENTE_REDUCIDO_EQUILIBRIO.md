@@ -268,3 +268,58 @@ al KKT local de L es una cadena de pruebas Lean *bajo
 hipotesis explicitas*. La Proposicion 4.2 **no** debe
 promoverse aun a prueba de dos equilibrios competitivos
 completos ni de crecimiento de largo plazo.
+
+## 9. Puente C1 a monotonia local: nueva cadena Lean verificada
+
+**Codigo:** `LocalScalarEconomicC1MonotonicityCandidate.lean`,
+commit `80a53bb6fe79e62a133df73e65ef08fed366d7c5`,
+[CI 42442206679](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42442206679)
+(`success`). Los cuatro teoremas del modulo tienen unicamente
+`propext`, `Classical.choice` y `Quot.sound` como axiomas
+y ningun `sorryAx` (logs individuales y `axioms.log` inspeccionados).
+
+**Hipotesis mas debil que C1:** continuidad en el origen de
+`y ↦ (fderiv R M y) localScalarSlackDirection`.
+Como `LocalScalarImplicitReduction` ya afirma
+`(fderiv R M 0) localScalarSlackDirection < 0`, esa
+continuidad implica una bola con derivada direccional
+estrictamente negativa. La cota del cono
+`norm(reserveRemunerationSlice s h) <= abs(s)+abs(h)`
+entonces proporciona para cada `K>0` un radio `rhoK>0`
+donde `s ↦ M(s,h)` es continua y estrictamente decreciente
+sobre `[0,-K*h]`, con `-rhoK<h<0`.
+**La antitonicidad deja de ser una hipotesis separada**.
+El teorema final del modulo construye las dos soluciones
+complementarias locales y verifica las 33 filas modificadas
+en ambas, bajo `LocalScalarImplicitReduction`,
+`M(0)=0` y continuidad direccional del Schur en cero.
+
+**Puente a la notacion del manuscrito:**
+`LocalScalarEconomicContDiffBridgeCandidate.lean`,
+commit `f781f17a7beb6bd7aa663bbf39b2e5bb9090540c`,
+[CI 42442264792](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42442264792)
+(`success`). Los dos teoremas se elaboraron sin `sorryAx`.
+`ContDiffAt R 1 M 0` implica continuidad de `fderiv M`
+en cero y, por evaluacion en la direccion de slack,
+la condicion de continuidad anterior. Esta es una
+**implicacion de analisis demostrada**, no prueba que
+la `M` del sistema calibrado satisfaga `ContDiffAt`.
+
+**No atribuir a estos lemas** existencia o unicidad de
+`solutionLog` para las 33 ecuaciones; valores firmados
+del Jacobiano real; realizacion de ramas S/B de la estructura
+`Allocation`; ni trayectorias macroeconomicas o crecimiento.
+
+**Nota de trazabilidad numerica:** el archivo
+`code/v0m/cierre_interno_2026_10_17/finite_bridge_certificate.json`
+reporta un intervalo negativo para
+`branches.binding.reduced_mu_derivative_with_respect_to_slack`;
+`branches.slack.reduced_mu_derivative_with_respect_to_slack`
+figura `null`. No tratar ambas ramas como portadoras de
+un certificado numerico independiente del mismo tipo.
+
+**Proximo cierre:** identificar un testigo fuente de
+`LocalScalarImplicitReduction`, `ContDiffAt R 1`
+y `M(0)=0` conectado al Jacobiano original con
+aritmetica intervalar; despues establecer suficiencia
+de todas las condiciones originales y la cola dinamica.
