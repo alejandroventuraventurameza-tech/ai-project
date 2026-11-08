@@ -5,8 +5,8 @@
   "checked_branch": "work/lean-ci-validation-otc-20261106",
   "reviewed_date": "2026-11-08",
   "claim_count": 57,
-  "status_policy": "No equivalence/full coverage is certified by locating or compiling a related lemma. The 57 source ledger formalization_status values stay not_run until exact statements, hypotheses, and kernel scope are proven equal.",
-  "source_module_check": "Syntactic declaration inspection only; source theorem existence is NOT theorem/paper equivalence.",
+  "status_policy": "All 57 numbered claims retained. Source functions and exact PaperInterface proof candidates are NOT counted as kernel verified until the matching CI run passes. Do not infer economic equilibrium or full program completion from these bridges.",
+  "source_module_check": "Targeted mathematical inspection for all 14 main-text numbered claims, with seven new comparisons; theorem references verified syntactically and exact PaperInterface bridge remains CI-pending.",
   "scope": "57 numbered claims including historical appendices; current PDF page numbers in the original ledger are stale after compact layout.",
   "entries": [
     {
@@ -15,10 +15,23 @@
       "title": "Suficiencia de la cobertura para repago",
       "paper_statement_sha256": "7a94d9c8bb5c81183a8de8deae542ba158a29f00faf600a6495081e24817e679",
       "source_ledger_formalization_status": "not_run",
-      "review_state": "not_yet_semantically_reviewed",
+      "review_state": "targeted_semantic_comparison",
       "paper_proof_equivalent_in_lean": "not_established",
-      "related_lean_declarations": [],
-      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/checkpoint/modules/Ventura26LiquidityAllocation/PaperInterface.lean",
+          "declaration": "repaymentSpec",
+          "relationship": "unproved_source_specification",
+          "note": "Especificación exacta del lema; una definición Prop no es una demostración."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/OneSidedCollateralMonotonicityCandidate.lean",
+          "declaration": "robustCollateral_capital_mono_of_nonneg_prices",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Preserva garantía por hijo ante un incremento de capital, no prueba riqueza futura."
+        }
+      ],
+      "semantic_gap": "RobustCollateral impone una desigualdad por hijo y los lemas auxiliares preservan cobertura, pero no se ha localizado una prueba de todas las conclusiones de patrimonio no negativo en repaymentSpec. Los dividendos/beneficios, depósitos, tasa bruta y soporte deben cotejarse."
     },
     {
       "paper_number": "3.2",
@@ -26,10 +39,23 @@
       "title": "No ahorrar y endeudarse simultáneamente",
       "paper_statement_sha256": "d44f2c87cbebcf2801541ce8152347066d49a47c49402b4cf995f81a543d5c97",
       "source_ledger_formalization_status": "not_run",
-      "review_state": "not_yet_semantically_reviewed",
+      "review_state": "targeted_semantic_comparison",
       "paper_proof_equivalent_in_lean": "not_established",
-      "related_lean_declarations": [],
-      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/checkpoint/modules/Ventura26LiquidityAllocation/FinancialCore.lean",
+          "declaration": "no_simultaneous_saving_and_borrowing",
+          "relationship": "source_financial_proof_related",
+          "note": "Prueba exclusión por KKT y tasas bajo PositiveFinancialDomain."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperFinancialMainExactCandidate.lean",
+          "declaration": "exact_noSimultaneousSavingBorrowingSpec",
+          "relationship": "exact_interface_claim_candidate_ci_pending",
+          "note": "Candidato que demuestra literalmente noSimultaneousSavingBorrowingSpec, sujeto al kernel y auditoría de axiomas."
+        }
+      ],
+      "semantic_gap": "FinancialCore prueba exclusión de posiciones brutas simultáneas bajo KKT normalizadas, tasa de préstamos superior y descuento positivo. El enunciado literal del PaperInterface incluye NormalizedFirmMarginalDiscount; el nuevo puente reproduce los cuantificadores y está pendiente de auditoría Lean antes de marcar cobertura integrada."
     },
     {
       "paper_number": "3.3",
@@ -51,9 +77,21 @@
           "declaration": "firmFeasible_binding_capital_formula",
           "relationship": "auxiliary_or_conditional_only",
           "note": "Conecta presupuesto y garantía activa con el modelo fuente bajo depósitos empresariales nulos."
+        },
+        {
+          "relative_path": "lean/checkpoint/modules/Ventura26LiquidityAllocation/FinancialCore.lean",
+          "declaration": "financingCapacity_hasDerivAt_and_deriv_neg",
+          "relationship": "source_financial_proof_related",
+          "note": "Demostración fuente exacta de signo y derivada para precios y recursos fijos."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperFinancialMainExactCandidate.lean",
+          "declaration": "exact_financingCapacityComparativeSpec",
+          "relationship": "exact_interface_claim_candidate_ci_pending",
+          "note": "Candidato que prueba la especificación literal del PaperInterface."
         }
       ],
-      "semantic_gap": "La prueba Lean es una comparación ordinal para fondos internos, q y garantía fijos; no reproduce literalmente la derivada cerrada ni una estática comparativa general de equilibrio."
+      "semantic_gap": "El bloque FinancialCore contiene la derivada exacta de capacidad con fondos, q y colateral fijos. La nueva prueba candidata establece la especificación literal financingCapacityComparativeSpec; falta compilarla y revisar axiomas antes de promover formalización, y no constituye estática comparativa de equilibrio."
     },
     {
       "paper_number": "3.4",
@@ -61,10 +99,23 @@
       "title": "Equivalencia de la financiación con signo",
       "paper_statement_sha256": "e47c12008123669cabba088fe9249940bb425a344e75d252ae01ccf28b3cc8b8",
       "source_ledger_formalization_status": "not_run",
-      "review_state": "not_yet_semantically_reviewed",
+      "review_state": "targeted_semantic_comparison",
       "paper_proof_equivalent_in_lean": "not_established",
-      "related_lean_declarations": [],
-      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/checkpoint/modules/Ventura26LiquidityAllocation/FinancialCore.lean",
+          "declaration": "signedFundingEquivalence",
+          "relationship": "source_financial_proof_related",
+          "note": "Cubre cartera bruta, promesa firmada, ganancia estricta de caja y recuperación; no el isomorfismo de planes infinitos."
+        },
+        {
+          "relative_path": "lean/checkpoint/modules/Ventura26LiquidityAllocation/PaperInterface.lean",
+          "declaration": "signedFundingEquivalenceSpec",
+          "relationship": "unproved_source_specification",
+          "note": "La especificación completa de planes óptimos sigue sin prueba íntegra de igual alcance."
+        }
+      ],
+      "semantic_gap": "FinancialCore demuestra equivalencia de cartera y caja fecha a fecha, pero el PaperInterface exige transportar optimalidad de planes infinitos, admisibilidad, continuidad y cierre de funciones objetivo; dicho puente global no se deriva automáticamente."
     },
     {
       "paper_number": "3.5",
@@ -72,10 +123,23 @@
       "title": "Superdiferencial exacto de la financiación",
       "paper_statement_sha256": "58965478503206d9e0347a817d25d72f48cd6073d3ae2e781bff1ba7ad2500bc",
       "source_ledger_formalization_status": "not_run",
-      "review_state": "not_yet_semantically_reviewed",
+      "review_state": "targeted_semantic_comparison",
       "paper_proof_equivalent_in_lean": "not_established",
-      "related_lean_declarations": [],
-      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/checkpoint/modules/Ventura26LiquidityAllocation/FinancialCore.lean",
+          "declaration": "isFundingSupergradient_iff_cases",
+          "relationship": "source_financial_proof_related",
+          "note": "Teorema original del superdiferencial completo, bajo 0<RD<RL."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/PaperFinancialMainExactCandidate.lean",
+          "declaration": "exact_fundingSupergradientSpec",
+          "relationship": "exact_interface_claim_candidate_ci_pending",
+          "note": "Candidato de prueba exactamente del predicado fundingSupergradientSpec."
+        }
+      ],
+      "semantic_gap": "La equivalencia entre la desigualdad global de supergradiente y las tres ramas, incluido todo el intervalo en la esquina cero, coincide con la definición fuente. El nuevo módulo prueba el objeto literal fundingSupergradientSpec, pero todavía no se eleva a verificado hasta su compilación y auditoría de axiomas."
     },
     {
       "paper_number": "3.6",
@@ -101,10 +165,23 @@
       "title": "Corredor y monotonía",
       "paper_statement_sha256": "b05d283497c7da5b7abfe75704e0196c9fb2c4715100da952ecaa177aa67f4dd",
       "source_ledger_formalization_status": "not_run",
-      "review_state": "not_yet_semantically_reviewed",
+      "review_state": "targeted_semantic_comparison",
       "paper_proof_equivalent_in_lean": "not_established",
-      "related_lean_declarations": [],
-      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean",
+          "declaration": "otcCorridorWeight_mem",
+          "relationship": "source_financial_proof_related",
+          "note": "Cota del peso de Nash; no alcanza al resultado de monotonía."
+        },
+        {
+          "relative_path": "lean/checkpoint/modules/Ventura26LiquidityAllocation/PaperInterface.lean",
+          "declaration": "otcCorridorMonotonicitySpec",
+          "relationship": "unproved_source_specification",
+          "note": "La proposición íntegra está especificada como Prop y no se acredita aquí su prueba."
+        }
+      ],
+      "semantic_gap": "otcCorridorWeight_mem demuestra el peso OTC estrictamente entre cero y uno bajo tightness positiva, por tanto la tasa se sitúa en el corredor si el corredor es estricto. No demuestra continuidad en tightness=1 ni StrictMono del peso en ambos tramos para intensidad de matching positiva."
     },
     {
       "paper_number": "3.8",
@@ -214,10 +291,20 @@
       "title": "Referencia eficiente y derivada de reasignación",
       "paper_statement_sha256": "b69871efd0fd457e84ee03180b8ee1493acb2f6f25b162994f43006fbd6268ee",
       "source_ledger_formalization_status": "not_run",
-      "review_state": "not_yet_semantically_reviewed",
+      "review_state": "targeted_semantic_comparison",
       "paper_proof_equivalent_in_lean": "not_established",
-      "related_lean_declarations": [],
-      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/checkpoint/modules/Ventura26LiquidityAllocation/PaperInterface.lean",
+          "declaration": "allocationLossIdentitySpec",
+          "relationship": "unproved_source_specification",
+          "note": "Especificación Lean de parte del resultado: Y, Yeff y pérdida≥0; no incluye derivada de reasignación."
+        }
+      ],
+      "semantic_gap": "El PaperInterface define allocationLossIdentitySpec pero no se encontró un teorema que pruebe simultáneamente óptimo laboral, referente eficiente, no negatividad de pérdida y derivada dL/dlog(kH/kL); no confundir con un cálculo numérico de pérdida.",
+      "numerical_context": [
+        "paper/irf_mechanism_table.tex"
+      ]
     },
     {
       "paper_number": "4.4",
@@ -247,10 +334,23 @@
       "title": "Persistencia condicional de ramas reducidas bajo riesgo",
       "paper_statement_sha256": "6d370b5ac35929562698046bd6a0adba5d638b89449f1a17a0c5978aaf3079d4",
       "source_ledger_formalization_status": "not_run",
-      "review_state": "not_yet_semantically_reviewed",
+      "review_state": "targeted_semantic_comparison",
       "paper_proof_equivalent_in_lean": "not_established",
-      "related_lean_declarations": [],
-      "semantic_gap": "Pendiente cotejar el enunciado literal, las hipótesis, la prueba y sus variables con una declaración Lean de igual alcance. No se atribuye ausencia de prueba por falta de inspección."
+      "related_lean_declarations": [
+        {
+          "relative_path": "lean/checkpoint/modules/Ventura26LiquidityAllocation/PaperInterface.lean",
+          "declaration": "riskyBranchPersistenceSpec",
+          "relationship": "unproved_source_specification",
+          "note": "La antigua especificación en Lean es más fuerte que el resultado reducido condicional del paper."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/Proposition42PrimalSeparationCandidate.lean",
+          "declaration": "strict_slack_and_binding_primal_disjoint",
+          "relationship": "auxiliary_or_conditional_only",
+          "note": "Si existieran ramas con strict slack y binding, sus variables primales no podrían coincidir; no construye ninguna rama."
+        }
+      ],
+      "semantic_gap": "riskyBranchPersistenceSpec exige dos equilibrios competitivos adaptados para todo riesgo pequeño en una cuña eta<c*|h|. El paper ahora afirma solo persistencia de raíces reducidas bajo un operador contractivo asumido. La separación primal Lean no prueba existencia estocástica ni punto fijo de la continuación; los dos enunciados no tienen el mismo alcance."
     },
     {
       "paper_number": "A.2.1",
