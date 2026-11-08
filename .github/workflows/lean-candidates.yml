@@ -165,6 +165,7 @@ jobs:
         run: |
           set -euo pipefail
           cat > CandidateAxioms.lean <<'LEAN'
+          import Ventura26LiquidityAllocation.LocalScalarAugmented34PositiveKktCandidate
           import Ventura26LiquidityAllocation.StationaryEquilibriumCandidate
           import Ventura26LiquidityAllocation.BoundaryAnalyticPackageCandidate
           import Ventura26LiquidityAllocation.InterbankCancellationCandidate
@@ -211,6 +212,12 @@ jobs:
           import Ventura26LiquidityAllocation.DateZeroJointBindingSharedDualCandidate
           import Ventura26LiquidityAllocation.DateZeroBindingDualFreedomCandidate
           import Ventura26LiquidityAllocation.DateZeroBindingDualRepairCandidate
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.augmentedBoundaryZeroResidual_source_row
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.augmentedBoundaryZeroResidual_source_dual
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.augmentedBoundaryZeroResidual_dual_fixed_state
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.augmentedBoundaryZeroResidual_eq_zero_iff
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Kkt.augmented_source_zero_recovers_boundary_L_conditions
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34PositiveKkt.augmented_source_zero_recovers_original_L_under_positive_domain
           #print axioms Ventura26LiquidityAllocation.ProposedStationaryEquilibrium.parent_competitiveEquilibrium
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.proposed_localSlackLiteralAllocation_settlementClears_of_binarySymmetric
