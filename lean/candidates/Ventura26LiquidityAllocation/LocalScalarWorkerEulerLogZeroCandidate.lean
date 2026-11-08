@@ -70,7 +70,12 @@ theorem source_worker_gross_sigma_one
         d.controls.depositRate / d.nextControls.inflation := by
   unfold sourceWorkerEulerGross
   rw [hsigma]
-  rw [mul_div_assoc, source_crra_ratio_sigma_one _ _ hc0 hc1]
+  calc
+    _ = (P.workerDiscount *
+          (crraMarginal 1 d.nextControls.workerConsumption /
+            crraMarginal 1 d.controls.workerConsumption)) *
+          d.controls.depositRate / d.nextControls.inflation := by ring
+    _ = _ := by rw [source_crra_ratio_sigma_one _ _ hc0 hc1]
 
 /-- Economic positivity assumptions provide the strictly positive
 gross valuation required by the logarithmic expression. -/
