@@ -21,12 +21,13 @@ from types import SimpleNamespace
 HERE = Path(__file__).resolve().parent
 DEFAULT_CACHE = HERE.parent / "v0m"
 # Historical bridge digest was e3523811b5433a076e13fe51479a4a518e338386498898d46549b2b6929063fa (initial IRF source commit 02bce4c).
-# 2026-11-07 audit: only optional interval-AD point/box export, parameter
+# 2026-11-07/08 audit: optional interval-AD point/box export, direct L-dual center,
+# parameter
 # invocations and new diagnostic export paths; scalar_boundary, make_boundary
 # and the original default bridge residual calculations remain unchanged. Keep a strict pin to
 # the new complete source instead of bypassing the provenance check.
 SOURCE_HASHES = {
-    "finite_bridge.py": "a9bcc440a1831a01787deede29514c8dd28c41899b30ec5d0508d8580df6dd9a",
+    "finite_bridge.py": "62f60baa22b93157e92be8c98e76e4e8943ad3067a7b4b0bbbf7bb42caaa1097",
     "verified_linear_operator.py": "1369e9c04ed9774297d957ea27d8dad893f99fc17fb08c9819fa9a378ca6400b",
     "rational_preconditioners.json": "d0cef14050de9f4725e51e5cd28b1ea77e33733dfb2c78d2e38a193200337e94",
 }
