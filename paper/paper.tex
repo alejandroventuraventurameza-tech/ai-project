@@ -78,6 +78,18 @@ una comprobación de Python en una demostración de esas últimas.
 
 \input{body_compact_intro}
 
+\paragraph{Objeción formal a la unicidad literal.}
+La estructura fuente \texttt{Allocation} incluye el campo
+\texttt{collateralDual}, que no está determinado por el predicado
+de equilibrio competitivo tal como se formalizó originalmente.
+Por tanto, la unicidad \emph{literal} de la estructura puede fallar
+aunque las variables económicas primales estén determinadas.
+El lema Lean que construye ese contraejemplo no prueba ni refuta
+que existan dos ramas de asignaciones \emph{económicamente}
+distintas; para ello se debe comparar sus variables primales
+y demostrar la correspondencia de equilibrio. Este error de
+especificación se conserva como parte del juicio crítico del proyecto.
+
 \begin{proposition}[Dos soluciones locales de la complementariedad reducida]\label{prop:local_macro_multiplicity}
 Suponga que la eliminación del resto del prefijo define una función
 $\mathcal M(s,h)$ de clase $C^1$ en un entorno de $(0,0)$,
