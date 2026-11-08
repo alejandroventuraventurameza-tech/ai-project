@@ -36,6 +36,7 @@ ALLOWED_RELATIONS = {
     "counterexample_malformed_interface_kernel_verified",
     "auxiliary_claim_kernel_verified",
     "efficiency_support_kernel_verified",
+    "source_algebra_kernel_verified",
 }
 GREEN_SOURCE_FINANCIAL_RUN = 42457259796
 GREEN_SOURCE_FINANCIAL_SHA = "c006e00c437243c3f6f44ec3c102df4286c545e0"
@@ -45,6 +46,12 @@ GREEN_LOSS_AUX_RUN = 42458449121
 GREEN_LOSS_AUX_SHA = "1e797f886dea03a6fdea135338e6408a3e8ab91b"
 GREEN_EFFICIENCY_RUN = 42459394970
 GREEN_EFFICIENCY_SHA = "8e883b7993f39d29ae431c44a6a14e45ca55707d"
+GREEN_SOURCE_BRIDGE_RUN = 42459648021
+GREEN_SOURCE_BRIDGE_SHA = "aef180ba9595e426c32236a2941731837151fdcc"
+EXPECTED_VERIFIED_SOURCE_BRIDGE = {
+    "productivity_weight_recovers_A",
+    "positive_aggregate_loss_log_formula",
+}
 EXPECTED_VERIFIED_EFFICIENCY = {
     "normalized_two_type_output_le_benchmark",
     "normalized_benchmark_attained",
@@ -97,6 +104,7 @@ def main() -> None:
     green_refutations = {}
     green_loss_aux = set()
     green_efficiency_aux = set()
+    green_source_bridge = set()
     for row in data["entries"]:
         label = row["label"]
         old = original[label]
@@ -126,6 +134,18 @@ def main() -> None:
                     f"{label}: invalid theorem relation {rel}")
             if rel == "counterexample_to_stronger_literal_interface":
                 refutations += 1
+            if rel == "source_algebra_kernel_verified":
+                require(label == "lem:allocation_loss_identity",
+                        "Source power/log bridge attached to wrong paper lemma")
+                require(item["declaration"] in EXPECTED_VERIFIED_SOURCE_BRIDGE,
+                        "Unknown source power/log bridge theorem")
+                require(item["declaration"] not in green_source_bridge,
+                        "Duplicate power/log source bridge theorem")
+                require(item.get("lean_ci_run_id") == GREEN_SOURCE_BRIDGE_RUN
+                        and item.get("lean_ci_commit") == GREEN_SOURCE_BRIDGE_SHA
+                        and item.get("lean_axiom_audit") == "passed_no_sorryAx",
+                        "Power/log source theorem not pinned to green kernel run")
+                green_source_bridge.add(item["declaration"])
             if rel == "efficiency_support_kernel_verified":
                 require(label == "lem:allocation_loss_identity",
                         "Efficiency support theorem mapped to wrong source claim")
@@ -226,6 +246,8 @@ def main() -> None:
             f"Loss auxiliary proof set incomplete: {green_loss_aux}")
     require(green_efficiency_aux == EXPECTED_VERIFIED_EFFICIENCY,
             f"Global efficiency proof set incomplete: {green_efficiency_aux}")
+    require(green_source_bridge == EXPECTED_VERIFIED_SOURCE_BRIDGE,
+            f"Source power/log proof set incomplete: {green_source_bridge}")
     require(green_exact == {
         "lem:repayment": "exact_repaymentSpec",
         "lem:v0m_original_6_2": "exact_noSimultaneousSavingBorrowingSpec",
@@ -268,6 +290,8 @@ def main() -> None:
         "verified_loss_auxiliary_lemmas": len(green_loss_aux),
         "verified_global_efficiency_run": GREEN_EFFICIENCY_RUN,
         "verified_global_efficiency_lemmas": len(green_efficiency_aux),
+        "verified_source_power_log_run": GREEN_SOURCE_BRIDGE_RUN,
+        "verified_source_power_log_lemmas": len(green_source_bridge),
         "unproved_source_specifications": source_specifications,
         "complete_paper_theorems_proved_in_lean_by_this_audit": 0,
         "full_equilibrium_confirmed": False,
