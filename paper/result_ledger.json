@@ -1,6 +1,6 @@
 {
   "author": "Alejandro Ventura",
-  "paper_sha256": "25c674b3bc0bcf4bef077a4ecf0e2e4ff4ae45ffada6c67b4eea40beebc47c9e",
+  "paper_sha256": "918dae6e7214631804b2b137dda7358c7cc48f9dceb4b7947d6ae272c1f53872",
   "numbered_results": 57,
   "formalization_started": true,
   "results": [
@@ -831,7 +831,7 @@
   },
   "editorial_compaction": {
     "date": "2026-11-08",
-    "manuscript_source_sha256": "25c674b3bc0bcf4bef077a4ecf0e2e4ff4ae45ffada6c67b4eea40beebc47c9e",
+    "manuscript_source_sha256": "918dae6e7214631804b2b137dda7358c7cc48f9dceb4b7947d6ae272c1f53872",
     "exact_reduced_theorem_moved_to_body": "prop:local_macro_multiplicity",
     "prior_results_retained": 57,
     "main_body_files": [
@@ -840,6 +840,7 @@
     ],
     "archive_status": "technical historical dossier retained in paper/paper.tex after bibliography",
     "formalization_status": "No result promoted from not_run by layout revision",
-    "caveat": "Length in compiled PDF and ledger page numbers require verification; preserving 57 theorem statements does not imply 57 source-matched Lean proofs."
+    "caveat": "Length in compiled PDF and ledger page numbers require verification; preserving 57 theorem statements does not imply 57 source-matched Lean proofs.",
+    "page_gate": "Compile-time IE_COMPACT_BODY_PAGES marker required to satisfy 8--20 body pages, before bibliography/appendix"
   }
 }
