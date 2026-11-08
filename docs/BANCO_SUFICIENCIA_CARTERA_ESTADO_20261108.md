@@ -3,7 +3,7 @@
 **Fecha de investigación:** 2026-11-08.  
 **Rama:** `work/lean-ci-validation-otc-20261106`.  
 **Declaración Lean candidata:** `PaperBankStaticSupergradientSufficiencyCandidate.lean`.  
-**Estado de evidencia al crear esta nota:** `PENDIENTE de CI focalizada y auditoría #print axioms`. No promover a verificado hasta ver una ejecución verde en el SHA exacto.
+**Estado de evidencia:** los dos teoremas estáticos del módulo de cartera bancaria superaron CI focalizada y auditoría `#print axioms` sin `sorryAx`: [#42506496740](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506496740) (SHA `d42f9325709189ea87af4c686361c41ad816b8f0`) y [#42506614812](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42506614812) (SHA `51b18f81c847e20a866850df5435a4a501de9682`). Los teoremas Bellman posteriores permanecen pendientes hasta CI verde.
 
 ## 1. Pregunta económica y alcance
 
@@ -80,7 +80,7 @@ para toda alternativa factible. El teorema Lean candidato exige factibilidad lit
 
 ## 4. Qué implica y qué NO implica
 
-**Si la prueba compila:** se certifica un teorema de suficiencia **estática, condicional** que se mantiene ante cambios arbitrarios del patrón déficit/superávit de la cartera alternativa. Es un avance frente a la simple verificación local KKT y complementa los diagnósticos de la cartera bancaria bajo ambas ramas.
+**Con las dos pruebas estáticas ya compiladas y auditadas:** se certifica un teorema de suficiencia **estática, condicional** que se mantiene ante cambios arbitrarios del patrón déficit/superávit de la cartera alternativa. Es un avance frente a la simple verificación local KKT y complementa los diagnósticos de la cartera bancaria bajo ambas ramas.
 
 **Pendiente:** instanciar en las trayectorias numéricas exactas las condiciones de precios y gradientes como predicados `Primitives/Allocation` para cada nodo; demostrar la continuación Bellman para TODAS las alternativas admisibles; vincular el valor individual a la dinámica de equity y los pagos de salida; comprobar terminalidad; establecer factibilidad y optimalidad de todos los agentes e identificar equilibrios completos; seleccionar de forma defendible las ramas S/B. No confundir los residuos reducidos de las IRF con suficiencia de equilibrio.
 
