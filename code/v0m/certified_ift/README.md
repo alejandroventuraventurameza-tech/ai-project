@@ -98,3 +98,30 @@ quantified inequalities for `localBindingResidualWithSlack`,
 establish a `solutionLog` witness with normalization and regularity,
 and certify the Schur signs. Neither this arithmetic workflow nor
 a green general build provides that witness.
+
+## Critical row-5 source-operator conversion
+
+The old finite-node **binding** Jacobian uses row 5
+`g_log(z)=log(face_L(z)/collateral_L(z))`
+(in `finite_bridge.py`), whereas the current exact Lean source uses
+`g_mod(z,s)=1-face_L(z)/collateral_L(z)-s`
+(in `EconomicModel.lean:localBindingResidualWithSlack`).
+At the boundary `face_L/collateral_L=1`, both are zero for `s=0`,
+but their **state derivatives are negatives**:
+`D_z g_mod = -D_z g_log`; the **direct slack derivative** of the Lean row
+is `-1`.
+
+For **point Jacobians only**, set `D=diag(1,...,-1 at row 5,...)`.
+Then `J_source=D*J_legacy` and the point preconditioner transforms as
+`R_source=R_legacy*D`; hence
+`R_source*J_source=R_legacy*J_legacy`.
+The executable `source_row5_transform.py` implements that rational
+row/column sign transformation, and `test_source_row5_transform.py`
+tests its identity on a synthetic 33-dimensional system.
+
+**DO NOT** treat this as a uniform nonlinear enclosure. Away from
+coverage ratio one, the two different residuals are not related by
+a constant row-sign flip. The true product-ball Jacobian still must
+be evaluated and enclosed from the Lean-modified residual itself,
+including the four direct monetary policy derivatives and the
+prescribed-slack direction in the exact order `(s,v_R,v_M,v_rho,v_Delta)`.
