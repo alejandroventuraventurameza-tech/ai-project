@@ -1,7 +1,7 @@
 import Ventura26LiquidityAllocation.PaperInterface
 
 /-!
-# Exact source-facing paper financial results 3.2, 3.3 and 3.5
+# Exact source-facing paper financial results 3.2, 3.3 and corrected 3.5
 
 Unlike auxiliary financial lemmas, these prove the LITERAL propositions
 declared in the pinned PaperInterface, with their original quantifiers
@@ -79,11 +79,46 @@ theorem exact_financingCapacityComparativeSpec :
   exact financingCapacity_hasDerivAt_and_deriv_neg
     hresources hcollateral hrate hbound
 
-/-- Exact PaperInterface Lemma 3.5; in particular, the subgradient
-at zero is the ENTIRE interval and not one of the two interior Euler
-conditions. -/
-theorem exact_fundingSupergradientSpec :
-    fundingSupergradientSpec := by
+/-- Audit finding: the PINNED PaperInterface definition currently parses
+as [(rate assumptions -> supergradient)] iff cases, because its displayed
+implication lacks parentheses around the full equivalence.
+That unguarded proposition is false: RL = RD = 1, face = 0, slope = 2
+makes the left implication vacuously true and the right cases false.
+
+We preserve the upstream source verbatim and refute that malformed
+interface instead of silently weakening the original objective. -/
+theorem original_fundingSupergradientSpec_false :
+    ¬ fundingSupergradientSpec := by
+  intro hspec
+  have hbad := hspec (1 : ℝ) (1 : ℝ) (0 : ℝ) (2 : ℝ)
+  have hleft :
+      ((0 : ℝ) < 1 →
+        (1 : ℝ) < 1 →
+          ∀ g : ℝ,
+            fundingCash 1 1 g ≤ fundingCash 1 1 0 + 2 * (g - 0)) := by
+    intro _ hlt
+    norm_num at hlt
+  have hright := hbad.mp hleft
+  norm_num at hright
+
+/-- Correct source formula: the rate domain guards the ENTIRE
+supergradient equivalence, not just the left implication.
+This is the paper's mathematical Lemma 3.5, including its corner. -/
+def fundingSupergradientCorrectedSpec : Prop :=
+  ∀ (loanRate depositRate face slope : ℝ),
+    0 < depositRate →
+      depositRate < loanRate →
+        ((∀ g : ℝ,
+            fundingCash loanRate depositRate g ≤
+              fundingCash loanRate depositRate face + slope * (g - face)) ↔
+          ((face < 0 ∧ slope = 1 / depositRate) ∨
+            (face = 0 ∧ 1 / loanRate ≤ slope ∧ slope ≤ 1 / depositRate) ∨
+            (0 < face ∧ slope = 1 / loanRate)))
+
+/-- Corrected, scoped theorem corresponding to the economic manuscript's
+superdifferential, under strict RL > RD > 0. -/
+theorem corrected_fundingSupergradientSpec :
+    fundingSupergradientCorrectedSpec := by
   intro loanRate depositRate face slope hdeposit hspread
   change
     IsFundingSupergradient loanRate depositRate face slope ↔
@@ -92,7 +127,8 @@ theorem exact_fundingSupergradientSpec :
 
 #print axioms exact_noSimultaneousSavingBorrowingSpec
 #print axioms exact_financingCapacityComparativeSpec
-#print axioms exact_fundingSupergradientSpec
+#print axioms original_fundingSupergradientSpec_false
+#print axioms corrected_fundingSupergradientSpec
 
 end ProposedPaperFinancialMainExact
 end Ventura26LiquidityAllocation
