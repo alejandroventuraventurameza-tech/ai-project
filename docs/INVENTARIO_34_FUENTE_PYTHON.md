@@ -18,7 +18,7 @@ parametros concretos de Python.
 | 3 | Euler de capital L, t=0 | Comparar SDF, producto marginal y garantias | Pendiente |
 | 4 | Colateral H, t=0 | Residuos en niveles, fila reescrita por Python | Pendiente |
 | 5 | Holgura normalizada L, t=0 | Fuente exige `1-F_L/(theta*J*K_L)-s`; fila reescrita | Pendiente |
-| 6 | Renovacion nominal bancaria, t=0 | Equivalencia log/niveles con factor fuente y positividad | Lemas fuente y compatibilidad algebraica verificados; instancia de `aB` pendiente |
+| 6 | Renovacion nominal bancaria, t=0 | Equivalencia log/niveles con factor fuente y positividad | Equivalencia de ceros en operador aumentado verificada bajo compatibilidad/positividad; instancia del vector Python pendiente |
 | 7 | Precio de oferta de capital, t=0 | Definiciones de capital agregado y ajuste | Pendiente |
 | 8 | Recursos agregados, t=0 | Identidades de cantidades, masa, costos y output | Pendiente |
 | 9 | Oferta de trabajo, t=0 | Equivalencia log/niveles; `sigmaW=phi=1` | Lema Lean verificado; instancia y dominio pendientes |
@@ -34,7 +34,7 @@ parametros concretos de Python.
 | 19 | Euler de capital H, t=1 | Producto marginal y continuation t=2 | Pendiente |
 | 20 | Euler de capital L, t=1 | Producto marginal y continuation t=2 | Pendiente |
 | 21 | Garantia comun de capital t=1 | Equivalencia logaritmo/nivel del compromiso a t=2 | Equivalencia de ceros fuente verificada bajo positividad; mapeo Python concreto y terminalidad pendientes |
-| 22 | Renovacion nominal bancaria, t=1 | Lema generico log/niveles para fuente `d1` | Lemas fuente y compatibilidad algebraica verificados; datos `d1` pendientes |
+| 22 | Renovacion nominal bancaria, t=1 | Lema generico log/niveles para fuente `d1` | Equivalencia de ceros en operador aumentado verificada bajo compatibilidad/positividad; datos `d1` Python pendientes |
 | 23 | Oferta de capital, t=1 | Datos t=1 y continuation t=2 | Pendiente |
 | 24 | Recursos, t=1 | Datos t=1 y continuation t=2 | Pendiente |
 | 25 | Oferta de trabajo, t=1 | Lema generico log/niveles para fuente `d1` | Lema Lean verificado; instancia `d1` pendiente |
@@ -238,12 +238,11 @@ comun. El residual original en `EconomicModel.lean` es
 `ad=1-P.depreciation` con variables fuente
 identificadas con las de Python.
 
-El modulo candidato
-`LocalScalarCommonPledgeLogZeroCandidate.lean`
+El modulo `LocalScalarCommonPledgeLogZeroCandidate.lean`
 formaliza esa equivalencia y deriva la positividad
 del denominador a partir de la depreciacion y los
-precios futuros estrictamente positivos; debe
-pasar CI Lean antes de ser promovido a demostrado.
+precios futuros estrictamente positivos. Compilo y paso control de
+axiomas en [Lean CI 42453702554](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42453702554).
 
 Tampoco la equivalencia de la fila 21 acredita una
 transicion `t=2` competitiva con cola infinita:
@@ -256,12 +255,12 @@ el calendario y las continuaciones siguen abiertos.
   fuente (fechas 0 y 1), incluidos los log-cocientes realizados/objetivo,
   y la equivalencia de ceros de la garantia comun (fila 21) bajo dominio
   positivo. La auditoria de sus axiomas no reporto `sorryAx`.
-- **Candidato en revision:**
+- **DEMOSTRADO bajo premisas explicitadas, Lean CI 42453702554:**
   `LocalScalarAugmented34MonetaryRowsCandidate.lean` une esas cuatro
   igualdades a componentes concretos 12/13/28/29 del operador
   `augmentedBoundaryZeroResidual`; prueba ademas el calendario de la
   innovacion remunerada (solo modifica la innovacion inicial).
-- **Candidato en revision:**
+- **DEMOSTRADO bajo premisas explicitadas, Lean CI 42453702554:**
   `LocalScalarAugmented34BankFaceRowsCandidate.lean` conecta las filas
   6/22 del mismo operador al conjunto de ceros de los log-cocientes de
   renovacion bancaria, bajo compatibilidad del factor de renovacion
@@ -276,6 +275,33 @@ el calendario y las continuaciones siguen abiertos.
   original de Lean ni su Jacobiano. El experimento ilustrativo de IRF
   sigue fuera del radio de politica del certificado local.
 
-No promover estos dos modulos mas recientes a DEMOSTRADO hasta obtener
-un run verde del **commit que los contiene** y su auditoria expresa
-`#print axioms`; ninguna ejecucion anterior los certifica.
+Los modulos de las filas 6, 12, 13, 22, 28, 29, ademas de la garantia
+comun 21 y dual 33, compilaron y pasaron auditoria de axiomas en
+[Lean CI 42453702554](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42453702554).
+La equivalencia con la fuente externa Python sigue limitada a los
+antecedentes expresados en cada teorema, sin prueba de 34 filas.
+
+
+### Escala estacionaria y compatibilidad de fuente (nueva compuerta)
+
+La formula de Python para la tasa estacionaria y el coeficiente bancario
+ha sido contrastada mediante aritmetica decimal intervalar dirigida:
+[CI Python 42454567930](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42454567930),
+job `Python syntax`, obtuvo PASS con diferencias encerradas en
+magnitudes de orden `1e-79`. Para el escenario estacionario Lean
+`primitives G`, las definiciones declaran
+`bankExit=1/10` y `bankSeedShare=10/RL-9`, donde `RL` es la tasa
+bancaria estacionaria. Por algebra,
+`bankRenewalFactor = 1/RL`.
+
+El modulo `LocalScalarStationaryPythonCalibrationCandidate.lean`
+propone los teoremas exactos que cotejan las pendientes OTC, RR, RL,
+los parametros de las reglas y la renovacion, **aun bajo auditoria Lean**
+hasta obtener resultado correspondiente. El script
+`code/v0m/certified_ift/audit_stationary_scalar_bridge.py` ofrece
+el cotejo numerico reproducible y rechaza intervalos disjuntos.
+Ver [nota detallada](PUENTE_ESTACIONARIO_PYTHON_LEAN_20261108.md).
+
+La identificacion matematica escalar estacionaria NO es un certificado
+de todas las entradas del evaluador Python ni de las derivadas de las
+34 funciones literales en un entorno perturbado.
