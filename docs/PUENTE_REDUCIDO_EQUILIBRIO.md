@@ -158,5 +158,5 @@ las etiquetas economicas y unidades exactas. Las demas innovaciones
 
 La Proposicion 4.2 conserva por tanto el estatus de
 **argumento condicional de multiplicidad reducida** con una
-subcadena escalar paramatrica ahora verificada en Lean. No se
+subcadena escalar parametrica ahora verificada en Lean. No se
 promueve su afirmacion economica completa a teorema Lean cerrado.
