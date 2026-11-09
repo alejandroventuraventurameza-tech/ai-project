@@ -1242,5 +1242,71 @@ theorem source_discounted_mass_contracts_on_supported_histories
 
 #print axioms source_discounted_mass_contracts_on_supported_histories
 
+
+/-- SOURCE one-step OTC identity requiring real economic positivity
+only for supported aggregate parent histories and positive-probability
+child transitions. Zero probability edges disappear before any SDF
+or aggregate equity divisibility assumption is used. -/
+theorem source_weighted_child_identity_supported_only
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (hfeasible : BankContinuationFeasibleAt P X t h
+      (X.bankEquity t h) (sourceFullRetentionCandidate P X t h))
+    (n : ℕ) (future : Fin n → S)
+    (payments : Fin n → P.paymentSupport)
+    (s : S) (omega : P.paymentSupport)
+    (hrisk : P.workerRiskAversion = 1)
+    (hconsumption : FuturePathSupported P.tree (currentState h) n future →
+      0 < X.workerConsumption (t + n) (continuationHistory h future))
+    (hchildConsumption : FuturePathSupported P.tree (currentState h) n future →
+      0 < P.tree.transition
+        (currentState (continuationHistory h future)) s →
+      0 < X.workerConsumption (t + n + 1)
+        (childHistory (continuationHistory h future) s))
+    (haggregate : FuturePathSupported P.tree (currentState h) n future →
+      0 < X.bankEquity (t + n) (continuationHistory h future)) :
+    (continuationTransitionWeight P.tree (currentState h) n future *
+      continuationPaymentWeight P payments) *
+      ((P.tree.transition
+        (currentState (continuationHistory h future)) s *
+          P.paymentProbability omega) *
+        (bankCumulativeSDFAt P X t h (childFutureHistory future s) *
+          (sourceFullRetentionCandidate P X t h).equity (n + 1)
+            (childFutureHistory future s)
+            (childPaymentHistory payments omega))) =
+    (continuationTransitionWeight P.tree (currentState h) n future *
+      continuationPaymentWeight P payments) *
+      ((P.tree.transition
+        (currentState (continuationHistory h future)) s *
+          P.paymentProbability omega) *
+        ((bankCumulativeSDFAt P X t h future *
+          (sourceFullRetentionCandidate P X t h).equity n future payments) *
+          sourceDiscountedEquityGrowthFactor P X t h n future s omega)) := by
+  by_cases hzeroParent :
+      continuationTransitionWeight P.tree (currentState h) n future = 0
+  · simp [hzeroParent]
+  by_cases hzeroEdge : P.tree.transition
+      (currentState (continuationHistory h future)) s = 0
+  · simp [hzeroEdge]
+  have hpositiveParent : 0 <
+      continuationTransitionWeight P.tree (currentState h) n future :=
+    lt_of_le_of_ne
+      (ProposedBankContinuationPathProbabilityMass.source_aggregate_future_path_weight_nonneg
+        P.tree n (currentState h) future) (Ne.symm hzeroParent)
+  have hpositiveEdge : 0 <
+      P.tree.transition (currentState (continuationHistory h future)) s :=
+    lt_of_le_of_ne
+      (P.tree.transition_nonneg _ _) (Ne.symm hzeroEdge)
+  have hpath := positive_transition_weight_implies_supported
+    P.tree (currentState h) n future hpositiveParent
+  have hnonneg := (hfeasible.2 n future payments hpath).1
+  have hchild := source_full_retention_nonnegative_parent_child_identity
+    P X t h hfeasible n future payments hpath s omega
+    hrisk (hconsumption hpath)
+    (hchildConsumption hpath hpositiveEdge) hnonneg (haggregate hpath)
+  rw [hchild]
+
+#print axioms source_weighted_child_identity_supported_only
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
