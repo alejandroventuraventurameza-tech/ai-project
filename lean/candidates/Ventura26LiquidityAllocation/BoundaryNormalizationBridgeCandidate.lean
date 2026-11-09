@@ -1785,6 +1785,226 @@ theorem boundary_unique_reduced_prefix_rate_of_three
   exact boundary_unique_reduced_prefix_rate_of_four G
     (boundary_four_boxes_from_three h)
 
+/-- A strictly positive lower SOURCE enclosure of stationary worker
+consumption after wage^5 normalization. Each input remains tied to
+the original bank and firm primitives, including the common loan rate. -/
+theorem boundary_worker_consumption_scale_lower :
+    (8038062 / 1000000 : ℝ) <
+      ProposedStationaryRealScale.workerConsumptionScale := by
+  rcases boundary_source_user_cost_sharp_boxes with
+    ⟨⟨huHlo, _⟩, ⟨huLlo, _⟩⟩
+  rcases boundary_source_capital_scales_sharp_boxes with
+    ⟨⟨hkHlo, _⟩, ⟨hkLlo, _⟩⟩
+  rcases boundary_source_loan_rate_sharp_box with ⟨hrlo, hrhi⟩
+  have hkHpos := ProposedStationaryRealScale.capitalScale_pos .H
+  have hkLpos := ProposedStationaryRealScale.capitalScale_pos .L
+  have hprodH :
+      (63166370 / 1000000000 : ℝ) * (5677035 / 100000 : ℝ) <
+        ProposedStationaryRealScale.userCost .H *
+          ProposedStationaryRealScale.capitalScale .H := by
+    calc
+      _ < (63166370 / 1000000000 : ℝ) *
+            ProposedStationaryRealScale.capitalScale .H :=
+        mul_lt_mul_of_pos_left hkHlo (by norm_num)
+      _ < _ := mul_lt_mul_of_pos_right huHlo hkHpos
+  have hprodL :
+      (55943655 / 1000000000 : ℝ) * (9431553 / 100000 : ℝ) <
+        ProposedStationaryRealScale.userCost .L *
+          ProposedStationaryRealScale.capitalScale .L := by
+    calc
+      _ < (55943655 / 1000000000 : ℝ) *
+            ProposedStationaryRealScale.capitalScale .L :=
+        mul_lt_mul_of_pos_left hkLlo (by norm_num)
+      _ < _ := mul_lt_mul_of_pos_right huLlo hkLpos
+  have hYformula :
+      ProposedStationaryRealScale.outputScale =
+        (3 / 2 : ℝ) *
+          (ProposedStationaryRealScale.userCost .H *
+              ProposedStationaryRealScale.capitalScale .H +
+            ProposedStationaryRealScale.userCost .L *
+              ProposedStationaryRealScale.capitalScale .L) := by
+    unfold ProposedStationaryRealScale.outputScale
+      ProposedStationaryRealScale.average
+    ring
+  have hYlo :
+      (1329349 / 100000 : ℝ) <
+        ProposedStationaryRealScale.outputScale := by
+    rw [hYformula]
+    have hsum := add_lt_add hprodH hprodL
+    linarith only [hsum]
+  have hKlo :
+      (7554294 / 100000 : ℝ) <
+        ProposedStationaryRealScale.average
+          ProposedStationaryRealScale.capitalScale := by
+    unfold ProposedStationaryRealScale.average
+    linarith only [hkHlo, hkLlo]
+  have hrpos : 0 < ProposedStationaryBank.loanRate :=
+    ProposedStationaryRealScale.loanRate_pos
+  have hcreditScaled :
+      ProposedStationaryRealScale.creditScale *
+          ProposedStationaryBank.loanRate =
+        ((3 / 20 : ℝ) * (3159 / 3200 : ℝ) *
+            ProposedStationaryRealScale.capitalScale .H +
+          (2 / 5 : ℝ) * (3159 / 3200 : ℝ) *
+            ProposedStationaryRealScale.capitalScale .L) / 2 := by
+    unfold ProposedStationaryRealScale.creditScale
+      ProposedStationaryRealScale.average
+      ProposedStationaryRealScale.pledgeability
+      ProposedStationaryRealScale.liquidationValue
+      ProposedStationaryRealScale.capitalPrice
+    field_simp [ne_of_gt hrpos] <;> ring
+  have hcreditScaledLower :
+      (2255292 / 100000 : ℝ) *
+          (101204823808 / 100000000000 : ℝ) <
+        ((3 / 20 : ℝ) * (3159 / 3200 : ℝ) *
+            ProposedStationaryRealScale.capitalScale .H +
+          (2 / 5 : ℝ) * (3159 / 3200 : ℝ) *
+            ProposedStationaryRealScale.capitalScale .L) / 2 := by
+    linarith only [hkHlo, hkLlo]
+  have hcreditLower :
+      (2255292 / 100000 : ℝ) <
+        ProposedStationaryRealScale.creditScale := by
+    by_contra hn
+    have hle :
+        ProposedStationaryRealScale.creditScale ≤
+          (2255292 / 100000 : ℝ) := le_of_not_gt hn
+    have hm := mul_le_mul_of_nonneg_right hle hrpos.le
+    rw [hcreditScaled] at hm
+    linarith only [hm, hrhi, hcreditScaledLower]
+  have hloanAboveOne : 0 < ProposedStationaryBank.loanRate - 1 :=
+    sub_pos.mpr ProposedStationaryRealScale.loanRate_gt_one
+  have hcreditProductLower :
+      ((101204823607 / 100000000000 : ℝ) - 1) *
+          (2255292 / 100000 : ℝ) <
+        (ProposedStationaryBank.loanRate - 1) *
+          ProposedStationaryRealScale.creditScale := by
+    calc
+      _ < (ProposedStationaryBank.loanRate - 1) *
+            (2255292 / 100000 : ℝ) :=
+        mul_lt_mul_of_pos_right (by linarith only [hrlo]) (by norm_num)
+      _ < _ := mul_lt_mul_of_pos_left hcreditLower hloanAboveOne
+  have hrat :
+      (8038062 / 1000000 : ℝ) <
+        (7 / 12 : ℝ) * (1329349 / 100000 : ℝ) +
+          (7554294 / 100000 : ℝ) / 6400 +
+          ((101204823607 / 100000000000 : ℝ) - 1) *
+            (2255292 / 100000 : ℝ) := by
+    norm_num
+  unfold ProposedStationaryRealScale.workerConsumptionScale
+  linarith only [hYlo, hKlo, hcreditProductLower, hrat]
+
+/-- Strict rational upper enclosure for the lower boundary's SOURCE
+deposit rate, derived from the OTC slope micro-boxes and positive
+settlement denominators. -/
+theorem boundary_deposit_rate_lo_source_upper :
+    boundaryDepositRate boundaryLo <
+      (1023052874 / 1000000000 : ℝ) := by
+  rcases boundary_source_slope_rational_micro_boxes with
+    ⟨⟨hmlo, hmhi⟩, ⟨hglo, hghi⟩⟩
+  have hRmem : boundaryLo ∈ boundaryInterval :=
+    ⟨le_refl _, le_of_lt boundaryLo_lt_boundaryHi⟩
+  have hrrpos : 0 < boundaryReserveRate boundaryLo :=
+    (boundary_rate_domain hRmem).2
+  have hpaypos : 0 < boundaryPaymentTerm := by
+    unfold boundaryPaymentTerm
+    linarith only [hglo]
+  have hnum :
+      boundaryReserveRate boundaryLo +
+        (9 / 10 : ℝ) * ProposedStationaryBank.meanSlope +
+        (1 / 10 : ℝ) * boundaryPaymentTerm <
+      (1024285357182 / 1000000000000 : ℝ) := by
+    unfold boundaryReserveRate boundaryPaymentTerm boundaryLo
+    linarith only [hmlo, hmhi, hghi]
+  have hfrac :
+      (1204711925 / 1000000000000 : ℝ) <
+        boundaryPaymentTerm / boundaryReserveRate boundaryLo := by
+    apply (lt_div_iff₀ hrrpos).2
+    unfold boundaryPaymentTerm boundaryReserveRate boundaryLo
+    linarith only [hmlo, hglo]
+  have hdenlo :
+      (1001204711925 / 1000000000000 : ℝ) <
+        1 + boundaryPaymentTerm / boundaryReserveRate boundaryLo := by
+    linarith only [hfrac]
+  have hdenpos :
+      0 < 1 + boundaryPaymentTerm / boundaryReserveRate boundaryLo := by
+    have hdiv := div_pos hpaypos hrrpos
+    linarith only [hdiv]
+  change (boundaryReserveRate boundaryLo +
+      (9 / 10 : ℝ) * ProposedStationaryBank.meanSlope +
+      (1 / 10 : ℝ) * boundaryPaymentTerm) /
+    (1 + boundaryPaymentTerm / boundaryReserveRate boundaryLo) <
+      (1023052874 / 1000000000 : ℝ)
+  apply (div_lt_iff₀ hdenpos).2
+  calc
+    boundaryReserveRate boundaryLo +
+        (9 / 10 : ℝ) * ProposedStationaryBank.meanSlope +
+        (1 / 10 : ℝ) * boundaryPaymentTerm <
+      (1024285357182 / 1000000000000 : ℝ) := hnum
+    _ < (1023052874 / 1000000000 : ℝ) *
+          (1001204711925 / 1000000000000 : ℝ) := by norm_num
+    _ < (1023052874 / 1000000000 : ℝ) *
+          (1 + boundaryPaymentTerm / boundaryReserveRate boundaryLo) :=
+      mul_lt_mul_of_pos_left hdenlo (by norm_num)
+
+/-- Strict SOURCE proof of the *lower* worker-consumption endpoint:
+not a fitted resource residual or a postulated component box. -/
+theorem boundary_worker_lo_box_from_source :
+    (793630 / 100000 : ℝ) <
+      normalizedWorkerConsumption boundaryLo := by
+  have hw := boundary_worker_consumption_scale_lower
+  have hrd := boundary_deposit_rate_lo_source_upper
+  have hRmem : boundaryLo ∈ boundaryInterval :=
+    ⟨le_refl _, le_of_lt boundaryLo_lt_boundaryHi⟩
+  have hden : 0 < (99 / 100 : ℝ) * boundaryDepositRate boundaryLo :=
+    mul_pos (by norm_num) (boundaryDepositRate_pos hRmem)
+  unfold normalizedWorkerConsumption
+  apply (lt_div_iff₀ hden).2
+  have hrate :
+      (99 / 100 : ℝ) * boundaryDepositRate boundaryLo <
+        (99 / 100 : ℝ) * (1023052874 / 1000000000 : ℝ) :=
+    mul_lt_mul_of_pos_left hrd (by norm_num)
+  have hprod :
+      (793630 / 100000 : ℝ) *
+          ((99 / 100 : ℝ) * boundaryDepositRate boundaryLo) <
+        (793630 / 100000 : ℝ) *
+          ((99 / 100 : ℝ) * (1023052874 / 1000000000 : ℝ)) :=
+    mul_lt_mul_of_pos_left hrate (by norm_num)
+  calc
+    _ < (793630 / 100000 : ℝ) *
+        ((99 / 100 : ℝ) * (1023052874 / 1000000000 : ℝ)) := hprod
+    _ < (8038062 / 1000000 : ℝ) := by norm_num
+    _ < _ := hw
+
+/-- Only the two SOURCE output root enclosures remain for certifying
+the scalar resource residual's opposite signs. -/
+structure BoundaryRemainingTwoBoxes : Prop where
+  Ylo_upper : normalizedOutput boundaryLo < 1327678 / 100000
+  Yhi_lower : 1340498 / 100000 < normalizedOutput boundaryHi
+
+theorem boundary_three_boxes_from_two
+    (h : BoundaryRemainingTwoBoxes) : BoundaryRemainingThreeBoxes := by
+  exact ⟨h.Ylo_upper, boundary_worker_lo_box_from_source, h.Yhi_lower⟩
+
+/-- Conditional uniqueness of the scalar SOURCE rate and 33-row
+reduced system. The final two output boxes remain explicit premises. -/
+theorem boundary_unique_reduced_prefix_rate_of_two
+    (G : ℝ) (h : BoundaryRemainingTwoBoxes) :
+    ∃! R : ℝ,
+      boundaryLo ≤ R ∧ R ≤ boundaryHi ∧
+      boundaryResourceResidual R = 0 ∧
+      ∀ branch : LocalPrefixBranch,
+        LocalReducedPrefixEquationsHold branch
+          (boundaryPrimitives G R)
+          (boundaryInitialState G R)
+          (boundaryCoordinates R) .dateOne .recurrent boundaryTail := by
+  exact boundary_unique_reduced_prefix_rate_of_three G
+    (boundary_three_boxes_from_two h)
+
+#print axioms boundary_worker_consumption_scale_lower
+#print axioms boundary_deposit_rate_lo_source_upper
+#print axioms boundary_worker_lo_box_from_source
+#print axioms boundary_unique_reduced_prefix_rate_of_two
+
 #print axioms boundary_source_user_cost_sharp_boxes
 #print axioms boundary_source_capital_scales_sharp_boxes
 #print axioms boundary_capital_cost_lo_box_from_source
