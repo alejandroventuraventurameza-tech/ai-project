@@ -117,8 +117,7 @@ theorem sourceBoundaryDateData_ratio_nonzero (G : ℝ) :
               localPrefixReserveDepositRatio
                 (boundaryPrimitives G boundarySourceRate)
                 dateData := by
-            rw [boundary_oneData_fields]
-            rfl
+            rw [boundary_oneData_fields] <;> rfl
           rw [hratioOne]
           exact hstationary
       | succ n =>
