@@ -414,19 +414,35 @@ theorem boundary_source_user_cost_micro_boxes :
     field_simp [ne_of_gt hpos] <;> ring
   constructor
   · constructor
-    · apply (mul_lt_mul_right hpos).mp
-      rw [hscaledH]
-      linarith only [hrlo]
-    · apply (mul_lt_mul_right hpos).mp
-      rw [hscaledH]
-      linarith only [hrhi]
+    · by_contra hn
+      have hle :
+          ProposedStationaryRealScale.userCost .H ≤
+            (6316636 / 100000000 : ℝ) := le_of_not_gt hn
+      have hmul := mul_le_mul_of_nonneg_right hle hpos.le
+      rw [hscaledH] at hmul
+      linarith only [hmul, hrlo]
+    · by_contra hn
+      have hge :
+          (6316638 / 100000000 : ℝ) ≤
+            ProposedStationaryRealScale.userCost .H := le_of_not_gt hn
+      have hmul := mul_le_mul_of_nonneg_right hge hpos.le
+      rw [hscaledH] at hmul
+      linarith only [hmul, hrhi]
   · constructor
-    · apply (mul_lt_mul_right hpos).mp
-      rw [hscaledL]
-      linarith only [hrlo]
-    · apply (mul_lt_mul_right hpos).mp
-      rw [hscaledL]
-      linarith only [hrhi]
+    · by_contra hn
+      have hle :
+          ProposedStationaryRealScale.userCost .L ≤
+            (5594364 / 100000000 : ℝ) := le_of_not_gt hn
+      have hmul := mul_le_mul_of_nonneg_right hle hpos.le
+      rw [hscaledL] at hmul
+      linarith only [hmul, hrlo]
+    · by_contra hn
+      have hge :
+          (5594368 / 100000000 : ℝ) ≤
+            ProposedStationaryRealScale.userCost .L := le_of_not_gt hn
+      have hmul := mul_le_mul_of_nonneg_right hge hpos.le
+      rw [hscaledL] at hmul
+      linarith only [hmul, hrhi]
 
 /-- Structural SOURCE collateral wedge: the stationary bank pricing
 condition RL < 25/24 alone implies the lower-pledgeability high-productivity
@@ -574,8 +590,17 @@ theorem boundary_source_stationary_capital_scale_order :
     have h := mul_lt_mul_of_pos_left hprodIneq
       (by norm_num : (0 : ℝ) < 4 / 5)
     nlinarith only [h]
+  have hbase0 :
+      0 ≤ (4 / 5 : ℝ) * ProposedStationaryRealScale.profitCoefficient .H /
+          ProposedStationaryRealScale.userCost .H :=
+    (div_pos
+      (mul_pos (by norm_num)
+        (ProposedStationaryRealScale.profitCoefficient_pos .H))
+      hcostH).le
   unfold ProposedStationaryRealScale.capitalScale
-  gcongr <;> exact hbase
+  gcongr
+  · exact hbase0
+  · exact hbase
 
 #print axioms boundary_source_stationary_capital_scale_order
 
