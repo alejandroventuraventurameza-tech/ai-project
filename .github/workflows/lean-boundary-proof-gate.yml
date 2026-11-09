@@ -100,7 +100,7 @@ jobs:
         working-directory: upstream
         run: |
           set -euo pipefail
-          lake build Ventura26LiquidityAllocation.BoundaryNormalizationBridgeCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
+          lake build Ventura26LiquidityAllocation.BoundaryRealizedBankRowsCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
             tail -n 160 "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log"
             exit 1
           }
@@ -111,7 +111,7 @@ jobs:
         run: |
           set -euo pipefail
           cat > BoundaryProofAudit.lean <<'LEAN'
-          import Ventura26LiquidityAllocation.BoundaryNormalizationBridgeCandidate
+          import Ventura26LiquidityAllocation.BoundaryRealizedBankRowsCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryWorkerLabor.boundary_full_prefix_equations_from_root
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.output_ratio_fifteenth_power
@@ -148,6 +148,8 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundarySourceRate_exactRootOn
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundarySourceRate_unique_of_source_root
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_paper_spec_of_source_full_witness
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryRealizedBankRows.source_boundary_bank_equity_transitions
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryRealizedBankRows.source_boundary_full_allocation_not_identified
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_micro_boxes
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_productivity_collateral_cost_wedge
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_wedge_of_bank_pricing
