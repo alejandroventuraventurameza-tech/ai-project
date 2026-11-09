@@ -2438,5 +2438,75 @@ theorem source_payment_shock_abs_bounded_on_support
 
 #print axioms source_payment_shock_abs_bounded_on_support
 
+
+/-- Literal SOURCE OTC settlement exposure bounded in units of retained
+equity. Shock boundedness follows from finite payment support, while
+the requirement and deposit/reserve-rate ratio bounds remain explicit
+monetary assumptions on this admissible history. -/
+theorem source_otc_position_abs_le_equity_of_monetary_envelopes
+    (P : Primitives S) (I : InheritedState) (X : Allocation S)
+    (t : ℕ) (h : History S t) (omega : P.paymentSupport)
+    (rhoBound ratioBound : ℝ)
+    (hh : FirmHistoryAdmissible P t h)
+    (hbank : BankFeasible P I X (fullRetentionCommonBankPlan P X))
+    (htight : 0 < X.bankTightness t h)
+    (hrhoNonneg : 0 ≤ rhoBound) (hratioNonneg : 0 ≤ ratioBound)
+    (hrho : |P.reserveRequirementPath t h| ≤ rhoBound)
+    (hratio : |X.depositRate t h / X.reserveRate t h| ≤ ratioBound) :
+    |bankOTCInterbankAt P X t h (X.bankTightness t h)
+        (X.reservesPrePayment t h) (X.bankDeposits t h) omega| ≤
+    (1 + P.bankDepositCap +
+      P.bankDepositCap * rhoBound +
+      P.bankDepositCap * (ratioBound + rhoBound) *
+        sourcePaymentShockAbsBound P) * X.bankEquity t h := by
+  obtain ⟨hD0, hDcap, hR0, hRcap⟩ :=
+    source_full_retention_deposits_and_reserves_le_equity_caps
+      P I X t h hh hbank
+  have hshock := (source_payment_shock_abs_bounded_on_support P omega).2
+  have hshock0 := (source_payment_shock_abs_bounded_on_support P omega).1
+  have hratioSum :
+      |X.depositRate t h / X.reserveRate t h| +
+        |P.reserveRequirementPath t h| ≤ ratioBound + rhoBound :=
+    add_le_add hratio hrho
+  have hsum0 : 0 ≤ ratioBound + rhoBound :=
+    add_nonneg hratioNonneg hrhoNonneg
+  have hsource := source_otc_position_abs_le_settlement_imbalance
+    P X t h (X.bankTightness t h) (X.reservesPrePayment t h)
+      (X.bankDeposits t h) omega htight
+  have htriangle := source_settlement_imbalance_abs_le_primitive_terms
+    (X.reservesPrePayment t h) (P.reserveRequirementPath t h)
+    (X.depositRate t h / X.reserveRate t h)
+    (X.bankDeposits t h) (P.paymentShock omega)
+  calc
+    |bankOTCInterbankAt P X t h (X.bankTightness t h)
+        (X.reservesPrePayment t h) (X.bankDeposits t h) omega| ≤
+      |bankSettlementSurplus (X.reservesPrePayment t h)
+        (P.reserveRequirementPath t h)
+        (X.depositRate t h / X.reserveRate t h)
+        (X.bankDeposits t h) (P.paymentShock omega)| := hsource
+    _ ≤ |X.reservesPrePayment t h| +
+        |P.reserveRequirementPath t h| * |X.bankDeposits t h| +
+        (|X.depositRate t h / X.reserveRate t h| +
+          |P.reserveRequirementPath t h|) *
+          |P.paymentShock omega| * |X.bankDeposits t h| := htriangle
+    _ ≤ X.reservesPrePayment t h +
+        rhoBound * X.bankDeposits t h +
+        (ratioBound + rhoBound) * sourcePaymentShockAbsBound P *
+          X.bankDeposits t h := by
+      rw [abs_of_nonneg hR0, abs_of_nonneg hD0]
+      gcongr
+    _ ≤ (1 + P.bankDepositCap) * X.bankEquity t h +
+        rhoBound * (P.bankDepositCap * X.bankEquity t h) +
+        (ratioBound + rhoBound) * sourcePaymentShockAbsBound P *
+          (P.bankDepositCap * X.bankEquity t h) := by
+      gcongr
+    _ = (1 + P.bankDepositCap +
+        P.bankDepositCap * rhoBound +
+        P.bankDepositCap * (ratioBound + rhoBound) *
+          sourcePaymentShockAbsBound P) * X.bankEquity t h := by
+      ring
+
+#print axioms source_otc_position_abs_le_equity_of_monetary_envelopes
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
