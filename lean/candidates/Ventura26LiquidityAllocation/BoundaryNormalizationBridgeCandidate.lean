@@ -2412,6 +2412,50 @@ theorem boundarySourceRate_workerLabor :
     boundaryWage_pos hmem,
     boundary_worker_labor_equation hmem⟩
 
+
+/-- The unique source frontier root is certified for the exact paper
+ExactRootOn interface, with the literal economic resource residual.
+This closes the scalar carrier obligation, not full equilibrium. -/
+theorem boundarySourceRate_exactRootOn :
+    ExactRootOn boundaryResourceResidual boundaryLo boundaryHi := by
+  exact boundary_exactRootOn boundary_analyticPackage
+    (endpointSigns_of_boxes boundary_component_boxes_from_source)
+
+/-- Any root of the literal source residual inside the interval equals
+the same SOURCE rate used to construct the 33 reduced prefix rows. -/
+theorem boundarySourceRate_unique_of_source_root
+    (R : ℝ) (hlo : boundaryLo ≤ R) (hhi : R ≤ boundaryHi)
+    (hzero : boundaryResourceResidual R = 0) :
+    R = boundarySourceRate := by
+  obtain ⟨root, _hroot, huniq⟩ := boundarySourceRate_exactRootOn
+  have hR : R = root := huniq R ⟨hlo, hhi, hzero⟩
+  have hStar : boundarySourceRate = root :=
+    huniq boundarySourceRate boundarySourceRate_spec
+  exact hR.trans hStar.symm
+
+/-- A paper-level boundary witness, IF independently constructed for the
+same source primitives and inherited state, discharges the original paper
+Proposition 4.1 interface with Phi fixed to the resource residual. Its
+existence and global optimality remain OPEN obligations. -/
+theorem boundary_paper_spec_of_source_full_witness
+    (G : ℝ) (X : Allocation LocalBridgePhase)
+    (hX : BoundaryEquilibriumCandidate
+      (boundaryPrimitives G boundarySourceRate)
+      (boundaryInitialState G boundarySourceRate) X) :
+    boundaryEquilibriumSpec := by
+  refine ⟨LocalBridgePhase, inferInstance, inferInstance,
+    boundaryPrimitives G boundarySourceRate,
+    boundaryInitialState G boundarySourceRate,
+    X, boundaryResourceResidual, ?_, hX⟩
+  have ha : (1.025 : ℝ) = boundaryLo := by norm_num [boundaryLo]
+  have hb : (1.032 : ℝ) = boundaryHi := by norm_num [boundaryHi]
+  rw [ha, hb]
+  exact boundarySourceRate_exactRootOn
+
+#print axioms boundarySourceRate_exactRootOn
+#print axioms boundarySourceRate_unique_of_source_root
+#print axioms boundary_paper_spec_of_source_full_witness
+
 #print axioms boundarySourceRate_workerLabor
 
 #print axioms boundarySourceRate_firmRegime

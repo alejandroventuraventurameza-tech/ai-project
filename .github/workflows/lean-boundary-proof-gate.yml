@@ -145,6 +145,9 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundarySourceRate_firmRegime
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundarySourceRate_firmSigns
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundarySourceRate_workerLabor
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundarySourceRate_exactRootOn
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundarySourceRate_unique_of_source_root
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_paper_spec_of_source_full_witness
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_micro_boxes
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_productivity_collateral_cost_wedge
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_wedge_of_bank_pricing
