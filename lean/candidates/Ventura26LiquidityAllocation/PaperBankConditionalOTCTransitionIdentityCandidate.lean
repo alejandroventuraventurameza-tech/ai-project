@@ -1161,5 +1161,86 @@ theorem source_weighted_discounted_equity_nonneg_on_support
 
 #print axioms source_weighted_discounted_equity_nonneg_on_support
 
+
+/-- The exact SOURCE mass contracts with the conditional OTC return
+bound imposed only at positive-probability Markov histories.
+Bank solvency and worker-consumption positivity are needed only on
+supported histories to establish nonnegative weighted parent mass.
+The one-step source identity is supplied explicitly here, so this
+lemma can later be paired with a supported-only version of it. -/
+theorem source_discounted_mass_contracts_on_supported_histories
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (grossBound : ℝ)
+    (hfeasible : BankContinuationFeasibleAt P X t h
+      (X.bankEquity t h) (sourceFullRetentionCandidate P X t h))
+    (hinitial : 0 < X.workerConsumption t h)
+    (hconsumption : ∀ n (future : Fin n → S),
+      FuturePathSupported P.tree (currentState h) n future →
+        0 < X.workerConsumption (t + n)
+          (continuationHistory h future))
+    (hconditional : ∀ n (future : Fin n → S),
+      FuturePathSupported P.tree (currentState h) n future →
+        sourceConditionalOTCGrowthFactor P X t h n future ≤ grossBound)
+    (hnext : ∀ n,
+      sourceDiscountedBankEquityMassAt P X t h (n + 1) =
+      ∑ future : Fin n → S, ∑ payments : Fin n → P.paymentSupport,
+        ((continuationTransitionWeight P.tree (currentState h) n future *
+          continuationPaymentWeight P payments) *
+          (bankCumulativeSDFAt P X t h future *
+            (sourceFullRetentionCandidate P X t h).equity n future payments)) *
+          sourceConditionalOTCGrowthFactor P X t h n future) :
+    ∀ n, sourceDiscountedBankEquityMassAt P X t h (n + 1) ≤
+      grossBound * sourceDiscountedBankEquityMassAt P X t h n := by
+  intro n
+  rw [hnext n]
+  unfold sourceDiscountedBankEquityMassAt
+  calc
+    (∑ future : Fin n → S, ∑ payments : Fin n → P.paymentSupport,
+      ((continuationTransitionWeight P.tree (currentState h) n future *
+        continuationPaymentWeight P payments) *
+        (bankCumulativeSDFAt P X t h future *
+          (sourceFullRetentionCandidate P X t h).equity n future payments)) *
+        sourceConditionalOTCGrowthFactor P X t h n future) ≤
+      ∑ future : Fin n → S, ∑ payments : Fin n → P.paymentSupport,
+        ((continuationTransitionWeight P.tree (currentState h) n future *
+          continuationPaymentWeight P payments) *
+          (bankCumulativeSDFAt P X t h future *
+            (sourceFullRetentionCandidate P X t h).equity n future payments)) *
+        grossBound := by
+      apply Finset.sum_le_sum
+      intro future _hf
+      apply Finset.sum_le_sum
+      intro payments _hp
+      have hnonneg := source_weighted_discounted_equity_nonneg_on_support
+        P X t h hfeasible hinitial hconsumption n future payments
+      by_cases hzero : continuationTransitionWeight P.tree (currentState h)
+          n future = 0
+      · simp [hzero]
+      · have hpositive : 0 <
+          continuationTransitionWeight P.tree (currentState h) n future :=
+          lt_of_le_of_ne
+            (ProposedBankContinuationPathProbabilityMass.source_aggregate_future_path_weight_nonneg
+              P.tree n (currentState h) future) (Ne.symm hzero)
+        have hpath := positive_transition_weight_implies_supported
+          P.tree (currentState h) n future hpositive
+        exact mul_le_mul_of_nonneg_left
+          (hconditional n future hpath) hnonneg
+    _ = grossBound * (∑ future : Fin n → S,
+      ∑ payments : Fin n → P.paymentSupport,
+      (continuationTransitionWeight P.tree (currentState h) n future *
+        continuationPaymentWeight P payments) *
+        (bankCumulativeSDFAt P X t h future *
+          (sourceFullRetentionCandidate P X t h).equity n future payments)) := by
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro future _hf
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro payments _hp
+      ring
+
+#print axioms source_discounted_mass_contracts_on_supported_histories
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
