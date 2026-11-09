@@ -377,6 +377,77 @@ theorem boundary_source_loan_rate_micro_box :
   unfold ProposedStationaryBank.loanRate
   constructor <;> linarith
 
+
+/-- The two SOURCE firm user costs inherit strict rational envelopes from
+the proved positive loan-rate box. This is a statement about stationary
+primitive parameters and a candidate bank pricing solution; it does not
+by itself certify a full competitive equilibrium. -/
+theorem boundary_source_user_cost_micro_boxes :
+    ((6316636 / 100000000 : ℝ) <
+        ProposedStationaryRealScale.userCost .H ∧
+      ProposedStationaryRealScale.userCost .H <
+        (6316638 / 100000000 : ℝ)) ∧
+    ((5594364 / 100000000 : ℝ) <
+        ProposedStationaryRealScale.userCost .L ∧
+      ProposedStationaryRealScale.userCost .L <
+        (5594368 / 100000000 : ℝ)) := by
+  rcases boundary_source_loan_rate_micro_box with ⟨hrlo, hrhi⟩
+  have hpos : 0 < ProposedStationaryBank.loanRate :=
+    ProposedStationaryRealScale.loanRate_pos
+  have hscaledH :
+      ProposedStationaryRealScale.userCost .H *
+        ProposedStationaryBank.loanRate =
+      (81 / 80 : ℝ) * ((511 / 2400 : ℝ) *
+        ProposedStationaryBank.loanRate - 39 / 256) := by
+    unfold ProposedStationaryRealScale.userCost
+      ProposedStationaryRealScale.capitalPrice
+      ProposedStationaryRealScale.pledgeability
+    field_simp [ne_of_gt hpos] <;> ring
+  have hscaledL :
+      ProposedStationaryRealScale.userCost .L *
+        ProposedStationaryBank.loanRate =
+      (81 / 80 : ℝ) * ((137 / 300 : ℝ) *
+        ProposedStationaryBank.loanRate - 13 / 32) := by
+    unfold ProposedStationaryRealScale.userCost
+      ProposedStationaryRealScale.capitalPrice
+      ProposedStationaryRealScale.pledgeability
+    field_simp [ne_of_gt hpos] <;> ring
+  constructor
+  · constructor
+    · apply (mul_lt_mul_right hpos).mp
+      rw [hscaledH]
+      linarith only [hrlo]
+    · apply (mul_lt_mul_right hpos).mp
+      rw [hscaledH]
+      linarith only [hrhi]
+  · constructor
+    · apply (mul_lt_mul_right hpos).mp
+      rw [hscaledL]
+      linarith only [hrlo]
+    · apply (mul_lt_mul_right hpos).mp
+      rw [hscaledL]
+      linarith only [hrhi]
+
+/-- A strictly higher-technology firm has lower pledgeability and a
+larger stationary user cost under the SOURCE illustrative parameters.
+This is a wedge ranking, not a general-equilibrium welfare result. -/
+theorem boundary_source_productivity_collateral_cost_wedge :
+    ProposedStationaryRealScale.technology .L <
+      ProposedStationaryRealScale.technology .H ∧
+    ProposedStationaryRealScale.pledgeability .H <
+      ProposedStationaryRealScale.pledgeability .L ∧
+    ProposedStationaryRealScale.userCost .L <
+      ProposedStationaryRealScale.userCost .H := by
+  rcases boundary_source_user_cost_micro_boxes with
+    ⟨⟨hHlo, _hHhi⟩, ⟨_hLlo, hLhi⟩⟩
+  refine ⟨?_, ?_, ?_⟩
+  · norm_num [ProposedStationaryRealScale.technology]
+  · norm_num [ProposedStationaryRealScale.pledgeability]
+  · linarith
+
+#print axioms boundary_source_user_cost_micro_boxes
+#print axioms boundary_source_productivity_collateral_cost_wedge
+
 #print axioms boundary_source_reserve_rate_micro_box
 #print axioms boundary_source_loan_rate_micro_box
 
