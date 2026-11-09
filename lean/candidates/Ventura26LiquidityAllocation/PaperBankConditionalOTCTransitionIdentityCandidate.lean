@@ -2622,5 +2622,71 @@ theorem source_otc_position_abs_le_equity_of_firm_rate_box_and_reserve_floor
 
 #print axioms source_otc_position_abs_le_equity_of_firm_rate_box_and_reserve_floor
 
+
+/-- The literal SOURCE monetary rule yields the initial log reserve-rate
+floor if its date-zero policy forcing meets the proposed threshold.
+This is a sufficient condition, not an assumption hidden in feasibility. -/
+theorem source_initial_reserve_log_floor_of_policy_forcing
+    (P : Primitives S) (I : InheritedState) (X : Allocation S)
+    (h : History S 0) (lowerLog : ℝ)
+    (hpolicy : MonetaryPolicyRules P I X)
+    (hh : FirmHistoryAdmissible P 0 h)
+    (hforcing :
+      lowerLog ≤
+        P.reserveRatePersistence * Real.log I.reserveRateLag +
+        (1 - P.reserveRatePersistence) *
+          (Real.log P.reserveRateSteady +
+            P.inflationResponse * Real.log (X.inflation 0 h) +
+            P.outputResponse * Real.log (X.output 0 h / P.outputReference)) +
+        P.reserveRateInnovation (currentState h)) :
+    lowerLog ≤ Real.log (X.reserveRate 0 h) := by
+  rw [hpolicy.1 h hh]
+  exact hforcing
+
+/-- A lower invariant for the SOURCE log remuneration rule. Its genuine
+economic requirement is a lower bound on the combined policy forcing,
+including potentially negative monetary innovations. No globally bounded
+path is inferred from pointwise reserve-rate positivity. -/
+theorem source_reserve_log_floor_preserved_by_policy_forcing
+    (P : Primitives S) (I : InheritedState) (X : Allocation S)
+    (t : ℕ) (h : History S t) (s : S) (lowerLog : ℝ)
+    (hpolicy : MonetaryPolicyRules P I X)
+    (hchild : FirmHistoryAdmissible P (t + 1) (childHistory h s))
+    (hpersistence : 0 ≤ P.reserveRatePersistence)
+    (hprev : lowerLog ≤ Real.log (X.reserveRate t h))
+    (hforcing :
+      (1 - P.reserveRatePersistence) * lowerLog ≤
+        (1 - P.reserveRatePersistence) *
+          (Real.log P.reserveRateSteady +
+            P.inflationResponse *
+              Real.log (X.inflation (t + 1) (childHistory h s)) +
+            P.outputResponse *
+              Real.log (X.output (t + 1) (childHistory h s) /
+                P.outputReference)) +
+          P.reserveRateInnovation s) :
+    lowerLog ≤ Real.log
+      (X.reserveRate (t + 1) (childHistory h s)) := by
+  have hrec := hpolicy.2.2.1 t h s hchild
+  rw [hrec]
+  have hproduct :=
+    mul_le_mul_of_nonneg_left hprev hpersistence
+  nlinarith [hproduct, hforcing]
+
+/-- A log lower bound becomes a strictly positive level bound on the
+SOURCE remuneration rate when its positive domain holds. -/
+theorem source_reserve_rate_floor_of_log_floor
+    (reserveRate lowerLog : ℝ)
+    (hrate : 0 < reserveRate)
+    (hlog : lowerLog ≤ Real.log reserveRate) :
+    Real.exp lowerLog ≤ reserveRate := by
+  calc
+    Real.exp lowerLog ≤ Real.exp (Real.log reserveRate) :=
+      Real.exp_le_exp.mpr hlog
+    _ = reserveRate := Real.exp_log hrate
+
+#print axioms source_initial_reserve_log_floor_of_policy_forcing
+#print axioms source_reserve_log_floor_preserved_by_policy_forcing
+#print axioms source_reserve_rate_floor_of_log_floor
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
