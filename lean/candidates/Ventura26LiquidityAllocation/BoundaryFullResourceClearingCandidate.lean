@@ -80,14 +80,16 @@ theorem sourceBoundaryDateData_capital_step (G : ℝ) (t : ℕ)
       (sourceBoundaryDateData G (t + 1)).currentCapital i := by
   cases t with
   | zero =>
-      rw [sourceBoundaryDateData_zero, sourceBoundaryDateData_one]
+      rw [sourceBoundaryDateData_zero, sourceBoundaryDateData_one,
+        boundary_oneData_fields]
       rfl
   | succ t =>
       cases t with
       | zero =>
           change (sourceBoundaryDateData G 1).nextCapital i =
             (sourceBoundaryDateData G 2).currentCapital i
-          rw [sourceBoundaryDateData_one, sourceBoundaryDateData_tail G 0]
+          rw [sourceBoundaryDateData_one, sourceBoundaryDateData_tail G 0,
+            boundary_oneData_fields]
           rfl
       | succ n =>
           change (sourceBoundaryDateData G (n + 2)).nextCapital i =
