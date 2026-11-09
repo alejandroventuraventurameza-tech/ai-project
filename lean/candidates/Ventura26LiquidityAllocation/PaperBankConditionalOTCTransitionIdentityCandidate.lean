@@ -1445,5 +1445,107 @@ theorem source_discounted_bank_mass_next_on_supported_histories
 
 #print axioms source_discounted_bank_mass_next_on_supported_histories
 
+
+/-- Nonnegative source surviving-equity value using feasibility only
+at Markov-supported paths. Off-support contributions are identically
+zero; the survival factor is assumed nonnegative. -/
+theorem source_surviving_value_nonneg_on_supported_histories
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (hsurvive : 0 ≤ 1 - P.bankExit)
+    (hfeasible : BankContinuationFeasibleAt P X t h
+      (X.bankEquity t h) (sourceFullRetentionCandidate P X t h))
+    (hinitial : 0 < X.workerConsumption t h)
+    (hconsumption : ∀ n (future : Fin n → S),
+      FuturePathSupported P.tree (currentState h) n future →
+        0 < X.workerConsumption (t + n) (continuationHistory h future)) :
+    ∀ n, 0 ≤ bankSurvivingValueTermAt P X t h
+      (sourceFullRetentionCandidate P X t h) n := by
+  intro n
+  rw [source_surviving_value_eq_survival_pow_mul_mass]
+  apply mul_nonneg (pow_nonneg hsurvive n)
+  unfold sourceDiscountedBankEquityMassAt
+  apply Finset.sum_nonneg
+  intro future _hf
+  apply Finset.sum_nonneg
+  intro payments _hp
+  exact source_weighted_discounted_equity_nonneg_on_support
+    P X t h hfeasible hinitial hconsumption n future payments
+
+/-- SOURCE full-retention TVC and payoff summability under OTC
+conditional-growth bounds ONLY on supported histories. Individual
+equity may be zero; off-support prices/consumption need no positivity.
+The bound and economic feasibility are premises, not an equilibrium
+existence or global BankOptimal theorem. -/
+theorem source_full_retention_tvc_on_supported_histories
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (C grossBound : ℝ)
+    (hC : 0 ≤ C)
+    (hgross : 0 ≤ grossBound)
+    (hsurvive : 0 ≤ 1 - P.bankExit)
+    (hexit : P.bankExit < 1)
+    (hcontraction : (1 - P.bankExit) * grossBound < 1)
+    (hbase : bankSurvivingValueTermAt P X t h
+      (sourceFullRetentionCandidate P X t h) 0 ≤ C)
+    (hfeasible : BankContinuationFeasibleAt P X t h
+      (X.bankEquity t h) (sourceFullRetentionCandidate P X t h))
+    (hrisk : P.workerRiskAversion = 1)
+    (hinitial : 0 < X.workerConsumption t h)
+    (hconsumption : ∀ n (future : Fin n → S),
+      FuturePathSupported P.tree (currentState h) n future →
+        0 < X.workerConsumption (t + n) (continuationHistory h future))
+    (hchildConsumption : ∀ n (future : Fin n → S) s,
+      FuturePathSupported P.tree (currentState h) n future →
+        0 < P.tree.transition
+          (currentState (continuationHistory h future)) s →
+        0 < X.workerConsumption (t + n + 1)
+          (childHistory (continuationHistory h future) s))
+    (haggregate : ∀ n (future : Fin n → S),
+      FuturePathSupported P.tree (currentState h) n future →
+        0 < X.bankEquity (t + n) (continuationHistory h future))
+    (hconditional : ∀ n (future : Fin n → S),
+      FuturePathSupported P.tree (currentState h) n future →
+        sourceConditionalOTCGrowthFactor P X t h n future ≤ grossBound) :
+    BankContinuationObjectiveWellDefinedAt P X t h
+      (sourceFullRetentionCandidate P X t h) ∧
+    BankContinuationTerminalConditionAt P X t h
+      (sourceFullRetentionCandidate P X t h) := by
+  have hnext := source_discounted_bank_mass_next_on_supported_histories
+    P X t h hfeasible hrisk hconsumption hchildConsumption haggregate
+  have hmass := source_discounted_mass_contracts_on_supported_histories
+    P X t h grossBound hfeasible hinitial hconsumption hconditional hnext
+  have hnonneg := source_surviving_value_nonneg_on_supported_histories
+    P X t h hsurvive hfeasible hinitial hconsumption
+  have hstep : ∀ n,
+      bankSurvivingValueTermAt P X t h
+        (sourceFullRetentionCandidate P X t h) (n + 1) ≤
+      ((1 - P.bankExit) * grossBound) *
+        bankSurvivingValueTermAt P X t h
+          (sourceFullRetentionCandidate P X t h) n := by
+    intro n
+    calc
+      bankSurvivingValueTermAt P X t h
+          (sourceFullRetentionCandidate P X t h) (n + 1) =
+        (1 - P.bankExit) ^ (n + 1) *
+          sourceDiscountedBankEquityMassAt P X t h (n + 1) :=
+        source_surviving_value_eq_survival_pow_mul_mass P X t h (n + 1)
+      _ ≤ (1 - P.bankExit) ^ (n + 1) *
+          (grossBound * sourceDiscountedBankEquityMassAt P X t h n) :=
+        mul_le_mul_of_nonneg_left (hmass n) (pow_nonneg hsurvive _)
+      _ = ((1 - P.bankExit) * grossBound) *
+          bankSurvivingValueTermAt P X t h
+            (sourceFullRetentionCandidate P X t h) n := by
+        rw [source_surviving_value_eq_survival_pow_mul_mass P X t h n]
+        rw [pow_succ]
+        ring
+  exact full_retention_analytic_conditions_of_survivor_contraction
+    P X t h C ((1 - P.bankExit) * grossBound)
+    hC (mul_nonneg hsurvive hgross) hcontraction
+    hexit hnonneg hbase hstep
+
+#print axioms source_surviving_value_nonneg_on_supported_histories
+#print axioms source_full_retention_tvc_on_supported_histories
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
