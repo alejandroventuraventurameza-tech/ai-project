@@ -2508,5 +2508,49 @@ theorem source_otc_position_abs_le_equity_of_monetary_envelopes
 
 #print axioms source_otc_position_abs_le_equity_of_monetary_envelopes
 
+
+/-- On an admissible SOURCE positive domain, the reserve requirement is
+nonnegative and strictly below one. Thus rhoBound=1 is not an extra
+assumption in the OTC bank exposure certificate. -/
+theorem source_reserve_requirement_abs_le_one_of_positive_domain
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (hdomain : PositiveDomain P X)
+    (hh : FirmHistoryAdmissible P t h) :
+    |P.reserveRequirementPath t h| ≤ 1 := by
+  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, _, hreq0, hreq1, _⟩ :=
+    hdomain t h hh
+  rw [abs_of_nonneg hreq0]
+  exact le_of_lt hreq1
+
+/-- The per-history SOURCE OTC exposure certificate specialized to the
+literal reserve requirement domain 0 <= rho < 1. This removes the
+independent rhoBound premise but NOT the deposit/reserve-rate ratio
+premise or bank feasibility. -/
+theorem source_otc_position_abs_le_equity_of_positive_domain
+    (P : Primitives S) (I : InheritedState) (X : Allocation S)
+    (t : ℕ) (h : History S t) (omega : P.paymentSupport)
+    (ratioBound : ℝ)
+    (hh : FirmHistoryAdmissible P t h)
+    (hbank : BankFeasible P I X (fullRetentionCommonBankPlan P X))
+    (hdomain : PositiveDomain P X)
+    (htight : 0 < X.bankTightness t h)
+    (hratioNonneg : 0 ≤ ratioBound)
+    (hratio : |X.depositRate t h / X.reserveRate t h| ≤ ratioBound) :
+    |bankOTCInterbankAt P X t h (X.bankTightness t h)
+        (X.reservesPrePayment t h) (X.bankDeposits t h) omega| ≤
+    (1 + P.bankDepositCap +
+      P.bankDepositCap * 1 +
+      P.bankDepositCap * (ratioBound + 1) *
+        sourcePaymentShockAbsBound P) * X.bankEquity t h := by
+  exact source_otc_position_abs_le_equity_of_monetary_envelopes
+    P I X t h omega 1 ratioBound hh hbank htight
+    (by norm_num) hratioNonneg
+    (source_reserve_requirement_abs_le_one_of_positive_domain P X t h hdomain hh)
+    hratio
+
+#print axioms source_reserve_requirement_abs_le_one_of_positive_domain
+#print axioms source_otc_position_abs_le_equity_of_positive_domain
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
