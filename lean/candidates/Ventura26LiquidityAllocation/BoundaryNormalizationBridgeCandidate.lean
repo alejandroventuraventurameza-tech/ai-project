@@ -674,6 +674,174 @@ theorem boundary_firm_L_endpoint_boxes_of_coefficient_box
     apply (div_lt_iff₀ hdenHi).2
     exact lt_trans hhi (by norm_num [boundaryHi])
 
+
+/-- A sharper rational lower enclosure follows from the same *SOURCE*
+cost box as the earlier coarse capital enclosure. No decimal constant is
+introduced as an axiom. -/
+theorem boundary_source_capital_scale_L_sharp_lower :
+    (9431533 / 100000 : ℝ) <
+      ProposedStationaryRealScale.capitalScale .L := by
+  rcases (boundary_source_user_cost_micro_boxes).2 with ⟨_, hcosthi⟩
+  have hcostpos :
+      0 < ProposedStationaryRealScale.userCost .L :=
+    ProposedStationaryRealScale.userCost_pos .L
+  have hbaseLo :
+      (24826555 / 10000000 : ℝ) <
+        (5 / 36 : ℝ) / ProposedStationaryRealScale.userCost .L := by
+    apply (lt_div_iff₀ hcostpos).2
+    linarith only [hcosthi]
+  have hpowLo :
+      (24826555 / 10000000 : ℝ) ^ (5 : ℕ) <
+        ((5 / 36 : ℝ) /
+          ProposedStationaryRealScale.userCost .L) ^ (5 : ℕ) := by
+    gcongr
+  have hcapital :
+      ProposedStationaryRealScale.capitalScale .L =
+        ((5 / 36 : ℝ) /
+          ProposedStationaryRealScale.userCost .L) ^ (5 : ℕ) := by
+    unfold ProposedStationaryRealScale.capitalScale
+    norm_num [ProposedStationaryRealScale.profitCoefficient,
+      ProposedStationaryRealScale.technology]
+  rw [hcapital]
+  exact lt_trans (by norm_num) hpowLo
+
+/-- The stationary L firm's numerator is algebraically determined by its
+capital and the SOURCE bank loan rate. The correlation between capital
+and loan rate is not discarded by this identity. -/
+private theorem boundary_source_firm_L_coefficient_formula :
+    firmCoefficient .L =
+      ProposedStationaryRealScale.capitalScale .L *
+        ((81 / 80 : ℝ) * ((187 / 1200 : ℝ) -
+          (377 / 3200 : ℝ) / ProposedStationaryBank.loanRate)) := by
+  have hrpos : 0 < ProposedStationaryBank.loanRate :=
+    ProposedStationaryRealScale.loanRate_pos
+  dsimp [firmCoefficient, ProposedStationaryRealScale.userCost,
+    ProposedStationaryRealScale.pledgeability,
+    ProposedStationaryRealScale.capitalPrice,
+    ProposedStationaryRealScale.liquidationValue]
+  field_simp [ne_of_gt hrpos] <;> ring
+
+/-- Two of the original ten endpoint component inequalities are derived
+from SOURCE bank pricing and firm primitives: no coefficient-box premise.
+The other eight component inequalities remain independent obligations. -/
+theorem boundary_firm_L_endpoint_boxes_from_source :
+    (382592 / 100000 : ℝ) <
+      normalizedFirmConsumption boundaryLo .L ∧
+    normalizedFirmConsumption boundaryHi .L <
+      (380000 / 100000 : ℝ) := by
+  let f : ℝ := (81 / 80 : ℝ) *
+    ((187 / 1200 : ℝ) -
+      (377 / 3200 : ℝ) / ProposedStationaryBank.loanRate)
+  have hrpos : 0 < ProposedStationaryBank.loanRate :=
+    ProposedStationaryRealScale.loanRate_pos
+  rcases boundary_source_loan_rate_micro_box with ⟨hrlo, hrhi⟩
+  have hfm :
+      f * ProposedStationaryBank.loanRate =
+        (81 / 80 : ℝ) *
+          ((187 / 1200 : ℝ) * ProposedStationaryBank.loanRate -
+            (377 / 3200 : ℝ)) := by
+    dsimp [f]
+    field_simp [ne_of_gt hrpos] <;> ring
+  have hflo : (39916157 / 1000000000 : ℝ) < f := by
+    by_contra hn
+    have hle : f ≤ (39916157 / 1000000000 : ℝ) :=
+      le_of_not_gt hn
+    have hm := mul_le_mul_of_nonneg_right hle hrpos.le
+    rw [hfm] at hm
+    linarith only [hm, hrlo]
+  have hfhi : f < (39916165 / 1000000000 : ℝ) := by
+    by_contra hn
+    have hge : (39916165 / 1000000000 : ℝ) ≤ f :=
+      le_of_not_gt hn
+    have hm := mul_le_mul_of_nonneg_right hge hrpos.le
+    rw [hfm] at hm
+    linarith only [hm, hrhi]
+  have hfpos : 0 < f :=
+    lt_trans (by norm_num : (0 : ℝ) <
+      (39916157 / 1000000000 : ℝ)) hflo
+  have hklo := boundary_source_capital_scale_L_sharp_lower
+  have hkhi := (boundary_source_capital_scale_L_rational_box).2
+  have hcoefflo :
+      (1470588 / 390625 : ℝ) < firmCoefficient .L := by
+    rw [boundary_source_firm_L_coefficient_formula]
+    change (1470588 / 390625 : ℝ) <
+      ProposedStationaryRealScale.capitalScale .L * f
+    calc
+      (1470588 / 390625 : ℝ) <
+          (9431533 / 100000 : ℝ) *
+            (39916157 / 1000000000 : ℝ) := by norm_num
+      _ < (9431533 / 100000 : ℝ) * f :=
+        mul_lt_mul_of_pos_left hflo (by norm_num)
+      _ < ProposedStationaryRealScale.capitalScale .L * f :=
+        mul_lt_mul_of_pos_right hklo hfpos
+  have hcoeffhi :
+      firmCoefficient .L < (58824 / 15625 : ℝ) := by
+    rw [boundary_source_firm_L_coefficient_formula]
+    change ProposedStationaryRealScale.capitalScale .L * f <
+      (58824 / 15625 : ℝ)
+    calc
+      ProposedStationaryRealScale.capitalScale .L * f <
+          (943158 / 10000 : ℝ) * f :=
+        mul_lt_mul_of_pos_right hkhi hfpos
+      _ < (943158 / 10000 : ℝ) *
+          (39916165 / 1000000000 : ℝ) :=
+        mul_lt_mul_of_pos_left hfhi (by norm_num)
+      _ < (58824 / 15625 : ℝ) := by norm_num
+  have hdenLo : 0 < (24 / 25 : ℝ) * boundaryLo := by
+    norm_num [boundaryLo]
+  have hdenHi : 0 < (24 / 25 : ℝ) * boundaryHi := by
+    norm_num [boundaryHi]
+  constructor
+  · change (382592 / 100000 : ℝ) <
+      firmCoefficient .L / ((24 / 25 : ℝ) * boundaryLo)
+    apply (lt_div_iff₀ hdenLo).2
+    exact lt_of_le_of_lt (by norm_num [boundaryLo]) hcoefflo
+  · change firmCoefficient .L / ((24 / 25 : ℝ) * boundaryHi) <
+      (380000 / 100000 : ℝ)
+    apply (div_lt_iff₀ hdenHi).2
+    exact lt_of_lt_of_le hcoeffhi (by norm_num [boundaryHi])
+
+/-- The independent sign certificate now has eight, not ten, open
+rational inequalities; both L-consumption boxes follow from the
+source-equation chain above. -/
+structure BoundaryRemainingEightBoxes : Prop where
+  Ylo_upper : normalizedOutput boundaryLo < 1327678 / 100000
+  CWlo_lower : 793630 / 100000 < normalizedWorkerConsumption boundaryLo
+  CHlo_lower : 296932 / 100000 < normalizedFirmConsumption boundaryLo .H
+  GammaLo_lower : 266849 / 100000 < normalizedCapitalCost boundaryLo
+  Yhi_lower : 1340498 / 100000 < normalizedOutput boundaryHi
+  CWhi_upper : normalizedWorkerConsumption boundaryHi < 788240 / 100000
+  CHhi_upper : normalizedFirmConsumption boundaryHi .H < 294921 / 100000
+  GammaHi_upper : normalizedCapitalCost boundaryHi < 164406 / 100000
+
+theorem boundary_component_boxes_from_eight
+    (h : BoundaryRemainingEightBoxes) : BoundaryComponentBoxes := by
+  rcases boundary_firm_L_endpoint_boxes_from_source with ⟨hclo, hchi⟩
+  exact ⟨h.Ylo_upper, h.CWlo_lower, h.CHlo_lower, hclo,
+    h.GammaLo_lower, h.Yhi_lower, h.CWhi_upper,
+    h.CHhi_upper, hchi, h.GammaHi_upper⟩
+
+/-- Certified uniqueness of the exact SOURCE scalar root on the bracket,
+conditional only on the eight remaining component inequalities.
+This is a 33-row reduced prefix, NOT a complete infinite-horizon
+competitive equilibrium or branch-selection theorem. -/
+theorem boundary_unique_reduced_prefix_rate_of_eight
+    (G : ℝ) (h : BoundaryRemainingEightBoxes) :
+    ∃! R : ℝ,
+      boundaryLo ≤ R ∧ R ≤ boundaryHi ∧
+      boundaryResourceResidual R = 0 ∧
+      ∀ branch : LocalPrefixBranch,
+        LocalReducedPrefixEquationsHold branch
+          (boundaryPrimitives G R)
+          (boundaryInitialState G R)
+          (boundaryCoordinates R) .dateOne .recurrent boundaryTail := by
+  exact boundary_unique_reduced_prefix_rate_of_boxes G
+    (boundary_component_boxes_from_eight h)
+
+#print axioms boundary_source_capital_scale_L_sharp_lower
+#print axioms boundary_firm_L_endpoint_boxes_from_source
+#print axioms boundary_unique_reduced_prefix_rate_of_eight
+
 #print axioms boundary_source_capital_scale_L_rational_box
 #print axioms boundary_firm_L_endpoint_boxes_of_coefficient_box
 
