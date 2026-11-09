@@ -2416,7 +2416,7 @@ theorem source_full_retention_deposits_and_reserves_le_equity_caps
 absolute payment-shock bound. No new distributional boundedness
 assumption is imposed: this constant is finite by finite summation. -/
 noncomputable def sourcePaymentShockAbsBound (P : Primitives S) : ℝ :=
-  ∑ omega ∈ P.paymentSupport, |P.paymentShock omega|
+  ∑ omega : P.paymentSupport, |P.paymentShock omega|
 
 theorem source_payment_shock_abs_bounded_on_support
     (P : Primitives S) (omega : P.paymentSupport) :
@@ -2429,14 +2429,10 @@ theorem source_payment_shock_abs_bounded_on_support
     exact abs_nonneg _
   refine ⟨hnonneg, ?_⟩
   unfold sourcePaymentShockAbsBound
-  change |P.paymentShock (omega : BankPayment)| ≤
-    ∑ w ∈ P.paymentSupport, |P.paymentShock w|
-  simpa only [Finset.sum_filter] using
-    (Finset.single_le_sum
-      (s := P.paymentSupport)
-      (f := fun w : BankPayment => |P.paymentShock w|)
-      (by intro w hw; exact abs_nonneg _)
-      omega.property)
+  apply Finset.single_le_sum
+  · intro w hw
+    exact abs_nonneg _
+  · exact Finset.mem_univ _
 
 #print axioms source_payment_shock_abs_bounded_on_support
 
