@@ -100,7 +100,7 @@ jobs:
         working-directory: upstream
         run: |
           set -euo pipefail
-          lake build Ventura26LiquidityAllocation.BoundaryFullSettlementCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
+          lake build Ventura26LiquidityAllocation.BoundaryFullCapitalProducerCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
             tail -n 160 "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log"
             exit 1
           }
@@ -111,7 +111,7 @@ jobs:
         run: |
           set -euo pipefail
           cat > BoundaryProofAudit.lean <<'LEAN'
-          import Ventura26LiquidityAllocation.BoundaryFullSettlementCandidate
+          import Ventura26LiquidityAllocation.BoundaryFullCapitalProducerCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryWorkerLabor.boundary_full_prefix_equations_from_root
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.output_ratio_fifteenth_power
@@ -176,6 +176,14 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullSettlement.sourceBoundaryDateData_reserveRequirement
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullSettlement.sourceBoundaryLiteralAllocation_settlementClears
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullSettlement.sourceBoundaryLiteralAllocation_fiscalClosure
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryCapitalProducer.sourceBoundaryDateData_currentCapital_pos
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryCapitalProducer.sourceBoundaryDateData_aggregateCapital_pos
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryCapitalProducer.sourceBoundaryDateData_zero_investment_eq
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryCapitalProducer.sourceBoundaryDateData_stationary_investment_pos
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryCapitalProducer.sourceBoundaryDateData_investment_pos
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryCapitalProducer.sourceBoundary_sourceAggregateCapital_eq
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryCapitalProducer.sourceBoundary_sourceInvestment_eq
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryCapitalProducer.sourceBoundaryLiteralAllocation_capitalProducerAccounts
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_micro_boxes
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_productivity_collateral_cost_wedge
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_wedge_of_bank_pricing
