@@ -127,6 +127,8 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_productivity_collateral_cost_wedge
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_wedge_of_bank_pricing
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_stationary_capital_scale_order
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_capital_scale_L_rational_box
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_firm_L_endpoint_boxes_of_coefficient_box
           LEAN
           lake env lean BoundaryProofAudit.lean > "$GITHUB_WORKSPACE/lean-boundary-logs/axioms.log" 2>&1 || {
             cat "$GITHUB_WORKSPACE/lean-boundary-logs/axioms.log"
