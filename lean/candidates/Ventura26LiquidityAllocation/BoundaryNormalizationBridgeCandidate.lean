@@ -2288,6 +2288,40 @@ theorem boundary_unique_reduced_prefix_rate_from_source
     ⟨boundary_output_lo_box_from_source,
       boundary_output_hi_box_from_source⟩
 
+/-- Named mathematical SOURCE boundary rate for use by subsequent full
+allocation construction. This is the scalar resource root, not a
+complete intervention equilibrium object. -/
+noncomputable def boundarySourceRate : ℝ :=
+  boundaryRoot boundary_analyticPackage
+    (endpointSigns_of_boxes boundary_component_boxes_from_source)
+
+/-- The named rate is bracketed and solves the *source* resource
+equation, not merely a normalized numerical surrogate. -/
+theorem boundarySourceRate_spec :
+    boundaryLo ≤ boundarySourceRate ∧
+    boundarySourceRate ≤ boundaryHi ∧
+    boundaryResourceResidual boundarySourceRate = 0 := by
+  simpa only [boundarySourceRate] using
+    (boundaryRoot_spec boundary_analyticPackage
+      (endpointSigns_of_boxes boundary_component_boxes_from_source))
+
+/-- All 33 reduced equations hold at the named SOURCE root in either
+formal prefix branch. A full history-indexed allocation, individual
+optimality and terminal checks must still be supplied. -/
+theorem boundarySourceRate_reduced_prefix
+    (G : ℝ) (branch : LocalPrefixBranch) :
+    LocalReducedPrefixEquationsHold branch
+      (boundaryPrimitives G boundarySourceRate)
+      (boundaryInitialState G boundarySourceRate)
+      (boundaryCoordinates boundarySourceRate)
+      .dateOne .recurrent boundaryTail := by
+  simpa only [boundarySourceRate] using
+    (boundary_reduced_prefix_from_endpoint_boxes
+      G boundary_component_boxes_from_source branch)
+
+#print axioms boundarySourceRate_spec
+#print axioms boundarySourceRate_reduced_prefix
+
 #print axioms boundary_source_output_scale_sharp_box
 #print axioms boundary_output_lo_box_from_source
 #print axioms boundary_output_hi_box_from_source
