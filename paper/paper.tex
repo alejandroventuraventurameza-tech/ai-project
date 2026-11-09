@@ -1331,8 +1331,8 @@ $34.7593<\Phi'(R)<37.5087$ en él. El teorema del valor intermedio prueba existe
 El único dual empresarial nulo por construcción es el de L en fecha 0. H tiene dual positivo y ambas esquinas de depósitos tienen signo correcto. La continuación satisface las pruebas estacionarias anteriores. $m=\bar m=5/6$ y $\Pi=1$ en todas las fechas satisfacen las bandas de precios globales; los términos terminales desaparecen. Se aplica la proposición \ref{prop:finite_prefix_equilibrium}.
 \end{proof}
 \paragraph{Alcance del enlace de frontera y estatus de la formalización.}
-En el módulo Lean \texttt{BoundaryNormalizationBridgeCandidate}, el
-teorema \texttt{boundary\_unique\_reduced\_prefix\_rate\_from\_source}
+En el módulo Lean \texttt{BoundaryNormalization}\allowbreak\texttt{BridgeCandidate}, el
+teorema \texttt{boundary\_unique\_reduced\_}\allowbreak\texttt{prefix\_rate\_from\_source}
 demuestra, a partir de las primitivas originales y sin asumir cajas
 numéricas de frontera, la existencia y unicidad de la raíz
 $R\in[1.025,1.032]$ del residual de recursos, junto con las
@@ -1342,7 +1342,7 @@ raíces decimoquintas del producto, fueron descargadas en Lean y
 sometidas a la auditoría de axiomas del commit \texttt{6ab6d29b}.
 Este certificado se refiere a la tasa escalar y al prefijo: no entrega
 por sí mismo una trayectoria $X$ definida en todas las fechas e
-historias, ni equivale a \texttt{CompetitiveEquilibriumWithInitialIntervention}.
+historias, ni equivale a \texttt{CompetitiveEquilibrium}\allowbreak\texttt{WithInitialIntervention}.
 
 La afirmación más fuerte de equilibrio competitivo de la
 proposición \ref{prop:boundary_equilibrium} requiere verificar, sobre
