@@ -2374,5 +2374,42 @@ theorem source_settlement_imbalance_abs_le_primitive_terms
 
 #print axioms source_settlement_imbalance_abs_le_primitive_terms
 
+
+/-- SOURCE BankFeasible of the literal full-retention plan implies
+a deposit-to-equity upper bound and, via its exact balance-sheet
+identity and nonnegative loans, a pre-settlement reserve-to-equity
+upper bound. These are consequences of primitive bank feasibility
+at an admissible history, not additional portfolio assumptions. -/
+theorem source_full_retention_deposits_and_reserves_le_equity_caps
+    (P : Primitives S) (I : InheritedState) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (hh : FirmHistoryAdmissible P t h)
+    (hbank : BankFeasible P I X (fullRetentionCommonBankPlan P X)) :
+    0 ≤ X.bankDeposits t h ∧
+      X.bankDeposits t h ≤ P.bankDepositCap * X.bankEquity t h ∧
+    0 ≤ X.reservesPrePayment t h ∧
+      X.reservesPrePayment t h ≤
+        (1 + P.bankDepositCap) * X.bankEquity t h := by
+  have hsign := hbank.1 t h hh
+  have hbal := hbank.2.2.1 t h hh
+  have hcaps := hbank.2.2.2.1 t h hh
+  have hloan : 0 ≤ X.bankLoans t h := by
+    simpa only [fullRetentionCommonBankPlan] using hsign.2.2.2.1
+  have hreserve : 0 ≤ X.reservesPrePayment t h := by
+    simpa only [fullRetentionCommonBankPlan] using hsign.2.2.2.2.1
+  have hdeposit : 0 ≤ X.bankDeposits t h := by
+    simpa only [fullRetentionCommonBankPlan] using hsign.2.2.2.2.2
+  have hbalance :
+      X.bankLoans t h + X.reservesPrePayment t h =
+        X.bankDeposits t h + X.bankEquity t h := by
+    simpa only [fullRetentionCommonBankPlan] using hbal
+  have hdepositCap :
+      X.bankDeposits t h ≤ P.bankDepositCap * X.bankEquity t h := by
+    simpa only [fullRetentionCommonBankPlan] using hcaps.1
+  refine ⟨hdeposit, hdepositCap, hreserve, ?_⟩
+  nlinarith
+
+#print axioms source_full_retention_deposits_and_reserves_le_equity_caps
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
