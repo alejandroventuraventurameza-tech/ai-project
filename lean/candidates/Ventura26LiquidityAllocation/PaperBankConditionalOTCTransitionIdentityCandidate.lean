@@ -2220,7 +2220,7 @@ theorem source_discounted_growth_le_uniform_bound_of_feasible_signed_portfolio
           X.bankEquity (t + n) (continuationHistory h future)) /
         X.bankEquity (t + n) (continuationHistory h future) /
         X.inflation (t + n + 1)
-          (childHistory (continuationHistory h future) s)) :
+          (childHistory (continuationHistory h future) s))
     (huniform : sdfBound *
         (((X.loanRate (t + n) (continuationHistory h future) *
           P.bankLoanCap + reserveRevenueCap + fundingMagnitudeCap) *
