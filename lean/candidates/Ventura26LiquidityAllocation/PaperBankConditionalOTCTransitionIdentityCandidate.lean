@@ -2155,5 +2155,93 @@ theorem source_full_retention_tvc_of_positive_shock_growth_bounds
 
 #print axioms source_full_retention_tvc_of_positive_shock_growth_bounds
 
+
+/-- A concrete sufficient upper-bound certificate for the literal
+discounted OTC growth on an admissible source history. Unlike an
+unqualified portfolio cap, loan leverage follows here from SOURCE
+BankFeasible of the full-retention plan. The uniform upper envelope,
+reserve revenues and magnitude of signed interbank funding remain
+explicit economic premises. -/
+theorem source_discounted_growth_le_uniform_bound_of_feasible_signed_portfolio
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t) (n : ℕ)
+    (future : Fin n → S) (s : S) (omega : P.paymentSupport)
+    (sdfBound reserveRevenueCap fundingMagnitudeCap grossBound : ℝ)
+    (hsdfLower : 0 ≤
+      P.workerDiscount *
+        X.workerConsumption (t + n) (continuationHistory h future) /
+          X.workerConsumption (t + n + 1)
+            (childHistory (continuationHistory h future) s))
+    (hsdfUpper :
+      P.workerDiscount *
+        X.workerConsumption (t + n) (continuationHistory h future) /
+          X.workerConsumption (t + n + 1)
+            (childHistory (continuationHistory h future) s) ≤ sdfBound)
+    (hloanRate : 0 ≤
+      X.loanRate (t + n) (continuationHistory h future))
+    (I : InheritedState)
+    (hh : FirmHistoryAdmissible P (t + n)
+      (continuationHistory h future))
+    (hbankFeasible : BankFeasible P I X (fullRetentionCommonBankPlan P X))
+    (hreserveRevenue :
+      X.reserveRate (t + n) (continuationHistory h future) *
+        bankPostSettlementReservesAt P X (t + n)
+          (continuationHistory h future)
+          (X.bankTightness (t + n) (continuationHistory h future))
+          (X.reservesPrePayment (t + n) (continuationHistory h future))
+          (X.bankDeposits (t + n) (continuationHistory h future)) omega ≤
+        reserveRevenueCap * X.bankEquity (t + n)
+          (continuationHistory h future))
+    (hfundingMagnitude :
+      |X.depositRate (t + n) (continuationHistory h future) *
+        X.bankDeposits (t + n) (continuationHistory h future) *
+        (1 + P.paymentShock omega)| +
+      |X.interbankRate (t + n) (continuationHistory h future) *
+        bankOTCInterbankAt P X (t + n)
+          (continuationHistory h future)
+          (X.bankTightness (t + n) (continuationHistory h future))
+          (X.reservesPrePayment (t + n) (continuationHistory h future))
+          (X.bankDeposits (t + n) (continuationHistory h future)) omega| +
+      |X.facilityRate (t + n) (continuationHistory h future) *
+        bankFacilityBorrowingAt P X (t + n)
+          (continuationHistory h future)
+          (X.bankTightness (t + n) (continuationHistory h future))
+          (X.reservesPrePayment (t + n) (continuationHistory h future))
+          (X.bankDeposits (t + n) (continuationHistory h future)) omega|
+        ≤ fundingMagnitudeCap * X.bankEquity (t + n)
+            (continuationHistory h future))
+    (hequity : 0 < X.bankEquity (t + n)
+      (continuationHistory h future))
+    (hinflation : 0 < X.inflation (t + n + 1)
+      (childHistory (continuationHistory h future) s))
+    (hcapNonneg : 0 ≤
+      ((X.loanRate (t + n) (continuationHistory h future) *
+        P.bankLoanCap + reserveRevenueCap + fundingMagnitudeCap) *
+          X.bankEquity (t + n) (continuationHistory h future)) /
+        X.bankEquity (t + n) (continuationHistory h future) /
+        X.inflation (t + n + 1)
+          (childHistory (continuationHistory h future) s)) :
+    (huniform : sdfBound *
+        (((X.loanRate (t + n) (continuationHistory h future) *
+          P.bankLoanCap + reserveRevenueCap + fundingMagnitudeCap) *
+            X.bankEquity (t + n) (continuationHistory h future)) /
+          X.bankEquity (t + n) (continuationHistory h future) /
+          X.inflation (t + n + 1)
+            (childHistory (continuationHistory h future) s)) ≤
+          grossBound) :
+    sourceDiscountedEquityGrowthFactor P X t h n future s omega ≤ grossBound := by
+  have hloanCap := source_full_retention_loan_cap_of_bank_feasible
+    P I X (t + n) (continuationHistory h future) hh hbankFeasible
+  exact le_trans
+    (source_discounted_growth_factor_le_signed_funding_envelope
+      P X t h n future s omega
+      sdfBound reserveRevenueCap fundingMagnitudeCap
+      hsdfLower hsdfUpper hloanRate hloanCap hreserveRevenue
+      hfundingMagnitude hequity hinflation hcapNonneg)
+    huniform
+
+#print axioms source_discounted_growth_le_uniform_bound_of_feasible_signed_portfolio
+
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
