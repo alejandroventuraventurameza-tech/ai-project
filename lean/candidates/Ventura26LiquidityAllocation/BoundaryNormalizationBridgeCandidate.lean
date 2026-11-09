@@ -838,6 +838,121 @@ theorem boundary_unique_reduced_prefix_rate_of_eight
   exact boundary_unique_reduced_prefix_rate_of_boxes G
     (boundary_component_boxes_from_eight h)
 
+
+/-- Exact-rational enclosure of the high-productivity firm's stationary
+capital scale from its SOURCE user cost. This is not a GE existence claim. -/
+theorem boundary_source_capital_scale_H_rational_box :
+    (567703 / 10000 : ℝ) <
+      ProposedStationaryRealScale.capitalScale .H ∧
+    ProposedStationaryRealScale.capitalScale .H <
+      (567705 / 10000 : ℝ) := by
+  rcases (boundary_source_user_cost_micro_boxes).1 with ⟨hulo, huhi⟩
+  have hu : 0 < ProposedStationaryRealScale.userCost .H :=
+    ProposedStationaryRealScale.userCost_pos .H
+  have hbaseLo :
+      (22429741 / 10000000 : ℝ) <
+        (10201 / 72000 : ℝ) / ProposedStationaryRealScale.userCost .H := by
+    apply (lt_div_iff₀ hu).2
+    linarith only [huhi]
+  have hbaseHi :
+      (10201 / 72000 : ℝ) / ProposedStationaryRealScale.userCost .H <
+        (22429749 / 10000000 : ℝ) := by
+    apply (div_lt_iff₀ hu).2
+    linarith only [hulo]
+  have hpowLo :
+      (22429741 / 10000000 : ℝ) ^ (5 : ℕ) <
+        ((10201 / 72000 : ℝ) /
+          ProposedStationaryRealScale.userCost .H) ^ (5 : ℕ) := by
+    gcongr
+  have hpowHi :
+      ((10201 / 72000 : ℝ) /
+        ProposedStationaryRealScale.userCost .H) ^ (5 : ℕ) <
+        (22429749 / 10000000 : ℝ) ^ (5 : ℕ) := by
+    gcongr
+  have hcapital :
+      ProposedStationaryRealScale.capitalScale .H =
+        ((10201 / 72000 : ℝ) /
+          ProposedStationaryRealScale.userCost .H) ^ (5 : ℕ) := by
+    unfold ProposedStationaryRealScale.capitalScale
+    norm_num [ProposedStationaryRealScale.profitCoefficient,
+      ProposedStationaryRealScale.technology]
+  rw [hcapital]
+  constructor
+  · exact lt_trans (by norm_num) hpowLo
+  · exact lt_trans hpowHi (by norm_num)
+
+/-- Original SOURCE bank pricing converts the firm's non-normalized
+consumption coefficient into a rational loan-rate factor times capital. -/
+private theorem boundary_source_firm_H_coefficient_formula :
+    firmCoefficient .H =
+      ProposedStationaryRealScale.capitalScale .H *
+        ((81 / 80 : ℝ) * ((911 / 9600 : ℝ) -
+          (1131 / 25600 : ℝ) / ProposedStationaryBank.loanRate)) := by
+  have hr : 0 < ProposedStationaryBank.loanRate :=
+    ProposedStationaryRealScale.loanRate_pos
+  dsimp [firmCoefficient, ProposedStationaryRealScale.userCost,
+    ProposedStationaryRealScale.pledgeability,
+    ProposedStationaryRealScale.capitalPrice,
+    ProposedStationaryRealScale.liquidationValue]
+  field_simp [ne_of_gt hr] <;> ring
+
+/-- The H firm's SOURCE numerator falls within a strict rational box
+sufficiently sharp for both original endpoint consumption inequalities. -/
+theorem boundary_source_firm_H_coefficient_rational_box :
+    (294539 / 100000 : ℝ) < firmCoefficient .H ∧
+    firmCoefficient .H < (294541 / 100000 : ℝ) := by
+  let f : ℝ := (81 / 80 : ℝ) *
+    ((911 / 9600 : ℝ) -
+      (1131 / 25600 : ℝ) / ProposedStationaryBank.loanRate)
+  have hr : 0 < ProposedStationaryBank.loanRate :=
+    ProposedStationaryRealScale.loanRate_pos
+  rcases boundary_source_loan_rate_micro_box with ⟨hrlo, hrhi⟩
+  have hfm :
+      f * ProposedStationaryBank.loanRate =
+        (81 / 80 : ℝ) *
+          ((911 / 9600 : ℝ) * ProposedStationaryBank.loanRate -
+            (1131 / 25600 : ℝ)) := by
+    dsimp [f]
+    field_simp [ne_of_gt hr] <;> ring
+  have hflo : (518826 / 10000000 : ℝ) < f := by
+    by_contra hn
+    have hle : f ≤ (518826 / 10000000 : ℝ) := le_of_not_gt hn
+    have hm := mul_le_mul_of_nonneg_right hle hr.le
+    rw [hfm] at hm
+    linarith only [hm, hrlo]
+  have hfhi : f < (518827 / 10000000 : ℝ) := by
+    by_contra hn
+    have hge : (518827 / 10000000 : ℝ) ≤ f := le_of_not_gt hn
+    have hm := mul_le_mul_of_nonneg_right hge hr.le
+    rw [hfm] at hm
+    linarith only [hm, hrhi]
+  have hfpos : 0 < f :=
+    lt_trans (by norm_num : (0 : ℝ) < 518826 / 10000000) hflo
+  rcases boundary_source_capital_scale_H_rational_box with ⟨hklo, hkhi⟩
+  rw [boundary_source_firm_H_coefficient_formula]
+  change (294539 / 100000 : ℝ) <
+    ProposedStationaryRealScale.capitalScale .H * f ∧
+    ProposedStationaryRealScale.capitalScale .H * f <
+      (294541 / 100000 : ℝ)
+  constructor
+  · calc
+      (294539 / 100000 : ℝ) <
+          (567703 / 10000 : ℝ) * (518826 / 10000000 : ℝ) := by norm_num
+      _ < (567703 / 10000 : ℝ) * f :=
+        mul_lt_mul_of_pos_left hflo (by norm_num)
+      _ < ProposedStationaryRealScale.capitalScale .H * f :=
+        mul_lt_mul_of_pos_right hklo hfpos
+  · calc
+      ProposedStationaryRealScale.capitalScale .H * f <
+          (567705 / 10000 : ℝ) * f :=
+        mul_lt_mul_of_pos_right hkhi hfpos
+      _ < (567705 / 10000 : ℝ) * (518827 / 10000000 : ℝ) :=
+        mul_lt_mul_of_pos_left hfhi (by norm_num)
+      _ < (294541 / 100000 : ℝ) := by norm_num
+
+#print axioms boundary_source_capital_scale_H_rational_box
+#print axioms boundary_source_firm_H_coefficient_rational_box
+
 #print axioms boundary_source_capital_scale_L_sharp_lower
 #print axioms boundary_firm_L_endpoint_boxes_from_source
 #print axioms boundary_unique_reduced_prefix_rate_of_eight
