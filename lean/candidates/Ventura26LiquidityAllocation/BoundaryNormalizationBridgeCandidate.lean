@@ -950,6 +950,180 @@ theorem boundary_source_firm_H_coefficient_rational_box :
         mul_lt_mul_of_pos_left hfhi (by norm_num)
       _ < (294541 / 100000 : ℝ) := by norm_num
 
+
+/-- Both high-productivity H consumption endpoint enclosures are consequences
+of the original firm coefficient, source user-cost bounds, and the exact
+financial price-identity. The strict margins are proved by rational arithmetic,
+not by importing interval output as axioms. -/
+theorem boundary_firm_H_endpoint_boxes_from_source :
+    (296932 / 100000 : ℝ) <
+      normalizedFirmConsumption boundaryLo .H ∧
+    normalizedFirmConsumption boundaryHi .H <
+      (294921 / 100000 : ℝ) := by
+  rcases boundary_source_firm_H_coefficient_rational_box with
+    ⟨hcLo, hcHi⟩
+  rcases (boundary_source_user_cost_micro_boxes).1 with
+    ⟨huHlo, huHhi⟩
+  rcases (boundary_source_user_cost_micro_boxes).2 with
+    ⟨huLlo, huLhi⟩
+  have hprice :
+      parentEffectivePrice .H =
+        (24 / 25 : ℝ) *
+          (ProposedStationaryRealScale.userCost .H +
+            (17 / 20 : ℝ) *
+              ProposedStationaryRealScale.liquidationValue) := by
+    rw [parentEffectivePrice_identity .H]
+    dsimp [continuationReturn, ProposedStationaryRealScale.pledgeability]
+    ring
+  have hpriceLo :
+      (8661847 / 10000000 : ℝ) < parentEffectivePrice .H := by
+    rw [hprice]
+    dsimp [ProposedStationaryRealScale.liquidationValue,
+      ProposedStationaryRealScale.capitalPrice]
+    linarith only [huHlo]
+  have hpriceHi :
+      parentEffectivePrice .H < (8661848 / 10000000 : ℝ) := by
+    rw [hprice]
+    dsimp [ProposedStationaryRealScale.liquidationValue,
+      ProposedStationaryRealScale.capitalPrice]
+    linarith only [huHhi]
+  have hnLo :
+      (895053 / 1000000 : ℝ) <
+        continuationReturn .L -
+          ProposedStationaryRealScale.pledgeability .H *
+            ProposedStationaryRealScale.liquidationValue := by
+    dsimp [continuationReturn, ProposedStationaryRealScale.pledgeability,
+      ProposedStationaryRealScale.liquidationValue,
+      ProposedStationaryRealScale.capitalPrice]
+    linarith only [huLlo]
+  have hnHi :
+      continuationReturn .L -
+        ProposedStationaryRealScale.pledgeability .H *
+          ProposedStationaryRealScale.liquidationValue <
+        (8950531 / 10000000 : ℝ) := by
+    dsimp [continuationReturn, ProposedStationaryRealScale.pledgeability,
+      ProposedStationaryRealScale.liquidationValue,
+      ProposedStationaryRealScale.capitalPrice]
+    linarith only [huLhi]
+  have hnpos :
+      0 < continuationReturn .L -
+        ProposedStationaryRealScale.pledgeability .H *
+          ProposedStationaryRealScale.liquidationValue :=
+    lt_trans (by norm_num : (0 : ℝ) < 895053 / 1000000) hnLo
+  have hprodLo :
+      (294539 / 100000 : ℝ) * (895053 / 1000000 : ℝ) <
+        firmCoefficient .H *
+          (continuationReturn .L -
+            ProposedStationaryRealScale.pledgeability .H *
+              ProposedStationaryRealScale.liquidationValue) := by
+    calc
+      _ < (294539 / 100000 : ℝ) *
+            (continuationReturn .L -
+              ProposedStationaryRealScale.pledgeability .H *
+                ProposedStationaryRealScale.liquidationValue) :=
+        mul_lt_mul_of_pos_left hnLo (by norm_num)
+      _ < _ := mul_lt_mul_of_pos_right hcLo hnpos
+  have hprodHi :
+      firmCoefficient .H *
+        (continuationReturn .L -
+          ProposedStationaryRealScale.pledgeability .H *
+            ProposedStationaryRealScale.liquidationValue) <
+      (294541 / 100000 : ℝ) * (8950531 / 10000000 : ℝ) := by
+    calc
+      _ < (294541 / 100000 : ℝ) *
+            (continuationReturn .L -
+              ProposedStationaryRealScale.pledgeability .H *
+                ProposedStationaryRealScale.liquidationValue) :=
+        mul_lt_mul_of_pos_right hcHi hnpos
+      _ < _ := mul_lt_mul_of_pos_left hnHi (by norm_num)
+  have hRlo : 0 < boundaryLo := by norm_num [boundaryLo]
+  have hRhi : 0 < boundaryHi := by norm_num [boundaryHi]
+  have hpricepos : 0 < parentEffectivePrice .H :=
+    parentEffectivePrice_pos .H
+  have hdenLo : 0 < boundaryLo * parentEffectivePrice .H :=
+    mul_pos hRlo hpricepos
+  have hdenHi : 0 < boundaryHi * parentEffectivePrice .H :=
+    mul_pos hRhi hpricepos
+  constructor
+  · change (296932 / 100000 : ℝ) <
+      firmCoefficient .H *
+        (continuationReturn .L -
+          ProposedStationaryRealScale.pledgeability .H *
+            ProposedStationaryRealScale.liquidationValue) /
+          (boundaryLo * parentEffectivePrice .H)
+    apply (lt_div_iff₀ hdenLo).2
+    have hdenlt :
+        boundaryLo * parentEffectivePrice .H <
+          boundaryLo * (8661848 / 10000000 : ℝ) :=
+      mul_lt_mul_of_pos_left hpriceHi hRlo
+    calc
+      (296932 / 100000 : ℝ) *
+          (boundaryLo * parentEffectivePrice .H) <
+        (296932 / 100000 : ℝ) *
+          (boundaryLo * (8661848 / 10000000 : ℝ)) :=
+        mul_lt_mul_of_pos_left hdenlt (by norm_num)
+      _ < (294539 / 100000 : ℝ) * (895053 / 1000000 : ℝ) := by
+        norm_num [boundaryLo]
+      _ < _ := hprodLo
+  · change firmCoefficient .H *
+        (continuationReturn .L -
+          ProposedStationaryRealScale.pledgeability .H *
+            ProposedStationaryRealScale.liquidationValue) /
+          (boundaryHi * parentEffectivePrice .H) <
+        (294921 / 100000 : ℝ)
+    apply (div_lt_iff₀ hdenHi).2
+    have hdenlt :
+        boundaryHi * (8661847 / 10000000 : ℝ) <
+          boundaryHi * parentEffectivePrice .H :=
+      mul_lt_mul_of_pos_left hpriceLo hRhi
+    calc
+      firmCoefficient .H *
+        (continuationReturn .L -
+          ProposedStationaryRealScale.pledgeability .H *
+            ProposedStationaryRealScale.liquidationValue) <
+        (294541 / 100000 : ℝ) * (8950531 / 10000000 : ℝ) :=
+        hprodHi
+      _ < (294921 / 100000 : ℝ) *
+          (boundaryHi * (8661847 / 10000000 : ℝ)) := by
+        norm_num [boundaryHi]
+      _ < (294921 / 100000 : ℝ) *
+          (boundaryHi * parentEffectivePrice .H) :=
+        mul_lt_mul_of_pos_left hdenlt (by norm_num)
+
+/-- The only remaining endpoint-sign premises concern aggregate output,
+worker consumption and capital-installation costs at both endpoints. -/
+structure BoundaryRemainingSixBoxes : Prop where
+  Ylo_upper : normalizedOutput boundaryLo < 1327678 / 100000
+  CWlo_lower : 793630 / 100000 < normalizedWorkerConsumption boundaryLo
+  GammaLo_lower : 266849 / 100000 < normalizedCapitalCost boundaryLo
+  Yhi_lower : 1340498 / 100000 < normalizedOutput boundaryHi
+  CWhi_upper : normalizedWorkerConsumption boundaryHi < 788240 / 100000
+  GammaHi_upper : normalizedCapitalCost boundaryHi < 164406 / 100000
+
+theorem boundary_eight_boxes_from_six
+    (h : BoundaryRemainingSixBoxes) : BoundaryRemainingEightBoxes := by
+  rcases boundary_firm_H_endpoint_boxes_from_source with ⟨hlo, hhi⟩
+  exact ⟨h.Ylo_upper, h.CWlo_lower, hlo, h.GammaLo_lower,
+    h.Yhi_lower, h.CWhi_upper, hhi, h.GammaHi_upper⟩
+
+/-- Uniqueness is only for the SOURCE scalar rate plus the 33-row reduced
+prefix. No full competitive equilibrium or infinite continuation is proved. -/
+theorem boundary_unique_reduced_prefix_rate_of_six
+    (G : ℝ) (h : BoundaryRemainingSixBoxes) :
+    ∃! R : ℝ,
+      boundaryLo ≤ R ∧ R ≤ boundaryHi ∧
+      boundaryResourceResidual R = 0 ∧
+      ∀ branch : LocalPrefixBranch,
+        LocalReducedPrefixEquationsHold branch
+          (boundaryPrimitives G R)
+          (boundaryInitialState G R)
+          (boundaryCoordinates R) .dateOne .recurrent boundaryTail := by
+  exact boundary_unique_reduced_prefix_rate_of_eight G
+    (boundary_eight_boxes_from_six h)
+
+#print axioms boundary_firm_H_endpoint_boxes_from_source
+#print axioms boundary_unique_reduced_prefix_rate_of_six
+
 #print axioms boundary_source_capital_scale_H_rational_box
 #print axioms boundary_source_firm_H_coefficient_rational_box
 
