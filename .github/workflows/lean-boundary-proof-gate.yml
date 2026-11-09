@@ -1,0 +1,138 @@
+# Specific Lean kernel and axiom check for the economic boundary root.
+# No green signal here asserts a complete competitive equilibrium.
+name: Lean boundary proof gate (pinned)
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'lean/candidates/Ventura26LiquidityAllocation/Boundary*.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/Stationary*.lean'
+      - 'lean/checkpoint/**'
+      - '.github/workflows/lean-boundary-proof-gate.yml'
+  push:
+    branches:
+      - 'work/lean-ci-validation-*'
+    paths:
+      - 'lean/candidates/Ventura26LiquidityAllocation/Boundary*.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/Stationary*.lean'
+      - 'lean/checkpoint/**'
+      - '.github/workflows/lean-boundary-proof-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lean-boundary-proof-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  boundary:
+    name: Kernel and axioms for boundary reduced-prefix claims
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    steps:
+      - name: Checkout review branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Establish immutable pinned Lean environment
+        shell: bash
+        env:
+          PINNED_SHA: 16e24fe828a5a0002ef13bb82bae9e295f190f86
+          UPSTREAM_SHA: 194edcc95df74806a39b961d10dedddc6e730cce
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor "$PINNED_SHA" HEAD
+          mkdir -p lean-boundary-logs
+          git clone --quiet --filter=blob:none https://github.com/nikhgarg/AppliedModelingLib.git upstream
+          git -C upstream checkout --quiet --detach "$UPSTREAM_SHA"
+          test "$(git -C upstream rev-parse HEAD)" = "$UPSTREAM_SHA"
+          cmp lean/checkpoint/dependencies/lean-toolchain upstream/lean-toolchain
+          cmp lean/checkpoint/dependencies/lake-manifest.json upstream/lake-manifest.json
+          python3 - <<'PY'
+          from pathlib import Path
+          upstream = Path('upstream/lakefile.toml').read_bytes()
+          overlay = Path('lean/checkpoint/dependencies/lakefile.toml').read_bytes()
+          extra = b'\n[[lean_lib]]\nname = "Ventura26LiquidityAllocation"\nsrcDir = "papers"\n'
+          assert overlay == upstream + extra, 'Pinned Lean overlay modified'
+          PY
+          cp lean/checkpoint/dependencies/lakefile.toml upstream/lakefile.toml
+          mkdir -p upstream/papers/Ventura26LiquidityAllocation
+          cp lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/checkpoint/module_root.lean upstream/papers/Ventura26LiquidityAllocation.lean
+          cp lean/candidates/Ventura26LiquidityAllocation/*.lean upstream/papers/Ventura26LiquidityAllocation/
+          sha256sum lean/candidates/Ventura26LiquidityAllocation/Boundary*.lean > lean-boundary-logs/boundary-source-sha256.txt
+
+      - name: Install pinned Lean
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o "$RUNNER_TEMP/elan-init.sh"
+          sh "$RUNNER_TEMP/elan-init.sh" -y --no-modify-path
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Recover pinned Mathlib build artifacts
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          grep -Fx 'leanprover/lean4:v4.30.0-rc2' lean-toolchain
+          lake exe cache get > "$GITHUB_WORKSPACE/lean-boundary-logs/mathlib-cache.log" 2>&1 || {
+            tail -n 100 "$GITHUB_WORKSPACE/lean-boundary-logs/mathlib-cache.log"
+            exit 1
+          }
+
+      - name: Restore candidate compilation cache
+        uses: actions/cache/restore@v4
+        with:
+          path: upstream/.lake/build
+          key: boundary-lean-${{ runner.os }}-v4.30.0-rc2-${{ hashFiles('lean/checkpoint/dependencies/lake-manifest.json', 'lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean', 'lean/candidates/Ventura26LiquidityAllocation/Boundary*.lean', 'lean/candidates/Ventura26LiquidityAllocation/Stationary*.lean') }}
+          restore-keys: |
+            lean-ventura26-${{ runner.os }}-pinned-v4.30.0-rc2-u194edcc-
+            boundary-lean-${{ runner.os }}-v4.30.0-rc2-
+
+      - name: Compile literal boundary root and normalization chain
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          lake build Ventura26LiquidityAllocation.BoundaryNormalizationBridgeCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
+            tail -n 160 "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log"
+            exit 1
+          }
+
+      - name: Audit exact frontier theorems without sorryAx
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          cat > BoundaryProofAudit.lean <<'LEAN'
+          import Ventura26LiquidityAllocation.BoundaryNormalizationBridgeCandidate
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryWorkerLabor.boundary_full_prefix_equations_from_root
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.output_ratio_fifteenth_power
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.normalized_output_eq_from_source
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.endpointSigns_of_boxes
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_reduced_prefix_from_endpoint_boxes
+          LEAN
+          lake env lean BoundaryProofAudit.lean > "$GITHUB_WORKSPACE/lean-boundary-logs/axioms.log" 2>&1 || {
+            cat "$GITHUB_WORKSPACE/lean-boundary-logs/axioms.log"
+            exit 1
+          }
+          cat "$GITHUB_WORKSPACE/lean-boundary-logs/axioms.log"
+          if grep -q 'sorryAx' "$GITHUB_WORKSPACE/lean-boundary-logs/axioms.log"; then
+            echo "Unsafe sorryAx in boundary proof transitive dependencies"
+            exit 1
+          fi
+
+      - name: Upload verifiable kernel and axiom logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lean-boundary-kernel-logs
+          path: lean-boundary-logs/
+          retention-days: 30
