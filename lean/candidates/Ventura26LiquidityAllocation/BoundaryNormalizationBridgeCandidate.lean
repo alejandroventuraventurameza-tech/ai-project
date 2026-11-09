@@ -1121,6 +1121,107 @@ theorem boundary_unique_reduced_prefix_rate_of_six
   exact boundary_unique_reduced_prefix_rate_of_eight G
     (boundary_eight_boxes_from_six h)
 
+
+/-- The upper endpoint's *original* stationary capital-installation
+cost has a certified strict rational upper bound. This is obtained by
+enclosing K_H, K_L and the date-zero capital scaling from SOURCE
+costs and prices. It does not assume an endpoint sign. -/
+theorem boundary_capital_cost_hi_box_from_source :
+    normalizedCapitalCost boundaryHi < (164406 / 100000 : ℝ) := by
+  rcases (boundary_source_user_cost_micro_boxes).2 with ⟨hulo, huhi⟩
+  have hden :
+      0 < 2 * continuationReturn .L -
+        (41 / 40 : ℝ) * boundaryHi := by
+    dsimp [continuationReturn, ProposedStationaryRealScale.liquidationValue,
+      ProposedStationaryRealScale.capitalPrice, boundaryHi]
+    linarith only [hulo]
+  have hsLo :
+      (10034396 / 10000000 : ℝ) <
+        boundaryCapitalScale boundaryHi := by
+    rw [boundaryCapitalScale_rewrite boundaryHi
+      (by norm_num [boundaryHi])]
+    apply (lt_div_iff₀ hden).2
+    dsimp [continuationReturn, ProposedStationaryRealScale.liquidationValue,
+      ProposedStationaryRealScale.capitalPrice, boundaryHi]
+    linarith only [huhi]
+  have hfour :
+      4 * (10034396 / 10000000 : ℝ) <
+        4 * boundaryCapitalScale boundaryHi := by
+    nlinarith only [hsLo]
+  have hinv :
+      (1 : ℝ) / (4 * boundaryCapitalScale boundaryHi) <
+        1 / (4 * (10034396 / 10000000 : ℝ)) :=
+    one_div_lt_one_div_of_lt (by norm_num) hfour
+  have hfactor :
+      (41 / 80 : ℝ) +
+          1 / (4 * boundaryCapitalScale boundaryHi) -
+          (4719 / 6400 : ℝ) * boundaryCapitalScale boundaryHi <
+        (2176319 / 100000000 : ℝ) := by
+    have hrat :
+        (41 / 80 : ℝ) +
+            1 / (4 * (10034396 / 10000000 : ℝ)) -
+            (4719 / 6400 : ℝ) * (10034396 / 10000000 : ℝ) <
+          (2176319 / 100000000 : ℝ) := by norm_num
+    linarith only [hinv, hsLo, hrat]
+  have hKpos : 0 < ProposedStationaryRealScale.average
+      ProposedStationaryRealScale.capitalScale :=
+    ProposedStationaryRealScale.aggregate_scales_pos.1
+  have hKbound :
+      ProposedStationaryRealScale.average
+          ProposedStationaryRealScale.capitalScale <
+        (7554315 / 100000 : ℝ) := by
+    rcases boundary_source_capital_scale_H_rational_box with ⟨_, hH⟩
+    rcases boundary_source_capital_scale_L_rational_box with ⟨_, hL⟩
+    unfold ProposedStationaryRealScale.average
+    linarith only [hH, hL]
+  have hproduct :
+      normalizedCapitalCost boundaryHi <
+        (7554315 / 100000 : ℝ) *
+          (2176319 / 100000000 : ℝ) := by
+    unfold normalizedCapitalCost
+    calc
+      _ < ProposedStationaryRealScale.average
+          ProposedStationaryRealScale.capitalScale *
+            (2176319 / 100000000 : ℝ) :=
+          mul_lt_mul_of_pos_left hfactor hKpos
+      _ < (7554315 / 100000 : ℝ) *
+            (2176319 / 100000000 : ℝ) :=
+          mul_lt_mul_of_pos_right hKbound (by norm_num)
+  exact lt_trans hproduct (by norm_num)
+
+/-- Five explicit endpoint inequalities remain independent: output
+and worker consumption at both ends, plus installation cost at the
+lower end. The upper installation-cost box follows from SOURCE. -/
+structure BoundaryRemainingFiveBoxes : Prop where
+  Ylo_upper : normalizedOutput boundaryLo < 1327678 / 100000
+  CWlo_lower : 793630 / 100000 < normalizedWorkerConsumption boundaryLo
+  GammaLo_lower : 266849 / 100000 < normalizedCapitalCost boundaryLo
+  Yhi_lower : 1340498 / 100000 < normalizedOutput boundaryHi
+  CWhi_upper : normalizedWorkerConsumption boundaryHi < 788240 / 100000
+
+theorem boundary_six_boxes_from_five
+    (h : BoundaryRemainingFiveBoxes) : BoundaryRemainingSixBoxes := by
+  exact ⟨h.Ylo_upper, h.CWlo_lower, h.GammaLo_lower,
+    h.Yhi_lower, h.CWhi_upper, boundary_capital_cost_hi_box_from_source⟩
+
+/-- Strictly conditional scalar uniqueness and the 33-row prefix. The
+five remaining boxes are not yet Lean-proved from SOURCE primitives. -/
+theorem boundary_unique_reduced_prefix_rate_of_five
+    (G : ℝ) (h : BoundaryRemainingFiveBoxes) :
+    ∃! R : ℝ,
+      boundaryLo ≤ R ∧ R ≤ boundaryHi ∧
+      boundaryResourceResidual R = 0 ∧
+      ∀ branch : LocalPrefixBranch,
+        LocalReducedPrefixEquationsHold branch
+          (boundaryPrimitives G R)
+          (boundaryInitialState G R)
+          (boundaryCoordinates R) .dateOne .recurrent boundaryTail := by
+  exact boundary_unique_reduced_prefix_rate_of_six G
+    (boundary_six_boxes_from_five h)
+
+#print axioms boundary_capital_cost_hi_box_from_source
+#print axioms boundary_unique_reduced_prefix_rate_of_five
+
 #print axioms boundary_firm_H_endpoint_boxes_from_source
 #print axioms boundary_unique_reduced_prefix_rate_of_six
 
