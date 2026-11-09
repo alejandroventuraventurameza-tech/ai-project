@@ -2810,10 +2810,11 @@ theorem source_reserve_log_floor_all_admissible_histories
       have hchild : FirmHistoryAdmissible P (t + 1)
           (childHistory (previousHistory h) (currentState h)) := by
         simpa only [childHistory_previousHistory_currentState] using hh
-      exact source_reserve_log_floor_preserved_by_policy_forcing
-        P I X t (previousHistory h) (currentState h) lowerLog
-        hpolicy hchild hpersistence hprev
-        (hcontinuation t (previousHistory h) (currentState h) hchild)
+      simpa only [childHistory_previousHistory_currentState] using
+        (source_reserve_log_floor_preserved_by_policy_forcing
+          P I X t (previousHistory h) (currentState h) lowerLog
+          hpolicy hchild hpersistence hprev
+          (hcontinuation t (previousHistory h) (currentState h) hchild))
 
 #print axioms source_reserve_log_floor_all_admissible_histories
 
