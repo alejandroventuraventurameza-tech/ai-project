@@ -1614,5 +1614,89 @@ theorem source_conditional_otc_growth_le_of_positive_shock_bounds
 
 #print axioms source_conditional_otc_growth_le_of_positive_shock_bounds
 
+
+/-!
+## Source balance-sheet revenue bound
+
+The following inequalities are about the ACTUAL detailed OTC and
+facility return, not a substituted reduced-form bank return. Their
+economic conditions (nonnegative funding outlays, bounded post-
+settlement reserve revenue) must be verified from equilibrium
+portfolios and prices. In particular, a deposit position is NOT
+automatically a nonnegative expense without a sign restriction on
+the deposit rate and payment shock.
+-/
+
+/-- If all three funding expenses are nonnegative, actual bank OTC
+returns cannot exceed the sum of loan and post-settlement reserve
+revenues. The source return is unfolded literally. -/
+theorem source_detailed_otc_return_le_gross_revenues
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (tightness loans reserves deposits : ℝ) (omega : P.paymentSupport)
+    (hdepositOutlay : 0 ≤
+      X.depositRate t h * deposits * (1 + P.paymentShock omega))
+    (hotcOutlay : 0 ≤
+      X.interbankRate t h *
+        bankOTCInterbankAt P X t h tightness reserves deposits omega)
+    (hfacilityOutlay : 0 ≤
+      X.facilityRate t h *
+        bankFacilityBorrowingAt P X t h tightness reserves deposits omega) :
+    bankDetailedPortfolioReturnAt P X t h tightness
+        loans reserves deposits omega ≤
+      X.loanRate t h * loans +
+        X.reserveRate t h *
+          bankPostSettlementReservesAt P X t h tightness
+            reserves deposits omega := by
+  unfold bankDetailedPortfolioReturnAt
+  linarith
+
+/-- Under the SOURCE loan-to-retained-equity cap, nonnegative loan
+rate, bounded post-settlement reserve revenues per unit retained
+equity and nonnegative funding outlays, the bank's detailed OTC
+return has an explicit retained-equity proportional upper bound.
+No claim that the reserve-revenue cap follows automatically from
+OTC clearing is made. -/
+theorem source_detailed_otc_return_le_retained_equity_cap
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (tightness loans reserves deposits retained reserveRevenueCap : ℝ)
+    (omega : P.paymentSupport)
+    (hloanRate : 0 ≤ X.loanRate t h)
+    (hloanCap : loans ≤ P.bankLoanCap * retained)
+    (hreserveRevenue : X.reserveRate t h *
+      bankPostSettlementReservesAt P X t h tightness
+        reserves deposits omega ≤ reserveRevenueCap * retained)
+    (hdepositOutlay : 0 ≤
+      X.depositRate t h * deposits * (1 + P.paymentShock omega))
+    (hotcOutlay : 0 ≤ X.interbankRate t h *
+      bankOTCInterbankAt P X t h tightness reserves deposits omega)
+    (hfacilityOutlay : 0 ≤ X.facilityRate t h *
+      bankFacilityBorrowingAt P X t h tightness reserves deposits omega) :
+    bankDetailedPortfolioReturnAt P X t h tightness
+        loans reserves deposits omega ≤
+      (X.loanRate t h * P.bankLoanCap + reserveRevenueCap) *
+        retained := by
+  have hloanRevenue :
+      X.loanRate t h * loans ≤
+        X.loanRate t h * (P.bankLoanCap * retained) :=
+    mul_le_mul_of_nonneg_left hloanCap hloanRate
+  have htotal := source_detailed_otc_return_le_gross_revenues
+    P X t h tightness loans reserves deposits omega
+    hdepositOutlay hotcOutlay hfacilityOutlay
+  calc
+    bankDetailedPortfolioReturnAt P X t h tightness
+        loans reserves deposits omega ≤
+      X.loanRate t h * loans +
+        X.reserveRate t h *
+          bankPostSettlementReservesAt P X t h tightness
+            reserves deposits omega := htotal
+    _ ≤ (X.loanRate t h * P.bankLoanCap + reserveRevenueCap) *
+        retained := by
+      nlinarith [hloanRevenue, hreserveRevenue]
+
+#print axioms source_detailed_otc_return_le_gross_revenues
+#print axioms source_detailed_otc_return_le_retained_equity_cap
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
