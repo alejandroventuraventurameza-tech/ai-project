@@ -100,7 +100,7 @@ jobs:
         working-directory: upstream
         run: |
           set -euo pipefail
-          lake build Ventura26LiquidityAllocation.BoundaryFullResourceClearingCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
+          lake build Ventura26LiquidityAllocation.BoundaryFullSettlementCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
             tail -n 160 "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log"
             exit 1
           }
@@ -111,7 +111,7 @@ jobs:
         run: |
           set -euo pipefail
           cat > BoundaryProofAudit.lean <<'LEAN'
-          import Ventura26LiquidityAllocation.BoundaryFullResourceClearingCandidate
+          import Ventura26LiquidityAllocation.BoundaryFullSettlementCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryWorkerLabor.boundary_full_prefix_equations_from_root
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.output_ratio_fifteenth_power
@@ -171,6 +171,11 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullResourceClearing.sourceBoundaryDateData_unit_productivity
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullResourceClearing.literal_resourceClears_of_aligned_reduced_rows
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullResourceClearing.sourceBoundaryLiteralAllocation_resourceClears
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullSettlement.source_boundary_deposit_gt_reserve
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullSettlement.sourceBoundaryDateData_otc_domain
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullSettlement.sourceBoundaryDateData_reserveRequirement
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullSettlement.sourceBoundaryLiteralAllocation_settlementClears
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullSettlement.sourceBoundaryLiteralAllocation_fiscalClosure
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_micro_boxes
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_productivity_collateral_cost_wedge
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_wedge_of_bank_pricing
