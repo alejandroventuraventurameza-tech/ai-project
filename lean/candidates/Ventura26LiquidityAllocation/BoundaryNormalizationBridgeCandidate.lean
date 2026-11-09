@@ -207,6 +207,86 @@ theorem boundary_unique_reduced_prefix_rate_of_boxes
   · intro y hy
     exact huniq y ⟨hy.1, hy.2.1, hy.2.2.1⟩
 
+
+/-- A tight, fully rational enclosure of the literal OTC matching weight.
+Every inequality is reduced to exact rational square comparisons with
+sqrt(3/2), never to a floating-point evaluation. -/
+theorem boundary_weight_rational_micro_box :
+    (44948974278 / 100000000000 : ℝ) <
+      ProposedStationaryBank.weight ∧
+    ProposedStationaryBank.weight <
+      (44948974279 / 100000000000 : ℝ) := by
+  have hs0 : 0 ≤ Real.sqrt (3 / 2 : ℝ) := Real.sqrt_nonneg _
+  have hsq : Real.sqrt (3 / 2 : ℝ) ^ (2 : ℕ) = 3 / 2 :=
+    Real.sq_sqrt (by norm_num)
+  have hslo :
+      (122474487139 / 100000000000 : ℝ) <
+        Real.sqrt (3 / 2 : ℝ) := by
+    have hsqlo :
+        (122474487139 / 100000000000 : ℝ) ^ (2 : ℕ) <
+          3 / 2 := by norm_num
+    by_contra hn
+    have hle :
+        Real.sqrt (3 / 2 : ℝ) ≤
+          (122474487139 / 100000000000 : ℝ) :=
+      le_of_not_gt hn
+    have hp : 0 ≤
+        ((122474487139 / 100000000000 : ℝ) -
+          Real.sqrt (3 / 2 : ℝ)) *
+        ((122474487139 / 100000000000 : ℝ) +
+          Real.sqrt (3 / 2 : ℝ)) :=
+      mul_nonneg (sub_nonneg.mpr hle)
+        (add_nonneg (by norm_num) hs0)
+    nlinarith only [hsqlo, hsq, hp]
+  have hshi :
+      Real.sqrt (3 / 2 : ℝ) <
+        (122474487140 / 100000000000 : ℝ) := by
+    have hsqhi :
+        (3 / 2 : ℝ) <
+          (122474487140 / 100000000000 : ℝ) ^ (2 : ℕ) := by
+      norm_num
+    by_contra hn
+    have hge :
+        (122474487140 / 100000000000 : ℝ) ≤
+          Real.sqrt (3 / 2 : ℝ) :=
+      le_of_not_gt hn
+    have hp : 0 ≤
+        (Real.sqrt (3 / 2 : ℝ) -
+          (122474487140 / 100000000000 : ℝ)) *
+        (Real.sqrt (3 / 2 : ℝ) +
+          (122474487140 / 100000000000 : ℝ)) :=
+      mul_nonneg (sub_nonneg.mpr hge)
+        (add_nonneg hs0 (by norm_num))
+    nlinarith only [hsqhi, hsq, hp]
+  have hd : 0 < 1 + Real.sqrt (3 / 2 : ℝ) := by linarith
+  constructor
+  · unfold ProposedStationaryBank.weight
+    apply (lt_div_iff₀ hd).2
+    nlinarith only [hshi]
+  · unfold ProposedStationaryBank.weight
+    apply (div_lt_iff₀ hd).2
+    nlinarith only [hslo]
+
+/-- The SOURCE OTC mean and differential slopes inherit rational
+micro-intervals from the exact matching-weight enclosure. -/
+theorem boundary_source_slope_rational_micro_boxes :
+    ((8371173070 / 1000000000000 : ℝ) <
+      ProposedStationaryBank.meanSlope ∧
+      ProposedStationaryBank.meanSlope <
+        (8371173072 / 1000000000000 : ℝ)) ∧
+    ((12247448713 / 1000000000000 : ℝ) <
+      ProposedStationaryBank.slopeGap ∧
+      ProposedStationaryBank.slopeGap <
+        (12247448715 / 1000000000000 : ℝ)) := by
+  rcases boundary_weight_rational_micro_box with ⟨hlo, hhi⟩
+  unfold ProposedStationaryBank.meanSlope ProposedStationaryBank.slopeGap
+  constructor
+  · constructor <;> linarith
+  · constructor <;> linarith
+
+#print axioms boundary_weight_rational_micro_box
+#print axioms boundary_source_slope_rational_micro_boxes
+
 #print axioms boundary_unique_reduced_prefix_rate_of_boxes
 
 #print axioms normalized_output_eq_from_source
