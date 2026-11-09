@@ -100,7 +100,7 @@ jobs:
         working-directory: upstream
         run: |
           set -euo pipefail
-          lake build Ventura26LiquidityAllocation.BoundaryFullBankBalanceCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
+          lake build Ventura26LiquidityAllocation.BoundaryFullRealAccountingCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
             tail -n 160 "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log"
             exit 1
           }
@@ -111,7 +111,7 @@ jobs:
         run: |
           set -euo pipefail
           cat > BoundaryProofAudit.lean <<'LEAN'
-          import Ventura26LiquidityAllocation.BoundaryFullBankBalanceCandidate
+          import Ventura26LiquidityAllocation.BoundaryFullRealAccountingCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryWorkerLabor.boundary_full_prefix_equations_from_root
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.output_ratio_fifteenth_power
@@ -159,6 +159,12 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullBankBalance.sourceBoundaryDateData_bankRow
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullBankBalance.sourceBoundaryDateData_ratio_nonzero
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullBankBalance.sourceBoundaryLiteralAllocation_bankBalance
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryRealAccounting.sourceBoundary_real_accounting
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryRealAccounting.sourceBoundary_all_loan_rates_nonzero
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryRealAccounting.sourceBoundary_current_nominal_face_consistency
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryRealAccounting.sourceBoundary_fiscalClosure_of_settlement
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryRealAccounting.sourceBoundary_resourceClears_iff
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryRealAccounting.sourceBoundary_householdBudget_iff
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_micro_boxes
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_productivity_collateral_cost_wedge
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_wedge_of_bank_pricing
