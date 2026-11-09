@@ -1034,6 +1034,12 @@ theorem source_discounted_bank_mass_next_of_nonnegative_equity
               (sourceFullRetentionCandidate P X t h).equity (n + 1)
                 (childFutureHistory future s)
                 (childPaymentHistory payments omega))) := by
+            have hfuture :
+                childFutureHistory future s = Fin.cons s future := rfl
+            have hpayments :
+                childPaymentHistory payments omega =
+                  Fin.cons omega payments := rfl
+            rw [hfuture, hpayments]
             ring
         _ = (continuationTransitionWeight P.tree (currentState h) n future *
           continuationPaymentWeight P payments) *
