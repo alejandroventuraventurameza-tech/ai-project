@@ -803,11 +803,11 @@ theorem source_full_retention_nonnegative_parent_conditional_child_sum
     _ = (bankCumulativeSDFAt P X t h future *
           (sourceFullRetentionCandidate P X t h).equity n future payments) *
           sourceConditionalOTCGrowthFactor P X t h n future := by
+        unfold sourceConditionalOTCGrowthFactor
         rw [Finset.mul_sum]
         apply Finset.sum_congr rfl
         intro s _hs
         rw [Finset.mul_sum]
-        rfl
 
 #print axioms source_full_retention_nonnegative_parent_conditional_child_sum
 
@@ -1034,7 +1034,6 @@ theorem source_discounted_bank_mass_next_of_nonnegative_equity
               (sourceFullRetentionCandidate P X t h).equity (n + 1)
                 (childFutureHistory future s)
                 (childPaymentHistory payments omega))) := by
-            dsimp [childFutureHistory, childPaymentHistory]
             ring
         _ = (continuationTransitionWeight P.tree (currentState h) n future *
           continuationPaymentWeight P payments) *
