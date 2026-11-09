@@ -31,6 +31,7 @@ namespace Ventura26LiquidityAllocation
 namespace ProposedBankConditionalOTCTransitionIdentity
 
 open ProposedBankConditionalExpectedContraction
+open ProposedBankSurvivingContraction
 open ProposedBankConditionalOTCMean
 open ProposedBankPathwiseOTCDiscountedReturn
 open ProposedBankPathwiseGrowthInduction
