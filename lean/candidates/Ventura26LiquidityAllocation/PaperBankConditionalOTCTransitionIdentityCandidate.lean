@@ -2688,5 +2688,75 @@ theorem source_reserve_rate_floor_of_log_floor
 #print axioms source_reserve_log_floor_preserved_by_policy_forcing
 #print axioms source_reserve_rate_floor_of_log_floor
 
+
+/-- A lower bound on the SOURCE policy log reserve remuneration can
+replace the exogenous level floor in the bank OTC equity certificate.
+The uniformity of the log bound across all admissible histories
+remains a separate economic/inductive question. -/
+theorem source_otc_position_abs_le_equity_of_log_reserve_floor
+    (P : Primitives S) (I : InheritedState) (X : Allocation S)
+    (t : ℕ) (h : History S t) (omega : P.paymentSupport)
+    (lowerLog : ℝ)
+    (hh : FirmHistoryAdmissible P t h)
+    (hbank : BankFeasible P I X (fullRetentionCommonBankPlan P X))
+    (hdomain : PositiveDomain P X)
+    (hfirmBox : FirmPriceRateBounds X)
+    (htight : 0 < X.bankTightness t h)
+    (hlog : lowerLog ≤ Real.log (X.reserveRate t h)) :
+    ∃ depositCeiling : ℝ,
+      0 ≤ depositCeiling ∧
+      |bankOTCInterbankAt P X t h (X.bankTightness t h)
+          (X.reservesPrePayment t h) (X.bankDeposits t h) omega| ≤
+        (1 + P.bankDepositCap +
+          P.bankDepositCap * 1 +
+          P.bankDepositCap * (depositCeiling / Real.exp lowerLog + 1) *
+            sourcePaymentShockAbsBound P) * X.bankEquity t h := by
+  have hrate0 : 0 < X.reserveRate t h := by
+    rcases hdomain t h hh with ⟨_, _, _, _, _, _, _, _, hreserve, _⟩
+    exact hreserve
+  have hfloor : Real.exp lowerLog ≤ X.reserveRate t h :=
+    source_reserve_rate_floor_of_log_floor
+      (X.reserveRate t h) lowerLog hrate0 hlog
+  exact source_otc_position_abs_le_equity_of_firm_rate_box_and_reserve_floor
+    P I X t h omega (Real.exp lowerLog) hh hbank hdomain hfirmBox
+      htight (Real.exp_pos _) hfloor
+
+/-- Initial SOURCE remuneration rule and a literal lower bound on
+its forcing jointly deliver the date-zero bank OTC equity envelope.
+No pathwise stationary bound or monetary equilibrium existence
+claim is smuggled into this time-zero corollary. -/
+theorem source_initial_otc_equity_bound_of_policy_forcing
+    (P : Primitives S) (I : InheritedState) (X : Allocation S)
+    (h : History S 0) (omega : P.paymentSupport) (lowerLog : ℝ)
+    (hh : FirmHistoryAdmissible P 0 h)
+    (hpolicy : MonetaryPolicyRules P I X)
+    (hbank : BankFeasible P I X (fullRetentionCommonBankPlan P X))
+    (hdomain : PositiveDomain P X)
+    (hfirmBox : FirmPriceRateBounds X)
+    (htight : 0 < X.bankTightness 0 h)
+    (hforcing :
+      lowerLog ≤
+        P.reserveRatePersistence * Real.log I.reserveRateLag +
+        (1 - P.reserveRatePersistence) *
+          (Real.log P.reserveRateSteady +
+            P.inflationResponse * Real.log (X.inflation 0 h) +
+            P.outputResponse * Real.log (X.output 0 h / P.outputReference)) +
+        P.reserveRateInnovation (currentState h)) :
+    ∃ depositCeiling : ℝ,
+      0 ≤ depositCeiling ∧
+      |bankOTCInterbankAt P X 0 h (X.bankTightness 0 h)
+          (X.reservesPrePayment 0 h) (X.bankDeposits 0 h) omega| ≤
+        (1 + P.bankDepositCap +
+          P.bankDepositCap * 1 +
+          P.bankDepositCap * (depositCeiling / Real.exp lowerLog + 1) *
+            sourcePaymentShockAbsBound P) * X.bankEquity 0 h := by
+  have hlog := source_initial_reserve_log_floor_of_policy_forcing
+    P I X h lowerLog hpolicy hh hforcing
+  exact source_otc_position_abs_le_equity_of_log_reserve_floor
+    P I X 0 h omega lowerLog hh hbank hdomain hfirmBox htight hlog
+
+#print axioms source_otc_position_abs_le_equity_of_log_reserve_floor
+#print axioms source_initial_otc_equity_bound_of_policy_forcing
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
