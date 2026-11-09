@@ -19,6 +19,8 @@ jobs:
           python-version: "3.12"
       - run: python -m pip install --quiet -r code/requirements.txt
       - run: python code/verify.py
+      - name: Verify rational frontier endpoint boxes without floating-point acceptance
+        run: python code/boundary/verify_endpoint_boxes_exact.py
 
   pdfs:
     name: Compile the PDFs from LaTeX
