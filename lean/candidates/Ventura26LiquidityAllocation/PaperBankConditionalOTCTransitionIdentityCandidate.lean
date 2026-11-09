@@ -1873,5 +1873,73 @@ theorem source_full_retention_loan_cap_of_bank_feasible
 
 #print axioms source_full_retention_loan_cap_of_bank_feasible
 
+
+/-- Sign-robust upper bound on the literal SOURCE OTC bank return.
+Unlike the nonnegative-outlays certificate, this bound allows the
+interbank position to be a net asset (negative borrowing). It
+therefore treats deposit, OTC and facility terms via their absolute
+values, making the required magnitude controls explicit. -/
+theorem source_detailed_otc_return_le_absolute_cost_envelope
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (tightness loans reserves deposits : ℝ)
+    (omega : P.paymentSupport) :
+    bankDetailedPortfolioReturnAt P X t h tightness
+        loans reserves deposits omega ≤
+      X.loanRate t h * loans +
+        X.reserveRate t h *
+          bankPostSettlementReservesAt P X t h tightness
+            reserves deposits omega +
+        |X.depositRate t h * deposits * (1 + P.paymentShock omega)| +
+        |X.interbankRate t h *
+          bankOTCInterbankAt P X t h tightness reserves deposits omega| +
+        |X.facilityRate t h *
+          bankFacilityBorrowingAt P X t h tightness reserves deposits omega| := by
+  unfold bankDetailedPortfolioReturnAt
+  have hD := neg_le_abs (X.depositRate t h * deposits *
+    (1 + P.paymentShock omega))
+  have hIB := neg_le_abs (X.interbankRate t h *
+    bankOTCInterbankAt P X t h tightness reserves deposits omega)
+  have hF := neg_le_abs (X.facilityRate t h *
+    bankFacilityBorrowingAt P X t h tightness reserves deposits omega)
+  linarith
+
+/-- A signed-OTC return cap from the loan limit plus explicitly
+bounded reserve revenue and absolute funding cash flows. This does
+not infer nonnegative interbank borrowing from the policy corridor:
+OTC positions can be signed in the SOURCE model. -/
+theorem source_detailed_otc_return_le_signed_cost_cap
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (tightness loans reserves deposits retained reserveRevenueCap
+      fundingMagnitudeCap : ℝ)
+    (omega : P.paymentSupport)
+    (hloanRate : 0 ≤ X.loanRate t h)
+    (hloanCap : loans ≤ P.bankLoanCap * retained)
+    (hreserveRevenue : X.reserveRate t h *
+      bankPostSettlementReservesAt P X t h tightness
+        reserves deposits omega ≤ reserveRevenueCap * retained)
+    (hfundingMagnitude :
+      |X.depositRate t h * deposits * (1 + P.paymentShock omega)| +
+        |X.interbankRate t h *
+          bankOTCInterbankAt P X t h tightness reserves deposits omega| +
+        |X.facilityRate t h *
+          bankFacilityBorrowingAt P X t h tightness reserves deposits omega|
+        ≤ fundingMagnitudeCap * retained) :
+    bankDetailedPortfolioReturnAt P X t h tightness
+        loans reserves deposits omega ≤
+      (X.loanRate t h * P.bankLoanCap + reserveRevenueCap +
+        fundingMagnitudeCap) * retained := by
+  have hloanRevenue :
+      X.loanRate t h * loans ≤
+        X.loanRate t h * (P.bankLoanCap * retained) :=
+    mul_le_mul_of_nonneg_left hloanCap hloanRate
+  have hreturn := source_detailed_otc_return_le_absolute_cost_envelope
+    P X t h tightness loans reserves deposits omega
+  nlinarith [hloanRevenue, hreserveRevenue, hfundingMagnitude]
+
+#print axioms source_detailed_otc_return_le_absolute_cost_envelope
+#print axioms source_detailed_otc_return_le_signed_cost_cap
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
