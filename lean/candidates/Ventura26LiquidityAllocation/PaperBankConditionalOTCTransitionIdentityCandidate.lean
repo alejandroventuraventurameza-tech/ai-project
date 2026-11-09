@@ -2577,5 +2577,50 @@ theorem source_deposit_reserve_rate_ratio_abs_le_of_level_envelopes
 
 #print axioms source_deposit_reserve_rate_ratio_abs_le_of_level_envelopes
 
+
+/-- A SOURCE firm price/rate box supplies the upper deposit-rate ceiling.
+A genuinely separate positive reserve-remuneration floor supplies
+the missing denominator bound. The resulting bank OTC exposure
+certificate is consequently conditional, not an equilibrium claim. -/
+theorem source_otc_position_abs_le_equity_of_firm_rate_box_and_reserve_floor
+    (P : Primitives S) (I : InheritedState) (X : Allocation S)
+    (t : ℕ) (h : History S t) (omega : P.paymentSupport)
+    (reserveFloor : ℝ)
+    (hh : FirmHistoryAdmissible P t h)
+    (hbank : BankFeasible P I X (fullRetentionCommonBankPlan P X))
+    (hdomain : PositiveDomain P X)
+    (hfirmBox : FirmPriceRateBounds X)
+    (htight : 0 < X.bankTightness t h)
+    (hfloor0 : 0 < reserveFloor)
+    (hfloor : reserveFloor ≤ X.reserveRate t h) :
+    ∃ depositCeiling : ℝ,
+      0 ≤ depositCeiling ∧
+      |bankOTCInterbankAt P X t h (X.bankTightness t h)
+          (X.reservesPrePayment t h) (X.bankDeposits t h) omega| ≤
+        (1 + P.bankDepositCap +
+          P.bankDepositCap * 1 +
+          P.bankDepositCap * (depositCeiling / reserveFloor + 1) *
+            sourcePaymentShockAbsBound P) * X.bankEquity t h := by
+  rcases hfirmBox with ⟨lower, upper, hlower, horder, hall⟩
+  have hrateBox := hall t h
+  have hdeposit0 : 0 ≤ X.depositRate t h :=
+    le_trans (le_of_lt hlower) hrateBox.1
+  have hdepositCeiling : X.depositRate t h ≤ upper :=
+    le_trans hrateBox.2.1 hrateBox.2.2.1
+  have hupper0 : 0 ≤ upper := le_trans hdeposit0 hdepositCeiling
+  have hratio :
+      |X.depositRate t h / X.reserveRate t h| ≤ upper / reserveFloor :=
+    source_deposit_reserve_rate_ratio_abs_le_of_level_envelopes
+      (X.depositRate t h) (X.reserveRate t h)
+      reserveFloor upper hdeposit0 hfloor0 hfloor hdepositCeiling
+  have hratioBound0 : 0 ≤ upper / reserveFloor :=
+    div_nonneg hupper0 (le_of_lt hfloor0)
+  refine ⟨upper, hupper0, ?_⟩
+  exact source_otc_position_abs_le_equity_of_positive_domain
+    P I X t h omega (upper / reserveFloor) hh hbank hdomain
+      htight hratioBound0 hratio
+
+#print axioms source_otc_position_abs_le_equity_of_firm_rate_box_and_reserve_floor
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
