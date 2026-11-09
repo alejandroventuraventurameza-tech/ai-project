@@ -97,7 +97,12 @@ theorem sourceBoundaryDateData_ratio_nonzero (G : ℝ) :
     rw [reducedReserveDepositRatio_eq
       (boundaryPrimitives G boundarySourceRate) 0 1
       (boundary_binary_payment_law G boundarySourceRate)]
-    exact ne_of_gt bank_margins_and_pricing.1
+    have hr : 0 < ProposedStationaryBank.reserveDepositRatio := by
+      rcases ProposedStationaryBank.bank_margins_and_pricing with
+        ⟨_hxi0, _hxiupper, hrlo, _hrhi, _hpricing,
+          _hloanlo, _hloanhi⟩
+      linarith
+    exact ne_of_gt hr
   intro t
   cases t with
   | zero =>
