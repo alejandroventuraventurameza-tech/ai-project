@@ -599,8 +599,6 @@ theorem boundary_source_stationary_capital_scale_order :
       hcostH).le
   unfold ProposedStationaryRealScale.capitalScale
   gcongr
-  · exact hbase0
-  · exact hbase
 
 #print axioms boundary_source_stationary_capital_scale_order
 
