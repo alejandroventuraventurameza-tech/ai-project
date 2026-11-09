@@ -473,263 +473,6 @@ theorem boundary_source_loan_rate_sharp_box :
   constructor <;> linarith
 
 
-/-- A finer SOURCE user-cost box from the quadratic bank solution:
-the lower R_L bound and the upper R_L bound are kernel-proved rather
-than rounded decimal estimates. -/
-theorem boundary_source_user_cost_sharp_boxes :
-    ((63166370 / 1000000000 : ℝ) <
-        ProposedStationaryRealScale.userCost .H ∧
-      ProposedStationaryRealScale.userCost .H <
-        (63166372 / 1000000000 : ℝ)) ∧
-    ((55943655 / 1000000000 : ℝ) <
-        ProposedStationaryRealScale.userCost .L ∧
-      ProposedStationaryRealScale.userCost .L <
-        (55943657 / 1000000000 : ℝ)) := by
-  rcases boundary_source_loan_rate_sharp_box with ⟨hrlo, hrhi⟩
-  have hrpos : 0 < ProposedStationaryBank.loanRate :=
-    ProposedStationaryRealScale.loanRate_pos
-  have hscaledH :
-      ProposedStationaryRealScale.userCost .H *
-        ProposedStationaryBank.loanRate =
-      (81 / 80 : ℝ) *
-        ((511 / 2400 : ℝ) * ProposedStationaryBank.loanRate -
-          39 / 256) := by
-    unfold ProposedStationaryRealScale.userCost
-      ProposedStationaryRealScale.capitalPrice
-      ProposedStationaryRealScale.pledgeability
-    field_simp [ne_of_gt hrpos] <;> ring
-  have hscaledL :
-      ProposedStationaryRealScale.userCost .L *
-        ProposedStationaryBank.loanRate =
-      (81 / 80 : ℝ) *
-        ((137 / 300 : ℝ) * ProposedStationaryBank.loanRate -
-          13 / 32) := by
-    unfold ProposedStationaryRealScale.userCost
-      ProposedStationaryRealScale.capitalPrice
-      ProposedStationaryRealScale.pledgeability
-    field_simp [ne_of_gt hrpos] <;> ring
-  constructor
-  · constructor
-    · by_contra hn
-      have hle :
-          ProposedStationaryRealScale.userCost .H ≤
-            (63166370 / 1000000000 : ℝ) := le_of_not_gt hn
-      have hm := mul_le_mul_of_nonneg_right hle hrpos.le
-      rw [hscaledH] at hm
-      linarith only [hm, hrlo]
-    · by_contra hn
-      have hge :
-          (63166372 / 1000000000 : ℝ) ≤
-            ProposedStationaryRealScale.userCost .H := le_of_not_gt hn
-      have hm := mul_le_mul_of_nonneg_right hge hrpos.le
-      rw [hscaledH] at hm
-      linarith only [hm, hrhi]
-  · constructor
-    · by_contra hn
-      have hle :
-          ProposedStationaryRealScale.userCost .L ≤
-            (55943655 / 1000000000 : ℝ) := le_of_not_gt hn
-      have hm := mul_le_mul_of_nonneg_right hle hrpos.le
-      rw [hscaledL] at hm
-      linarith only [hm, hrlo]
-    · by_contra hn
-      have hge :
-          (55943657 / 1000000000 : ℝ) ≤
-            ProposedStationaryRealScale.userCost .L := le_of_not_gt hn
-      have hm := mul_le_mul_of_nonneg_right hge hrpos.le
-      rw [hscaledL] at hm
-      linarith only [hm, hrhi]
-
-/-- Sharper capital-scale enclosures for *both* heterogeneous firms,
-from source user costs and fifth powers. No GE capital allocation is
-asserted; these values describe the stationary SOURCE candidate. -/
-theorem boundary_source_capital_scales_sharp_boxes :
-    ((5677035 / 100000 : ℝ) <
-        ProposedStationaryRealScale.capitalScale .H ∧
-      ProposedStationaryRealScale.capitalScale .H <
-        (5677037 / 100000 : ℝ)) ∧
-    ((9431553 / 100000 : ℝ) <
-        ProposedStationaryRealScale.capitalScale .L ∧
-      ProposedStationaryRealScale.capitalScale .L <
-        (9431556 / 100000 : ℝ)) := by
-  rcases boundary_source_user_cost_sharp_boxes with
-    ⟨⟨huHlo, huHhi⟩, ⟨huLlo, huLhi⟩⟩
-  constructor
-  · have hu : 0 < ProposedStationaryRealScale.userCost .H :=
-      ProposedStationaryRealScale.userCost_pos .H
-    have hbaseLo :
-        (224297440 / 100000000 : ℝ) <
-          (10201 / 72000 : ℝ) /
-            ProposedStationaryRealScale.userCost .H := by
-      apply (lt_div_iff₀ hu).2
-      linarith only [huHhi]
-    have hbaseHi :
-        (10201 / 72000 : ℝ) /
-            ProposedStationaryRealScale.userCost .H <
-          (224297448 / 100000000 : ℝ) := by
-      apply (div_lt_iff₀ hu).2
-      linarith only [huHlo]
-    have hpowLo :
-        (224297440 / 100000000 : ℝ) ^ (5 : ℕ) <
-          ((10201 / 72000 : ℝ) /
-            ProposedStationaryRealScale.userCost .H) ^ (5 : ℕ) := by
-      gcongr
-    have hpowHi :
-        ((10201 / 72000 : ℝ) /
-            ProposedStationaryRealScale.userCost .H) ^ (5 : ℕ) <
-          (224297448 / 100000000 : ℝ) ^ (5 : ℕ) := by
-      gcongr
-    have hcap :
-        ProposedStationaryRealScale.capitalScale .H =
-          ((10201 / 72000 : ℝ) /
-            ProposedStationaryRealScale.userCost .H) ^ (5 : ℕ) := by
-      unfold ProposedStationaryRealScale.capitalScale
-      norm_num [ProposedStationaryRealScale.profitCoefficient,
-        ProposedStationaryRealScale.technology]
-    rw [hcap]
-    constructor
-    · exact lt_trans (by norm_num) hpowLo
-    · exact lt_trans hpowHi (by norm_num)
-  · have hu : 0 < ProposedStationaryRealScale.userCost .L :=
-      ProposedStationaryRealScale.userCost_pos .L
-    have hbaseLo :
-        (248265659 / 100000000 : ℝ) <
-          (5 / 36 : ℝ) /
-            ProposedStationaryRealScale.userCost .L := by
-      apply (lt_div_iff₀ hu).2
-      linarith only [huLhi]
-    have hbaseHi :
-        (5 / 36 : ℝ) /
-            ProposedStationaryRealScale.userCost .L <
-          (248265669 / 100000000 : ℝ) := by
-      apply (div_lt_iff₀ hu).2
-      linarith only [huLlo]
-    have hpowLo :
-        (248265659 / 100000000 : ℝ) ^ (5 : ℕ) <
-          ((5 / 36 : ℝ) /
-            ProposedStationaryRealScale.userCost .L) ^ (5 : ℕ) := by
-      gcongr
-    have hpowHi :
-        ((5 / 36 : ℝ) /
-            ProposedStationaryRealScale.userCost .L) ^ (5 : ℕ) <
-          (248265669 / 100000000 : ℝ) ^ (5 : ℕ) := by
-      gcongr
-    have hcap :
-        ProposedStationaryRealScale.capitalScale .L =
-          ((5 / 36 : ℝ) /
-            ProposedStationaryRealScale.userCost .L) ^ (5 : ℕ) := by
-      unfold ProposedStationaryRealScale.capitalScale
-      norm_num [ProposedStationaryRealScale.profitCoefficient,
-        ProposedStationaryRealScale.technology]
-    rw [hcap]
-    constructor
-    · exact lt_trans (by norm_num) hpowLo
-    · exact lt_trans hpowHi (by norm_num)
-
-/-- The lower-end capital installation inequality from the *SOURCE*
-economic functions. Source-specific positivity and the sharp firm
-capital envelopes discharge the numerical bracket premise. -/
-theorem boundary_capital_cost_lo_box_from_source :
-    (266849 / 100000 : ℝ) <
-      normalizedCapitalCost boundaryLo := by
-  rcases boundary_source_user_cost_sharp_boxes with
-    ⟨_, ⟨huLlo, _⟩⟩
-  have hden :
-      0 < 2 * continuationReturn .L -
-        (41 / 40 : ℝ) * boundaryLo := by
-    dsimp [continuationReturn,
-      ProposedStationaryRealScale.liquidationValue,
-      ProposedStationaryRealScale.capitalPrice, boundaryLo]
-    linarith only [huLlo]
-  have hsHi :
-      boundaryCapitalScale boundaryLo <
-        (989728731 / 1000000000 : ℝ) := by
-    rw [boundaryCapitalScale_rewrite boundaryLo
-      (by norm_num [boundaryLo])]
-    apply (div_lt_iff₀ hden).2
-    dsimp [continuationReturn,
-      ProposedStationaryRealScale.liquidationValue,
-      ProposedStationaryRealScale.capitalPrice, boundaryLo]
-    linarith only [huLlo]
-  have hRmem : boundaryLo ∈ boundaryInterval :=
-    ⟨le_refl _, le_of_lt boundaryLo_lt_boundaryHi⟩
-  have hspos : 0 < boundaryCapitalScale boundaryLo :=
-    (boundary_scale_and_investment_domain hRmem).1
-  have hfour :
-      4 * boundaryCapitalScale boundaryLo <
-        4 * (989728731 / 1000000000 : ℝ) := by
-    nlinarith only [hsHi]
-  have hinv :
-      (1 : ℝ) / (4 * (989728731 / 1000000000 : ℝ)) <
-        1 / (4 * boundaryCapitalScale boundaryLo) :=
-    one_div_lt_one_div_of_lt (mul_pos (by norm_num) hspos) hfour
-  have hfactor :
-      (3532417 / 100000000 : ℝ) <
-        (41 / 80 : ℝ) +
-          1 / (4 * boundaryCapitalScale boundaryLo) -
-          (4719 / 6400 : ℝ) * boundaryCapitalScale boundaryLo := by
-    have hrat :
-        (3532417 / 100000000 : ℝ) <
-          (41 / 80 : ℝ) +
-            1 / (4 * (989728731 / 1000000000 : ℝ)) -
-            (4719 / 6400 : ℝ) * (989728731 / 1000000000 : ℝ) := by
-      norm_num
-    linarith only [hinv, hsHi, hrat]
-  have hKlo :
-      (7554294 / 100000 : ℝ) <
-        ProposedStationaryRealScale.average
-          ProposedStationaryRealScale.capitalScale := by
-    rcases boundary_source_capital_scales_sharp_boxes with
-      ⟨⟨hHlo, _⟩, ⟨hLlo, _⟩⟩
-    unfold ProposedStationaryRealScale.average
-    linarith only [hHlo, hLlo]
-  have hKpos : 0 <
-      ProposedStationaryRealScale.average
-        ProposedStationaryRealScale.capitalScale :=
-    ProposedStationaryRealScale.aggregate_scales_pos.1
-  unfold normalizedCapitalCost
-  calc
-    (266849 / 100000 : ℝ) <
-        (7554294 / 100000 : ℝ) *
-          (3532417 / 100000000 : ℝ) := by norm_num
-    _ < ProposedStationaryRealScale.average
-          ProposedStationaryRealScale.capitalScale *
-            (3532417 / 100000000 : ℝ) :=
-      mul_lt_mul_of_pos_right hKlo (by norm_num)
-    _ < _ := mul_lt_mul_of_pos_left hfactor hKpos
-
-/-- Three endpoints remain unverified from source: two fifteenth-root
-output boxes and one lower-end worker consumption inequality. -/
-structure BoundaryRemainingThreeBoxes : Prop where
-  Ylo_upper : normalizedOutput boundaryLo < 1327678 / 100000
-  CWlo_lower : 793630 / 100000 < normalizedWorkerConsumption boundaryLo
-  Yhi_lower : 1340498 / 100000 < normalizedOutput boundaryHi
-
-theorem boundary_four_boxes_from_three
-    (h : BoundaryRemainingThreeBoxes) : BoundaryRemainingFourBoxes := by
-  exact ⟨h.Ylo_upper, h.CWlo_lower,
-    boundary_capital_cost_lo_box_from_source, h.Yhi_lower⟩
-
-/-- Literal scalar rate uniqueness plus the reduced 33-row prefix;
-no infinite-horizon competitive equilibrium is implied. -/
-theorem boundary_unique_reduced_prefix_rate_of_three
-    (G : ℝ) (h : BoundaryRemainingThreeBoxes) :
-    ∃! R : ℝ,
-      boundaryLo ≤ R ∧ R ≤ boundaryHi ∧
-      boundaryResourceResidual R = 0 ∧
-      ∀ branch : LocalPrefixBranch,
-        LocalReducedPrefixEquationsHold branch
-          (boundaryPrimitives G R)
-          (boundaryInitialState G R)
-          (boundaryCoordinates R) .dateOne .recurrent boundaryTail := by
-  exact boundary_unique_reduced_prefix_rate_of_four G
-    (boundary_four_boxes_from_three h)
-
-#print axioms boundary_source_user_cost_sharp_boxes
-#print axioms boundary_source_capital_scales_sharp_boxes
-#print axioms boundary_capital_cost_lo_box_from_source
-#print axioms boundary_unique_reduced_prefix_rate_of_three
-
 #print axioms boundary_source_reserve_rate_sharp_box
 #print axioms boundary_source_loan_rate_sharp_box
 
@@ -1789,6 +1532,263 @@ theorem boundary_unique_reduced_prefix_rate_of_four
           (boundaryCoordinates R) .dateOne .recurrent boundaryTail := by
   exact boundary_unique_reduced_prefix_rate_of_five G
     (boundary_five_boxes_from_four h)
+
+/-- A finer SOURCE user-cost box from the quadratic bank solution:
+the lower R_L bound and the upper R_L bound are kernel-proved rather
+than rounded decimal estimates. -/
+theorem boundary_source_user_cost_sharp_boxes :
+    ((63166370 / 1000000000 : ℝ) <
+        ProposedStationaryRealScale.userCost .H ∧
+      ProposedStationaryRealScale.userCost .H <
+        (63166372 / 1000000000 : ℝ)) ∧
+    ((55943655 / 1000000000 : ℝ) <
+        ProposedStationaryRealScale.userCost .L ∧
+      ProposedStationaryRealScale.userCost .L <
+        (55943657 / 1000000000 : ℝ)) := by
+  rcases boundary_source_loan_rate_sharp_box with ⟨hrlo, hrhi⟩
+  have hrpos : 0 < ProposedStationaryBank.loanRate :=
+    ProposedStationaryRealScale.loanRate_pos
+  have hscaledH :
+      ProposedStationaryRealScale.userCost .H *
+        ProposedStationaryBank.loanRate =
+      (81 / 80 : ℝ) *
+        ((511 / 2400 : ℝ) * ProposedStationaryBank.loanRate -
+          39 / 256) := by
+    unfold ProposedStationaryRealScale.userCost
+      ProposedStationaryRealScale.capitalPrice
+      ProposedStationaryRealScale.pledgeability
+    field_simp [ne_of_gt hrpos] <;> ring
+  have hscaledL :
+      ProposedStationaryRealScale.userCost .L *
+        ProposedStationaryBank.loanRate =
+      (81 / 80 : ℝ) *
+        ((137 / 300 : ℝ) * ProposedStationaryBank.loanRate -
+          13 / 32) := by
+    unfold ProposedStationaryRealScale.userCost
+      ProposedStationaryRealScale.capitalPrice
+      ProposedStationaryRealScale.pledgeability
+    field_simp [ne_of_gt hrpos] <;> ring
+  constructor
+  · constructor
+    · by_contra hn
+      have hle :
+          ProposedStationaryRealScale.userCost .H ≤
+            (63166370 / 1000000000 : ℝ) := le_of_not_gt hn
+      have hm := mul_le_mul_of_nonneg_right hle hrpos.le
+      rw [hscaledH] at hm
+      linarith only [hm, hrlo]
+    · by_contra hn
+      have hge :
+          (63166372 / 1000000000 : ℝ) ≤
+            ProposedStationaryRealScale.userCost .H := le_of_not_gt hn
+      have hm := mul_le_mul_of_nonneg_right hge hrpos.le
+      rw [hscaledH] at hm
+      linarith only [hm, hrhi]
+  · constructor
+    · by_contra hn
+      have hle :
+          ProposedStationaryRealScale.userCost .L ≤
+            (55943655 / 1000000000 : ℝ) := le_of_not_gt hn
+      have hm := mul_le_mul_of_nonneg_right hle hrpos.le
+      rw [hscaledL] at hm
+      linarith only [hm, hrlo]
+    · by_contra hn
+      have hge :
+          (55943657 / 1000000000 : ℝ) ≤
+            ProposedStationaryRealScale.userCost .L := le_of_not_gt hn
+      have hm := mul_le_mul_of_nonneg_right hge hrpos.le
+      rw [hscaledL] at hm
+      linarith only [hm, hrhi]
+
+/-- Sharper capital-scale enclosures for *both* heterogeneous firms,
+from source user costs and fifth powers. No GE capital allocation is
+asserted; these values describe the stationary SOURCE candidate. -/
+theorem boundary_source_capital_scales_sharp_boxes :
+    ((5677035 / 100000 : ℝ) <
+        ProposedStationaryRealScale.capitalScale .H ∧
+      ProposedStationaryRealScale.capitalScale .H <
+        (5677037 / 100000 : ℝ)) ∧
+    ((9431553 / 100000 : ℝ) <
+        ProposedStationaryRealScale.capitalScale .L ∧
+      ProposedStationaryRealScale.capitalScale .L <
+        (9431556 / 100000 : ℝ)) := by
+  rcases boundary_source_user_cost_sharp_boxes with
+    ⟨⟨huHlo, huHhi⟩, ⟨huLlo, huLhi⟩⟩
+  constructor
+  · have hu : 0 < ProposedStationaryRealScale.userCost .H :=
+      ProposedStationaryRealScale.userCost_pos .H
+    have hbaseLo :
+        (224297440 / 100000000 : ℝ) <
+          (10201 / 72000 : ℝ) /
+            ProposedStationaryRealScale.userCost .H := by
+      apply (lt_div_iff₀ hu).2
+      linarith only [huHhi]
+    have hbaseHi :
+        (10201 / 72000 : ℝ) /
+            ProposedStationaryRealScale.userCost .H <
+          (224297448 / 100000000 : ℝ) := by
+      apply (div_lt_iff₀ hu).2
+      linarith only [huHlo]
+    have hpowLo :
+        (224297440 / 100000000 : ℝ) ^ (5 : ℕ) <
+          ((10201 / 72000 : ℝ) /
+            ProposedStationaryRealScale.userCost .H) ^ (5 : ℕ) := by
+      gcongr
+    have hpowHi :
+        ((10201 / 72000 : ℝ) /
+            ProposedStationaryRealScale.userCost .H) ^ (5 : ℕ) <
+          (224297448 / 100000000 : ℝ) ^ (5 : ℕ) := by
+      gcongr
+    have hcap :
+        ProposedStationaryRealScale.capitalScale .H =
+          ((10201 / 72000 : ℝ) /
+            ProposedStationaryRealScale.userCost .H) ^ (5 : ℕ) := by
+      unfold ProposedStationaryRealScale.capitalScale
+      norm_num [ProposedStationaryRealScale.profitCoefficient,
+        ProposedStationaryRealScale.technology]
+    rw [hcap]
+    constructor
+    · exact lt_trans (by norm_num) hpowLo
+    · exact lt_trans hpowHi (by norm_num)
+  · have hu : 0 < ProposedStationaryRealScale.userCost .L :=
+      ProposedStationaryRealScale.userCost_pos .L
+    have hbaseLo :
+        (248265659 / 100000000 : ℝ) <
+          (5 / 36 : ℝ) /
+            ProposedStationaryRealScale.userCost .L := by
+      apply (lt_div_iff₀ hu).2
+      linarith only [huLhi]
+    have hbaseHi :
+        (5 / 36 : ℝ) /
+            ProposedStationaryRealScale.userCost .L <
+          (248265669 / 100000000 : ℝ) := by
+      apply (div_lt_iff₀ hu).2
+      linarith only [huLlo]
+    have hpowLo :
+        (248265659 / 100000000 : ℝ) ^ (5 : ℕ) <
+          ((5 / 36 : ℝ) /
+            ProposedStationaryRealScale.userCost .L) ^ (5 : ℕ) := by
+      gcongr
+    have hpowHi :
+        ((5 / 36 : ℝ) /
+            ProposedStationaryRealScale.userCost .L) ^ (5 : ℕ) <
+          (248265669 / 100000000 : ℝ) ^ (5 : ℕ) := by
+      gcongr
+    have hcap :
+        ProposedStationaryRealScale.capitalScale .L =
+          ((5 / 36 : ℝ) /
+            ProposedStationaryRealScale.userCost .L) ^ (5 : ℕ) := by
+      unfold ProposedStationaryRealScale.capitalScale
+      norm_num [ProposedStationaryRealScale.profitCoefficient,
+        ProposedStationaryRealScale.technology]
+    rw [hcap]
+    constructor
+    · exact lt_trans (by norm_num) hpowLo
+    · exact lt_trans hpowHi (by norm_num)
+
+/-- The lower-end capital installation inequality from the *SOURCE*
+economic functions. Source-specific positivity and the sharp firm
+capital envelopes discharge the numerical bracket premise. -/
+theorem boundary_capital_cost_lo_box_from_source :
+    (266849 / 100000 : ℝ) <
+      normalizedCapitalCost boundaryLo := by
+  rcases boundary_source_user_cost_sharp_boxes with
+    ⟨_, ⟨huLlo, _⟩⟩
+  have hden :
+      0 < 2 * continuationReturn .L -
+        (41 / 40 : ℝ) * boundaryLo := by
+    dsimp [continuationReturn,
+      ProposedStationaryRealScale.liquidationValue,
+      ProposedStationaryRealScale.capitalPrice, boundaryLo]
+    linarith only [huLlo]
+  have hsHi :
+      boundaryCapitalScale boundaryLo <
+        (989728731 / 1000000000 : ℝ) := by
+    rw [boundaryCapitalScale_rewrite boundaryLo
+      (by norm_num [boundaryLo])]
+    apply (div_lt_iff₀ hden).2
+    dsimp [continuationReturn,
+      ProposedStationaryRealScale.liquidationValue,
+      ProposedStationaryRealScale.capitalPrice, boundaryLo]
+    linarith only [huLlo]
+  have hRmem : boundaryLo ∈ boundaryInterval :=
+    ⟨le_refl _, le_of_lt boundaryLo_lt_boundaryHi⟩
+  have hspos : 0 < boundaryCapitalScale boundaryLo :=
+    (boundary_scale_and_investment_domain hRmem).1
+  have hfour :
+      4 * boundaryCapitalScale boundaryLo <
+        4 * (989728731 / 1000000000 : ℝ) := by
+    nlinarith only [hsHi]
+  have hinv :
+      (1 : ℝ) / (4 * (989728731 / 1000000000 : ℝ)) <
+        1 / (4 * boundaryCapitalScale boundaryLo) :=
+    one_div_lt_one_div_of_lt (mul_pos (by norm_num) hspos) hfour
+  have hfactor :
+      (3532417 / 100000000 : ℝ) <
+        (41 / 80 : ℝ) +
+          1 / (4 * boundaryCapitalScale boundaryLo) -
+          (4719 / 6400 : ℝ) * boundaryCapitalScale boundaryLo := by
+    have hrat :
+        (3532417 / 100000000 : ℝ) <
+          (41 / 80 : ℝ) +
+            1 / (4 * (989728731 / 1000000000 : ℝ)) -
+            (4719 / 6400 : ℝ) * (989728731 / 1000000000 : ℝ) := by
+      norm_num
+    linarith only [hinv, hsHi, hrat]
+  have hKlo :
+      (7554294 / 100000 : ℝ) <
+        ProposedStationaryRealScale.average
+          ProposedStationaryRealScale.capitalScale := by
+    rcases boundary_source_capital_scales_sharp_boxes with
+      ⟨⟨hHlo, _⟩, ⟨hLlo, _⟩⟩
+    unfold ProposedStationaryRealScale.average
+    linarith only [hHlo, hLlo]
+  have hKpos : 0 <
+      ProposedStationaryRealScale.average
+        ProposedStationaryRealScale.capitalScale :=
+    ProposedStationaryRealScale.aggregate_scales_pos.1
+  unfold normalizedCapitalCost
+  calc
+    (266849 / 100000 : ℝ) <
+        (7554294 / 100000 : ℝ) *
+          (3532417 / 100000000 : ℝ) := by norm_num
+    _ < ProposedStationaryRealScale.average
+          ProposedStationaryRealScale.capitalScale *
+            (3532417 / 100000000 : ℝ) :=
+      mul_lt_mul_of_pos_right hKlo (by norm_num)
+    _ < _ := mul_lt_mul_of_pos_left hfactor hKpos
+
+/-- Three endpoints remain unverified from source: two fifteenth-root
+output boxes and one lower-end worker consumption inequality. -/
+structure BoundaryRemainingThreeBoxes : Prop where
+  Ylo_upper : normalizedOutput boundaryLo < 1327678 / 100000
+  CWlo_lower : 793630 / 100000 < normalizedWorkerConsumption boundaryLo
+  Yhi_lower : 1340498 / 100000 < normalizedOutput boundaryHi
+
+theorem boundary_four_boxes_from_three
+    (h : BoundaryRemainingThreeBoxes) : BoundaryRemainingFourBoxes := by
+  exact ⟨h.Ylo_upper, h.CWlo_lower,
+    boundary_capital_cost_lo_box_from_source, h.Yhi_lower⟩
+
+/-- Literal scalar rate uniqueness plus the reduced 33-row prefix;
+no infinite-horizon competitive equilibrium is implied. -/
+theorem boundary_unique_reduced_prefix_rate_of_three
+    (G : ℝ) (h : BoundaryRemainingThreeBoxes) :
+    ∃! R : ℝ,
+      boundaryLo ≤ R ∧ R ≤ boundaryHi ∧
+      boundaryResourceResidual R = 0 ∧
+      ∀ branch : LocalPrefixBranch,
+        LocalReducedPrefixEquationsHold branch
+          (boundaryPrimitives G R)
+          (boundaryInitialState G R)
+          (boundaryCoordinates R) .dateOne .recurrent boundaryTail := by
+  exact boundary_unique_reduced_prefix_rate_of_four G
+    (boundary_four_boxes_from_three h)
+
+#print axioms boundary_source_user_cost_sharp_boxes
+#print axioms boundary_source_capital_scales_sharp_boxes
+#print axioms boundary_capital_cost_lo_box_from_source
+#print axioms boundary_unique_reduced_prefix_rate_of_three
 
 #print axioms boundary_worker_consumption_scale_upper
 #print axioms boundary_deposit_rate_hi_source_lower
