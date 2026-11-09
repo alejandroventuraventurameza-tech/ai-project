@@ -1603,7 +1603,12 @@ theorem source_conditional_otc_growth_le_of_positive_shock_bounds
       apply Finset.sum_congr rfl
       intro omega _ho
       ring
-    _ = ∑ s : S, T s * grossBound := by simp [hQ]
+    _ = ∑ s : S, T s * grossBound := by
+      change (∑ s : S, (T s * grossBound) *
+        (∑ omega : P.paymentSupport, Q omega)) =
+          ∑ s : S, T s * grossBound
+      rw [hQ]
+      simp
     _ = (∑ s : S, T s) * grossBound := by rw [Finset.sum_mul]
     _ = grossBound := by rw [hT]; ring
 
