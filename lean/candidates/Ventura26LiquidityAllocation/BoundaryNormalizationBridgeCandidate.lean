@@ -428,6 +428,51 @@ theorem boundary_source_user_cost_micro_boxes :
       rw [hscaledL]
       linarith only [hrhi]
 
+/-- Structural SOURCE collateral wedge: the stationary bank pricing
+condition RL < 25/24 alone implies the lower-pledgeability high-productivity
+firm has a strictly higher capital user cost. No micro-interval bounds or
+root approximation enter this proof. This is not a GE welfare result. -/
+theorem boundary_source_user_cost_wedge_of_bank_pricing :
+    ProposedStationaryRealScale.userCost .L <
+      ProposedStationaryRealScale.userCost .H := by
+  rcases ProposedStationaryBank.bank_margins_and_pricing with
+    ⟨_, _, _, _, _, _, hloanUpper⟩
+  have hloan : 0 < ProposedStationaryBank.loanRate :=
+    ProposedStationaryRealScale.loanRate_pos
+  have hdifference :
+      (ProposedStationaryRealScale.userCost .H -
+        ProposedStationaryRealScale.userCost .L) *
+        ProposedStationaryBank.loanRate =
+      (81 / 320 : ℝ) *
+        ((65 / 64 : ℝ) -
+          (39 / 40 : ℝ) * ProposedStationaryBank.loanRate) := by
+    unfold ProposedStationaryRealScale.userCost
+      ProposedStationaryRealScale.capitalPrice
+      ProposedStationaryRealScale.pledgeability
+    field_simp [ne_of_gt hloan] <;> ring
+  have hbracket :
+      0 < (65 / 64 : ℝ) -
+        (39 / 40 : ℝ) * ProposedStationaryBank.loanRate := by
+    linarith only [hloanUpper]
+  have hright : 0 <
+      (81 / 320 : ℝ) *
+        ((65 / 64 : ℝ) -
+          (39 / 40 : ℝ) * ProposedStationaryBank.loanRate) :=
+    mul_pos (by norm_num) hbracket
+  by_contra hn
+  have hle :
+      ProposedStationaryRealScale.userCost .H ≤
+        ProposedStationaryRealScale.userCost .L :=
+    le_of_not_gt hn
+  have hprod :
+      (ProposedStationaryRealScale.userCost .H -
+        ProposedStationaryRealScale.userCost .L) *
+          ProposedStationaryBank.loanRate ≤ 0 :=
+    mul_nonpos_of_nonpos_of_nonneg (sub_nonpos.mpr hle) hloan.le
+  linarith only [hdifference, hright, hprod]
+
+#print axioms boundary_source_user_cost_wedge_of_bank_pricing
+
 /-- A strictly higher-technology firm has lower pledgeability and a
 larger stationary user cost under the SOURCE illustrative parameters.
 This is a wedge ranking, not a general-equilibrium welfare result. -/
@@ -438,12 +483,9 @@ theorem boundary_source_productivity_collateral_cost_wedge :
       ProposedStationaryRealScale.pledgeability .L ∧
     ProposedStationaryRealScale.userCost .L <
       ProposedStationaryRealScale.userCost .H := by
-  rcases boundary_source_user_cost_micro_boxes with
-    ⟨⟨hHlo, _hHhi⟩, ⟨_hLlo, hLhi⟩⟩
-  refine ⟨?_, ?_, ?_⟩
+  refine ⟨?_, ?_, boundary_source_user_cost_wedge_of_bank_pricing⟩
   · norm_num [ProposedStationaryRealScale.technology]
   · norm_num [ProposedStationaryRealScale.pledgeability]
-  · linarith
 
 #print axioms boundary_source_user_cost_micro_boxes
 #print axioms boundary_source_productivity_collateral_cost_wedge
