@@ -47,6 +47,26 @@ ni convergencia a un equilibrio competitivo completo.
   las equivalencias exactas que aíslan los residuos fiscales, reales y
   domésticos. Estas equivalencias **no** descargan sus premisas económicas.
 
+## Cierre literal de recursos en el portador SOURCE
+
+- **DEMOSTRADO**, compuerta Lean de frontera #42720016791, SHA
+  `b18e1def5a37baf94d037c5f14fafecd9a4d305b`: el módulo
+  `BoundaryFullResourceClearingCandidate.lean` establece
+  `ResourceClears (boundaryPrimitives G boundarySourceRate)
+  (sourceBoundaryLiteralAllocation G)` sin `sorryAx`. La prueba contiene:
+  (a) recursos de fechas 0 y 1 y de toda la cola estacionaria como filas
+  reducidas; (b) capital heredado al inicio; (c) identidad entre el capital
+  elegido en t y el instalado en t+1; (d) producto efectivo y cuentas de
+  inversión/costo coincidentes con los datos reducidos. Este certificado
+  **no** es un resultado de óptimo privado, factibilidad total, ni existencia
+  de equilibrio competitivo.
+
+El argumento utiliza productividad agregada uno en las tres fases de este
+testigo artificial. No se extiende por sí mismo a shocks agregados generales,
+intervenciones persistentes ni otra distribución estocástica. La auditoría
+global de todos los candidatos constituye una compuerta independiente de
+la focalizada.
+
 ## Brechas remanentes de equilibrio completo
 
 `CompetitiveEquilibrium` en `EconomicModel.lean` exige de forma
@@ -63,9 +83,9 @@ para `X` salvo prueba posterior específica:
    terminales; no basta Euler/KKT reducido.
 3. **Presupuestos/mercados:** `FirmBudgetFlows`,
    `HouseholdBudgetFlows`, `InheritedNominalFaceConsistency`,
-   `CapitalProducerAccounts`, `FiscalClosure`, `ResourceClears`.
-   Algunas identidades contables están cerradas pero no todas las
-   condiciones de factibilidad.
+   `CapitalProducerAccounts` y `FiscalClosure`.
+   `ResourceClears` ya está demostrado para el testigo SOURCE exacto, pero
+   persisten condiciones privadas y nominales de factibilidad.
 4. **Liquidación OTC:** los flujos interbancarios netos del banco común no
    se anulan por `BankBalance`. `SettlementClears` y los márgenes de
    facilidad deben verificarse para cada historia admitida.
@@ -93,7 +113,7 @@ requiere demostrar `loanRate_t ≠ 0` para todas las fechas.
 
 Conservar el certificado Lean focalizado #42717672368 en `cb89e939` y
 recuperar la auditoría completa de candidatos de esa misma revisión. Después,
-derivar las filas de recursos y
-el presupuesto doméstico literal, el saldo OTC por historia, y por separado
+cerrar el presupuesto doméstico literal y el saldo OTC por historia,
+verificar el régimen de factibilidad bancaria y demostrar por separado
 el conjunto de condiciones de optimalidad y transversalidad. Mantener
 `main` sin cambios y el PR en borrador hasta las compuertas científicas.
