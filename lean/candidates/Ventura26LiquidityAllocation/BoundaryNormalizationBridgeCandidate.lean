@@ -600,6 +600,83 @@ theorem boundary_source_stationary_capital_scale_order :
   unfold ProposedStationaryRealScale.capitalScale
   gcongr
 
+
+/-- Exact-rational stationary capital-scale enclosure for the lower-
+productivity firm L. Both inequalities are consequences of the SOURCE
+cost box; the fifth powers and divisions are controlled over positive
+domains. This is a prerequisite for the endpoint cash-flow boxes. -/
+theorem boundary_source_capital_scale_L_rational_box :
+    (943153 / 10000 : ℝ) <
+      ProposedStationaryRealScale.capitalScale .L ∧
+    ProposedStationaryRealScale.capitalScale .L <
+      (943158 / 10000 : ℝ) := by
+  rcases (boundary_source_user_cost_micro_boxes).2 with ⟨hcostlo, hcosthi⟩
+  have hcostpos :
+      0 < ProposedStationaryRealScale.userCost .L :=
+    ProposedStationaryRealScale.userCost_pos .L
+  have hbaseLo :
+      (24826555 / 10000000 : ℝ) <
+        (5 / 36 : ℝ) / ProposedStationaryRealScale.userCost .L := by
+    apply (lt_div_iff₀ hcostpos).2
+    linarith only [hcosthi]
+  have hbaseHi :
+      (5 / 36 : ℝ) / ProposedStationaryRealScale.userCost .L <
+        (24826574 / 10000000 : ℝ) := by
+    apply (div_lt_iff₀ hcostpos).2
+    linarith only [hcostlo]
+  have hpowLo :
+      (24826555 / 10000000 : ℝ) ^ (5 : ℕ) <
+        ((5 / 36 : ℝ) /
+          ProposedStationaryRealScale.userCost .L) ^ (5 : ℕ) := by
+    gcongr
+  have hpowHi :
+      ((5 / 36 : ℝ) /
+        ProposedStationaryRealScale.userCost .L) ^ (5 : ℕ) <
+        (24826574 / 10000000 : ℝ) ^ (5 : ℕ) := by
+    gcongr
+  have hcapital :
+      ProposedStationaryRealScale.capitalScale .L =
+        ((5 / 36 : ℝ) /
+          ProposedStationaryRealScale.userCost .L) ^ (5 : ℕ) := by
+    unfold ProposedStationaryRealScale.capitalScale
+    norm_num [ProposedStationaryRealScale.profitCoefficient,
+      ProposedStationaryRealScale.technology]
+  rw [hcapital]
+  constructor
+  · exact lt_trans (by norm_num) hpowLo
+  · exact lt_trans hpowHi (by norm_num)
+
+/-- The two L-consumption endpoint boxes have a common SOURCE
+numerator. An exact rational enclosure of firmCoefficient L,
+rather than two unrelated endpoint assumptions, suffices for both.
+The numerator bounds remain obligations to be derived from the bank
+and firm primitives; this lemma does not assert those bounds. -/
+theorem boundary_firm_L_endpoint_boxes_of_coefficient_box
+    (hlo : (376471 / 100000 : ℝ) <
+      firmCoefficient .L)
+    (hhi : firmCoefficient .L <
+      (376473 / 100000 : ℝ)) :
+    (382592 / 100000 : ℝ) <
+      normalizedFirmConsumption boundaryLo .L ∧
+    normalizedFirmConsumption boundaryHi .L <
+      (380000 / 100000 : ℝ) := by
+  have hdenLo : 0 < (24 / 25 : ℝ) * boundaryLo := by
+    norm_num [boundaryLo]
+  have hdenHi : 0 < (24 / 25 : ℝ) * boundaryHi := by
+    norm_num [boundaryHi]
+  constructor
+  · change (382592 / 100000 : ℝ) <
+      firmCoefficient .L / ((24 / 25 : ℝ) * boundaryLo)
+    apply (lt_div_iff₀ hdenLo).2
+    exact lt_trans (by norm_num [boundaryLo]) hlo
+  · change firmCoefficient .L / ((24 / 25 : ℝ) * boundaryHi) <
+      (380000 / 100000 : ℝ)
+    apply (div_lt_iff₀ hdenHi).2
+    exact lt_trans hhi (by norm_num [boundaryHi])
+
+#print axioms boundary_source_capital_scale_L_rational_box
+#print axioms boundary_firm_L_endpoint_boxes_of_coefficient_box
+
 #print axioms boundary_source_stationary_capital_scale_order
 
 #print axioms boundary_source_user_cost_micro_boxes
