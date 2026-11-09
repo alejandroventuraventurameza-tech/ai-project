@@ -21,6 +21,8 @@ jobs:
       - run: python code/verify.py
       - name: Verify rational frontier endpoint boxes without floating-point acceptance
         run: python code/boundary/verify_endpoint_boxes_exact.py
+      - name: Verify SOURCE bank-rate roots and slopes with exact fractions
+        run: python code/boundary/verify_source_bank_rate_boxes_exact.py
 
   pdfs:
     name: Compile the PDFs from LaTeX
