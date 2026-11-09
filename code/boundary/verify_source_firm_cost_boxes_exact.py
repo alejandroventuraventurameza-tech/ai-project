@@ -60,5 +60,32 @@ assert FIRMS["H"]["theta"] < FIRMS["L"]["theta"]
 assert FIRMS["L"]["user_cost"][1] < FIRMS["H"]["user_cost"][0]
 assert FIRMS["H"]["capital_scale"][1] < FIRMS["L"]["capital_scale"][0]
 
+# A structural, *partial-formula* threshold independent of narrow boxes:
+# k_H^scale < k_L^scale iff u_H > (A_H/A_L)^2 * u_L when both
+# user costs and returns are positive. Using the SOURCE definitions:
+# u_H(r) = (81/80)*(511/2400-39/(256*r))
+# u_L(r) = (81/80)*(137/300-13/(32*r)).
+productivity_ratio_sq = (FIRMS["H"]["A"] / FIRMS["L"]["A"]) ** 2
+assert productivity_ratio_sq == Q(10201, 10000)
+coeff_r = productivity_ratio_sq * Q(137, 300) - Q(511, 2400)
+coeff_const = productivity_ratio_sq * Q(13, 32) - Q(39, 256)
+assert coeff_r > 0 and coeff_const > 0
+critical_loan_rate = coeff_const / coeff_r
+assert critical_loan_rate == Q(2096575, 2023432)
+broad_loan_upper = Q(100, 99) + Q(7, 800)  # SOURCE reserve<deposit, slope<7/800
+assert 1 < broad_loan_upper < critical_loan_rate < Q(25, 24)
+for r in (RLO, RHI, broad_loan_upper):
+    h_cost = PRICE * (Q(511, 2400) - Q(39, 256) / r)
+    l_cost = PRICE * (Q(137, 300) - Q(13, 32) / r)
+    assert 0 < l_cost < h_cost
+    assert (h_cost - productivity_ratio_sq * l_cost) * r == (
+        PRICE * (coeff_const - coeff_r * r))
+    assert h_cost > productivity_ratio_sq * l_cost
+
+print("Capital reversal threshold (exact):", critical_loan_rate)
+print("SOURCE broad bank upper < reversal threshold:",
+      broad_loan_upper, "<", critical_loan_rate)
+print("PASS: structural firm ranking holds across broad SOURCE bank bounds")
+
 print("PASS: stationary high-productivity, low-pledgeability firm has")
 print("      higher user cost and smaller capital scale (exact rational boxes)")
