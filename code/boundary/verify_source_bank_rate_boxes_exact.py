@@ -74,7 +74,7 @@ assert 1 < sharp_rr_lo < sharp_rr_hi < r_d
 sharp_loan_rate_lo, sharp_loan_rate_hi = (
     F(101204823607, 10**11), F(101204823808, 10**11)
 )
-assert sharp_loan_rate_lo < sharp_rr_lo + m_lo
+assert sharp_loan_rate_lo == sharp_rr_lo + m_lo
 assert sharp_rr_hi + m_hi < sharp_loan_rate_hi
 
 for name, value in [
