@@ -1941,5 +1941,44 @@ theorem source_detailed_otc_return_le_signed_cost_cap
 #print axioms source_detailed_otc_return_le_absolute_cost_envelope
 #print axioms source_detailed_otc_return_le_signed_cost_cap
 
+
+/-- A sign-robust real-return bound for the SOURCE detailed OTC
+portfolio, allowing signed interbank positions. Aggregate equity
+and next-period inflation must be strictly positive. -/
+theorem source_detailed_otc_signed_real_return_le_cap
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (tightness loans reserves deposits retained reserveRevenueCap
+      fundingMagnitudeCap : ℝ)
+    (s : S) (omega : P.paymentSupport)
+    (hloanRate : 0 ≤ X.loanRate t h)
+    (hloanCap : loans ≤ P.bankLoanCap * retained)
+    (hreserveRevenue : X.reserveRate t h *
+      bankPostSettlementReservesAt P X t h tightness
+        reserves deposits omega ≤ reserveRevenueCap * retained)
+    (hfundingMagnitude :
+      |X.depositRate t h * deposits * (1 + P.paymentShock omega)| +
+        |X.interbankRate t h *
+          bankOTCInterbankAt P X t h tightness reserves deposits omega| +
+        |X.facilityRate t h *
+          bankFacilityBorrowingAt P X t h tightness reserves deposits omega|
+        ≤ fundingMagnitudeCap * retained)
+    (hequity : 0 < X.bankEquity t h)
+    (hinflation : 0 < X.inflation (t + 1) (childHistory h s)) :
+    bankDetailedPortfolioReturnAt P X t h tightness loans reserves
+        deposits omega / X.bankEquity t h /
+        X.inflation (t + 1) (childHistory h s) ≤
+      ((X.loanRate t h * P.bankLoanCap + reserveRevenueCap +
+        fundingMagnitudeCap) * retained) / X.bankEquity t h /
+        X.inflation (t + 1) (childHistory h s) := by
+  have hnominal := source_detailed_otc_return_le_signed_cost_cap
+    P X t h tightness loans reserves deposits retained reserveRevenueCap
+    fundingMagnitudeCap omega hloanRate hloanCap hreserveRevenue
+    hfundingMagnitude
+  have hscaled := div_le_div_of_nonneg_right hnominal hequity.le
+  exact div_le_div_of_nonneg_right hscaled hinflation.le
+
+#print axioms source_detailed_otc_signed_real_return_le_cap
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
