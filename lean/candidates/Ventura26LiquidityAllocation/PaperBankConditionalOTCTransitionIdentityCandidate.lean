@@ -2290,5 +2290,47 @@ theorem source_otc_position_nonpositive_on_settlement_surplus
 #print axioms source_otc_position_nonnegative_on_settlement_deficit
 #print axioms source_otc_position_nonpositive_on_settlement_surplus
 
+
+/-- The literal signed interbank settlement position cannot exceed
+the absolute pre-matching liquidity surplus. Both deficit and surplus
+matching shares are certified to belong to [0, 1] by the SOURCE
+matching-intensity primitives. This does not yet bound the surplus
+itself relative to retained bank equity. -/
+theorem source_otc_position_abs_le_settlement_imbalance
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (tightness reserves deposits : ℝ) (omega : P.paymentSupport)
+    (htightness : 0 < tightness) :
+    |bankOTCInterbankAt P X t h tightness reserves deposits omega| ≤
+      |bankSettlementSurplus reserves (P.reserveRequirementPath t h)
+        (X.depositRate t h / X.reserveRate t h)
+        deposits (P.paymentShock omega)| := by
+  let surplus := bankSettlementSurplus reserves (P.reserveRequirementPath t h)
+    (X.depositRate t h / X.reserveRate t h)
+    deposits (P.paymentShock omega)
+  change |if surplus < 0 then
+      -otcDeficitMatchFraction P.matchingIntensity tightness * surplus
+    else -otcSurplusMatchFraction P.matchingIntensity tightness * surplus| ≤
+      |surplus|
+  split_ifs with hs
+  · obtain ⟨hfrac0, hfrac1⟩ := otcDeficitMatchFraction_mem
+      P.matchingIntensity tightness P.matching_intensity_pos htightness
+    rw [abs_mul, abs_neg, abs_of_nonneg hfrac0]
+    calc
+      otcDeficitMatchFraction P.matchingIntensity tightness * |surplus| ≤
+          1 * |surplus| :=
+        mul_le_mul_of_nonneg_right hfrac1 (abs_nonneg surplus)
+      _ = |surplus| := one_mul _
+  · obtain ⟨hfrac0, hfrac1⟩ := otcSurplusMatchFraction_mem
+      P.matchingIntensity tightness P.matching_intensity_pos htightness
+    rw [abs_mul, abs_neg, abs_of_nonneg hfrac0]
+    calc
+      otcSurplusMatchFraction P.matchingIntensity tightness * |surplus| ≤
+          1 * |surplus| :=
+        mul_le_mul_of_nonneg_right hfrac1 (abs_nonneg surplus)
+      _ = |surplus| := one_mul _
+
+#print axioms source_otc_position_abs_le_settlement_imbalance
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
