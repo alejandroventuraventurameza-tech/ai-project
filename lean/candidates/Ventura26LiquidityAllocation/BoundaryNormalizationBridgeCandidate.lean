@@ -179,6 +179,36 @@ theorem boundary_reduced_prefix_from_endpoint_boxes
   exact boundary_full_prefix_equations_from_root G
     boundary_analyticPackage (endpointSigns_of_boxes hboxes) branch
 
+/-- Conditional uniqueness for the SOURCE *scalar* frontier rate plus
+the literal 33-row reduced prefix in every named reduced-system branch.
+Uniqueness is of R on the resource bracket, not uniqueness of the
+allocation or of an infinite-horizon competitive equilibrium.
+The ten rational endpoint boxes are still explicit hypotheses. -/
+theorem boundary_unique_reduced_prefix_rate_of_boxes
+    (G : ℝ) (hboxes : BoundaryComponentBoxes) :
+    ∃! R : ℝ,
+      boundaryLo ≤ R ∧ R ≤ boundaryHi ∧
+      boundaryResourceResidual R = 0 ∧
+      ∀ branch : LocalPrefixBranch,
+        LocalReducedPrefixEquationsHold branch
+          (boundaryPrimitives G R)
+          (boundaryInitialState G R)
+          (boundaryCoordinates R) .dateOne .recurrent boundaryTail := by
+  let R := boundaryRoot boundary_analyticPackage (endpointSigns_of_boxes hboxes)
+  have hspec := boundaryRoot_spec
+    boundary_analyticPackage (endpointSigns_of_boxes hboxes)
+  have huniq :=
+    (Classical.choose_spec
+      (boundary_exactRootOn boundary_analyticPackage
+        (endpointSigns_of_boxes hboxes))).2
+  refine ⟨R, ⟨hspec.1, hspec.2.1, hspec.2.2, ?_⟩, ?_⟩
+  · intro branch
+    exact boundary_reduced_prefix_from_endpoint_boxes G hboxes branch
+  · intro y hy
+    exact huniq y ⟨hy.1, hy.2.1, hy.2.2.1⟩
+
+#print axioms boundary_unique_reduced_prefix_rate_of_boxes
+
 #print axioms normalized_output_eq_from_source
 #print axioms endpointSigns_of_boxes
 #print axioms boundary_reduced_prefix_from_endpoint_boxes
