@@ -2173,7 +2173,7 @@ theorem boundary_output_hi_box_from_source :
       ProposedStationaryRealScale.capitalPrice, boundaryHi]
     linarith only [huLlo]
   have hsLo :
-      (1003439782 / 1000000000 : ℝ) <
+      (1003439781 / 1000000000 : ℝ) <
         boundaryCapitalScale boundaryHi := by
     rw [boundaryCapitalScale_rewrite boundaryHi
       (by norm_num [boundaryHi])]
@@ -2188,7 +2188,7 @@ theorem boundary_output_hi_box_from_source :
         (99 / 100 : ℝ) * boundaryDepositRate boundaryHi :=
     mul_lt_mul_of_pos_left hrdLo (by norm_num)
   have hspow :
-      (1003439782 / 1000000000 : ℝ) ^ (8 : ℕ) <
+      (1003439781 / 1000000000 : ℝ) ^ (8 : ℕ) <
         boundaryCapitalScale boundaryHi ^ (8 : ℕ) := by
     gcongr
   have hdpow :
