@@ -1698,5 +1698,43 @@ theorem source_detailed_otc_return_le_retained_equity_cap
 #print axioms source_detailed_otc_return_le_gross_revenues
 #print axioms source_detailed_otc_return_le_retained_equity_cap
 
+
+/-- Dividing the SOURCE detailed OTC return by positive aggregate
+equity and positive next-period inflation preserves a nominal
+balance-sheet return cap. This isolates the exact denominators
+appearing in the SOURCE discounted-equity growth factor. -/
+theorem source_detailed_otc_real_return_le_cap
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (tightness loans reserves deposits retained reserveRevenueCap : ℝ)
+    (s : S) (omega : P.paymentSupport)
+    (hloanRate : 0 ≤ X.loanRate t h)
+    (hloanCap : loans ≤ P.bankLoanCap * retained)
+    (hreserveRevenue : X.reserveRate t h *
+      bankPostSettlementReservesAt P X t h tightness
+        reserves deposits omega ≤ reserveRevenueCap * retained)
+    (hdepositOutlay : 0 ≤
+      X.depositRate t h * deposits * (1 + P.paymentShock omega))
+    (hotcOutlay : 0 ≤ X.interbankRate t h *
+      bankOTCInterbankAt P X t h tightness reserves deposits omega)
+    (hfacilityOutlay : 0 ≤ X.facilityRate t h *
+      bankFacilityBorrowingAt P X t h tightness reserves deposits omega)
+    (hequity : 0 < X.bankEquity t h)
+    (hinflation : 0 < X.inflation (t + 1) (childHistory h s)) :
+    bankDetailedPortfolioReturnAt P X t h tightness loans reserves
+        deposits omega / X.bankEquity t h /
+        X.inflation (t + 1) (childHistory h s) ≤
+      ((X.loanRate t h * P.bankLoanCap + reserveRevenueCap) *
+        retained) / X.bankEquity t h /
+        X.inflation (t + 1) (childHistory h s) := by
+  have hnominal := source_detailed_otc_return_le_retained_equity_cap
+    P X t h tightness loans reserves deposits retained reserveRevenueCap
+    omega hloanRate hloanCap hreserveRevenue hdepositOutlay hotcOutlay
+    hfacilityOutlay
+  have hscaled := div_le_div_of_nonneg_right hnominal hequity.le
+  exact div_le_div_of_nonneg_right hscaled hinflation.le
+
+#print axioms source_detailed_otc_real_return_le_cap
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
