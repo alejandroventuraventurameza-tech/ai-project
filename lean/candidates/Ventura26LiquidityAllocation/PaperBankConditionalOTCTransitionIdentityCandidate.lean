@@ -2758,5 +2758,64 @@ theorem source_initial_otc_equity_bound_of_policy_forcing
 #print axioms source_otc_position_abs_le_equity_of_log_reserve_floor
 #print axioms source_initial_otc_equity_bound_of_policy_forcing
 
+
+/-- Uniform logarithmic reserve-remuneration floor along *all*
+admissible histories, derived by induction from the SOURCE monetary
+rule under explicit initial and continuation forcing envelopes.
+In particular, the forcing assumptions are not asserted to follow
+from general equilibrium or primitive positivity. -/
+theorem source_reserve_log_floor_all_admissible_histories
+    (P : Primitives S) (I : InheritedState) (X : Allocation S)
+    (lowerLog : ℝ)
+    (hpolicy : MonetaryPolicyRules P I X)
+    (hpersistence : 0 ≤ P.reserveRatePersistence)
+    (hinitial : ∀ h : History S 0,
+      FirmHistoryAdmissible P 0 h →
+      lowerLog ≤
+        P.reserveRatePersistence * Real.log I.reserveRateLag +
+        (1 - P.reserveRatePersistence) *
+          (Real.log P.reserveRateSteady +
+            P.inflationResponse * Real.log (X.inflation 0 h) +
+            P.outputResponse * Real.log (X.output 0 h / P.outputReference)) +
+        P.reserveRateInnovation (currentState h))
+    (hcontinuation : ∀ (t : ℕ) (h : History S t) (s : S),
+      FirmHistoryAdmissible P (t + 1) (childHistory h s) →
+      (1 - P.reserveRatePersistence) * lowerLog ≤
+        (1 - P.reserveRatePersistence) *
+          (Real.log P.reserveRateSteady +
+            P.inflationResponse *
+              Real.log (X.inflation (t + 1) (childHistory h s)) +
+            P.outputResponse *
+              Real.log (X.output (t + 1) (childHistory h s) /
+                P.outputReference)) +
+          P.reserveRateInnovation s) :
+    ∀ (t : ℕ) (h : History S t),
+      FirmHistoryAdmissible P t h →
+      lowerLog ≤ Real.log (X.reserveRate t h) := by
+  intro t
+  induction t with
+  | zero =>
+      intro h hh
+      exact source_initial_reserve_log_floor_of_policy_forcing
+        P I X h lowerLog hpolicy hh (hinitial h hh)
+  | succ t ih =>
+      intro h hh
+      have hparent : FirmHistoryAdmissible P t (previousHistory h) := by
+        unfold FirmHistoryAdmissible at hh ⊢
+        simp only [FiniteMarkovTree.historyWeight] at hh
+        have htransition := P.tree.transition_nonneg
+          (currentState (previousHistory h)) (currentState h)
+        nlinarith
+      have hprev := ih (previousHistory h) hparent
+      have hchild : FirmHistoryAdmissible P (t + 1)
+          (childHistory (previousHistory h) (currentState h)) := by
+        simpa only [childHistory_previousHistory_currentState] using hh
+      exact source_reserve_log_floor_preserved_by_policy_forcing
+        P I X t (previousHistory h) (currentState h) lowerLog
+        hpolicy hchild hpersistence hprev
+        (hcontinuation t (previousHistory h) (currentState h) hchild)
+
+#print axioms source_reserve_log_floor_all_admissible_histories
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
