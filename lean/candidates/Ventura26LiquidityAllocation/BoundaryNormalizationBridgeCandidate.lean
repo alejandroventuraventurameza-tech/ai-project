@@ -284,6 +284,102 @@ theorem boundary_source_slope_rational_micro_boxes :
   · constructor <;> linarith
   · constructor <;> linarith
 
+
+/-- An enclosure of the stationary SOURCE reserve remuneration follows
+from the exact bank quadratic, its strictly positive root, and previously
+certified rational OTC slope boxes. No square root is approximated here. -/
+theorem boundary_source_reserve_rate_micro_box :
+    (100367704 / 100000000 : ℝ) <
+      ProposedStationaryBank.reserveRate ∧
+    ProposedStationaryBank.reserveRate <
+      (100367709 / 100000000 : ℝ) := by
+  rcases boundary_source_slope_rational_micro_boxes with
+    ⟨⟨hmlo, hmhi⟩, ⟨hglo, hghi⟩⟩
+  have hcoef :
+      (100244447 / 100000000 : ℝ) <
+        ProposedStationaryBank.rootCoefficient ∧
+      ProposedStationaryBank.rootCoefficient <
+        (100244449 / 100000000 : ℝ) := by
+    unfold ProposedStationaryBank.rootCoefficient
+      ProposedStationaryBank.depositRate
+    constructor <;> linarith
+  have hpoly := (ProposedStationaryBank.reserveRate_spec).2.2
+  have hr1 : 1 < ProposedStationaryBank.reserveRate :=
+    (ProposedStationaryBank.reserveRate_spec).1
+  have hplo :
+      (100367704 / 100000000 : ℝ) ^ (2 : ℕ) -
+        ProposedStationaryBank.rootCoefficient *
+          (100367704 / 100000000 : ℝ) -
+        ProposedStationaryBank.depositRate *
+          ProposedStationaryBank.slopeGap / 10 < 0 := by
+    have hcert :
+        (100367704 / 100000000 : ℝ) ^ (2 : ℕ) -
+          (100244447 / 100000000 : ℝ) *
+            (100367704 / 100000000 : ℝ) -
+          (100 / 99 : ℝ) *
+            (12247448713 / 1000000000000 : ℝ) / 10 < 0 := by
+      norm_num
+    unfold ProposedStationaryBank.depositRate
+    nlinarith only [hcoef.1, hglo, hcert]
+  have hphi :
+      0 < (100367709 / 100000000 : ℝ) ^ (2 : ℕ) -
+        ProposedStationaryBank.rootCoefficient *
+          (100367709 / 100000000 : ℝ) -
+        ProposedStationaryBank.depositRate *
+          ProposedStationaryBank.slopeGap / 10 := by
+    have hcert :
+        0 < (100367709 / 100000000 : ℝ) ^ (2 : ℕ) -
+          (100244449 / 100000000 : ℝ) *
+            (100367709 / 100000000 : ℝ) -
+          (100 / 99 : ℝ) *
+            (12247448715 / 1000000000000 : ℝ) / 10 := by
+      norm_num
+    unfold ProposedStationaryBank.depositRate
+    nlinarith only [hcoef.2, hghi, hcert]
+  constructor
+  · by_contra hn
+    have hle :
+        ProposedStationaryBank.reserveRate ≤
+          (100367704 / 100000000 : ℝ) := le_of_not_gt hn
+    have hfac : 0 ≤
+        ((100367704 / 100000000 : ℝ) -
+          ProposedStationaryBank.reserveRate) *
+        ((100367704 / 100000000 : ℝ) +
+          ProposedStationaryBank.reserveRate -
+          ProposedStationaryBank.rootCoefficient) :=
+      mul_nonneg (sub_nonneg.mpr hle)
+        (by linarith [hcoef.2, hr1])
+    nlinarith only [hfac, hplo, hpoly]
+  · by_contra hn
+    have hle :
+        (100367709 / 100000000 : ℝ) ≤
+          ProposedStationaryBank.reserveRate := le_of_not_gt hn
+    have hfac : 0 ≤
+        (ProposedStationaryBank.reserveRate -
+          (100367709 / 100000000 : ℝ)) *
+        (ProposedStationaryBank.reserveRate +
+          (100367709 / 100000000 : ℝ) -
+          ProposedStationaryBank.rootCoefficient) :=
+      mul_nonneg (sub_nonneg.mpr hle)
+        (by linarith [hcoef.2, hr1])
+    nlinarith only [hfac, hphi, hpoly]
+
+/-- The loan gross rate equals reserve remuneration plus the exact
+mean OTC slope; hence both levels admit a rational source certificate. -/
+theorem boundary_source_loan_rate_micro_box :
+    (101204821 / 100000000 : ℝ) <
+      ProposedStationaryBank.loanRate ∧
+    ProposedStationaryBank.loanRate <
+      (101204827 / 100000000 : ℝ) := by
+  rcases boundary_source_reserve_rate_micro_box with ⟨hrlo, hrhi⟩
+  rcases boundary_source_slope_rational_micro_boxes with
+    ⟨⟨hmlo, hmhi⟩, _⟩
+  unfold ProposedStationaryBank.loanRate
+  constructor <;> linarith
+
+#print axioms boundary_source_reserve_rate_micro_box
+#print axioms boundary_source_loan_rate_micro_box
+
 #print axioms boundary_weight_rational_micro_box
 #print axioms boundary_source_slope_rational_micro_boxes
 
