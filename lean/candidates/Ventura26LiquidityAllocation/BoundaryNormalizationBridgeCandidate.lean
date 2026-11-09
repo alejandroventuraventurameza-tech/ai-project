@@ -487,6 +487,98 @@ theorem boundary_source_productivity_collateral_cost_wedge :
   · norm_num [ProposedStationaryRealScale.technology]
   · norm_num [ProposedStationaryRealScale.pledgeability]
 
+
+/-- Structural capital misallocation ranking in the literal SOURCE
+stationary construction. The high-technology H firm has a lower
+stationary capital scale than L, because the collateral/user-cost wedge
+dominates its 1% technology advantage. Unlike numerical certificates,
+this uses only the original broad bank bounds and source identities.
+It does not assert a complete GE allocation or a growth effect. -/
+theorem boundary_source_stationary_capital_scale_order :
+    ProposedStationaryRealScale.capitalScale .H <
+      ProposedStationaryRealScale.capitalScale .L := by
+  have hrpos : 0 < ProposedStationaryBank.loanRate :=
+    ProposedStationaryRealScale.loanRate_pos
+  have hrUpper := (ProposedStationaryBank.reserveRate_spec).2.1
+  have hmUpper := (ProposedStationaryBank.slope_bounds).2.1
+  have hrBound :
+      ProposedStationaryBank.loanRate < (103 / 100 : ℝ) := by
+    change ProposedStationaryBank.reserveRate +
+      ProposedStationaryBank.meanSlope < (103 / 100 : ℝ)
+    norm_num [ProposedStationaryBank.depositRate] at hrUpper
+    linarith only [hrUpper, hmUpper]
+  let alpha : ℝ := 10201 / 10000
+  have hprofitRatio :
+      ProposedStationaryRealScale.profitCoefficient .H =
+        alpha * ProposedStationaryRealScale.profitCoefficient .L := by
+    dsimp [alpha]
+    norm_num [ProposedStationaryRealScale.profitCoefficient,
+      ProposedStationaryRealScale.technology]
+  have hscaled :
+      (ProposedStationaryRealScale.userCost .H -
+        alpha * ProposedStationaryRealScale.userCost .L) *
+        ProposedStationaryBank.loanRate =
+      (81 / 80 : ℝ) *
+        (((511 / 2400 : ℝ) - alpha * (137 / 300 : ℝ)) *
+            ProposedStationaryBank.loanRate +
+          alpha * (13 / 32 : ℝ) - 39 / 256) := by
+    dsimp [alpha]
+    unfold ProposedStationaryRealScale.userCost
+      ProposedStationaryRealScale.pledgeability
+      ProposedStationaryRealScale.capitalPrice
+    field_simp [ne_of_gt hrpos] <;> ring
+  have hmargin :
+      0 < (((511 / 2400 : ℝ) - alpha * (137 / 300 : ℝ)) *
+            ProposedStationaryBank.loanRate +
+          alpha * (13 / 32 : ℝ) - 39 / 256) := by
+    dsimp [alpha]
+    linarith only [hrBound]
+  have hscaledPos :
+      0 < (ProposedStationaryRealScale.userCost .H -
+        alpha * ProposedStationaryRealScale.userCost .L) *
+        ProposedStationaryBank.loanRate := by
+    rw [hscaled]
+    exact mul_pos (by norm_num) hmargin
+  have hcost :
+      alpha * ProposedStationaryRealScale.userCost .L <
+        ProposedStationaryRealScale.userCost .H := by
+    by_contra hn
+    have hle : ProposedStationaryRealScale.userCost .H -
+        alpha * ProposedStationaryRealScale.userCost .L ≤ 0 := by
+      linarith only [le_of_not_gt hn]
+    have hprod := mul_nonpos_of_nonpos_of_nonneg hle hrpos.le
+    linarith only [hprod, hscaledPos]
+  have hprofitL :
+      0 < ProposedStationaryRealScale.profitCoefficient .L :=
+    ProposedStationaryRealScale.profitCoefficient_pos .L
+  have hcostH :
+      0 < ProposedStationaryRealScale.userCost .H :=
+    ProposedStationaryRealScale.userCost_pos .H
+  have hcostL :
+      0 < ProposedStationaryRealScale.userCost .L :=
+    ProposedStationaryRealScale.userCost_pos .L
+  have hprodIneq :
+      ProposedStationaryRealScale.profitCoefficient .H *
+          ProposedStationaryRealScale.userCost .L <
+        ProposedStationaryRealScale.profitCoefficient .L *
+          ProposedStationaryRealScale.userCost .H := by
+    rw [hprofitRatio]
+    have h := mul_lt_mul_of_pos_right hcost hprofitL
+    nlinarith only [h]
+  have hbase :
+      (4 / 5 : ℝ) * ProposedStationaryRealScale.profitCoefficient .H /
+          ProposedStationaryRealScale.userCost .H <
+        (4 / 5 : ℝ) * ProposedStationaryRealScale.profitCoefficient .L /
+          ProposedStationaryRealScale.userCost .L := by
+    apply (div_lt_div_iff₀ hcostH hcostL).2
+    have h := mul_lt_mul_of_pos_left hprodIneq
+      (by norm_num : (0 : ℝ) < 4 / 5)
+    nlinarith only [h]
+  unfold ProposedStationaryRealScale.capitalScale
+  gcongr
+
+#print axioms boundary_source_stationary_capital_scale_order
+
 #print axioms boundary_source_user_cost_micro_boxes
 #print axioms boundary_source_productivity_collateral_cost_wedge
 
