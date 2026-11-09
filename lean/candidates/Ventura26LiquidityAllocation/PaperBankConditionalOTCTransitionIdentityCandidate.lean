@@ -1109,5 +1109,51 @@ theorem source_full_retention_tvc_of_nonnegative_equity_mass_identity
 
 #print axioms source_full_retention_tvc_of_nonnegative_equity_mass_identity
 
+
+/-- Nonnegative SOURCE discounted bank mass on every probability-weighted
+parent, requiring consumption positivity only on supported aggregate
+histories. At off-support histories the joint path weight is zero,
+so no source feasibility or worker-consumption condition is invoked. -/
+theorem source_weighted_discounted_equity_nonneg_on_support
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (hfeasible : BankContinuationFeasibleAt P X t h
+      (X.bankEquity t h) (sourceFullRetentionCandidate P X t h))
+    (hinitial : 0 < X.workerConsumption t h)
+    (hconsumption : ∀ n (future : Fin n → S),
+      FuturePathSupported P.tree (currentState h) n future →
+        0 < X.workerConsumption (t + n)
+          (continuationHistory h future)) :
+    ∀ n (future : Fin n → S)
+      (payments : Fin n → P.paymentSupport),
+      0 ≤
+        (continuationTransitionWeight P.tree (currentState h) n future *
+          continuationPaymentWeight P payments) *
+        (bankCumulativeSDFAt P X t h future *
+          (sourceFullRetentionCandidate P X t h).equity n future payments) := by
+  intro n future payments
+  by_cases hzero : continuationTransitionWeight P.tree (currentState h)
+      n future = 0
+  · simp [hzero]
+  · have hpositive : 0 <
+        continuationTransitionWeight P.tree (currentState h) n future :=
+      lt_of_le_of_ne
+        (ProposedBankContinuationPathProbabilityMass.source_aggregate_future_path_weight_nonneg
+          P.tree n (currentState h) future) (Ne.symm hzero)
+    have hpath := positive_transition_weight_implies_supported
+      P.tree (currentState h) n future hpositive
+    have hequity : 0 ≤
+        (sourceFullRetentionCandidate P X t h).equity n future payments :=
+      (hfeasible.2 n future payments hpath).1
+    have hsdf : 0 < bankCumulativeSDFAt P X t h future :=
+      source_bank_cumulative_sdf_pos P X t h n future
+        hinitial (hconsumption n future hpath)
+    exact mul_nonneg
+      (ProposedBankContinuationPathProbabilityMass.source_joint_future_path_weight_nonneg
+        P n (currentState h) future payments)
+      (mul_nonneg hsdf.le hequity)
+
+#print axioms source_weighted_discounted_equity_nonneg_on_support
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
