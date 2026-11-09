@@ -2243,5 +2243,52 @@ theorem source_discounted_growth_le_uniform_bound_of_feasible_signed_portfolio
 #print axioms source_discounted_growth_le_uniform_bound_of_feasible_signed_portfolio
 
 
+
+/-- The literal OTC settlement position is borrowing on a deficit:
+the source matching fraction is nonnegative, and deficit surplus is
+strictly negative. This does not impose a sign on OTC positions in
+the surplus branch. -/
+theorem source_otc_position_nonnegative_on_settlement_deficit
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (tightness reserves deposits : ℝ) (omega : P.paymentSupport)
+    (htightness : 0 < tightness)
+    (hdeficit : bankSettlementSurplus reserves
+      (P.reserveRequirementPath t h)
+      (X.depositRate t h / X.reserveRate t h)
+      deposits (P.paymentShock omega) < 0) :
+    0 ≤ bankOTCInterbankAt P X t h tightness reserves deposits omega := by
+  have hfraction := (otcDeficitMatchFraction_mem
+    P.matchingIntensity tightness P.matching_intensity_pos htightness).1
+  unfold bankOTCInterbankAt
+  simp only [hdeficit, if_pos]
+  exact mul_nonneg hfraction (neg_nonneg.mpr hdeficit.le)
+
+/-- The literal OTC settlement position is lending on a surplus:
+the negative OTC sign is economically meaningful, not a violation
+of a generic nonnegative borrowing restriction. -/
+theorem source_otc_position_nonpositive_on_settlement_surplus
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (tightness reserves deposits : ℝ) (omega : P.paymentSupport)
+    (htightness : 0 < tightness)
+    (hsurplus : 0 ≤ bankSettlementSurplus reserves
+      (P.reserveRequirementPath t h)
+      (X.depositRate t h / X.reserveRate t h)
+      deposits (P.paymentShock omega)) :
+    bankOTCInterbankAt P X t h tightness reserves deposits omega ≤ 0 := by
+  have hfraction := (otcSurplusMatchFraction_mem
+    P.matchingIntensity tightness P.matching_intensity_pos htightness).1
+  unfold bankOTCInterbankAt
+  have hnotdeficit : ¬ bankSettlementSurplus reserves
+      (P.reserveRequirementPath t h)
+      (X.depositRate t h / X.reserveRate t h)
+      deposits (P.paymentShock omega) < 0 := not_lt.mpr hsurplus
+  simp only [hnotdeficit, if_neg]
+  exact neg_nonpos.mpr (mul_nonneg hfraction hsurplus)
+
+#print axioms source_otc_position_nonnegative_on_settlement_deficit
+#print axioms source_otc_position_nonpositive_on_settlement_surplus
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
