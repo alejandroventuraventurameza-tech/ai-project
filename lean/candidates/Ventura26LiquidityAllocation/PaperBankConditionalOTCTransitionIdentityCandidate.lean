@@ -1857,5 +1857,21 @@ theorem source_discounted_growth_factor_le_balance_sheet_envelope
 
 #print axioms source_discounted_growth_factor_le_balance_sheet_envelope
 
+
+/-- The aggregate loan-to-equity cap used in the OTC factor is not
+an extra numerical conjecture: at an admissible history it follows
+from SOURCE BankFeasible of the literal full-retention common plan.
+The economic burden is to establish that source feasibility. -/
+theorem source_full_retention_loan_cap_of_bank_feasible
+    (P : Primitives S) (I : InheritedState) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (hh : FirmHistoryAdmissible P t h)
+    (hbankFeasible : BankFeasible P I X (fullRetentionCommonBankPlan P X)) :
+    X.bankLoans t h ≤ P.bankLoanCap * X.bankEquity t h := by
+  rcases hbankFeasible with ⟨_, _, _, hcaps, _⟩
+  exact (hcaps t h hh).2
+
+#print axioms source_full_retention_loan_cap_of_bank_feasible
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
