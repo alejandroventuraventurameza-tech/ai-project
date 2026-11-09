@@ -2124,10 +2124,22 @@ theorem boundary_output_lo_box_from_source :
   have hpoly :
       x ≤ (998741401 / 1000000000 : ℝ) ^ (15 : ℕ) := by
     dsimp [x]
-    have hm1 :=
-      mul_lt_mul_of_pos_right hspow
-        (pow_pos (mul_pos (by norm_num) hrdpos) (5 : ℕ))
-    have hm2 :=
+    have hfactorPos :
+        0 < ((99 / 100 : ℝ) * boundaryDepositRate boundaryLo) ^
+          (5 : ℕ) :=
+      pow_pos (mul_pos (by norm_num) hrdpos) (5 : ℕ)
+    have hm1 :
+        boundaryCapitalScale boundaryLo ^ (8 : ℕ) *
+            ((99 / 100 : ℝ) * boundaryDepositRate boundaryLo) ^ (5 : ℕ) <
+          (989728731 / 1000000000 : ℝ) ^ (8 : ℕ) *
+            ((99 / 100 : ℝ) * boundaryDepositRate boundaryLo) ^ (5 : ℕ) :=
+      mul_lt_mul_of_pos_right hspow hfactorPos
+    have hm2 :
+        (989728731 / 1000000000 : ℝ) ^ (8 : ℕ) *
+            ((99 / 100 : ℝ) * boundaryDepositRate boundaryLo) ^ (5 : ℕ) <
+          (989728731 / 1000000000 : ℝ) ^ (8 : ℕ) *
+            ((99 / 100 : ℝ) *
+              (1023052874 / 1000000000 : ℝ)) ^ (5 : ℕ) :=
       mul_lt_mul_of_pos_left hdpow
         (by norm_num :
           (0 : ℝ) < (989728731 / 1000000000 : ℝ) ^ (8 : ℕ))
