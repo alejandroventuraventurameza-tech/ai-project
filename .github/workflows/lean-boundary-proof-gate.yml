@@ -123,6 +123,8 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_slope_rational_micro_boxes
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_reserve_rate_micro_box
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_loan_rate_micro_box
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_reserve_rate_sharp_box
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_loan_rate_sharp_box
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_micro_boxes
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_productivity_collateral_cost_wedge
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_wedge_of_bank_pricing

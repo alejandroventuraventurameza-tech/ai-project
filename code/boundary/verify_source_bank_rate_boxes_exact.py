@@ -64,6 +64,19 @@ r_l_lo, r_l_hi = F(101204821, 10**8), F(101204827, 10**8)
 assert r_l_lo < r_r_lo + m_lo
 assert r_r_hi + m_hi < r_l_hi
 
+# Sharper exact source quadratic enclosure, proved independently in Lean.
+sharp_a_lo, sharp_a_hi = F(1002444479849, 10**12), F(1002444479851, 10**12)
+assert sharp_a_lo < a_from_hi and a_from_lo < sharp_a_hi
+sharp_rr_lo, sharp_rr_hi = F(1003677063, 10**9), F(1003677065, 10**9)
+assert p(sharp_rr_lo, sharp_a_lo, g_lo) < 0
+assert p(sharp_rr_hi, sharp_a_hi, g_hi) > 0
+assert 1 < sharp_rr_lo < sharp_rr_hi < r_d
+sharp_loan_rate_lo, sharp_loan_rate_hi = (
+    F(101204823607, 10**11), F(101204823808, 10**11)
+)
+assert sharp_loan_rate_lo < sharp_rr_lo + m_lo
+assert sharp_rr_hi + m_hi < sharp_loan_rate_hi
+
 for name, value in [
     ("otc_weight_lo", w_lo), ("otc_weight_hi", w_hi),
     ("mean_slope_lo", m_lo), ("mean_slope_hi", m_hi),
@@ -71,6 +84,8 @@ for name, value in [
     ("quadratic_coefficient_lo", a_lo), ("quadratic_coefficient_hi", a_hi),
     ("reserve_rate_lo", r_r_lo), ("reserve_rate_hi", r_r_hi),
     ("loan_rate_lo", r_l_lo), ("loan_rate_hi", r_l_hi),
+    ("sharp_reserve_rate_lo", sharp_rr_lo), ("sharp_reserve_rate_hi", sharp_rr_hi),
+    ("sharp_loan_rate_lo", sharp_loan_rate_lo), ("sharp_loan_rate_hi", sharp_loan_rate_hi),
 ]:
     print(f"{name}: {value} = {float(value):.12f}")
 print("p(reserve_rate_lo) upper:", p(r_r_lo, a_lo, g_lo))

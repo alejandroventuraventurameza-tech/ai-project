@@ -378,6 +378,103 @@ theorem boundary_source_loan_rate_micro_box :
   constructor <;> linarith
 
 
+
+/-- A two-billionth-width interval for the literal stationary reserve
+remuneration follows from the SOURCE quadratic and the rational OTC
+slope bounds. This sharpens, rather than assumes, the original root
+certificate; no floating-point approximations enter the theorem. -/
+theorem boundary_source_reserve_rate_sharp_box :
+    (1003677063 / 1000000000 : ℝ) <
+      ProposedStationaryBank.reserveRate ∧
+    ProposedStationaryBank.reserveRate <
+      (1003677065 / 1000000000 : ℝ) := by
+  rcases boundary_source_slope_rational_micro_boxes with
+    ⟨⟨hmlo, hmhi⟩, ⟨hglo, hghi⟩⟩
+  have hcoef :
+      (1002444479849 / 1000000000000 : ℝ) <
+        ProposedStationaryBank.rootCoefficient ∧
+      ProposedStationaryBank.rootCoefficient <
+        (1002444479851 / 1000000000000 : ℝ) := by
+    unfold ProposedStationaryBank.rootCoefficient
+      ProposedStationaryBank.depositRate
+    constructor <;> linarith
+  have hpoly := (ProposedStationaryBank.reserveRate_spec).2.2
+  have hr1 : 1 < ProposedStationaryBank.reserveRate :=
+    (ProposedStationaryBank.reserveRate_spec).1
+  have hplo :
+      (1003677063 / 1000000000 : ℝ) ^ (2 : ℕ) -
+        ProposedStationaryBank.rootCoefficient *
+          (1003677063 / 1000000000 : ℝ) -
+        ProposedStationaryBank.depositRate *
+          ProposedStationaryBank.slopeGap / 10 < 0 := by
+    have hcert :
+        (1003677063 / 1000000000 : ℝ) ^ (2 : ℕ) -
+          (1002444479849 / 1000000000000 : ℝ) *
+            (1003677063 / 1000000000 : ℝ) -
+          (100 / 99 : ℝ) *
+            (12247448713 / 1000000000000 : ℝ) / 10 < 0 := by
+      norm_num
+    unfold ProposedStationaryBank.depositRate
+    nlinarith only [hcoef.1, hglo, hcert]
+  have hphi :
+      0 < (1003677065 / 1000000000 : ℝ) ^ (2 : ℕ) -
+        ProposedStationaryBank.rootCoefficient *
+          (1003677065 / 1000000000 : ℝ) -
+        ProposedStationaryBank.depositRate *
+          ProposedStationaryBank.slopeGap / 10 := by
+    have hcert :
+        0 < (1003677065 / 1000000000 : ℝ) ^ (2 : ℕ) -
+          (1002444479851 / 1000000000000 : ℝ) *
+            (1003677065 / 1000000000 : ℝ) -
+          (100 / 99 : ℝ) *
+            (12247448715 / 1000000000000 : ℝ) / 10 := by
+      norm_num
+    unfold ProposedStationaryBank.depositRate
+    nlinarith only [hcoef.2, hghi, hcert]
+  constructor
+  · by_contra hn
+    have hle :
+        ProposedStationaryBank.reserveRate ≤
+          (1003677063 / 1000000000 : ℝ) := le_of_not_gt hn
+    have hfac : 0 ≤
+        ((1003677063 / 1000000000 : ℝ) -
+          ProposedStationaryBank.reserveRate) *
+        ((1003677063 / 1000000000 : ℝ) +
+          ProposedStationaryBank.reserveRate -
+          ProposedStationaryBank.rootCoefficient) :=
+      mul_nonneg (sub_nonneg.mpr hle)
+        (by linarith [hcoef.2, hr1])
+    nlinarith only [hfac, hplo, hpoly]
+  · by_contra hn
+    have hle :
+        (1003677065 / 1000000000 : ℝ) ≤
+          ProposedStationaryBank.reserveRate := le_of_not_gt hn
+    have hfac : 0 ≤
+        (ProposedStationaryBank.reserveRate -
+          (1003677065 / 1000000000 : ℝ)) *
+        (ProposedStationaryBank.reserveRate +
+          (1003677065 / 1000000000 : ℝ) -
+          ProposedStationaryBank.rootCoefficient) :=
+      mul_nonneg (sub_nonneg.mpr hle)
+        (by linarith [hcoef.2, hr1])
+    nlinarith only [hfac, hphi, hpoly]
+
+/-- SOURCE loan gross rate: the reserve rate plus the exact OTC mean
+slope. The bounds are derived, not substituted for the bank solution. -/
+theorem boundary_source_loan_rate_sharp_box :
+    (101204823607 / 100000000000 : ℝ) <
+      ProposedStationaryBank.loanRate ∧
+    ProposedStationaryBank.loanRate <
+      (101204823808 / 100000000000 : ℝ) := by
+  rcases boundary_source_reserve_rate_sharp_box with ⟨hrlo, hrhi⟩
+  rcases boundary_source_slope_rational_micro_boxes with
+    ⟨⟨hmlo, hmhi⟩, _⟩
+  unfold ProposedStationaryBank.loanRate
+  constructor <;> linarith
+
+#print axioms boundary_source_reserve_rate_sharp_box
+#print axioms boundary_source_loan_rate_sharp_box
+
 /-- The two SOURCE firm user costs inherit strict rational envelopes from
 the proved positive loan-rate box. This is a statement about stationary
 primitive parameters and a candidate bank pricing solution; it does not
