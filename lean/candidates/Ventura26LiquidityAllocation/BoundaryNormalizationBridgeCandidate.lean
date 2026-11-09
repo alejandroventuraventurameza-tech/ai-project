@@ -24,6 +24,7 @@ open ProposedBoundaryResourceRoot
 open ProposedBoundaryEndpointBoxes
 open ProposedBoundaryWorkerLabor
 open ProposedBoundaryAnalyticPackage
+open ProposedBoundaryFullPrefix
 
 /-- Express entrepreneur consumption in terms of unit-wage capital scale. -/
 theorem firm_coefficient_scaled (i : FirmType) :
@@ -68,9 +69,6 @@ theorem normalized_capitalCost_eq (R : ℝ)
   field_simp [ne_of_gt wage_pos, ne_of_gt (pow_pos wage_pos (5 : ℕ)),
     ne_of_gt hscale] <;> ring
 
-/-- All five source-normalization fields follow once the one remaining
-    output-root identity has been proved. The parent scales are NOT taken
-    as hypotheses; the four non-output fields above construct their proofs. -/
 /-- The original SOURCE production scaling proves the exact fifteenth
 root expression, rather than postulating it at the two bracket endpoints.
 This depends on output_ratio_fifteenth_power in the analytic module. -/
@@ -105,7 +103,7 @@ theorem normalized_output_eq_from_source (R : ℝ)
   have hscale :
       outputScale = wage ^ (5 : ℕ) * aggregateOutput := by
     rw [aggregateOutput_scale]
-    field_simp [ne_of_gt (pow_pos wage_pos (5 : ℕ))] <;> ring
+    field_simp [ne_of_gt wage_pos, ne_of_gt (pow_pos wage_pos (5 : ℕ))] <;> ring
   change wage ^ (5 : ℕ) * boundaryAggregateOutput R =
     outputScale * (boundaryCapitalScale R ^ (8 : ℕ) *
       ((99 / 100 : ℝ) * boundaryDepositRate R) ^ (5 : ℕ)) ^
@@ -113,6 +111,9 @@ theorem normalized_output_eq_from_source (R : ℝ)
   rw [← hroot, hscale]
   field_simp [ne_of_gt aggregates_pos.2.1] <;> ring
 
+/-- All five source-normalization fields follow once the one remaining
+    output-root identity has been proved. The parent scales are NOT taken
+    as hypotheses; the four non-output fields above construct their proofs. -/
 theorem scaleIdentities_of_output_root (R : ℝ) (hR : R ∈ boundaryInterval)
     (houtput : wage ^ (5 : ℕ) * boundaryAggregateOutput R =
       normalizedOutput R) :
