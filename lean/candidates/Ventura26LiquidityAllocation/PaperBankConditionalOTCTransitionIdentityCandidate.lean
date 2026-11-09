@@ -2101,5 +2101,59 @@ theorem source_discounted_growth_factor_le_signed_funding_envelope
 
 #print axioms source_discounted_growth_factor_le_signed_funding_envelope
 
+
+/-- Close the last aggregation step from pathwise bounds on every
+positive-probability payment/Markov shock to the literal SOURCE full
+retention bank TVC. Unlike a mere conditional-mean premise, this
+requires an explicit pointwise bound on supported histories. The
+economic verification of those bounds remains a separate obligation. -/
+theorem source_full_retention_tvc_of_positive_shock_growth_bounds
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (C grossBound : ℝ)
+    (hC : 0 ≤ C)
+    (hgross : 0 ≤ grossBound)
+    (hsurvive : 0 ≤ 1 - P.bankExit)
+    (hexit : P.bankExit < 1)
+    (hcontraction : (1 - P.bankExit) * grossBound < 1)
+    (hbase : bankSurvivingValueTermAt P X t h
+      (sourceFullRetentionCandidate P X t h) 0 ≤ C)
+    (hfeasible : BankContinuationFeasibleAt P X t h
+      (X.bankEquity t h) (sourceFullRetentionCandidate P X t h))
+    (hrisk : P.workerRiskAversion = 1)
+    (hinitial : 0 < X.workerConsumption t h)
+    (hconsumption : ∀ n (future : Fin n → S),
+      FuturePathSupported P.tree (currentState h) n future →
+        0 < X.workerConsumption (t + n) (continuationHistory h future))
+    (hchildConsumption : ∀ n (future : Fin n → S) s,
+      FuturePathSupported P.tree (currentState h) n future →
+        0 < P.tree.transition
+          (currentState (continuationHistory h future)) s →
+        0 < X.workerConsumption (t + n + 1)
+          (childHistory (continuationHistory h future) s))
+    (haggregate : ∀ n (future : Fin n → S),
+      FuturePathSupported P.tree (currentState h) n future →
+        0 < X.bankEquity (t + n) (continuationHistory h future))
+    (hshock : ∀ n (future : Fin n → S),
+      FuturePathSupported P.tree (currentState h) n future →
+      ∀ s (omega : P.paymentSupport),
+        0 < P.tree.transition
+          (currentState (continuationHistory h future)) s →
+        0 < P.paymentProbability omega →
+          sourceDiscountedEquityGrowthFactor P X t h n future s omega ≤
+            grossBound) :
+    BankContinuationObjectiveWellDefinedAt P X t h
+      (sourceFullRetentionCandidate P X t h) ∧
+    BankContinuationTerminalConditionAt P X t h
+      (sourceFullRetentionCandidate P X t h) := by
+  apply source_full_retention_tvc_on_supported_histories
+    P X t h C grossBound hC hgross hsurvive hexit hcontraction
+    hbase hfeasible hrisk hinitial hconsumption hchildConsumption haggregate
+  intro n future hpath
+  exact source_conditional_otc_growth_le_of_positive_shock_bounds
+    P X t h n future grossBound (hshock n future hpath)
+
+#print axioms source_full_retention_tvc_of_positive_shock_growth_bounds
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
