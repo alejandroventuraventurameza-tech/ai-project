@@ -22,6 +22,8 @@ open ProposedStationaryProductionBridge
 open ProposedBoundaryBridge
 open ProposedBoundaryResourceRoot
 open ProposedBoundaryEndpointBoxes
+open ProposedBoundaryWorkerLabor
+open ProposedBoundaryAnalyticPackage
 
 /-- Express entrepreneur consumption in terms of unit-wage capital scale. -/
 theorem firm_coefficient_scaled (i : FirmType) :
@@ -69,6 +71,48 @@ theorem normalized_capitalCost_eq (R : ℝ)
 /-- All five source-normalization fields follow once the one remaining
     output-root identity has been proved. The parent scales are NOT taken
     as hypotheses; the four non-output fields above construct their proofs. -/
+/-- The original SOURCE production scaling proves the exact fifteenth
+root expression, rather than postulating it at the two bracket endpoints.
+This depends on output_ratio_fifteenth_power in the analytic module. -/
+theorem normalized_output_eq_from_source (R : ℝ)
+    (hR : R ∈ boundaryInterval) :
+    wage ^ (5 : ℕ) * boundaryAggregateOutput R =
+      normalizedOutput R := by
+  have hY : 0 < boundaryAggregateOutput R := by
+    rw [aggregateOutput_scaling hR]
+    exact mul_pos
+      (mul_pos aggregates_pos.2.1
+        (Real.rpow_pos_of_pos
+          (boundary_scale_and_investment_domain hR).1 _))
+      (div_pos wage_pos (boundaryWage_pos hR))
+  have hratio0 :
+      0 ≤ boundaryAggregateOutput R / aggregateOutput :=
+    (div_pos hY aggregates_pos.2.1).le
+  have hpow := output_ratio_fifteenth_power hR
+  have hroot :
+      boundaryAggregateOutput R / aggregateOutput =
+        (boundaryCapitalScale R ^ (8 : ℕ) *
+          ((99 / 100 : ℝ) * boundaryDepositRate R) ^ (5 : ℕ)) ^
+            (1 / 15 : ℝ) := by
+    calc
+      boundaryAggregateOutput R / aggregateOutput =
+          ((boundaryAggregateOutput R / aggregateOutput) ^
+              (15 : ℕ)) ^ (1 / 15 : ℝ) := by
+            simpa only [one_div] using
+              (Real.pow_rpow_inv_natCast hratio0
+                (by norm_num : (15 : ℕ) ≠ 0)).symm
+      _ = _ := by rw [hpow]
+  have hscale :
+      outputScale = wage ^ (5 : ℕ) * aggregateOutput := by
+    rw [aggregateOutput_scale]
+    field_simp [ne_of_gt (pow_pos wage_pos (5 : ℕ))] <;> ring
+  change wage ^ (5 : ℕ) * boundaryAggregateOutput R =
+    outputScale * (boundaryCapitalScale R ^ (8 : ℕ) *
+      ((99 / 100 : ℝ) * boundaryDepositRate R) ^ (5 : ℕ)) ^
+        (1 / 15 : ℝ)
+  rw [← hroot, hscale]
+  field_simp [ne_of_gt aggregates_pos.2.1] <;> ring
+
 theorem scaleIdentities_of_output_root (R : ℝ) (hR : R ∈ boundaryInterval)
     (houtput : wage ^ (5 : ℕ) * boundaryAggregateOutput R =
       normalizedOutput R) :
@@ -99,6 +143,44 @@ theorem endpointSigns_of_boxes_and_output_roots
       (by
         exact ⟨le_of_lt boundaryLo_lt_boundaryHi, le_refl _⟩) houtputHi)
     hboxes
+
+/-- Both exact endpoint production roots are now consequences of
+source production and positivity, not independent hypotheses. Ten
+rational interval boxes remain an explicit proof obligation. -/
+theorem endpointSigns_of_boxes
+    (hboxes : BoundaryComponentBoxes) : BoundaryEndpointSigns := by
+  exact endpointSigns_of_verified_components
+    (scaleIdentities_of_output_root boundaryLo
+      ⟨le_refl _, le_of_lt boundaryLo_lt_boundaryHi⟩
+      (normalized_output_eq_from_source boundaryLo
+        ⟨le_refl _, le_of_lt boundaryLo_lt_boundaryHi⟩))
+    (scaleIdentities_of_output_root boundaryHi
+      ⟨le_of_lt boundaryLo_lt_boundaryHi, le_refl _⟩
+      (normalized_output_eq_from_source boundaryHi
+        ⟨le_of_lt boundaryLo_lt_boundaryHi, le_refl _⟩))
+    hboxes
+
+/-- The boundary reduced prefix is closed conditionally on only the
+ten endpoint boxes: neither the worker-labor FOC nor source monotonicity
+nor the fifteenth output root is supplied as an extra assumption. The
+full competitive equilibrium and terminal conditions remain separate. -/
+theorem boundary_reduced_prefix_from_endpoint_boxes
+    (G : ℝ) (hboxes : BoundaryComponentBoxes)
+    (branch : LocalPrefixBranch) :
+    LocalReducedPrefixEquationsHold branch
+      (boundaryPrimitives G
+        (boundaryRoot boundary_analyticPackage (endpointSigns_of_boxes hboxes)))
+      (boundaryInitialState G
+        (boundaryRoot boundary_analyticPackage (endpointSigns_of_boxes hboxes)))
+      (boundaryCoordinates
+        (boundaryRoot boundary_analyticPackage (endpointSigns_of_boxes hboxes)))
+      .dateOne .recurrent boundaryTail := by
+  exact boundary_full_prefix_equations_from_root G
+    boundary_analyticPackage (endpointSigns_of_boxes hboxes) branch
+
+#print axioms normalized_output_eq_from_source
+#print axioms endpointSigns_of_boxes
+#print axioms boundary_reduced_prefix_from_endpoint_boxes
 
 end ProposedBoundaryNormalizationBridge
 end Ventura26LiquidityAllocation
