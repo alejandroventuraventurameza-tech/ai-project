@@ -1330,16 +1330,30 @@ $34.7593<\Phi'(R)<37.5087$ en él. El teorema del valor intermedio prueba existe
 
 El único dual empresarial nulo por construcción es el de L en fecha 0. H tiene dual positivo y ambas esquinas de depósitos tienen signo correcto. La continuación satisface las pruebas estacionarias anteriores. $m=\bar m=5/6$ y $\Pi=1$ en todas las fechas satisfacen las bandas de precios globales; los términos terminales desaparecen. Se aplica la proposición \ref{prop:finite_prefix_equilibrium}.
 \end{proof}
-\paragraph{Alcance del enlace de frontera.}
-En Lean, \texttt{BoundaryFullPrefixCandidate} reconstruye las
-33 filas condicionadamente a la raíz, el paquete analítico
-y \texttt{BoundaryWorkerLaborPackage}: esta última contiene
-la FOC laboral de fecha cero aún no descargada en ese módulo.
-Además, el paso a equilibrio completo exige comprobar las
-premisas globales y terminales de
-\ref{prop:finite_prefix_equilibrium} en la asignación
-perturbada. La existencia de la raíz de recursos no
-certifica por sí sola ese paso.
+\paragraph{Alcance del enlace de frontera y estatus de la formalización.}
+En el módulo Lean \texttt{BoundaryNormalizationBridgeCandidate}, el
+teorema \texttt{boundary\_unique\_reduced\_prefix\_rate\_from\_source}
+demuestra, a partir de las primitivas originales y sin asumir cajas
+numéricas de frontera, la existencia y unicidad de la raíz
+$R\in[1.025,1.032]$ del residual de recursos, junto con las
+33 ecuaciones del prefijo reducido para cada rama formalizada.
+Las diez desigualdades auxiliares, incluidas las dos comparaciones de
+raíces decimoquintas del producto, fueron descargadas en Lean y
+sometidas a la auditoría de axiomas del commit \texttt{6ab6d29b}.
+Este certificado se refiere a la tasa escalar y al prefijo: no entrega
+por sí mismo una trayectoria $X$ definida en todas las fechas e
+historias, ni equivale a \texttt{CompetitiveEquilibriumWithInitialIntervention}.
+
+La afirmación más fuerte de equilibrio competitivo de la
+proposición \ref{prop:boundary_equilibrium} requiere verificar, sobre
+esa trayectoria completa, factibilidad, KKT originales y suficiencia
+de optimalidad de cada agente, consistencia de cuentas y mercados,
+y las condiciones globales y terminales de
+\ref{prop:finite_prefix_equilibrium}. Los argumentos analíticos
+anteriores especifican la construcción propuesta; su elevación a un
+teorema del equilibrio completo en Lean sigue pendiente.
+En particular, la raíz de recursos no sustituye las condiciones
+de transversalidad ni selecciona por sí misma una rama dinámica.
 
 \begin{center}\small
 \begin{tabular}{@{}lr@{}}\toprule

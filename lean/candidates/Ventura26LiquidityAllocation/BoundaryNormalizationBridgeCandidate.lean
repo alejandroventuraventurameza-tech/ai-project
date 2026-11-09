@@ -2319,6 +2319,107 @@ theorem boundarySourceRate_reduced_prefix
     (boundary_reduced_prefix_from_endpoint_boxes
       G boundary_component_boxes_from_source branch)
 
+
+/-- Economic admissibility of the named SOURCE frontier rate.
+All statements concern the explicit boundary date-zero construction,
+not an unconstructed infinite-horizon competitive allocation. -/
+theorem boundarySourceRate_positiveRealDomain :
+    0 < boundarySourceRate ∧
+    0 < boundaryReserveRate boundarySourceRate ∧
+    0 < boundaryDepositRate boundarySourceRate ∧
+    0 < boundaryCapitalScale boundarySourceRate ∧
+    boundaryCapitalScale boundarySourceRate < (40 / 39 : ℝ) ∧
+    0 < boundaryInvestment boundarySourceRate := by
+  have hmem : boundarySourceRate ∈ boundaryInterval :=
+    ⟨boundarySourceRate_spec.1, boundarySourceRate_spec.2.1⟩
+  rcases boundary_rate_domain hmem with ⟨hr, hrr⟩
+  rcases boundary_scale_and_investment_domain hmem with ⟨hs, hbound, hi⟩
+  exact ⟨hr, hrr, boundaryDepositRate_pos hmem,
+    hs, hbound, hi⟩
+
+/-- Named-root SOURCE bank stocks and the reserve/deposit ratio are
+strictly admissible at date zero. This proves positive bank balance
+components but does not discharge bank portfolio optimality or TVCs. -/
+theorem boundarySourceRate_bankDomain :
+    0 < boundaryBankEquity boundarySourceRate ∧
+    0 < boundaryBankDeposits boundarySourceRate ∧
+    0 < boundaryReservesPre boundarySourceRate ∧
+    0 < boundaryReserveDepositRatio boundarySourceRate ∧
+    boundaryReserveDepositRatio boundarySourceRate < 1 ∧
+    boundaryBankEquity boundarySourceRate <
+      boundaryBankLoans boundarySourceRate := by
+  have hmem : boundarySourceRate ∈ boundaryInterval :=
+    ⟨boundarySourceRate_spec.1, boundarySourceRate_spec.2.1⟩
+  rcases boundaryBankScale_pos hmem with ⟨he, hd, hm⟩
+  rcases boundaryReserveDepositRatio_bounds hmem with ⟨hpos, hlt⟩
+  exact ⟨he, hd, hm, hpos, hlt,
+    boundaryBankLoans_gt_equity hmem⟩
+
+
+/-- The named SOURCE rate separates the financially constrained firm
+from the boundary firm: H has strictly valuable collateral and
+L has binding collateral but zero shadow value. Neither classification
+is an assertion about nearby perturbed equilibria. -/
+theorem boundarySourceRate_firmRegime :
+    ValuableCollateralLoan boundarySourceRate
+      (ProposedStationaryRealScale.pledgeability .H *
+        ProposedStationaryRealScale.liquidationValue)
+      (ProposedStationaryRealScale.capital .H)
+      (boundarySDF boundarySourceRate .H)
+      (ProposedStationaryRealScale.firmFace .H)
+      (boundaryDual boundarySourceRate .H) ∧
+    ActiveCollateralZeroDual boundarySourceRate
+      (ProposedStationaryRealScale.pledgeability .L *
+        ProposedStationaryRealScale.liquidationValue)
+      (ProposedStationaryRealScale.capital .L)
+      (boundarySDF boundarySourceRate .L)
+      (ProposedStationaryRealScale.firmFace .L)
+      (boundaryDual boundarySourceRate .L) := by
+  have hr : 0 < boundarySourceRate :=
+    boundarySourceRate_positiveRealDomain.1
+  exact ⟨boundary_H_valuable boundarySourceRate hr,
+    boundary_L_active_zero_dual boundarySourceRate hr⟩
+
+/-- Strict firm consumption and the two collateral shadow values
+at the SOURCE boundary date zero; no claim about firm optimality at
+all later dates follows from these local signs. -/
+theorem boundarySourceRate_firmSigns :
+    0 < boundaryConsumption boundarySourceRate .H ∧
+    0 < boundaryConsumption boundarySourceRate .L ∧
+    0 < boundaryDual boundarySourceRate .H ∧
+    boundaryDual boundarySourceRate .L = 0 := by
+  have hr : 0 < boundarySourceRate :=
+    boundarySourceRate_positiveRealDomain.1
+  exact ⟨boundaryConsumption_pos boundarySourceRate hr .H,
+    boundaryConsumption_pos boundarySourceRate hr .L,
+    boundaryDual_H_pos boundarySourceRate hr,
+    boundaryDual_L boundarySourceRate hr⟩
+
+
+/-- The initial SOURCE worker is positive and satisfies the *literal*
+static labor-supply condition at the named frontier rate. This is
+only a date-zero first-order condition, not an infinite household
+optimality certificate. -/
+theorem boundarySourceRate_workerLabor :
+    0 < boundaryWorkerConsumption boundarySourceRate ∧
+    0 < boundaryWage boundarySourceRate ∧
+    boundaryWage boundarySourceRate =
+      boundaryWorkerConsumption boundarySourceRate *
+        boundaryAggregateLabor boundarySourceRate := by
+  have hmem : boundarySourceRate ∈ boundaryInterval :=
+    ⟨boundarySourceRate_spec.1, boundarySourceRate_spec.2.1⟩
+  exact ⟨boundaryWorkerConsumption_pos hmem,
+    boundaryWage_pos hmem,
+    boundary_worker_labor_equation hmem⟩
+
+#print axioms boundarySourceRate_workerLabor
+
+#print axioms boundarySourceRate_firmRegime
+#print axioms boundarySourceRate_firmSigns
+
+#print axioms boundarySourceRate_positiveRealDomain
+#print axioms boundarySourceRate_bankDomain
+
 #print axioms boundarySourceRate_spec
 #print axioms boundarySourceRate_reduced_prefix
 
