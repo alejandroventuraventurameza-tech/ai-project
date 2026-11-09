@@ -123,6 +123,8 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_slope_rational_micro_boxes
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_reserve_rate_micro_box
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_loan_rate_micro_box
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_micro_boxes
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_productivity_collateral_cost_wedge
           LEAN
           lake env lean BoundaryProofAudit.lean > "$GITHUB_WORKSPACE/lean-boundary-logs/axioms.log" 2>&1 || {
             cat "$GITHUB_WORKSPACE/lean-boundary-logs/axioms.log"
