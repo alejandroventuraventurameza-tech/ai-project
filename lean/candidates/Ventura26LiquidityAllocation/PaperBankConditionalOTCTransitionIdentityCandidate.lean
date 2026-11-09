@@ -2429,10 +2429,14 @@ theorem source_payment_shock_abs_bounded_on_support
     exact abs_nonneg _
   refine ⟨hnonneg, ?_⟩
   unfold sourcePaymentShockAbsBound
-  apply Finset.single_le_sum
-  · intro w hw
-    exact abs_nonneg _
-  · exact omega.property
+  change |P.paymentShock (omega : BankPayment)| ≤
+    ∑ w ∈ P.paymentSupport, |P.paymentShock w|
+  simpa only [Finset.sum_filter] using
+    (Finset.single_le_sum
+      (s := P.paymentSupport)
+      (f := fun w : BankPayment => |P.paymentShock w|)
+      (by intro w hw; exact abs_nonneg _)
+      omega.property)
 
 #print axioms source_payment_shock_abs_bounded_on_support
 
