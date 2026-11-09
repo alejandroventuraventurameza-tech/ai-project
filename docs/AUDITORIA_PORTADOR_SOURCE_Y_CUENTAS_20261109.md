@@ -67,6 +67,28 @@ intervenciones persistentes ni otra distribución estocástica. La auditoría
 global de todos los candidatos constituye una compuerta independiente de
 la focalizada.
 
+## Liquidación OTC y cuentas fiscales del SOURCE
+
+- **DEMOSTRADO**, compuerta Lean de frontera #42722416369, SHA
+  `a14d825c5bc18311dc3a14c2dadc87c78cc79429`:
+  `BoundaryFullSettlementCandidate.lean` verifica
+  `SettlementClears (boundaryPrimitives G boundarySourceRate)
+  (sourceBoundaryLiteralAllocation G)` y
+  `FiscalClosure (boundaryPrimitives G boundarySourceRate)
+  (boundaryInitialState G boundarySourceRate)
+  (sourceBoundaryLiteralAllocation G)`. Incluye la cota estricta de
+  depósitos frente a reservas en fecha cero, los dominios bancarios
+  exactos en fechas uno y posteriores, y la correspondencia del encaje
+  con la historia admisible del árbol determinista. El certificado
+  audita `#print axioms` sin `sorryAx`.
+- Estas ecuaciones cierran el mercado OTC *agregado del portador común* y
+  las cuentas fiscales residuales; no construyen una población bancaria
+  dinámicamente óptima, ni demuestran por sí mismas
+  `BankPopulationEquilibrium`, `HouseholdBudgetFlows` o
+  `CompetitiveEquilibrium`. El parámetro `G` permanece simbólico; su
+  dominio económico positivo debe verificarse al cerrar
+  `MonetaryPolicyPrimitiveDomain`.
+
 ## Brechas remanentes de equilibrio completo
 
 `CompetitiveEquilibrium` en `EconomicModel.lean` exige de forma
@@ -83,12 +105,13 @@ para `X` salvo prueba posterior específica:
    terminales; no basta Euler/KKT reducido.
 3. **Presupuestos/mercados:** `FirmBudgetFlows`,
    `HouseholdBudgetFlows`, `InheritedNominalFaceConsistency`,
-   `CapitalProducerAccounts` y `FiscalClosure`.
-   `ResourceClears` ya está demostrado para el testigo SOURCE exacto, pero
-   persisten condiciones privadas y nominales de factibilidad.
-4. **Liquidación OTC:** los flujos interbancarios netos del banco común no
-   se anulan por `BankBalance`. `SettlementClears` y los márgenes de
-   facilidad deben verificarse para cada historia admitida.
+   `CapitalProducerAccounts`. Las condiciones `FiscalClosure` y
+   `ResourceClears` ya están demostradas para el testigo SOURCE exacto,
+   pero persisten condiciones privadas y nominales de factibilidad.
+4. **Liquidación OTC:** `SettlementClears` ya está demostrado para el
+   portador común y todas las historias admitidas. Sigue pendiente el
+   equilibrio de la **población bancaria** con Bellman y factibilidad
+   individual; no se deduce de la igualdad agregada.
 5. **Dinámica/crecimiento:** una cola estacionaria elegida por
    construcción no es prueba de que agentes optimizadores la seleccionen.
    Tampoco demuestra selección S/B, persistencia estocástica, óptimo
@@ -113,7 +136,8 @@ requiere demostrar `loanRate_t ≠ 0` para todas las fechas.
 
 Conservar el certificado Lean focalizado #42717672368 en `cb89e939` y
 recuperar la auditoría completa de candidatos de esa misma revisión. Después,
-cerrar el presupuesto doméstico literal y el saldo OTC por historia,
-verificar el régimen de factibilidad bancaria y demostrar por separado
-el conjunto de condiciones de optimalidad y transversalidad. Mantener
+cerrar `CapitalProducerAccounts`, `FirmBudgetFlows` y
+`HouseholdBudgetFlows` con condiciones de signo y flujos nominales;
+verificar factibilidad y optimalidad de la población bancaria y demostrar
+por separado las condiciones de transversalidad. Mantener
 `main` sin cambios y el PR en borrador hasta las compuertas científicas.
