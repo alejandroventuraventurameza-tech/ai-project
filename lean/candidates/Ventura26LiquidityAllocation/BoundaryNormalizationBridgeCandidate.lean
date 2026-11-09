@@ -2000,6 +2000,288 @@ theorem boundary_unique_reduced_prefix_rate_of_two
   exact boundary_unique_reduced_prefix_rate_of_three G
     (boundary_three_boxes_from_two h)
 
+/-- Sharp stationary SOURCE output scale from the two firm cost and
+capital enclosures. Both inequalities are consequences of the common
+bank loan rate and the technology/pledgeability primitives. -/
+theorem boundary_source_output_scale_sharp_box :
+    (13293498 / 1000000 : ℝ) <
+      ProposedStationaryRealScale.outputScale ∧
+    ProposedStationaryRealScale.outputScale <
+      (13293504 / 1000000 : ℝ) := by
+  rcases boundary_source_user_cost_sharp_boxes with
+    ⟨⟨huHlo, huHhi⟩, ⟨huLlo, huLhi⟩⟩
+  rcases boundary_source_capital_scales_sharp_boxes with
+    ⟨⟨hkHlo, hkHhi⟩, ⟨hkLlo, hkLhi⟩⟩
+  have huHpos := ProposedStationaryRealScale.userCost_pos .H
+  have huLpos := ProposedStationaryRealScale.userCost_pos .L
+  have hkHpos := ProposedStationaryRealScale.capitalScale_pos .H
+  have hkLpos := ProposedStationaryRealScale.capitalScale_pos .L
+  have hprodHlo :
+      (63166370 / 1000000000 : ℝ) * (5677035 / 100000 : ℝ) <
+        ProposedStationaryRealScale.userCost .H *
+          ProposedStationaryRealScale.capitalScale .H := by
+    calc
+      _ < (63166370 / 1000000000 : ℝ) *
+            ProposedStationaryRealScale.capitalScale .H :=
+        mul_lt_mul_of_pos_left hkHlo (by norm_num)
+      _ < _ := mul_lt_mul_of_pos_right huHlo hkHpos
+  have hprodLlo :
+      (55943655 / 1000000000 : ℝ) * (9431553 / 100000 : ℝ) <
+        ProposedStationaryRealScale.userCost .L *
+          ProposedStationaryRealScale.capitalScale .L := by
+    calc
+      _ < (55943655 / 1000000000 : ℝ) *
+            ProposedStationaryRealScale.capitalScale .L :=
+        mul_lt_mul_of_pos_left hkLlo (by norm_num)
+      _ < _ := mul_lt_mul_of_pos_right huLlo hkLpos
+  have hprodHhi :
+      ProposedStationaryRealScale.userCost .H *
+        ProposedStationaryRealScale.capitalScale .H <
+        (63166372 / 1000000000 : ℝ) * (5677037 / 100000 : ℝ) := by
+    calc
+      _ < (63166372 / 1000000000 : ℝ) *
+            ProposedStationaryRealScale.capitalScale .H :=
+        mul_lt_mul_of_pos_right huHhi hkHpos
+      _ < _ := mul_lt_mul_of_pos_left hkHhi (by norm_num)
+  have hprodLhi :
+      ProposedStationaryRealScale.userCost .L *
+        ProposedStationaryRealScale.capitalScale .L <
+        (55943657 / 1000000000 : ℝ) * (9431556 / 100000 : ℝ) := by
+    calc
+      _ < (55943657 / 1000000000 : ℝ) *
+            ProposedStationaryRealScale.capitalScale .L :=
+        mul_lt_mul_of_pos_right huLhi hkLpos
+      _ < _ := mul_lt_mul_of_pos_left hkLhi (by norm_num)
+  have hYformula :
+      ProposedStationaryRealScale.outputScale =
+        (3 / 2 : ℝ) *
+          (ProposedStationaryRealScale.userCost .H *
+              ProposedStationaryRealScale.capitalScale .H +
+            ProposedStationaryRealScale.userCost .L *
+              ProposedStationaryRealScale.capitalScale .L) := by
+    unfold ProposedStationaryRealScale.outputScale
+      ProposedStationaryRealScale.average
+    ring
+  rw [hYformula]
+  constructor
+  · have hsum := add_lt_add hprodHlo hprodLlo
+    linarith only [hsum]
+  · have hsum := add_lt_add hprodHhi hprodLhi
+    linarith only [hsum]
+
+/-- Fifteenth-root upper box at the lower SOURCE bracket endpoint.
+The root is bounded by an exact fifteenth-power comparison, not by
+approximating Real.rpow or postulating an endpoint sign. -/
+theorem boundary_output_lo_box_from_source :
+    normalizedOutput boundaryLo < (1327678 / 100000 : ℝ) := by
+  rcases boundary_source_output_scale_sharp_box with ⟨_, hYhi⟩
+  rcases boundary_source_user_cost_sharp_boxes with
+    ⟨_, ⟨huLlo, _⟩⟩
+  have hRmem : boundaryLo ∈ boundaryInterval :=
+    ⟨le_refl _, le_of_lt boundaryLo_lt_boundaryHi⟩
+  have hspos : 0 < boundaryCapitalScale boundaryLo :=
+    (boundary_scale_and_investment_domain hRmem).1
+  have hrdpos : 0 < boundaryDepositRate boundaryLo :=
+    boundaryDepositRate_pos hRmem
+  have hden :
+      0 < 2 * continuationReturn .L -
+        (41 / 40 : ℝ) * boundaryLo := by
+    dsimp [continuationReturn,
+      ProposedStationaryRealScale.liquidationValue,
+      ProposedStationaryRealScale.capitalPrice, boundaryLo]
+    linarith only [huLlo]
+  have hsHi :
+      boundaryCapitalScale boundaryLo <
+        (989728731 / 1000000000 : ℝ) := by
+    rw [boundaryCapitalScale_rewrite boundaryLo
+      (by norm_num [boundaryLo])]
+    apply (div_lt_iff₀ hden).2
+    dsimp [continuationReturn,
+      ProposedStationaryRealScale.liquidationValue,
+      ProposedStationaryRealScale.capitalPrice, boundaryLo]
+    linarith only [huLlo]
+  have hrdHi := boundary_deposit_rate_lo_source_upper
+  have hdepositScaled :
+      (99 / 100 : ℝ) * boundaryDepositRate boundaryLo <
+        (99 / 100 : ℝ) * (1023052874 / 1000000000 : ℝ) :=
+    mul_lt_mul_of_pos_left hrdHi (by norm_num)
+  have hspow :
+      boundaryCapitalScale boundaryLo ^ (8 : ℕ) <
+        (989728731 / 1000000000 : ℝ) ^ (8 : ℕ) := by
+    gcongr
+  have hdpow :
+      ((99 / 100 : ℝ) * boundaryDepositRate boundaryLo) ^ (5 : ℕ) <
+        ((99 / 100 : ℝ) *
+          (1023052874 / 1000000000 : ℝ)) ^ (5 : ℕ) := by
+    gcongr
+  let x : ℝ :=
+    boundaryCapitalScale boundaryLo ^ (8 : ℕ) *
+      ((99 / 100 : ℝ) * boundaryDepositRate boundaryLo) ^ (5 : ℕ)
+  have hx : 0 ≤ x := by
+    dsimp [x]
+    exact mul_nonneg (pow_nonneg hspos.le _)
+      (pow_nonneg (mul_nonneg (by norm_num) hrdpos.le) _)
+  have hpoly :
+      x ≤ (998741401 / 1000000000 : ℝ) ^ (15 : ℕ) := by
+    dsimp [x]
+    have hm1 :=
+      mul_lt_mul_of_pos_right hspow
+        (pow_pos (mul_pos (by norm_num) hrdpos) (5 : ℕ))
+    have hm2 :=
+      mul_lt_mul_of_pos_left hdpow
+        (by norm_num :
+          (0 : ℝ) < (989728731 / 1000000000 : ℝ) ^ (8 : ℕ))
+    exact (lt_trans (lt_trans hm1 hm2) (by norm_num)).le
+  have hroot :
+      x ^ (1 / 15 : ℝ) ≤ (998741401 / 1000000000 : ℝ) :=
+    (fifteenth_root_between 0
+      (998741401 / 1000000000 : ℝ) x
+      (by norm_num) (by norm_num) hx
+      (by simpa using hx) hpoly).2
+  have hYpos : 0 < ProposedStationaryRealScale.outputScale :=
+    ProposedStationaryRealScale.aggregate_scales_pos.2.1
+  change ProposedStationaryRealScale.outputScale *
+    x ^ (1 / 15 : ℝ) < (1327678 / 100000 : ℝ)
+  calc
+    _ ≤ ProposedStationaryRealScale.outputScale *
+          (998741401 / 1000000000 : ℝ) :=
+      mul_le_mul_of_nonneg_left hroot hYpos.le
+    _ < (13293504 / 1000000 : ℝ) *
+          (998741401 / 1000000000 : ℝ) :=
+      mul_lt_mul_of_pos_right hYhi (by norm_num)
+    _ < (1327678 / 100000 : ℝ) := by norm_num
+
+/-- Fifteenth-root lower box at the upper SOURCE bracket endpoint;
+uses the exact production power and the previously source-derived
+deposit-remuneration and capital-scale enclosures. -/
+theorem boundary_output_hi_box_from_source :
+    (1340498 / 100000 : ℝ) < normalizedOutput boundaryHi := by
+  rcases boundary_source_output_scale_sharp_box with ⟨hYlo, _⟩
+  rcases boundary_source_user_cost_sharp_boxes with
+    ⟨_, ⟨huLlo, huLhi⟩⟩
+  have hRmem : boundaryHi ∈ boundaryInterval :=
+    ⟨le_of_lt boundaryLo_lt_boundaryHi, le_refl _⟩
+  have hspos : 0 < boundaryCapitalScale boundaryHi :=
+    (boundary_scale_and_investment_domain hRmem).1
+  have hrdpos : 0 < boundaryDepositRate boundaryHi :=
+    boundaryDepositRate_pos hRmem
+  have hden :
+      0 < 2 * continuationReturn .L -
+        (41 / 40 : ℝ) * boundaryHi := by
+    dsimp [continuationReturn,
+      ProposedStationaryRealScale.liquidationValue,
+      ProposedStationaryRealScale.capitalPrice, boundaryHi]
+    linarith only [huLlo]
+  have hsLo :
+      (1003439782 / 1000000000 : ℝ) <
+        boundaryCapitalScale boundaryHi := by
+    rw [boundaryCapitalScale_rewrite boundaryHi
+      (by norm_num [boundaryHi])]
+    apply (lt_div_iff₀ hden).2
+    dsimp [continuationReturn,
+      ProposedStationaryRealScale.liquidationValue,
+      ProposedStationaryRealScale.capitalPrice, boundaryHi]
+    linarith only [huLhi]
+  have hrdLo := boundary_deposit_rate_hi_source_lower
+  have hdepositScaled :
+      (99 / 100 : ℝ) * (10300529 / 10000000 : ℝ) <
+        (99 / 100 : ℝ) * boundaryDepositRate boundaryHi :=
+    mul_lt_mul_of_pos_left hrdLo (by norm_num)
+  have hspow :
+      (1003439782 / 1000000000 : ℝ) ^ (8 : ℕ) <
+        boundaryCapitalScale boundaryHi ^ (8 : ℕ) := by
+    gcongr
+  have hdpow :
+      ((99 / 100 : ℝ) *
+        (10300529 / 10000000 : ℝ)) ^ (5 : ℕ) <
+        ((99 / 100 : ℝ) * boundaryDepositRate boundaryHi) ^ (5 : ℕ) := by
+    gcongr
+  let x : ℝ :=
+    boundaryCapitalScale boundaryHi ^ (8 : ℕ) *
+      ((99 / 100 : ℝ) * boundaryDepositRate boundaryHi) ^ (5 : ℕ)
+  have hx : 0 ≤ x := by
+    dsimp [x]
+    exact mul_nonneg (pow_nonneg hspos.le _)
+      (pow_nonneg (mul_nonneg (by norm_num) hrdpos.le) _)
+  have hpoly :
+      (1008386313 / 1000000000 : ℝ) ^ (15 : ℕ) ≤ x := by
+    dsimp [x]
+    have hm1 :=
+      mul_lt_mul_of_pos_right hspow
+        (by norm_num :
+          (0 : ℝ) <
+            ((99 / 100 : ℝ) * (10300529 / 10000000 : ℝ)) ^ (5 : ℕ))
+    have hm2 :=
+      mul_lt_mul_of_pos_left hdpow
+        (pow_pos hspos (8 : ℕ))
+    exact (lt_trans (by norm_num) (lt_trans hm1 hm2)).le
+  have hroot :
+      (1008386313 / 1000000000 : ℝ) ≤
+        x ^ (1 / 15 : ℝ) := by
+    have h := Real.rpow_le_rpow
+      (pow_nonneg (by norm_num :
+        (0 : ℝ) ≤ (1008386313 / 1000000000 : ℝ)) (15 : ℕ))
+      hpoly (by norm_num : (0 : ℝ) ≤ 1 / 15)
+    calc
+      (1008386313 / 1000000000 : ℝ) =
+          ((1008386313 / 1000000000 : ℝ) ^ (15 : ℕ)) ^
+            (1 / 15 : ℝ) := by
+        simpa only [one_div] using
+          (Real.pow_rpow_inv_natCast
+            (by norm_num :
+              (0 : ℝ) ≤ (1008386313 / 1000000000 : ℝ))
+            (by norm_num : (15 : ℕ) ≠ 0)).symm
+      _ ≤ x ^ (1 / 15 : ℝ) := h
+  have hYpos : 0 < ProposedStationaryRealScale.outputScale :=
+    ProposedStationaryRealScale.aggregate_scales_pos.2.1
+  change (1340498 / 100000 : ℝ) <
+    ProposedStationaryRealScale.outputScale * x ^ (1 / 15 : ℝ)
+  calc
+    (1340498 / 100000 : ℝ) <
+        (13293498 / 1000000 : ℝ) *
+          (1008386313 / 1000000000 : ℝ) := by norm_num
+    _ < ProposedStationaryRealScale.outputScale *
+          (1008386313 / 1000000000 : ℝ) :=
+      mul_lt_mul_of_pos_right hYlo (by norm_num)
+    _ ≤ _ := mul_le_mul_of_nonneg_left hroot hYpos.le
+
+/-- All ten source endpoint inequalities are now consequences of the
+literal bank/firm/worker/production equations. This statement is
+separate from the equilibrium proposition of the paper. -/
+theorem boundary_component_boxes_from_source : BoundaryComponentBoxes := by
+  have htwo : BoundaryRemainingTwoBoxes :=
+    ⟨boundary_output_lo_box_from_source,
+      boundary_output_hi_box_from_source⟩
+  have hthree := boundary_three_boxes_from_two htwo
+  have hfour := boundary_four_boxes_from_three hthree
+  have hfive := boundary_five_boxes_from_four hfour
+  have hsix := boundary_six_boxes_from_five hfive
+  have height := boundary_eight_boxes_from_six hsix
+  exact boundary_component_boxes_from_eight height
+
+/-- An unconditional SOURCE scalar frontier rate has a unique root on
+the bracket with all 33 reduced-prefix identities. Not a proof of
+full infinite-horizon competitive equilibrium or branch selection. -/
+theorem boundary_unique_reduced_prefix_rate_from_source
+    (G : ℝ) :
+    ∃! R : ℝ,
+      boundaryLo ≤ R ∧ R ≤ boundaryHi ∧
+      boundaryResourceResidual R = 0 ∧
+      ∀ branch : LocalPrefixBranch,
+        LocalReducedPrefixEquationsHold branch
+          (boundaryPrimitives G R)
+          (boundaryInitialState G R)
+          (boundaryCoordinates R) .dateOne .recurrent boundaryTail := by
+  exact boundary_unique_reduced_prefix_rate_of_two G
+    ⟨boundary_output_lo_box_from_source,
+      boundary_output_hi_box_from_source⟩
+
+#print axioms boundary_source_output_scale_sharp_box
+#print axioms boundary_output_lo_box_from_source
+#print axioms boundary_output_hi_box_from_source
+#print axioms boundary_component_boxes_from_source
+#print axioms boundary_unique_reduced_prefix_rate_from_source
+
 #print axioms boundary_worker_consumption_scale_lower
 #print axioms boundary_deposit_rate_lo_source_upper
 #print axioms boundary_worker_lo_box_from_source
