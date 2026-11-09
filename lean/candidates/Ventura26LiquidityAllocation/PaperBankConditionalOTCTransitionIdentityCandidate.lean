@@ -2411,5 +2411,30 @@ theorem source_full_retention_deposits_and_reserves_le_equity_caps
 
 #print axioms source_full_retention_deposits_and_reserves_le_equity_caps
 
+
+/-- A fixed finite payment support endogenously supplies a uniform
+absolute payment-shock bound. No new distributional boundedness
+assumption is imposed: this constant is finite by finite summation. -/
+noncomputable def sourcePaymentShockAbsBound (P : Primitives S) : ℝ :=
+  ∑ omega ∈ P.paymentSupport, |P.paymentShock omega|
+
+theorem source_payment_shock_abs_bounded_on_support
+    (P : Primitives S) (omega : P.paymentSupport) :
+    0 ≤ sourcePaymentShockAbsBound P ∧
+      |P.paymentShock omega| ≤ sourcePaymentShockAbsBound P := by
+  have hnonneg : 0 ≤ sourcePaymentShockAbsBound P := by
+    unfold sourcePaymentShockAbsBound
+    apply Finset.sum_nonneg
+    intro w hw
+    exact abs_nonneg _
+  refine ⟨hnonneg, ?_⟩
+  unfold sourcePaymentShockAbsBound
+  apply Finset.single_le_sum
+  · intro w hw
+    exact abs_nonneg _
+  · exact omega.property
+
+#print axioms source_payment_shock_abs_bounded_on_support
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
