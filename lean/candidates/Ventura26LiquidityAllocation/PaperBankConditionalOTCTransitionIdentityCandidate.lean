@@ -1548,5 +1548,66 @@ theorem source_full_retention_tvc_on_supported_histories
 #print axioms source_surviving_value_nonneg_on_supported_histories
 #print axioms source_full_retention_tvc_on_supported_histories
 
+
+/-- A sufficient, primitive-probability certificate for the conditional
+source OTC return bound. Only positive-probability shocks require a
+pointwise return enclosure; zero-probability shocks drop out.
+The economic enclosure on actual OTC returns is still an explicit
+premise, not an equilibrium theorem. -/
+theorem source_conditional_otc_growth_le_of_positive_shock_bounds
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (n : ℕ) (future : Fin n → S) (grossBound : ℝ)
+    (hshock : ∀ s (omega : P.paymentSupport),
+      0 < P.tree.transition
+        (currentState (continuationHistory h future)) s →
+      0 < P.paymentProbability omega →
+        sourceDiscountedEquityGrowthFactor P X t h n future s omega ≤
+          grossBound) :
+    sourceConditionalOTCGrowthFactor P X t h n future ≤ grossBound := by
+  classical
+  let T : S → ℝ := fun s =>
+    P.tree.transition (currentState (continuationHistory h future)) s
+  let Q : P.paymentSupport → ℝ := fun omega => P.paymentProbability omega
+  have hT : (∑ s : S, T s) = 1 := by
+    exact P.tree.transition_sum_one _
+  have hQ : (∑ omega : P.paymentSupport, Q omega) = 1 := by
+    have hsrc := P.payment_probability_sum_one
+    rw [Finset.sum_subtype P.paymentSupport (fun x => Iff.rfl)] at hsrc
+    exact hsrc
+  unfold sourceConditionalOTCGrowthFactor
+  calc
+    (∑ s : S, ∑ omega : P.paymentSupport,
+      T s * Q omega *
+        sourceDiscountedEquityGrowthFactor P X t h n future s omega) ≤
+      ∑ s : S, ∑ omega : P.paymentSupport,
+        T s * Q omega * grossBound := by
+      apply Finset.sum_le_sum
+      intro s _hs
+      apply Finset.sum_le_sum
+      intro omega _ho
+      by_cases ht : T s = 0
+      · simp [ht]
+      by_cases hq : Q omega = 0
+      · simp [hq]
+      have htpos : 0 < T s :=
+        lt_of_le_of_ne (P.tree.transition_nonneg _ _) (Ne.symm ht)
+      have hqpos : 0 < Q omega :=
+        lt_of_le_of_ne (P.payment_probability_nonneg omega) (Ne.symm hq)
+      exact mul_le_mul_of_nonneg_left
+        (hshock s omega htpos hqpos) (mul_nonneg htpos.le hqpos.le)
+    _ = ∑ s : S, (T s * grossBound) * (∑ omega : P.paymentSupport, Q omega) := by
+      apply Finset.sum_congr rfl
+      intro s _hs
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro omega _ho
+      ring
+    _ = ∑ s : S, T s * grossBound := by simp [hQ]
+    _ = (∑ s : S, T s) * grossBound := by rw [Finset.sum_mul]
+    _ = grossBound := by rw [hT]; ring
+
+#print axioms source_conditional_otc_growth_le_of_positive_shock_bounds
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
