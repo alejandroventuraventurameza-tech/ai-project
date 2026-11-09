@@ -1980,5 +1980,126 @@ theorem source_detailed_otc_signed_real_return_le_cap
 
 #print axioms source_detailed_otc_signed_real_return_le_cap
 
+
+/-- Full discounted SOURCE growth cap with signed interbank settlement
+flows. Unlike the earlier nonnegative-expense envelope, it uses an
+absolute funding-magnitude budget and does not require positive
+realized bank returns. The right-hand upper envelope must be
+nonnegative to combine the household SDF upper bound. -/
+theorem source_discounted_growth_factor_le_signed_funding_envelope
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t) (n : ℕ)
+    (future : Fin n → S) (s : S) (omega : P.paymentSupport)
+    (sdfBound reserveRevenueCap fundingMagnitudeCap : ℝ)
+    (hsdfLower : 0 ≤
+      P.workerDiscount *
+        X.workerConsumption (t + n) (continuationHistory h future) /
+          X.workerConsumption (t + n + 1)
+            (childHistory (continuationHistory h future) s))
+    (hsdfUpper :
+      P.workerDiscount *
+        X.workerConsumption (t + n) (continuationHistory h future) /
+          X.workerConsumption (t + n + 1)
+            (childHistory (continuationHistory h future) s) ≤ sdfBound)
+    (hloanRate : 0 ≤
+      X.loanRate (t + n) (continuationHistory h future))
+    (hloanCap :
+      X.bankLoans (t + n) (continuationHistory h future) ≤
+        P.bankLoanCap * X.bankEquity (t + n)
+          (continuationHistory h future))
+    (hreserveRevenue :
+      X.reserveRate (t + n) (continuationHistory h future) *
+        bankPostSettlementReservesAt P X (t + n)
+          (continuationHistory h future)
+          (X.bankTightness (t + n) (continuationHistory h future))
+          (X.reservesPrePayment (t + n) (continuationHistory h future))
+          (X.bankDeposits (t + n) (continuationHistory h future)) omega ≤
+        reserveRevenueCap * X.bankEquity (t + n)
+          (continuationHistory h future))
+    (hfundingMagnitude :
+      |X.depositRate (t + n) (continuationHistory h future) *
+        X.bankDeposits (t + n) (continuationHistory h future) *
+        (1 + P.paymentShock omega)| +
+      |X.interbankRate (t + n) (continuationHistory h future) *
+        bankOTCInterbankAt P X (t + n)
+          (continuationHistory h future)
+          (X.bankTightness (t + n) (continuationHistory h future))
+          (X.reservesPrePayment (t + n) (continuationHistory h future))
+          (X.bankDeposits (t + n) (continuationHistory h future)) omega| +
+      |X.facilityRate (t + n) (continuationHistory h future) *
+        bankFacilityBorrowingAt P X (t + n)
+          (continuationHistory h future)
+          (X.bankTightness (t + n) (continuationHistory h future))
+          (X.reservesPrePayment (t + n) (continuationHistory h future))
+          (X.bankDeposits (t + n) (continuationHistory h future)) omega|
+        ≤ fundingMagnitudeCap * X.bankEquity (t + n)
+            (continuationHistory h future))
+    (hequity : 0 < X.bankEquity (t + n)
+      (continuationHistory h future))
+    (hinflation : 0 < X.inflation (t + n + 1)
+      (childHistory (continuationHistory h future) s))
+    (hcapNonneg : 0 ≤
+      ((X.loanRate (t + n) (continuationHistory h future) *
+        P.bankLoanCap + reserveRevenueCap + fundingMagnitudeCap) *
+          X.bankEquity (t + n) (continuationHistory h future)) /
+        X.bankEquity (t + n) (continuationHistory h future) /
+        X.inflation (t + n + 1)
+          (childHistory (continuationHistory h future) s)) :
+    sourceDiscountedEquityGrowthFactor P X t h n future s omega ≤
+      sdfBound *
+        (((X.loanRate (t + n) (continuationHistory h future) *
+          P.bankLoanCap + reserveRevenueCap + fundingMagnitudeCap) *
+            X.bankEquity (t + n) (continuationHistory h future)) /
+          X.bankEquity (t + n) (continuationHistory h future) /
+          X.inflation (t + n + 1)
+            (childHistory (continuationHistory h future) s)) := by
+  have hreturnUpper := source_detailed_otc_signed_real_return_le_cap
+    P X (t + n) (continuationHistory h future)
+    (X.bankTightness (t + n) (continuationHistory h future))
+    (X.bankLoans (t + n) (continuationHistory h future))
+    (X.reservesPrePayment (t + n) (continuationHistory h future))
+    (X.bankDeposits (t + n) (continuationHistory h future))
+    (X.bankEquity (t + n) (continuationHistory h future))
+    reserveRevenueCap fundingMagnitudeCap s omega
+    hloanRate hloanCap hreserveRevenue hfundingMagnitude
+    hequity hinflation
+  have hnonnegSdfBound : 0 ≤ sdfBound := le_trans hsdfLower hsdfUpper
+  unfold sourceDiscountedEquityGrowthFactor
+  calc
+    (P.workerDiscount *
+      X.workerConsumption (t + n) (continuationHistory h future) /
+        X.workerConsumption (t + n + 1)
+          (childHistory (continuationHistory h future) s)) *
+      (bankDetailedPortfolioReturnAt P X (t + n)
+        (continuationHistory h future)
+        (X.bankTightness (t + n) (continuationHistory h future))
+        (X.bankLoans (t + n) (continuationHistory h future))
+        (X.reservesPrePayment (t + n) (continuationHistory h future))
+        (X.bankDeposits (t + n) (continuationHistory h future)) omega /
+          X.bankEquity (t + n) (continuationHistory h future) /
+          X.inflation (t + n + 1)
+            (childHistory (continuationHistory h future) s)) ≤
+      (P.workerDiscount *
+        X.workerConsumption (t + n) (continuationHistory h future) /
+          X.workerConsumption (t + n + 1)
+            (childHistory (continuationHistory h future) s)) *
+      (((X.loanRate (t + n) (continuationHistory h future) *
+        P.bankLoanCap + reserveRevenueCap + fundingMagnitudeCap) *
+          X.bankEquity (t + n) (continuationHistory h future)) /
+        X.bankEquity (t + n) (continuationHistory h future) /
+        X.inflation (t + n + 1)
+          (childHistory (continuationHistory h future) s)) :=
+        mul_le_mul_of_nonneg_left hreturnUpper hsdfLower
+    _ ≤ sdfBound *
+      (((X.loanRate (t + n) (continuationHistory h future) *
+        P.bankLoanCap + reserveRevenueCap + fundingMagnitudeCap) *
+          X.bankEquity (t + n) (continuationHistory h future)) /
+        X.bankEquity (t + n) (continuationHistory h future) /
+        X.inflation (t + n + 1)
+          (childHistory (continuationHistory h future) s)) :=
+        mul_le_mul_of_nonneg_right hsdfUpper hcapNonneg
+
+#print axioms source_discounted_growth_factor_le_signed_funding_envelope
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
