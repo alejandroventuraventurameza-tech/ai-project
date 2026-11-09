@@ -325,6 +325,55 @@ private theorem output_ratio_cube {R : ℝ} (hR : R ∈ boundaryInterval) :
     _ = scalePow R ^ (2 : ℕ) / workerRatio R := by
       field_simp [ne_of_gt hu, ne_of_gt hz] <;> ring
 
+
+/-- Exact source output power identity: normalized production is a
+fifteenth root, not a decimal surrogate. The proof uses the literal
+worker-consumption rule and the already established cubic aggregate-output
+scaling. It leaves no endpoint sign or numerical box as an assumption. -/
+theorem output_ratio_fifteenth_power {R : ℝ}
+    (hR : R ∈ boundaryInterval) :
+    (boundaryAggregateOutput R / aggregateOutput) ^ (15 : ℕ) =
+      boundaryCapitalScale R ^ (8 : ℕ) *
+        ((99 / 100 : ℝ) * boundaryDepositRate R) ^ (5 : ℕ) := by
+  have hd : 0 < (99 / 100 : ℝ) * boundaryDepositRate R :=
+    mul_pos (by norm_num) (boundaryDepositRate_pos hR)
+  have hworker :
+      workerRatio R =
+        1 / ((99 / 100 : ℝ) * boundaryDepositRate R) := by
+    unfold workerRatio boundaryWorkerConsumption
+    field_simp [ne_of_gt workerConsumption_pos,
+      ne_of_gt (boundaryDepositRate_pos hR)] <;> ring
+  have hbase := output_ratio_cube hR
+  rw [hworker] at hbase
+  unfold scalePow at hbase
+  have hcube :
+      (boundaryAggregateOutput R / aggregateOutput) ^ (3 : ℕ) =
+        (boundaryCapitalScale R ^ (4 / 5 : ℝ)) ^ (2 : ℕ) *
+          ((99 / 100 : ℝ) * boundaryDepositRate R) := by
+    calc
+      _ = (boundaryCapitalScale R ^ (4 / 5 : ℝ)) ^ (2 : ℕ) /
+            (1 / ((99 / 100 : ℝ) * boundaryDepositRate R)) := hbase
+      _ = _ := by field_simp [ne_of_gt hd] <;> ring
+  have hs8 :
+      ((boundaryCapitalScale R ^ (4 / 5 : ℝ)) ^ (2 : ℕ)) ^ (5 : ℕ) =
+        boundaryCapitalScale R ^ (8 : ℕ) := by
+    calc
+      _ = (boundaryCapitalScale R ^ (4 / 5 : ℝ)) ^ (10 : ℕ) := by ring
+      _ = boundaryCapitalScale R ^ (8 : ℕ) := by
+        have h := Real.rpow_mul
+          (boundary_scale_and_investment_domain hR).1.le
+          (4 / 5 : ℝ) (10 : ℝ)
+        norm_num [Real.rpow_natCast] at h ⊢
+        exact h.symm
+  calc
+    (boundaryAggregateOutput R / aggregateOutput) ^ (15 : ℕ) =
+      ((boundaryAggregateOutput R / aggregateOutput) ^ (3 : ℕ)) ^ (5 : ℕ) := by ring
+    _ = ((boundaryCapitalScale R ^ (4 / 5 : ℝ)) ^ (2 : ℕ) *
+          ((99 / 100 : ℝ) * boundaryDepositRate R)) ^ (5 : ℕ) := by rw [hcube]
+    _ = ((boundaryCapitalScale R ^ (4 / 5 : ℝ)) ^ (2 : ℕ)) ^ (5 : ℕ) *
+          ((99 / 100 : ℝ) * boundaryDepositRate R) ^ (5 : ℕ) := by ring
+    _ = _ := by rw [hs8]
+
 private theorem scalePow_strictMonoOn :
     StrictMonoOn scalePow boundaryInterval := by
   intro x hx y hy hxy
