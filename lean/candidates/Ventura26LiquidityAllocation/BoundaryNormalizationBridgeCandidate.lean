@@ -575,7 +575,7 @@ theorem boundary_source_stationary_capital_scale_order :
       (by norm_num : (0 : ℝ) < 4 / 5)
     nlinarith only [h]
   unfold ProposedStationaryRealScale.capitalScale
-  gcongr
+  gcongr <;> exact hbase
 
 #print axioms boundary_source_stationary_capital_scale_order
 
