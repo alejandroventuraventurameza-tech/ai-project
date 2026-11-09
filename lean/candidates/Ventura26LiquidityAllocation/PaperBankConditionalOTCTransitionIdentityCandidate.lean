@@ -2284,7 +2284,7 @@ theorem source_otc_position_nonpositive_on_settlement_surplus
       (P.reserveRequirementPath t h)
       (X.depositRate t h / X.reserveRate t h)
       deposits (P.paymentShock omega) < 0 := not_lt.mpr hsurplus
-  simp only [hnotdeficit, if_neg]
+  simp only [hnotdeficit, ↓reduceIte]
   nlinarith [mul_nonneg hfraction hsurplus]
 
 #print axioms source_otc_position_nonnegative_on_settlement_deficit
