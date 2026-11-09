@@ -2332,5 +2332,47 @@ theorem source_otc_position_abs_le_settlement_imbalance
 
 #print axioms source_otc_position_abs_le_settlement_imbalance
 
+
+/-- A primitive, shock-by-shock triangle enclosure for the SOURCE
+pre-OTC settlement imbalance. No bank equilibrium or bound on rates
+is hidden in this algebraic inequality; the economic bounds on each
+term must still be supplied. -/
+theorem source_settlement_imbalance_abs_le_primitive_terms
+    (reserves requirement depositReserveRatio deposits shock : ℝ) :
+    |bankSettlementSurplus reserves requirement depositReserveRatio
+      deposits shock| ≤
+      |reserves| + |requirement| * |deposits| +
+        (|depositReserveRatio| + |requirement|) * |shock| * |deposits| := by
+  have hbase : |reserves - requirement * deposits| ≤
+      |reserves| + |requirement * deposits| := by
+    simpa [sub_eq_add_neg, abs_neg] using
+      (abs_add_le reserves (-(requirement * deposits)))
+  have hcoef : |depositReserveRatio - requirement| ≤
+      |depositReserveRatio| + |requirement| := by
+    simpa [sub_eq_add_neg, abs_neg] using
+      (abs_add_le depositReserveRatio (-requirement))
+  have hshock :
+      |(depositReserveRatio - requirement) * shock * deposits| ≤
+        (|depositReserveRatio| + |requirement|) * |shock| * |deposits| := by
+    rw [abs_mul, abs_mul]
+    exact mul_le_mul_of_nonneg_right
+      (mul_le_mul_of_nonneg_right hcoef (abs_nonneg shock))
+      (abs_nonneg deposits)
+  unfold bankSettlementSurplus
+  calc
+    |reserves - requirement * deposits +
+        (depositReserveRatio - requirement) * shock * deposits| ≤
+      |reserves - requirement * deposits| +
+        |(depositReserveRatio - requirement) * shock * deposits| :=
+        abs_add_le _ _
+    _ ≤ (|reserves| + |requirement * deposits|) +
+        (|depositReserveRatio| + |requirement|) * |shock| * |deposits| :=
+        add_le_add hbase hshock
+    _ = |reserves| + |requirement| * |deposits| +
+        (|depositReserveRatio| + |requirement|) * |shock| * |deposits| := by
+      rw [abs_mul]
+
+#print axioms source_settlement_imbalance_abs_le_primitive_terms
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
