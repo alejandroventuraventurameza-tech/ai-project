@@ -2818,5 +2818,86 @@ theorem source_reserve_log_floor_all_admissible_histories
 
 #print axioms source_reserve_log_floor_all_admissible_histories
 
+
+/-- A single uniform SOURCE deposit-rate ceiling and a policy-invariant
+positive reserve-rate floor yield the same OTC exposure coefficient
+at every admissible aggregate history and every supported payment.
+This proves a relative-to-equity bound, not a level bound if equity
+is unbounded, and does not establish bank optimality or GE existence. -/
+theorem source_otc_equity_exposure_uniform_all_admissible_histories
+    (P : Primitives S) (I : InheritedState) (X : Allocation S)
+    (lowerLog : ℝ)
+    (hpolicy : MonetaryPolicyRules P I X)
+    (hpersistence : 0 ≤ P.reserveRatePersistence)
+    (hinitial : ∀ h : History S 0,
+      FirmHistoryAdmissible P 0 h →
+      lowerLog ≤
+        P.reserveRatePersistence * Real.log I.reserveRateLag +
+        (1 - P.reserveRatePersistence) *
+          (Real.log P.reserveRateSteady +
+            P.inflationResponse * Real.log (X.inflation 0 h) +
+            P.outputResponse * Real.log (X.output 0 h / P.outputReference)) +
+        P.reserveRateInnovation (currentState h))
+    (hcontinuation : ∀ (t : ℕ) (h : History S t) (s : S),
+      FirmHistoryAdmissible P (t + 1) (childHistory h s) →
+      (1 - P.reserveRatePersistence) * lowerLog ≤
+        (1 - P.reserveRatePersistence) *
+          (Real.log P.reserveRateSteady +
+            P.inflationResponse *
+              Real.log (X.inflation (t + 1) (childHistory h s)) +
+            P.outputResponse *
+              Real.log (X.output (t + 1) (childHistory h s) /
+                P.outputReference)) +
+          P.reserveRateInnovation s)
+    (hbank : BankFeasible P I X (fullRetentionCommonBankPlan P X))
+    (hdomain : PositiveDomain P X)
+    (hfirmBox : FirmPriceRateBounds X)
+    (hotc : OTCNegotiatedRateRule P X) :
+    ∃ depositCeiling : ℝ,
+      0 ≤ depositCeiling ∧
+      ∀ (t : ℕ) (h : History S t) (omega : P.paymentSupport),
+        FirmHistoryAdmissible P t h →
+        |bankOTCInterbankAt P X t h (X.bankTightness t h)
+            (X.reservesPrePayment t h) (X.bankDeposits t h) omega| ≤
+          (1 + P.bankDepositCap +
+            P.bankDepositCap * 1 +
+            P.bankDepositCap * (depositCeiling / Real.exp lowerLog + 1) *
+              sourcePaymentShockAbsBound P) * X.bankEquity t h := by
+  rcases hfirmBox with ⟨lower, upper, hlower, horder, hall⟩
+  have hupper0 : 0 ≤ upper := by
+    have hlt : 0 < upper := lt_of_lt_of_le hlower horder
+    exact le_of_lt hlt
+  refine ⟨upper, hupper0, ?_⟩
+  intro t h omega hh
+  have hlog := source_reserve_log_floor_all_admissible_histories
+    P I X lowerLog hpolicy hpersistence hinitial hcontinuation
+      t h hh
+  have hrate0 : 0 < X.reserveRate t h := by
+    rcases hdomain t h hh with ⟨_, _, _, _, _, _, _, _, hreserve, _⟩
+    exact hreserve
+  have hfloor : Real.exp lowerLog ≤ X.reserveRate t h :=
+    source_reserve_rate_floor_of_log_floor
+      (X.reserveRate t h) lowerLog hrate0 hlog
+  have hrateBox := hall t h
+  have hdeposit0 : 0 ≤ X.depositRate t h :=
+    le_trans (le_of_lt hlower) hrateBox.1
+  have hdepositCeiling : X.depositRate t h ≤ upper :=
+    le_trans hrateBox.2.1 hrateBox.2.2.1
+  have hratio :
+      |X.depositRate t h / X.reserveRate t h| ≤
+        upper / Real.exp lowerLog :=
+    source_deposit_reserve_rate_ratio_abs_le_of_level_envelopes
+      (X.depositRate t h) (X.reserveRate t h)
+      (Real.exp lowerLog) upper hdeposit0
+      (Real.exp_pos _) hfloor hdepositCeiling
+  have hratioBound0 : 0 ≤ upper / Real.exp lowerLog :=
+    div_nonneg hupper0 (le_of_lt (Real.exp_pos _))
+  have htight := (hotc t h hh).1
+  exact source_otc_position_abs_le_equity_of_positive_domain
+    P I X t h omega (upper / Real.exp lowerLog)
+    hh hbank hdomain htight hratioBound0 hratio
+
+#print axioms source_otc_equity_exposure_uniform_all_admissible_histories
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
