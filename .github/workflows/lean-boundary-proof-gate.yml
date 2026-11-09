@@ -138,6 +138,10 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_unique_reduced_prefix_rate_of_six
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_capital_cost_hi_box_from_source
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_unique_reduced_prefix_rate_of_five
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_worker_consumption_scale_upper
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_deposit_rate_hi_source_lower
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_worker_hi_box_from_source
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_unique_reduced_prefix_rate_of_four
           LEAN
           lake env lean BoundaryProofAudit.lean > "$GITHUB_WORKSPACE/lean-boundary-logs/axioms.log" 2>&1 || {
             cat "$GITHUB_WORKSPACE/lean-boundary-logs/axioms.log"
