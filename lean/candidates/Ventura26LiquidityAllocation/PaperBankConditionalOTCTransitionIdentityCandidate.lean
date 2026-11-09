@@ -2262,7 +2262,7 @@ theorem source_otc_position_nonnegative_on_settlement_deficit
     P.matchingIntensity tightness P.matching_intensity_pos htightness).1
   unfold bankOTCInterbankAt
   simp only [hdeficit, if_pos]
-  exact mul_nonneg hfraction (neg_nonneg.mpr hdeficit.le)
+  nlinarith [mul_nonneg hfraction (neg_nonneg.mpr hdeficit.le)]
 
 /-- The literal OTC settlement position is lending on a surplus:
 the negative OTC sign is economically meaningful, not a violation
@@ -2285,7 +2285,7 @@ theorem source_otc_position_nonpositive_on_settlement_surplus
       (X.depositRate t h / X.reserveRate t h)
       deposits (P.paymentShock omega) < 0 := not_lt.mpr hsurplus
   simp only [hnotdeficit, if_neg]
-  exact neg_nonpos.mpr (mul_nonneg hfraction hsurplus)
+  nlinarith [mul_nonneg hfraction hsurplus]
 
 #print axioms source_otc_position_nonnegative_on_settlement_deficit
 #print axioms source_otc_position_nonpositive_on_settlement_surplus
