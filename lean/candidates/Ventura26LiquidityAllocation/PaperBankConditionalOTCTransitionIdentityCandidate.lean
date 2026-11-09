@@ -2552,5 +2552,30 @@ theorem source_otc_position_abs_le_equity_of_positive_domain
 #print axioms source_reserve_requirement_abs_le_one_of_positive_domain
 #print axioms source_otc_position_abs_le_equity_of_positive_domain
 
+
+/-- A lower envelope for reserve remuneration and an upper envelope for
+the deposit rate bound their ratio. Positivity alone does not furnish
+these envelopes uniformly along infinite histories. -/
+theorem source_deposit_reserve_rate_ratio_abs_le_of_level_envelopes
+    (depositRate reserveRate reserveFloor depositCeiling : ℝ)
+    (hdeposit0 : 0 ≤ depositRate)
+    (hfloor0 : 0 < reserveFloor)
+    (hfloor : reserveFloor ≤ reserveRate)
+    (hcap : depositRate ≤ depositCeiling) :
+    |depositRate / reserveRate| ≤ depositCeiling / reserveFloor := by
+  have hreserve0 : 0 < reserveRate := lt_of_lt_of_le hfloor0 hfloor
+  have hcap0 : 0 ≤ depositCeiling := le_trans hdeposit0 hcap
+  have hratio0 : 0 ≤ depositRate / reserveRate :=
+    div_nonneg hdeposit0 (le_of_lt hreserve0)
+  rw [abs_of_nonneg hratio0]
+  apply (div_le_div_iff₀ hreserve0 hfloor0).2
+  calc
+    depositRate * reserveFloor ≤ depositCeiling * reserveFloor :=
+      mul_le_mul_of_nonneg_right hcap (le_of_lt hfloor0)
+    _ ≤ depositCeiling * reserveRate :=
+      mul_le_mul_of_nonneg_left hfloor hcap0
+
+#print axioms source_deposit_reserve_rate_ratio_abs_le_of_level_envelopes
+
 end ProposedBankConditionalOTCTransitionIdentity
 end Ventura26LiquidityAllocation
