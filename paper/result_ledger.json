@@ -135,10 +135,10 @@
       "title": "Raíz reducida y obstrucción nominal del candidato SOURCE",
       "statement_sha256": "2421b7787dbac89c73f0f04006bea7f769071352b0c0d036578b192d05c4327e",
       "proof_sha256": "a2a2ad8e6696a57e131ab9a268114e0754ee6a64ec021c7080f681a8e7419fa6",
-      "written_review": "source_specific_kernel_verified_negative",
-      "formalization_status": "lean_kernel_verified_source_candidate_rejection",
-      "lean_file": "lean/candidates/Ventura26LiquidityAllocation/FirmFaceUniformGapCandidate.lean",
-      "lean_declaration": "Ventura26LiquidityAllocation.ProposedFirmFaceUniformGap.source_boundary_candidate_not_competitive_equilibrium",
+      "written_review": "targeted_source_specific_negative_review",
+      "formalization_status": "not_run",
+      "lean_file": null,
+      "lean_declaration": null,
       "disposition": "retained_with_revised_claim",
       "author_full_review": false,
       "paper_number": "4.1",
@@ -821,7 +821,7 @@
     "Valued-portfolio terminal bound with positive consumption lower bound.",
     "Risk/intervention wedge eta < c_star * abs(h), with no fixed-risk h-to-zero claim."
   ],
-  "formalization_scope": "SOURCE-specific: the revised proposition prop:boundary_equilibrium records a Lean-kernel-checked negative result for the rate-dependent inherited-state construction (commit 3c881026, boundary gate 42902110667). It does not prove any complete frozen-inheritance dynamic equilibrium and does not promote the other 56 numbered results to source-matched Lean coverage.",
+  "formalization_scope": "A related SOURCE-specific negative theorem is kernel-verified at commit 3c881026, boundary gate 42902110667, but no complete one-to-one equivalence of any of the 57 numbered paper claims is asserted by the conservative crosswalk. The revised proposition prop:boundary_equilibrium remains not_run for full paper-to-Lean semantic equivalence; the negative SOURCE candidate result is documented as related evidence. Complete frozen-inheritance dynamic equilibrium remains unproved.",
   "source_before_irf_revision_sha256": "a89e83f02cb8745a6c59eeb3c047bcb335033a18eae4b0ea538ce47a61cf7764",
   "page_numbers_scope": "Historical numbers and PDF pages from the pre-compaction 57-result ledger are stale: the original technical text is now explicitly in the appendix, and the main conditional proposition was moved unchanged. Re-index against the compiled compact PDF before delivery.",
   "editorial_scope_revision": {
@@ -850,6 +850,7 @@
     "numbered_result": "prop:boundary_equilibrium",
     "status": "verified_SOURCE_candidate_rejection_only",
     "interpretive_limit": "The inherited state boundaryInitialState G R moves with R; no global nonexistence or stationary-frozen-inheritance equilibrium result is certified.",
-    "new_statement_and_proof_hashes": "Recomputed from the exact parser used by code/v0m/verify_v0m.py; other 56 result hashes unchanged."
+    "new_statement_and_proof_hashes": "Recomputed from the exact parser used by code/v0m/verify_v0m.py; other 56 result hashes unchanged.",
+    "paper_claim_equivalence": "not_established_by_57_row_semantic_crosswalk"
   }
 }
