@@ -6,6 +6,9 @@ on:
       - .github/workflows/stencil-transition-bridge.yml
       - code/irf/audit_stencil_transition_bridge.py
       - code/irf/audit_stencil_nonlinear_16_rows.py
+      - code/irf/audit_python_lean_prefix_row_permutation.py
+      - lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean
+      - lean/candidates/Ventura26LiquidityAllocation/LocalScalarAugmented34SourceCandidate.lean
       - code/irf/finite_irf.py
       - code/irf/exact_linear_tail_power_certificate.py
       - code/irf/inputs/rational_preconditioners.json
@@ -20,6 +23,9 @@ on:
       - .github/workflows/stencil-transition-bridge.yml
       - code/irf/audit_stencil_transition_bridge.py
       - code/irf/audit_stencil_nonlinear_16_rows.py
+      - code/irf/audit_python_lean_prefix_row_permutation.py
+      - lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean
+      - lean/candidates/Ventura26LiquidityAllocation/LocalScalarAugmented34SourceCandidate.lean
       - code/irf/finite_irf.py
       - code/irf/exact_linear_tail_power_certificate.py
       - code/irf/inputs/rational_preconditioners.json
@@ -53,6 +59,8 @@ jobs:
         run: python -m pip install --quiet numpy==2.2.6
       - name: Compare nonlinear 16-row derivatives against hand interval stencil
         run: python code/irf/audit_stencil_nonlinear_16_rows.py
+      - name: Verify 33-row permutation and separate SOURCE funding-dual 34th row
+        run: python code/irf/audit_python_lean_prefix_row_permutation.py
       - name: Archive traceable arithmetical certificates
         if: always()
         uses: actions/upload-artifact@v7
@@ -62,5 +70,6 @@ jobs:
             code/irf/output/exact_linear_tail_power_certificate.json
             code/irf/output/stencil_transition_bridge.json
             code/irf/output/stencil_nonlinear_16_rows_audit.json
+            code/irf/output/lean_python_33_row_permutation.json
           if-no-files-found: warn
           retention-days: 30
