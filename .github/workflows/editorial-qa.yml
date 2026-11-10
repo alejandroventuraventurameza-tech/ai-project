@@ -25,6 +25,16 @@ jobs:
           python -m pip install --disable-pip-version-check --only-binary=:all: numpy==2.3.5
       - name: Check directed stationary scalar rate and renewal bridge
         run: python code/v0m/certified_ift/audit_stationary_scalar_bridge.py
+      - name: Audit same-predecessor S/B local exclusion and bounded root search
+        run: python code/irf/frozen_same_predecessor_branch_audit.py
+      - name: Preserve S/B root and obstruction evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: same-predecessor-branch-diagnostic
+          path: code/irf/output/same_predecessor_branch_audit.json
+          if-no-files-found: warn
+          retention-days: 30
       - name: Audit deterministic boundary worker FOC and cubic wage
         run: python code/irf/audit_boundary_labor.py
       - name: Verify all 33 reduced-prefix rows independently
