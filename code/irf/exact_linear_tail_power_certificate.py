@@ -20,6 +20,9 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 SOURCE = HERE / "inputs" / "rational_preconditioners.json"
 OUT = HERE / "output" / "exact_linear_tail_power_certificate.json"
+EXPECTED_SOURCE_SHA256 = (
+    "d0cef14050de9f4725e51e5cd28b1ea77e33733dfb2c78d2e38a193200337e94"
+)
 
 SIZE = 6
 BLOCK = 48
@@ -82,6 +85,9 @@ def directed_ceil(x, decimal_places=12):
 
 
 def main():
+    source_hash = hashlib.sha256(SOURCE.read_bytes()).hexdigest()
+    if source_hash != EXPECTED_SOURCE_SHA256:
+        raise AssertionError("Pinned decimal F0 source hash changed")
     f0 = read_rational_matrix(SOURCE)
     powers = identity()
     entries = [{
@@ -139,7 +145,7 @@ def main():
             "decimal literals of pinned 6x6 F0 interpreted as exact rationals; "
             "NOT the exact source DSGE nor nonlinear continuation"
         ),
-        "source_sha256": hashlib.sha256(SOURCE.read_bytes()).hexdigest(),
+        "source_sha256": source_hash,
         "block_power": BLOCK,
         "strict_contraction_norm_bound": "24/25",
         "norm_F0_48_lower_12dp": directed_floor(contraction),
