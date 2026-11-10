@@ -397,6 +397,108 @@ theorem source_common_pledge_one_log_zero_iff_original_row_zero
 #print axioms source_L_binding_positive_dual_is_complementary
 #print axioms source_common_pledge_one_log_zero_iff_original_row_zero
 
+/-! ## Three further log/level row conversions from actual SOURCE
+
+These are generic, source-literal ZERO-SET equivalences, not a
+numerical calibration or a theorem that all 33 Jacobian rows match.
+The worker expression retains the SOURCE's generic elasticities;
+Python's hardcoded unity elasticities require a separate parameter
+identification.
+-/
+
+/-- The SOURCE household deposit Euler uses one minus the ratio,
+while the Python system uses the log of that ratio. The factor has
+the opposite SIGN, despite identical zeros on the positive domain. -/
+theorem source_household_euler_log_zero_iff_original_row_zero
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (d : LocalPrefixDateData)
+    (hpositive : 0 <
+      d.controls.depositRate *
+        (P.workerDiscount *
+          crraMarginal P.workerRiskAversion d.nextControls.workerConsumption /
+          crraMarginal P.workerRiskAversion d.controls.workerConsumption) /
+          d.nextControls.inflation) :
+    Real.log
+        (d.controls.depositRate *
+          (P.workerDiscount *
+            crraMarginal P.workerRiskAversion d.nextControls.workerConsumption /
+            crraMarginal P.workerRiskAversion d.controls.workerConsumption) /
+          d.nextControls.inflation) = 0 ↔
+      localReducedRemainingResidual P d 4 = 0 := by
+  change Real.log
+      (d.controls.depositRate *
+        (P.workerDiscount *
+          crraMarginal P.workerRiskAversion d.nextControls.workerConsumption /
+          crraMarginal P.workerRiskAversion d.controls.workerConsumption) /
+        d.nextControls.inflation) = 0 ↔
+    (1 - d.controls.depositRate *
+      (P.workerDiscount *
+        crraMarginal P.workerRiskAversion d.nextControls.workerConsumption /
+        crraMarginal P.workerRiskAversion d.controls.workerConsumption) /
+      d.nextControls.inflation = 0)
+  have h := positive_log_zero_iff_ratio_minus_one_zero _ hpositive
+  constructor
+  · intro hz
+    have heq := h.mp hz
+    linarith only [heq]
+  · intro hz
+    apply h.mpr
+    linarith only [hz]
+
+/-- The original SOURCE labor-supply row is a WAGE minus its exact
+CRRA/Frisch marginal-disutility expression. Its log-ratio has the
+same zero set under strictly positive wage and labor-cost value. -/
+theorem source_worker_labor_log_zero_iff_original_row_zero
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (d : LocalPrefixDateData)
+    (hwage : 0 < d.controls.wage)
+    (hcost : 0 <
+      P.laborScale *
+        d.controls.workerConsumption ^ P.workerRiskAversion *
+        localPrefixAggregateLabor P d ^ P.laborCurvature) :
+    Real.log (d.controls.wage /
+        (P.laborScale *
+          d.controls.workerConsumption ^ P.workerRiskAversion *
+          localPrefixAggregateLabor P d ^ P.laborCurvature)) = 0 ↔
+      localReducedRemainingResidual P d 3 = 0 := by
+  change Real.log (d.controls.wage /
+      (P.laborScale *
+        d.controls.workerConsumption ^ P.workerRiskAversion *
+        localPrefixAggregateLabor P d ^ P.laborCurvature)) = 0 ↔
+    (d.controls.wage -
+      P.laborScale *
+        d.controls.workerConsumption ^ P.workerRiskAversion *
+        localPrefixAggregateLabor P d ^ P.laborCurvature = 0)
+  exact positive_log_ratio_zero_iff_face_difference_zero _ _
+    hwage hcost
+
+/-- The SOURCE nominal bank-face transition and the Python log
+transition have identical zeros under strict face positivity.
+No bank KKT, resource feasibility, or stochastic OTC claim is made. -/
+theorem source_bank_face_log_zero_iff_original_row_zero
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (d : LocalPrefixDateData)
+    (hnext : 0 < d.nextBankFace)
+    (hpred : 0 <
+      bankRenewalFactor P * d.controls.loanRate *
+        d.currentBankFace / d.controls.inflation) :
+    Real.log (d.nextBankFace /
+      (bankRenewalFactor P * d.controls.loanRate *
+        d.currentBankFace / d.controls.inflation)) = 0 ↔
+      localReducedRemainingResidual P d 0 = 0 := by
+  change Real.log (d.nextBankFace /
+      (bankRenewalFactor P * d.controls.loanRate *
+        d.currentBankFace / d.controls.inflation)) = 0 ↔
+    (d.nextBankFace -
+      bankRenewalFactor P * d.controls.loanRate *
+        d.currentBankFace / d.controls.inflation = 0)
+  exact positive_log_ratio_zero_iff_face_difference_zero _ _
+    hnext hpred
+
+#print axioms source_household_euler_log_zero_iff_original_row_zero
+#print axioms source_worker_labor_log_zero_iff_original_row_zero
+#print axioms source_bank_face_log_zero_iff_original_row_zero
+
 #print axioms source_sub_reduced_is_sdf_pledge_gap
 #print axioms source_eq_reduced_of_pledge_face
 #print axioms row_shear_preserves_zero_set
