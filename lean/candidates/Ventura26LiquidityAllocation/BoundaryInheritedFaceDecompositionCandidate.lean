@@ -19,6 +19,9 @@ namespace ProposedBoundaryInheritedFaceDecomposition
 open ProposedStationaryPrimitives
 open ProposedStationaryInheritedState
 open ProposedStationaryRealScale
+open ProposedBoundaryResourceRoot
+open ProposedBoundaryFirmBridge
+open ProposedBoundaryNormalizationBridge
 open ProposedBoundaryFullPrefix
 open ProposedBoundaryInheritedFaceGate
 
