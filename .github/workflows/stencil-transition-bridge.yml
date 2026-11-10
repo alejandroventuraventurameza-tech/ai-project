@@ -1,0 +1,51 @@
+name: audit-stencil-transition-bridge
+
+on:
+  push:
+    paths:
+      - .github/workflows/stencil-transition-bridge.yml
+      - code/irf/audit_stencil_transition_bridge.py
+      - code/irf/exact_linear_tail_power_certificate.py
+      - code/irf/inputs/rational_preconditioners.json
+      - code/v0m/cotas_2026_10_15/rational_preconditioners.json
+      - code/v0m/cotas_2026_10_15/verified_linear_operator.py
+      - code/v0m/cotas_2026_10_15/verified_linear_bounds.json
+  pull_request:
+    paths:
+      - .github/workflows/stencil-transition-bridge.yml
+      - code/irf/audit_stencil_transition_bridge.py
+      - code/irf/exact_linear_tail_power_certificate.py
+      - code/irf/inputs/rational_preconditioners.json
+      - code/v0m/cotas_2026_10_15/rational_preconditioners.json
+      - code/v0m/cotas_2026_10_15/verified_linear_operator.py
+      - code/v0m/cotas_2026_10_15/verified_linear_bounds.json
+  workflow_dispatch:
+
+concurrency:
+  group: stencil-transition-bridge-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rational-coordinate-bridge:
+    name: Validate pinned 80-digit stencil and 48-step robust certificate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Exact rational power and matrix-neighborhood bound
+        run: python code/irf/exact_linear_tail_power_certificate.py
+      - name: Exact coordinates and pinned 80-digit interval transfer
+        run: python code/irf/audit_stencil_transition_bridge.py
+      - name: Archive traceable arithmetical certificates
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: pinned-stencil-matrix-bridge
+          path: |
+            code/irf/output/exact_linear_tail_power_certificate.json
+            code/irf/output/stencil_transition_bridge.json
+          if-no-files-found: warn
+          retention-days: 30
