@@ -197,6 +197,7 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryPredeterminedState.same_inherited_state_consistency_iff
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryPredeterminedState.stationary_inherited_gap_zero
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryPredeterminedState.frozen_stationary_gap_zero_after_intervention
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryPredeterminedState.boundary_initial_state_ne_stationary_for_all_boundary_rates
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryPredeterminedState.source_boundary_initial_state_ne_stationary_predecessor
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceGate.inheritedNominalFaceConsistency_iff_gap_zero
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceGate.sourceBoundaryInheritedFaceConsistency_iff_gap_zero
