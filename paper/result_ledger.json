@@ -1,6 +1,6 @@
 {
   "author": "Alejandro Ventura",
-  "paper_sha256": "fe965e5459a6013be82c33eb1414d07d676c22a0974602e02f881c834977dd8b",
+  "paper_sha256": "d3be9cb7cd7b5122ce20ac2d4dd69269d3a336d38fa54a757ff01f5131a893ba",
   "numbered_results": 57,
   "formalization_started": true,
   "results": [
@@ -132,14 +132,14 @@
     },
     {
       "label": "prop:boundary_equilibrium",
-      "title": "Un equilibrio en la frontera de L",
-      "statement_sha256": "f86130d08e406f0effb845fb0b729311aa31de4f98ca04e2dbdf3f1f0cd844cd",
-      "proof_sha256": "d353da6204d1bd3d991281a881f00caf1bc32566958a6880f503f8ce1335506f",
-      "written_review": "scoped_conditional_argument",
-      "formalization_status": "not_run",
-      "lean_file": null,
-      "lean_declaration": null,
-      "disposition": "retained",
+      "title": "Raíz reducida y obstrucción nominal del candidato SOURCE",
+      "statement_sha256": "2421b7787dbac89c73f0f04006bea7f769071352b0c0d036578b192d05c4327e",
+      "proof_sha256": "a2a2ad8e6696a57e131ab9a268114e0754ee6a64ec021c7080f681a8e7419fa6",
+      "written_review": "source_specific_kernel_verified_negative",
+      "formalization_status": "lean_kernel_verified_source_candidate_rejection",
+      "lean_file": "lean/candidates/Ventura26LiquidityAllocation/FirmFaceUniformGapCandidate.lean",
+      "lean_declaration": "Ventura26LiquidityAllocation.ProposedFirmFaceUniformGap.source_boundary_candidate_not_competitive_equilibrium",
+      "disposition": "retained_with_revised_claim",
       "author_full_review": false,
       "paper_number": "4.1",
       "pdf_page": 28
@@ -821,7 +821,7 @@
     "Valued-portfolio terminal bound with positive consumption lower bound.",
     "Risk/intervention wedge eta < c_star * abs(h), with no fixed-risk h-to-zero claim."
   ],
-  "formalization_scope": "Preliminary isolated campaign on the previous source; no numbered result promoted to integrated source-matched Lean coverage.",
+  "formalization_scope": "SOURCE-specific: the revised proposition prop:boundary_equilibrium records a Lean-kernel-checked negative result for the rate-dependent inherited-state construction (commit 3c881026, boundary gate 42902110667). It does not prove any complete frozen-inheritance dynamic equilibrium and does not promote the other 56 numbered results to source-matched Lean coverage.",
   "source_before_irf_revision_sha256": "a89e83f02cb8745a6c59eeb3c047bcb335033a18eae4b0ea538ce47a61cf7764",
   "page_numbers_scope": "Historical numbers and PDF pages from the pre-compaction 57-result ledger are stale: the original technical text is now explicitly in the appendix, and the main conditional proposition was moved unchanged. Re-index against the compiled compact PDF before delivery.",
   "editorial_scope_revision": {
@@ -842,5 +842,14 @@
     "formalization_status": "No result promoted from not_run by layout revision",
     "caveat": "Length in compiled PDF and ledger page numbers require verification; preserving 57 theorem statements does not imply 57 source-matched Lean proofs.",
     "page_gate": "Compile-time IE_COMPACT_BODY_PAGES marker required to satisfy 8--20 body pages, before bibliography/appendix"
+  },
+  "source_nominal_gap_review": {
+    "date": "2026-11-10",
+    "theorem_commit": "3c881026632f78122566f21abd30aff4391ee04b",
+    "kernel_gate_run": 42902110667,
+    "numbered_result": "prop:boundary_equilibrium",
+    "status": "verified_SOURCE_candidate_rejection_only",
+    "interpretive_limit": "The inherited state boundaryInitialState G R moves with R; no global nonexistence or stationary-frozen-inheritance equilibrium result is certified.",
+    "new_statement_and_proof_hashes": "Recomputed from the exact parser used by code/v0m/verify_v0m.py; other 56 result hashes unchanged."
   }
 }
