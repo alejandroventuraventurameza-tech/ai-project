@@ -20,7 +20,7 @@ open ProposedStationaryPrimitives
 open ProposedStationaryInheritedState
 open ProposedStationaryRealScale
 open ProposedBoundaryResourceRoot
-open ProposedBoundaryFirmBridge
+open ProposedBoundaryBridge
 open ProposedBoundaryNormalizationBridge
 open ProposedBoundaryFullPrefix
 open ProposedBoundaryInheritedFaceGate
@@ -38,7 +38,6 @@ theorem inheritedNominalFaceGap_firm_bank_update
       (newBankFace - I.bankFace) / bankRenewalFactor P := by
   unfold inheritedNominalFaceGap
   simp only [sum_firmType_eq_H_add_L]
-  dsimp
   ring
 
 /-- Policy surprises never alter this inherited accounting gap, provided
