@@ -623,6 +623,27 @@ def validate_margins(rows, branch):
     minima["tightness_upper"] = min(1.0 - row["tightness"] for row in rows)
     minima["reserve_to_deposit_rate"] = min(row["deposit_rate"] - row["reserve_rate"] for row in rows)
     minima["deposit_to_loan_rate"] = min(row["loan_rate"] - row["deposit_rate"] for row in rows)
+    # The continuation uses B for BOTH firms from date 1 onwards, in
+    # either date-0 branch. Previously only H's dual (and L's date-0
+    # condition) was checked; this left later L KKT admissibility UNGATED.
+    # Here both source complementary variables are required in their
+    # active-set locations, without pretending KKT is globally sufficient.
+    if len(rows) < 2:
+        raise AssertionError("Need at least two dates for recurrent KKT checks")
+    kkt_tol = 1e-9
+    minima["H_binding_face_all_dates_abs_tolerance"] = (
+        kkt_tol - max(abs(row["collateral_slack_H"]) for row in rows)
+    )
+    minima["L_binding_face_from_date1_abs_tolerance"] = (
+        kkt_tol - max(abs(row["collateral_slack_L"]) for row in rows[1:])
+    )
+    minima["L_strict_funding_dual_from_date1"] = min(
+        row["collateral_dual_L"] for row in rows[1:]
+    )
+    minima["L_complementarity_product_from_date1_tolerance"] = (
+        kkt_tol - max(abs(row["collateral_slack_L"] *
+                          row["collateral_dual_L"]) for row in rows[1:])
+    )
     if branch == "slack":
         minima["date0_L_slack"] = rows[0]["collateral_slack_L"]
         minima["date0_L_dual_abs_tolerance"] = 1e-9 - abs(rows[0]["collateral_dual_L"])
