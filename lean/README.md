@@ -1,5 +1,9 @@
 # Estado de formalización y alcance de esta entrega
 
+**Actualización SOURCE (10 de noviembre de 2026):** el certificado literal del sistema reducido, incluidos ambos signos del residual y la brecha financiera heredada, superó compilación y auditoría de axiomas en el [gate #42902110667](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42902110667), para el commit `3c881026`. El alcance y las limitaciones constan en [SOURCE_CERTIFICATE_STATUS_2026-11-10.md](SOURCE_CERTIFICATE_STATUS_2026-11-10.md). Este certificado no prueba la existencia de un equilibrio dinámico con estado heredado fijo ni la totalidad de las afirmaciones del manuscrito.
+
+**La descripción de la campaña preliminar que sigue es histórica** y se refiere a otro alcance y otras revisiones de código; no invalida ni amplía el certificado específico SOURCE anterior.
+
 La campaña preliminar en un clon aislado de AppliedModelingLib produjo pruebas
 auxiliares y construcciones condicionales. Se trabajó sobre la fuente anterior
 SHA256 `a89e83f02cb8745a6c59eeb3c047bcb335033a18eae4b0ea538ce47a61cf7764`.
