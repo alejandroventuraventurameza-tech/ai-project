@@ -194,6 +194,8 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.normalized_source_resource_residual_exact
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.source_normalization_factor_pos
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.narrow_endpoints_source_normalization_exact
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.narrow_left_negative_iff_normalized_negative
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.narrow_right_positive_iff_normalized_positive
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFaceGapFiscalReduction.source_gap_eq_at_zero_fiscal
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFaceGapFiscalReduction.uniform_gap_from_zero_fiscal_reference
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFaceGapFiscalReduction.noCompetitiveEquilibrium_from_zero_fiscal_reference
