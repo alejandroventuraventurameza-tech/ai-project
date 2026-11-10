@@ -100,7 +100,7 @@ jobs:
         working-directory: upstream
         run: |
           set -euo pipefail
-          lake build Ventura26LiquidityAllocation.FirmFaceUniformGapCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
+          lake build Ventura26LiquidityAllocation.FrozenInheritanceImpactPrefixCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
             tail -n 160 "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log"
             exit 1
           }
@@ -111,7 +111,7 @@ jobs:
         run: |
           set -euo pipefail
           cat > BoundaryProofAudit.lean <<'LEAN'
-          import Ventura26LiquidityAllocation.FirmFaceUniformGapCandidate
+          import Ventura26LiquidityAllocation.FrozenInheritanceImpactPrefixCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryWorkerLabor.boundary_full_prefix_equations_from_root
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.output_ratio_fifteenth_power
@@ -227,6 +227,13 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceUniformGap.source_uniform_firm_face_decline_gt_11_percent
           #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceUniformGap.source_uniform_inherited_nominal_face_gap_gt_eight_percent
           #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceUniformGap.source_boundary_candidate_not_competitive_equilibrium
+          #print axioms Ventura26LiquidityAllocation.ProposedFrozenInheritanceImpactPrefix.dateZero_predetermined_fields_exact
+          #print axioms Ventura26LiquidityAllocation.ProposedFrozenInheritanceImpactPrefix.dateZero_four_instruments_exact
+          #print axioms Ventura26LiquidityAllocation.ProposedFrozenInheritanceImpactPrefix.dateOne_four_instruments_unperturbed
+          #print axioms Ventura26LiquidityAllocation.ProposedFrozenInheritanceImpactPrefix.inherited_nominal_faces_consistent_for_every_intervention
+          #print axioms Ventura26LiquidityAllocation.ProposedFrozenInheritanceImpactPrefix.sourceLike_dateZero_innovation_fields
+          #print axioms Ventura26LiquidityAllocation.ProposedFrozenInheritanceImpactPrefix.moving_SOURCE_capital_below_frozen_predecessor
+          #print axioms Ventura26LiquidityAllocation.ProposedFrozenInheritanceImpactPrefix.boundary_versus_frozen_dateZero_capital
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowDepositBox.source_narrow_left_worker_consumption_lower
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.normalized_source_resource_residual_exact
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.source_normalization_factor_pos
