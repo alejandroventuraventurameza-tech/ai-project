@@ -57,7 +57,59 @@ En particular, F0^k x converge a cero y
 
 La aritmetica exacta produce una cota mas ajustada sobre la fraccion de la suma de los 48 primeros terminos y uno menos la norma exacta del bloque: es estrictamente menor que 2274.018921091477. Es una cota sobre la serie de normas de esta MATRIZ DECIMAL; no es una cota posterior del error de una solucion finita del DSGE.
 
-## 3. Proposicion N: implicacion no lineal CONDICIONAL
+## 3. Proposicion R: contraccion robusta ante error de matriz
+
+Esta proposicion es particularmente importante para la transferencia SOURCE:
+no es necesario suponer identidad literal de todos los decimales del Jacobiano
+si puede probarse una cota de error matricial expresada en LA MISMA BASE de seis estados.
+
+**Hipotesis cuantitativa.** Sea A una matriz REAL arbitraria de 6 por 6
+(no necesariamente racional) con
+
+\[
+ \|A-F_0\|_\infty\leq\delta:=\frac1{10000}.
+\]
+
+**Conclusion certificada por cotas racionales:** para TODAS esas matrices A,
+
+\[
+ \|A^{48}\|_\infty<\frac{49}{50}<1,\qquad
+ \max_{0\le r<48}\|A^r\|_\infty<7.
+\]
+
+Luego, para cualquier k entero no negativo y cualquier x en R6,
+
+\[
+ \|A^k x\|_\infty\leq
+ 7\left(\frac{49}{50}\right)^{\lfloor k/48\rfloor}\|x\|_\infty.
+\]
+
+**Demostracion.** Escriba B=F0 y E=A-B. La identidad telescopica exacta
+
+\[
+ A^n=B^n+\sum_{j=0}^{n-1}B^{n-1-j}EA^j
+\]
+
+permite definir a_0=1 y, para n=1,...,48,
+
+\[
+ a_n=\|B^n\|_\infty+
+       \delta\sum_{j=0}^{n-1}\|B^{n-1-j}\|_\infty a_j.
+\]
+
+Por induccion, ||A^n||<=a_n. El codigo evalua las 49 normas de B y
+los 49 mayorantes a_n exactamente como fracciones; comprueba
+a_48<49/50 y max(a_0,...,a_47)<7 sin aceptar aproximaciones flotantes.
+La conclusion para k=48m+r vuelve a seguir de la submultiplicatividad.
+Fin.
+
+**Brecha que sigue abierta:** NO se ha demostrado que la derivada del
+operador SOURCE, en las seis coordenadas EXACTAMENTE correspondientes,
+satisfaga ||D(Phi)(0)-F0||<=1/10000. Se ofrece una condicion verificable,
+no se declara que la economia cumpla esa condicion. Tampoco se prueba
+una grafica no lineal invariante.
+
+## 4. Proposicion N: implicacion no lineal CONDICIONAL
 
 **Supuestos.** Existe una ley local \(\Phi:U\to\mathbb R^6\) de clase C1 en un entorno abierto U de cero, con \(\Phi(0)=0\) y \(D\Phi(0)=F_0\) **exactamente**.
 
@@ -73,13 +125,13 @@ La aritmetica exacta produce una cota mas ajustada sobre la fraccion de la suma 
 
 **Obligaciones esenciales pendientes:** construir Phi como ley ORIGINAL del equilibrio con una grafica de controles compatible, demostrar que es C1 en el conjunto activo, que su derivada es exactamente el F0 fijado, que los estados de fecha dos de S/B estan dentro del radio valido y que las KKT se cumplen a lo largo de la trayectoria. La proposicion N no establece existencia ni unicidad de equilibrios a partir de los datos disponibles.
 
-## 4. Por que la cola lineal no cierra la TVC economica
+## 5. Por que la cola lineal no cierra la TVC economica
 
 La contraccion de seis estados no prueba por si sola la sumabilidad de beneficios o dividendos descontados en todo el arbol de pagos; tampoco la propiedad de optimalidad dinamica BankContinuationOptimalAt, la factibilidad bancaria robusta o la correspondencia de 34 filas de SOURCE con el prefijo reducido de 33 ecuaciones. La continuidad bajo dos cierres terminales finitos T=8,20,40,80,160 es evidencia NUMERICA; su diferencia puede ser no monotona y no se controla con una cota aislada sobre F0.
 
 Tampoco se infiere seleccion endogena de rama, causalidad ni una mayor tasa de crecimiento tendencial. Un crecimiento persistente requiere un mecanismo de acumulacion no estacionario y sus propias condiciones de equilibrio.
 
-## 5. Siguiente compuerta rigurosa
+## 6. Siguiente compuerta rigurosa
 
 (1) Construir la ley no lineal y la grafica de controles satisfaciendo las 16 ecuaciones originales de recurrencia en un dominio de estados positivo. (2) Demostrar igualdad de Jacobianos en el modelo fuente y obtener un radio explicito mediante aritmetica intervalar, no asumirlo. (3) Acotar la norma de la derivada del mapa de 48 pasos en el dominio, controlando las restricciones de garantia y las esquinas OTC. (4) Verificar optimalidad global, TVC y mercados en todas las historias soportadas. (5) Solo entonces identificar el mecanismo causal y el crecimiento con contrafactuales admisibles.
 
