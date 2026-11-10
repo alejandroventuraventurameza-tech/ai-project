@@ -48,6 +48,33 @@ theorem frozen_stationary_gap_zero_after_intervention
   rw [inheritedNominalFaceGap_initialIntervention_invariant]
   exact stationary_inherited_gap_zero G
 
+/-- Any two date-zero monetary interventions have exactly the same
+inherited nominal-face residual when the predecessor state is identical.
+No equilibrium, optimality or endogenous trajectory is asserted. -/
+theorem same_inherited_state_gap_independent_of_policy
+    (P : Primitives LocalBridgePhase) (I : InheritedState)
+    (v₁ v₂ : InitialPolicyIntervention) :
+    inheritedNominalFaceGap (initialIntervenedPrimitives P v₁) I =
+      inheritedNominalFaceGap (initialIntervenedPrimitives P v₂) I := by
+  calc
+    inheritedNominalFaceGap (initialIntervenedPrimitives P v₁) I =
+        inheritedNominalFaceGap P I :=
+      inheritedNominalFaceGap_initialIntervention_invariant P I v₁
+    _ = inheritedNominalFaceGap (initialIntervenedPrimitives P v₂) I :=
+      (inheritedNominalFaceGap_initialIntervention_invariant P I v₂).symm
+
+/-- Likewise, inherited nominal-face consistency is identical across two
+policy innovations with a fixed predecessor. This concerns one necessary
+equilibrium accounting condition, not complete equilibria. -/
+theorem same_inherited_state_consistency_iff
+    (P : Primitives LocalBridgePhase) (I : InheritedState)
+    (v₁ v₂ : InitialPolicyIntervention) :
+    InheritedNominalFaceConsistency (initialIntervenedPrimitives P v₁) I ↔
+      InheritedNominalFaceConsistency (initialIntervenedPrimitives P v₂) I := by
+  exact
+    (ProposedBoundaryFrozenInheritance.initialIntervention_inheritedNominalFaceConsistency_iff P I v₁).trans
+      (ProposedBoundaryFrozenInheritance.initialIntervention_inheritedNominalFaceConsistency_iff P I v₂).symm
+
 /-- The old SOURCE constructor changes at least the bank face of the
 inherited state: its boundary loan rate exceeds the stationary rate.
 This disqualifies identification of that constructor with a common
@@ -64,6 +91,8 @@ theorem source_boundary_initial_state_ne_stationary_predecessor (G : ℝ) :
 
 #print axioms stationary_inherited_gap_zero
 #print axioms frozen_stationary_gap_zero_after_intervention
+#print axioms same_inherited_state_gap_independent_of_policy
+#print axioms same_inherited_state_consistency_iff
 #print axioms source_boundary_initial_state_ne_stationary_predecessor
 
 end ProposedBoundaryPredeterminedState
