@@ -1,4 +1,42 @@
 CONTINUIDAD DEL PROYECTO EN CHAT
+
+ACTUALIZACION PRIORITARIA: 10 DE NOVIEMBRE DE 2026 (LEER ANTES DEL HISTORIAL)
+Rama de investigación: work/lean-ci-validation-otc-20261106. PR #2 en borrador.
+El commit matemático 3c881026632f78122566f21abd30aff4391ee04b pasó
+Lean boundary proof gate #42902110667: compilación y auditoría de axiomas
+sin sorryAx. Están DEMOSTRADAS sobre SOURCE las dos desigualdades del
+residual (en 1.029135 es negativo; en 1.029136 es positivo), la raíz
+única dentro de ese intervalo y la brecha uniforme de obligaciones
+nominales heredadas superior a 0.08. La parte de firmas supera 0.11;
+la parte bancaria es mayor que -0.03. El teorema
+ProposedFirmFaceUniformGap.source_boundary_candidate_not_competitive_equilibrium
+descarta el candidato SOURCE con el estado inicial boundaryInitialState G R.
+NO demuestra inexistencia de todos los equilibrios dinámicos ni de un
+candidato distinto con inheritedState G fijo: el estado SOURCE depende de R.
+
+Registro de teoremas, cuantificadores, limites y enlace al gate:
+lean/SOURCE_CERTIFICATE_STATUS_2026-11-10.md.
+Se corrigió paper/paper.tex para sustituir la antigua proposición positiva
+"Un equilibrio en la frontera de L" por la raíz REDUCIDA y la obstrucción
+nominal demostrada; referencia histórica LaTeX: prop:boundary_equilibrium.
+Los cambios científicos están en commits a8d75d76, da8def32 y 5bb7f79b.
+El commit 84d785641ce0a2bf701f3d6863e6e1b13f722c21 actualiza las
+huellas SHA-256 de paper/result_ledger.json: 57 resultados retenidos,
+solo el enunciado/prueba de SOURCE alterados. El job code/verify.py de ese
+commit pasó; revisar el estado de la compilación de PDFs y de los otros
+workflows antes de afirmar que la nueva entrega editorial está cerrada.
+
+SIGUIENTE TRABAJO EFECTIVO: (1) compuertas del manuscrito y lectura visual
+PDF (no confundir con la prueba Lean); (2) trasladar a las diapositivas la
+refutación de SOURCE sin borrar resultados reducidos válidos;
+(3) CONSTRUIR un nuevo sistema con inheritedState predeterminado e idéntico
+bajo la intervención monetaria, sus presupuestos y KKT originales;
+(4) resolver y simular las cuatro herramientas (tasa, corredor, balance,
+encaje) con IRF reproducibles, heterogeneidad y mala asignación dinámica.
+No modificar main ni elevar el PR #2 a final sin revisión integral.
+
+FIN DE LA ACTUALIZACION PRIORITARIA. SIGUE EL CONTEXTO HISTORICO.
+
 Autor: Alejandro Ventura. Estado preparado el 5 de noviembre de 2026.
 
 Este es el punto de entrada para retomar el proyecto desde GitHub en la pestaña
