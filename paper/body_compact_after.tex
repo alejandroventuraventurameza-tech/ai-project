@@ -243,9 +243,37 @@ El resto sigue por submultiplicatividad.
 \end{proof}
 Ambos resultados corresponden a una \emph{matriz decimal}
 y a una clase explícita de matrices próximas a ella.
-No se ha demostrado que la derivada fuente pertenezca
-a esa clase: hace falta controlar la diferencia matricial
-en las mismas seis coordenadas con cota $10^{-4}$.
+El verificador intervalar independiente del sistema de
+\emph{16 filas linealizadas a mano} acota, en su propia
+base racional $R_s$, una transición corregida
+$F_{\mathrm{st}}$ mediante
+\[
+ \bigl\|R_s^{-1}(F_{\mathrm{st}}-F_0)R_s\bigr\|_\infty
+ \le \varepsilon_F,\qquad
+ \varepsilon_F<1.617\cdot10^{-47}.
+\]
+Al verificar que la matriz $F_0$ de ambos módulos es
+literalmente idéntica, invertir racionalmente \emph{la base
+del verificador original} y obtener
+$\|R_s\|_\infty\|R_s^{-1}\|_\infty<20.055$, se sigue
+\[
+ \|F_{\mathrm{st}}-F_0\|_\infty
+ \le \|R_s\|_\infty\|R_s^{-1}\|_\infty\varepsilon_F
+ <3.25\cdot10^{-46}<10^{-4}.
+\]
+La conclusión es \emph{condicional a la validez de la cota
+intervalar original} y alcanza únicamente a ese sistema
+linealizado; permite invocar el lema de robustez
+para $F_{\mathrm{st}}$. No se ha demostrado que esta
+transición sea el Jacobiano de las 34 condiciones del
+equilibrio SOURCE de \texttt{EconomicModel.lean}.
+Las bases racionales guardadas en los dos módulos difieren
+ligeramente en once entradas: usar la de IRF para transportar
+sin justificación la cota original sería incorrecto.
+El código independiente
+\path{code/irf/audit_stencil_transition_bridge.py}
+documenta las identidades, el inverso racional y las
+huellas de los archivos auditados.
 
 De hecho, $\|F_0^7\|_\infty>6$: es posible una
 amplificación transitoria aunque la cola lineal decaiga.
