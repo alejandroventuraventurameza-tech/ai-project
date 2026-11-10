@@ -40,6 +40,13 @@ jobs:
           path: code/irf/output/exact_linear_tail_power_certificate.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve audited V0-M-stencil-to-IRF coordinate bound
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-stencil-transition-coordinate-bridge
+          path: code/irf/output/stencil_transition_bridge.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Verify rational frontier endpoint boxes without floating-point acceptance
         run: python code/boundary/verify_endpoint_boxes_exact.py
       - name: Verify SOURCE bank-rate roots and slopes with exact fractions
