@@ -28,6 +28,9 @@ SIZE = 6
 BLOCK = 48
 Q_BOUND = Fraction(24, 25)  # strict upper bound on ||F0^48||_infinity
 M_BOUND = Fraction(61, 10)  # strict upper bound on powers 0,...,47
+DELTA_BOUND = Fraction(1, 10000)  # allowed ||A-F0||_infinity
+ROBUST_Q = Fraction(49, 50)     # strict 48-step norm bound for ANY nearby A
+ROBUST_M = Fraction(7)          # bound on the first 48 powers of ANY nearby A
 
 
 def read_rational_matrix(path):
@@ -98,9 +101,11 @@ def main():
     transient_bound = Fraction(1)
     transient_at = 0
     seventh = None
+    exact_power_norms = [Fraction(1)]
     for n in range(1, BLOCK + 1):
         powers = matmul(powers, f0)
         row_norm = infinity_norm(powers)
+        exact_power_norms.append(row_norm)
         if n < BLOCK and row_norm > transient_bound:
             transient_bound = row_norm
             transient_at = n
@@ -124,6 +129,29 @@ def main():
         raise AssertionError("Expected transient peak at power seven changed")
     if len(entries) != BLOCK + 1:
         raise AssertionError("Incomplete power certificate")
+
+    # Stability is ROBUST to a small but UNPROVED source/decimal gap.
+    # For any real matrix A with ||A-F0||_inf <= DELTA_BOUND, the
+    # telescoping identity yields
+    # A^n = F0^n + sum_(j=0)^(n-1) F0^(n-1-j)*(A-F0)*A^j.
+    # Define a_0=1 and
+    # a_n=||F0^n|| + delta*sum_(j=0)^(n-1)||F0^(n-1-j)||*a_j.
+    # Induction and the operator norm inequality show ||A^n||<=a_n.
+    # All a_n are FRACTIONS; no floating-point acceptance is involved.
+    a = [Fraction(1)]
+    for n in range(1, BLOCK + 1):
+        convolution = sum((
+            exact_power_norms[n - 1 - j]*a[j]
+            for j in range(n)
+        ), Fraction(0))
+        a.append(exact_power_norms[n] + DELTA_BOUND*convolution)
+    robust_transient = max(a[:BLOCK])
+    robust_48 = a[BLOCK]
+    if not robust_48 < ROBUST_Q:
+        raise AssertionError("Exact robust 48-step matrix bound failed")
+    if not robust_transient < ROBUST_M:
+        raise AssertionError("Exact robust transient bound failed")
+
     # A separate strict bound on the sum of powers follows from
     # ||F^(48m+r)|| <= ||F^48||^m ||F^r||, for 0<=r<48.
     # The finite exact sum below is also provided, but the theorem is
@@ -155,6 +183,17 @@ def main():
         "max_norm_lower_12dp": directed_floor(transient_bound),
         "max_norm_upper_12dp": directed_ceil(transient_bound),
         "norm_F0_7_exceeds_exactly": "6",
+        "source_gap_tolerance_for_ANY_real_6x6_matrix": "1/10000",
+        "robust_power_48_majorant_upper_12dp": directed_ceil(robust_48),
+        "robust_transient_majorant_upper_12dp": directed_ceil(robust_transient),
+        "robust_strict_48_step_bound": "49/50",
+        "robust_strict_max_0_to_47_bound": "7",
+        "robust_statement": (
+            "For ANY real 6x6 A such that ||A-F0||_infinity<=1/10000, "
+            "||A^(48m+r)x||_infinity < "
+            "7*(49/50)^m*||x||_infinity for each 0<=r<48 and x != 0. "
+            "The SOURCE Jacobian has NOT been proved to satisfy this bound."
+        ),
         "infinite_sum_of_norms_upper_12dp": directed_ceil(summability_upper),
         "coarse_summability_bound": "48*(61/10)/(1-24/25)=7320",
         "claim": (
@@ -184,6 +223,12 @@ def main():
         "norm_F0_48_upper_12dp": payload["norm_F0_48_upper_12dp"],
         "max_norm_before_48_upper_12dp": payload[
             "max_norm_upper_12dp"
+        ],
+        "robust_48_majorant_upper_12dp": payload[
+            "robust_power_48_majorant_upper_12dp"
+        ],
+        "robust_norm_tolerance": payload[
+            "source_gap_tolerance_for_ANY_real_6x6_matrix"
         ],
         "transient_max_at_n": transient_at,
         "infinite_sum_of_norms_upper_12dp": payload[
