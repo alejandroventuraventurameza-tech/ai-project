@@ -195,6 +195,37 @@ necesarias sobre soluciones finitas. Permanecen abiertas
 la suficiencia dinámica, la continuación económica infinita y
 la regla de selección entre ramas.
 
+\begin{proposition}[Decaimiento por bloques del grafo lineal decimal]
+\label{prop:compact_exact_tail_power}
+Sea $F_0\in\mathbb{Q}^{6\times6}$ la matriz cuyos coeficientes
+son exactamente los literales decimales fijados en el insumo
+de los precondicionadores. La auditoría de fracciones enteras
+verifica $\|F_0^{48}\|_\infty<24/25$ y
+$\max_{0\le r<48}\|F_0^r\|_\infty<61/10$.
+Para todo $x\in\mathbb{R}^6$ y todo $k\ge0$ entero,
+\[
+ \|F_0^kx\|_\infty\le\frac{61}{10}
+ \left(\frac{24}{25}\right)^{\lfloor k/48\rfloor}
+ \|x\|_\infty.
+\]
+\end{proposition}
+\begin{proof}
+Escriba $k=48m+r$, $0\le r<48$. La afirmación se obtiene
+de $F_0^k=(F_0^{48})^mF_0^r$ y de la submultiplicatividad
+de la norma inducida.
+\end{proof}
+El certificado exacto corresponde a la \emph{matriz decimal},
+no a la derivada fuente sin un puente semántico.
+De hecho, $\|F_0^7\|_\infty>6$: es posible una
+amplificación transitoria aunque la cola lineal decaiga.
+Una extensión no lineal requeriría construir y validar una
+ley local $C^1$ cuya derivada en el punto fijo coincidiera
+exactamente con $F_0$, además de verificar sus restricciones,
+optimalidad y terminalidad. Véase el comprobador
+\path{code/irf/exact_linear_tail_power_certificate.py}.
+La proposición no establece una condición de transversalidad
+bancaria ni dos equilibrios competitivos infinitos.
+
 El comando reproducible de entrada es
 \texttt{python code/verify.py}, ejecutado desde la raíz.
 El mismo repositorio contiene archivos de entrada,
