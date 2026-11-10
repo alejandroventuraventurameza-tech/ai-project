@@ -100,7 +100,7 @@ jobs:
         working-directory: upstream
         run: |
           set -euo pipefail
-          lake build Ventura26LiquidityAllocation.BoundaryFaceGapFiscalReductionCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
+          lake build Ventura26LiquidityAllocation.BoundaryNarrowSourceResidualBridgeCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
             tail -n 160 "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log"
             exit 1
           }
@@ -111,7 +111,7 @@ jobs:
         run: |
           set -euo pipefail
           cat > BoundaryProofAudit.lean <<'LEAN'
-          import Ventura26LiquidityAllocation.BoundaryFaceGapFiscalReductionCandidate
+          import Ventura26LiquidityAllocation.BoundaryNarrowSourceResidualBridgeCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryWorkerLabor.boundary_full_prefix_equations_from_root
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.output_ratio_fifteenth_power
@@ -191,6 +191,9 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullFirmBudget.sourceBoundaryLiteralAllocation_firmBudgetFlows
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFaceGapFiscalReduction.firm_face_decline_pos_of_total_gap_pos
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFaceGapFiscalReduction.firm_face_decline_gt_eight_percent_of_gap_gt_eight_percent
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.normalized_source_resource_residual_exact
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.source_normalization_factor_pos
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.narrow_endpoints_source_normalization_exact
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFaceGapFiscalReduction.source_gap_eq_at_zero_fiscal
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFaceGapFiscalReduction.uniform_gap_from_zero_fiscal_reference
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFaceGapFiscalReduction.noCompetitiveEquilibrium_from_zero_fiscal_reference
