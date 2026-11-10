@@ -26,7 +26,7 @@ from compare_nonlinear_tail import StackedPath
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "output" / "same_predecessor_nonlinear_tail_probe.json"
 BRANCHES = ("binding", "slack")
-HORIZONS = (8, 20, 40)
+HORIZONS = (8, 20, 40, 80, 160)
 TERMINALS = ("linear_graph", "zero_controls")
 SHOCKS = (0.0, -1e-5)
 
@@ -115,7 +115,7 @@ def main():
         raise AssertionError("Pinned continuation graph dimension drift")
     table = []
     for T in HORIZONS:
-        for terminal in (TERMINALS if T in (8, 20) else ("linear_graph",)):
+        for terminal in TERMINALS:
             for branch in BRANCHES:
                 outcomes = {}
                 for shock in SHOCKS:
