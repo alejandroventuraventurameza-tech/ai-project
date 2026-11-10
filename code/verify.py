@@ -310,6 +310,10 @@ if __name__ == "__main__":
     # At t=0 in S, L's pledge-based price is hypothetical (L is slack).
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_effective_price_wedge_irf.py")], check=True)
 
+    # Re-evaluate the literal SOURCE's normalized firm-L funding dual
+    # from the generated finite CSV. This does NOT close the other 33 rows.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_L_funding_dual_irf.py")], check=True)
+
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "diagnose_impact.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "compare_nonlinear_tail.py")], check=True)
