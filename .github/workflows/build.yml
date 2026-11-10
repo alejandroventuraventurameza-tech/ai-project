@@ -89,6 +89,13 @@ jobs:
           path: code/irf/output/remaining_log_rows_audit.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve 9-of-33 partial Jacobian row-scale ledger
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-jacobian-partial-9-row-scales
+          path: code/irf/output/partial_source_jacobian_row_scale_ledger.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Verify rational frontier endpoint boxes without floating-point acceptance
         run: python code/boundary/verify_endpoint_boxes_exact.py
       - name: Verify SOURCE bank-rate roots and slopes with exact fractions

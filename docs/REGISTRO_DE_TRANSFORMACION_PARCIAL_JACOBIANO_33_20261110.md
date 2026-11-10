@@ -26,7 +26,7 @@ Para la Euler de depositos con $r(z)>0$, la fuente emplea $f(z)=1-r(z)$ y Python
 \]
 **Esta fila tiene signo negativo**. En cambio, el caso de empresa L holgada usa $f=r-1$ y $g=\log r$, con $Dg(z_*)=Df(z_*)$. Distinguir estos casos evita confundir el signo del jacobiano con una discrepancia economica.
 
-Las igualdades de conjuntos de ceros correspondientes a las filas de regimen vinculante y holgado, la garantia comun y las condiciones fuente de colateral ya fueron comprobadas por Lean, con 17 teoremas verificados en total. Los lemas fuente para patrimonio bancario, oferta laboral y Euler del hogar se han sometido adicionalmente al kernel: deben marcarse **CANDIDATOS** hasta consultar su ejecucion focalizada.
+Las igualdades de conjuntos de ceros correspondientes a las filas de regimen vinculante y holgado, la garantia comun y las condiciones fuente de colateral ya fueron comprobadas por Lean, con 17 teoremas verificados en total. Los tres lemas fuente para patrimonio bancario, oferta laboral y Euler del hogar **ya compilan en el kernel Lean** sin `sorryAx`, con axiomas fundacionales solamente ([Actions #42924055334](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42924055334), SHA `a5b146321e728a4ded7b82d1491303e75093a4e8`). El bloque contiene **20 teoremas comprobados**. El cálculo específico de factores del Jacobiano completo y la identificación de las demás filas permanecen PENDIENTES.
 
 ## 2. Matriz de coeficientes conocida, SIN completar filas pendientes
 
@@ -66,3 +66,8 @@ La condicion SOURCE n.º 34 es $\mu_{L,0}$ y su igualdad a cero se impone en el 
 En las 160 transiciones por rama y sus bases se verificaron con errores $\sim10^{-16}$ las identidades nivel/log de rostros empresariales y garantia comun, ademas de la ecuacion 34. La auditoria posterior \`code/irf/audit_remaining_log_rows.py\` verifica las filas SOURCE 0, 3 y 4 del bloque de once, aplicadas a ambos periodos y ramas, **tambien con perturbaciones positivas fuera de la raiz**. Su archivo \`remaining_log_rows_audit.json\` se obtiene y archiva en GitHub Actions; las pruebas principales de Python pasaron en la ejecucion \`42923540337\`. Ello comprueba la conversion de los residuos de esas funciones, no sus 33 derivadas estructurales simultaneas.
 
 **Compuerta siguiente:** formalizar el factor jacobiano de cada fila en la carta de 33 coordenadas Lean, construir $T$ y $\psi$ exactos, probar una equivalencia funcional de operadores (no solo igualdad de ceros) y pasar las matrices inversas por aritmetica intervalar dirigida. Solo entonces intentar un teorema de funcion implicita en SOURCE, un grafo $C^1$ invariante con radio cuantitativo y, finalmente, la prueba independiente de optimalidad y transversalidad de equilibrio infinito.
+
+
+## 5. Ledger numerico de escalas sin sobrecertificacion
+
+`code/irf/audit_partial_jacobian_row_scales.py` genera, desde CSV/metadata regenerados y el mapa de permutacion verificado, un JSON de coeficientes **candidatos** para los nueve indices de la tabla anterior, distinguiendo B y S en la fecha cero. Comprueba que los factores son finitos y no nulos y que los residuos base correspondientes son practicamente cero, pero **no** eleva ese subbloque a matriz 33×33 fuente. El archivo `code/irf/output/partial_source_jacobian_row_scale_ledger.json` conserva el conjunto de los **24 indices desconocidos** y tres interruptores de estado en `false` para equivalencia de operador, inverso jacobiano y carta entre espacios.

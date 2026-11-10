@@ -322,6 +322,10 @@ if __name__ == "__main__":
     # logarithmic forms, with independent positive off-root perturbations.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_remaining_log_rows.py")], check=True)
 
+    # Assemble only nine ROOT scalar Jacobian factors at date 0/1;
+    # the other 24 SOURCE rows, Euler shear and coordinate chart stay OPEN.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_partial_jacobian_row_scales.py")], check=True)
+
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "diagnose_impact.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "compare_nonlinear_tail.py")], check=True)
