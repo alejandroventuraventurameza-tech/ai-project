@@ -5,19 +5,25 @@ on:
     paths:
       - .github/workflows/stencil-transition-bridge.yml
       - code/irf/audit_stencil_transition_bridge.py
+      - code/irf/audit_stencil_nonlinear_16_rows.py
+      - code/irf/finite_irf.py
       - code/irf/exact_linear_tail_power_certificate.py
       - code/irf/inputs/rational_preconditioners.json
       - code/v0m/cotas_2026_10_15/rational_preconditioners.json
       - code/v0m/cotas_2026_10_15/verified_linear_operator.py
+      - code/v0m/cotas_2026_10_15/inputs/hand_linearization.py
       - code/v0m/cotas_2026_10_15/verified_linear_bounds.json
   pull_request:
     paths:
       - .github/workflows/stencil-transition-bridge.yml
       - code/irf/audit_stencil_transition_bridge.py
+      - code/irf/audit_stencil_nonlinear_16_rows.py
+      - code/irf/finite_irf.py
       - code/irf/exact_linear_tail_power_certificate.py
       - code/irf/inputs/rational_preconditioners.json
       - code/v0m/cotas_2026_10_15/rational_preconditioners.json
       - code/v0m/cotas_2026_10_15/verified_linear_operator.py
+      - code/v0m/cotas_2026_10_15/inputs/hand_linearization.py
       - code/v0m/cotas_2026_10_15/verified_linear_bounds.json
   workflow_dispatch:
 
@@ -39,6 +45,10 @@ jobs:
         run: python code/irf/exact_linear_tail_power_certificate.py
       - name: Exact coordinates and pinned 80-digit interval transfer
         run: python code/irf/audit_stencil_transition_bridge.py
+      - name: Install pinned NumPy for independent Jacobian diagnostics
+        run: python -m pip install --quiet numpy==2.2.6
+      - name: Compare nonlinear 16-row derivatives against hand interval stencil
+        run: python code/irf/audit_stencil_nonlinear_16_rows.py
       - name: Archive traceable arithmetical certificates
         if: always()
         uses: actions/upload-artifact@v7
@@ -47,5 +57,6 @@ jobs:
           path: |
             code/irf/output/exact_linear_tail_power_certificate.json
             code/irf/output/stencil_transition_bridge.json
+            code/irf/output/stencil_nonlinear_16_rows_audit.json
           if-no-files-found: warn
           retention-days: 30
