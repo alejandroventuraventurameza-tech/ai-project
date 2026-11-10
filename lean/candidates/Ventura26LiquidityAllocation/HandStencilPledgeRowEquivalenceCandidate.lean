@@ -157,6 +157,63 @@ theorem source_firm_budget_effective_price_of_binding_regime_zero
 #print axioms source_firm_budget_effective_price_of_face
 #print axioms source_firm_budget_effective_price_of_binding_regime_zero
 
+/-- The financing-adjusted capital price after substituting the
+binding nominal collateral face. This is a PRICE wedge, not a
+claim that the resulting investment allocation is optimal. -/
+noncomputable def sourceEffectiveCapitalPrice
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (d : LocalPrefixDateData) (i : FirmType) : ℝ :=
+  d.controls.capitalPrice -
+    localPrefixPledgeUnit P d i / d.controls.loanRate
+
+/-- A source-identity, evaluated under a COMMON loan rate and common
+next-period capital price/inflation, but firm-specific pledgeability.
+No numerical calibration is assumed. -/
+theorem source_effective_price_wedge_H_minus_L
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (d : LocalPrefixDateData) :
+    sourceEffectiveCapitalPrice P d FirmType.H -
+      sourceEffectiveCapitalPrice P d FirmType.L =
+      (P.pledgeability FirmType.L - P.pledgeability FirmType.H) *
+        ((1 - P.depreciation) * d.nextControls.inflation *
+          d.nextControls.capitalPrice / d.controls.loanRate) := by
+  dsimp [sourceEffectiveCapitalPrice, localPrefixPledgeUnit]
+  ring
+
+/-- Under an explicitly SMALLER H collateral share, a strictly
+positive collateral price and a positive COMMON gross loan rate,
+firm H faces a strictly HIGHER effective investment price.
+H's higher productivity is recorded separately by P.productivity_order,
+but does not enter this pure budget identity. No total policy
+derivative, equilibrium investment ranking, or growth claim follows. -/
+theorem source_less_pledgeable_H_higher_effective_price
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (d : LocalPrefixDateData)
+    (hpledge : P.pledgeability FirmType.H < P.pledgeability FirmType.L)
+    (hdepr : P.depreciation < 1)
+    (hpi : 0 < d.nextControls.inflation)
+    (hq : 0 < d.nextControls.capitalPrice)
+    (hloan : 0 < d.controls.loanRate) :
+    sourceEffectiveCapitalPrice P d FirmType.L <
+      sourceEffectiveCapitalPrice P d FirmType.H := by
+  have hspread : 0 <
+      P.pledgeability FirmType.L - P.pledgeability FirmType.H :=
+    sub_pos.mpr hpledge
+  have hnondepr : 0 < 1 - P.depreciation := sub_pos.mpr hdepr
+  have hunit : 0 < (1 - P.depreciation) *
+      d.nextControls.inflation * d.nextControls.capitalPrice /
+      d.controls.loanRate :=
+    div_pos (mul_pos (mul_pos hnondepr hpi) hq) hloan
+  have hwedge : 0 <
+      sourceEffectiveCapitalPrice P d FirmType.H -
+        sourceEffectiveCapitalPrice P d FirmType.L := by
+    rw [source_effective_price_wedge_H_minus_L]
+    exact mul_pos hspread hunit
+  exact sub_pos.mp hwedge
+
+#print axioms source_effective_price_wedge_H_minus_L
+#print axioms source_less_pledgeable_H_higher_effective_price
+
 #print axioms source_sub_reduced_is_sdf_pledge_gap
 #print axioms source_eq_reduced_of_pledge_face
 #print axioms row_shear_preserves_zero_set
