@@ -284,6 +284,10 @@ if __name__ == "__main__":
     # Six policy pairs at two shock sizes; quantify interactions, not causal multipliers.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "frozen_four_tool_joint_interaction_audit.py")], check=True)
 
+    # Separate KKT-necessary roots S/B using one inherited X0; do not claim
+    # full dynamic equilibrium or global multiplicity from a reduced system.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "frozen_same_predecessor_branch_audit.py")], check=True)
+
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "reproduce.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "diagnose_impact.py")], check=True)
