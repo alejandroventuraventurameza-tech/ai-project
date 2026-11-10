@@ -62,9 +62,11 @@ del sistema reducido: una con crédito no restringido de la firma L
 y otra con garantías activas para ambas firmas. Un experimento
 ilustrativo encuentra menos tasa de préstamo y más crédito a la
 firma H en ambas ramas, pero signos opuestos en capital y pérdida
-asignativa condicional. Los resultados numéricos y las comprobaciones
-Lean son de alcance delimitado; no certifican dos equilibrios
-competitivos infinitos ni un efecto permanente sobre el crecimiento.
+asignativa condicional. Una auditoría formal adicional de SOURCE demuestra que su raíz
+del prefijo reducido viola la consistencia nominal heredada del
+estado inicial construido, por lo que ese candidato no constituye
+un equilibrio competitivo. Ninguno de estos resultados certifica
+dos equilibrios competitivos infinitos ni crecimiento permanente.
 El cuerpo presenta la contribución y sus límites; el desarrollo
 histórico detallado se preserva en los anexos.
 \end{abstract}
@@ -642,7 +644,7 @@ En un estado estacionario determinista con inflación uno, consumo empresarial c
 \end{equation}
 La restricción es estrictamente valiosa solo si $\beta_E\RL<1$. En cambio, un tipo con colateral holgado, $\mu=0$ y $b=0$, debe satisfacer por la esquina $\beta_E\RL\geq1$. Por tanto, con el mismo descuento empresarial y una tasa común, no podemos asumir genéricamente un estado estacionario donde un tipo tiene $\mu>0$ y el otro colateral estrictamente holgado.
 
-El régimen mixto puede aparecer transitoriamente, o puede requerir preferencias distintas, renovación empresarial o un contrato diferente. No elegiremos esos supuestos para garantizar de antemano el signo favorable. Esta incompatibilidad impide importar el laboratorio estático como estado estacionario. V0-M mantiene las preferencias y construye el régimen mixto de manera transitoria, mediante \ref{prop:boundary_equilibrium} y \ref{prop:local_macro_multiplicity}.
+El régimen mixto puede aparecer transitoriamente, o puede requerir preferencias distintas, renovación empresarial o un contrato diferente. No elegiremos esos supuestos para garantizar de antemano el signo favorable. Esta incompatibilidad impide importar el laboratorio estático como estado estacionario. La proposición \ref{prop:boundary_equilibrium} prueba que el candidato SOURCE satisface el prefijo reducido, pero no puede ser un equilibrio competitivo con su estado inicial construido. La proposición \ref{prop:local_macro_multiplicity} se refiere a raíces de complementariedad del sistema reducido, no certifica por sí sola equilibrios dinámicos.
 
 \subsection{Un sistema estocástico que conserva todos los regímenes empresariales}\label{sec:stochastic_complementarity}\label{sec:v0m_source_59}
 \subsubsection{Una promesa con signo y una función de caja}
@@ -1308,7 +1310,11 @@ Como ambas inflaciones son uno, Rotemberg y NKPC se cumplen con $m_0=\bar m$. La
 =\pi^{op}_{i0}+a_\delta q_0k_{i0}
 -c^E_{i0}-p_i(R)\bar k_i.
 \end{equation}
-No se ajustan estas promesas después al comparar intervenciones: quedan fijadas en el experimento.
+Estas expresiones definen promesas \emph{en función de} la tasa de
+impacto $R$: no son, por construcción, un estado heredado
+predeterminado común a todas las intervenciones. Mantenerlas fijas
+en una comparación posterior no subsana esa dependencia inicial.
+La auditoría SOURCE siguiente muestra por qué importa esta distinción.
 
 Con rezagos iniciales $\bar R^R,\bar M$, las innovaciones anunciadas necesarias son
 \begin{align}
@@ -1320,7 +1326,7 @@ Con rezagos iniciales $\bar R^R,\bar M$, las innovaciones anunciadas necesarias 
 \end{align}
 Desde fecha 2 son cero en esta construcción determinista. Así las reglas se cumplen incluso cuando sus rezagos de fecha 1 todavía difieren de sus referencias.
 
-\subsubsection{Existencia y comprobaciones con redondeo dirigido}
+\subsubsection{Raíz escalar y comprobaciones con redondeo dirigido}
 \begin{proposition}[Raíz reducida y obstrucción nominal del candidato SOURCE]\label{prop:boundary_equilibrium}
 Con las primitivas exactas del testigo, la ecuación de recursos
 \eqref{eq:scalar_bridge_root} posee una única raíz $R^*$ en
@@ -1357,30 +1363,29 @@ La cadena, incluidas las cotas y la conclusión negativa, compiló
 sin \texttt{sorryAx} en el gate de Lean \texttt{42902110667}
 para el commit \texttt{3c881026}.
 \end{proof}
-\paragraph{Alcance del enlace de frontera y estatus de la formalización.}
-En el módulo Lean \texttt{BoundaryNormalization}\allowbreak\texttt{BridgeCandidate}, el
-teorema \texttt{boundary\_unique\_reduced\_}\allowbreak\texttt{prefix\_rate\_from\_source}
-demuestra, a partir de las primitivas originales y sin asumir cajas
-numéricas de frontera, la existencia y unicidad de la raíz
-$R\in[1.025,1.032]$ del residual de recursos, junto con las
-33 ecuaciones del prefijo reducido para cada rama formalizada.
-Las diez desigualdades auxiliares, incluidas las dos comparaciones de
-raíces decimoquintas del producto, fueron descargadas en Lean y
-sometidas a la auditoría de axiomas del commit \texttt{6ab6d29b}.
-Este certificado se refiere a la tasa escalar y al prefijo: no entrega
-por sí mismo una trayectoria $X$ definida en todas las fechas e
-historias, ni equivale a \texttt{CompetitiveEquilibrium}\allowbreak\texttt{WithInitialIntervention}.
+\paragraph{Alcance exacto del enlace de frontera y de su rechazo competitivo.}
+Los módulos \texttt{BoundaryNormalizationBridgeCandidate},
+\texttt{BoundaryNarrowRightResidualSignCandidate} y
+\texttt{FirmFaceUniformGapCandidate} distinguen tres objetos:
+la raíz del residual escalar, las 33 identidades del prefijo
+reducido y la compatibilidad de las caras nominales heredadas.
+Las dos primeras se satisfacen; la tercera falla en más de $0.08$.
+La construcción SOURCE original no es, por tanto, un equilibrio
+competitivo literal. El registro formal con nombres de declaraciones,
+commit exacto y limitaciones está en
+\texttt{lean/SOURCE\_CERTIFICATE\_STATUS\_2026-11-10.md}.
 
-La afirmación más fuerte de equilibrio competitivo de la
-proposición \ref{prop:boundary_equilibrium} requiere verificar, sobre
-esa trayectoria completa, factibilidad, KKT originales y suficiencia
-de optimalidad de cada agente, consistencia de cuentas y mercados,
-y las condiciones globales y terminales de
-\ref{prop:finite_prefix_equilibrium}. Los argumentos analíticos
-anteriores especifican la construcción propuesta; su elevación a un
-teorema del equilibrio completo en Lean sigue pendiente.
-En particular, la raíz de recursos no sustituye las condiciones
-de transversalidad ni selecciona por sí misma una rama dinámica.
+\emph{Alcance de la conclusión:} el estado
+\texttt{boundaryInitialState} depende de $R$ y difiere del
+estado estacionario heredado congelado \texttt{inheritedState}.
+Este resultado negativo no demuestra que todo shock monetario
+aplicado a un mismo estado predeterminado carezca de equilibrio,
+ni que sea imposible una trayectoria dinámica alternativa.
+La existencia, la optimalidad de horizonte infinito, las KKT,
+las restricciones globales y las condiciones terminales de esa
+nueva construcción permanecen pendientes. La proposición
+\ref{prop:finite_prefix_equilibrium} no puede usarse como puente
+si falla una identidad necesaria del estado inicial.
 
 \begin{center}\small
 \begin{tabular}{@{}lr@{}}\toprule
@@ -1396,7 +1401,7 @@ $\Mpre_0$ & $0.546147959$\\
 Cobertura heredada holgada H, L & $0.050450672,\ 0.163132291$\\\bottomrule
 \end{tabular}
 \end{center}
-Estos valores son un testigo interno, no una calibración ni una respuesta de impulso. La frontera queda fuera del entorno de la proposición \ref{prop:regime_tube}: por ejemplo, la tasa de préstamo y el consumo de L se separan de sus referencias más de lo permitido allí. No hay contradicción entre ambas pruebas.
+Estos valores describen un testigo del \emph{prefijo reducido}, no un equilibrio competitivo verificado, una calibración ni una respuesta de impulso. La frontera queda fuera del entorno de la proposición \ref{prop:regime_tube}: por ejemplo, la tasa de préstamo y el consumo de L se separan de sus referencias más de lo permitido allí. No hay contradicción entre ambas pruebas.
 
 \subsection{La complementariedad produce dos soluciones locales del sistema reducido}\label{sec:local_multiplicity}\label{sec:v0m_source_64}
 
@@ -4512,11 +4517,14 @@ Una mayor cuota de H todavía no prueba menor pérdida asignativa. Hay que verif
 \subsection{Relación con el enlace que ya construye V0-M}
 La barrera local explica por qué el certificado más próximo al estado
 estacionario no demuestra por sí solo liberación del colateral.
-Las proposiciones \ref{prop:boundary_equilibrium} y
-\ref{prop:local_macro_multiplicity} construyen un enlace distinto, fuera
-de ese tubo, con todos los filtros bancarios y domésticos comprobados.
-No se selecciona una trayectoria favorable ni se cambia una primitiva
-para imponer el resultado.
+La proposición \ref{prop:boundary_equilibrium} localiza una raíz
+del sistema reducido fuera de ese tubo, pero prueba simultáneamente
+que el estado nominal heredado construido es incompatible con un
+equilibrio competitivo literal. La proposición
+\ref{prop:local_macro_multiplicity} clasifica soluciones
+\emph{reducidas} de complementariedad; ninguna de ellas se eleva aquí
+a equilibrio dinámico completo. No se selecciona una trayectoria
+favorable ni se cambia una primitiva para imponer el resultado.
 
 La condición \eqref{eq:cash_reallocation_threshold} conserva su alcance
 condicional en la región de ambos límites activos. La comparación de
