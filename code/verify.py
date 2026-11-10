@@ -272,6 +272,9 @@ if __name__ == "__main__":
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_prefix_rows.py")], check=True)
 
+    # Frozen predecessor: numerical starting-point audit, not an equilibrium/IRF certificate.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "frozen_stationary_prefix_audit.py")], check=True)
+
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "reproduce.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "diagnose_impact.py")], check=True)
