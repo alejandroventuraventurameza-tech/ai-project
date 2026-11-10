@@ -318,6 +318,10 @@ if __name__ == "__main__":
     # (B for H/L, S for L, and common pledge in recurrent periods).
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_firm_regime_log_vs_level_irf.py")], check=True)
 
+    # SOURCE rows 0, 3, 4 versus bank-face, worker-labor, household-Euler
+    # logarithmic forms, with independent positive off-root perturbations.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_remaining_log_rows.py")], check=True)
+
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "diagnose_impact.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "compare_nonlinear_tail.py")], check=True)
