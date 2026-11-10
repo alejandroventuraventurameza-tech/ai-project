@@ -104,6 +104,59 @@ theorem source_binding_euler_reduces_using_original_pledge
   rw [hpledge]
   ring
 
+/-- The *literal* binding-regime residual is exactly the restriction
+that the nominal face equals the collateralized face. -/
+theorem source_binding_regime_zero_iff_nominal_face
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (d : LocalPrefixDateData) (i : FirmType) :
+    localReducedFirmRegimeResidual LocalPrefixBranch.binding P d i = 0 ↔
+      d.nextFace i =
+        localPrefixPledgeUnit P d i * d.nextCapital i := by
+  change (d.nextFace i -
+    localPrefixPledgeUnit P d i * d.nextCapital i = 0) ↔
+      (d.nextFace i =
+        localPrefixPledgeUnit P d i * d.nextCapital i)
+  exact sub_eq_zero
+
+/-- With nominal collateral binding, the actual SOURCE firm budget
+equals its effective-capital-price representation. This statement
+uses the literal original budget residual, without any extra firm
+optimality or positivity assumption. -/
+theorem source_firm_budget_effective_price_of_face
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (d : LocalPrefixDateData) (i : FirmType)
+    (hface : d.nextFace i =
+      localPrefixPledgeUnit P d i * d.nextCapital i) :
+    localReducedFirmBudgetResidual P d i =
+      localPrefixFirmConsumption d.controls i +
+        (d.controls.capitalPrice -
+          localPrefixPledgeUnit P d i / d.controls.loanRate) *
+            d.nextCapital i -
+        localPrefixFirmWealth P d i := by
+  dsimp [localReducedFirmBudgetResidual]
+  rw [hface]
+  ring
+
+/-- The source B-regime row alone gives the face equality needed
+to reconstruct the effective price inside the source budget. -/
+theorem source_firm_budget_effective_price_of_binding_regime_zero
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (d : LocalPrefixDateData) (i : FirmType)
+    (hreg :
+      localReducedFirmRegimeResidual LocalPrefixBranch.binding P d i = 0) :
+    localReducedFirmBudgetResidual P d i =
+      localPrefixFirmConsumption d.controls i +
+        (d.controls.capitalPrice -
+          localPrefixPledgeUnit P d i / d.controls.loanRate) *
+            d.nextCapital i -
+        localPrefixFirmWealth P d i := by
+  apply source_firm_budget_effective_price_of_face P d i
+  exact (source_binding_regime_zero_iff_nominal_face P d i).mp hreg
+
+#print axioms source_binding_regime_zero_iff_nominal_face
+#print axioms source_firm_budget_effective_price_of_face
+#print axioms source_firm_budget_effective_price_of_binding_regime_zero
+
 #print axioms source_sub_reduced_is_sdf_pledge_gap
 #print axioms source_eq_reduced_of_pledge_face
 #print axioms row_shear_preserves_zero_set
