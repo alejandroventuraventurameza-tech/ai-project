@@ -322,6 +322,31 @@ y de las transformaciones económicas necesarias es
 una compuerta abierta. Véase
 \path{docs/PUENTE_STENCIL_EULER_GARANTIA_20261110.md}.
 
+\paragraph{La ecuación 34 es una condición de frontera, no una ecuación B adicional.}
+En las definiciones del modelo fuente, la complementariedad de L
+exige que su holgura de colateral $s_L$ y su dual de
+financiamiento $\mu_L$ satisfagan
+\[
+ s_L\geq 0,\qquad \mu_L\geq 0,\qquad s_L\mu_L=0.
+\]
+Así, $s_L>0$ obliga $\mu_L=0$ (rama S), mientras que
+$\mu_L>0$ obliga $s_L=0$ (rama B).
+El sistema aumentado que impone el residuo adicional
+$\mu_L=0$ sirve para localizar la \emph{frontera} entre
+ramas: no constituye una ecuación suplementaria que deba
+anularse en cualquier punto interior de la rama B.
+En el ejercicio finito, el dual L al impacto tras el shock
+es prácticamente nulo en S y positivo
+($3.2188\cdot10^{-5}$) en B; imponerle cero a B
+descartaría una raíz que satisface esas condiciones
+necesarias de complementariedad. La auditoría de Python
+replica la fórmula literal de ese dual con discrepancia
+inferior a $3\cdot10^{-16}$ y ahora también verifica los
+márgenes de L desde la fecha uno hasta el final del
+horizonte reportado. Esta comprobación no sustituye
+el análisis de suficiencia ni de las condiciones
+terminales.
+
 \begin{proposition}[Cuña de precio efectivo del capital bajo garantía vinculante]
 \label{prop:compact_source_collateral_effective_wedge}
 Supóngase que ambas empresas enfrentan la misma tasa
