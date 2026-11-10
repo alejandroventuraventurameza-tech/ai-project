@@ -48,6 +48,25 @@ theorem initialIntervention_monetaryPrimitiveDomain_iff
       MonetaryPolicyPrimitiveDomain P I := by
   rfl
 
+/-- By contrast, the old SOURCE boundary constructor makes inherited
+capital STRICTLY rate-dependent. Thus different boundary loan-rate
+candidates cannot represent surprises applied to a common predetermined
+capital state. This is an economic interpretation of the original code,
+not an impossibility claim about a different fixed-inheritance model. -/
+theorem boundaryInitialState_capital_strictMono
+    (G R₁ R₂ : ℝ) (i : FirmType)
+    (h₁ : R₁ ∈ ProposedBoundaryResourceRoot.boundaryInterval)
+    (h₂ : R₂ ∈ ProposedBoundaryResourceRoot.boundaryInterval)
+    (hRate : R₁ < R₂) :
+    (ProposedBoundaryFullPrefix.boundaryInitialState G R₁).capital i <
+      (ProposedBoundaryFullPrefix.boundaryInitialState G R₂).capital i := by
+  change ProposedBoundaryResourceRoot.boundaryCapital R₁ i <
+    ProposedBoundaryResourceRoot.boundaryCapital R₂ i
+  unfold ProposedBoundaryResourceRoot.boundaryCapital
+  exact mul_lt_mul_of_pos_right
+    (ProposedBoundaryAnalyticPackage.capitalScale_strictMonoOn h₁ h₂ hRate)
+    (ProposedStationaryRealScale.capital_pos i)
+
 /-- For the already certified stationary inherited balance sheet,
 all four source policy instruments preserve exact date-zero nominal
 compatibility without adjusting deposits, inherited firm faces, capital,
@@ -67,6 +86,7 @@ theorem stationaryInheritedState_consistent_under_initialIntervention
 #print axioms initialIntervention_bankRenewalFactor_eq
 #print axioms initialIntervention_inheritedNominalFaceConsistency_iff
 #print axioms initialIntervention_monetaryPrimitiveDomain_iff
+#print axioms boundaryInitialState_capital_strictMono
 #print axioms stationaryInheritedState_consistent_under_initialIntervention
 
 end ProposedBoundaryFrozenInheritance
