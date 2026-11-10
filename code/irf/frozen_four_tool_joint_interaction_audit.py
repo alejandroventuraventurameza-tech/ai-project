@@ -224,11 +224,18 @@ def main():
         large, small = series
         den = large["nonlinear_log_coordinate_interaction_max_abs"]
         num = small["nonlinear_log_coordinate_interaction_max_abs"]
-        ratios[pair_name] = (
-            None if den <= 1.0e-11 else num / den
-        )
+        ratio = None if den <= 1.0e-11 else num / den
+        # D_ij(h) = h^2 z_ij(0) + o(h^2) on a regular active set.
+        # For a detectable nonzero interaction, halving h should give ~1/4.
+        # This is a numerical asymptotic diagnostic, not interval/IFT proof.
+        if ratio is not None and abs(ratio - 0.25) > 0.03:
+            raise AssertionError(
+                f"{pair_name}: interaction fails second-order scaling "
+                f"diagnostic (observed ratio {ratio:.6g})"
+            )
+        ratios[pair_name] = ratio
 
-    print(json.dumps({
+    payload = {
         "status": "NUMERICAL_PAIRWISE_FOUR_TOOL_FROZEN_PREFIX_ONLY",
         "reference": "original 33 nonlinear rows, frozen predecessor",
         "tail": "pinned 16-by-6 local-linear P0",
@@ -248,7 +255,12 @@ def main():
             "nonlinear infinite-horizon continuation or complete equilibrium",
             "causal interpretation, welfare, long-run capital growth",
         ],
-    }, indent=2, sort_keys=True))
+    }
+    content = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+    output = HERE / "output" / "four_tool_pairwise_audit.json"
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(content, encoding="utf-8")
+    print(content, end="")
 
 
 if __name__ == "__main__":
