@@ -16,6 +16,7 @@ future exact nonzero certificate.
 namespace Ventura26LiquidityAllocation
 namespace ProposedBoundaryInheritedFaceGate
 
+open ProposedStationaryReducedSystem
 open ProposedBoundaryFullPrefix
 open ProposedBoundaryNormalizationBridge
 
@@ -79,9 +80,28 @@ theorem sourceBoundary_inheritedFace_invalid_of_gap_ne_zero
   intro h
   exact hgap ((sourceBoundaryInheritedFaceConsistency_iff_gap_zero G).mp h)
 
+/-- If the exact SOURCE inherited-face gap is nonzero, *no* Allocation
+over the unchanged SOURCE primitives and inherited positions can satisfy
+the full original competitive equilibrium definition. In particular this
+does not merely rule out the explicitly constructed candidate.
+The hypothesis hgap requires a separate exact proof. -/
+theorem sourceBoundary_noCompetitiveEquilibrium_of_gap_ne_zero
+    (G : ℝ) (X : Allocation LocalBridgePhase)
+    (hgap : sourceBoundaryInheritedNominalFaceGap G ≠ 0) :
+    ¬ CompetitiveEquilibrium
+      (boundaryPrimitives G boundarySourceRate)
+      (boundaryInitialState G boundarySourceRate) X := by
+  intro hCE
+  rcases hCE with ⟨_hdomain, _hpositive, _hpolicy, _hfirms,
+    _hhousehold, _hpopulation, _hretail, _hcapitalOptimal,
+    _hfirmBudgets, _hhouseholdBudget, hinheritedFaces, _hrest⟩
+  exact hgap ((sourceBoundaryInheritedFaceConsistency_iff_gap_zero G).mp
+    hinheritedFaces)
+
 #print axioms inheritedNominalFaceConsistency_iff_gap_zero
 #print axioms sourceBoundaryInheritedFaceConsistency_iff_gap_zero
 #print axioms sourceBoundary_inheritedFace_invalid_of_gap_ne_zero
+#print axioms sourceBoundary_noCompetitiveEquilibrium_of_gap_ne_zero
 
 end ProposedBoundaryInheritedFaceGate
 end Ventura26LiquidityAllocation
