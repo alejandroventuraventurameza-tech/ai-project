@@ -48,7 +48,7 @@
 \large Un entorno neokeynesiano cerrado con multiplicidad local}
 \author{Alejandro Ventura\thanks{Universidad del Pacífico. AI Econ Modeling, Track B.
 Repositorio: \url{https://github.com/alejandroventuraventurameza-tech/ai-project}.}}
-\date{Revisión científica y condensación editorial, 8 de noviembre de 2026}
+\date{Revisión científica y auditoría SOURCE, 10 de noviembre de 2026}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -5279,9 +5279,12 @@ En particular, salida del tipo bancario, sustitución de propietarios y desapari
 \clearpage
 \section{Registro completo de formalización}\label{sec:lean_status}
 Los 57 resultados numerados están conservados, con sus enunciados y pruebas
-escritas. En esta versión ninguna fila afirma una prueba Lean. ``Acotada''
-significa revisión interna de un argumento condicional, no aprobación del autor,
-auditoría integral ni cobertura formal. ``Inventario'' identifica los resultados
+escritas. La fila de la proposición \ref{prop:boundary_equilibrium} recoge
+ahora una demostración Lean \emph{negativa y específica} sobre SOURCE:
+refuta la interpretación competitiva de la construcción anterior.
+Las demás filas no se promueven automáticamente a prueba Lean.
+``Acotada'' significa revisión interna de un argumento condicional,
+no aprobación del autor, auditoría integral ni cobertura formal. ``Inventario'' identifica los resultados
 registrados sin esa revisión sustantiva. El detalle estable por etiqueta y los
 hashes de enunciado y prueba se encuentran en \texttt{paper/result\_ledger.json}.
 Los auxiliares no numerados de continuación, términos terminales y persistencia
@@ -5298,7 +5301,7 @@ también deben traducirse cuando constituyan dependencias de una prueba.
 \ref{lem:v0m_original_9_1} & Corredor y monotonía & Acotada & Sin cobertura integrada\\
 \ref{prop:v0m_original_10_1} & Spread no negativo en este régimen & Acotada & Sin cobertura integrada\\
 \ref{prop:v0m_original_12_1} & Consistencia de flujos agregados & Acotada & Sin cobertura integrada\\
-\ref{prop:boundary_equilibrium} & Un equilibrio en la frontera de L & Acotada & Sin cobertura integrada\\
+\ref{prop:boundary_equilibrium} & Raíz reducida y obstrucción SOURCE & Revisada & Lean: \texttt{FirmFaceUniformGapCandidate}\\
 \ref{prop:local_macro_multiplicity} & Multiplicidad y ausencia local en lados opuestos & Acotada & Sin cobertura integrada\\
 \ref{lem:allocation_loss_identity} & Referencia eficiente y derivada de reasignación & Acotada & Sin cobertura integrada\\
 \ref{prop:opposite_branch_allocation} & Condiciones de una mejora y un deterioro para el mismo instrumento & Acotada & Sin cobertura integrada\\
