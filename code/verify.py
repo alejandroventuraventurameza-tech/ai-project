@@ -288,6 +288,10 @@ if __name__ == "__main__":
     # full dynamic equilibrium or global multiplicity from a reduced system.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "frozen_same_predecessor_branch_audit.py")], check=True)
 
+    # Finite exact-rational certificate for the pinned LINEAR tail matrix F0.
+    # Not a certificate for the nonlinear SOURCE operator or economic TVC.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "exact_linear_tail_power_certificate.py")], check=True)
+
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "reproduce.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "diagnose_impact.py")], check=True)
