@@ -114,6 +114,7 @@ theorem source_narrow_left_normalized_output_upper :
           ((99 / 100 : ℝ) * (10271880 / 10000000 : ℝ)) ^ (5 : ℕ) :=
     mul_lt_mul_of_pos_left hdpow (by norm_num)
   have hpoly : x ≤ (100443 / 100000 : ℝ) ^ (15 : ℕ) := by
+    apply le_of_lt
     calc
       x <
         (99780499 / 100000000 : ℝ) ^ (8 : ℕ) *
