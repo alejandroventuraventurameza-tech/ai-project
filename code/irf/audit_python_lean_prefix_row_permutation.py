@@ -14,6 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 LEAN = ROOT / "lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean"
 PYTHON = ROOT / "code/irf/finite_irf.py"
+AUGMENTED = ROOT / "lean/candidates/Ventura26LiquidityAllocation/LocalScalarAugmented34SourceCandidate.lean"
 OUT = ROOT / "code/irf/output/lean_python_33_row_permutation.json"
 STANDARD = {
     "bankEquity": "bank_equity",
@@ -99,6 +100,25 @@ def main():
         raise AssertionError("33-row permutation is not bijective")
     if any(python_to_lean[lean_to_python[i]] != i for i in range(33)):
         raise AssertionError("Inverse permutation audit failed")
+    # The augmented 34th equation is NOT one of these 33 Python slots.
+    # In Lean it is the normalized funding dual of firm L on the same
+    # positive 33-coordinate log chart. This is a syntactic source check,
+    # not a proof that an unrelated Python surrogate computes it.
+    aug_source = AUGMENTED.read_text(encoding="utf-8")
+    aug_start = aug_source.index("noncomputable def augmentedBoundaryZeroResidual")
+    aug_end = aug_source.index("theorem augmentedBoundaryZeroResidual_source_row", aug_start)
+    aug_body = aug_source[aug_start:aug_end]
+    for anchor in (
+        ": (Fin 33 → ℝ) × ℝ :=",
+        "localBindingResidualWithSlack",
+        "reserveRemunerationSlice 0 h",
+        "localNormalizedCollateralDualL P (localPrefixLogChart Z0 z)",
+    ):
+        if anchor not in aug_body:
+            raise AssertionError(
+                f"Original 33+1 SOURCE funding-dual contract changed: {anchor}"
+            )
+
     # Known nontrivial firm-order difference must remain explicit.
     if lean_to_python[:6] != [0, 3, 1, 4, 2, 5]:
         raise AssertionError("Date-zero firm order changed unexpectedly")
@@ -108,9 +128,15 @@ def main():
         "status": "SYNTACTIC_33_ROW_PERMUTATION_VERIFIED_NOT_SEMANTIC_EQUALITY",
         "source_sha256": {
             str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
-            for p in (LEAN, PYTHON)
+            for p in (LEAN, PYTHON, AUGMENTED)
         },
         "source_row_count": 33,
+        "source_augmented_row_count": 34,
+        "last_augmented_row_34_lean": (
+            "localNormalizedCollateralDualL P (localPrefixLogChart Z0 z)"
+        ),
+        "last_augmented_row_is_in_original_python_prefix": False,
+        "source_34th_row_semantic_equivalence_to_any_python_surrogate_verified": False,
         "source_to_python_permutation": lean_to_python,
         "python_to_source_permutation": python_to_lean,
         "rows": [
@@ -135,6 +161,7 @@ def main():
     print(json.dumps({
         "status": report["status"],
         "count": len(report["rows"]),
+        "source_augmented_row_34": report["last_augmented_row_34_lean"],
         "source_to_python_first_six": lean_to_python[:6],
         "source_to_python_date_one_first_five": lean_to_python[17:22],
         "output": str(OUT),
