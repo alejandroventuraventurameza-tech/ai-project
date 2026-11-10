@@ -24,7 +24,7 @@ open ProposedStationaryPrimitives
 open ProposedStationaryInheritedState
 open ProposedStationaryRealScale
 open ProposedBoundaryResourceRoot
-open ProposedBoundaryFirmBridge
+open ProposedBoundaryBridge
 open ProposedBoundaryFullPrefix
 open ProposedFirmFaceUniformGap
 open ProposedFrozenInheritanceImpactPrefix
@@ -52,7 +52,7 @@ theorem original_firm_budget_residual_affine_in_inherited_face
       localPrefixOperatingProfit P d i := by rfl
   unfold localReducedFirmBudgetResidual localPrefixFirmWealth
   dsimp only
-  first | rw [hProfit] | skip
+  rw [hProfit]
   ring
 
 /-- The old SOURCE budget row was zero precisely because it wrote its
