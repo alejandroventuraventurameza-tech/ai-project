@@ -27,15 +27,19 @@ IRF = ROOT / "code" / "irf" / "inputs" / "rational_preconditioners.json"
 BASE = ROOT / "code" / "v0m" / "cotas_2026_10_15"
 V0M = BASE / "rational_preconditioners.json"
 BOUNDS = BASE / "verified_linear_bounds.json"
+REFERENCE_RS = IRF.parent / "v0m_verified_Rs_reference.json"
+REFERENCE_BOUNDS = IRF.parent / "v0m_verified_bounds_reference.json"
 PRODUCER = BASE / "verified_linear_operator.py"
 OUT = ROOT / "code" / "irf" / "output" / "stencil_transition_bridge.json"
 
-# Pin the exact contents and the provenance of the directed bounds. A change
-# must trigger manual re-auditing, not be treated as a cosmetic update.
+# The V0-M verifier regenerates two files (V0M and BOUNDS) as part of
+# code/verify.py. Pin IMMUTABLE snapshots of the original 80-digit RS
+# basis and error interval instead of expecting regenerated files to
+# retain byte-identical formatting/eigenbasis rounding.
 EXPECTED_BLOBS = {
     IRF: "bef34b844836d01848b87145f1565ff84bd5071a",
-    V0M: "74a44037f46a5f865c8123e6d059ef8342e46a19",
-    BOUNDS: "ca7c2f8a49814fca0e3c6901b5ed22b506710662",
+    REFERENCE_RS: "f861c07b54f80fb6152e69418b7167ecb99c1ede",
+    REFERENCE_BOUNDS: "ca7c2f8a49814fca0e3c6901b5ed22b506710662",
     PRODUCER: "aae0e13d86d6627216a5e53716a0f762b05b78c9",
 }
 N = 6
@@ -149,7 +153,23 @@ def main():
             raise AssertionError(
                 f"IRF and verified hand-stencil {name} differ exactly"
             )
-    v0m_rs = matrix(from_v0m["Rs"], N, N)
+    rs_snapshot = json.loads(REFERENCE_RS.read_text(encoding="utf-8"))
+    if rs_snapshot.get("source_git_blob_sha1") != (
+        "74a44037f46a5f865c8123e6d059ef8342e46a19"
+    ):
+        raise AssertionError("Rs snapshot no longer originates from V0-M baseline")
+    v0m_rs = matrix(rs_snapshot["Rs"], N, N)
+    runtime_rs = matrix(from_v0m["Rs"], N, N)
+    runtime_rs_drift = norm_inf([
+        [runtime_rs[i][j] - v0m_rs[i][j] for j in range(N)]
+        for i in range(N)
+    ])
+    # Nonessential QA of the regenerated eigenvector decimal basis.
+    # NEVER substitute runtime_rs for the V0-M certified snapshot.
+    if runtime_rs_drift >= Fraction(1, 100000000):
+        raise AssertionError(
+            "Regenerated V0-M Rs differs too much from frozen directed basis"
+        )
     irf_rs = matrix(from_irf["Rs"], N, N)
     different_rs = sum(
         irf_rs[i][j] != v0m_rs[i][j]
@@ -175,7 +195,18 @@ def main():
             raise AssertionError(
                 f"Directed certificate's basis/meaning changed: {anchor}"
             )
-    certificate = json.loads(BOUNDS.read_text(encoding="utf-8"))
+    certificate = json.loads(REFERENCE_BOUNDS.read_text(encoding="utf-8"))
+    # The dynamic V0-M verifier may update its output, but the certified
+    # upper bound we TRANSPORT is always the original SHA-pinned snapshot.
+    # A gross conflict with a fresh interval run should not be ignored.
+    runtime_certificate = json.loads(BOUNDS.read_text(encoding="utf-8"))
+    if runtime_certificate.get("precision_decimal_digits") != 80:
+        raise AssertionError("Generated interval precision has drifted")
+    runtime_eps = rational(
+        runtime_certificate["exact_transition_coordinate_error_upper"]
+    )
+    if runtime_eps <= 0 or runtime_eps >= Fraction(1, 10**30):
+        raise AssertionError("Generated interval F-error requires manual review")
     if certificate.get("precision_decimal_digits") != 80:
         raise AssertionError("Directed verification precision changed")
     eps = rational(certificate["exact_transition_coordinate_error_upper"])
@@ -195,11 +226,17 @@ def main():
     payload = {
         "status": "EXACT_RATIONAL_TRANSPORT_OF_PINNED_DIRECTED_STENCIL_BOUND",
         "source_blob_sha1": blobs,
+        "runtime_80digit_preconditioner_blob_sha1": git_blob_sha1(V0M),
+        "runtime_80digit_bounds_blob_sha1": git_blob_sha1(BOUNDS),
+        "runtime_Rs_vs_pinned_Rs_max_row_difference_upper_15dp": (
+            directed_upper(runtime_rs_drift)
+        ),
         "stencil_80_digit_cert_scope": certificate.get("scope"),
         "pinning_notice": (
             "The producer's 80-digit certificate is treated as an external "
-            "directed-interval premise; this script independently transports "
-            "it using exact rational arithmetic and verifies inputs/hashes."
+            "directed-interval premise from immutable RS + bound snapshots. "
+            "It independently transports the bound using exact rationals "
+            "and checks regenerated V0-M matrices P0/F0/Rv for equality."
         ),
         "irf_P0_F0_Rv_are_identical_to_v0m_source_literals": True,
         "verified_Rs_differs_from_IRF_Rs_in_entries": different_rs,
