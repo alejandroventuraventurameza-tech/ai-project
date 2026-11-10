@@ -81,7 +81,6 @@ theorem source_narrow_left_deposit_rate_box :
       1 + boundaryPaymentTerm / boundaryReserveRate R <
         1 + (1199831773 / 1000000000000 : ℝ) := by
     linarith only [hfracHi]
-  dsimp [R]
   change (10271879 / 10000000 : ℝ) <
       (boundaryReserveRate (1029135 / 1000000 : ℝ) +
         (9 / 10 : ℝ) * meanSlope +
