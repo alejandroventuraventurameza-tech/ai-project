@@ -23,6 +23,7 @@ open ProposedStationaryBank
 open ProposedStationaryRealScale
 open ProposedStationaryPrimitives
 open ProposedStationaryInheritedState
+open ProposedStationaryReducedSystem
 open ProposedBoundaryResourceRoot
 open ProposedBoundaryFullPrefix
 open ProposedBoundaryNormalizationBridge
@@ -85,6 +86,7 @@ theorem source_stationary_wage_gt_137 :
   have hPowLe :
       wage ^ (12 : ℕ) ≤ (137 / 100 : ℝ) ^ (12 : ℕ) := by
     gcongr
+    exact wage_pos.le
   rw [wage_pow_twelve] at hPowLe
   linarith only [hProduct, hPowLe]
 
@@ -173,7 +175,15 @@ theorem source_stationary_bank_equity_lt_44_25 :
         (44 / 25 : ℝ) *
           ((8 / 3 : ℝ) * (137 / 100 : ℝ) ^ (5 : ℕ)) := by
     norm_num
-  rw [mul_assoc, hId] at hMulLower
+  have hIdR :
+      bankEquity *
+        ((3 - 2 * ProposedStationaryBank.reserveDepositRatio) *
+          wage ^ (5 : ℕ)) = creditScale := by
+    calc
+      _ = bankEquity * (3 - 2 * ProposedStationaryBank.reserveDepositRatio) *
+            wage ^ (5 : ℕ) := by ring
+      _ = creditScale := hId
+  rw [hIdR] at hMulLower
   linarith only [hUpper, hMulLower, hNumerical]
 
 /-- The ORIGINAL bank-face contribution cannot be more negative
@@ -252,7 +262,7 @@ theorem source_narrow_bank_face_contribution_gt_neg_three_percent
     unfold boundaryBankEquity
     field_simp [ne_of_gt hRpos, ne_of_gt hLoanPos] <;> ring
   rw [hIdentity]
-  linarith only [hDiv]
+  convert neg_lt_neg hDiv using 1 <;> ring
 
 #print axioms source_stationary_wage_gt_137
 #print axioms source_credit_scale_lt_22553
