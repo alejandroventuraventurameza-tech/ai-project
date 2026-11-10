@@ -292,6 +292,10 @@ if __name__ == "__main__":
     # Not a certificate for the nonlinear SOURCE operator or economic TVC.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "exact_linear_tail_power_certificate.py")], check=True)
 
+    # Transport a separately pinned 80-digit HAND-STENCIL F0 error through
+    # its own exact rational change of basis. SOURCE semantics still open.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_stencil_transition_bridge.py")], check=True)
+
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "reproduce.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "diagnose_impact.py")], check=True)
