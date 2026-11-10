@@ -296,9 +296,30 @@ el error máximo al cotejar los Jacobianos tras aplicar
 esta transformación cae a $3.87\cdot10^{-9}$
 en la prueba numérica. La identidad fuera de la
 variedad contractual se verifica también independientemente.
-La comprobación de las restantes filas continúa siendo
+Las identidades exactas de Euler, la preservación de ceros
+por la operación de fila y la simplificación de la Euler
+literal del modelo fuente se han formalizado en Lean~4:
+los cuatro lemas del archivo
+\path{lean/candidates/Ventura26LiquidityAllocation/HandStencilPledgeRowEquivalenceCandidate.lean}
+compilaron sin \texttt{sorryAx} (GitHub Actions
+\texttt{42918395877}, revisión \texttt{4a0dfb52}).
+La comprobación de los restantes residuos es todavía
 numérica y el puente integral con las 34 condiciones del
-modelo fuente, una obligación formal. Véase
+modelo fuente, una obligación formal.
+
+\paragraph{Orden de filas y condición adicional.}
+El orden de las ecuaciones fuente de fecha cero no coincide
+con el orden de las primeras seis filas de Python:
+la permutación fuente--Python es $(0,3,1,4,2,5)$.
+La auditoría automatizada de las 33 etiquetas comprueba
+su correspondencia biyectiva; no prueba por sí misma
+equivalencia funcional de los residuos. La condición
+trigésima cuarta del sistema aumentado es el \emph{dual
+normalizado de financiamiento de la firma L}, y no una
+segunda identidad de garantía ni otra perturbación
+de política. La verificación de este último renglón
+y de las transformaciones económicas necesarias es
+una compuerta abierta. Véase
 \path{docs/PUENTE_STENCIL_EULER_GARANTIA_20261110.md}.
 
 De hecho, $\|F_0^7\|_\infty>6$: es posible una
