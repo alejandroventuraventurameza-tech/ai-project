@@ -60,7 +60,7 @@ def exact_local_exclusion(s):
         "zeta": (s.zeta, Q(1, 5)),
         "aa": (s.aa, Q(1, 2)),
         "tight": (s.tight, Q(1, 2)),
-        "steady_inflation": (s.base[9], Q(1, 1)),
+        "steady_inflation": (s.base[11], Q(1, 1)),
         "steady_C_L_0_equals_C_L_1": (s.cc[1], Q(str(s.cc[1]))),
     }
     for name, (value, expected) in params.items():
@@ -78,11 +78,7 @@ def exact_local_exclusion(s):
         raise AssertionError("Stationary loan gross rate bound failed")
     if not (0 < s.cm < float(cm_ub)
             and 0 < s.cp < float(cp_ub)
-            and 0 < s.cd < float(cm_ub)
-            and 0 < s.ar if hasattr(s, "ar") else
-            (0 < s.cm < float(cm_ub)
-             and 0 < s.cp < float(cp_ub)
-             and 0 < s.cd < float(cm_ub))):
+            and 0 < s.cd < float(cm_ub)):
         raise AssertionError("Float consistency of corridor slope bounds failed")
     if not s.rate < float(derived_rate_ub):
         raise AssertionError("Float source rate violates rational outer bound")
@@ -202,9 +198,9 @@ def numeric_candidate(s, seed, p0, policy, z, branch):
     }
 
 
-def slack_seeds(binding_z, s, seed):
+def slack_seeds(binding_z, s, seed, p0):
     """Start from B and enforce the L loan Euler equality in 3 distinct ways."""
-    x1, u0, x2, u1, u2 = decode_prefix(seed, [[0.0]*6]*16, binding_z)
+    x1, u0, x2, u1, u2 = decode_prefix(seed, p0, binding_z)
     loan_foc_log = math.log(u0[8] * s.be*u0[1]/u1[1]/u1[5])
     variants = [("binding_root", list(binding_z))]
     for label, coordinate, delta in (
@@ -252,7 +248,7 @@ def main():
         fS = lambda z: prefix_residual(seed, p0, "slack", shock, z)
         candidates = []
         errors = []
-        for trial_name, trial in slack_seeds(b_root, s, seed):
+        for trial_name, trial in slack_seeds(b_root, s, seed, p0):
             try:
                 s_root, history, _ = newton(
                     fS, trial, tolerance=2e-12, max_iterations=25
