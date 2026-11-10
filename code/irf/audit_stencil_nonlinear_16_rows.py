@@ -106,6 +106,36 @@ def main():
         [[float(c1[i, j].midpoint()) for j in range(N)]
          for i in range(N)],
     ]
+    # The legacy hand stencil omitted the direct derivative with respect
+    # to the FUTURE inflation, at the capital Euler FOCs for H and L.
+    # The omitted derivative is -be*theta_i*J (gross real collateral).
+    hand_original = (V0M / "inputs/hand_linearization.py").read_text(
+        encoding="utf-8"
+    )
+    candidate_path = (
+        V0M / "inputs/hand_linearization_future_inflation_candidate.py"
+    )
+    hand_candidate = candidate_path.read_text(encoding="utf-8")
+    old_line = (
+        "nxt=-b[i]/k[i]*eye[2]+p[i]*sigmaE*eye[6+i]"
+        "-be*uc[i]*logu[i]-be*(1-pledge[i])*ad*q*eye[12]"
+    )
+    corrected_line = old_line + "-be*pledge[i]*J*eye[11]"
+    if hand_original.split(old_line).__len__() != 2:
+        raise AssertionError("Original hand coefficient stencil changed")
+    if hand_candidate != hand_original.replace(old_line, corrected_line):
+        raise AssertionError(
+            "Candidate changes more than the two missing inflation terms"
+        )
+    targets_corrected = [
+        [list(row) for row in m] for m in targets
+    ]
+    required_missing = {
+        "H": -sn.be*sn.pledge[0]*sn.J,
+        "L": -sn.be*sn.pledge[1]*sn.J,
+    }
+    targets_corrected[1][2][11] += required_missing["H"]
+    targets_corrected[1][3][11] += required_missing["L"]
     analyses = []
     for step in STEPS:
         fd = [[[0.0]*N for _ in range(N)] for _ in range(2)]
@@ -122,10 +152,17 @@ def main():
                 for i in range(N):
                     fd[axis][i][j] = (fp[i]-fm[i])/(2*step)
         rows = []
+        corrected_rows = []
         worst = []
+        worst_corrected = []
         for i in range(N):
             worst_i = max(
                 (abs(fd[axis][i][j]-targets[axis][i][j]), axis, j)
+                for axis in range(2) for j in range(N)
+            )
+            corrected_i = max(
+                (abs(fd[axis][i][j]-targets_corrected[axis][i][j]),
+                 axis, j)
                 for axis in range(2) for j in range(N)
             )
             rows.append({
@@ -136,10 +173,30 @@ def main():
                 "reference": targets[worst_i[1]][i][worst_i[2]],
                 "finite_difference": fd[worst_i[1]][i][worst_i[2]],
             })
+            corrected_rows.append({
+                "name": ROW_NAMES[i],
+                "max_error_abs": corrected_i[0],
+                "axis": ("current" if corrected_i[1] == 0 else "next"),
+                "column": corrected_i[2],
+            })
             worst.append(worst_i[0])
+            worst_corrected.append(corrected_i[0])
         analyses.append({
-            "step": step, "max_abs_row_jacobian_error": max(worst),
-            "row_breakdown": rows,
+            "step": step, "legacy_max_abs_jacobian_error": max(worst),
+            "candidate_corrected_max_abs_jacobian_error": max(worst_corrected),
+            "legacy_row_breakdown": rows,
+            "corrected_row_breakdown": corrected_rows,
+            "legacy_missing_entries": {
+                name: {
+                    "hand_reference": targets[1][row][11],
+                    "source_finite_difference": fd[1][row][11],
+                    "corrected_hand_analytic_coefficient": (
+                        targets_corrected[1][row][11]
+                    ),
+                    "derived_missing_source_term": required_missing[name],
+                }
+                for name, row in (("H", 2), ("L", 3))
+            },
             "raw_jacobians_for_step_comparison": fd,
         })
     max_fd_disagreement = max(
@@ -151,12 +208,21 @@ def main():
         del item["raw_jacobians_for_step_comparison"]
     good = (
         stationary_error < 1e-9
-        and all(r["max_abs_row_jacobian_error"] < ABS_TOL for r in analyses)
+        and all(
+            r["candidate_corrected_max_abs_jacobian_error"] < ABS_TOL
+            for r in analyses
+        )
+        and all(
+            r["legacy_max_abs_jacobian_error"] > 0.1
+            for r in analyses
+        )
         and max_fd_disagreement < CONVERGENCE_TOL
     )
     report = {
-        "status": ("NUMERICAL_HAND_STENCIL_VS_NONLINEAR_ROWS_MATCH"
-                   if good else "NUMERICAL_HAND_STENCIL_MISMATCH"),
+        "status": (
+            "KNOWN_STENCIL_DEFECT_EXACTLY_LOCATED_CANDIDATE_CORRECTION_MATCH"
+            if good else "STENCIL_CORRECTION_UNRESOLVED"
+        ),
         "scope": (
             "Nonlinear Python recurrent binding-period rows, at the same "
             "stationary 16-log-coordinate state, against hand-interval "
@@ -175,10 +241,15 @@ def main():
         "max_steady_level_difference": max_stationary_mismatch,
         "stationary_16_row_residual_max_abs": stationary_error,
         "finite_difference_analyses": analyses,
+        "candidate_hand_stencil": str(candidate_path.relative_to(ROOT)),
+        "original_hand_stencil_is_NOT_equivalent_to_nonlinear_rows": True,
+        "expected_missing_next_inflation_coefficients": required_missing,
         "two_step_jacobian_max_abs_disagreement": max_fd_disagreement,
         "acceptance_threshold_abs": ABS_TOL,
         "step_consistency_threshold": CONVERGENCE_TOL,
         "not_established": [
+            "80-digit graph and transition re-certified for corrected stencil",
+            "legacy F0/P0 correspond to corrected nonlinear evaluator",
             "full 34-row SOURCE semantic equality",
             "certified interval Jacobian for nonlinear Python evaluator",
             "state derivative equality over a positive-radius neighborhood",
@@ -190,18 +261,23 @@ def main():
     print(json.dumps({
         "status": report["status"],
         "stationary_row_error": stationary_error,
-        "max_first_step_error": analyses[0]["max_abs_row_jacobian_error"],
-        "max_second_step_error": analyses[1]["max_abs_row_jacobian_error"],
+        "legacy_max_first_step_error": analyses[0]["legacy_max_abs_jacobian_error"],
+        "candidate_corrected_max_first_step_error": (
+            analyses[0]["candidate_corrected_max_abs_jacobian_error"]
+        ),
+        "candidate_corrected_max_second_step_error": (
+            analyses[1]["candidate_corrected_max_abs_jacobian_error"]
+        ),
         "steps_disagreement": max_fd_disagreement,
-        "worst_rows": sorted(analyses[0]["row_breakdown"],
+        "legacy_worst_rows": sorted(analyses[0]["legacy_row_breakdown"],
                              key=lambda r:r["max_error_abs"],
                              reverse=True)[:4],
         "report": str(OUT),
     }, indent=2), flush=True)
     if not good:
         raise AssertionError(
-            "Nonlinear 16-row and hand-interval stencil derivative mismatch; "
-            "inspect the archived JSON, do not relax the gate automatically"
+            "The two known future-inflation missing terms do not explain "
+            "the 16-row nonlinear/stencil discrepancy: inspect archived JSON"
         )
 
 
