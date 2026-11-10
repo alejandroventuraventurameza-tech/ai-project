@@ -34,6 +34,49 @@ The program uses rational endpoints internally represented as enclosing multiple
 
 **Result (`NUMERICO EXACTO`):** the transcribed resource function crosses zero across the rational bracket. The transcribed face gap is strictly bounded between 0.08 and 0.09 at every real rate in that interval, not merely at a midpoint. The Lean model already has a monotone resource function and a unique broad-bracket SOURCE root, so importing these inequalities as kernel proofs would establish the exclusion of the current inherited-state witness.
 
+## Exact structural decomposition, certified by the Lean kernel
+
+**DEMOSTRADO** on the original SOURCE definitions, commit
+`f524820bbf8ebbbf5caee6bcb5658f07cff98e3b` (the code is in
+`BoundaryInheritedFaceDecompositionCandidate.lean` and
+`BoundaryInheritedFaceMechanismCandidate.lean`).
+- Focused Lean/axiom gate: [#42747478805](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42747478805), **success**.
+- General dependency-order candidate audit: [#42747471124](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42747471124), **success**.
+
+The initial nominal-face gap of the unmodified SOURCE initial-state
+construction admits the **exact algebraic decomposition**, for any
+`G` and boundary loan gross rate `R`:
+
+```text
+Delta_Face(G,R)
+  = sum_i mass_i * (F_i^stationary - F_i^SOURCE(G,R))
+    + (B_face^SOURCE(R) - B_face^stationary)
+        / bankRenewalFactor.
+```
+
+The Lean kernel additionally proves:
+
+1. `boundaryInheritedFace_independent_of_G` and
+   `boundaryInheritedGap_independent_of_G`: neither the reconstructed
+   initial firm faces nor the exact total nominal gap changes when the
+   fiscal bond-supply parameter `G` changes.
+2. `stationaryLoanRate_lt_boundaryRate`: the SOURCE boundary gross
+   loan rate exceeds the stationary parent loan rate at **every**
+   point of the originally certified SOURCE root interval.
+3. `boundaryBankFace_lt_stationary` and
+   `sourceBankFaceContribution_neg`: the inherited bank-face shift
+   is strictly negative after bank renewal adjustment at the named
+   SOURCE root. This is a statement about the old `boundaryInitialState`
+   constructor, **not** a policy-induced loss along a complete equilibrium
+   impulse response.
+
+**Interpretation:** a *positive* total gap would have to arise because
+the decline in the inherited entrepreneurial face claims outweighs the
+negative bank-face shift. The observed positive sign continues to be
+`NUMERICO EXACTO` on the separately transcribed formulas; the structural
+Lean theorems do **not** themselves close the three numerical-to-kernel
+inequalities listed below.
+
 ## Separate kernel obligations
 
 The source-side Lean module `BoundaryInheritedFaceIntervalBridgeCandidate.lean` states a **conditional theorem**, not a new assumption-free incompatibility result. It uses pre-existing Lean monotonicity and root uniqueness to narrow the SOURCE root, provided the two endpoint signs for the original `boundaryResourceResidual` are demonstrated. A second conditional theorem uses a uniform 0.08 lower bound for the **original** `inheritedNominalFaceGap` to derive the no-equilibrium conclusion.
