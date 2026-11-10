@@ -322,6 +322,82 @@ y de las transformaciones económicas necesarias es
 una compuerta abierta. Véase
 \path{docs/PUENTE_STENCIL_EULER_GARANTIA_20261110.md}.
 
+\begin{proposition}[Cuña de precio efectivo del capital bajo garantía vinculante]
+\label{prop:compact_source_collateral_effective_wedge}
+Supóngase que ambas empresas enfrentan la misma tasa
+crediticia bruta $R_t^L>0$, con depreciación $\delta<1$,
+inflación futura $\Pi_{t+1}>0$, precio futuro del capital
+$q_{t+1}>0$, y pignorabilidades
+$\theta_H<\theta_L$. Defina
+\[
+J_{t+1}=(1-\delta)\Pi_{t+1}q_{t+1},
+\quad
+p_{i,t}^{\mathrm{eff}}
+=q_t-\frac{\theta_iJ_{t+1}}{R_t^L}.
+\]
+Entonces, para las firmas con garantía vinculante,
+\[
+W_t:=p_{H,t}^{\mathrm{eff}}-p_{L,t}^{\mathrm{eff}}
+=(\theta_L-\theta_H)\frac{J_{t+1}}{R_t^L}>0.
+\]
+\end{proposition}
+\begin{proof}
+El presupuesto fuente se reduce al precio efectivo
+cuando la igualdad nominal de garantía se cumple.
+Al restar los precios efectivos, desaparece $q_t$.
+El orden de $\theta_i$ y la positividad de
+$J_{t+1}/R_t^L$ establecen la desigualdad.
+\end{proof}
+Las tres identidades del presupuesto empresarial y los
+dos lemas de esta cuña se compilaron en Lean~4 sin
+\texttt{sorryAx}; para los últimos dos, véase la ejecución
+\texttt{42919617934} del mismo módulo fuente.
+El supuesto $\theta_H<\theta_L$ corresponde al experimento
+ilustrativo, pero no es una restricción universal de la
+estructura \texttt{Primitives}, que sí exige productividad
+$A_H>A_L$. La desigualdad de precios no demuestra
+una asignación relativa determinada ni bienestar superior.
+
+\paragraph{Descomposición contable de la respuesta}
+Con pignorabilidades fijas y $W,J,R^L>0$,
+\[
+\Delta\log W_t
+=\Delta\log J_{t+1}-\Delta\log R_t^L.
+\]
+Manteniendo $J$ fijo, la derivada parcial de $W$ con
+respecto a $R_t^L$ es estrictamente negativa; una reducción
+aislada de la tasa bruta puede ampliar la desventaja
+de precio efectivo de H. En el experimento de remuneración
+de reservas, sin embargo, tasa y valor de la garantía
+varían endógenamente. La identidad no identifica sus
+efectos causales por separado.
+
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+Impacto, $100\Delta\log$ (log \%) & S & B\\
+\midrule
+Cuña financiera $W$ & $+0.000931$ & $+0.001913$\\
+Valor futuro de garantía $J$ & $+0.000313$ & $+0.001030$\\
+Menos variación de tasa $R^L$ & $+0.000618$ & $+0.000883$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\noindent\emph{Nota.} Innovación de fecha cero de $-0.1$
+puntos básicos aproximados en la regla de remuneración de
+reservas, parámetros ilustrativos y continuación local
+finita. En S, L tiene colateral holgado al impacto:
+su precio efectivo pignorable es una magnitud hipotética,
+\emph{no} el costo marginal de inversión de la rama S.
+En B, ambas empresas están restringidas al impacto.
+La auditoría independiente sobre 160 fechas por rama
+obtiene un error de identidad en niveles inferior a
+$2\cdot10^{-16}$. Véase
+\path{docs/CUNA_FINANCIERA_COLATERAL_Y_DESCOMPOSICION_IRF_20261110.md}
+y \path{code/irf/audit_effective_price_wedge_irf.py}.
+El signo de la cuña cambia en fechas posteriores del
+ejercicio finito; no se extrapola al largo plazo.
+
 De hecho, $\|F_0^7\|_\infty>6$: es posible una
 amplificación transitoria aunque la cola lineal decaiga.
 Una extensión no lineal requeriría construir y validar una
