@@ -107,6 +107,26 @@ def directed_upper(q, places=15):
     return f"{n // scale}.{n % scale:0{places}d}"
 
 
+def outward_scientific_upper(q, significant_digits=10):
+    """Base-10 scientific upward bound, using Fractions throughout."""
+    if q <= 0:
+        raise AssertionError("Expected a positive exact rational")
+    e = len(str(q.numerator)) - len(str(q.denominator))
+    def ten_power(k):
+        return Fraction(10 ** k) if k >= 0 else Fraction(1, 10 ** (-k))
+    while q < ten_power(e):
+        e -= 1
+    while q >= ten_power(e + 1):
+        e += 1
+    places = significant_digits - 1
+    x = q * Fraction(10 ** places) / ten_power(e)
+    n = -((-x.numerator) // x.denominator)
+    if n >= 10 ** significant_digits:
+        n = 10 ** places
+        e += 1
+    return f"{n // (10 ** places)}.{n % (10 ** places):0{places}d}e{e:+d}"
+
+
 def main():
     blobs = {}
     for p, expected in EXPECTED_BLOBS.items():
@@ -193,6 +213,9 @@ def main():
         "unweighted_six_state_Fstar_minus_F0_upper_15dp": (
             directed_upper(coordinate_gap_bound)
         ),
+        "unweighted_six_state_Fstar_minus_F0_upper_scientific": (
+            outward_scientific_upper(coordinate_gap_bound)
+        ),
         "norm_gap_target": "1/10000",
         "strict_gap_gate_passes": True,
         "linear_conditional_consequence": (
@@ -222,6 +245,9 @@ def main():
         ),
         "unweighted_gap_upper_15dp": (
             payload["unweighted_six_state_Fstar_minus_F0_upper_15dp"]
+        ),
+        "unweighted_gap_upper_scientific": (
+            payload["unweighted_six_state_Fstar_minus_F0_upper_scientific"]
         ),
         "source_operator_equivalence": "PENDING",
         "output": str(OUT),
