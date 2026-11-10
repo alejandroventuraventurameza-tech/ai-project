@@ -220,6 +220,46 @@ def slack_seeds(binding_z, s, seed, p0):
     return variants
 
 
+def root_log_coordinate_groups(z):
+    return {
+        "next_state_0_to_1": max_abs(z[:7]),
+        "current_controls_0": max_abs(z[7:17]),
+        "date_two_compact_state": max_abs(z[17:23]),
+        "date_one_controls": max_abs(z[23:33]),
+    }
+
+
+def log_pct(new, reference):
+    if not (new > 0 and reference > 0):
+        raise AssertionError("Policy response is outside log-positive domain")
+    return 100.0*math.log(new/reference)
+
+
+def branch_specific_impact(cur, reference):
+    """Response within ONE branch, relative to its own zero-shock root."""
+    values = {
+        "output_log_pct": log_pct(
+            cur["date0_output"], reference["date0_output"]
+        ),
+        "loan_rate_log_pct": log_pct(
+            cur["date0_loan_rate"], reference["date0_loan_rate"]
+        ),
+    }
+    for i, name in enumerate(("H", "L")):
+        values["capital_next_"+name+"_log_pct"] = log_pct(
+            cur["date0_capital_next_H_L"][i],
+            reference["date0_capital_next_H_L"][i],
+        )
+        values["credit_"+name+"_log_pct"] = log_pct(
+            cur["date0_credit_H_L"][i],
+            reference["date0_credit_H_L"][i],
+        )
+    values["relative_capital_H_over_L_log_pct"] = (
+        values["capital_next_H_log_pct"] - values["capital_next_L_log_pct"]
+    )
+    return values
+
+
 def main():
     s = steady_case()
     seed = frozen_stationary_seed(s)
@@ -276,6 +316,7 @@ def main():
                 candidates.append({
                     "trial": trial_name,
                     "log_coordinate_norm_inf": local_distance,
+                    "log_coordinate_group_norm_inf": root_log_coordinate_groups(s_root),
                     "maximum_residual_33_rows": s_resid,
                     "candidate": sc,
                 })
@@ -296,6 +337,7 @@ def main():
             "B": {
                 "maximum_residual_33_rows": b_resid,
                 "log_coordinate_norm_inf": max_abs(b_root),
+                "log_coordinate_group_norm_inf": root_log_coordinate_groups(b_root),
                 "necessary_condition_gate": bcheck,
             },
             "S": {
@@ -325,6 +367,31 @@ def main():
         }), flush=True)
         if tuple(seed.X0) != snapshot:
             raise AssertionError(f"{name}: inherited state changed")
+    # Compare policy shocks ONLY against the zero-shock root of the same
+    # active set. Never compare a shock on S directly with the B baseline
+    # and then call the level difference a causal treatment effect.
+    baseline = results["zero_shock"]
+    b_zero = baseline["B"]["necessary_condition_gate"]
+    s_zero_entry = baseline["S"]["qualified_candidate"]
+    s_zero = s_zero_entry["candidate"] if s_zero_entry else None
+    comparison = {}
+    for name, case in results.items():
+        if name == "zero_shock":
+            continue
+        b_current = case["B"]["necessary_condition_gate"]
+        b_response = branch_specific_impact(b_current, b_zero)
+        s_entry = case["S"]["qualified_candidate"]
+        s_response = (
+            branch_specific_impact(s_entry["candidate"], s_zero)
+            if s_entry and s_zero else None
+        )
+        comparison[name] = {
+            "B_relative_to_B_zero_shock": b_response,
+            "S_relative_to_S_zero_shock": s_response,
+            "same_inherited_state": True,
+            "different_local_branch_baselines": True,
+            "not_causal_evidence": True,
+        }
     payload = {
         "status": "NUMERICAL_SAME_PREDECESSOR_BRANCH_DIAGNOSTIC_ONLY",
         "source_code_row_count": 33,
@@ -333,6 +400,7 @@ def main():
         "linear_tail": "pinned local P0 16-by-6",
         "rational_local_S_exclusion": theorem,
         "scenarios": results,
+        "branch_specific_policy_responses": comparison,
         "not_established": [
             "global nonexistence of the S branch if no solver finds it",
             "validity of either branch as an infinite-horizon equilibrium",
