@@ -431,11 +431,23 @@ theorem source_household_euler_log_zero_iff_original_row_zero
           crraMarginal P.workerRiskAversion d.nextControls.workerConsumption /
           crraMarginal P.workerRiskAversion d.controls.workerConsumption) /
         d.nextControls.inflation) = 0 ↔
-    (1 - d.controls.depositRate *
+    (1 -
       (P.workerDiscount *
         crraMarginal P.workerRiskAversion d.nextControls.workerConsumption /
-        crraMarginal P.workerRiskAversion d.controls.workerConsumption) /
-      d.nextControls.inflation = 0)
+        crraMarginal P.workerRiskAversion d.controls.workerConsumption) *
+      d.controls.depositRate / d.nextControls.inflation = 0)
+  have hswap :
+      (P.workerDiscount *
+        crraMarginal P.workerRiskAversion d.nextControls.workerConsumption /
+        crraMarginal P.workerRiskAversion d.controls.workerConsumption) *
+      d.controls.depositRate / d.nextControls.inflation =
+      d.controls.depositRate *
+        (P.workerDiscount *
+          crraMarginal P.workerRiskAversion d.nextControls.workerConsumption /
+          crraMarginal P.workerRiskAversion d.controls.workerConsumption) /
+        d.nextControls.inflation := by
+    ring
+  rw [hswap]
   have h := positive_log_zero_iff_ratio_minus_one_zero _ hpositive
   constructor
   · intro hz
