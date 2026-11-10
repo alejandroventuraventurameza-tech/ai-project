@@ -296,6 +296,10 @@ if __name__ == "__main__":
     # its own exact rational change of basis. SOURCE semantics still open.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_stencil_transition_bridge.py")], check=True)
 
+    # Compare nonlinear Python 16-row source with hand Euler reduction via
+    # the INVERTIBLE nominal-pledge row operation, not literal row equality.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_stencil_nonlinear_16_rows.py")], check=True)
+
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "reproduce.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "diagnose_impact.py")], check=True)
