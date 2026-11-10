@@ -97,10 +97,31 @@ theorem firm_face_decline_pos_of_total_gap_pos
   rw [boundaryInheritedGap_eq_face_shifts G R] at hgap
   linarith
 
+/-- More informative conditional lower bound on the entrepreneurial
+face decline. A bank-face contribution below zero implies that whenever
+the full inherited nominal discrepancy exceeds 0.08, the weighted firm
+face decline exceeds 0.08 as well. This does NOT prove the premise: the
+uniform SOURCE gap certificate is still a separate kernel obligation. -/
+theorem firm_face_decline_gt_eight_percent_of_gap_gt_eight_percent
+    (G R : ℝ) (hR : R ∈ boundaryInterval)
+    (hgap : (8 / 100 : ℝ) <
+      inheritedNominalFaceGap
+        (boundaryPrimitives G R) (boundaryInitialState G R)) :
+    (8 / 100 : ℝ) < ∑ i, (primitives G).mass i *
+      ((inheritedState G).firmFace i -
+        boundaryInheritedFace G R (boundaryZeroSeed G R) i) := by
+  have hbank :
+      (boundaryBankEquity R - bankEquity) /
+        bankRenewalFactor (primitives G) < 0 :=
+    bankFaceContribution_neg G R hR
+  rw [boundaryInheritedGap_eq_face_shifts G R] at hgap
+  linarith
+
 #print axioms source_gap_eq_at_zero_fiscal
 #print axioms uniform_gap_from_zero_fiscal_reference
 #print axioms noCompetitiveEquilibrium_from_zero_fiscal_reference
 #print axioms firm_face_decline_pos_of_total_gap_pos
+#print axioms firm_face_decline_gt_eight_percent_of_gap_gt_eight_percent
 
 end ProposedBoundaryFaceGapFiscalReduction
 end Ventura26LiquidityAllocation
