@@ -76,10 +76,16 @@ def exact_local_exclusion(s):
     derived_rate_ub = (rd + sqrt_ub)/2 + cbar_ub
     if not derived_rate_ub < rate_ub:
         raise AssertionError("Stationary loan gross rate bound failed")
+    # The stationary constructor stores cm and cp, not their difference.
+    # The auxiliary block computes cd=cm-cp from those same two slopes.
+    source_cd = s.cm - s.cp
     if not (0 < s.cm < float(cm_ub)
             and 0 < s.cp < float(cp_ub)
-            and 0 < s.cd < float(cm_ub)):
+            and 0 < source_cd < float(cm_ub)):
         raise AssertionError("Float consistency of corridor slope bounds failed")
+    ar_floor = rd - Q(9, 10)*cbar_ub - Q(1, 10)*zeta*cm_ub/2
+    if not ar_floor > 0:
+        raise AssertionError("No positive stationary reserve-rate root bound")
     if not s.rate < float(derived_rate_ub):
         raise AssertionError("Float source rate violates rational outer bound")
     r = RADIUS
