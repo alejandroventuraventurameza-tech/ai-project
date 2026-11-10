@@ -100,7 +100,7 @@ jobs:
         working-directory: upstream
         run: |
           set -euo pipefail
-          lake build Ventura26LiquidityAllocation.BoundaryBankFaceUniformLowerCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
+          lake build Ventura26LiquidityAllocation.FirmFaceAccountingCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
             tail -n 160 "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log"
             exit 1
           }
@@ -111,7 +111,7 @@ jobs:
         run: |
           set -euo pipefail
           cat > BoundaryProofAudit.lean <<'LEAN'
-          import Ventura26LiquidityAllocation.BoundaryBankFaceUniformLowerCandidate
+          import Ventura26LiquidityAllocation.FirmFaceAccountingCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryWorkerLabor.boundary_full_prefix_equations_from_root
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.output_ratio_fifteenth_power
@@ -212,6 +212,9 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryBankFaceUniformLower.source_credit_scale_lt_22553
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryBankFaceUniformLower.source_stationary_bank_equity_lt_44_25
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryBankFaceUniformLower.source_narrow_bank_face_contribution_gt_neg_three_percent
+          #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceAccounting.boundary_wage_labor_eq_profit_share
+          #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceAccounting.boundary_source_operating_profit_eq_output_share
+          #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceAccounting.source_firm_face_decline_exact
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowDepositBox.source_narrow_left_worker_consumption_lower
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.normalized_source_resource_residual_exact
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.source_normalization_factor_pos
