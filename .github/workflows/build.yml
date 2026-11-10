@@ -75,6 +75,13 @@ jobs:
           path: code/irf/output/source_L_funding_dual_irf_audit.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve source/Python log-to-level regime row evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: finite-irf-source-log-regime-bridge
+          path: code/irf/output/source_python_firm_regime_log_level_audit.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Verify rational frontier endpoint boxes without floating-point acceptance
         run: python code/boundary/verify_endpoint_boxes_exact.py
       - name: Verify SOURCE bank-rate roots and slopes with exact fractions
