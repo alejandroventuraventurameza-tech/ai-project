@@ -15,6 +15,11 @@ No floating-point output, axiom or numerical certificate is imported.
 namespace Ventura26LiquidityAllocation
 namespace ProposedBoundaryFaceGapFiscalReduction
 
+open ProposedStationaryPrimitives
+open ProposedStationaryInheritedState
+open ProposedStationaryRealScale
+open ProposedBoundaryResourceRoot
+open ProposedBoundaryInheritedFaceDecomposition
 open ProposedBoundaryFullPrefix
 open ProposedBoundaryInheritedFaceGate
 open ProposedBoundaryInheritedFaceMechanism
@@ -71,9 +76,31 @@ theorem noCompetitiveEquilibrium_from_zero_fiscal_reference
   intro R hlo hhi
   exact uniform_gap_from_zero_fiscal_reference hzero G R hlo hhi
 
+/-- Conditional economic implication on ORIGINAL SOURCE terms.
+The bank-face contribution is strictly negative throughout boundaryInterval.
+If the aggregate inherited nominal gap is positive, the mass-weighted
+DECLINE in firm promises must itself be strictly positive. This lemma
+does not assert that the total gap is positive; that requires the still
+pending exact interval-sign certificate. -/
+theorem firm_face_decline_pos_of_total_gap_pos
+    (G R : ℝ) (hR : R ∈ boundaryInterval)
+    (hgap : 0 <
+      inheritedNominalFaceGap
+        (boundaryPrimitives G R) (boundaryInitialState G R)) :
+    0 < ∑ i, (primitives G).mass i *
+      ((inheritedState G).firmFace i -
+        boundaryInheritedFace G R (boundaryZeroSeed G R) i) := by
+  have hbank :
+      (boundaryBankEquity R - bankEquity) /
+        bankRenewalFactor (primitives G) < 0 :=
+    bankFaceContribution_neg G R hR
+  rw [boundaryInheritedGap_eq_face_shifts G R] at hgap
+  linarith
+
 #print axioms source_gap_eq_at_zero_fiscal
 #print axioms uniform_gap_from_zero_fiscal_reference
 #print axioms noCompetitiveEquilibrium_from_zero_fiscal_reference
+#print axioms firm_face_decline_pos_of_total_gap_pos
 
 end ProposedBoundaryFaceGapFiscalReduction
 end Ventura26LiquidityAllocation
