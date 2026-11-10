@@ -26,6 +26,13 @@ jobs:
           path: code/irf/output/four_tool_pairwise_audit.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve same-predecessor S/B economic branch diagnostic
+        uses: actions/upload-artifact@v7
+        with:
+          name: same-predecessor-branch-diagnostic
+          path: code/irf/output/same_predecessor_branch_audit.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Verify rational frontier endpoint boxes without floating-point acceptance
         run: python code/boundary/verify_endpoint_boxes_exact.py
       - name: Verify SOURCE bank-rate roots and slopes with exact fractions
