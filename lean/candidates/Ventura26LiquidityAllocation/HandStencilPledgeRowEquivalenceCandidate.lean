@@ -214,6 +214,102 @@ theorem source_less_pledgeable_H_higher_effective_price
 #print axioms source_effective_price_wedge_H_minus_L
 #print axioms source_less_pledgeable_H_higher_effective_price
 
+/-! ## SOURCE/Python zero-set bridge for firm regime residuals
+
+Python writes the L-slack and firm-binding constraints as logarithmic
+ratios; EconomicModel.lean writes them as a ratio-minus-one or
+a face-minus-collateral product. Positivity is essential. These
+lemmas establish identical ZERO SETS for the source-constructed
+expressions. They do NOT prove equality of numerical residual values
+or of raw Jacobian rows. -/
+
+/-- A log residual and a ratio-minus-one residual have the same zeros
+on the strictly positive real domain. -/
+theorem positive_log_zero_iff_ratio_minus_one_zero
+    (x : ℝ) (hx : 0 < x) :
+    Real.log x = 0 ↔ x - 1 = 0 := by
+  constructor
+  · intro hlog
+    have hexp := congrArg Real.exp hlog
+    have hx1 : x = 1 := by
+      simpa [Real.exp_log hx] using hexp
+    exact sub_eq_zero.mpr hx1
+  · intro hsub
+    have hx1 : x = 1 := sub_eq_zero.mp hsub
+    simpa [hx1]
+
+/-- A log face-ratio residual has the same zeros as a level face gap
+if both its numerator and denominator are strictly positive. -/
+theorem positive_log_ratio_zero_iff_face_difference_zero
+    (face capacity : ℝ) (hface : 0 < face) (hcapacity : 0 < capacity) :
+    Real.log (face / capacity) = 0 ↔ face - capacity = 0 := by
+  constructor
+  · intro hlog
+    have hratio : face / capacity - 1 = 0 :=
+      (positive_log_zero_iff_ratio_minus_one_zero
+        (face / capacity) (div_pos hface hcapacity)).mp hlog
+    have hquot : face / capacity = 1 := sub_eq_zero.mp hratio
+    have hface_eq : face = capacity := by
+      have h := (div_eq_iff (ne_of_gt hcapacity)).mp hquot
+      simpa using h
+    exact sub_eq_zero.mpr hface_eq
+  · intro hgap
+    have hface_eq : face = capacity := sub_eq_zero.mp hgap
+    simpa [hface_eq, ne_of_gt hcapacity]
+
+/-- In the source economic L-slack regime, the Python-style log
+funding Euler is zero iff the original source level/rational Euler
+is zero. The factor is the L entrepreneur's literal source SDF. -/
+theorem source_L_slack_log_row_zero_iff_source_regime_row_zero
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (d : LocalPrefixDateData)
+    (hrate : 0 < d.controls.loanRate)
+    (hsdf : 0 < localPrefixEntrepreneurSDF P d FirmType.L)
+    (hpi : 0 < d.nextControls.inflation) :
+    Real.log
+        (d.controls.loanRate *
+          localPrefixEntrepreneurSDF P d FirmType.L /
+          d.nextControls.inflation) = 0 ↔
+      localReducedFirmRegimeResidual LocalPrefixBranch.slack
+        P d FirmType.L = 0 := by
+  change Real.log
+      (d.controls.loanRate *
+        localPrefixEntrepreneurSDF P d FirmType.L /
+        d.nextControls.inflation) = 0 ↔
+    (d.controls.loanRate *
+      localPrefixEntrepreneurSDF P d FirmType.L /
+      d.nextControls.inflation - 1 = 0)
+  exact positive_log_zero_iff_ratio_minus_one_zero _
+    (div_pos (mul_pos hrate hsdf) hpi)
+
+/-- In the source binding regime for either firm, the Python-style
+log face-to-collateral ratio is zero iff the original nominal-face
+SOURCE regime gap is zero. Neither residual can replace the other
+outside the positive domain. -/
+theorem source_firm_binding_log_row_zero_iff_source_regime_row_zero
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (d : LocalPrefixDateData) (i : FirmType)
+    (hface : 0 < d.nextFace i)
+    (hcollateral : 0 <
+      localPrefixPledgeUnit P d i * d.nextCapital i) :
+    Real.log
+        (d.nextFace i /
+          (localPrefixPledgeUnit P d i * d.nextCapital i)) = 0 ↔
+      localReducedFirmRegimeResidual LocalPrefixBranch.binding
+        P d i = 0 := by
+  change Real.log
+      (d.nextFace i /
+        (localPrefixPledgeUnit P d i * d.nextCapital i)) = 0 ↔
+      (d.nextFace i -
+        localPrefixPledgeUnit P d i * d.nextCapital i = 0)
+  exact positive_log_ratio_zero_iff_face_difference_zero _ _
+    hface hcollateral
+
+#print axioms positive_log_zero_iff_ratio_minus_one_zero
+#print axioms positive_log_ratio_zero_iff_face_difference_zero
+#print axioms source_L_slack_log_row_zero_iff_source_regime_row_zero
+#print axioms source_firm_binding_log_row_zero_iff_source_regime_row_zero
+
 #print axioms source_sub_reduced_is_sdf_pledge_gap
 #print axioms source_eq_reduced_of_pledge_face
 #print axioms row_shear_preserves_zero_set
