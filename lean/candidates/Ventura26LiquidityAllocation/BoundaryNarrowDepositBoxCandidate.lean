@@ -128,15 +128,12 @@ theorem source_narrow_left_worker_consumption_lower :
       normalizedWorkerConsumption (1029135 / 1000000 : ℝ) := by
   have hw := boundary_worker_consumption_scale_lower
   have hrd := source_narrow_left_deposit_rate_box.2
-  have hRmem :
-      (1029135 / 1000000 : ℝ) ∈ boundaryInterval := by
-    change boundaryLo ≤ (1029135 / 1000000 : ℝ) ∧
-      (1029135 / 1000000 : ℝ) ≤ boundaryHi
-    norm_num [boundaryLo, boundaryHi]
   have hden :
       0 < (99 / 100 : ℝ) *
         boundaryDepositRate (1029135 / 1000000 : ℝ) :=
-    mul_pos (by norm_num) (boundaryDepositRate_pos hRmem)
+    mul_pos (by norm_num)
+      (lt_trans (by norm_num : (0 : ℝ) < 10271879 / 10000000)
+        source_narrow_left_deposit_rate_box.1)
   unfold normalizedWorkerConsumption
   apply (lt_div_iff₀ hden).2
   have hrate :
