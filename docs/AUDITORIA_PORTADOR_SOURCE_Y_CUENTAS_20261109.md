@@ -89,6 +89,39 @@ la focalizada.
   dominio económico positivo debe verificarse al cerrar
   `MonetaryPolicyPrimitiveDomain`.
 
+## Capital físico y presupuestos empresariales
+
+- **DEMOSTRADO**, commit `7b021e61f8ffdcd525901d6c44871dae87fc6b67`,
+  compuerta Lean #42723290194 y auditoría general #42723281305:
+  `sourceBoundaryLiteralAllocation_capitalProducerAccounts` prueba
+  `CapitalProducerAccounts P X` con capital e inversión estrictamente
+  positivos en todas las fechas admitidas. No certifica
+  `CapitalProducerOptimal`.
+- **DEMOSTRADO (compuerta focalizada)**, commit
+  `d195b1fd271d0da06578df0be49b10cb3686cd07`,
+  compuerta Lean #42725580101: el módulo
+  `BoundaryFullFirmBudgetCandidate.lean` demuestra
+  `FirmBudgetFlows P I X` al conectar las filas reducidas con las
+  promesas nominales heredadas y la riqueza de cada empresa.
+  La auditoría general #42725570386 se comprueba por separado
+  y no debe darse por aprobada sin ver su resultado.
+
+## Advertencia: compatibilidad financiera inicial
+
+- **NUMÉRICO (NO prueba Lean)**: el diagnóstico de 70 dígitos indica
+  `Delta_Face ≈ +0.08291496457343135383655` en la raíz SOURCE;
+  el estado estacionario anterior da esencialmente cero. El residual
+  de recursos de la frontera es asimismo esencialmente cero. La
+  definición exacta de `InheritedNominalFaceConsistency` requiere
+  `Delta_Face = 0`, por lo que esta condición no puede tratarse como
+  cerrada por las 33 ecuaciones.
+- Diagnóstico reproducible y obligación de certificación exacta:
+  `docs/SOURCE_INHERITED_FACE_DIAGNOSTIC_20261109.md` y
+  `scripts/audit_source_inherited_nominal_faces.py`.
+  Probar formalmente el signo mediante un intervalo racional está
+  **PENDIENTE**. No reparar silenciosamente los depósitos heredados ni
+  declarar equilibrio completo.
+
 ## Brechas remanentes de equilibrio completo
 
 `CompetitiveEquilibrium` en `EconomicModel.lean` exige de forma
@@ -103,11 +136,11 @@ para `X` salvo prueba posterior específica:
    `BankPopulationEquilibrium`, `RetailOptimal` y
    `CapitalProducerOptimal`, con suficiencia global y condiciones
    terminales; no basta Euler/KKT reducido.
-3. **Presupuestos/mercados:** `FirmBudgetFlows`,
-   `HouseholdBudgetFlows`, `InheritedNominalFaceConsistency`,
-   `CapitalProducerAccounts`. Las condiciones `FiscalClosure` y
-   `ResourceClears` ya están demostradas para el testigo SOURCE exacto,
-   pero persisten condiciones privadas y nominales de factibilidad.
+3. **Presupuestos/mercados:** `HouseholdBudgetFlows` e
+   `InheritedNominalFaceConsistency` siguen pendientes. Los predicados
+   `FirmBudgetFlows`, `CapitalProducerAccounts`, `FiscalClosure` y
+   `ResourceClears` cuentan con certificación focalizada para el testigo,
+   pero no eliminan el residual heredado ni las exigencias de optimalidad.
 4. **Liquidación OTC:** `SettlementClears` ya está demostrado para el
    portador común y todas las historias admitidas. Sigue pendiente el
    equilibrio de la **población bancaria** con Bellman y factibilidad
@@ -136,8 +169,9 @@ requiere demostrar `loanRate_t ≠ 0` para todas las fechas.
 
 Conservar el certificado Lean focalizado #42717672368 en `cb89e939` y
 recuperar la auditoría completa de candidatos de esa misma revisión. Después,
-cerrar `CapitalProducerAccounts`, `FirmBudgetFlows` y
-`HouseholdBudgetFlows` con condiciones de signo y flujos nominales;
-verificar factibilidad y optimalidad de la población bancaria y demostrar
-por separado las condiciones de transversalidad. Mantener
+registrar la auditoría general de `FirmBudgetFlows`; acotar el residual
+nominal heredado del SOURCE con garantías exactas; verificar
+`BankRenewalFlows` y resolver de forma económicamente legítima el estado
+inicial antes de probar `HouseholdBudgetFlows`. Después, certificar
+factibilidad, optimalidad y transversalidad. Mantener
 `main` sin cambios y el PR en borrador hasta las compuertas científicas.

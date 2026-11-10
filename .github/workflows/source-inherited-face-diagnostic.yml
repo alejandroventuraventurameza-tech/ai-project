@@ -1,0 +1,35 @@
+name: SOURCE inherited-face gap diagnostic (numerical)
+on:
+  push:
+    branches:
+      - work/lean-ci-validation-otc-20261106
+    paths:
+      - scripts/audit_source_inherited_nominal_faces.py
+      - .github/workflows/source-inherited-face-diagnostic.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  numerical-face-gap:
+    name: Detect nonzero inherited-face gap (NOT equilibrium certification)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact SOURCE review ref
+        uses: actions/checkout@v4
+      - name: Set up Python standard library
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Reproduce 70-digit source diagnostics
+        run: |
+          set -euo pipefail
+          python scripts/audit_source_inherited_nominal_faces.py | tee source-inherited-face-audit.json
+          echo "::warning title=SOURCE nominal inheritance::A nonzero gap has been detected NUMERICALLY (about +0.08291496). This passing diagnostic job is NOT a proof of equilibrium; exact Lean interval certification is pending."
+      - name: Preserve reproducible diagnostic output
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-inherited-face-audit
+          path: source-inherited-face-audit.json
+          if-no-files-found: error
