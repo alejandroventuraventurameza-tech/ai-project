@@ -33,6 +33,7 @@ open ProposedBoundaryNarrowRightCore
 open ProposedBoundaryNarrowLeftResidualSign
 open ProposedBoundaryNarrowRightResidualSign
 open ProposedBoundaryInheritedFaceDecomposition
+open ProposedBoundaryInheritedFaceGate
 open ProposedBoundaryInheritedFaceIntervalBridge
 open ProposedBoundaryBankFaceUniformLower
 open ProposedFirmFaceAccounting
@@ -417,8 +418,7 @@ theorem source_uniform_firm_face_decline_gt_11_percent
     linarith only [hY, hAvg, hCredit, hValuation]
   have hWage5 :
       wage ^ (5 : ℕ) < (11 / 8 : ℝ) ^ (5 : ℕ) := by
-    gcongr
-    exact source_stationary_wage_lt_11_8
+    gcongr <;> first | exact wage_pos.le | exact source_stationary_wage_lt_11_8
   have hWage5pos : 0 < wage ^ (5 : ℕ) := pow_pos wage_pos _
   have hThreshold :
       (11 / 100 : ℝ) * wage ^ (5 : ℕ) <
