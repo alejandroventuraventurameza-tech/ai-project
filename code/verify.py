@@ -314,6 +314,10 @@ if __name__ == "__main__":
     # from the generated finite CSV. This does NOT close the other 33 rows.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_L_funding_dual_irf.py")], check=True)
 
+    # Source level firm regime gaps vs Python positive-domain log ratios
+    # (B for H/L, S for L, and common pledge in recurrent periods).
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_firm_regime_log_vs_level_irf.py")], check=True)
+
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "diagnose_impact.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "compare_nonlinear_tail.py")], check=True)
