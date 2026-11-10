@@ -281,6 +281,9 @@ if __name__ == "__main__":
     # Independent direct-forcing and centered nonlinear/implicit-Jacobian audit.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "frozen_four_tool_local_derivative_audit.py")], check=True)
 
+    # Six policy pairs at two shock sizes; quantify interactions, not causal multipliers.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "frozen_four_tool_joint_interaction_audit.py")], check=True)
+
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "reproduce.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "diagnose_impact.py")], check=True)
