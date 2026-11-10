@@ -18,6 +18,7 @@ namespace ProposedBoundaryNarrowDepositBox
 open ProposedStationaryBank
 open ProposedBoundaryResourceRoot
 open ProposedBoundaryNormalizationBridge
+open ProposedBoundaryEndpointBoxes
 
 /-- Original SOURCE deposit remuneration, at the lower narrow rate,
 lies in a fully rational interval of width 10^(-7). -/
@@ -117,7 +118,47 @@ theorem source_narrow_left_deposit_rate_box :
             boundaryReserveRate (1029135 / 1000000 : ℝ)) :=
           mul_lt_mul_of_pos_left hdenLo (by norm_num)
 
+/-- First directly source-derived component bound at the narrow left
+resource endpoint. The proof combines the exact stationary worker
+consumption-scale lower box with the original SOURCE deposit-price upper
+box; the final product comparison is entirely rational. This is not yet
+the sign of the full SOURCE resource residual. -/
+theorem source_narrow_left_worker_consumption_lower :
+    (790435 / 100000 : ℝ) <
+      normalizedWorkerConsumption (1029135 / 1000000 : ℝ) := by
+  have hw := boundary_worker_consumption_scale_lower
+  have hrd := source_narrow_left_deposit_rate_box.2
+  have hRmem :
+      (1029135 / 1000000 : ℝ) ∈ boundaryInterval := by
+    change boundaryLo ≤ (1029135 / 1000000 : ℝ) ∧
+      (1029135 / 1000000 : ℝ) ≤ boundaryHi
+    norm_num [boundaryLo, boundaryHi]
+  have hden :
+      0 < (99 / 100 : ℝ) *
+        boundaryDepositRate (1029135 / 1000000 : ℝ) :=
+    mul_pos (by norm_num) (boundaryDepositRate_pos hRmem)
+  unfold normalizedWorkerConsumption
+  apply (lt_div_iff₀ hden).2
+  have hrate :
+      (99 / 100 : ℝ) *
+        boundaryDepositRate (1029135 / 1000000 : ℝ) <
+      (99 / 100 : ℝ) * (10271880 / 10000000 : ℝ) :=
+    mul_lt_mul_of_pos_left hrd (by norm_num)
+  have hprod :
+      (790435 / 100000 : ℝ) *
+          ((99 / 100 : ℝ) *
+            boundaryDepositRate (1029135 / 1000000 : ℝ)) <
+      (790435 / 100000 : ℝ) *
+          ((99 / 100 : ℝ) * (10271880 / 10000000 : ℝ)) :=
+    mul_lt_mul_of_pos_left hrate (by norm_num)
+  calc
+    _ < (790435 / 100000 : ℝ) *
+          ((99 / 100 : ℝ) * (10271880 / 10000000 : ℝ)) := hprod
+    _ < (8038062 / 1000000 : ℝ) := by norm_num
+    _ < _ := hw
+
 #print axioms source_narrow_left_deposit_rate_box
+#print axioms source_narrow_left_worker_consumption_lower
 
 end ProposedBoundaryNarrowDepositBox
 end Ventura26LiquidityAllocation
