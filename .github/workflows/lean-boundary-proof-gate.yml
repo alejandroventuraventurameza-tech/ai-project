@@ -100,7 +100,7 @@ jobs:
         working-directory: upstream
         run: |
           set -euo pipefail
-          lake build Ventura26LiquidityAllocation.BoundaryInheritedFaceMechanismCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
+          lake build Ventura26LiquidityAllocation.BoundaryPredeterminedStateCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
             tail -n 160 "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log"
             exit 1
           }
@@ -111,7 +111,7 @@ jobs:
         run: |
           set -euo pipefail
           cat > BoundaryProofAudit.lean <<'LEAN'
-          import Ventura26LiquidityAllocation.BoundaryInheritedFaceMechanismCandidate
+          import Ventura26LiquidityAllocation.BoundaryPredeterminedStateCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryWorkerLabor.boundary_full_prefix_equations_from_root
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.output_ratio_fifteenth_power
@@ -189,6 +189,9 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullFirmBudget.sourceBoundaryDateData_initial_firm_face
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullFirmBudget.localSlackLiteralAllocation_firmBudgetFlows_of_aligned_rows
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullFirmBudget.sourceBoundaryLiteralAllocation_firmBudgetFlows
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryPredeterminedState.stationary_inherited_gap_zero
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryPredeterminedState.frozen_stationary_gap_zero_after_intervention
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryPredeterminedState.source_boundary_initial_state_ne_stationary_predecessor
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceGate.inheritedNominalFaceConsistency_iff_gap_zero
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceGate.sourceBoundaryInheritedFaceConsistency_iff_gap_zero
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceGate.sourceBoundary_inheritedFace_invalid_of_gap_ne_zero
