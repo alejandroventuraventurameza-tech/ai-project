@@ -23,6 +23,7 @@ open ProposedBoundaryBridge
 open ProposedBoundaryResourceRoot
 open ProposedBoundaryFullPrefix
 open ProposedBoundaryNormalizationBridge
+open ProposedBoundaryEndpointBoxes
 open ProposedFirmFaceAccounting
 
 /-- The exact original face decline becomes a function of five
