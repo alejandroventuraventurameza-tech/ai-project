@@ -20,6 +20,7 @@ namespace ProposedBoundaryPredeterminedState
 open ProposedStationaryBank
 open ProposedStationaryPrimitives
 open ProposedStationaryInheritedState
+open ProposedStationaryRealScale
 open ProposedBoundaryNormalizationBridge
 open ProposedBoundaryFullPrefix
 open ProposedBoundaryInheritedFaceGate
