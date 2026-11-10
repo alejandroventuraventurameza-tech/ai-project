@@ -95,6 +95,30 @@ Tampoco es licito llamar a la diferencia Y_S-Y_B un beneficio de la relajacion d
 - Ejecucion: python code/irf/frozen_same_predecessor_branch_audit.py desde la raiz del repositorio. El informe generado es code/irf/output/same_predecessor_branch_audit.json. La version nueva genera las diferencias de shocks dentro de la misma rama y los desplazamientos por bloques de coordenadas; validar su **SHA** antes de citar datos nuevos.
 - Reproducibilidad: el workflow editorial-qa.yml conserva el JSON en un artifact, y build.yml lo archiva tambien cuando code/verify.py termina sin errores.
 
-**PENDIENTE, orden recomendado:** (i) medir la amplitud de las coordenadas de fecha dos utilizadas en el grafo P0 para la candidata S; (ii) sustituir el cierre local-lineal por una continuacion no lineal validada y ver si sobrevive la raiz; (iii) verificar todos los presupuestos heredados y dualidades contra el MODELO FUENTE de 34 filas; (iv) comprobar el cumplimiento completo de factibilidad bancaria y KKT en cada historia y las TVC; (v) demostrar mecanismos de reasignacion y efectos sobre el crecimiento solo despues de construir equilibrios genuinamente comparables.
+**Compuertas avanzadas en esta sesion:** se han medido los desplazamientos por bloques de coordenadas y se ha resuelto la continuacion FINITA no lineal con horizonte hasta 160; ver la seccion 6. Permanecen **PENDIENTES**: demostrar convergencia de la sucesion de problemas truncados cuando T tiende a infinito, cotejar todos los presupuestos y dualidades con el MODELO FUENTE de 34 filas, probar factibilidad bancaria completa y optimalidad global de firmas/hogar/banco bajo historias soportadas, cerrar la TVC y estudiar crecimiento solo despues de contar con equilibrios genuinamente comparables.
 
-**Veredicto:** existe evidencia NUMERICA de dos soluciones algebraicas distintas del mismo reducido, con KKT necesarias consistentes, pero **no** se ha probado existencia de dos equilibrios economicos. Mantener PR #2 draft y main intacta.
+**Veredicto:** existe evidencia NUMERICA de dos soluciones algebraicas distintas del reducido, con KKT necesarias y continuacion finita no lineal compatibles. **No** se ha probado existencia de dos equilibrios economicos infinitos. Mantener PR #2 draft y main intacta.
+
+## 6. Auditoria nueva de continuaciones no lineales T=8 a 160
+
+**Codigo:** code/irf/frozen_same_predecessor_nonlinear_tail_probe.py, commit e7270ab348984400f79e6950a2e21ec323968474. **Fuente del ejecutor apilado:** compare_nonlinear_tail.py, clase StackedPath, cuyo constructor original se corrige antes de resolver: se sustituye make_boundary() por frozen_stationary_seed(), de modo que el antecesor y las promesas heredadas son exactamente iguales para S y B. **Compilacion reproducible:** [GitHub Actions #42913297654](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42913297654), exitoso en el SHA anterior. **Artifact:** same-predecessor-nonlinear-tail. No es un certificado Lean.
+
+Se ensayan cinco horizontes (8, 20, 40, 80, 160), dos cierres terminales (controles fijados en el grafo P0 o controles terminales nulos respecto del estacionario), dos ramas (S/B) y dos condiciones de politica (sin shock y un shock de -1e-5 de remuneracion de reservas). **40 de 40 ejecuciones** encontraron raices con residuos del sistema apilado inferiores a 1e-8 y todos los margenes necesarios inspeccionados sin incumplimientos.
+
+### Resultados comparables de producto: misma rama y mismo antecesor
+
+| T | Delta log Y0 (%) B, grafo lineal | Delta log Y0 (%) S, grafo lineal | Delta log Y0 (%) B, controles finales fijos | Delta log Y0 (%) S, controles finales fijos |
+|---:|---:|---:|---:|---:|
+| 8 | -0.004238270 | -0.000203689 | -0.003659450 | -0.002055196 |
+| 20 | -0.004238085 | -0.000203308 | -0.003765125 | -0.001136748 |
+| 40 | -0.004238080 | -0.000203167 | -0.002349569 | -0.003403936 |
+| 80 | -0.004238080 | -0.000203166 | -0.003743752 | -0.001416144 |
+| 160 | -0.004238080 | -0.000203166 | -0.004202156 | -0.000304313 |
+
+El cierre del grafo da respuestas estables conforme T aumenta en estas pruebas. El cierre con controles terminales fijos muestra sensibilidad importante y no monotona en horizontes intermedios; sus respuestas de T=160 se acercan a las del grafo, sin prueba de que su limite coincida. Para S a T=160, la respuesta del capital siguiente de H es +0.000101904% bajo grafo y +0.000069288% bajo controles terminales fijos. Ambos valores son respuestas numericas del **prefijo condicional**.
+
+### Diagnostico del radio de continuacion
+
+La norma maxima de las 33 coordenadas del prefijo en la raiz S sin shock es aproximadamente 0.10414. Sin embargo, el desplazamiento de las **seis variables de estado al inicio de la continuacion, fecha dos**, es solo aproximadamente 0.00363 y la desviacion maxima de estados durante la cola con grafo es aproximadamente 0.00462. El alejamiento del prefijo no implica que la condicion inicial del grafo P0 este a distancia 0.104 de la estacionariedad. La extension no lineal finita mitiga parte de esa inquietud, pero no certifica el radio de un teorema implicito ni la cola infinita.
+
+**Se mantienen abiertas** las pruebas de suficiencia del equilibrio economico original, las condiciones terminales estocasticas, las restricciones OTC y decisiones de valor bancario en todo el arbol, la compatibilidad literal Lean-Python de 34 filas y la seleccion endogena de la rama. Ni 40 raices truncadas ni la estabilidad de T=160 permiten llamar demostrada la multiplicidad de equilibrios o el efecto permanente sobre la tasa de crecimiento.
