@@ -19,6 +19,7 @@ open ProposedStationaryPrimitives
 open ProposedStationaryInheritedState
 open ProposedStationaryRealScale
 open ProposedBoundaryResourceRoot
+open ProposedBoundaryBridge
 open ProposedBoundaryInheritedFaceDecomposition
 open ProposedBoundaryFullPrefix
 open ProposedBoundaryInheritedFaceGate
