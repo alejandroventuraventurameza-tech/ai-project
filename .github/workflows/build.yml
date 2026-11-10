@@ -54,6 +54,13 @@ jobs:
           path: code/irf/output/stencil_nonlinear_16_rows_audit.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve the exact 33-row SOURCE/Python indexing ledger
+        uses: actions/upload-artifact@v7
+        with:
+          name: lean-python-prefix-row-permutation
+          path: code/irf/output/lean_python_33_row_permutation.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Verify rational frontier endpoint boxes without floating-point acceptance
         run: python code/boundary/verify_endpoint_boxes_exact.py
       - name: Verify SOURCE bank-rate roots and slopes with exact fractions
