@@ -100,7 +100,7 @@ jobs:
         working-directory: upstream
         run: |
           set -euo pipefail
-          lake build Ventura26LiquidityAllocation.BoundaryNarrowRightCoreCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
+          lake build Ventura26LiquidityAllocation.BoundaryNarrowRightResidualSignCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
             tail -n 160 "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log"
             exit 1
           }
@@ -111,7 +111,7 @@ jobs:
         run: |
           set -euo pipefail
           cat > BoundaryProofAudit.lean <<'LEAN'
-          import Ventura26LiquidityAllocation.BoundaryNarrowRightCoreCandidate
+          import Ventura26LiquidityAllocation.BoundaryNarrowRightResidualSignCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryWorkerLabor.boundary_full_prefix_equations_from_root
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.output_ratio_fifteenth_power
@@ -201,6 +201,13 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightCore.source_narrow_right_deposit_rate_box
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightCore.source_narrow_right_capital_scale_box
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightCore.source_narrow_right_normalized_output_lower
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightResidualSign.source_stationary_worker_scale_sharp_upper
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightResidualSign.source_narrow_right_worker_consumption_upper
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightResidualSign.source_narrow_right_capital_cost_upper
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightResidualSign.source_narrow_right_firm_H_upper
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightResidualSign.source_narrow_right_firm_L_upper
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightResidualSign.source_narrow_right_resource_residual_positive
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightResidualSign.source_reduced_prefix_rate_in_narrow_interval
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowDepositBox.source_narrow_left_worker_consumption_lower
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.normalized_source_resource_residual_exact
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.source_normalization_factor_pos
