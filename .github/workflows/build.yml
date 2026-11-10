@@ -68,6 +68,13 @@ jobs:
           path: code/irf/output/effective_price_wedge_irf_audit.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve the literal SOURCE 34th funding-dual numerical audit
+        uses: actions/upload-artifact@v7
+        with:
+          name: finite-irf-source-row34-funding-dual
+          path: code/irf/output/source_L_funding_dual_irf_audit.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Verify rational frontier endpoint boxes without floating-point acceptance
         run: python code/boundary/verify_endpoint_boxes_exact.py
       - name: Verify SOURCE bank-rate roots and slopes with exact fractions
