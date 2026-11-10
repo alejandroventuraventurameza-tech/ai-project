@@ -122,6 +122,7 @@ theorem source_firm_face_decline_exact
         boundaryInheritedFace G R (boundaryZeroSeed G R) .L) = _
   unfold boundaryInheritedFace
   rw [hH, hL]
+  dsimp only [boundaryZeroSeed]
   unfold boundaryAggregateOutput aggregateCredit aggregateCapital average
     boundaryCapital boundaryEffectivePrice loan firmFace
   field_simp [ne_of_gt hRpos, ne_of_gt loanRate_pos] <;> ring
