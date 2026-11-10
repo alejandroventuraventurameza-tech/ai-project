@@ -103,6 +103,57 @@ def run_one(T, terminal, branch, shock, p0, f0):
         }
 
 
+def compare_terminal_closures(rows):
+    """Observable finite-horizon disagreements, never a convergence proof.
+
+    Compare impacts within each active-set branch against its own zero
+    intervention under the SAME inherited X0. A change in terminal
+    boundary is a change in the finite problem, not a policy treatment.
+    """
+    lookup = {
+        (case["T"], case["branch"], case["terminal"]): case
+        for case in rows
+    }
+    metrics = (
+        "output_log_pct", "kH_next_log_pct", "kL_next_log_pct",
+        "credit_H_log_pct", "credit_L_log_pct",
+    )
+    results = {}
+    for branch in BRANCHES:
+        records = []
+        for T in HORIZONS:
+            graph = lookup[(T, branch, "linear_graph")]
+            zero = lookup[(T, branch, "zero_controls")]
+            g = graph["branch_specific_impact"]
+            z = zero["branch_specific_impact"]
+            record = {
+                "T": T,
+                "graph_impact_available": g is not None,
+                "zero_controls_impact_available": z is not None,
+            }
+            if g is not None and z is not None:
+                record["graph_minus_zero_controls_log_pct"] = {
+                    key: g[key]-z[key] for key in metrics
+                }
+                record["maximum_absolute_impact_disagreement_log_pct"] = max(
+                    abs(g[key]-z[key]) for key in metrics
+                )
+                record["same_sign_for_each_metric"] = {
+                    key: (g[key] > 0) == (z[key] > 0)
+                    for key in metrics
+                }
+            records.append(record)
+        results[branch] = records
+    return {
+        "status": "NUMERICAL_FINITE_CLOSURE_DISAGREEMENT_NOT_A_LIMIT",
+        "comparisons": results,
+        "caution": (
+            "Differences at T=160 may be smaller than at T=40, without "
+            "monotone convergence or a certified T-to-infinity bound."
+        ),
+    }
+
+
 def main():
     raw = json.loads(
         (HERE / "inputs" / "rational_preconditioners.json").read_text(
@@ -180,6 +231,7 @@ def main():
     report = {
         "status": "FINITE_NONLINEAR_TAIL_SAME_PREDECESSOR_PROBE_ONLY",
         "scenarios": table,
+        "terminal_sensitivity": compare_terminal_closures(table),
         "necessary_benchmark": "B stationary zero-shock all horizons",
         "not_established": [
             "infinite-horizon convergence or transversality",
