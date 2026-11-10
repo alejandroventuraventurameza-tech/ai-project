@@ -306,6 +306,10 @@ if __name__ == "__main__":
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "reproduce.py")], check=True)
 
+    # Branch-wise finite IRF accounting identity, NOT a policy causal theorem.
+    # At t=0 in S, L's pledge-based price is hypothetical (L is slack).
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_effective_price_wedge_irf.py")], check=True)
+
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "diagnose_impact.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "compare_nonlinear_tail.py")], check=True)
