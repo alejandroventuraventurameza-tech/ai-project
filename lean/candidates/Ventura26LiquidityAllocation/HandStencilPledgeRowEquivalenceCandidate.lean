@@ -310,6 +310,93 @@ theorem source_firm_binding_log_row_zero_iff_source_regime_row_zero
 #print axioms source_L_slack_log_row_zero_iff_source_regime_row_zero
 #print axioms source_firm_binding_log_row_zero_iff_source_regime_row_zero
 
+/-! ## Source collateral complementarity and the common recurrent pledge
+
+The source's 34th scalar condition is a *marginal funding dual*.
+At a B interior active branch, that dual may be STRICTLY positive
+while the collateral slack is zero. Complementarity does not demand
+both be zero. The special augmented boundary problem imposes dual=0
+only to locate the regime SWITCH, not throughout the B solution.
+-/
+
+/-- For source scalar KKT complementarity, strictly positive unused
+collateral capacity forces zero funding dual. -/
+theorem source_L_strict_slack_implies_funding_dual_zero
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (Z : LocalPrefixCoordinates)
+    (hcomp : LocalScalarComplementarityL P Z)
+    (hslack : 0 < localNormalizedSlackL P Z) :
+    localNormalizedCollateralDualL P Z = 0 := by
+  have hprod :
+      localNormalizedSlackL P Z *
+        localNormalizedCollateralDualL P Z = 0 := hcomp.2.2
+  rcases mul_eq_zero.mp hprod with hzero | hzero
+  · exact (ne_of_gt hslack hzero).elim
+  · exact hzero
+
+/-- A strictly positive source funding dual forces the collateral
+slack to be zero. This is KKT NECESSITY, not global optimality. -/
+theorem source_L_strict_funding_dual_implies_binding
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (Z : LocalPrefixCoordinates)
+    (hcomp : LocalScalarComplementarityL P Z)
+    (hdual : 0 < localNormalizedCollateralDualL P Z) :
+    localNormalizedSlackL P Z = 0 := by
+  have hprod :
+      localNormalizedSlackL P Z *
+        localNormalizedCollateralDualL P Z = 0 := hcomp.2.2
+  rcases mul_eq_zero.mp hprod with hzero | hzero
+  · exact hzero
+  · exact (ne_of_gt hdual hzero).elim
+
+/-- Source KKT permits a B interior with binding collateral and
+STRICTLY positive funding dual. The 34th augmented-boundary zero
+condition must not be imposed at such a B observation. -/
+theorem source_L_binding_positive_dual_is_complementary
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (Z : LocalPrefixCoordinates)
+    (hbinding : localNormalizedSlackL P Z = 0)
+    (hdual : 0 < localNormalizedCollateralDualL P Z) :
+    LocalScalarComplementarityL P Z := by
+  refine ⟨le_of_eq hbinding.symm, le_of_lt hdual, ?_⟩
+  simp [hbinding]
+
+/-- The common date-one pledge is a SOURCE level residual. Under
+strict positivity it has the same ZERO SET as the recurrent Python
+log of the common pledge ratio. It is not a theorem about the
+linearized tail being an exact nonlinear solution. -/
+theorem source_common_pledge_one_log_zero_iff_original_row_zero
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (I : InheritedState)
+    (Z : LocalPrefixCoordinates) (dateOne recurrent : S)
+    (tail : LocalPrefixContinuationRule)
+    (hface : 0 < Z.stateTwo.commonPledgeValue)
+    (hcapacity : 0 <
+      (1 - P.depreciation) *
+        (localPrefixDateOneData P Z dateOne recurrent tail).nextControls.inflation *
+        (localPrefixDateOneData P Z dateOne recurrent tail).nextControls.capitalPrice) :
+    Real.log (Z.stateTwo.commonPledgeValue /
+      ((1 - P.depreciation) *
+        (localPrefixDateOneData P Z dateOne recurrent tail).nextControls.inflation *
+        (localPrefixDateOneData P Z dateOne recurrent tail).nextControls.capitalPrice)) = 0 ↔
+      localReducedPrefixResidual LocalPrefixBranch.binding P I Z
+        dateOne recurrent tail LocalPrefixEquation.commonPledgeOne = 0 := by
+  change Real.log (Z.stateTwo.commonPledgeValue /
+      ((1 - P.depreciation) *
+        (localPrefixDateOneData P Z dateOne recurrent tail).nextControls.inflation *
+        (localPrefixDateOneData P Z dateOne recurrent tail).nextControls.capitalPrice)) = 0 ↔
+      (Z.stateTwo.commonPledgeValue -
+        (1 - P.depreciation) *
+          (localPrefixDateOneData P Z dateOne recurrent tail).nextControls.inflation *
+          (localPrefixDateOneData P Z dateOne recurrent tail).nextControls.capitalPrice = 0)
+  exact positive_log_ratio_zero_iff_face_difference_zero _ _
+    hface hcapacity
+
+#print axioms source_L_strict_slack_implies_funding_dual_zero
+#print axioms source_L_strict_funding_dual_implies_binding
+#print axioms source_L_binding_positive_dual_is_complementary
+#print axioms source_common_pledge_one_log_zero_iff_original_row_zero
+
 #print axioms source_sub_reduced_is_sdf_pledge_gap
 #print axioms source_eq_reduced_of_pledge_face
 #print axioms row_shear_preserves_zero_set
