@@ -275,6 +275,32 @@ El código independiente
 documenta las identidades, el inverso racional y las
 huellas de los archivos auditados.
 
+\paragraph{Las Euler de capital y la fila de garantía.}
+La comparación directa de los 16 Jacobianos recurrentes muestra
+un desacuerdo de $0.37908$ en dos condiciones empresariales.
+No es un defecto de la linealización que invalide el grafo:
+el \emph{stencil} emplea previamente
+$J_{t+1}=(1-\delta)\Pi_{t+1}q_{t+1}$,
+mientras el evaluador no lineal conserva la identidad como
+una fila adicional $g=\log[J_{t+1}/((1-\delta)
+\Pi_{t+1}q_{t+1})]$. Las condiciones de Euler satisfacen
+exactamente
+\[
+ f_i^{\mathrm{raw}}-f_i^{\mathrm{red}}
+ =m_i\theta_i(1-\delta)q_{t+1}(e^g-1).
+\]
+En la raíz estacionaria, su diferencial difiere en
+$\lambda_iDg$, $\lambda_i=\beta_E\theta_i J$.
+La transformación triangular de filas es invertible;
+el error máximo al cotejar los Jacobianos tras aplicar
+esta transformación cae a $3.87\cdot10^{-9}$
+en la prueba numérica. La identidad fuera de la
+variedad contractual se verifica también independientemente.
+La comprobación de las restantes filas continúa siendo
+numérica y el puente integral con las 34 condiciones del
+modelo fuente, una obligación formal. Véase
+\path{docs/PUENTE_STENCIL_EULER_GARANTIA_20261110.md}.
+
 De hecho, $\|F_0^7\|_\infty>6$: es posible una
 amplificación transitoria aunque la cola lineal decaiga.
 Una extensión no lineal requeriría construir y validar una
