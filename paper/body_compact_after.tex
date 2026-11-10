@@ -214,8 +214,39 @@ Escriba $k=48m+r$, $0\le r<48$. La afirmación se obtiene
 de $F_0^k=(F_0^{48})^mF_0^r$ y de la submultiplicatividad
 de la norma inducida.
 \end{proof}
-El certificado exacto corresponde a la \emph{matriz decimal},
-no a la derivada fuente sin un puente semántico.
+\begin{lemma}[Robustez matricial del bloque de 48 pasos]
+\label{lem:compact_robust_tail_power}
+Para cualquier matriz real $A\in\mathbb R^{6\times6}$ con
+$\|A-F_0\|_\infty\le10^{-4}$ se tiene
+$\|A^{48}\|_\infty<49/50$ y
+$\max_{0\le r<48}\|A^r\|_\infty<7$.
+En consecuencia,
+\[
+ \|A^kx\|_\infty
+ \le 7\left(\frac{49}{50}\right)^{\lfloor k/48\rfloor}
+ \|x\|_\infty,\qquad k\ge0.
+\]
+\end{lemma}
+\begin{proof}
+La identidad telescópica
+$A^n-F_0^n=\sum_{j=0}^{n-1}F_0^{n-1-j}(A-F_0)A^j$
+da por inducción $\|A^n\|_\infty\le a_n$, donde
+$a_0=1$ y
+\[
+ a_n=\|F_0^n\|_\infty+
+ 10^{-4}\sum_{j=0}^{n-1}
+ \|F_0^{n-1-j}\|_\infty a_j.
+\]
+El cálculo de estas fracciones exactas verifica
+$a_{48}<49/50$ y $\max_{r<48}a_r<7$.
+El resto sigue por submultiplicatividad.
+\end{proof}
+Ambos resultados corresponden a una \emph{matriz decimal}
+y a una clase explícita de matrices próximas a ella.
+No se ha demostrado que la derivada fuente pertenezca
+a esa clase: hace falta controlar la diferencia matricial
+en las mismas seis coordenadas con cota $10^{-4}$.
+
 De hecho, $\|F_0^7\|_\infty>6$: es posible una
 amplificación transitoria aunque la cola lineal decaiga.
 Una extensión no lineal requeriría construir y validar una
