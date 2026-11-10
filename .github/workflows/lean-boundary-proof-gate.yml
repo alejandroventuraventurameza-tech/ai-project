@@ -100,7 +100,7 @@ jobs:
         working-directory: upstream
         run: |
           set -euo pipefail
-          lake build Ventura26LiquidityAllocation.BoundaryFrozenInheritanceCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
+          lake build Ventura26LiquidityAllocation.BoundaryInheritedFaceDecompositionCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
             tail -n 160 "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log"
             exit 1
           }
@@ -111,7 +111,7 @@ jobs:
         run: |
           set -euo pipefail
           cat > BoundaryProofAudit.lean <<'LEAN'
-          import Ventura26LiquidityAllocation.BoundaryFrozenInheritanceCandidate
+          import Ventura26LiquidityAllocation.BoundaryInheritedFaceDecompositionCandidate
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryWorkerLabor.boundary_full_prefix_equations_from_root
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.output_ratio_fifteenth_power
@@ -200,6 +200,11 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFrozenInheritance.initialIntervention_monetaryPrimitiveDomain_iff
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFrozenInheritance.boundaryInitialState_capital_strictMono
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFrozenInheritance.stationaryInheritedState_consistent_under_initialIntervention
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceDecomposition.inheritedNominalFaceGap_firm_bank_update
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceDecomposition.inheritedNominalFaceGap_initialIntervention_invariant
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceDecomposition.boundaryInitialState_unchanged_fields
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceDecomposition.boundaryInheritedGap_eq_face_shifts
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceDecomposition.sourceBoundaryInheritedGap_eq_face_shifts
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_micro_boxes
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_productivity_collateral_cost_wedge
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_wedge_of_bank_pricing
