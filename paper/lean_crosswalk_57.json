@@ -1,11 +1,11 @@
 {
   "schema": "ie-paper-lean-crosswalk-v1",
-  "paper_sha256": "fe965e5459a6013be82c33eb1414d07d676c22a0974602e02f881c834977dd8b",
+  "paper_sha256": "df53a6d3221447627c91ed6da0094f60376e4caaa011baea79054485ec14a46c",
   "ledger_source": "paper/result_ledger.json",
   "checked_branch": "work/lean-ci-validation-otc-20261106",
-  "reviewed_date": "2026-11-08",
+  "reviewed_date": "2026-11-10",
   "claim_count": 57,
-  "status_policy": "Forty-two scoped declarations tied to Lemma 4.3 are Lean kernel-verified: 37 previous auxiliary claims, 3 source-integrated static/pathwise/11-claim theorems (#42505059048, #42505126404, #42505264161), and 2 physical Cobb-Douglas marginal capital product lemmas (#42505447150). The three integrators consolidate existing results and must not be counted as independent new economic mechanisms. The original 57 source-paper claim specifications conservatively remain at 0/57 full literal equivalence with 24/57 directed semantic comparisons; the new source-level complete predicate is proved, but the older allocationLossIdentitySpec is materially weaker. Dynamic equilibrium/monetary shock causal implications not established. Four conditional source bank static/Bellman comparison declarations now have pinned green Lean runs (#42506496740, #42506614812, #42506650961, #42506762177), associated with Proposition 3.8 only as supporting lemmas. They do not establish full BankOptimal, bank-value terminality, macro equilibrium, or complete literal paper theorem equivalence. Two bank KKT cap/corner sufficiency declarations additionally verified in CI #42515365119. They are supporting conditional claims related to Proposition 3.8, not full literal equivalence. Banking additions verified at CI #42515897038: full five-dual static source KKT sufficiency and literal one-history Bellman environment from static optimum plus candidate value identity. Eight conditional bank declarations total, with the previous 42 Lemma 4.3 declarations unchanged and 0/57 literal complete source claims promoted.",
+  "status_policy": "Forty-two scoped declarations tied to Lemma 4.3 are Lean kernel-verified: 37 previous auxiliary claims, 3 source-integrated static/pathwise/11-claim theorems (#42505059048, #42505126404, #42505264161), and 2 physical Cobb-Douglas marginal capital product lemmas (#42505447150). The three integrators consolidate existing results and must not be counted as independent new economic mechanisms. The original 57 source-paper claim specifications conservatively remain at 0/57 full literal equivalence with 24/57 directed semantic comparisons; the new source-level complete predicate is proved, but the older allocationLossIdentitySpec is materially weaker. Dynamic equilibrium/monetary shock causal implications not established. Four conditional source bank static/Bellman comparison declarations now have pinned green Lean runs (#42506496740, #42506614812, #42506650961, #42506762177), associated with Proposition 3.8 only as supporting lemmas. They do not establish full BankOptimal, bank-value terminality, macro equilibrium, or complete literal paper theorem equivalence. Two bank KKT cap/corner sufficiency declarations additionally verified in CI #42515365119. They are supporting conditional claims related to Proposition 3.8, not full literal equivalence. Banking additions verified at CI #42515897038: full five-dual static source KKT sufficiency and literal one-history Bellman environment from static optimum plus candidate value identity. Eight conditional bank declarations total, with the previous 42 Lemma 4.3 declarations unchanged and 0/57 literal complete source claims promoted. Update 2026-11-10: the revised SOURCE boundary proposition has a related kernel-verified rejection (CI 42902110667), but retains not_run/not_established for full paper theorem equivalence, as required by the audited 57-claim policy.",
   "source_module_check": "24/57 semantic comparisons performed, 33 not individually audited. Eleven-claim source-integrated static/differential theorem proved; physical MPK differentiation and alpha*Y/k bridge proved at CI #42505447150. Legacy FirmType interface still mismatched; numerical IRFs conditional and infinite-horizon equilibrium unverified. New global one-history bank portfolio sufficiency from source OTC payoff and a one-step Bellman comparison compiled without sorryAx; economic hypotheses explicit and not discharged by the numerical paths.",
   "scope": "57 numbered claims including historical appendices; current PDF page numbers in the original ledger are stale after compact layout.",
   "entries": [
@@ -333,8 +333,8 @@
     {
       "paper_number": "4.1",
       "label": "prop:boundary_equilibrium",
-      "title": "Un equilibrio en la frontera de L",
-      "paper_statement_sha256": "f86130d08e406f0effb845fb0b729311aa31de4f98ca04e2dbdf3f1f0cd844cd",
+      "title": "Raíz reducida y obstrucción nominal del candidato SOURCE",
+      "paper_statement_sha256": "2421b7787dbac89c73f0f04006bea7f769071352b0c0d036578b192d05c4327e",
       "source_ledger_formalization_status": "not_run",
       "review_state": "targeted_semantic_comparison",
       "paper_proof_equivalent_in_lean": "not_established",
@@ -350,9 +350,18 @@
           "declaration": "boundary_zero_householdEuler",
           "relationship": "auxiliary_or_conditional_only",
           "note": "Una relación Euler de frontera; presupone dominio y testigo local."
+        },
+        {
+          "relative_path": "lean/candidates/Ventura26LiquidityAllocation/FirmFaceUniformGapCandidate.lean",
+          "declaration": "source_boundary_candidate_not_competitive_equilibrium",
+          "relationship": "source_financial_proof_related",
+          "lean_ci_run_id": 42902110667,
+          "lean_ci_commit": "3c881026632f78122566f21abd30aff4391ee04b",
+          "lean_axiom_audit": "passed_no_sorryAx",
+          "note": "Prueba negativa de la instancia SOURCE dependiente de R, compilada y auditada sin sorryAx. No se afirma equivalencia formal integral del resultado numerado ni existencia de otro equilibrio."
         }
       ],
-      "semantic_gap": "La construcción de varias filas de fecha cero en un prefijo no implica todas las condiciones de equilibrio competitivo ni suficiencia/terminalidad."
+      "semantic_gap": "La proposición se corrigió: la raíz y las 33 filas del prefijo reducido no implican equilibrio. Un teorema kernel-verificado descarta específicamente la instancia SOURCE con boundaryInitialState G R, pero no existe aún una auditoría de equivalencia integral con todas las afirmaciones del artículo ni un equilibrio dinámico con estado heredado congelado."
     },
     {
       "paper_number": "4.2",
