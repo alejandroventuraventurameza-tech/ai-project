@@ -57,11 +57,11 @@ theorem source_firm_face_decline_normalized_exact
           normalizedFirmConsumption R .L) / 2 := by rw [hRH, hRL]
   have hCredit : wage ^ (5 : ℕ) * aggregateCredit = creditScale := by
     rw [aggregateCredit_scale]
-    field_simp [ne_of_gt (pow_pos wage_pos (5 : ℕ))] <;> ring
+    field_simp [ne_of_gt wage_pos] <;> ring
   have hCapital :
       wage ^ (5 : ℕ) * aggregateCapital = average capitalScale := by
     rw [aggregateCapital_scale]
-    field_simp [ne_of_gt (pow_pos wage_pos (5 : ℕ))] <;> ring
+    field_simp [ne_of_gt wage_pos] <;> ring
   calc
     wage ^ (5 : ℕ) *
         (∑ i, (primitives G).mass i *
