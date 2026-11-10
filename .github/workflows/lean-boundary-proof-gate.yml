@@ -192,6 +192,7 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceGate.inheritedNominalFaceConsistency_iff_gap_zero
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceGate.sourceBoundaryInheritedFaceConsistency_iff_gap_zero
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceGate.sourceBoundary_inheritedFace_invalid_of_gap_ne_zero
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceGate.sourceBoundary_noCompetitiveEquilibrium_of_gap_ne_zero
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_micro_boxes
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_productivity_collateral_cost_wedge
           #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_wedge_of_bank_pricing
