@@ -57,9 +57,10 @@ theorem sourceBoundaryInheritedFaceConsistency_iff_gap_zero (G : ℝ) :
     sourceBoundaryInheritedNominalFaceGap G = 0 := by
   have hfactor : 0 < bankRenewalFactor
       (boundaryPrimitives G boundarySourceRate) :=
-    (bankRenewalFactor_bounds
-      (boundaryPrimitives G boundarySourceRate)
-      (boundary_stationary_parameters G boundarySourceRate)).1
+    lt_trans (by norm_num)
+      (bankRenewalFactor_bounds
+        (boundaryPrimitives G boundarySourceRate)
+        (boundary_stationary_parameters G boundarySourceRate)).1
   change InheritedNominalFaceConsistency
     (boundaryPrimitives G boundarySourceRate)
     (boundaryInitialState G boundarySourceRate) ↔
