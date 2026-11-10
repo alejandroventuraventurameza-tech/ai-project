@@ -19,6 +19,13 @@ jobs:
           python-version: "3.12"
       - run: python -m pip install --quiet -r code/requirements.txt
       - run: python code/verify.py
+      - name: Preserve four-tool pairwise interaction audit
+        uses: actions/upload-artifact@v7
+        with:
+          name: four-tool-pairwise-frozen-prefix
+          path: code/irf/output/four_tool_pairwise_audit.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Verify rational frontier endpoint boxes without floating-point acceptance
         run: python code/boundary/verify_endpoint_boxes_exact.py
       - name: Verify SOURCE bank-rate roots and slopes with exact fractions
