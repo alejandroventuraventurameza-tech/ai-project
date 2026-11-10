@@ -399,8 +399,19 @@ def prefix_residual(base, p0, branch, intervention, log_coordinates):
     tail_log = matvec(p0, z[17:23])
     u2 = [s.base[6 + i] * math.exp(tail_log[6 + i]) for i in range(10)]
     state2 = expand_compact_state(s, x2)
-    e0 = [base.e0[0] + intervention, base.e0[1]]
-    aux0 = auxiliary(s, base.X0, u0, x1[:2], e0)
+    # Backward compatible: scalar legacy v_R or the exact four-tool
+    # (v_R, v_M, v_rho, v_Delta) source initial intervention vector.
+    if isinstance(intervention, (tuple, list)):
+        if len(intervention) != 4:
+            raise ValueError("Expected four date-zero policy instruments.")
+        v_rate, v_quantity, v_requirement, v_corridor = intervention
+    else:
+        v_rate, v_quantity, v_requirement, v_corridor = intervention, 0.0, 0.0, 0.0
+    e0 = [base.e0[0] + v_rate, base.e0[1] + v_quantity]
+    aux0 = auxiliary(
+        s, base.X0, u0, x1[:2], e0,
+        rho=s.rho + v_requirement, corridor=s.Delta + v_corridor
+    )
     aux1 = auxiliary(s, x1, u1, state2[:2], base.e1)
     aux2 = auxiliary(s, state2, u2, state2[:2], [0.0, 0.0])
     sdf0 = [s.be * u0[i] / u1[i] for i in range(2)]
@@ -435,8 +446,14 @@ def decode_prefix(base, p0, z):
     return x1, u0, x2, u1, u2
 
 
-def period_metrics(s, state, controls, next_state, next_controls, innovations, branch):
-    aux = auxiliary(s, state, controls, next_state[:2], innovations)
+def period_metrics(
+    s, state, controls, next_state, next_controls, innovations, branch,
+    rho=None, corridor=None,
+):
+    aux = auxiliary(
+        s, state, controls, next_state[:2], innovations,
+        rho=rho, corridor=corridor,
+    )
     aux_next = auxiliary(s, next_state, next_controls, next_state[:2], [0.0, 0.0])
     _, _, _, marginal_next = production(s, next_state[:2], next_controls)
     sdf = [s.be * controls[i] / next_controls[i] for i in range(2)]
