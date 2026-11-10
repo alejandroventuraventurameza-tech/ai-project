@@ -1321,14 +1321,41 @@ Con rezagos iniciales $\bar R^R,\bar M$, las innovaciones anunciadas necesarias 
 Desde fecha 2 son cero en esta construcción determinista. Así las reglas se cumplen incluso cuando sus rezagos de fecha 1 todavía difieren de sus referencias.
 
 \subsubsection{Existencia y comprobaciones con redondeo dirigido}
-\begin{proposition}[Un equilibrio en la frontera de L]\label{prop:boundary_equilibrium}
-Con las primitivas exactas del testigo, la ecuación \eqref{eq:scalar_bridge_root} tiene una única raíz en $[1.025,1.032]$. La construcción anterior y su continuación estacionaria satisfacen equilibrio, con H estrictamente restringida y L con préstamo positivo, cobertura activa y dual cero en fecha 0. Desde fecha 1 ambas tienen dual positivo.
+\begin{proposition}[Raíz reducida y obstrucción nominal del candidato SOURCE]\label{prop:boundary_equilibrium}
+Con las primitivas exactas del testigo, la ecuación de recursos
+\eqref{eq:scalar_bridge_root} posee una única raíz $R^*$ en
+$[1.025,1.032]$ y satisface la cota certificada
+\[
+1.029135<R^*<1.029136.
+\]
+Los objetos de la construcción resuelven las 33 ecuaciones del
+prefijo reducido. Sin embargo, las obligaciones nominales heredadas
+del estado construido son incompatibles: para todo nivel fiscal $G$
+y todo $R\in[1.029135,1.029136]$,
+\[
+\Delta_{\mathrm{Face}}(G,R)>0.08.
+\]
+En consecuencia, para las primitivas y el estado inicial
+\emph{específicos} producidos por el constructor SOURCE en $R^*$,
+no existe asignación que satisfaga el predicado literal
+\texttt{CompetitiveEquilibrium}.
 \end{proposition}
 \begin{proof}
-Las funciones anteriores son continuas y sus denominadores permanecen positivos en el intervalo. La evaluación intervalar da $\Phi(1.025)<0$, $\Phi(1.032)>0$ y
-$34.7593<\Phi'(R)<37.5087$ en él. El teorema del valor intermedio prueba existencia y la derivada estrictamente positiva, unicidad. Se comprueban consumos, inversión, promesas heredadas positivas, cobertura inicial, solvencia por pago, límites bancarios, bonos domésticos y las KKT. El presupuesto empresarial da exactamente \eqref{eq:bridge_initial_faces}; el del hogar se reconstruye con la identidad de promesas y el impuesto residual.
-
-El único dual empresarial nulo por construcción es el de L en fecha 0. H tiene dual positivo y ambas esquinas de depósitos tienen signo correcto. La continuación satisface las pruebas estacionarias anteriores. $m=\bar m=5/6$ y $\Pi=1$ en todas las fechas satisfacen las bandas de precios globales; los términos terminales desaparecen. Se aplica la proposición \ref{prop:finite_prefix_equilibrium}.
+La continuidad, monotonía y las cotas racionales de las componentes
+del residual SOURCE dan
+$\Phi(1.029135)<0<\Phi(1.029136)$ y la raíz única; estas
+desigualdades están demostradas en Lean sobre las funciones originales.
+La variación ponderada de las caras empresariales heredadas satisface
+$D_F(G,R)>0.11$ y el ajuste bancario satisface
+$D_B(G,R)>-0.03$, uniformemente en el mismo intervalo.
+La identidad exacta
+$\Delta_{\mathrm{Face}}=D_F+D_B$ implica la cota positiva.
+La consistencia de las caras nominales heredadas es condición
+necesaria de \texttt{CompetitiveEquilibrium}, de modo que esa
+desigualdad excluye el estado y las primitivas SOURCE construidos.
+La cadena, incluidas las cotas y la conclusión negativa, compiló
+sin \texttt{sorryAx} en el gate de Lean \texttt{42902110667}
+para el commit \texttt{3c881026}.
 \end{proof}
 \paragraph{Alcance del enlace de frontera y estatus de la formalización.}
 En el módulo Lean \texttt{BoundaryNormalization}\allowbreak\texttt{BridgeCandidate}, el
