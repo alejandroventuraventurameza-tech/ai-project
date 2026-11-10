@@ -111,7 +111,7 @@ una grafica no lineal invariante.
 
 ## 4. Proposicion N: implicacion no lineal CONDICIONAL
 
-**Supuestos.** Existe una ley local \(\Phi:U\to\mathbb R^6\) de clase C1 en un entorno abierto U de cero, con \(\Phi(0)=0\) y \(D\Phi(0)=F_0\) **exactamente**.
+**Supuestos.** Existe una ley local \(\Phi:U\to\mathbb R^6\) de clase C1 en un entorno abierto U de cero, con \(\Phi(0)=0\) y un Jacobiano real \(A=D\Phi(0)\) que satisface \(\|A-F_0\|_\infty\leq10^{-4}\) en las mismas seis coordenadas.
 
 **Conclusion.** Hay un radio r>0 (desconocido cuantitativamente) y constantes M'>0, q' en (0,1) tales que, para estados iniciales suficientemente cercanos a cero,
 
@@ -121,9 +121,9 @@ una grafica no lineal invariante.
  \quad(k\ge0).
 \]
 
-**Demostracion.** La regla de la cadena da D(Phi^48)(0)=F0^48, cuya norma infinito es menor que 24/25. Por continuidad de la derivada, existe una bola donde los 48 primeros iterados estan definidos y ||D(Phi^48)(x)||<97/100. El teorema del valor medio en esa bola convexa implica ||Phi^48(x)|| <=(97/100)||x|| y, por tanto, invariancia del mapa de 48 pasos. Al iterar y acotar las 47 aplicaciones intermedias por sus constantes locales de Lipschitz se obtiene el resultado. Fin.
+**Demostracion.** La regla de la cadena da D(Phi^48)(0)=A^48, cuya norma infinito es menor que 49/50 por la proposicion R. Por continuidad de la derivada, existe una bola donde los 48 primeros iterados estan definidos y ||D(Phi^48)(x)||<99/100. El teorema del valor medio en esa bola convexa implica ||Phi^48(x)|| <=(99/100)||x|| y, por tanto, invariancia del mapa de 48 pasos. Al iterar y acotar las 47 aplicaciones intermedias por sus constantes locales de Lipschitz se obtiene el resultado. Fin.
 
-**Obligaciones esenciales pendientes:** construir Phi como ley ORIGINAL del equilibrio con una grafica de controles compatible, demostrar que es C1 en el conjunto activo, que su derivada es exactamente el F0 fijado, que los estados de fecha dos de S/B estan dentro del radio valido y que las KKT se cumplen a lo largo de la trayectoria. La proposicion N no establece existencia ni unicidad de equilibrios a partir de los datos disponibles.
+**Obligaciones esenciales pendientes:** construir Phi como ley ORIGINAL del equilibrio con una grafica de controles compatible, demostrar que es C1 en el conjunto activo, que la distancia entre su derivada y F0 no supera 10^-4, que los estados de fecha dos de S/B estan dentro del radio valido y que las KKT se cumplen a lo largo de la trayectoria. La proposicion N no establece existencia ni unicidad de equilibrios a partir de los datos disponibles.
 
 ## 5. Por que la cola lineal no cierra la TVC economica
 
