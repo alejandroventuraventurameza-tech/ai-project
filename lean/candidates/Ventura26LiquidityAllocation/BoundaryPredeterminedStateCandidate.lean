@@ -75,6 +75,21 @@ theorem same_inherited_state_consistency_iff
     (ProposedBoundaryFrozenInheritance.initialIntervention_inheritedNominalFaceConsistency_iff P I v₁).trans
       (ProposedBoundaryFrozenInheritance.initialIntervention_inheritedNominalFaceConsistency_iff P I v₂).symm
 
+/-- The old SOURCE inherited-state constructor fails to preserve the
+stationary predecessor throughout the ENTIRE certified boundary rate
+interval, rather than only at the named SOURCE root. The discrepancy is
+in the bank-face field, independently of the fiscal parameter. -/
+theorem boundary_initial_state_ne_stationary_for_all_boundary_rates
+    (G R : ℝ)
+    (hR : R ∈ ProposedBoundaryResourceRoot.boundaryInterval) :
+    boundaryInitialState G R ≠ inheritedState G := by
+  intro hstate
+  have hface := congrArg InheritedState.bankFace hstate
+  change boundaryBankEquity R = bankEquity at hface
+  have hlt : boundaryBankEquity R < bankEquity :=
+    boundaryBankFace_lt_stationary R hR
+  exact (ne_of_lt hlt) hface
+
 /-- The old SOURCE constructor changes at least the bank face of the
 inherited state: its boundary loan rate exceeds the stationary rate.
 This disqualifies identification of that constructor with a common
@@ -93,6 +108,7 @@ theorem source_boundary_initial_state_ne_stationary_predecessor (G : ℝ) :
 #print axioms frozen_stationary_gap_zero_after_intervention
 #print axioms same_inherited_state_gap_independent_of_policy
 #print axioms same_inherited_state_consistency_iff
+#print axioms boundary_initial_state_ne_stationary_for_all_boundary_rates
 #print axioms source_boundary_initial_state_ne_stationary_predecessor
 
 end ProposedBoundaryPredeterminedState
