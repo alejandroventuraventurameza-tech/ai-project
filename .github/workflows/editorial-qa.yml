@@ -37,6 +37,8 @@ jobs:
         run: python code/audit_lean_crosswalk.py
       - name: Audit printed branch S-B loss and capital derivative identity
         run: python code/audit_allocation_loss_table.py
+      - name: Verify exact-integer SOURCE interval translation (not a Lean certificate)
+        run: python scripts/audit_source_inherited_nominal_faces_exact_intervals.py
 
   latex-logs:
     name: Final LaTeX references and layout
