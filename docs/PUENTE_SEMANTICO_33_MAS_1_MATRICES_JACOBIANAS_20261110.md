@@ -1,6 +1,6 @@
 # IE Project: contrato de correspondencia funcional de 33 + 1 filas
 
-**Corte:** 10 de noviembre de 2026. **Status:** auditoria analitica del codigo fuente, modulo de teoremas logaritmicos *CANDIDATO* hasta obtener kernel y reporte de axiomas del SHA pertinente. Las columnas `transformacion` y `compuerta` son tareas cientificas, no certificaciones globales. Modelo original: `lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean`; ejecutor numérico: `code/irf/finite_irf.py`. El mapa exacto de nombres, permutacion y fila 34 ya esta automatizado en `code/irf/audit_python_lean_prefix_row_permutation.py`.
+**Corte:** 10 de noviembre de 2026. **Status:** auditoria analitica; las cuatro equivalencias logaritmicas del primer grupo ya estan **COMPROBADAS por el kernel Lean** ([Actions #42921708717](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42921708717), SHA `773b79891e77423d043b4d00bb6b50554a76bb53`, solo axiomas fundacionales, sin `sorryAx`). El grupo mas reciente de complementariedad de L y garantia comun de fecha 1 sigue etiquetado como CANDIDATO hasta su propio resultado CI. Las columnas `transformacion` y `compuerta` son tareas cientificas, no certificaciones globales. Modelo original: `lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean`; ejecutor numérico: `code/irf/finite_irf.py`. El mapa exacto de nombres, permutacion y fila 34 ya esta automatizado en `code/irf/audit_python_lean_prefix_row_permutation.py`.
 
 ## 1. Regla matematica para no comparar erróneamente Jacobianos
 
@@ -30,7 +30,7 @@ El orden SOURCE es 0-indexado en `Fin 33`; el orden Python es el del vector prod
 |---|---|---|
 | 0→0; 1→3 | Presupuesto H/L en fecha 0 | Residuo fuente en niveles, escritura de precio efectivo **L**; coincidencia de riqueza `aux0['N']` con riqueza SOURCE **O** |
 | 2→1; 3→4 | Euler H/L, fecha 0 | B: Euler simplificada por fila de garantía **L + N** (shear invertible). S, L: Euler no restringida; coincidencia parametrica **O** |
-| 4→2; 5→5 | Régimen H/L fecha 0 | B: diferencia de rostro nominal vs log cociente de rostros (**C** bajo positividad). S, L: $R^Lm_L/\Pi-1$ vs log de ese cociente (**C** bajo positividad) |
+| 4→2; 5→5 | Régimen H/L fecha 0 | B: diferencia de rostro nominal vs log cociente de rostros (**L** bajo positividad). S, L: $R^Lm_L/\Pi-1$ vs log de ese cociente (**L** bajo positividad). Coincidencia de las definiciones ejecutables y todas las derivadas **O** |
 | 6→6 | Transición de rostro nominal bancario | Fuente diferencia en niveles, Python log cociente: normalizacion por rostro proyectado positivo **O** |
 | 7→7 | Precio del productor de capital | $q-1-\varphi_I I/K$ en niveles; comparar costos/generador de inversión **O** |
 | 8→8 | Contabilidad agregada de recursos | Nivel contra nivel; igualar agregacion, Rotemberg, costos, impuestos y fechas **O** |
@@ -50,6 +50,12 @@ El orden SOURCE es 0-indexado en `Fin 33`; el orden Python es el del vector prod
 
 ## 3. Ruta de cierre formal
 
-El cierre exige, en este orden: (i) demostrar ceros y escala de las filas de regimen en el dominio positivo con Lean, (ii) completar las transformaciones de las otras filas con definiciones SOURCE exactas, fechas y parametros, (iii) construir y auditar la matriz compuesta de permutacion, shear y escalas positivas en el estacionario, (iv) relacionar el jacobiano y las seis coordenadas de la transicion fuente, (v) levantar la conclusion a un grafo no lineal C1 con radio y restricciones activas, (vi) demostrar optimizacion, pagos contingentes y condiciones terminales. Nada de ello es una prueba de crecimiento endogeno permanente por si mismo.
+El cierre exige, en este orden: (i) usar los ceros ya demostrados en Lean para calcular las escalas de los jacobianos y cerrar la garantia comun de fecha 1,  (ii) completar las transformaciones de las otras filas con definiciones SOURCE exactas, fechas y parametros, (iii) construir y auditar la matriz compuesta de permutacion, shear y escalas positivas en el estacionario, (iv) relacionar el jacobiano y las seis coordenadas de la transicion fuente, (v) levantar la conclusion a un grafo no lineal C1 con radio y restricciones activas, (vi) demostrar optimizacion, pagos contingentes y condiciones terminales. Nada de ello es una prueba de crecimiento endogeno permanente por si mismo.
 
 **Interpretacion economica:** equivalencia de una ecuacion de restricciones necesarias no implica suficiencia de equilibrio. Un sistema de estacionariedad, KKT y persistencia finita puede soportar comparativas de niveles sin generar una tasa de crecimiento tendencial distinta. Cualquier promesa de crecimiento permanente requiere especificar una ley endogena de acumulacion/tecnologia y sus hipotesis de estabilidad/transversalidad.
+
+## 4. Prueba numerica transversal reforzada
+
+El auditor nuevo `code/irf/audit_firm_regime_log_vs_level_irf.py` (incorporado en `code/verify.py`) comprueba directamente `face-cap=cap*expm1(log(face/cap))`, el log del Euler holgado de L y el cociente de la garantia comun en las 160 transiciones de cada rama, con y sin shock. [GitHub Actions #42922148973](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42922148973): prueba general Python y compilacion PDF aprobadas; error maximo de transformacion `8.123686111155731e-16` y 640 evaluaciones de brechas empresariales por rama. El archivo de auditoria se archiva por separado como artifact `finite-irf-source-log-regime-bridge` (ID `13811478295`). **No** equivale a una prueba de la derivada fuente completa.
+
+El chequeo KKT posterior se ha fortalecido en `code/irf/finite_irf.py`: desde t=1 se exige que L tenga holgura nula hasta 1e-9, dual estrictamente positivo y producto de complementariedad cercano a cero, y que H permanezca en garantia vinculante a lo largo de las fechas finitas. En las trayectorias trazadas, el minimo del dual de L desde t=1 es 0.02807495 en B (shock de -0.1pb) y 0.02789273 en B (shock de -1pb); en S los minimos son 0.02807590 y 0.02790220. Es una compuerta de admisibilidad necesaria: no prueba optimalidad global de empresas ni bancos.
