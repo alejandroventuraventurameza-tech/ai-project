@@ -21,7 +21,7 @@ namespace Ventura26LiquidityAllocation
 namespace ProposedBoundaryNarrowLeftResidualSign
 
 open ProposedStationaryRealScale
-open ProposedBoundaryFirmBridge
+open ProposedBoundaryBridge
 open ProposedBoundaryResourceRoot
 open ProposedBoundaryEndpointBoxes
 open ProposedBoundaryNormalizationBridge
@@ -74,7 +74,8 @@ theorem source_narrow_left_firm_H_lower :
       _ < boundaryLo * (296932 / 100000 : ℝ) := hrat
       _ < boundaryLo * normalizedFirmConsumption boundaryLo .H := hscaled
       _ = R * normalizedFirmConsumption R .H := hidentity.symm
-  exact (mul_lt_mul_left hR).mp hproduct
+  dsimp [R] at hproduct
+  nlinarith only [hproduct]
 
 /-- Same rate-transport argument for the lower-productivity L firm. -/
 theorem source_narrow_left_firm_L_lower :
@@ -102,7 +103,8 @@ theorem source_narrow_left_firm_L_lower :
       _ < boundaryLo * (382592 / 100000 : ℝ) := hrat
       _ < boundaryLo * normalizedFirmConsumption boundaryLo .L := hscaled
       _ = R * normalizedFirmConsumption R .L := hidentity.symm
-  exact (mul_lt_mul_left hR).mp hproduct
+  dsimp [R] at hproduct
+  nlinarith only [hproduct]
 
 /-- Exact rational SOURCE lower bound for the investment-adjustment
 cost. It uses both heterogeneous stationary capital scales and the
