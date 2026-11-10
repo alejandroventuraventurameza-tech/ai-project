@@ -19,6 +19,7 @@ from pathlib import Path
 
 from finite_irf import (
     PREFIX_ROW_NAMES,
+    auxiliary,
     max_abs,
     newton,
     numerical_jacobian,
@@ -65,6 +66,110 @@ def unpack_solution(s, seed, z, intervention):
     return next_state, u0, u1, metrics
 
 
+def firm_financing_channels(s, seed, z, intervention):
+    """Source-period wealth and collateral-face budget, at one frozen X0.
+
+    Both firms are on the binding collateral branch. Verify the exact
+    identities N_i - c_i = p_i*k'_i and b_i = face_i*k'_i/RL, rather
+    than interpreting either accounting decomposition as independent
+    causal effects. Do not use these identities on the slack branch.
+    """
+    x1, u0, u1, metrics = unpack_solution(s, seed, z, intervention)
+    e0 = [
+        seed.e0[0] + intervention[0],
+        seed.e0[1] + intervention[1],
+    ]
+    a0 = auxiliary(
+        s, seed.X0, u0, x1[:2], e0,
+        rho=s.rho + intervention[2],
+        corridor=s.Delta + intervention[3],
+    )
+    results = {}
+    for i, label in enumerate(("H", "L")):
+        wealth = a0["N"][i]
+        funds = wealth - u0[i]
+        face = s.pledge[i] * s.ad * u1[5] * u1[6]
+        effective_price = u0[6] - face / u0[8]
+        capital = x1[i]
+        credit = x1[2 + i] / u0[8]
+        errors = {
+            "budget": abs(funds - effective_price * capital),
+            "collateral_face": abs(x1[2 + i] - face * capital),
+            "credit": abs(credit - face * capital / u0[8]),
+            "reported_price": abs(
+                metrics["effective_price_" + label] - effective_price
+            ),
+            "reported_credit": abs(metrics["credit_" + label] - credit),
+        }
+        if min(wealth, funds, face, effective_price, capital, credit) <= 0:
+            raise AssertionError(f"{label}: invalid positive financing domain")
+        if max(errors.values()) >= 1e-9:
+            raise AssertionError(
+                f"{label}: SOURCE binding-budget or pledge identity fails: "
+                f"{errors}"
+            )
+        results[label] = {
+            "wealth": wealth,
+            "investible_funds": funds,
+            "pledge_face_per_unit_capital": face,
+            "effective_capital_price": effective_price,
+            "capital_next": capital,
+            "loan_rate": u0[8],
+            "credit": credit,
+            "source_budget_face_errors": errors,
+        }
+    return results
+
+
+def log_change(value, baseline):
+    if value <= 0 or baseline <= 0:
+        raise AssertionError("Log change is outside positive domain")
+    return 100.0 * math.log(value / baseline)
+
+
+def channel_decomposition(current, baseline):
+    result = {}
+    for label in ("H", "L"):
+        a, b = current[label], baseline[label]
+        funds = log_change(a["investible_funds"], b["investible_funds"])
+        price = log_change(a["effective_capital_price"],
+                           b["effective_capital_price"])
+        capital = log_change(a["capital_next"], b["capital_next"])
+        face = log_change(a["pledge_face_per_unit_capital"],
+                          b["pledge_face_per_unit_capital"])
+        loan_rate = log_change(a["loan_rate"], b["loan_rate"])
+        credit = log_change(a["credit"], b["credit"])
+        capital_error = abs(capital - (funds - price))
+        credit_error = abs(credit - (face + capital - loan_rate))
+        if max(capital_error, credit_error) > 1e-8:
+            raise AssertionError(
+                f"{label}: log budget/credit decomposition mismatch "
+                f"{capital_error}, {credit_error}"
+            )
+        result[label] = {
+            "wealth_level": a["wealth"],
+            "funds_log_pct": funds,
+            "effective_price_log_pct": price,
+            "capital_log_pct": capital,
+            "face_per_capital_log_pct": face,
+            "loan_rate_log_pct": loan_rate,
+            "credit_log_pct": credit,
+            "max_log_identity_error_pct": max(capital_error, credit_error),
+        }
+    for key in ("funds_log_pct", "effective_price_log_pct", "capital_log_pct"):
+        result["relative_H_minus_L_" + key] = (
+            result["H"][key] - result["L"][key]
+        )
+    result["relative_allocation_identity_error_pct"] = abs(
+        result["relative_H_minus_L_capital_log_pct"] -
+        (result["relative_H_minus_L_funds_log_pct"]
+         - result["relative_H_minus_L_effective_price_log_pct"])
+    )
+    if result["relative_allocation_identity_error_pct"] > 2e-8:
+        raise AssertionError("H-L allocation channel identity mismatch")
+    return result
+
+
 def main():
     s = steady_case()
     seed = frozen_stationary_seed(s)
@@ -89,6 +194,7 @@ def main():
     jac = numerical_jacobian(baseline_fun, zero)
     _, baseline_pivots = solve_linear(jac, [0.0] * 33)
     baseline_metrics = unpack_solution(s, seed, zero, no_shock)[3]
+    baseline_firm_channels = firm_financing_channels(s, seed, zero, no_shock)
     snapshot = tuple(seed.X0)
     table = {}
 
@@ -149,6 +255,10 @@ def main():
                 metrics["collateral_slack_H"], metrics["collateral_slack_L"]
             ],
             "impact_metrics": {k: metrics[k] for k in METRICS},
+            "binding_firm_accounting_channels": channel_decomposition(
+                firm_financing_channels(s, seed, solution, shock),
+                baseline_firm_channels,
+            ),
             "impact_changes_from_same_predecessor": {
                 k: metrics[k] - baseline_metrics[k] for k in METRICS
             },
@@ -185,6 +295,7 @@ def main():
             "full policy-specific nonlinear infinite-horizon continuation",
             "both-branch multiplicity / slack branch under same shock",
             "causal policy transmission identification",
+            "independent funds/price causal decomposition: accounting only",
             "long-run allocative growth, welfare or calibrated effects",
         ],
     }, ensure_ascii=False, indent=2))
