@@ -122,9 +122,7 @@ def main():
     # ||F^(48m+r)|| <= ||F^48||^m ||F^r||, for 0<=r<48.
     # The finite exact sum below is also provided, but the theorem is
     # proved by submultiplicativity rather than by floating-point fitting.
-    s_power = sum((
-        Fraction(str("0")) for _ in ()
-    ), Fraction(0))
+    s_power = Fraction(0)
     # Recover exactly the norm sums while preserving the existing loop
     # output without needing huge rational entries in the JSON.
     p = identity()
