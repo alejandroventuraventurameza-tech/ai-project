@@ -9,6 +9,8 @@ on:
       - code/irf/finite_irf.py
       - code/irf/exact_linear_tail_power_certificate.py
       - code/irf/inputs/rational_preconditioners.json
+      - code/irf/inputs/v0m_verified_Rs_reference.json
+      - code/irf/inputs/v0m_verified_bounds_reference.json
       - code/v0m/cotas_2026_10_15/rational_preconditioners.json
       - code/v0m/cotas_2026_10_15/verified_linear_operator.py
       - code/v0m/cotas_2026_10_15/inputs/hand_linearization.py
@@ -21,6 +23,8 @@ on:
       - code/irf/finite_irf.py
       - code/irf/exact_linear_tail_power_certificate.py
       - code/irf/inputs/rational_preconditioners.json
+      - code/irf/inputs/v0m_verified_Rs_reference.json
+      - code/irf/inputs/v0m_verified_bounds_reference.json
       - code/v0m/cotas_2026_10_15/rational_preconditioners.json
       - code/v0m/cotas_2026_10_15/verified_linear_operator.py
       - code/v0m/cotas_2026_10_15/inputs/hand_linearization.py
