@@ -125,10 +125,11 @@ theorem sourceLike_dateZero_innovation_fields
       boundaryReserveRateInnovationZero R ∧
     (impactDateZero G (sourceLikeDateZeroShock R) Z).reserveQuantityInnovation =
       boundaryReserveQuantityInnovationZero R := by
-  simpa [sourceLikeDateZeroShock] using
-    (dateZero_four_instruments_exact G (sourceLikeDateZeroShock R) Z).1
-      |>.and
-        (dateZero_four_instruments_exact G (sourceLikeDateZeroShock R) Z).2.1
+  constructor
+  · simpa [sourceLikeDateZeroShock] using
+      (dateZero_four_instruments_exact G (sourceLikeDateZeroShock R) Z).1
+  · simpa [sourceLikeDateZeroShock] using
+      (dateZero_four_instruments_exact G (sourceLikeDateZeroShock R) Z).2.1
 
 /-- The old SOURCE root bracket has impact-installed capital
 STRICTLY BELOW the stationary predecessor's inherited capital.
