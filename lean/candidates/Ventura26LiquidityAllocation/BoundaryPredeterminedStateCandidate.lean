@@ -17,6 +17,7 @@ any new full infinite-horizon equilibrium exists.
 namespace Ventura26LiquidityAllocation
 namespace ProposedBoundaryPredeterminedState
 
+open ProposedStationaryBank
 open ProposedStationaryPrimitives
 open ProposedStationaryInheritedState
 open ProposedBoundaryNormalizationBridge
