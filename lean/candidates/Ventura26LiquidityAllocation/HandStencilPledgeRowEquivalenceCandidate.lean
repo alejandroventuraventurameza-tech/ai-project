@@ -56,7 +56,6 @@ theorem source_eq_reduced_of_pledge_face
   have hratio : Jnext / piNext = ad * qNext := by
     rw [hface]
     field_simp [hpi]
-    ring
   have hdiff :=
     source_sub_reduced_is_sdf_pledge_gap
       qNow loanRate sdf ukNext ad qNext theta Jnext piNext
@@ -101,7 +100,6 @@ theorem source_binding_euler_reduces_using_original_pledge
           d.nextControls.capitalPrice := by
     dsimp [localPrefixPledgeUnit]
     field_simp [hpi]
-    ring
   dsimp [localReducedFirmCapitalEulerResidual]
   rw [hpledge]
   ring
