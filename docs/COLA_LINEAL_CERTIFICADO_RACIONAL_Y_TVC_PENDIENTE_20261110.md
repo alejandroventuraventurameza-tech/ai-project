@@ -125,13 +125,74 @@ una grafica no lineal invariante.
 
 **Obligaciones esenciales pendientes:** construir Phi como ley ORIGINAL del equilibrio con una grafica de controles compatible, demostrar que es C1 en el conjunto activo, que la distancia entre su derivada y F0 no supera 10^-4, que los estados de fecha dos de S/B estan dentro del radio valido y que las KKT se cumplen a lo largo de la trayectoria. La proposicion N no establece existencia ni unicidad de equilibrios a partir de los datos disponibles.
 
-## 5. Por que la cola lineal no cierra la TVC economica
+## 5. Puente exacto entre el verificador de 80 cifras y las seis coordenadas IRF
+
+**Fuente exacta:** code/v0m/cotas_2026_10_15/verified_linear_operator.py
+(blob Git aae0e13d86d6627216a5e53716a0f762b05b78c9), salida
+verified_linear_bounds.json (blob ca7c2f8a49814fca0e3c6901b5ed22b506710662),
+precondicionadores V0-M (blob 74a44037f46a5f865c8123e6d059ef8342e46a19),
+y precondicionadores IRF (blob bef34b844836d01848b87145f1565ff84bd5071a).
+La auditoria reproduce el manejo de coordenadas mediante
+code/irf/audit_stencil_transition_bridge.py y falla si cambian esos
+cuatro archivos sin revalidacion expresa.
+
+**Identidad de datos verificada:** P0, F0 y Rv coinciden exactamente como
+matrices de fracciones en ambos modulos. Las versiones de la matriz Rs
+**NO** coinciden (11 entradas difieren por redondeos pequenos). El
+verificador de 80 cifras define Fs=Rsi@F0@Rs, con Rsi inversa de
+**su propia** Rs, y computa f_error a partir de jv, coupling y p_error
+en esa base. Es incorrecto aplicar f_error directamente en
+las coordenadas originales o intercambiar las dos matrices Rs.
+
+En notacion abstracta, sea F_st la transicion lineal corregida de
+aquel **stencil de 16 filas**, no la derivada SOURCE ya certificada.
+Tomamos como PREMISA AUDITADA DEL VERIFICADOR el resultado dirigido
+
+\[
+ \|R_s^{-1}(F_{\rm st}-F_0)R_s\|_\infty
+ \le \varepsilon_{\rm st},\qquad
+ \varepsilon_{\rm st}\le
+ 1.6168045246227126598759396782156971985080490633018783895341973
+ \cdot10^{-47}.
+\]
+
+Se invierte R_s por eliminacion de Gauss exacta en Q y se verifica la
+identidad R_s R_s^{-1}=I6 exactamente; la norma de condicion en la
+norma infinito se acota por arriba por 20.054945746121781.
+Entonces, por submultiplicatividad,
+
+\[
+ \|F_{\rm st}-F_0\|_\infty
+ \le \|R_s\|_\infty\|R_s^{-1}\|_\infty
+       \varepsilon_{\rm st}
+ <3.25\cdot10^{-46}<10^{-4}.
+\]
+
+Combinada con la **proposicion R** anterior, esta desigualdad entrega
+\(\|F_{\rm st}^{48}\|_\infty<49/50\), **condicional a la validez
+del certificado dirigido de la transicion linealizada a mano**.
+Este paso de coordenadas y la desigualdad final son aritmetica exacta:
+no se obtuvieron con una condicion numerica estimada en double.
+
+**Fuente de CI:** GitHub Actions
+[stencil-transition-bridge #42915280556](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42915280556),
+job independiente exitoso, artifact pinned-stencil-matrix-bridge
+ID 13809291155. Las revisiones posteriores del redondeo dirigido
+de salida y de la documentacion exigen cotejo del SHA correspondiente.
+
+**COMPuerta todavia pendiente:** demostrar la igualdad de las 16
+filas del stencil, sus opciones de esquina y sus derivadas con la
+reduccion correcta de las **34 condiciones SOURCE** del equilibrio
+Lean/Python. El teorema condicional no prueba una ley no lineal
+Phi, su radio de validez, ni la optima continuacion bancaria.
+
+## 6. Por que la cola lineal no cierra la TVC economica
 
 La contraccion de seis estados no prueba por si sola la sumabilidad de beneficios o dividendos descontados en todo el arbol de pagos; tampoco la propiedad de optimalidad dinamica BankContinuationOptimalAt, la factibilidad bancaria robusta o la correspondencia de 34 filas de SOURCE con el prefijo reducido de 33 ecuaciones. La continuidad bajo dos cierres terminales finitos T=8,20,40,80,160 es evidencia NUMERICA; su diferencia puede ser no monotona y no se controla con una cota aislada sobre F0.
 
 Tampoco se infiere seleccion endogena de rama, causalidad ni una mayor tasa de crecimiento tendencial. Un crecimiento persistente requiere un mecanismo de acumulacion no estacionario y sus propias condiciones de equilibrio.
 
-## 6. Siguiente compuerta rigurosa
+## 7. Siguiente compuerta rigurosa
 
 (1) Construir la ley no lineal y la grafica de controles satisfaciendo las 16 ecuaciones originales de recurrencia en un dominio de estados positivo. (2) Demostrar igualdad de Jacobianos en el modelo fuente y obtener un radio explicito mediante aritmetica intervalar, no asumirlo. (3) Acotar la norma de la derivada del mapa de 48 pasos en el dominio, controlando las restricciones de garantia y las esquinas OTC. (4) Verificar optimalidad global, TVC y mercados en todas las historias soportadas. (5) Solo entonces identificar el mecanismo causal y el crecimiento con contrafactuales admisibles.
 
