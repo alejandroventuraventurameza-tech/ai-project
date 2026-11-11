@@ -96,6 +96,13 @@ jobs:
           path: code/irf/output/conditional_source_33_row_transform_inverse.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve inherited SOURCE versus frozen/frontier predecessor provenance
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-inherited-predecessor-provenance
+          path: code/irf/output/source_python_predecessor_provenance.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve SOURCE/Python calendar and four-policy semantic contract
         uses: actions/upload-artifact@v7
         with:
