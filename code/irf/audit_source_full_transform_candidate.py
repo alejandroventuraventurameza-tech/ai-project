@@ -46,6 +46,21 @@ def matmul(A,B):
              for j in range(N)] for i in range(N)]
 
 
+def infinity_norm(A):
+    """Induced matrix infinity norm (maximum absolute row sum)."""
+    return max(sum(abs(x) for x in row) for row in A)
+
+
+def exact_candidate_inverse_infinity_norm(diag, shear):
+    """Closed-form norm for D^-1(I-K), K[19/20,21]=-shear."""
+    require(len(diag)==N and all(math.isfinite(x) and x!=0 for x in diag),
+            "Noninvertible diagonal in candidate infinity norm")
+    require(all(math.isfinite(shear[i]) for i in (19,20)),
+            "Nonfinite pledge-row shear")
+    return max((1+abs(shear[i]))/abs(diag[i]) if i in (19,20)
+               else 1/abs(diag[i]) for i in range(N))
+
+
 def max_identity_error(A):
     return max(abs(A[i][j]-(1. if i==j else 0.))
                for i in range(N) for j in range(N))
@@ -125,6 +140,14 @@ def main():
         err2=max_identity_error(matmul(Ti,T))
         require(err1<1e-12 and err2<1e-12,
                 "Candidate T and explicit inverse do not multiply to I")
+        norm_T=infinity_norm(T)
+        norm_Tinv=infinity_norm(Ti)
+        closed_form_norm_Tinv=exact_candidate_inverse_infinity_norm(diag,a)
+        require(math.isclose(norm_Tinv,closed_form_norm_Tinv,
+                             rel_tol=2e-14,abs_tol=2e-14),
+                "Explicit inverse norm disagrees with analytic row-sum formula")
+        require(math.isfinite(norm_T*norm_Tinv) and norm_T*norm_Tinv>=1,
+                "Invalid candidate infinity-norm condition number")
         determinant=math.prod(diag)
         require(math.isfinite(determinant) and determinant!=0.,
                 "Candidate transformation has zero determinant")
@@ -137,6 +160,11 @@ def main():
                 str(k):v for k,v in a.items()},
             "nonzero_diagonal_product":determinant,
             "minimum_abs_diagonal":min(abs(x) for x in diag),
+            "candidate_T_infinity_norm":norm_T,
+            "candidate_T_inverse_infinity_norm":norm_Tinv,
+            "candidate_T_inverse_infinity_norm_analytic":closed_form_norm_Tinv,
+            "candidate_T_infinity_condition_number":norm_T*norm_Tinv,
+            "candidate_norm_does_not_bound_source_jacobian_inverse":True,
             "max_T_Tinv_identity_error":err1,
             "max_Tinv_T_identity_error":err2,
             "source_33x33_economic_derivative_proved":False
@@ -174,6 +202,7 @@ def main():
             "T=(I+K)D, K[19,21]=-aH, K[20,21]=-aL, K^2=0; "
             "Tinv=D^-1(I-K); det T=product(diag D)",
         "not_copied_branch_coefficients":True,
+        "norm_scope":"algebraic candidate T only; NOT inverse of SOURCE economic Jacobian",
         "branches":result,
         "input_sha256":{str(p.relative_to(ROOT)):sha(p)
                         for p in (PARTIAL,IDENTITY,FIRM,CHART,ROW_MAP,CSV)},
@@ -181,6 +210,7 @@ def main():
             "Literal equality of 33 SOURCE economic residuals with transcribed Python under common primitives",
             "Equality of all 33 source Fréchet derivatives and the candidate T",
             "SOURCE Jacobian inverse and quantitative norm radius",
+            "Full functional 33-row residual identity on an open neighborhood",
             "Bank/firm/global household optimality and full infinite equilibrium",
             "Permanent growth consequences",
         ]
