@@ -268,5 +268,85 @@ theorem source_intervened_reserve_ratio_no_direct_corridor_width
 #print axioms source_intervened_reserve_ratio_requirement_coefficient_bounds
 #print axioms source_intervened_reserve_ratio_no_direct_corridor_width
 
+
+/-! ## From fixed-data statements to literal date-zero intervention data
+
+The next statements change only the selected policy-intervention
+coordinate, hold the 33 SOURCE prefix coordinates fixed, and evaluate
+the genuine LocalPrefixDateZeroData source constructor. They remain
+ceteris paribus statements, not equilibrium impulse responses.
+-/
+
+/-- The direct reserve-requirement coefficient is between four-fifths
+and one on the low-tightness branch. -/
+theorem source_reserve_ratio_requirement_coefficient_exact_band
+    (tau : ℝ) (h0 : 0 ≤ tau) (h1 : tau ≤ 1) :
+    (4 / 5 : ℝ) ≤ (1 : ℝ) - (1 / 5 : ℝ) *
+        (1 - tau) / (1 + tau) ∧
+      (1 : ℝ) - (1 / 5 : ℝ) *
+        (1 - tau) / (1 + tau) ≤ 1 := by
+  have hd : 0 < (1 : ℝ) + tau := by linarith
+  have hf0 : 0 ≤ (1 - tau) / (1 + tau) :=
+    div_nonneg (by linarith) (le_of_lt hd)
+  have hf1 : (1 - tau) / (1 + tau) ≤ 1 :=
+    (div_le_iff₀ hd).2 (by linarith)
+  constructor <;> nlinarith
+
+/-- At Python's benchmark tightness one-half, exactly 14/15 of a
+reserve-requirement announcement enters the liquidity ratio directly. -/
+theorem source_reserve_ratio_requirement_coefficient_at_half :
+    (1 : ℝ) - (1 / 5 : ℝ) *
+      (1 - (1 / 2 : ℝ)) / (1 + (1 / 2 : ℝ)) = 14 / 15 := by
+  norm_num
+
+/-- Evaluate the original SOURCE liquidity ratio using the literal
+date-zero data constructor: adding eps only to the initial
+reserve-requirement announcement moves the ratio by the
+same exact coefficient at fixed 33-dimensional coordinates. -/
+theorem source_stationary_datezero_requirement_shock_direct
+    (G : ℝ) (v : InitialPolicyIntervention)
+    (Z : LocalPrefixCoordinates) (eps : ℝ) :
+    localPrefixReserveDepositRatio
+      (intervenedPrimitives G
+        { v with reserveRequirement := v.reserveRequirement + eps })
+      (sourceStationaryDateZeroData G
+        { v with reserveRequirement := v.reserveRequirement + eps } Z) -
+    localPrefixReserveDepositRatio (intervenedPrimitives G v)
+      (sourceStationaryDateZeroData G v Z) =
+      eps * (1 - (1 / 5 : ℝ) *
+        (1 - Z.controlsZero.tightness) /
+        (1 + Z.controlsZero.tightness)) := by
+  rw [intervened_reserve_deposit_ratio G
+    { v with reserveRequirement := v.reserveRequirement + eps },
+    intervened_reserve_deposit_ratio G v]
+  simp [sourceStationaryDateZeroData, localPrefixDateZeroData,
+    intervenedPrimitives, initialIntervenedPrimitives,
+    ProposedStationaryPrimitives.primitives, localBridgeTree] <;> ring
+
+/-- The corridor shock does not enter the standalone SOURCE
+liquidity-ratio formula directly at fixed coordinates, despite
+affecting the OTC price equations and the complete equilibrium. -/
+theorem source_stationary_datezero_corridor_shock_no_direct_ratio_change
+    (G : ℝ) (v : InitialPolicyIntervention)
+    (Z : LocalPrefixCoordinates) (eps : ℝ) :
+    localPrefixReserveDepositRatio
+      (intervenedPrimitives G
+        { v with corridorWidth := v.corridorWidth + eps })
+      (sourceStationaryDateZeroData G
+        { v with corridorWidth := v.corridorWidth + eps } Z) =
+    localPrefixReserveDepositRatio (intervenedPrimitives G v)
+      (sourceStationaryDateZeroData G v Z) := by
+  rw [intervened_reserve_deposit_ratio G
+    { v with corridorWidth := v.corridorWidth + eps },
+    intervened_reserve_deposit_ratio G v]
+  simp [sourceStationaryDateZeroData, localPrefixDateZeroData,
+    intervenedPrimitives, initialIntervenedPrimitives,
+    ProposedStationaryPrimitives.primitives, localBridgeTree]
+
+#print axioms source_reserve_ratio_requirement_coefficient_exact_band
+#print axioms source_reserve_ratio_requirement_coefficient_at_half
+#print axioms source_stationary_datezero_requirement_shock_direct
+#print axioms source_stationary_datezero_corridor_shock_no_direct_ratio_change
+
 end ProposedStationaryInterventionSourceBridge
 end Ventura26LiquidityAllocation

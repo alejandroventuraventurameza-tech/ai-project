@@ -56,17 +56,18 @@ Analizamos cómo una innovación de remuneración de reservas se transmite
 por bancos comerciales y un mercado OTC de pagos hacia el crédito
 y la asignación de capital entre dos tipos de firmas heterogéneas.
 El contrato empresarial garantiza repago contra capital pignorable en
-todos los estados admisibles. Bajo hipótesis explícitas de regularidad,
-un argumento de complementariedad escalar distingue dos raíces locales
-del sistema reducido: una con crédito no restringido de la firma L
-y otra con garantías activas para ambas firmas. Un experimento
-ilustrativo encuentra menos tasa de préstamo y más crédito a la
-firma H en ambas ramas, pero signos opuestos en capital y pérdida
-asignativa condicional. Una auditoría formal adicional de SOURCE demuestra que su raíz
-del prefijo reducido viola la consistencia nominal heredada del
-estado inicial construido, por lo que ese candidato no constituye
-un equilibrio competitivo. Ninguno de estos resultados certifica
-dos equilibrios competitivos infinitos ni crecimiento permanente.
+todos los estados admisibles. Un argumento condicional de complementariedad
+distingue las ramas reducidas S (firma L con holgura) y B (ambas firmas
+restringidas), pero no establece que ambas posean raíces cerca del
+mismo estado heredado: una cota racional excluye una raíz S dentro de
+la bola logarítmica auditada bajo ese antecedente común. Las respuestas
+numéricas de ambas ramas son ejercicios ilustrativos, no equilibrios
+competitivos dinámicos certificados. Por separado, un testigo padre
+estacionario satisface el predicado literal de equilibrio competitivo
+en Lean para $G\geq M^{\mathrm{pre}}$; otro candidato reducido SOURCE
+incumple la consistencia nominal heredada y no constituye un equilibrio.
+No demostramos multiplicidad competitiva dinámica ni un aumento
+permanente de la tasa de crecimiento.
 El cuerpo presenta la contribución y sus límites; el desarrollo
 histórico detallado se preserva en los anexos.
 \end{abstract}
@@ -4167,7 +4168,7 @@ Para $\phi_p=150$, basta por ejemplo exigir $m_t\geq0.82$ y $|\Pi_t-1|\leq0.02$.
 
 Esto resuelve el pendiente de optimalidad global de precios para nuestro caso CES, dentro de esa familia local de agregados. Junto con la suficiencia empresarial, del hogar y bancaria, permite hablar de un equilibrio local con decisiones individualmente óptimas frente a alternativas globales admisibles. La localización se refiere a estados y shocks de equilibrio, no a una prohibición de precios alternativos lejanos.
 
-Las dos identidades son derivaciones propias y se auditaron también con aritmética racional exacta en puntos de control; esa comprobación ilustra la prueba algebraica, no la reemplaza. Las secciones siguientes añaden la certificación computacional de matrices y un radio suficiente, distinguiéndolo de una región cuantitativa útil. Siguen pendientes frecuencia, calibración y reasignación con cambios de régimen. No hemos ejecutado formalización en AppliedModelingLib. Ninguna de estas pruebas transforma una caída de tasas en una mejora asignativa incondicional.
+Las dos identidades son derivaciones propias y se auditaron también con aritmética racional exacta en puntos de control; esa comprobación ilustra la prueba algebraica, no la reemplaza. Las secciones siguientes añaden la certificación computacional de matrices y un radio suficiente, distinguiéndolo de una región cuantitativa útil. Siguen pendientes frecuencia, calibración y reasignación con cambios de régimen. La formalización se ha ejecutado en un \emph{checkout} aislado de AppliedModelingLib con revisiones fijadas y se han comprobado teoremas Lean específicos; no ha sido integrada ni revisada en el repositorio oficial. Esa compilación tampoco certifica por sí sola la correspondencia de todas las filas con las IRF de Python. Ninguna de estas pruebas transforma una caída de tasas en una mejora asignativa incondicional.
 
 \section{Validación por intervalos sin suponer exacta la gráfica aproximada}\label{sec:v0m_source_54}
 \subsection{El objeto que ahora se verifica}
