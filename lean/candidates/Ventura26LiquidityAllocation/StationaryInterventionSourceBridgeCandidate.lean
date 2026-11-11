@@ -1,4 +1,5 @@
 import Ventura26LiquidityAllocation.StationaryPrimitivesCandidate
+import Ventura26LiquidityAllocation.StationaryInheritedStateCandidate
 import Ventura26LiquidityAllocation.HandStencilPledgeRowEquivalenceCandidate
 
 /-!
@@ -87,7 +88,8 @@ theorem intervened_otc_deficit_slope_low_tightness
       (Real.log (2 : ℝ)) d.controls.tightness)
     (d.currentReserveRate + d.corridorWidth)
     (Real.log (2 : ℝ)) d.controls.tightness = _
-  exact ProposedHandStencilPledgeRowEquivalence.source_otc_deficit_slope_matches_python_low_tightness
+  exact ProposedHandStencilPledgeRowEquivalence.
+    source_otc_deficit_slope_matches_python_low_tightness
       d.currentReserveRate d.corridorWidth d.controls.tightness htau
 
 /-- Literal OTC surplus slope in the intervened SOURCE Primitives.
@@ -104,7 +106,8 @@ theorem intervened_otc_surplus_slope_low_tightness
       (d.currentReserveRate + d.corridorWidth)
       (Real.log (2 : ℝ)) d.controls.tightness)
     (Real.log (2 : ℝ)) d.controls.tightness = _
-  exact ProposedHandStencilPledgeRowEquivalence.source_otc_surplus_slope_matches_python_low_tightness
+  exact ProposedHandStencilPledgeRowEquivalence.
+    source_otc_surplus_slope_matches_python_low_tightness
       d.currentReserveRate d.corridorWidth d.controls.tightness htau
 
 #print axioms intervened_binary_payment_law
@@ -113,6 +116,43 @@ theorem intervened_otc_surplus_slope_low_tightness
 #print axioms intervened_reserve_deposit_ratio
 #print axioms intervened_otc_deficit_slope_low_tightness
 #print axioms intervened_otc_surplus_slope_low_tightness
+
+
+/-! ## Literal inherited nominal faces under an initial announcement
+
+The stationary inherited state is an independent, already compiled
+SOURCE object. Date-zero innovations change neither its inherited
+financial positions nor the primitive fields used in the original
+nominal consistency and monetary-domain predicates.
+These are NOT claims of optimality or equality to Python's frozen
+same-predecessor S/B roots. -/
+
+/-- The exact SOURCE inherited household/firm/bank/government nominal
+face consistency survives arbitrary initial policy interventions. -/
+theorem intervened_inherited_nominal_consistency
+    (G : ℝ) (v : InitialPolicyIntervention) :
+    InheritedNominalFaceConsistency (intervenedPrimitives G v)
+      (ProposedStationaryInheritedState.inheritedState G) := by
+  change InheritedNominalFaceConsistency
+    (ProposedStationaryPrimitives.primitives G)
+    (ProposedStationaryInheritedState.inheritedState G)
+  exact ProposedStationaryInheritedState.inherited_nominalFaceConsistency G
+
+/-- If the stationary bond supply covers pre-settlement reserves,
+the monetary primitive domain remains satisfied after all four shocks.
+This does not enforce a strict interiority margin for date-zero policies. -/
+theorem intervened_inherited_monetary_domain
+    (G : ℝ) (v : InitialPolicyIntervention)
+    (hG : ProposedStationaryRealScale.reservesPre ≤ G) :
+    MonetaryPolicyPrimitiveDomain (intervenedPrimitives G v)
+      (ProposedStationaryInheritedState.inheritedState G) := by
+  change MonetaryPolicyPrimitiveDomain
+    (ProposedStationaryPrimitives.primitives G)
+    (ProposedStationaryInheritedState.inheritedState G)
+  exact ProposedStationaryInheritedState.inherited_monetary_domain G hG
+
+#print axioms intervened_inherited_nominal_consistency
+#print axioms intervened_inherited_monetary_domain
 
 end ProposedStationaryInterventionSourceBridge
 end Ventura26LiquidityAllocation
