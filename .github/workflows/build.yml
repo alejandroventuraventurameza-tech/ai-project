@@ -89,6 +89,13 @@ jobs:
           path: code/irf/output/remaining_log_rows_audit.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve branch-specific candidate 33-row invertible transformation
+        uses: actions/upload-artifact@v7
+        with:
+          name: conditional-source-33-row-transform-inverse
+          path: code/irf/output/conditional_source_33_row_transform_inverse.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve 9-of-33 partial Jacobian row-scale ledger
         uses: actions/upload-artifact@v7
         with:
