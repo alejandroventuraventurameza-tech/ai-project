@@ -1,0 +1,105 @@
+name: Lean stationary policy and payment bridge (pinned)
+
+on:
+  push:
+    branches:
+      - 'work/lean-ci-validation-*'
+    paths:
+      - '.github/workflows/lean-stationary-policy-payment-bridge.yml'
+      - 'lean/candidates/Ventura26LiquidityAllocation/StationaryInterventionSourceBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/StationaryPrimitivesCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/HandStencilPledgeRowEquivalenceCandidate.lean'
+      - 'lean/checkpoint/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/lean-stationary-policy-payment-bridge.yml'
+      - 'lean/candidates/Ventura26LiquidityAllocation/StationaryInterventionSourceBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/StationaryPrimitivesCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/HandStencilPledgeRowEquivalenceCandidate.lean'
+      - 'lean/checkpoint/**'
+  workflow_dispatch:
+
+concurrency:
+  group: lean-stationary-payment-single-branch
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  payment-bridge:
+    name: Kernel and axiom check for SOURCE intervened Primitives
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - name: Checkout review branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Restore fixed SOURCE and library
+        shell: bash
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor 16e24fe828a5a0002ef13bb82bae9e295f190f86 HEAD
+          mkdir -p lean-stationary-payment-logs
+          git clone --quiet --filter=blob:none https://github.com/nikhgarg/AppliedModelingLib.git upstream
+          git -C upstream checkout --quiet --detach 194edcc95df74806a39b961d10dedddc6e730cce
+          test "$(git -C upstream rev-parse HEAD)" = 194edcc95df74806a39b961d10dedddc6e730cce
+          cmp lean/checkpoint/dependencies/lean-toolchain upstream/lean-toolchain
+          cmp lean/checkpoint/dependencies/lake-manifest.json upstream/lake-manifest.json
+          python3 - <<'PY'
+          from pathlib import Path
+          a = Path("upstream/lakefile.toml").read_bytes()
+          b = Path("lean/checkpoint/dependencies/lakefile.toml").read_bytes()
+          assert b == a + b'\n[[lean_lib]]\nname = "Ventura26LiquidityAllocation"\nsrcDir = "papers"\n'
+          PY
+          cp lean/checkpoint/dependencies/lakefile.toml upstream/lakefile.toml
+          mkdir -p upstream/papers/Ventura26LiquidityAllocation
+          cp lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/checkpoint/module_root.lean upstream/papers/Ventura26LiquidityAllocation.lean
+          cp lean/candidates/Ventura26LiquidityAllocation/*.lean upstream/papers/Ventura26LiquidityAllocation/
+          sha256sum lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean lean/candidates/Ventura26LiquidityAllocation/StationaryPrimitivesCandidate.lean lean/candidates/Ventura26LiquidityAllocation/HandStencilPledgeRowEquivalenceCandidate.lean lean/candidates/Ventura26LiquidityAllocation/StationaryInterventionSourceBridgeCandidate.lean > lean-stationary-payment-logs/source-sha256.txt
+      - name: Install pinned Lean toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o "$RUNNER_TEMP/elan-init.sh"
+          sh "$RUNNER_TEMP/elan-init.sh" -y --no-modify-path
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Restore Mathlib cache
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          lean --version
+          grep -Fx 'leanprover/lean4:v4.30.0-rc2' lean-toolchain
+          lake exe cache get > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/cache.log" 2>&1 || {
+            tail -n 100 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/cache.log"
+            exit 1
+          }
+      - name: Compile stationary policy/payment bridge and inspect axioms
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          lake build Ventura26LiquidityAllocation.StationaryInterventionSourceBridgeCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/bridge.log" 2>&1 || {
+            tail -n 180 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/bridge.log"
+            exit 1
+          }
+          grep -E 'intervened_binary_payment_law|intervened_mean_absolute_payment|intervened_bank_renewal_matches_stationary|intervened_reserve_deposit_ratio|intervened_otc_deficit_slope_low_tightness|intervened_otc_surplus_slope_low_tightness' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/bridge.log"
+          if grep -E 'sorryAx|Lean\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/bridge.log"; then
+            echo 'UNEXPECTED AXIOM OR UNCHECKED PROOF'
+            exit 1
+          fi
+          tail -n 35 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/bridge.log"
+      - name: Archive SOURCE payment bridge logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stationary-policy-payment-bridge-logs
+          path: lean-stationary-payment-logs/
+          if-no-files-found: warn
+          retention-days: 30
