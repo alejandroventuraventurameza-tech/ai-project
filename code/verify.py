@@ -335,6 +335,10 @@ if __name__ == "__main__":
     # Strictly separate 33 candidate row slots from full SOURCE certification.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_33_claim_readiness.py")], check=True)
 
+    # Literal SOURCE date-zero/date-one field and four-tool timing contract.
+    # This is semantic provenance, not runtime equivalence of Lean residuals.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_python_calendar_contract.py")], check=True)
+
     # Literal date-zero policy support in SOURCE vs fixed-coordinate Python rows.
     # This does NOT assert zero date-one endogenous equilibrium responses.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_four_tool_direct_support.py")], check=True)
