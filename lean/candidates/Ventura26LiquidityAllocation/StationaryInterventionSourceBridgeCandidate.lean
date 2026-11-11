@@ -88,8 +88,7 @@ theorem intervened_otc_deficit_slope_low_tightness
       (Real.log (2 : ℝ)) d.controls.tightness)
     (d.currentReserveRate + d.corridorWidth)
     (Real.log (2 : ℝ)) d.controls.tightness = _
-  exact ProposedHandStencilPledgeRowEquivalence.
-    source_otc_deficit_slope_matches_python_low_tightness
+  exact ProposedHandStencilPledgeRowEquivalence.source_otc_deficit_slope_matches_python_low_tightness
       d.currentReserveRate d.corridorWidth d.controls.tightness htau
 
 /-- Literal OTC surplus slope in the intervened SOURCE Primitives.
@@ -106,8 +105,7 @@ theorem intervened_otc_surplus_slope_low_tightness
       (d.currentReserveRate + d.corridorWidth)
       (Real.log (2 : ℝ)) d.controls.tightness)
     (Real.log (2 : ℝ)) d.controls.tightness = _
-  exact ProposedHandStencilPledgeRowEquivalence.
-    source_otc_surplus_slope_matches_python_low_tightness
+  exact ProposedHandStencilPledgeRowEquivalence.source_otc_surplus_slope_matches_python_low_tightness
       d.currentReserveRate d.corridorWidth d.controls.tightness htau
 
 #print axioms intervened_binary_payment_law
@@ -196,7 +194,7 @@ theorem source_stationary_datezero_productivity_fields
     (Z : LocalPrefixCoordinates) :
     (sourceStationaryDateZeroData G v Z).currentAggregateProductivity = 1 ∧
       (sourceStationaryDateZeroData G v Z).nextAggregateProductivity = 1 := by
-  rfl
+  constructor <;> rfl
 
 /-- The literal date-one SOURCE data are fixed-coordinate invariant
 under an initial four-tool announcement in the concrete calendar. -/
