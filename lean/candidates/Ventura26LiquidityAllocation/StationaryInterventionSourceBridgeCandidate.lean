@@ -215,5 +215,58 @@ theorem source_stationary_dateone_data_invariant_fixed_coordinates
 #print axioms source_stationary_datezero_productivity_fields
 #print axioms source_stationary_dateone_data_invariant_fixed_coordinates
 
+
+/-! ## Exact direct reserve-requirement sensitivity of SOURCE liquidity ratio
+
+This is an identity of the ORIGINAL reserve/deposit function under a
+fixed LocalPrefixDateData record, not a bank-optimality theorem and
+not an equilibrium IRF. The five outcomes needed for a dynamic
+counterfactual remain jointly endogenous.
+-/
+
+/-- For fixed prices and matching tightness, a level change eps in rho
+changes the literal SOURCE reserve/deposit ratio by a known factor. -/
+theorem source_intervened_reserve_ratio_exact_requirement_change
+    (G : ℝ) (v : InitialPolicyIntervention)
+    (d : LocalPrefixDateData) (eps : ℝ) :
+    localPrefixReserveDepositRatio (intervenedPrimitives G v)
+      { d with reserveRequirement := d.reserveRequirement + eps } -
+    localPrefixReserveDepositRatio (intervenedPrimitives G v) d =
+    eps * (1 - (1 / 5 : ℝ) *
+      (1 - d.controls.tightness) / (1 + d.controls.tightness)) := by
+  rw [intervened_reserve_deposit_ratio G v,
+    intervened_reserve_deposit_ratio G v]
+  dsimp
+  ring
+
+/-- On the economic branch 0 <= tightness <= 1, the direct
+requirement coefficient lies in [4/5,1]; we prove positivity and
+the upper bound first. No equilibrium signs follow from this. -/
+theorem source_intervened_reserve_ratio_requirement_coefficient_bounds
+    (tau : ℝ) (h0 : 0 ≤ tau) (h1 : tau ≤ 1) :
+    0 < (1 : ℝ) - (1 / 5 : ℝ) * (1 - tau) / (1 + tau) ∧
+      (1 : ℝ) - (1 / 5 : ℝ) * (1 - tau) / (1 + tau) ≤ 1 := by
+  have hd : 0 < (1 : ℝ) + tau := by linarith
+  have hf0 : 0 ≤ (1 - tau) / (1 + tau) :=
+    div_nonneg (by linarith) (le_of_lt hd)
+  have hf1 : (1 - tau) / (1 + tau) ≤ 1 :=
+    (div_le_iff₀ hd).2 (by linarith)
+  constructor <;> nlinarith
+
+/-- Changing ONLY the corridor field of fixed SOURCE data does not
+directly change the reserve/deposit ratio. The general equilibrium
+effect need not be zero. -/
+theorem source_intervened_reserve_ratio_no_direct_corridor_width
+    (G : ℝ) (v : InitialPolicyIntervention)
+    (d : LocalPrefixDateData) (eps : ℝ) :
+    localPrefixReserveDepositRatio (intervenedPrimitives G v)
+      { d with corridorWidth := d.corridorWidth + eps } =
+    localPrefixReserveDepositRatio (intervenedPrimitives G v) d := by
+  rfl
+
+#print axioms source_intervened_reserve_ratio_exact_requirement_change
+#print axioms source_intervened_reserve_ratio_requirement_coefficient_bounds
+#print axioms source_intervened_reserve_ratio_no_direct_corridor_width
+
 end ProposedStationaryInterventionSourceBridge
 end Ventura26LiquidityAllocation
