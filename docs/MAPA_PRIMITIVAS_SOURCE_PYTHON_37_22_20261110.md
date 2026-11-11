@@ -1,59 +1,33 @@
-# SOURCE Primitives / Python: 37 economic fields and 22 proof obligations
+# SOURCE Primitives / Python: 37 campos, 22 pruebas y testigo estacionario real
 
-**Checkpoint de alcance, 10-XI-2026.** Los 33 residuos no se convierten en el mismo operador por identificar sus escalas, su carta logaritmica o las formulas de dos mercados. Todavia hay que construir una instancia completa de la estructura real Lean \`Primitives S\` que reproduzca \`steady_case()\`, \`make_boundary()\`, el calendario exogeno, los pagos y las reglas de politica.
+**Corrección de inventario (10-XI-2026).** El SOURCE contiene 37 campos económicos y funcionales, junto con 22 obligaciones de admisibilidad. **La instancia estacionaria ya está construida**, no es una tarea pendiente desde cero: `lean/candidates/Ventura26LiquidityAllocation/StationaryPrimitivesCandidate.lean` define `primitives (G : ℝ) : Primitives LocalBridgePhase` y proporciona las pruebas de todos esos campos. El módulo compiló en [Lean candidate audit #42935620974](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42935620974), commit `0b9409fe`. Sus predicados `stationary_parameters`, `stationary_recurrent_inputs` y `binary_payment_law` se apoyan en las definiciones literales de `EconomicModel.lean`.
 
-El SOURCE contiene 37 campos de datos y funciones, seguidos de 22 obligaciones de positividad, orden, soporte y momentos. Esta enumeracion se deriva literalmente de \`lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean\`, estructura \`Primitives\`, no de un modelo simplificado inventado para el audit.
+**No confundir tres afirmaciones distintas:** (a) se construyó una instancia SOURCE que satisface su tipo y restricciones; (b) existe un testigo estacionario para las ecuaciones reducidas bajo esa instancia; (c) falta demostrar que esa instancia y una intervención de cuatro instrumentos reproducen la totalidad del operador dinámico del ejecutor Python. (a) y el alcance reducido de (b) están compilados; (c) sigue pendiente.
 
-## 1. Mapa de campos, sin promocion de evidencia
+## 1. Correspondencias existentes y pendientes
 
-| Campo(s) SOURCE | Candidato Python / interpretacion | Estado |
+| Bloque de SOURCE | Testigo estacionario ya compilado | Relación con Python / pendiente |
 |---|---|---|
-| tree | \`localBridgeTree\`, calendario 0->1->2->2 | SOURCE define el arbol y tiene lemas de soporte; **falta incorporarlo a la instancia economica completa** |
-| mass | \`s.mass=[.5,.5]\` | candidato numerico |
-| productivity | \`s.technology=[1.01,1.0]\` para H/L | candidato numerico |
-| aggregateProductivity | productividad comun igual a uno en la ilustracion Python | candidato FUNCIONAL: definir sobre los tres estados y demostrarlo |
-| pledgeability | \`s.pledge=[.15,.4]\` | candidato numerico |
-| alpha, beta, depreciation | \`s.alpha=.4\`, \`s.beta=.5\`, \`s.delta=.025\` | candidato numerico |
-| entrepreneurDiscount, workerDiscount | \`s.be=.96\`, \`s.bw=.99\` | candidato numerico |
-| entrepreneurRiskAversion, workerRiskAversion | \`s.sigmaE=1\`, \`s.sigmaW=1\` | candidato numerico |
-| laborCurvature, laborScale | \`s.varphi=1\`, \`s.chiW=1\` | candidato numerico |
-| priceElasticity, priceAdjustmentCost | \`s.eps=6\`, coeficiente Rotemberg 150 (coste Python 75*(Pi-1)^2*Y) | candidato por formula; equivalencia del objeto dinamico pendiente |
-| capitalAdjustmentCost | \`s.phiI=.5\` | candidato numerico |
-| bankExit, bankSeedShare | \`s.eta=.1\`, \`(1/s.rate-(1-s.eta))/s.eta=0.8809519524...\` | candidato condicionado; \`bankRenewalFactor=1/s.rate\` |
-| bankDepositCap, bankLoanCap | 4 y 6 en diagnosticos Python | **no** implica optimalidad ni verificacion por tipo bancario |
-| matchingIntensity | SOURCE \`lambda=ln2\` equivale a Python \`s.aa=.5\` solo como cuota de matches | igualdades SOURCE probadas localmente para tau<=1; rama tau>1 incompatible |
-| governmentBondSupply | NO identificado con un campo de \`steady_case()\` | **abierto**; no asumir cero silenciosamente |
-| reserveRatePersistence, reserveQuantityPersistence | coeficientes de rezago .5 en \`auxiliary\` | candidato funcional |
-| reserveRateSteady, reserveQuantitySteady | \`s.rr\`, \`s.M\` | candidato numerico |
-| outputReference | \`s.Y\` | candidato numerico |
-| inflationResponse, outputResponse | 1.5 y .125 dentro de la regla de remuneracion | candidato funcional |
-| reserveRateInnovation, reserveQuantityInnovation | estados inicial/dateOne: \`base.e0\`, \`base.e1\`; recurrente: cero | **pendiente** prueba de funcion exogena sobre \`LocalBridgePhase\` |
-| reserveRequirementPath, corridorWidthPath | \`s.rho\`, \`s.Delta\`, con perturbacion solo en fecha cero | soporte de politica inicial cotejado; falta instancia con historias |
-| paymentSupport, paymentProbability, paymentShock | ley binaria simetrica candidata, momento absoluto \`s.zeta=.2\` | **abierto**: SOURCE exige soporte exacto, probabilidades positivas, suma uno y media cero |
+| Calendario y productividad agregada | `tree := localBridgeTree` y `aggregateProductivity := fun _ => 1` | Comparar historias y fechas de todos los datos del prefijo; no basta el árbol |
+| Tipos de firmas y tecnología | masas `1/2`, productividades `1.01/1.0`, `alpha=2/5`, `beta=1/2`, colaterales `0.15/0.4` | Valores compatibles con `steady_case()`; cotejo funcional de producción, empleo y riqueza todavía abierto |
+| Preferencias y ajuste | `beta_E=24/25`, `beta_W=99/100`, aversión 1, curvatura y escala 1, depreciación `1/40`, elasticidad 6, coste Rotemberg 150, coste de capital `1/2` | Candidatos compatibles con parámetros de Python, pero no prueba completa de sus Euler y presupuestos sobre la misma historia |
+| Renovación bancaria | `bankExit=1/10`, `bankSeedShare=10/Rstar-9`, límites 4 y 6 | El teorema fuente `bankRenewalFactor_eq` da `a_B=1/Rstar`. Las dos filas bancarias tienen equivalencia nivel/log verificada |
+| Matching OTC | `matchingIntensity := Real.log 2` | `1-exp(-log 2)=1/2`, la cuota efectiva Python `aa`. La igualdad de pendientes está demostrada únicamente en la rama `tau<=1`; no equivale al SOURCE para `tau>1` |
+| Pagos bancarios | soporte exacto `{0,1}`, shocks `-1/5,+1/5`, probabilidades `1/2,1/2` | Las seis obligaciones de soporte/probabilidades/media están ya resueltas; `BinarySymmetricPaymentLaw` y `localPrefixMeanAbsolutePaymentShock_eq_of_binarySymmetric` proporcionan la reducción `E|ω|=1/5` |
+| Reglas de política | coeficientes de persistencia `1/2`, `phi_pi=3/2`, `phi_y=1/8`, trayectorias base `rho=1/10`, `Delta=1/50`, innovaciones base cero | El SOURCE `initialIntervenedPrimitives` añade los cuatro shocks solo en fecha cero. Falta integrar todas las funciones con los controles y datos del mismo experimento Python |
+| Referencias estacionarias | tasas, reservas y output del paquete `ProposedStationaryBank` y escala productiva | Comparar objetos numéricos y dominios con `make_boundary` y raíces de S/B separadas |
+| Bonos públicos | `governmentBondSupply := G`, libre | No imponer `G=0` ni `G=2M` sin demostrarlo; cierre fiscal y estado heredado pendientes |
 
-El mapa ocupa **todos los 37 campos** sin marcar ninguno como instancia SOURCE ya construida. Algunos valores son candidatos ilustrativos; las funciones de politica, pagos e historia requieren objetos Lean completos y lemas de representacion.
+## 2. Las 22 obligaciones verificadas por el testigo
 
-## 2. Las 22 obligaciones de \`Primitives\`
+El SOURCE requiere: `mass_pos`, `productivity_pos`, `productivity_order`, `aggregate_productivity_pos`, `pledgeability_mem`, `alpha_pos`, `beta_pos`, `decreasing_returns`, `price_elasticity_gt_one`, `capital_adjustment_cost_pos`, `matching_intensity_pos`, `depreciation_mem`, `discount_order`, `bank_exit_mem`, `bank_seed_mem`, `bank_caps_nonneg`, `payment_probability_nonneg`, `payment_probability_pos_on_support`, `payment_shock_gt_neg_one_on_support`, `payment_probability_zero_outside`, `payment_probability_sum_one` y `payment_shock_mean_zero`.
 
-Se deben rellenar explicitamente:
+Todas aparecen como campos de prueba de `ProposedStationaryPrimitives.primitives`. Los teoremas de dicho archivo son **compilados**, pero la compilación de un testigo de parámetros no demuestra que una `Allocation` completa exista o sea óptima.
 
-\`\`\`text
-mass_pos, productivity_pos, productivity_order,
-aggregate_productivity_pos, pledgeability_mem,
-alpha_pos, beta_pos, decreasing_returns,
-price_elasticity_gt_one, capital_adjustment_cost_pos,
-matching_intensity_pos, depreciation_mem,
-discount_order, bank_exit_mem, bank_seed_mem, bank_caps_nonneg,
-payment_probability_nonneg, payment_probability_pos_on_support,
-payment_shock_gt_neg_one_on_support,
-payment_probability_zero_outside,
-payment_probability_sum_one, payment_shock_mean_zero.
-\`\`\`
+## 3. Próxima compuerta, sin duplicar trabajo existente
 
-Los candidatos escalares satisfacen a primera vista muchas restricciones: .4+.5=.9<1, 1.01>1.00>0, 0<.96<.99<1, 0<.025<1, 0<.15/.4<1, \`lambda=log2>0\`, \`eta=.1\` y \`omega_B≈.88095\` dentro de (0,1). Pero estas comprobaciones aisladas no rellenan los campos de prueba de la estructura Lean, especialmente las seis obligaciones de la ley de pagos.
+El módulo nuevo `StationaryInterventionSourceBridgeCandidate.lean` intenta demostrar que la ley de pagos, su momento absoluto, el factor de renovación y las expresiones de encaje/OTC del SOURCE se conservan bajo `initialIntervenedPrimitives (primitives G) v`. El gate focalizado es `lean-stationary-policy-payment-bridge.yml`; **no elevar sus seis lemas a DEMOSTRADOS hasta verificar kernel y ausencia de `sorryAx` en el SHA exacto**.
 
-## 3. Orden de cierre recomendado
+Después de esa compuerta faltan: identificar la misma estructura `LocalPrefixDateData` (historia, estados, precios, OTC, datos terminales) en Lean y Python; demostrar la igualdad funcional de los 33 residuos y la transformación del Jacobiano; conectar los 34 términos KKT según rama, la optimalidad dinámica y el horizonte infinito. La igualdad de una fila o la inversión de la matriz candidata no resuelven esas obligaciones.
 
-Primero construir un archivo Lean independiente que instancie \`Primitives LocalBridgePhase\` con el arbol ya probado, productividad y masa de firmas, parametros, politica por fecha e innovaciones heredadas. Segundo construir la ley de pagos binaria exactamente con dos \`BankPayment\` diferentes y verificar soporte, normalizacion y momento. Tercero reproducir \`LocalPrefixDateData\` y el comportamiento del tail y cotejar las 33 filas bajo el mismo objeto \`P\` y la carta positiva. Solo entonces convertir la matriz candidata T en una igualdad de operadores, probar el Jacobiano SOURCE y aplicar IFT. Los teoremas de existencia/optimalidad bancaria, TVC y crecimiento permanente se evaluan aparte.
-
-**Estado:** inventario de obligaciones y mapa candidato; no es un testigo Lean de \`Primitives\` ni una certificacion completa. Mantener PR #2 draft y main sin modificar.
+**PR #2 permanece draft; `main` sin modificaciones.**
