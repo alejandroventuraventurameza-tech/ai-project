@@ -18,6 +18,8 @@ jobs:
         with:
           python-version: "3.12"
       - run: python -m compileall -q code
+      - name: Check positive off-root bank-face log level equality and 33 gradients
+        run: python code/irf/test_bank_face_offroot_log_level.py
       - name: Regress candidate 33-row inverse and infinity norms without economic dependencies
         run: python code/irf/test_conditional_row_transform_norm.py
       - name: Audit illustrative firm scale without changing calibration
