@@ -770,5 +770,131 @@ theorem source_dateone_prefix_data_fixed_coordinates_unaffected
 #print axioms source_future_policy_paths_unchanged
 #print axioms source_dateone_prefix_data_fixed_coordinates_unaffected
 
+
+/-! ## SOURCE date-one economic row functions at fixed data/coordinates
+
+The four changed primitive fields are announcement functions or paths.
+The actual firm budget, firm capital Euler and 11 other remaining row
+formulas read those announcements through LocalPrefixDateData rather
+than directly through P. This extra layer is needed before making a
+rigorous fixed-coordinate derivative statement for the full prefix.
+-/
+
+/-- The original SOURCE entrepreneur budget formula reads only unaffected
+economic primitives when its LocalPrefixDateData argument is fixed. -/
+theorem source_fixed_data_firm_budget_unaffected
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (v : InitialPolicyIntervention)
+    (d : LocalPrefixDateData) (i : FirmType) :
+    localReducedFirmBudgetResidual (initialIntervenedPrimitives P v) d i =
+      localReducedFirmBudgetResidual P d i := by
+  rfl
+
+/-- Same statement for both capital Euler regimes. -/
+theorem source_fixed_data_firm_euler_unaffected
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (v : InitialPolicyIntervention)
+    (d : LocalPrefixDateData) (i : FirmType)
+    (branch : LocalPrefixBranch) :
+    localReducedFirmCapitalEulerResidual branch
+        (initialIntervenedPrimitives P v) d i =
+      localReducedFirmCapitalEulerResidual branch P d i := by
+  rfl
+
+/-- All 11 literal non-firm SOURCE row functions read unchanged P fields
+at a fixed LocalPrefixDateData, including the two policy rule formulas:
+their innovations are passed in the data record. -/
+theorem source_fixed_data_all_remaining_rows_unaffected
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (v : InitialPolicyIntervention)
+    (d : LocalPrefixDateData) (row : Fin 11) :
+    localReducedRemainingResidual (initialIntervenedPrimitives P v) d row =
+      localReducedRemainingResidual P d row := by
+  rfl
+
+/-- At fixed coordinates all 11 date-one remaining SOURCE rows are
+unchanged by an initial policy announcement; no claim is made about
+the endogenous date-one equilibrium path. -/
+theorem source_dateone_remaining_rows_unaffected
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (v : InitialPolicyIntervention)
+    (Z : LocalPrefixCoordinates) (dateOne recurrent : S)
+    (tail : LocalPrefixContinuationRule) (row : Fin 11)
+    (hdate : dateOne ≠ P.tree.initial) :
+    localReducedRemainingResidual (initialIntervenedPrimitives P v)
+        (localPrefixDateOneData (initialIntervenedPrimitives P v)
+          Z dateOne recurrent tail) row =
+      localReducedRemainingResidual P
+        (localPrefixDateOneData P Z dateOne recurrent tail) row := by
+  rw [source_dateone_prefix_data_fixed_coordinates_unaffected
+    P v Z dateOne recurrent tail hdate]
+  exact source_fixed_data_all_remaining_rows_unaffected P v _ row
+
+/-- Both date-one SOURCE entrepreneur budgets are unchanged at
+fixed coordinates. -/
+theorem source_dateone_firm_budgets_unaffected
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (v : InitialPolicyIntervention)
+    (Z : LocalPrefixCoordinates) (dateOne recurrent : S)
+    (tail : LocalPrefixContinuationRule) (i : FirmType)
+    (hdate : dateOne ≠ P.tree.initial) :
+    localReducedFirmBudgetResidual (initialIntervenedPrimitives P v)
+        (localPrefixDateOneData (initialIntervenedPrimitives P v)
+          Z dateOne recurrent tail) i =
+      localReducedFirmBudgetResidual P
+        (localPrefixDateOneData P Z dateOne recurrent tail) i := by
+  rw [source_dateone_prefix_data_fixed_coordinates_unaffected
+    P v Z dateOne recurrent tail hdate]
+  exact source_fixed_data_firm_budget_unaffected P v _ i
+
+/-- Both date-one SOURCE binding Euler rows are unchanged at
+fixed coordinates: the policy acts through the endogenous state. -/
+theorem source_dateone_binding_eulers_unaffected
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (v : InitialPolicyIntervention)
+    (Z : LocalPrefixCoordinates) (dateOne recurrent : S)
+    (tail : LocalPrefixContinuationRule) (i : FirmType)
+    (hdate : dateOne ≠ P.tree.initial) :
+    localReducedFirmCapitalEulerResidual LocalPrefixBranch.binding
+        (initialIntervenedPrimitives P v)
+        (localPrefixDateOneData (initialIntervenedPrimitives P v)
+          Z dateOne recurrent tail) i =
+      localReducedFirmCapitalEulerResidual LocalPrefixBranch.binding P
+        (localPrefixDateOneData P Z dateOne recurrent tail) i := by
+  rw [source_dateone_prefix_data_fixed_coordinates_unaffected
+    P v Z dateOne recurrent tail hdate]
+  exact source_fixed_data_firm_euler_unaffected P v _
+    i LocalPrefixBranch.binding
+
+/-- The date-one common physical pledge formula also uses only the
+unaffected depreciation primitive and fixed date-one controls. -/
+theorem source_dateone_common_pledge_unaffected
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (v : InitialPolicyIntervention)
+    (Z : LocalPrefixCoordinates) (dateOne recurrent : S)
+    (tail : LocalPrefixContinuationRule)
+    (hdate : dateOne ≠ P.tree.initial) :
+    Z.stateTwo.commonPledgeValue -
+      (1 - (initialIntervenedPrimitives P v).depreciation) *
+        (localPrefixDateOneData (initialIntervenedPrimitives P v)
+          Z dateOne recurrent tail).nextControls.inflation *
+        (localPrefixDateOneData (initialIntervenedPrimitives P v)
+          Z dateOne recurrent tail).nextControls.capitalPrice =
+    Z.stateTwo.commonPledgeValue -
+      (1 - P.depreciation) *
+        (localPrefixDateOneData P Z dateOne recurrent tail).nextControls.inflation *
+        (localPrefixDateOneData P Z dateOne recurrent tail).nextControls.capitalPrice := by
+  rw [source_dateone_prefix_data_fixed_coordinates_unaffected
+    P v Z dateOne recurrent tail hdate]
+  rfl
+
+#print axioms source_fixed_data_firm_budget_unaffected
+#print axioms source_fixed_data_firm_euler_unaffected
+#print axioms source_fixed_data_all_remaining_rows_unaffected
+#print axioms source_dateone_remaining_rows_unaffected
+#print axioms source_dateone_firm_budgets_unaffected
+#print axioms source_dateone_binding_eulers_unaffected
+#print axioms source_dateone_common_pledge_unaffected
+
 end ProposedHandStencilPledgeRowEquivalence
 end Ventura26LiquidityAllocation
