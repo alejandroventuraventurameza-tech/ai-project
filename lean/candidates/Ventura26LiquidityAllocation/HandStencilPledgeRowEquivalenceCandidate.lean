@@ -1023,5 +1023,55 @@ theorem source_bank_face_level_log_identity
 #print axioms source_bank_renewal_factor_matches_target
 #print axioms source_bank_face_level_log_identity
 
+
+/-! ## Literal SOURCE bank-face row and admissible renewal bounds
+
+The earlier lemma proves a positive level/log identity abstractly. These
+lemmas connect it to the ORIGINAL SOURCE bank-face residual and deduce
+aB bounds using the actual bank-exit and seed-share assumptions.
+-/
+
+/-- SOURCE's own bank nominal-face row is an exact positive multiple of
+its log-ratio form; no first-order approximation is used. -/
+theorem source_bank_face_literal_row_equals_log_chart
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (d : LocalPrefixDateData)
+    (hnext : 0 < d.nextBankFace)
+    (hpred : 0 <
+      bankRenewalFactor P * d.controls.loanRate * d.currentBankFace /
+        d.controls.inflation) :
+    localReducedRemainingResidual P d 0 =
+      (bankRenewalFactor P * d.controls.loanRate * d.currentBankFace /
+        d.controls.inflation) *
+        (Real.exp
+          (Real.log (d.nextBankFace /
+            (bankRenewalFactor P * d.controls.loanRate * d.currentBankFace /
+              d.controls.inflation))) - 1) := by
+  change d.nextBankFace -
+    (bankRenewalFactor P * d.controls.loanRate * d.currentBankFace /
+      d.controls.inflation) = _
+  exact source_bank_face_level_log_identity _ _ hnext hpred
+
+/-- For any admissible SOURCE seed share in [0,1], the bank renewal
+factor is between the surviving-bank fraction and 1. Strictly
+positive renewal needs its own additional hypothesis. -/
+theorem source_bank_renewal_factor_admissible_bounds
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) :
+    1 - P.bankExit ≤ bankRenewalFactor P ∧
+      bankRenewalFactor P ≤ 1 := by
+  have hnonneg : 0 ≤ P.bankExit * P.bankSeedShare :=
+    mul_nonneg P.bank_exit_mem.1 P.bank_seed_mem.1
+  have hupper : P.bankExit * P.bankSeedShare ≤ P.bankExit := by
+    calc
+      P.bankExit * P.bankSeedShare ≤ P.bankExit * 1 :=
+        mul_le_mul_of_nonneg_left P.bank_seed_mem.2 P.bank_exit_mem.1
+      _ = P.bankExit := by ring
+  dsimp [bankRenewalFactor]
+  constructor <;> linarith
+
+#print axioms source_bank_face_literal_row_equals_log_chart
+#print axioms source_bank_renewal_factor_admissible_bounds
+
 end ProposedHandStencilPledgeRowEquivalence
 end Ventura26LiquidityAllocation
