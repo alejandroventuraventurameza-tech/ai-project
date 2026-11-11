@@ -251,7 +251,24 @@ theorem source_intervened_reserve_ratio_requirement_coefficient_bounds
     div_nonneg (by linarith) (le_of_lt hd)
   have hf1 : (1 - tau) / (1 + tau) ≤ 1 :=
     (div_le_iff₀ hd).2 (by linarith)
-  constructor <;> nlinarith
+  have hscaled0 :
+      0 ≤ (1 / 5 : ℝ) * ((1 - tau) / (1 + tau)) :=
+    mul_nonneg (by norm_num) hf0
+  have hscaled1 :
+      (1 / 5 : ℝ) * ((1 - tau) / (1 + tau)) ≤ 1 / 5 := by
+    calc
+      (1 / 5 : ℝ) * ((1 - tau) / (1 + tau)) ≤ (1 / 5 : ℝ) * 1 :=
+        mul_le_mul_of_nonneg_left hf1 (by norm_num)
+      _ = 1 / 5 := by ring
+  have hRewrite :
+      (1 / 5 : ℝ) * (1 - tau) / (1 + tau) =
+        (1 / 5 : ℝ) * ((1 - tau) / (1 + tau)) := by
+    ring
+  constructor
+  · rw [hRewrite]
+    linarith [hscaled1]
+  · rw [hRewrite]
+    linarith [hscaled0]
 
 /-- Changing ONLY the corridor field of fixed SOURCE data does not
 directly change the reserve/deposit ratio. The general equilibrium
@@ -290,7 +307,24 @@ theorem source_reserve_ratio_requirement_coefficient_exact_band
     div_nonneg (by linarith) (le_of_lt hd)
   have hf1 : (1 - tau) / (1 + tau) ≤ 1 :=
     (div_le_iff₀ hd).2 (by linarith)
-  constructor <;> nlinarith
+  have hscaled0 :
+      0 ≤ (1 / 5 : ℝ) * ((1 - tau) / (1 + tau)) :=
+    mul_nonneg (by norm_num) hf0
+  have hscaled1 :
+      (1 / 5 : ℝ) * ((1 - tau) / (1 + tau)) ≤ 1 / 5 := by
+    calc
+      (1 / 5 : ℝ) * ((1 - tau) / (1 + tau)) ≤ (1 / 5 : ℝ) * 1 :=
+        mul_le_mul_of_nonneg_left hf1 (by norm_num)
+      _ = 1 / 5 := by ring
+  have hRewrite :
+      (1 / 5 : ℝ) * (1 - tau) / (1 + tau) =
+        (1 / 5 : ℝ) * ((1 - tau) / (1 + tau)) := by
+    ring
+  constructor
+  · rw [hRewrite]
+    linarith [hscaled1]
+  · rw [hRewrite]
+    linarith [hscaled0]
 
 /-- At Python's benchmark tightness one-half, exactly 14/15 of a
 reserve-requirement announcement enters the liquidity ratio directly. -/
