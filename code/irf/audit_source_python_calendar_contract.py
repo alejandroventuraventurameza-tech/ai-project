@@ -66,9 +66,14 @@ def normalized(s):
     return " ".join(s.split())
 
 def assignments(text):
+    # The final policy paths in date one span two physical lines.
+    body=text.split("LocalPrefixDateData where",1)[1]
+    chunks=re.split(r"(?m)^  (?=[A-Za-z][A-Za-z0-9_]*\\s*:=)",body)
     out={}
-    for key,value in re.findall(r"^\s*(\w+)\s*:=\s*(.*?)\s*$",text,re.M):
-        out[key]=normalized(value)
+    for chunk in chunks:
+        match=re.match(r"([A-Za-z][A-Za-z0-9_]*)\\s*:=\\s*(.*)",chunk,re.S)
+        if match:
+            out[match.group(1)]=normalized(match.group(2))
     return out
 
 def main():
