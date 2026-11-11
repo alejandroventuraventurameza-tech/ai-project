@@ -1018,7 +1018,6 @@ theorem source_bank_face_level_log_identity
       predicted * (Real.exp (Real.log (nextFace / predicted)) - 1) := by
   rw [Real.exp_log (div_pos hnext hpredicted)]
   field_simp [ne_of_gt hpredicted]
-  ring
 
 #print axioms source_bank_renewal_seed_witness
 #print axioms source_bank_renewal_factor_matches_target
