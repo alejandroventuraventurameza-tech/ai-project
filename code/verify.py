@@ -326,6 +326,10 @@ if __name__ == "__main__":
     # the other 24 SOURCE rows, Euler shear and coordinate chart stay OPEN.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_partial_jacobian_row_scales.py")], check=True)
 
+    # Conditional SOURCE transcription tests; do NOT promote to an operator proof.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_identity_row_candidates.py")], check=True)
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_firm_budget_euler_shear.py")], check=True)
+
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "diagnose_impact.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "compare_nonlinear_tail.py")], check=True)

@@ -51,6 +51,16 @@ jobs:
           path: code/irf/output/source_identity_row_candidates.json
           if-no-files-found: warn
           retention-days: 30
+      - name: Audit six direct firm SOURCE rows and two date-one common-pledge Euler shears
+        run: python code/irf/audit_source_firm_budget_euler_shear.py
+      - name: Archive conditional firm SOURCE/Python row bridge
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-firm-euler-shear-audit
+          path: code/irf/output/source_firm_budget_euler_shear_audit.json
+          if-no-files-found: warn
+          retention-days: 30
       - name: Audit proposition scope, 57-row ledger and Lean obstruction
         run: python code/audit_claim_scope.py
       - name: Audit all 57 Lean correspondence pointers without promoting theorem coverage
