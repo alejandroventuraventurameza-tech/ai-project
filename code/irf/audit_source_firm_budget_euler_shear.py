@@ -92,6 +92,13 @@ def source_transcription(base,p0,z,branch):
     return values,shears,g,rootcoeff
 
 
+def smooth_expm1_div(g):
+    """Smooth quotient expm1(g)/g, including the value 1 at zero."""
+    if abs(g)<1e-7:
+        return 1 + g/2 + g*g/6 + g*g*g/24 + g**4/120
+    return math.expm1(g)/g
+
+
 def main():
     src=SOURCE.read_text(encoding="utf-8")
     a=src.index("def localPrefixEquationOfIndex : Fin 33")
@@ -130,6 +137,9 @@ def main():
         [-8e-4*math.cos((j+1)*.81) for j in range(33)])
     max_direct=0.;max_shear=0.;max_deriv=0.;max_root_deriv=0.;n=0
     coeff_record={}
+    max_functional_shear=0.
+    max_product_derivative=0.
+    offroot_shear_direction_checks=0
     for branch in ("binding","slack"):
         for shock in shocks:
             for z in zs:
@@ -141,6 +151,12 @@ def main():
                 for i in SHEAR:
                     max_shear=max(max_shear,
                         abs(f[i]-py[INDEX[i][0]]-shear[i]))
+                    # The exact off-root row transformation has a
+                    # state-dependent coefficient, not the root a_i.
+                    _,_,_,coeff=source_transcription(base,p0,z,branch)
+                    transformed=coeff[i]*smooth_expm1_div(g)*g
+                    max_functional_shear=max(max_functional_shear,
+                        abs(f[i]-py[INDEX[i][0]]-transformed))
                 n+=1
         f0,sh0,g0,coef=source_transcription(base,p0,zs[0],branch)
         require(abs(g0)<1e-9,"Stationary common pledge root changed")
@@ -152,11 +168,22 @@ def main():
             fm,sm,_,_=source_transcription(base,p0,zm,branch)
             gp=model.prefix_residual(base,p0,branch,shocks[1],zp)
             gm=model.prefix_residual(base,p0,branch,shocks[1],zm)
+            _,_,g_plus,coef_plus=source_transcription(base,p0,zp,branch)
+            _,_,g_minus,coef_minus=source_transcription(base,p0,zm,branch)
             for i in INDEX:
                 dF=(fp[i]-fm[i])/(2*h)
                 dG=(gp[INDEX[i][0]]-gm[INDEX[i][0]])/(2*h)
                 dS=0. if i in DIRECT else (sp[i]-sm[i])/(2*h)
                 max_deriv=max(max_deriv,abs(dF-dG-dS))
+                if i in SHEAR:
+                    # Finite difference the full smooth shear a(z)*g(z),
+                    # including the derivative of the variable coefficient.
+                    transformed_plus=coef_plus[i]*smooth_expm1_div(g_plus)*g_plus
+                    transformed_minus=coef_minus[i]*smooth_expm1_div(g_minus)*g_minus
+                    transformed_deriv=(transformed_plus-transformed_minus)/(2*h)
+                    max_product_derivative=max(max_product_derivative,
+                        abs(dF-dG-transformed_deriv))
+                    offroot_shear_direction_checks+=1
             zp=[0.]*33;zm=[0.]*33;zp[col]=h;zm[col]=-h
             fp,_,_,_=source_transcription(base,p0,zp,branch)
             fm,_,_,_=source_transcription(base,p0,zm,branch)
@@ -169,6 +196,12 @@ def main():
                 max_root_deriv=max(max_root_deriv,abs(df-dp-coef[i]*dg))
     require(max_direct<3e-9,"Six firm SOURCE direct rows mismatched")
     require(max_shear<3e-9,"Common-pledge Euler row shear mismatched")
+    require(max_functional_shear<3e-9,
+            "Exact smooth off-root Euler row transformation mismatched")
+    require(offroot_shear_direction_checks==2*33*2,
+            "Incomplete two-branch, two-Euler, 33-direction product test")
+    require(max_product_derivative<3e-6,
+            "Off-root derivative of smooth shear coefficient mismatched")
     require(max_deriv<3e-6,"Off-root 33-column derivative mismatch")
     require(max_root_deriv<3e-6,"Root log-pledge row shear mismatch")
     report={
@@ -182,6 +215,10 @@ def main():
         "derivative_columns":33,"derivative_branches":2,
         "max_direct_level_error":max_direct,"max_shear_level_error":max_shear,
         "max_off_root_derivative_error":max_deriv,
+        "smooth_offroot_row_transform":"SOURCE_Euler = Python_Euler + a_i(z)*g(z), a_i=theta_i*A2*(1/RL1-m_i/Pi2)*expm1(g)/g",
+        "max_smooth_offroot_transform_error":max_functional_shear,
+        "max_smooth_offroot_product_derivative_error":max_product_derivative,
+        "offroot_euler_product_derivative_direction_checks":offroot_shear_direction_checks,
         "max_root_log_shear_derivative_error":max_root_deriv,
         "total_candidate_positions_after_prior_25":33,
         "source_inputs_sha256":{str(f.relative_to(ROOT)):hsha(f)
