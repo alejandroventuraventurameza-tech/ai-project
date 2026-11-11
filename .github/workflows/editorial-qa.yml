@@ -41,6 +41,16 @@ jobs:
         run: python code/irf/audit_prefix_rows.py
       - name: Check H transmission table is generated from the audited nonlinear solution
         run: python code/irf/render_mechanism_table.py --check
+      - name: Audit sixteen additional conditional SOURCE identity row shapes and 33-column derivatives
+        run: python code/irf/audit_source_identity_row_candidates.py
+      - name: Archive conditional SOURCE row-shape candidate report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-identity-row-candidates
+          path: code/irf/output/source_identity_row_candidates.json
+          if-no-files-found: warn
+          retention-days: 30
       - name: Audit proposition scope, 57-row ledger and Lean obstruction
         run: python code/audit_claim_scope.py
       - name: Audit all 57 Lean correspondence pointers without promoting theorem coverage
