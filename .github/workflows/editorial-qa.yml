@@ -81,6 +81,16 @@ jobs:
           path: code/irf/output/source_four_tool_direct_support_audit.json
           if-no-files-found: error
           retention-days: 30
+      - name: Audit SOURCE OTC log-two primitive mapping and high-tightness counterexample
+        run: python code/irf/audit_source_otc_log_two_bridge.py
+      - name: Archive conditional SOURCE/Python OTC low-tightness bridge
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-python-otc-log-two-bridge
+          path: code/irf/output/source_python_otc_log_two_bridge.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Audit proposition scope, 57-row ledger and Lean obstruction
         run: python code/audit_claim_scope.py
       - name: Audit all 57 Lean correspondence pointers without promoting theorem coverage

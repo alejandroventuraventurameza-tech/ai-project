@@ -898,5 +898,77 @@ theorem source_dateone_common_pledge_unaffected
 #print axioms source_dateone_binding_eulers_unaffected
 #print axioms source_dateone_common_pledge_unaffected
 
+
+/-! ## SOURCE OTC Leontief/Nash mapping to the Python half-match share
+
+The Python illustration has aa=1/2, meaning the SOURCE effective
+matching share a_lambda = 1-exp(-lambda), not lambda itself.
+The correct primitive mapping is lambda = log 2. On tightness <= 1,
+the SOURCE OTC Nash weight and both slope formulas then equal the
+literal Python expressions. The SOURCE has a DIFFERENT formula for
+tightness > 1, so this equality has no global extrapolation.
+-/
+
+/-- Matching intensity log 2 induces exactly one-half cumulative
+matching share, not a structural matching intensity of one-half. -/
+theorem source_otc_log_two_share :
+    otcMatchIntensityShare (Real.log (2 : ℝ)) = (1 / 2 : ℝ) := by
+  unfold otcMatchIntensityShare
+  rw [Real.exp_neg, Real.exp_log (by norm_num : (0 : ℝ) < 2)]
+  norm_num
+
+/-- Source Nash weight equals Python's weight on the low-tightness
+branch. No regularity or derivative claim is hidden in this equality. -/
+theorem source_otc_log_two_weight_low_tightness
+    (tau : ℝ) (htau : tau ≤ 1) :
+    otcCorridorWeight (Real.log (2 : ℝ)) tau =
+      1 / (1 + Real.sqrt (2 - tau)) := by
+  have hexp : Real.exp (Real.log (2 : ℝ)) = 2 :=
+    Real.exp_log (by norm_num : (0 : ℝ) < 2)
+  have hrad : tau + (1 - tau) * (2 : ℝ) = 2 - tau := by
+    ring
+  simp [otcCorridorWeight, htau, hexp, hrad]
+
+/-- The literal SOURCE deficit slope is Python's corridor*(1-aa+aa*w)
+when the effective matching share aa=1/2 and tau <= 1. -/
+theorem source_otc_deficit_slope_matches_python_low_tightness
+    (reserveRate corridor tau : ℝ) (htau : tau ≤ 1) :
+    otcDeficitSlope reserveRate
+        (otcNegotiatedRate reserveRate (reserveRate + corridor)
+          (Real.log (2 : ℝ)) tau)
+        (reserveRate + corridor) (Real.log (2 : ℝ)) tau =
+      corridor * (1 - (1 / 2 : ℝ) +
+        (1 / 2 : ℝ) * (1 / (1 + Real.sqrt (2 - tau)))) := by
+  have hfrac :
+      otcDeficitMatchFraction (Real.log (2 : ℝ)) tau = (1 / 2 : ℝ) := by
+    simp [otcDeficitMatchFraction, htau, source_otc_log_two_share]
+  have hw := source_otc_log_two_weight_low_tightness tau htau
+  unfold otcDeficitSlope otcNegotiatedRate
+  rw [hfrac, hw]
+  ring
+
+/-- The literal SOURCE surplus slope is Python's
+corridor*tau*aa*w with aa=1/2 on the same low-tightness branch. -/
+theorem source_otc_surplus_slope_matches_python_low_tightness
+    (reserveRate corridor tau : ℝ) (htau : tau ≤ 1) :
+    otcSurplusSlope reserveRate
+        (otcNegotiatedRate reserveRate (reserveRate + corridor)
+          (Real.log (2 : ℝ)) tau)
+        (Real.log (2 : ℝ)) tau =
+      corridor * tau * (1 / 2 : ℝ) *
+        (1 / (1 + Real.sqrt (2 - tau))) := by
+  have hfrac :
+      otcSurplusMatchFraction (Real.log (2 : ℝ)) tau = tau / 2 := by
+    simp [otcSurplusMatchFraction, htau, source_otc_log_two_share]
+  have hw := source_otc_log_two_weight_low_tightness tau htau
+  unfold otcSurplusSlope otcNegotiatedRate
+  rw [hfrac, hw]
+  ring
+
+#print axioms source_otc_log_two_share
+#print axioms source_otc_log_two_weight_low_tightness
+#print axioms source_otc_deficit_slope_matches_python_low_tightness
+#print axioms source_otc_surplus_slope_matches_python_low_tightness
+
 end ProposedHandStencilPledgeRowEquivalence
 end Ventura26LiquidityAllocation

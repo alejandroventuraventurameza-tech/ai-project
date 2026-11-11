@@ -335,6 +335,9 @@ if __name__ == "__main__":
     # Literal date-zero policy support in SOURCE vs fixed-coordinate Python rows.
     # This does NOT assert zero date-one endogenous equilibrium responses.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_four_tool_direct_support.py")], check=True)
+    # Exact OTC candidate identification: source lambda=log(2) corresponds to Python share aa=1/2.
+    # Restrict to 0<tau<=1; the SOURCE high-tightness branch is DIFFERENT.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_otc_log_two_bridge.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "diagnose_impact.py")], check=True)
 
