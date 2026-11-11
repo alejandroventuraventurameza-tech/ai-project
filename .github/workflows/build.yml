@@ -96,6 +96,13 @@ jobs:
           path: code/irf/output/conditional_source_33_row_transform_inverse.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve SOURCE/Python calendar and four-policy semantic contract
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-python-calendar-contract
+          path: code/irf/output/source_python_calendar_contract.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve strict 33-row SOURCE candidate readiness audit
         uses: actions/upload-artifact@v7
         with:
