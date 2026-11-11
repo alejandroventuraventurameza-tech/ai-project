@@ -693,5 +693,82 @@ theorem candidate_source_row_right_inverse
 #print axioms candidate_source_row_left_inverse
 #print axioms candidate_source_row_right_inverse
 
+
+/-! ## Literal four-instrument SOURCE timing: initial-only support
+
+These lemmas interrogate the actual initialIntervenedPrimitives and
+the original two localPrefixDateData constructors. They rule out
+direct contamination of date-one policy announcements by date-zero
+interventions. This is not a theorem that equilibrium responses
+in date one vanish: prices and states can respond endogenously.
+-/
+
+/-- The two innovation coordinates enter only at the initial Markov state. -/
+theorem source_initial_policy_innovation_pair
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (v : InitialPolicyIntervention) :
+    (initialIntervenedPrimitives P v).reserveRateInnovation P.tree.initial =
+       P.reserveRateInnovation P.tree.initial + v.reserveRateInnovation ∧
+    (initialIntervenedPrimitives P v).reserveQuantityInnovation P.tree.initial =
+       P.reserveQuantityInnovation P.tree.initial + v.reserveQuantityInnovation := by
+  simp [initialIntervenedPrimitives]
+
+/-- At every noninitial Markov state the two innovation functions
+are unchanged, not merely their stationary values. -/
+theorem source_noninitial_policy_innovations_unchanged
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (v : InitialPolicyIntervention)
+    (s : S) (hs : s ≠ P.tree.initial) :
+    (initialIntervenedPrimitives P v).reserveRateInnovation s =
+       P.reserveRateInnovation s ∧
+    (initialIntervenedPrimitives P v).reserveQuantityInnovation s =
+       P.reserveQuantityInnovation s := by
+  simp [initialIntervenedPrimitives, hs]
+
+/-- Reserve requirement and corridor width are perturbed together
+at date zero, for every supplied history. -/
+theorem source_initial_policy_path_pair
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (v : InitialPolicyIntervention)
+    (h : History S 0) :
+    (initialIntervenedPrimitives P v).reserveRequirementPath 0 h =
+       P.reserveRequirementPath 0 h + v.reserveRequirement ∧
+    (initialIntervenedPrimitives P v).corridorWidthPath 0 h =
+       P.corridorWidthPath 0 h + v.corridorWidth := by
+  simp [initialIntervenedPrimitives]
+
+/-- Both path instruments are unchanged at every later date,
+irrespective of the history argument. -/
+theorem source_future_policy_paths_unchanged
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (v : InitialPolicyIntervention)
+    (t : ℕ) (h : History S t) (ht : t ≠ 0) :
+    (initialIntervenedPrimitives P v).reserveRequirementPath t h =
+       P.reserveRequirementPath t h ∧
+    (initialIntervenedPrimitives P v).corridorWidthPath t h =
+       P.corridorWidthPath t h := by
+  simp [initialIntervenedPrimitives, ht]
+
+/-- The original date-one reduced data are literally unchanged at
+fixed coordinates by a date-zero announcement, provided dateOne
+is not the initial Markov state. Equilibrium date-one effects can
+still be nonzero when coordinates respond endogenously. -/
+theorem source_dateone_prefix_data_fixed_coordinates_unaffected
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (v : InitialPolicyIntervention)
+    (Z : LocalPrefixCoordinates) (dateOne recurrent : S)
+    (tail : LocalPrefixContinuationRule)
+    (hdate : dateOne ≠ P.tree.initial) :
+    localPrefixDateOneData (initialIntervenedPrimitives P v)
+        Z dateOne recurrent tail =
+      localPrefixDateOneData P Z dateOne recurrent tail := by
+  simp [localPrefixDateOneData, initialIntervenedPrimitives, hdate]
+
+#print axioms source_initial_policy_innovation_pair
+#print axioms source_noninitial_policy_innovations_unchanged
+#print axioms source_initial_policy_path_pair
+#print axioms source_future_policy_paths_unchanged
+#print axioms source_dateone_prefix_data_fixed_coordinates_unaffected
+
 end ProposedHandStencilPledgeRowEquivalence
 end Ventura26LiquidityAllocation
