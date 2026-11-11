@@ -87,8 +87,7 @@ theorem intervened_otc_deficit_slope_low_tightness
       (Real.log (2 : ℝ)) d.controls.tightness)
     (d.currentReserveRate + d.corridorWidth)
     (Real.log (2 : ℝ)) d.controls.tightness = _
-  exact ProposedHandStencilPledgeRowEquivalence.
-    source_otc_deficit_slope_matches_python_low_tightness
+  exact ProposedHandStencilPledgeRowEquivalence.source_otc_deficit_slope_matches_python_low_tightness
       d.currentReserveRate d.corridorWidth d.controls.tightness htau
 
 /-- Literal OTC surplus slope in the intervened SOURCE Primitives.
@@ -105,8 +104,7 @@ theorem intervened_otc_surplus_slope_low_tightness
       (d.currentReserveRate + d.corridorWidth)
       (Real.log (2 : ℝ)) d.controls.tightness)
     (Real.log (2 : ℝ)) d.controls.tightness = _
-  exact ProposedHandStencilPledgeRowEquivalence.
-    source_otc_surplus_slope_matches_python_low_tightness
+  exact ProposedHandStencilPledgeRowEquivalence.source_otc_surplus_slope_matches_python_low_tightness
       d.currentReserveRate d.corridorWidth d.controls.tightness htau
 
 #print axioms intervened_binary_payment_law
