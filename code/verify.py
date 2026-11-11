@@ -339,6 +339,9 @@ if __name__ == "__main__":
     # This is semantic provenance, not runtime equivalence of Lean residuals.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_python_calendar_contract.py")], check=True)
 
+    # Distinguish the fixed predecessor from the switching-frontier boundary.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_predecessor_provenance.py")], check=True)
+
     # Literal date-zero policy support in SOURCE vs fixed-coordinate Python rows.
     # This does NOT assert zero date-one endogenous equilibrium responses.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_four_tool_direct_support.py")], check=True)
