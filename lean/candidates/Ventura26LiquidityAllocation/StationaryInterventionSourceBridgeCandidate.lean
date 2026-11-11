@@ -154,5 +154,68 @@ theorem intervened_inherited_monetary_domain
 #print axioms intervened_inherited_nominal_consistency
 #print axioms intervened_inherited_monetary_domain
 
+
+/-! ## Literal SOURCE date-zero data-chart witness
+
+This is an exact projection of the original LocalPrefixDateZeroData
+applied to the ACTUAL stationary Primitives and InheritedState.
+Date-zero innovations are logarithmic offsets, while reserve
+requirement and corridor interventions are changes in LEVELS.
+Nothing here asserts that an unrestricted shock preserves positive
+price or bank-feasibility domains.
+-/
+
+noncomputable def sourceStationaryDateZeroData
+    (G : ℝ) (v : InitialPolicyIntervention)
+    (Z : LocalPrefixCoordinates) : LocalPrefixDateData :=
+  localPrefixDateZeroData (intervenedPrimitives G v)
+    (ProposedStationaryInheritedState.inheritedState G) Z .dateOne
+
+/-- The four primitive policy innovations appear in the original
+date-zero SOURCE data in the literal order (R, M, rho, Delta). -/
+theorem source_stationary_datezero_four_policy_fields
+    (G : ℝ) (v : InitialPolicyIntervention)
+    (Z : LocalPrefixCoordinates) :
+    (sourceStationaryDateZeroData G v Z).reserveRateInnovation =
+        v.reserveRateInnovation ∧
+    (sourceStationaryDateZeroData G v Z).reserveQuantityInnovation =
+        v.reserveQuantityInnovation ∧
+    (sourceStationaryDateZeroData G v Z).reserveRequirement =
+        (1 / 10 : ℝ) + v.reserveRequirement ∧
+    (sourceStationaryDateZeroData G v Z).corridorWidth =
+        (1 / 50 : ℝ) + v.corridorWidth := by
+  simp [sourceStationaryDateZeroData, localPrefixDateZeroData,
+    intervenedPrimitives, initialIntervenedPrimitives,
+    ProposedStationaryPrimitives.primitives, localBridgeTree]
+
+/-- The original SOURCE calendar keeps aggregate productivity at one
+across both initial and next dates. This does not establish a growth
+mechanism, or an allocation of the nonlinear prefix. -/
+theorem source_stationary_datezero_productivity_fields
+    (G : ℝ) (v : InitialPolicyIntervention)
+    (Z : LocalPrefixCoordinates) :
+    (sourceStationaryDateZeroData G v Z).currentAggregateProductivity = 1 ∧
+      (sourceStationaryDateZeroData G v Z).nextAggregateProductivity = 1 := by
+  rfl
+
+/-- The literal date-one SOURCE data are fixed-coordinate invariant
+under an initial four-tool announcement in the concrete calendar. -/
+theorem source_stationary_dateone_data_invariant_fixed_coordinates
+    (G : ℝ) (v : InitialPolicyIntervention)
+    (Z : LocalPrefixCoordinates) (tail : LocalPrefixContinuationRule) :
+    localPrefixDateOneData (intervenedPrimitives G v)
+      Z .dateOne .recurrent tail =
+    localPrefixDateOneData (primitives G)
+      Z .dateOne .recurrent tail := by
+  have hdate : LocalBridgePhase.dateOne ≠ (primitives G).tree.initial := by
+    change LocalBridgePhase.dateOne ≠ LocalBridgePhase.dateZero
+    decide
+  exact ProposedHandStencilPledgeRowEquivalence.source_dateone_prefix_data_fixed_coordinates_unaffected
+      (primitives G) v Z .dateOne .recurrent tail hdate
+
+#print axioms source_stationary_datezero_four_policy_fields
+#print axioms source_stationary_datezero_productivity_fields
+#print axioms source_stationary_dateone_data_invariant_fixed_coordinates
+
 end ProposedStationaryInterventionSourceBridge
 end Ventura26LiquidityAllocation
