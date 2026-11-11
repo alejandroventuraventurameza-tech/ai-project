@@ -120,6 +120,9 @@ def main():
     max_level_log=0.
     max_root_derivative=0.
     max_offroot_derivative=0.
+    max_invalid_root_only_offroot_derivative=0.
+    offroot_direction_checks=0
+    root_direction_checks=0
     comparisons=0
     for branch in ("slack","binding"):
         for v in shocks:
@@ -146,11 +149,21 @@ def main():
                     G=base[j]["python_log"];D=base[j]["target"]
                     predicted=dD*math.expm1(G)+D*math.exp(G)*dG
                     if z is zs[0]:
+                        root_direction_checks+=1
                         max_root_derivative=max(max_root_derivative,
                                                 abs(dF-D*dG))
                     else:
+                        offroot_direction_checks+=1
                         max_offroot_derivative=max(max_offroot_derivative,
                                                    abs(dF-predicted))
+                        max_invalid_root_only_offroot_derivative=max(
+                            max_invalid_root_only_offroot_derivative,
+                            abs(dF-D*dG))
+    need(root_direction_checks==2*2*33 and
+         offroot_direction_checks==2*2*33,
+         "Expected derivative coverage for both bank rows, branches and points")
+    need(max_invalid_root_only_offroot_derivative>1e-10,
+         "Off-root witness did not distinguish the invalid root-only derivative")
     need(max_level_log<3e-11,
          "SOURCE bank face level/log candidate mismatch")
     need(max_root_derivative<3e-6 and max_offroot_derivative<3e-6,
@@ -177,6 +190,10 @@ def main():
       "max_level_log_discrepancy":max_level_log,
       "max_root_derivative_discrepancy":max_root_derivative,
       "max_offroot_derivative_discrepancy":max_offroot_derivative,
+      "root_derivative_direction_checks":root_direction_checks,
+      "offroot_derivative_direction_checks":offroot_direction_checks,
+      "max_offroot_error_if_root_only_formula_misused":max_invalid_root_only_offroot_derivative,
+      "offroot_correction_is_required":True,
       "source_to_python_full_primitive_instance_constructed":False,
       "source_to_python_complete_bank_optimization_proved":False,
       "source_equilibrium_jacobian_invertible_proved":False,
@@ -193,6 +210,7 @@ def main():
       "max_level_err":max_level_log,
       "max_root_derivative_err":max_root_derivative,
       "max_offroot_derivative_err":max_offroot_derivative,
+      "max_invalid_root_only_offroot_error":max_invalid_root_only_offroot_derivative,
       "report":str(OUT)},indent=2))
 
 
