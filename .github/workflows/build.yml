@@ -96,6 +96,13 @@ jobs:
           path: code/irf/output/conditional_source_33_row_transform_inverse.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve conditional SOURCE inherited-state 12-to-7 projection
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-inherited-12-to-7-projection
+          path: code/irf/output/source_predecessor_12_to_7_conditional_chart.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve inherited SOURCE versus frozen/frontier predecessor provenance
         uses: actions/upload-artifact@v7
         with:
