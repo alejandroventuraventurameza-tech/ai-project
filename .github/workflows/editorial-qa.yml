@@ -18,6 +18,8 @@ jobs:
         with:
           python-version: "3.12"
       - run: python -m compileall -q code
+      - name: Regress candidate 33-row inverse and infinity norms without economic dependencies
+        run: python code/irf/test_conditional_row_transform_norm.py
       - name: Audit illustrative firm scale without changing calibration
         run: python code/irf/audit_firm_scale.py
       - name: Install pinned numerical dependency for the directed interval producer
