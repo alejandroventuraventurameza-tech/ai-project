@@ -141,8 +141,30 @@ def main():
             "max_Tinv_T_identity_error":err2,
             "source_33x33_economic_derivative_proved":False
         }
+    # Both S/B inputs are read separately, but the main IRF originates in a
+    # shared make_boundary(s) switching-frontier experiment. The distinct
+    # same-predecessor roots are NOT tested here.
+    compared_fields=("loan_rate","consumption_H","consumption_L",
+                     "inflation","capital_price")
+    baseline_difference=0.
+    for t in (1,2):
+        for field in compared_fields:
+            xs=float(bykey[("slack",t)][field+"_baseline"])
+            xb=float(bykey[("binding",t)][field+"_baseline"])
+            require(math.isfinite(xs) and math.isfinite(xb),
+                    "Nonfinite baseline metric")
+            baseline_difference=max(baseline_difference,abs(xs-xb))
+    shear_difference=max(abs(
+        result["binding"]["branch_specific_log_shear_coefficients"][str(i)] -
+        result["slack"]["branch_specific_log_shear_coefficients"][str(i)])
+        for i in (19,20))
     report={
         "status":"CONDITIONAL_EXPLICIT_33_ROW_CANDIDATE_T_INVERTIBLE_NOT_SOURCE_EQUIVALENCE",
+        "data_origin":"main/finite_irf_paths.csv: make_boundary switching frontier",
+        "distinct_frozen_same_predecessor_roots_studied_here":False,
+        "main_frontier_max_abs_branch_baseline_difference_in_10_metrics":baseline_difference,
+        "max_abs_main_frontier_euler_shear_coefficient_difference":shear_difference,
+        "do_not_infer_distinct_root_matrix_certificate":True,
         "row_count":N,
         "source_to_python_permutation":perm,
         "candidate_row_partition":{"nine_scalar":sorted(cover),
