@@ -617,5 +617,81 @@ theorem source_prefix_log_chart_positive
 #print axioms source_prefix_log_chart_each_coordinate
 #print axioms source_prefix_log_chart_positive
 
+
+/-! ## Exact inverse of the candidate 33-row scaling-plus-pledge shear
+
+The SOURCE/Python row correspondence is an OPEN separate hypothesis.
+This theorem states only that the finite-dimensional map associated
+with nine nonzero scaling factors and the two date-one Euler pledge
+shears has an explicit inverse, for arbitrary values of its coefficients. -/
+
+/-- Algebraic forward transform in SOURCE row order, with the two
+date-one Euler rows using the common-pledge row 21. -/
+noncomputable def candidateSourceRowTransform
+    (d : Fin 33 → ℝ) (aH aL : ℝ)
+    (x : Fin 33 → ℝ) (j : Fin 33) : ℝ :=
+  if j = 19 then
+    d 19 * x 19 - aH * (d 21 * x 21)
+  else if j = 20 then
+    d 20 * x 20 - aL * (d 21 * x 21)
+  else
+    d j * x j
+
+/-- Algebraic inverse D^-1(I-K), where K has only entries
+K[19,21]=-aH and K[20,21]=-aL. -/
+noncomputable def candidateSourceRowInverse
+    (d : Fin 33 → ℝ) (aH aL : ℝ)
+    (y : Fin 33 → ℝ) (j : Fin 33) : ℝ :=
+  if j = 19 then
+    (y 19 + aH * y 21) / d 19
+  else if j = 20 then
+    (y 20 + aL * y 21) / d 20
+  else
+    y j / d j
+
+/-- Explicit left inverse on all 33 coordinates when the diagonal
+normalizations are nonzero. The theorem assumes no model equilibrium. -/
+theorem candidate_source_row_left_inverse
+    (d : Fin 33 → ℝ) (aH aL : ℝ)
+    (hd : ∀ j, d j ≠ 0) :
+    Function.LeftInverse
+      (candidateSourceRowInverse d aH aL)
+      (candidateSourceRowTransform d aH aL) := by
+  intro x
+  funext j
+  by_cases hH : j = (19 : Fin 33)
+  · subst j
+    simp [candidateSourceRowInverse, candidateSourceRowTransform] <;>
+      field_simp [hd (19 : Fin 33), hd (21 : Fin 33)] <;> ring
+  · by_cases hL : j = (20 : Fin 33)
+    · subst j
+      simp [candidateSourceRowInverse, candidateSourceRowTransform] <;>
+        field_simp [hd (20 : Fin 33), hd (21 : Fin 33)] <;> ring
+    · simp [candidateSourceRowInverse, candidateSourceRowTransform, hH, hL] <;>
+        field_simp [hd j] <;> ring
+
+/-- Explicit right inverse of the same full 33-row candidate map. -/
+theorem candidate_source_row_right_inverse
+    (d : Fin 33 → ℝ) (aH aL : ℝ)
+    (hd : ∀ j, d j ≠ 0) :
+    Function.RightInverse
+      (candidateSourceRowInverse d aH aL)
+      (candidateSourceRowTransform d aH aL) := by
+  intro y
+  funext j
+  by_cases hH : j = (19 : Fin 33)
+  · subst j
+    simp [candidateSourceRowInverse, candidateSourceRowTransform] <;>
+      field_simp [hd (19 : Fin 33), hd (21 : Fin 33)] <;> ring
+  · by_cases hL : j = (20 : Fin 33)
+    · subst j
+      simp [candidateSourceRowInverse, candidateSourceRowTransform] <;>
+        field_simp [hd (20 : Fin 33), hd (21 : Fin 33)] <;> ring
+    · simp [candidateSourceRowInverse, candidateSourceRowTransform, hH, hL] <;>
+        field_simp [hd j] <;> ring
+
+#print axioms candidate_source_row_left_inverse
+#print axioms candidate_source_row_right_inverse
+
 end ProposedHandStencilPledgeRowEquivalence
 end Ventura26LiquidityAllocation
