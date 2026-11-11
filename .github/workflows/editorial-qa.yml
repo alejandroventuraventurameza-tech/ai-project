@@ -71,6 +71,16 @@ jobs:
           path: code/irf/output/source_python_log_chart_alignment.json
           if-no-files-found: warn
           retention-days: 30
+      - name: Audit SOURCE four-tool date-zero announcement support in fixed Python coordinates
+        run: python code/irf/audit_source_four_tool_direct_support.py
+      - name: Archive literal SOURCE/Python direct policy support comparison
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-four-tool-direct-support
+          path: code/irf/output/source_four_tool_direct_support_audit.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Audit proposition scope, 57-row ledger and Lean obstruction
         run: python code/audit_claim_scope.py
       - name: Audit all 57 Lean correspondence pointers without promoting theorem coverage
