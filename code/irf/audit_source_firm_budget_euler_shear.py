@@ -143,7 +143,7 @@ def main():
     for branch in ("binding","slack"):
         for shock in shocks:
             for z in zs:
-                f,shear,g,_=source_transcription(base,p0,z,branch)
+                f,shear,g,coeff=source_transcription(base,p0,z,branch)
                 py=model.prefix_residual(base,p0,branch,shock,z)
                 require(abs(g-py[21])<1e-12,"Common pledge row mismatch")
                 for i in DIRECT:
@@ -153,7 +153,6 @@ def main():
                         abs(f[i]-py[INDEX[i][0]]-shear[i]))
                     # The exact off-root row transformation has a
                     # state-dependent coefficient, not the root a_i.
-                    _,_,_,coeff=source_transcription(base,p0,z,branch)
                     transformed=coeff[i]*smooth_expm1_div(g)*g
                     max_functional_shear=max(max_functional_shear,
                         abs(f[i]-py[INDEX[i][0]]-transformed))
