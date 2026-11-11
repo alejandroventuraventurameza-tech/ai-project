@@ -18,6 +18,8 @@ jobs:
         with:
           python-version: "3.12"
       - run: python -m compileall -q code
+      - name: Check exact rational 33D Neumann criterion and negative controls
+        run: python code/irf/test_exact_neumann_33.py
       - name: Verify 33D chain rule across permutation, nonlinear chart, and variable row transform
         run: python code/irf/test_operator_transport_chain_rule.py
       - name: Check positive off-root bank-face log level equality and 33 gradients
