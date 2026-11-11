@@ -762,7 +762,9 @@ theorem source_dateone_prefix_data_fixed_coordinates_unaffected
     localPrefixDateOneData (initialIntervenedPrimitives P v)
         Z dateOne recurrent tail =
       localPrefixDateOneData P Z dateOne recurrent tail := by
-  simp [localPrefixDateOneData, initialIntervenedPrimitives, hdate]
+  simp [localPrefixDateOneData, initialIntervenedPrimitives,
+    localPrefixStateSixFace, bridgeDateOneHistory, bridgeDateZeroHistory,
+    hdate]
 
 #print axioms source_initial_policy_innovation_pair
 #print axioms source_noninitial_policy_innovations_unchanged
