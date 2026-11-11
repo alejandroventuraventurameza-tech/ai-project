@@ -339,6 +339,10 @@ if __name__ == "__main__":
     # Restrict to 0<tau<=1; the SOURCE high-tightness branch is DIFFERENT.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_otc_log_two_bridge.py")], check=True)
 
+    # Conditional SOURCE bankExit/bankSeedShare witness and nominal-face log/level row bridge.
+    # Not a complete Primitives instance, bank optimality theorem or SOURCE Jacobian inverse.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_bank_renewal_face_bridge.py")], check=True)
+
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "diagnose_impact.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "compare_nonlinear_tail.py")], check=True)

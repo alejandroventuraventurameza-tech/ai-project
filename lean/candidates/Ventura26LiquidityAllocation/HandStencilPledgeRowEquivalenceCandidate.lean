@@ -980,5 +980,49 @@ theorem source_otc_surplus_slope_matches_python_low_tightness
 #print axioms source_otc_deficit_slope_matches_python_low_tightness
 #print axioms source_otc_surplus_slope_matches_python_low_tightness
 
+
+/-! ## SOURCE bank renewal witness and nominal-face level/log bridge
+
+The SOURCE renewal factor is 1-bankExit+bankExit*bankSeedShare, while the
+Python illustration normalizes it as aB=1/R_star. These theorems give
+only the algebraic conditional match and the positive bank-face
+level/log identity. No full Primitives witness or bank optimality follows.
+-/
+
+/-- A candidate seed share for any target renewal factor aB reproduces
+that target when the bank exit probability is nonzero. -/
+theorem source_bank_renewal_seed_witness
+    (eta aB : ℝ) (hEta : eta ≠ 0) :
+    1 - eta + eta * ((aB - (1 - eta)) / eta) = aB := by
+  field_simp [hEta]
+  ring
+
+/-- Applying that purely algebraic witness to literal SOURCE primitives
+requires bankSeedShare to be identified; no source instance is constructed. -/
+theorem source_bank_renewal_factor_matches_target
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (aB : ℝ) (hEta : P.bankExit ≠ 0)
+    (hSeed : P.bankSeedShare =
+        (aB - (1 - P.bankExit)) / P.bankExit) :
+    bankRenewalFactor P = aB := by
+  unfold bankRenewalFactor
+  rw [hSeed]
+  exact source_bank_renewal_seed_witness P.bankExit aB hEta
+
+/-- Exact conversion of a strictly positive nominal-face level row to
+its log-ratio residual. It is NOT a local Taylor approximation. -/
+theorem source_bank_face_level_log_identity
+    (nextFace predicted : ℝ)
+    (hnext : 0 < nextFace) (hpredicted : 0 < predicted) :
+    nextFace - predicted =
+      predicted * (Real.exp (Real.log (nextFace / predicted)) - 1) := by
+  rw [Real.exp_log (div_pos hnext hpredicted)]
+  field_simp [ne_of_gt hpredicted]
+  ring
+
+#print axioms source_bank_renewal_seed_witness
+#print axioms source_bank_renewal_factor_matches_target
+#print axioms source_bank_face_level_log_identity
+
 end ProposedHandStencilPledgeRowEquivalence
 end Ventura26LiquidityAllocation

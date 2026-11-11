@@ -91,6 +91,16 @@ jobs:
           path: code/irf/output/source_python_otc_log_two_bridge.json
           if-no-files-found: error
           retention-days: 30
+      - name: Audit SOURCE bank renewal seed witness and exact bank-face log level correspondence
+        run: python code/irf/audit_source_bank_renewal_face_bridge.py
+      - name: Archive SOURCE bank renewal witness and bank-face bridge
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-bank-renewal-face-bridge
+          path: code/irf/output/source_bank_renewal_witness_and_face_rows.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Audit proposition scope, 57-row ledger and Lean obstruction
         run: python code/audit_claim_scope.py
       - name: Audit all 57 Lean correspondence pointers without promoting theorem coverage
