@@ -516,5 +516,63 @@ theorem source_bank_face_log_zero_iff_original_row_zero
 #print axioms row_shear_preserves_zero_set
 #print axioms source_binding_euler_reduces_using_original_pledge
 
+
+/-! ## SOURCE date-one firm budget and floating-pledge Euler
+
+The finite Python date-one state has its own common nominal pledged face
+J2, whereas literal EconomicModel SOURCE Euler uses the physical face
+(1-delta)*Pi2*q2. Only the pledge level gap separates the two Eulers.
+These are identities of SOURCE algebra, not a proof of the full economy. -/
+
+/-- Companion expression for a nominal face J independent of the
+physical pledge rule, retaining the actual SOURCE entrepreneurial SDF
+and marginal product. -/
+noncomputable def sourceEulerWithFloatingCommonFace
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (d : LocalPrefixDateData) (i : FirmType) (J : ℝ) : ℝ :=
+  d.controls.capitalPrice -
+    P.pledgeability i * J / d.controls.loanRate -
+    localPrefixEntrepreneurSDF P d i *
+      (localPrefixNextMarginalProduct P d i +
+        (1 - P.depreciation) * d.nextControls.capitalPrice -
+        P.pledgeability i * J / d.nextControls.inflation)
+
+/-- Literal SOURCE-minus-floating-Euler difference: exactly a common
+pledge row shear. No equilibrium, positive chart or differentiation is
+presupposed. -/
+theorem source_binding_euler_minus_common_face_is_pledge_shear
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (d : LocalPrefixDateData) (i : FirmType) (J : ℝ) :
+    localReducedFirmCapitalEulerResidual LocalPrefixBranch.binding P d i -
+      sourceEulerWithFloatingCommonFace P d i J =
+      P.pledgeability i *
+        (J - (1 - P.depreciation) * d.nextControls.inflation *
+          d.nextControls.capitalPrice) *
+        (1 / d.controls.loanRate -
+          localPrefixEntrepreneurSDF P d i / d.nextControls.inflation) := by
+  dsimp [localReducedFirmCapitalEulerResidual,
+    sourceEulerWithFloatingCommonFace, localPrefixPledgeUnit]
+  ring
+
+/-- Firm budget under a common nominal face J when the firm-specific
+SOURCE face is theta_i*J*k. This is a conditional budget identity. -/
+theorem source_firm_budget_with_common_face
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (d : LocalPrefixDateData) (i : FirmType) (J : ℝ)
+    (hface : d.nextFace i =
+      P.pledgeability i * J * d.nextCapital i) :
+    localReducedFirmBudgetResidual P d i =
+      localPrefixFirmConsumption d.controls i +
+        (d.controls.capitalPrice -
+          P.pledgeability i * J / d.controls.loanRate) *
+          d.nextCapital i -
+        localPrefixFirmWealth P d i := by
+  dsimp [localReducedFirmBudgetResidual]
+  rw [hface]
+  ring
+
+#print axioms source_binding_euler_minus_common_face_is_pledge_shear
+#print axioms source_firm_budget_with_common_face
+
 end ProposedHandStencilPledgeRowEquivalence
 end Ventura26LiquidityAllocation
