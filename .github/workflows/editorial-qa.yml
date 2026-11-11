@@ -61,6 +61,16 @@ jobs:
           path: code/irf/output/source_firm_budget_euler_shear_audit.json
           if-no-files-found: warn
           retention-days: 30
+      - name: Audit SOURCE coordinate chart and Python 33-dimensional decoder
+        run: python code/irf/audit_source_log_coordinate_chart.py
+      - name: Archive SOURCE/Python positive chart comparison
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-python-log-chart-alignment
+          path: code/irf/output/source_python_log_chart_alignment.json
+          if-no-files-found: warn
+          retention-days: 30
       - name: Audit proposition scope, 57-row ledger and Lean obstruction
         run: python code/audit_claim_scope.py
       - name: Audit all 57 Lean correspondence pointers without promoting theorem coverage

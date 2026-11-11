@@ -574,5 +574,48 @@ theorem source_firm_budget_with_common_face
 #print axioms source_binding_euler_minus_common_face_is_pledge_shear
 #print axioms source_firm_budget_with_common_face
 
+
+/-! ## Original SOURCE 33-coordinate log chart: exact round-trip.
+
+Unlike the still-open economic source/Python operator equivalence, these
+are literal identities of the original SOURCE chart and its positive domain.
+-/
+
+/-- The original Fin 33 coordinate unpacker and flattener are exact
+two-sided inverses in the vector-to-record-to-vector direction. -/
+theorem source_prefix_coordinate_vector_roundtrip
+    (w : Fin 33 → ℝ) :
+    localPrefixCoordinatesVector (localPrefixCoordinatesOfVector w) = w := by
+  funext j
+  fin_cases j <;> rfl
+
+/-- The actual SOURCE log chart has the diagonal exponential form
+at *every* coordinate, not only at a stationary root. -/
+theorem source_prefix_log_chart_each_coordinate
+    (Z0 : LocalPrefixCoordinates) (z : Fin 33 → ℝ)
+    (j : Fin 33) :
+    localPrefixCoordinatesVector (localPrefixLogChart Z0 z) j =
+      localPrefixCoordinatesVector Z0 j * Real.exp (z j) := by
+  change localPrefixCoordinatesVector
+    (localPrefixCoordinatesOfVector
+      (fun k => localPrefixCoordinatesVector Z0 k * Real.exp (z k))) j =
+    localPrefixCoordinatesVector Z0 j * Real.exp (z j)
+  exact congrFun (source_prefix_coordinate_vector_roundtrip
+    (fun k => localPrefixCoordinatesVector Z0 k * Real.exp (z k))) j
+
+/-- Positivity of the 33 baseline coordinates propagates throughout the
+SOURCE logarithmic chart; it does not confer bank or household feasibility. -/
+theorem source_prefix_log_chart_positive
+    (Z0 : LocalPrefixCoordinates) (z : Fin 33 → ℝ)
+    (hpositive : LocalPrefixCoordinatesPositive Z0) :
+    LocalPrefixCoordinatesPositive (localPrefixLogChart Z0 z) := by
+  intro j
+  rw [source_prefix_log_chart_each_coordinate]
+  exact mul_pos (hpositive j) (Real.exp_pos _)
+
+#print axioms source_prefix_coordinate_vector_roundtrip
+#print axioms source_prefix_log_chart_each_coordinate
+#print axioms source_prefix_log_chart_positive
+
 end ProposedHandStencilPledgeRowEquivalence
 end Ventura26LiquidityAllocation

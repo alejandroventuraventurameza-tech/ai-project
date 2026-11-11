@@ -329,6 +329,7 @@ if __name__ == "__main__":
     # Conditional SOURCE transcription tests; do NOT promote to an operator proof.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_identity_row_candidates.py")], check=True)
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_firm_budget_euler_shear.py")], check=True)
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_log_coordinate_chart.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "diagnose_impact.py")], check=True)
 
