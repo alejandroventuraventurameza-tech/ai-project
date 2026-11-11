@@ -969,6 +969,7 @@ theorem source_otc_surplus_slope_matches_python_low_tightness
   have hfrac :
       otcSurplusMatchFraction (Real.log (2 : ℝ)) tau = tau / 2 := by
     simp [otcSurplusMatchFraction, htau, source_otc_log_two_share]
+    <;> ring
   have hw := source_otc_log_two_weight_low_tightness tau htau
   unfold otcSurplusSlope otcNegotiatedRate
   rw [hfrac, hw]
