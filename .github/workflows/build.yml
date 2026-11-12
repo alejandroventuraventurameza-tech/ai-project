@@ -96,6 +96,13 @@ jobs:
           path: code/irf/output/conditional_source_33_row_transform_inverse.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve reduced-prefix inherited-field support audit
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-reduced-inherited-support
+          path: code/irf/output/source_reduced_prefix_inherited_support.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve conditional SOURCE inherited-state 12-to-7 projection
         uses: actions/upload-artifact@v7
         with:
