@@ -96,6 +96,13 @@ jobs:
           path: code/irf/output/conditional_source_33_row_transform_inverse.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve nonlinear off-root 33 SOURCE-shaped row transform
+        uses: actions/upload-artifact@v7
+        with:
+          name: frozen-33-source-shaped-offroot-nonlinear
+          path: code/irf/output/frozen_33_offroot_nonlinear_transform_candidate.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve frozen 33x33 SOURCE-shaped candidate matrix bridge
         uses: actions/upload-artifact@v7
         with:
