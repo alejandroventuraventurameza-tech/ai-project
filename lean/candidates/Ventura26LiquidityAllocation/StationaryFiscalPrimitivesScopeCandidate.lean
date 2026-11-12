@@ -75,4 +75,36 @@ theorem stationaryFiscal_reducedLogOperator_eq
 #print axioms stationaryFiscal_reducedLogOperator_eq
 
 
+/-- Equality of the actual Fréchet derivatives for the two stationary
+primitive instances follows from equality of their 33-row SOURCE functions. -/
+theorem stationaryFiscal_reducedLogJacobian_eq
+    (G H : ℝ) (branch : LocalPrefixBranch)
+    (Z0 : LocalPrefixCoordinates) (tail : LocalPrefixContinuationRule) :
+    fderiv ℝ (localReducedPrefixLogResidualVector branch
+        (primitives G) (inheritedState G) Z0 .dateOne .recurrent tail)
+        (0 : Fin 33 → ℝ) =
+      fderiv ℝ (localReducedPrefixLogResidualVector branch
+        (primitives H) (inheritedState H) Z0 .dateOne .recurrent tail)
+        (0 : Fin 33 → ℝ) := by
+  rw [stationaryFiscal_reducedLogOperator_eq G H branch Z0 tail]
+
+#print axioms stationaryFiscal_reducedLogJacobian_eq
+
+/-- A *conditional* certificate transports across the concrete fiscal
+primitive instances. This does not construct a certified inverse. -/
+theorem stationaryFiscal_reducedLogJacobianCertified_iff
+    (G H : ℝ) (branch : LocalPrefixBranch)
+    (Z0 : LocalPrefixCoordinates) (tail : LocalPrefixContinuationRule)
+    (inverseNormBound : ℝ) :
+    LocalReducedPrefixLogJacobianCertifiedAt branch
+        (primitives G) (inheritedState G) Z0 .dateOne .recurrent tail
+        inverseNormBound ↔
+      LocalReducedPrefixLogJacobianCertifiedAt branch
+        (primitives H) (inheritedState H) Z0 .dateOne .recurrent tail
+        inverseNormBound := by
+  have hfun := stationaryFiscal_reducedLogOperator_eq G H branch Z0 tail
+  simp only [LocalReducedPrefixLogJacobianCertifiedAt, hfun]
+
+#print axioms stationaryFiscal_reducedLogJacobianCertified_iff
+
 end Ventura26LiquidityAllocation
