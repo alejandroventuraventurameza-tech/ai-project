@@ -10,6 +10,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/StationaryPrimitivesCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/HandStencilPledgeRowEquivalenceCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/ReducedPrefixInheritedExtCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/StationaryFiscalFiberReducedPrefixCandidate.lean'
       - 'lean/checkpoint/**'
   pull_request:
     branches:
@@ -20,6 +21,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/StationaryPrimitivesCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/HandStencilPledgeRowEquivalenceCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/ReducedPrefixInheritedExtCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/StationaryFiscalFiberReducedPrefixCandidate.lean'
       - 'lean/checkpoint/**'
   workflow_dispatch:
 
@@ -99,6 +101,18 @@ jobs:
           grep 'localReducedPrefixLogResidualVector_inherited_extensionality' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/inherited-ext.log"
           grep 'localReducedPrefixLogJacobian_inherited_extensionality' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/inherited-ext.log"
           grep 'localReducedPrefixLogJacobianCertifiedAt_inherited_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/inherited-ext.log"
+          lake build Ventura26LiquidityAllocation.StationaryFiscalFiberReducedPrefixCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-fiscal-fiber.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-fiscal-fiber.log"
+            exit 1
+          }
+          grep 'stationaryInherited_five_fields_independent_of_G' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-fiscal-fiber.log"
+          grep 'stationaryInherited_fiscalFiber_logResidual_eq' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-fiscal-fiber.log"
+          grep 'stationaryInherited_fiscalFiber_certificate_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-fiscal-fiber.log"
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-fiscal-fiber.log"; then
+            echo 'UNCHECKED STATIONARY FISCAL FIBER LEMMA'
+            exit 1
+          fi
+
           if grep -E 'sorryAx|Lean\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/inherited-ext.log"; then
             echo 'UNCHECKED INHERITED EXTENSIONALITY PROOF'
             exit 1
