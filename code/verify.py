@@ -348,6 +348,9 @@ if __name__ == "__main__":
     # This scope claim is restricted to the 33 residuals, not the full equilibrium.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_reduced_prefix_inherited_support.py")], check=True)
 
+    # Diagnostic of the FLOAT64 Python frozen binding Jacobian only: not SOURCE IFT.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_frozen_python_jacobian_float_diagnostic.py")], check=True)
+
     # Literal date-zero policy support in SOURCE vs fixed-coordinate Python rows.
     # This does NOT assert zero date-one endogenous equilibrium responses.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_four_tool_direct_support.py")], check=True)
