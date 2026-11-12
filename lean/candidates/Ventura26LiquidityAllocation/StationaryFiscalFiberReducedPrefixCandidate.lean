@@ -33,8 +33,8 @@ theorem stationaryInherited_householdBonds_difference (G H : ℝ) :
     (ProposedStationaryInheritedState.inheritedState G).householdBonds -
       (ProposedStationaryInheritedState.inheritedState H).householdBonds =
     G - H := by
-  change G - ProposedStationaryInheritedState.reservesPre -
-      (H - ProposedStationaryInheritedState.reservesPre) = G - H
+  change G - ProposedStationaryRealScale.reservesPre -
+      (H - ProposedStationaryRealScale.reservesPre) = G - H
   ring
 
 #print axioms stationaryInherited_householdBonds_difference
