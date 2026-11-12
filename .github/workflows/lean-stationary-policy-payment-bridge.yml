@@ -15,6 +15,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/NonlinearResidualRowmapExactCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceCommonPledgeLogBridgeCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceSixScalarRowsLogBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceCollateralRegimeLogBridgeCandidate.lean'
       - 'lean/checkpoint/**'
   pull_request:
     branches:
@@ -30,6 +31,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/NonlinearResidualRowmapExactCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceCommonPledgeLogBridgeCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceSixScalarRowsLogBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceCollateralRegimeLogBridgeCandidate.lean'
       - 'lean/checkpoint/**'
   workflow_dispatch:
 
@@ -162,6 +164,21 @@ jobs:
           grep 'sourceWorkerWage_dateOne_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
           grep 'sourceHouseholdEuler_dateZero_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
           grep 'sourceHouseholdEuler_dateOne_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          lake build Ventura26LiquidityAllocation.SourceCollateralRegimeLogBridgeCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
+            exit 1
+          }
+          grep 'sourceBindingFirmRegime_exact_level' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
+          grep 'sourceSlackFirmLRegime_exact_level' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
+          grep 'sourceBindingFirmRegime_log_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
+          grep 'sourceSlackFirmLRegime_log_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
+          grep 'sourceBindingDateZeroH_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
+          grep 'sourceBindingDateZeroL_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
+          grep 'sourceSlackDateZeroL_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"; then
+            echo 'UNCHECKED SOURCE COLLATERAL REGIME LOG BRIDGE'
+            exit 1
+          fi
           if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"; then
             echo 'UNCHECKED SOURCE SIX SCALAR LOG BRIDGES'
             exit 1
