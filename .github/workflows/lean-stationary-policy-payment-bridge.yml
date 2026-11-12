@@ -96,6 +96,7 @@ jobs:
             exit 1
           }
           grep 'localReducedPrefixResidual_inherited_extensionality' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/inherited-ext.log"
+          grep 'localReducedPrefixLogResidualVector_inherited_extensionality' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/inherited-ext.log"
           if grep -E 'sorryAx|Lean\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/inherited-ext.log"; then
             echo 'UNCHECKED INHERITED EXTENSIONALITY PROOF'
             exit 1
