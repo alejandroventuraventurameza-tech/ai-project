@@ -107,4 +107,25 @@ theorem stationaryFiscal_reducedLogJacobianCertified_iff
 
 #print axioms stationaryFiscal_reducedLogJacobianCertified_iff
 
+/-- The zero locus of the finite reduced SOURCE equilibrium equations is
+identical across the stationary fiscal parameter G, for a COMMON candidate
+Z and COMMON terminal continuation. This is NOT a full-equilibrium result. -/
+theorem stationaryFiscal_reducedEquationsHold_iff
+    (G H : ℝ) (branch : LocalPrefixBranch)
+    (Z : LocalPrefixCoordinates)
+    (tail : LocalPrefixContinuationRule) :
+    LocalReducedPrefixEquationsHold branch (primitives G) (inheritedState G)
+        Z .dateOne .recurrent tail ↔
+      LocalReducedPrefixEquationsHold branch (primitives H) (inheritedState H)
+        Z .dateOne .recurrent tail := by
+  constructor
+  · intro h eqn
+    rw [← stationaryFiscal_reducedResidual_row_eq G H branch Z tail eqn]
+    exact h eqn
+  · intro h eqn
+    rw [stationaryFiscal_reducedResidual_row_eq G H branch Z tail eqn]
+    exact h eqn
+
+#print axioms stationaryFiscal_reducedEquationsHold_iff
+
 end Ventura26LiquidityAllocation
