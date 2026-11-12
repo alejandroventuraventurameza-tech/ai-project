@@ -366,6 +366,9 @@ if __name__ == "__main__":
     # Exactly 33 same-base candidate row slots, NOT 33 SOURCE functional proofs.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_frozen_33_candidate_partition.py")], check=True)
 
+    # Same-root scalar Jacobian normalization, NOT original SOURCE derivative.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_frozen_nine_root_jacobian_normalization.py")], check=True)
+
     # Literal date-zero policy support in SOURCE vs fixed-coordinate Python rows.
     # This does NOT assert zero date-one endogenous equilibrium responses.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_four_tool_direct_support.py")], check=True)
