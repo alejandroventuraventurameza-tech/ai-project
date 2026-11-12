@@ -18,6 +18,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceCollateralRegimeLogBridgeCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerPledgeWedgeCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerCommonPledgeShearCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerThreeRowZeroSetCandidate.lean'
       - 'lean/checkpoint/**'
   pull_request:
     branches:
@@ -36,6 +37,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceCollateralRegimeLogBridgeCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerPledgeWedgeCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerCommonPledgeShearCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerThreeRowZeroSetCandidate.lean'
       - 'lean/checkpoint/**'
   workflow_dispatch:
 
@@ -197,6 +199,17 @@ jobs:
           grep 'sourceFirmEuler_dateOne_commonPledge_difference' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-common-shear.log"
           grep 'sourceFirmEuler_dateOne_nominalPledge_shear' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-common-shear.log"
           grep 'sourceFirmEuler_dateOne_equivalent_on_pledge_zero' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-common-shear.log"
+          lake build Ventura26LiquidityAllocation.SourceFirmEulerThreeRowZeroSetCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log"
+            exit 1
+          }
+          grep 'sourceFirmEuler_dateOne_H_nominal_eq_of_pledge_zero' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log"
+          grep 'sourceFirmEuler_dateOne_L_nominal_eq_of_pledge_zero' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log"
+          grep 'sourceFirmEuler_dateOne_threeRow_zeroSet_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log"
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log"; then
+            echo 'UNCHECKED SOURCE THREE-ROW ZERO-SET EQUIVALENCE'
+            exit 1
+          fi
           if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-common-shear.log"; then
             echo 'UNCHECKED SOURCE EULER COMMON PLEDGE SHEAR'
             exit 1
