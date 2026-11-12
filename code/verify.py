@@ -360,6 +360,9 @@ if __name__ == "__main__":
     # Sixteen additional SOURCE-shaped rows, now on same stationary predecessor.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_frozen_16_remaining_row_candidates.py")], check=True)
 
+    # Nine remaining SOURCE-shaped level/log rows, recomputed at frozen base.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_frozen_nine_scalar_source_shapes.py")], check=True)
+
     # Literal date-zero policy support in SOURCE vs fixed-coordinate Python rows.
     # This does NOT assert zero date-one endogenous equilibrium responses.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_four_tool_direct_support.py")], check=True)
