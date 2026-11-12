@@ -122,6 +122,7 @@ jobs:
           grep 'stationaryFiscal_reducedLogOperator_eq' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"
           grep 'stationaryFiscal_reducedLogJacobian_eq' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"
           grep 'stationaryFiscal_reducedLogJacobianCertified_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"
+          grep 'stationaryFiscal_reducedEquationsHold_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"
           if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"; then
             echo 'UNCHECKED STATIONARY FISCAL PRIMITIVES SCOPE'
             exit 1
