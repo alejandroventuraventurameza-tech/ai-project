@@ -96,6 +96,13 @@ jobs:
           path: code/irf/output/conditional_source_33_row_transform_inverse.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve frozen nine SOURCE-shaped root derivative normalization
+        uses: actions/upload-artifact@v7
+        with:
+          name: frozen-nine-root-derivative-normalization
+          path: code/irf/output/frozen_nine_scalar_root_jacobian_normalization.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve frozen 33 SOURCE-shaped candidate partition audit
         uses: actions/upload-artifact@v7
         with:
