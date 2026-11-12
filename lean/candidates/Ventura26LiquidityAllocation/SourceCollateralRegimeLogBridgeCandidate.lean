@@ -73,7 +73,7 @@ theorem sourceSlackFirmLRegime_log_zero_iff
   · intro h
     have hr := scalarLevelLog_roundtrip 1
       (localReducedFirmRegimeResidual .slack P d FirmType.L)
-      (by norm_num) hp
+      (by norm_num) (by simpa only [div_one] using hp)
     rw [h] at hr
     simpa [scalarLevelResidual] using hr.symm
   · intro h
