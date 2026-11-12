@@ -372,6 +372,9 @@ if __name__ == "__main__":
     # Same-base full 33x33 candidate root row transform; NO true Lean SOURCE identity.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_frozen_33_root_candidate_matrix_bridge.py")], check=True)
 
+    # Nonlinear, state-dependent 33-row candidate mapping on a positive chart.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_frozen_33_offroot_nonlinear_transform.py")], check=True)
+
     # Literal date-zero policy support in SOURCE vs fixed-coordinate Python rows.
     # This does NOT assert zero date-one endogenous equilibrium responses.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_four_tool_direct_support.py")], check=True)
