@@ -72,4 +72,29 @@ theorem localReducedPrefixLogJacobian_inherited_extensionality
 
 #print axioms localReducedPrefixLogJacobian_inherited_extensionality
 
+/-- The *property* of possessing a certified inverse for the original SOURCE
+log-residual Jacobian is constant on each inherited-state fiber.  Neither
+the certificate's existence nor positivity is proved here. -/
+theorem localReducedPrefixLogJacobianCertifiedAt_inherited_iff
+    (branch : LocalPrefixBranch) (P : Primitives S)
+    (I J : InheritedState) (Z0 : LocalPrefixCoordinates)
+    (dateOne recurrent : S) (tail : LocalPrefixContinuationRule)
+    (inverseNormBound : ℝ)
+    (hcapital : I.capital = J.capital)
+    (hface : I.firmFace = J.firmFace)
+    (hbank : I.bankFace = J.bankFace)
+    (hrate : I.reserveRateLag = J.reserveRateLag)
+    (hreserves : I.reservesPreLag = J.reservesPreLag) :
+    LocalReducedPrefixLogJacobianCertifiedAt
+      branch P I Z0 dateOne recurrent tail inverseNormBound ↔
+    LocalReducedPrefixLogJacobianCertifiedAt
+      branch P J Z0 dateOne recurrent tail inverseNormBound := by
+  have hfun := localReducedPrefixLogResidualVector_inherited_extensionality
+    branch P I J Z0 dateOne recurrent tail
+    hcapital hface hbank hrate hreserves
+  simp only [LocalReducedPrefixLogJacobianCertifiedAt, hfun]
+
+#print axioms localReducedPrefixLogJacobianCertifiedAt_inherited_iff
+
+
 end Ventura26LiquidityAllocation
