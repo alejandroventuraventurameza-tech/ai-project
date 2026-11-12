@@ -25,7 +25,7 @@ theorem scalarLogLevel_roundtrip (d p : ℝ) (hd : d ≠ 0) :
     scalarLogResidual d (scalarLevelResidual d p) = p := by
   unfold scalarLogResidual scalarLevelResidual
   have h : 1 + d * (Real.exp p - 1) / d = Real.exp p := by
-    field_simp
+    field_simp [hd]
     ring
   rw [h, Real.log_exp]
 
@@ -38,7 +38,7 @@ theorem scalarLevelLog_roundtrip (d s : ℝ)
     scalarLevelResidual d (scalarLogResidual d s) = s := by
   unfold scalarLevelResidual scalarLogResidual
   rw [Real.exp_log hp]
-  field_simp
+  field_simp [hd]
   ring
 
 #print axioms scalarLevelLog_roundtrip
@@ -55,7 +55,7 @@ theorem negativeScalarLogLevel_roundtrip (d p : ℝ) (hd : d ≠ 0) :
     negativeScalarLogResidual d (negativeScalarLevelResidual d p) = p := by
   unfold negativeScalarLogResidual negativeScalarLevelResidual
   have h : 1 - -(d * (Real.exp p - 1)) / d = Real.exp p := by
-    field_simp
+    field_simp [hd]
     ring
   rw [h, Real.log_exp]
 
@@ -68,7 +68,7 @@ theorem negativeScalarLevelLog_roundtrip (d s : ℝ)
     negativeScalarLevelResidual d (negativeScalarLogResidual d s) = s := by
   unfold negativeScalarLevelResidual negativeScalarLogResidual
   rw [Real.exp_log hp]
-  field_simp
+  field_simp [hd]
   ring
 
 #print axioms negativeScalarLevelLog_roundtrip
