@@ -15,7 +15,7 @@ import finite_irf as model
 from frozen_stationary_prefix_audit import frozen_stationary_seed
 from audit_source_firm_budget_euler_shear import source_transcription, INDEX as FIRMS, SHEAR
 from audit_source_identity_row_candidates import transcribed_prefix_rows, ROWS
-from audit_frozen_nine_scalar_source_shapes import source_shape_pairs, SCALAR_TO_PY, SOURCE_INDICES
+from audit_frozen_nine_scalar_source_shapes import source_shape_pairs, SOURCE_TO_PY as SCALAR_TO_PY, SOURCE_INDICES
 
 HERE=Path(__file__).resolve().parent
 ROOT=HERE.parents[1]
