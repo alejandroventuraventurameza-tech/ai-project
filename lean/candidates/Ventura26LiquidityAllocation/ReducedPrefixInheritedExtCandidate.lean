@@ -32,4 +32,24 @@ theorem localReducedPrefixResidual_inherited_extensionality
 
 #print axioms localReducedPrefixResidual_inherited_extensionality
 
+theorem localReducedPrefixLogResidualVector_inherited_extensionality
+    (branch : LocalPrefixBranch) (P : Primitives S)
+    (I J : InheritedState) (Z0 : LocalPrefixCoordinates)
+    (dateOne recurrent : S) (tail : LocalPrefixContinuationRule)
+    (hcapital : I.capital = J.capital)
+    (hface : I.firmFace = J.firmFace)
+    (hbank : I.bankFace = J.bankFace)
+    (hrate : I.reserveRateLag = J.reserveRateLag)
+    (hreserves : I.reservesPreLag = J.reservesPreLag) :
+    localReducedPrefixLogResidualVector branch P I Z0 dateOne recurrent tail =
+      localReducedPrefixLogResidualVector branch P J Z0 dateOne recurrent tail := by
+  funext z row
+  exact localReducedPrefixResidual_inherited_extensionality
+    branch P I J (localPrefixLogChart Z0 z) dateOne recurrent tail
+    hcapital hface hbank hrate hreserves (localPrefixEquationOfIndex row)
+
+#print axioms localReducedPrefixLogResidualVector_inherited_extensionality
+
+
+
 end Ventura26LiquidityAllocation
