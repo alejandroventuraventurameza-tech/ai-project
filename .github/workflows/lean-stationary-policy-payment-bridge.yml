@@ -12,6 +12,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/ReducedPrefixInheritedExtCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/StationaryFiscalFiberReducedPrefixCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/StationaryFiscalPrimitivesScopeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/NonlinearResidualRowmapExactCandidate.lean'
       - 'lean/checkpoint/**'
   pull_request:
     branches:
@@ -24,6 +25,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/ReducedPrefixInheritedExtCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/StationaryFiscalFiberReducedPrefixCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/StationaryFiscalPrimitivesScopeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/NonlinearResidualRowmapExactCandidate.lean'
       - 'lean/checkpoint/**'
   workflow_dispatch:
 
@@ -123,6 +125,20 @@ jobs:
           grep 'stationaryFiscal_reducedLogJacobian_eq' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"
           grep 'stationaryFiscal_reducedLogJacobianCertified_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"
           grep 'stationaryFiscal_reducedEquationsHold_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"
+          lake build Ventura26LiquidityAllocation.NonlinearResidualRowmapExactCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"
+            exit 1
+          }
+          grep 'scalarLogLevel_roundtrip' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"
+          grep 'scalarLevelLog_roundtrip' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"
+          grep 'negativeScalarLogLevel_roundtrip' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"
+          grep 'negativeScalarLevelLog_roundtrip' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"
+          grep 'pledgeEulerShear_roundtrip' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"
+          grep 'pledgeEulerShear_reverse_roundtrip' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"; then
+            echo 'UNCHECKED NONLINEAR ROW-MAP LEMMAS'
+            exit 1
+          fi
           if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"; then
             echo 'UNCHECKED STATIONARY FISCAL PRIMITIVES SCOPE'
             exit 1
