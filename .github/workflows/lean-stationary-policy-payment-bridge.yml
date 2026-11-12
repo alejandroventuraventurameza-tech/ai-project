@@ -206,6 +206,8 @@ jobs:
           grep 'sourceFirmEuler_dateOne_H_nominal_eq_of_pledge_zero' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log"
           grep 'sourceFirmEuler_dateOne_L_nominal_eq_of_pledge_zero' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log"
           grep 'sourceFirmEuler_dateOne_threeRow_zeroSet_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log"
+          grep 'sourceNominalPledgeShearedResidual_eq_of_pledge_zero' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log"
+          grep 'sourceNominalPledgeShearedResidual_all_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log"
           if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log"; then
             echo 'UNCHECKED SOURCE THREE-ROW ZERO-SET EQUIVALENCE'
             exit 1
