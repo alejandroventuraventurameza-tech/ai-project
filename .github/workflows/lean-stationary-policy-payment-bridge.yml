@@ -13,6 +13,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/StationaryFiscalFiberReducedPrefixCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/StationaryFiscalPrimitivesScopeCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/NonlinearResidualRowmapExactCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceCommonPledgeLogBridgeCandidate.lean'
       - 'lean/checkpoint/**'
   pull_request:
     branches:
@@ -26,6 +27,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/StationaryFiscalFiberReducedPrefixCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/StationaryFiscalPrimitivesScopeCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/NonlinearResidualRowmapExactCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceCommonPledgeLogBridgeCandidate.lean'
       - 'lean/checkpoint/**'
   workflow_dispatch:
 
@@ -135,6 +137,17 @@ jobs:
           grep 'negativeScalarLevelLog_roundtrip' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"
           grep 'pledgeEulerShear_roundtrip' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"
           grep 'pledgeEulerShear_reverse_roundtrip' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"
+          lake build Ventura26LiquidityAllocation.SourceCommonPledgeLogBridgeCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-common-pledge-log.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-common-pledge-log.log"
+            exit 1
+          }
+          grep 'sourceCommonPledgeResidual_exact_level' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-common-pledge-log.log"
+          grep 'sourceCommonPledgeResidual_levelLog_roundtrip' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-common-pledge-log.log"
+          grep 'sourceCommonPledgeResidual_log_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-common-pledge-log.log"
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-common-pledge-log.log"; then
+            echo 'UNCHECKED SOURCE COMMON-PLEDGE LOG BRIDGE'
+            exit 1
+          fi
           if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"; then
             echo 'UNCHECKED NONLINEAR ROW-MAP LEMMAS'
             exit 1
