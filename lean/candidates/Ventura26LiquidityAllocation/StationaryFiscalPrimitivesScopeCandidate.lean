@@ -42,4 +42,37 @@ theorem stationaryFiscal_dateOneData_eq
 
 #print axioms stationaryFiscal_dateOneData_eq
 
+/-- Economic 33-row reduction under two ACTUAL primitive instances P(G) and P(H).
+Both inherited records vary as prescribed. Definitional equality is audited
+against SOURCE, not assumed as a new axiom. -/
+theorem stationaryFiscal_reducedResidual_row_eq
+    (G H : ℝ) (branch : LocalPrefixBranch)
+    (Z : LocalPrefixCoordinates)
+    (tail : LocalPrefixContinuationRule)
+    (eqn : LocalPrefixEquation) :
+    localReducedPrefixResidual branch (primitives G) (inheritedState G)
+        Z .dateOne .recurrent tail eqn =
+      localReducedPrefixResidual branch (primitives H) (inheritedState H)
+        Z .dateOne .recurrent tail eqn := by
+  cases eqn <;> rfl
+
+#print axioms stationaryFiscal_reducedResidual_row_eq
+
+/-- The resulting full 33-row log operator, with a common positive baseline
+chart and common terminal continuation, is independent of stationary G. -/
+theorem stationaryFiscal_reducedLogOperator_eq
+    (G H : ℝ) (branch : LocalPrefixBranch)
+    (Z0 : LocalPrefixCoordinates)
+    (tail : LocalPrefixContinuationRule) :
+    localReducedPrefixLogResidualVector branch (primitives G) (inheritedState G)
+        Z0 .dateOne .recurrent tail =
+      localReducedPrefixLogResidualVector branch (primitives H) (inheritedState H)
+        Z0 .dateOne .recurrent tail := by
+  funext z row
+  exact stationaryFiscal_reducedResidual_row_eq G H branch
+    (localPrefixLogChart Z0 z) tail (localPrefixEquationOfIndex row)
+
+#print axioms stationaryFiscal_reducedLogOperator_eq
+
+
 end Ventura26LiquidityAllocation
