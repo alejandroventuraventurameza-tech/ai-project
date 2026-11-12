@@ -16,6 +16,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceCommonPledgeLogBridgeCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceSixScalarRowsLogBridgeCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceCollateralRegimeLogBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerPledgeWedgeCandidate.lean'
       - 'lean/checkpoint/**'
   pull_request:
     branches:
@@ -32,6 +33,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceCommonPledgeLogBridgeCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceSixScalarRowsLogBridgeCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceCollateralRegimeLogBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerPledgeWedgeCandidate.lean'
       - 'lean/checkpoint/**'
   workflow_dispatch:
 
@@ -175,6 +177,20 @@ jobs:
           grep 'sourceBindingDateZeroH_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
           grep 'sourceBindingDateZeroL_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
           grep 'sourceSlackDateZeroL_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
+          lake build Ventura26LiquidityAllocation.SourceFirmEulerPledgeWedgeCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-wedge.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-wedge.log"
+            exit 1
+          }
+          grep 'sourceFirmEuler_binding_decomposition' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-wedge.log"
+          grep 'sourceFirmEuler_slack_L_unconstrained' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-wedge.log"
+          grep 'sourceFirmEuler_dateOne_H_binding' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-wedge.log"
+          grep 'sourceFirmEuler_dateOne_L_binding' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-wedge.log"
+          grep 'sourceFirmEuler_dateZero_H_binding' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-wedge.log"
+          grep 'sourceFirmEuler_dateZero_L_slack' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-wedge.log"
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-wedge.log"; then
+            echo 'UNCHECKED SOURCE FIRM EULER WEDGE'
+            exit 1
+          fi
           if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"; then
             echo 'UNCHECKED SOURCE COLLATERAL REGIME LOG BRIDGE'
             exit 1
