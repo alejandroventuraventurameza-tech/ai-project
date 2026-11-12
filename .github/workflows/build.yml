@@ -96,6 +96,13 @@ jobs:
           path: code/irf/output/conditional_source_33_row_transform_inverse.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve frozen Python 33x33 float Jacobian diagnostics
+        uses: actions/upload-artifact@v7
+        with:
+          name: frozen-python-jacobian-float-diagnostic
+          path: code/irf/output/frozen_python_33_jacobian_float_diagnostic.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve reduced-prefix inherited-field support audit
         uses: actions/upload-artifact@v7
         with:
