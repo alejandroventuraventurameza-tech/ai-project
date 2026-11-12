@@ -345,6 +345,9 @@ if __name__ == "__main__":
     # Explicit conditional projection of SOURCE 12-field inheritance to Python X0.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_inherited_12_to_7_projection.py")], check=True)
 
+    # This scope claim is restricted to the 33 residuals, not the full equilibrium.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_reduced_prefix_inherited_support.py")], check=True)
+
     # Literal date-zero policy support in SOURCE vs fixed-coordinate Python rows.
     # This does NOT assert zero date-one endogenous equilibrium responses.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_four_tool_direct_support.py")], check=True)
