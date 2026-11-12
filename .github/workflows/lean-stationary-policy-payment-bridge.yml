@@ -9,6 +9,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/StationaryInterventionSourceBridgeCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/StationaryPrimitivesCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/HandStencilPledgeRowEquivalenceCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/ReducedPrefixInheritedExtCandidate.lean'
       - 'lean/checkpoint/**'
   pull_request:
     branches:
@@ -18,6 +19,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/StationaryInterventionSourceBridgeCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/StationaryPrimitivesCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/HandStencilPledgeRowEquivalenceCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/ReducedPrefixInheritedExtCandidate.lean'
       - 'lean/checkpoint/**'
   workflow_dispatch:
 
@@ -89,6 +91,15 @@ jobs:
             tail -n 180 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/bridge.log"
             exit 1
           }
+          lake build Ventura26LiquidityAllocation.ReducedPrefixInheritedExtCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/inherited-ext.log" 2>&1 || {
+            tail -n 150 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/inherited-ext.log"
+            exit 1
+          }
+          grep 'localReducedPrefixResidual_inherited_extensionality' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/inherited-ext.log"
+          if grep -E 'sorryAx|Lean\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/inherited-ext.log"; then
+            echo 'UNCHECKED INHERITED EXTENSIONALITY PROOF'
+            exit 1
+          fi
           grep -E 'intervened_binary_payment_law|intervened_mean_absolute_payment|intervened_bank_renewal_matches_stationary|intervened_reserve_deposit_ratio|intervened_otc_deficit_slope_low_tightness|intervened_otc_surplus_slope_low_tightness' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/bridge.log"
           if grep -E 'sorryAx|Lean\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/bridge.log"; then
             echo 'UNEXPECTED AXIOM OR UNCHECKED PROOF'
