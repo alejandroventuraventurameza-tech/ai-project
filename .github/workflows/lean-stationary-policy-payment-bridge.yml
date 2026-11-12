@@ -14,6 +14,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/StationaryFiscalPrimitivesScopeCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/NonlinearResidualRowmapExactCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceCommonPledgeLogBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceSixScalarRowsLogBridgeCandidate.lean'
       - 'lean/checkpoint/**'
   pull_request:
     branches:
@@ -28,6 +29,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/StationaryFiscalPrimitivesScopeCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/NonlinearResidualRowmapExactCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceCommonPledgeLogBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceSixScalarRowsLogBridgeCandidate.lean'
       - 'lean/checkpoint/**'
   workflow_dispatch:
 
@@ -144,6 +146,26 @@ jobs:
           grep 'sourceCommonPledgeResidual_exact_level' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-common-pledge-log.log"
           grep 'sourceCommonPledgeResidual_levelLog_roundtrip' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-common-pledge-log.log"
           grep 'sourceCommonPledgeResidual_log_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-common-pledge-log.log"
+          lake build Ventura26LiquidityAllocation.SourceSixScalarRowsLogBridgeCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+            exit 1
+          }
+          grep 'sourceBankFace_level_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceWorkerWage_level_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceHouseholdEuler_level_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceBankFace_log_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceWorkerWage_log_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceHouseholdEuler_log_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceBankFace_dateZero_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceBankFace_dateOne_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceWorkerWage_dateZero_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceWorkerWage_dateOne_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceHouseholdEuler_dateZero_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceHouseholdEuler_dateOne_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"; then
+            echo 'UNCHECKED SOURCE SIX SCALAR LOG BRIDGES'
+            exit 1
+          fi
           if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-common-pledge-log.log"; then
             echo 'UNCHECKED SOURCE COMMON-PLEDGE LOG BRIDGE'
             exit 1
