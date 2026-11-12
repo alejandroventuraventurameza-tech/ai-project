@@ -96,6 +96,13 @@ jobs:
           path: code/irf/output/conditional_source_33_row_transform_inverse.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve invertible nonlinear 33-row SOURCE-shaped residual map
+        uses: actions/upload-artifact@v7
+        with:
+          name: frozen-33-source-shaped-offroot-rowmap-inverse
+          path: code/irf/output/frozen_33_offroot_inverse_rowmap_candidate.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve explicit off-root 33-row product-rule derivative audit
         uses: actions/upload-artifact@v7
         with:
