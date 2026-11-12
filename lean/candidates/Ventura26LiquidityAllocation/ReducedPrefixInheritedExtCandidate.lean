@@ -52,4 +52,24 @@ theorem localReducedPrefixLogResidualVector_inherited_extensionality
 
 
 
+/-- Equality of the actual SOURCE Fréchet derivatives follows from equality
+of the full log residual functions; no rank, inverse or smoothness is assumed. -/
+theorem localReducedPrefixLogJacobian_inherited_extensionality
+    (branch : LocalPrefixBranch) (P : Primitives S)
+    (I J : InheritedState) (Z0 : LocalPrefixCoordinates)
+    (dateOne recurrent : S) (tail : LocalPrefixContinuationRule)
+    (hcapital : I.capital = J.capital)
+    (hface : I.firmFace = J.firmFace)
+    (hbank : I.bankFace = J.bankFace)
+    (hrate : I.reserveRateLag = J.reserveRateLag)
+    (hreserves : I.reservesPreLag = J.reservesPreLag) :
+    fderiv ℝ (localReducedPrefixLogResidualVector branch P I Z0 dateOne recurrent tail)
+        (0 : Fin 33 → ℝ) =
+      fderiv ℝ (localReducedPrefixLogResidualVector branch P J Z0 dateOne recurrent tail)
+        (0 : Fin 33 → ℝ) := by
+  rw [localReducedPrefixLogResidualVector_inherited_extensionality
+    branch P I J Z0 dateOne recurrent tail hcapital hface hbank hrate hreserves]
+
+#print axioms localReducedPrefixLogJacobian_inherited_extensionality
+
 end Ventura26LiquidityAllocation
