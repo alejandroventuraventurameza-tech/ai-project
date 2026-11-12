@@ -27,6 +27,20 @@ theorem stationaryInherited_five_fields_independent_of_G (G H : ℝ) :
 
 #print axioms stationaryInherited_five_fields_independent_of_G
 
+/-- Unlike the reduced inherited coordinates, household bond stocks do change
+with the fiscal debt parameter.  This is exactly the omitted financial fiber. -/
+theorem stationaryInherited_householdBonds_difference (G H : ℝ) :
+    (ProposedStationaryInheritedState.inheritedState G).householdBonds -
+      (ProposedStationaryInheritedState.inheritedState H).householdBonds =
+    G - H := by
+  change G - ProposedStationaryInheritedState.reservesPre -
+      (H - ProposedStationaryInheritedState.reservesPre) = G - H
+  ring
+
+#print axioms stationaryInherited_householdBonds_difference
+
+
+
 theorem stationaryInherited_fiscalFiber_logResidual_eq
     (P : Primitives LocalBridgePhase)
     (G H : ℝ) (branch : LocalPrefixBranch)
