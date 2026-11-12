@@ -106,6 +106,7 @@ jobs:
             exit 1
           }
           grep 'stationaryInherited_five_fields_independent_of_G' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-fiscal-fiber.log"
+          grep 'stationaryInherited_householdBonds_difference' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-fiscal-fiber.log"
           grep 'stationaryInherited_fiscalFiber_logResidual_eq' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-fiscal-fiber.log"
           grep 'stationaryInherited_fiscalFiber_certificate_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-fiscal-fiber.log"
           if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-fiscal-fiber.log"; then
