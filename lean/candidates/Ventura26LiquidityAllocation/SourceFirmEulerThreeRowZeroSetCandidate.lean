@@ -97,4 +97,83 @@ theorem sourceFirmEuler_dateOne_threeRow_zeroSet_iff
 
 #print axioms sourceFirmEuler_dateOne_threeRow_zeroSet_iff
 
+
+/-- Full 33-row SOURCE operator after replacing the two date-one Euler rows
+by their nominal common-pledge-coordinate versions, with all other rows
+(including the actual pledge row) literally unchanged. -/
+noncomputable def sourceNominalPledgeShearedResidual
+    (branch : LocalPrefixBranch)
+    (P : Primitives LocalBridgePhase) (I : InheritedState)
+    (Z : LocalPrefixCoordinates)
+    (dateOne recurrent : LocalBridgePhase)
+    (tail : LocalPrefixContinuationRule)
+    (equation : LocalPrefixEquation) : ℝ :=
+  match equation with
+  | .firmCapitalEulerOneH =>
+      sourceFirmEulerNominalPledge P
+        (localPrefixDateOneData P Z dateOne recurrent tail) .H
+        Z.stateTwo.commonPledgeValue
+  | .firmCapitalEulerOneL =>
+      sourceFirmEulerNominalPledge P
+        (localPrefixDateOneData P Z dateOne recurrent tail) .L
+        Z.stateTwo.commonPledgeValue
+  | _ => localReducedPrefixResidual branch P I Z dateOne recurrent tail equation
+
+/-- Given genuine SOURCE pledge clearing, all 33 original and sheared
+residuals agree pointwise. -/
+theorem sourceNominalPledgeShearedResidual_eq_of_pledge_zero
+    (branch : LocalPrefixBranch)
+    (P : Primitives LocalBridgePhase) (I : InheritedState)
+    (Z : LocalPrefixCoordinates)
+    (dateOne recurrent : LocalBridgePhase)
+    (tail : LocalPrefixContinuationRule)
+    (hp : localReducedPrefixResidual branch P I Z dateOne recurrent tail
+      .commonPledgeOne = 0)
+    (equation : LocalPrefixEquation) :
+    sourceNominalPledgeShearedResidual branch P I Z dateOne recurrent tail
+      equation =
+    localReducedPrefixResidual branch P I Z dateOne recurrent tail equation := by
+  cases equation <;> simp only [sourceNominalPledgeShearedResidual]
+  · exact (sourceFirmEuler_dateOne_H_nominal_eq_of_pledge_zero
+      branch P I Z dateOne recurrent tail hp).symm
+  · exact (sourceFirmEuler_dateOne_L_nominal_eq_of_pledge_zero
+      branch P I Z dateOne recurrent tail hp).symm
+
+#print axioms sourceNominalPledgeShearedResidual_eq_of_pledge_zero
+
+/-- Full SOURCE 33-row simultaneous zero-set equivalence, EXACT and
+without Python, a fixed root, or positive-log assumptions.
+
+This is a zero-set result for a row operation; it does not assert that
+the economic 33-row system has any zeros or that its Jacobian is
+invertible. -/
+theorem sourceNominalPledgeShearedResidual_all_zero_iff
+    (branch : LocalPrefixBranch)
+    (P : Primitives LocalBridgePhase) (I : InheritedState)
+    (Z : LocalPrefixCoordinates)
+    (dateOne recurrent : LocalBridgePhase)
+    (tail : LocalPrefixContinuationRule) :
+    (∀ equation : LocalPrefixEquation,
+      sourceNominalPledgeShearedResidual branch P I Z
+        dateOne recurrent tail equation = 0) ↔
+    (∀ equation : LocalPrefixEquation,
+      localReducedPrefixResidual branch P I Z
+        dateOne recurrent tail equation = 0) := by
+  constructor
+  · intro h equation
+    have hp : localReducedPrefixResidual branch P I Z dateOne recurrent tail
+        .commonPledgeOne = 0 := by
+      simpa only [sourceNominalPledgeShearedResidual] using
+        (h .commonPledgeOne)
+    rw [← sourceNominalPledgeShearedResidual_eq_of_pledge_zero
+      branch P I Z dateOne recurrent tail hp equation]
+    exact h equation
+  · intro h equation
+    have hp := h .commonPledgeOne
+    rw [sourceNominalPledgeShearedResidual_eq_of_pledge_zero
+      branch P I Z dateOne recurrent tail hp equation]
+    exact h equation
+
+#print axioms sourceNominalPledgeShearedResidual_all_zero_iff
+
 end Ventura26LiquidityAllocation
