@@ -23,6 +23,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerRowLinearEquivalenceCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerEconomicLinearRowmapCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerJacobianBijectiveTransportCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceEuler33RowDirectionalDerivativeCandidate.lean'
       - 'lean/checkpoint/**'
   pull_request:
     branches:
@@ -46,6 +47,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerRowLinearEquivalenceCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerEconomicLinearRowmapCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerJacobianBijectiveTransportCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceEuler33RowDirectionalDerivativeCandidate.lean'
       - 'lean/checkpoint/**'
   workflow_dispatch:
 
@@ -247,6 +249,16 @@ jobs:
           grep 'sourceEulerRowsForward_bijective' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-jacobian-bijective.log"
           grep 'sourceEulerRowsForward_comp_bijective_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-jacobian-bijective.log"
           grep 'sourceEulerJacobian_bijective_iff_of_rowmap' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-jacobian-bijective.log"
+          lake build Ventura26LiquidityAllocation.SourceEuler33RowDirectionalDerivativeCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-33-directional-derivative.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-33-directional-derivative.log"
+            exit 1
+          }
+          grep 'sourceEulerRowsForward_path_derivative_at_pledge_zero' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-33-directional-derivative.log"
+          grep 'sourceNominalPledgeShearedResidual_33row_path_derivative' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-33-directional-derivative.log"
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-33-directional-derivative.log"; then
+            echo 'UNCHECKED SOURCE 33 ROW DIRECTIONAL DERIVATIVE'
+            exit 1
+          fi
           if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-jacobian-bijective.log"; then
             echo 'UNCHECKED SOURCE JACOBIAN BIJECTIVITY TRANSPORT'
             exit 1
