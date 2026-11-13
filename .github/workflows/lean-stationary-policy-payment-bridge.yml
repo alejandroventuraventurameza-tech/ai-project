@@ -20,6 +20,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerCommonPledgeShearCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerThreeRowZeroSetCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerShearDerivativeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerRowLinearEquivalenceCandidate.lean'
       - 'lean/checkpoint/**'
   pull_request:
     branches:
@@ -40,6 +41,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerCommonPledgeShearCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerThreeRowZeroSetCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerShearDerivativeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerRowLinearEquivalenceCandidate.lean'
       - 'lean/checkpoint/**'
   workflow_dispatch:
 
@@ -217,6 +219,19 @@ jobs:
           grep 'sourceShear_derivative_at_pledge_zero' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-shear-derivative.log"
           grep 'sourceFirmNominalEulerPath_shear_identity' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-shear-derivative.log"
           grep 'sourceFirmNominalEulerPath_derivative_at_pledge_zero' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-shear-derivative.log"
+          lake build Ventura26LiquidityAllocation.SourceEulerRowLinearEquivalenceCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-row-linear-equiv.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-row-linear-equiv.log"
+            exit 1
+          }
+          grep 'sourceEulerRows_backward_forward' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-row-linear-equiv.log"
+          grep 'sourceEulerRows_forward_backward' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-row-linear-equiv.log"
+          grep 'sourceEulerRowsForward_add' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-row-linear-equiv.log"
+          grep 'sourceEulerRowsForward_smul' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-row-linear-equiv.log"
+          grep 'sourceEulerRowsForward_all_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-row-linear-equiv.log"
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-row-linear-equiv.log"; then
+            echo 'UNCHECKED SOURCE EULER LINEAR ROW EQUIVALENCE'
+            exit 1
+          fi
           if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-shear-derivative.log"; then
             echo 'UNCHECKED SOURCE EULER SHEAR DERIVATIVE'
             exit 1
