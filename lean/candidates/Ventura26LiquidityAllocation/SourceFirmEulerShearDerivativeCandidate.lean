@@ -26,10 +26,13 @@ theorem sourceShear_derivative_at_pledge_zero
     (hroot : p t = 0) :
     HasDerivAt (fun x => e x + a x * p x)
       (de + a t * dp) t := by
-  have h : HasDerivAt (fun x => e x + a x * p x)
-      (de + (da * p t + a t * dp)) t := by
-    simpa only [Pi.add_apply, Pi.mul_apply] using he.add (ha.mul hp)
-  simpa only [hroot, mul_zero, zero_add] using h
+  have h := he.add (ha.mul hp)
+  change HasFDerivAtFilter (fun x => e x + a x * p x)
+    (ContinuousLinearMap.toSpanSingleton ℝ (de + a t * dp))
+    (nhds t ×ˢ pure t)
+  convert h using 1
+  ext x
+  simp [hroot, mul_zero, zero_add]
 
 #print axioms sourceShear_derivative_at_pledge_zero
 
