@@ -32,19 +32,17 @@ theorem sourceEulerRowsForward_path_derivative_at_pledge_zero
     HasDerivAt (fun s => sourceEulerRowsForward
       (aH s) (aL s) (F s) row)
       (sourceEulerRowsForward (aH t) (aL t) dF row) t := by
-  cases row <;> simp only [sourceEulerRowsForward] <;>
-    first
-    | exact sourceShear_derivative_at_pledge_zero
-        (fun s => F s .firmCapitalEulerOneH) aH
-        (fun s => F s .commonPledgeOne)
-        t (dF .firmCapitalEulerOneH) daH (dF .commonPledgeOne)
-        (hF .firmCapitalEulerOneH) haH (hF .commonPledgeOne) hroot
-    | exact sourceShear_derivative_at_pledge_zero
-        (fun s => F s .firmCapitalEulerOneL) aL
-        (fun s => F s .commonPledgeOne)
-        t (dF .firmCapitalEulerOneL) daL (dF .commonPledgeOne)
-        (hF .firmCapitalEulerOneL) haL (hF .commonPledgeOne) hroot
-    | exact hF _
+  cases row <;> simp only [sourceEulerRowsForward] <;> try { exact hF _ }
+  · exact sourceShear_derivative_at_pledge_zero
+      (fun s => F s .firmCapitalEulerOneH) aH
+      (fun s => F s .commonPledgeOne)
+      t (dF .firmCapitalEulerOneH) daH (dF .commonPledgeOne)
+      (hF .firmCapitalEulerOneH) haH (hF .commonPledgeOne) hroot
+  · exact sourceShear_derivative_at_pledge_zero
+      (fun s => F s .firmCapitalEulerOneL) aL
+      (fun s => F s .commonPledgeOne)
+      t (dF .firmCapitalEulerOneL) daL (dF .commonPledgeOne)
+      (hF .firmCapitalEulerOneL) haL (hF .commonPledgeOne) hroot
 
 #print axioms sourceEulerRowsForward_path_derivative_at_pledge_zero
 
