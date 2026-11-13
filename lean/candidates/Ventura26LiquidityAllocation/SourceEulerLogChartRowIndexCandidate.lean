@@ -40,17 +40,23 @@ theorem sourceShearedLogResidual_all_zero_iff
     branch P I (localPrefixLogChart Z0 z) dateOne recurrent tail
   constructor
   · intro h row
-    apply hb.mp
-    intro eqn
-    obtain ⟨j, hj⟩ := sourceLogRowIndex_bijective.2 eqn
-    subst eqn
-    exact h j
+    have hall : ∀ eqn : LocalPrefixEquation,
+        sourceNominalPledgeShearedResidual branch P I
+          (localPrefixLogChart Z0 z) dateOne recurrent tail eqn = 0 := by
+      intro eqn
+      obtain ⟨j, hj⟩ := sourceLogRowIndex_bijective.2 eqn
+      rw [← hj]
+      exact h j
+    exact (hb.mp hall) (localPrefixEquationOfIndex row)
   · intro h row
-    apply hb.mpr
-    intro eqn
-    obtain ⟨j, hj⟩ := sourceLogRowIndex_bijective.2 eqn
-    subst eqn
-    exact h j
+    have hall : ∀ eqn : LocalPrefixEquation,
+        localReducedPrefixResidual branch P I
+          (localPrefixLogChart Z0 z) dateOne recurrent tail eqn = 0 := by
+      intro eqn
+      obtain ⟨j, hj⟩ := sourceLogRowIndex_bijective.2 eqn
+      rw [← hj]
+      exact h j
+    exact (hb.mpr hall) (localPrefixEquationOfIndex row)
 
 #print axioms sourceShearedLogResidual_all_zero_iff
 
