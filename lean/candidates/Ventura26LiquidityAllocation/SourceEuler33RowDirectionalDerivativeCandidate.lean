@@ -1,4 +1,5 @@
 import Ventura26LiquidityAllocation.SourceEulerJacobianBijectiveTransportCandidate
+import Ventura26LiquidityAllocation.SourceFirmEulerShearDerivativeCandidate
 
 /-!
 # Genuine SOURCE 33-row directional derivative identity at a pledge root
