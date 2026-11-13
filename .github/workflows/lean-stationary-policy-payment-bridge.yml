@@ -25,6 +25,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerJacobianBijectiveTransportCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceEuler33RowDirectionalDerivativeCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerLogChartDirectionalBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerLogChartRowIndexCandidate.lean'
       - 'lean/checkpoint/**'
   pull_request:
     branches:
@@ -50,6 +51,7 @@ on:
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerJacobianBijectiveTransportCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceEuler33RowDirectionalDerivativeCandidate.lean'
       - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerLogChartDirectionalBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerLogChartRowIndexCandidate.lean'
       - 'lean/checkpoint/**'
   workflow_dispatch:
 
@@ -264,6 +266,16 @@ jobs:
           grep 'sourceNominalPledgeShearedLogResidualVector_eq_source_rowmap' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-chart-bridge.log"
           grep 'sourceOriginalLogResidualVector_row_eq_source' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-chart-bridge.log"
           grep 'sourceNominalPledgeShearedLogResidualVector_path_derivative' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-chart-bridge.log"
+          lake build Ventura26LiquidityAllocation.SourceEulerLogChartRowIndexCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-row-index.log" 2>&1 || {
+            tail -n 160 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-row-index.log"
+            exit 1
+          }
+          grep 'sourceLogRowIndex_bijective' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-row-index.log"
+          grep 'sourceShearedLogResidual_all_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-row-index.log"
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-row-index.log"; then
+            echo 'UNCHECKED SOURCE LOG INDEX BRIDGE'
+            exit 1
+          fi
           if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-chart-bridge.log"; then
             echo 'UNCHECKED SOURCE LOG CHART EULER DERIVATIVE'
             exit 1
