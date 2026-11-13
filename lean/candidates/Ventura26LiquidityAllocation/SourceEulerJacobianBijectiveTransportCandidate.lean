@@ -45,7 +45,7 @@ theorem sourceEulerRowsForward_comp_bijective_iff
     constructor
     · intro u v huv
       apply h.1
-      rw [huv]
+      exact congrArg (sourceEulerRowsForward aH aL) huv
     · intro v
       obtain ⟨u, hu⟩ := h.2 (sourceEulerRowsForward aH aL v)
       refine ⟨u, ?_⟩
