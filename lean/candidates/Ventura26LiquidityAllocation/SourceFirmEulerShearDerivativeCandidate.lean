@@ -26,8 +26,10 @@ theorem sourceShear_derivative_at_pledge_zero
     (hroot : p t = 0) :
     HasDerivAt (fun x => e x + a x * p x)
       (de + a t * dp) t := by
-  have h := he.add (ha.mul hp)
-  convert h using 1 <;> simp only [hroot, mul_zero, zero_add] <;> ring
+  have h : HasDerivAt (fun x => e x + a x * p x)
+      (de + (da * p t + a t * dp)) t := by
+    simpa only [Pi.add_apply, Pi.mul_apply] using he.add (ha.mul hp)
+  simpa only [hroot, mul_zero, zero_add] using h
 
 #print axioms sourceShear_derivative_at_pledge_zero
 
