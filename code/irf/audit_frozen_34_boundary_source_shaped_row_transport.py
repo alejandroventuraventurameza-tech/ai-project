@@ -129,7 +129,10 @@ def main():
     pulled=nonlinear_pullback(src,scalar,coeff)
     original=engine.prefix_residual(base,p0,"binding",(h,0.,0.,0.),z)
     functional_error=max(abs(a-b) for a,b in zip(pulled,original))
-    root_src=max(abs(v) for v in src)
+    # src is a dictionary indexed by SOURCE equation number. Iterate
+    # its VALUES: iterating the dictionary itself returns indices 0..32
+    # and incorrectly reports a maximum raw residual of exactly 32.
+    root_src=max(abs(v) for v in src.values())
     root_normalized=max(abs(v) for v in pulled)
     worst_raw=sorted((
         {"source_row":i, "python_row":SOURCE_TO_PY[i],
@@ -142,6 +145,11 @@ def main():
             "Transcription and Python rows disagree at h*")
     require(root_normalized < 1e-8,
             "Normalized SOURCE-shaped candidate is not a numerical root")
+    require(root_src < 1e-8,
+            "Raw SOURCE-shaped residual is not a numerical root")
+    require(abs(root_src - max(row["absolute_raw_residual"]
+                            for row in worst_raw)) < 1e-30,
+            "Source-shaped residual report disagrees with the raw values")
 
     w = list(z)+[h]
     S = engine.numerical_jacobian(
