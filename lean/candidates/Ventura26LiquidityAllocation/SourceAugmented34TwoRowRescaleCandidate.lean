@@ -38,7 +38,7 @@ theorem source34TwoRowRescale_inverse
       simp [source34TwoRowRescale, hk5]
     · by_cases h21 : row = (21 : Fin 33)
       · subst row
-        simp [source34TwoRowRescale]
+        simp [source34TwoRowRescale, hk21]
       · simp [source34TwoRowRescale, h5, h21]
   · rfl
 
