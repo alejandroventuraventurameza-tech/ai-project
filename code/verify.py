@@ -476,6 +476,13 @@ if __name__ == "__main__":
                     str(HERE / "irf" / "audit_source_dateone_p0_operational_wiring.py")],
                    check=True)
 
+    # The literal 33-coordinate SOURCE stationary reference must retain
+    # the same ordering as the ORIGINAL Python frozen predecessor.
+    # This is an anchored provenance check, not SOURCE/Python parity.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "audit_fully_pinned_source_python_reference.py")],
+                   check=True)
+
     # EXACT rational bound on decimal P0 coefficient conversion to
     # binary64 over a six-state log cube. Does not cover arithmetic
     # rounding in matvec, exp/log or SOURCE economic semantic identity.
