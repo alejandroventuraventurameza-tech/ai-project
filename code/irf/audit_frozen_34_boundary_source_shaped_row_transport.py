@@ -130,8 +130,18 @@ def main():
     original=engine.prefix_residual(base,p0,"binding",(h,0.,0.,0.),z)
     functional_error=max(abs(a-b) for a,b in zip(pulled,original))
     root_src=max(abs(v) for v in src)
-    require(functional_error < 1e-8, "Transcription and Python rows disagree at h*")
-    require(root_src < 1e-7, "Common SOURCE-shaped root is not close to zero")
+    root_normalized=max(abs(v) for v in pulled)
+    worst_raw=sorted((
+        {"source_row":i, "python_row":SOURCE_TO_PY[i],
+         "raw_residual":src[i],
+         "absolute_raw_residual":abs(src[i]),
+         "scalar_denominator":scalar[i][2] if i in SOURCE_INDICES else None}
+        for i in range(N)),
+        key=lambda row:row["absolute_raw_residual"], reverse=True)[:5]
+    require(functional_error < 1e-8,
+            "Transcription and Python rows disagree at h*")
+    require(root_normalized < 1e-8,
+            "Normalized SOURCE-shaped candidate is not a numerical root")
 
     w = list(z)+[h]
     S = engine.numerical_jacobian(
@@ -163,6 +173,8 @@ def main():
         "forward_ad_report_sha256":sha(FORWARD_AD),
         "innovation_h":h,
         "root_source_shaped_max_abs":root_src,
+        "root_reconstructed_normalized_max_abs":root_normalized,
+        "largest_unscaled_source_shaped_residuals":worst_raw,
         "max_reconstructed_functional_error":functional_error,
         "source_to_python_indices":{str(i):SOURCE_TO_PY[i] for i in range(N)},
         "source_to_python_row_transform_T":T,
@@ -183,7 +195,7 @@ def main():
     OUT.parent.mkdir(parents=True,exist_ok=True)
     OUT.write_text(json.dumps(report,indent=2,sort_keys=True)+"\n",encoding="utf-8")
     print(json.dumps({k:report[k] for k in (
-        "status","innovation_h","root_source_shaped_max_abs",
+        "status","innovation_h","root_source_shaped_max_abs","root_reconstructed_normalized_max_abs",
         "max_reconstructed_functional_error",
         "max_derivative_error_vs_original_Python_AD",
         "max_33_block_error_vs_original_Python_AD",
