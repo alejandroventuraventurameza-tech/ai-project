@@ -313,7 +313,7 @@ Even a certified SOURCE local inverse would establish a **local
 not automatically a full dynamic competitive equilibrium. This
 firewall must remain explicit in both the paper and presentation.
 
-## 3f. Formal Schur-to-reduced-sign bridges — pending CI
+## 3f. Schur-to-reduced-sign bridges — historical pre-audit status
 
 The next four candidate modules are now on the review branch:
 
@@ -357,6 +357,51 @@ The separately source-verified
 also shows that `LocalScalarImplicitReduction` lacks the
 basepoint's scalar funding-dual zero. Even a proven derivative
 and nonzero Schur scalar cannot substitute for this root.
+
+## 3g. Verified status of CRRA, chain rule, linearized multiplier, and sign gate
+
+At exact candidate SHA `0aca77066991b8727d47b701a992a3e14ffd513a`,
+[GitHub Actions #43578845239](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43578845239)
+completed **successfully**. Independently inspected its
+`lean-candidate-audit-logs` ZIP, digest
+`sha256:17a863262215b1093b78c13517d3b428a08a0b0f3b3dd5c5089d577df5cdc346`.
+The following declarations compiled and their `#print axioms`
+each lists exactly `[propext, Classical.choice, Quot.sound]`:
+
+- `sourceFundingDual_differentiableAt_positive_log`:
+  genuine SOURCE L financing dual is differentiable at all finite
+  log-coordinate vectors when the chart base is positive.
+- `sourceReducedFundingDual_differentiableAt_of_solutionLog` and
+  `sourceReducedFundingDual_fderiv_chain`: the SOURCE reduced
+  funding dual is differentiable and has the exact Fréchet chain
+  derivative when `solutionLog` is differentiable.
+- `sourceAugmented34_linearizedDual_identity` and
+  `sourceAugmented34_actualJacobian_bijective_iff_linearizedDual_ne`:
+  conditional SOURCE identification of Schur with the genuine
+  linearized dual response.
+- `sourceReducedFundingDual_sourceRateDirection_negative` and
+  `sourceAugmented34_jacobian_bijective_of_reducedRateSign`:
+  conditional sign/rank transfer consuming the strict sign
+  ALREADY ASSUMED in `LocalScalarImplicitReduction`.
+- `sourceBindingRawL_eq_face_minus_pledge`,
+  `sourceBindingNormalizedSlackL_eq_one_minus_pledge_ratio`,
+  `sourceBindingNormalizedSlackL_eq_neg_raw_div_pledge`, and
+  `sourceBindingNormalizedSlackL_zero_iff_rawL_zero`: original
+  economic binding-L residual and normalized SOURCE row have
+  identical zeros when the pledge denominator is nonzero.
+- `sourceFundingDual_invariant_under_initialPolicyIntervention` and
+  `sourceFundingDual_reserveRemunerationSlice_policy_neutral`:
+  no *direct* primitive-level change in L funding-dual at fixed
+  endogenous coordinates, even though equilibrium coordinates
+  respond to policy.
+
+The earlier candidate status under section 3f refers to runs PRIOR
+to this verified SHA; those specific declarations are now
+**DEMOSTRADO EN LEAN CON HIPOTESIS**, not placeholders. Theorems
+`SourceBindingSlackRowFrechetCandidate.lean` and
+`SourceBinding33Row5RankTransportCandidate.lean` added at later SHAs
+remain **PENDIENTE** of their own CI results. Neither the sign
+assumption nor economic A-invertibility/root is thereby proven.
 
 ## 4. Numerically auditable SOURCE certificate
 
