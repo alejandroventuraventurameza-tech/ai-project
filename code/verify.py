@@ -402,6 +402,13 @@ if __name__ == "__main__":
                     str(HERE / "irf" / "audit_frozen_34_boundary_source_shaped_row_transport.py")],
                    check=True)
 
+    # Verify every one of 33 SOURCE economic row labels, the original
+    # Python output-row names, and the exact six nontrivial Lean index
+    # moves. Row-order agreement is NOT economic function equality.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "audit_source_python_33_index_contract.py")],
+                   check=True)
+
     # Cross-baseline SOURCE/Python provenance: no phantom economic Jacobian inverse.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_jacobian_cross_baseline_firewall.py")], check=True)
 
