@@ -142,10 +142,12 @@ theorem sourceCanonicalLogBinding_row5_fderiv_eq_raw_div_pledge
   have hslackroot :
       localBindingResidualWithSlack P I Z0 dateOne recurrent tail
         (reserveRemunerationSlice 0 h) zstar (5 : Fin 33) = 0 := by
-    rw [hmodfun]
-    exact (sourceBindingNormalizedSlackL_zero_iff_rawL_zero
-      (sourceReserveSlicePrimitives P h) I
-      (localPrefixLogChart Z0 zstar) dateOne recurrent tail hne).mpr hroot
+    have heval := congrArg
+      (fun f : (Fin 33 → ℝ) → ℝ => f zstar) hmodfun
+    exact heval.trans
+      ((sourceBindingNormalizedSlackL_zero_iff_rawL_zero
+        (sourceReserveSlicePrimitives P h) I
+        (localPrefixLogChart Z0 zstar) dateOne recurrent tail hne).mpr hroot)
   have hlog := sourceCanonicalLogBinding_row5_fderiv_eq_neg_slack
     P I Z0 dateOne recurrent tail zstar h hslack hslackroot
   rw [hmodfun] at hlog
