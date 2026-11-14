@@ -173,6 +173,13 @@ jobs:
           path: code/irf/output/frozen_python_33_jacobian_float_diagnostic.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve exact rational P0 binary coefficient conversion bounds
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-p0-exact-decimal-binary64-conversion
+          path: code/irf/output/source_p0_exact_decimal_binary_conversion_bounds.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve finite SOURCE-shaped P0 tail structural contract
         uses: actions/upload-artifact@v7
         with:
