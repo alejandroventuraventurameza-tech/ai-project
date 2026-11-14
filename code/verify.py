@@ -398,6 +398,13 @@ if __name__ == "__main__":
     # Exact rational Neumann/Schur for rounded forward-AD 34x34 matrix,
     # compared entrywise with the previous independent FD rational gate.
     # Neither matrix is a directed enclosure of the true SOURCE derivative.
+    # Exact-fraction adversarial regression on all 512 corners of a
+    # simultaneous 2x2 A,b,c,d entrywise perturbation cube. This only
+    # verifies our conditional norm-bound implementation.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "test_schur_sign_perturbation_bound.py")],
+                   check=True)
+
     subprocess.run([sys.executable, "-B", "-X", "utf8",
                     str(HERE / "irf" / "audit_frozen_python_34_ad_rational_gate.py")],
                    check=True)
