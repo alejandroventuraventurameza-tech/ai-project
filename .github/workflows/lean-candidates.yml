@@ -182,6 +182,7 @@ jobs:
           import Ventura26LiquidityAllocation.SourceSixteenRowsFrozenP0CompositeCandidate
           import Ventura26LiquidityAllocation.SourceStationaryFrozenP0ConcreteOperatorCandidate
           import Ventura26LiquidityAllocation.SourceFullyPinnedStationaryP0OperatorCandidate
+          import Ventura26LiquidityAllocation.SourcePinnedDateTwoLogIndexP0Candidate
           import Ventura26LiquidityAllocation.SourceReduced33FrechetChartTransportCandidate
           import Ventura26LiquidityAllocation.SourceFundingDualExact33FreeCoordinatesCandidate
           import Ventura26LiquidityAllocation.SourceFundingDualScalarEliminationCandidate
@@ -320,6 +321,9 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.fullyPinnedStationarySOURCEZ0_positive
           #print axioms Ventura26LiquidityAllocation.fullyPinnedStationaryP0SOURCE_root_exists_iff
           #print axioms Ventura26LiquidityAllocation.fullyPinnedStationaryP0_tail_baseline
+          #print axioms Ventura26LiquidityAllocation.fullyPinnedSOURCE_dateTwoLogChart_exact
+          #print axioms Ventura26LiquidityAllocation.fullyPinnedSOURCE_dateOne_frozenP0_nextControls
+          #print axioms Ventura26LiquidityAllocation.fullyPinnedSOURCE_dateOne_eight_rows_with_P0
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_differentiableAt_iff
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_fderiv_first
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_fderiv_dual_zero
