@@ -430,6 +430,13 @@ if __name__ == "__main__":
                     str(HERE / "irf" / "audit_source_frozen_p0_lean_decimal_literals.py")],
                    check=True)
 
+    # Verify the original Python firm-L binding collateral AST
+    # against the four genuine SOURCE log-coordinate indices and
+    # its separately kernel-audited real-arithmetic row-5 lemma.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "audit_source_python_l_collateral_row5_ast.py")],
+                   check=True)
+
     # Cross-baseline SOURCE/Python provenance: no phantom economic Jacobian inverse.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_jacobian_cross_baseline_firewall.py")], check=True)
 
