@@ -379,6 +379,14 @@ if __name__ == "__main__":
                     str(HERE / "irf" / "audit_frozen_python_34_forward_ad.py")],
                    check=True)
 
+    # Validate original Python firm-L row5 against exact four-coordinate
+    # log formula, at the boundary and 12 nearby positive-chart probes.
+    # Separate SOURCE Lean theorem and source-code AST fingerprint
+    # are audited elsewhere. Float64 here is not directed rounding.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "audit_frozen_python_row5_exact_log_gradient.py")],
+                   check=True)
+
     # Exact rational Neumann inverse-defect and Schur sign for the DECIMAL-
     # ROUNDED numerical Python 34x34 matrix, not the SOURCE derivative.
     # The reported entrywise tolerance is conditional: still requires an
