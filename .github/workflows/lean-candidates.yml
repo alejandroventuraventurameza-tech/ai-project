@@ -165,6 +165,7 @@ jobs:
         run: |
           set -euo pipefail
           cat > CandidateAxioms.lean <<'LEAN'
+          import Ventura26LiquidityAllocation.SourceRow21LogQuotientDirectCandidate
           import Ventura26LiquidityAllocation.SourceAugmented34JacobianTransportCandidate
           import Ventura26LiquidityAllocation.SourceAugmented34TwoRowRescaleCandidate
           import Ventura26LiquidityAllocation.SourceRow21EconomicFrechetBridgeCandidate
@@ -245,6 +246,7 @@ jobs:
           import Ventura26LiquidityAllocation.DateZeroJointBindingSharedDualCandidate
           import Ventura26LiquidityAllocation.DateZeroBindingDualFreedomCandidate
           import Ventura26LiquidityAllocation.DateZeroBindingDualRepairCandidate
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source_row21_log_ratio_fderiv_at_positive_root
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34EconomicJacobian_bijective_iff_of_two_rows
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34TwoRowRescale_inverse
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34TwoRowRescale_comp_bijective_iff
