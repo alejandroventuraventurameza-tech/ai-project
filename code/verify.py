@@ -423,6 +423,13 @@ if __name__ == "__main__":
                     str(HERE / "irf" / "audit_source_p0_exact_binary_coefficient_bounds.py")],
                    check=True)
 
+    # Compare all 60 exact-real decimal P0 coefficients in the new
+    # SOURCE-typed Lean candidate with frozen P0 JSON. No float conversion;
+    # structural data fidelity is not an infinite-equilibrium proof.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "audit_source_frozen_p0_lean_decimal_literals.py")],
+                   check=True)
+
     # Cross-baseline SOURCE/Python provenance: no phantom economic Jacobian inverse.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_jacobian_cross_baseline_firewall.py")], check=True)
 
