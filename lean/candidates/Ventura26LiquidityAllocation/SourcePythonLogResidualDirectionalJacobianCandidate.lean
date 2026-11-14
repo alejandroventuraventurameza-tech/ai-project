@@ -119,7 +119,7 @@ zero directional derivative at the common economic root. -/
 theorem sourceLevelAndLog_derivative_zero_iff
     (B x delta : ℝ) (hBpos : 0 < B) :
     (delta / B = 0) ↔ (delta = 0) := by
-  exact div_eq_zero_iff (ne_of_gt hBpos)
+  simp [ne_of_gt hBpos]
 
 #print axioms sourceLevelAndLog_derivative_zero_iff
 
