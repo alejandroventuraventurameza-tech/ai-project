@@ -601,3 +601,71 @@ The future existence certificate must identify all 33 original
 economic rows, including normalizations and different inherited
 states, and derive a true real SOURCE Jacobian enclosure. A
 Python fixed-policy approximate root is not that theorem.
+
+## 14. Compiler correction, exact bank-factor bridge and reserve-rule target audit
+
+The previous derivative/Jacobian CI results were NOT green:
+[Lean #43653814882](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43653814882)
+and
+[Lean #43653901680](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43653901680)
+failed to compile `SourcePythonLogResidualDirectionalJacobianCandidate.lean`.
+The exact Lean errors were `No goals to be solved` on lines 64 and
+109 (a redundant `ring` after `field_simp` already closed each
+goal). An earlier candidate also used an invalid
+`div_eq_zero_iff (ne_of_gt hBpos)` application; that was corrected
+to `simp [ne_of_gt hBpos]` in commit
+`dda884e0518e5b7a96b1bd4be61261f75a589b23`.
+
+**Corrective commit**
+`b526c190d4527db3b97ffd82638526c4f604f24a`
+deletes the two redundant tactic steps while keeping the real
+calculus theorem statements unchanged. Re-audit is
+[Lean #43654792794](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43654792794).
+The new six-row rank and bank-calibration modules are downstream of
+this derivative module: they MUST NOT be declared Lean-verified until
+the corrected dependency compiles and their own proofs pass.
+
+**New exact SOURCE policy-rule bridge.**
+`SourceReserveRulesLogRatioBridgeCandidate.lean`
+(commit `a89cabbca1a6c9e6959138918f75140cfabca5c1`)
+proposes three exact identities on the strictly positive chart:
+
+```text
+log a - b = log(a / exp b)             for a > 0
+SOURCE reserve-rate row 6 =
+  log(currentReserveRate / exp(SOURCE reserve-rate LOG target))
+SOURCE reserve-quantity row 7 =
+  log(currentReservesPre / exp(SOURCE reserve-quantity LOG target))
+```
+
+Both equations are OFF ROOT and are derived from the ACTUAL
+`localReducedRemainingResidual`, not from a Python surrogate.
+The companion original-Python calls
+`remaining_residuals[6]=log(next_state[5]/aux['rr'])` and
+`remaining_residuals[7]=log(next_state[6]/aux['money'])`
+can only be promoted to SOURCE identities once the calibrated
+`aux` target objects and original SOURCE state/calendar are
+identified exactly. The separate pinned Lean audit for the SOURCE
+identities is
+[Lean #43654879840](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43654879840).
+
+**New original-Python policy-target diagnostic.**
+`code/irf/audit_source_python_reserve_rule_log_targets.py`
+(commit `105af21c3d3e9923e86d8d32f726f560b9ffa0f3`)
+checks the source text and AST anchors of both genuine policy rows,
+then exercises the original binary64 Python `auxiliary` and
+`remaining_residuals` functions on multiple interventions and
+off-root log-chart points at both dates. The test is wired through
+`code/verify.py` and its JSON is an explicit build artifact
+as of commit
+`1849225c2056a63fe0c4ef8155e365f51087dba7`.
+It **does not** evaluate Lean real terms in Python, prove full
+SOURCE/Python identity, certify an interval enclosure, establish an
+actual SOURCE root, or prove an infinite dynamic equilibrium.
+
+**Evidence status at note writing:** correction, new SOURCE policy
+proof, and Python policy diagnostic were COMMITTED and CI was
+SUBMITTED. A green Python build does not imply green Lean proofs.
+The scientific next gate remains complete zero-set/Jacobian transport
+for all original 33 rows, using identical positive data and a
+certified same-operator real derivative enclosure.
