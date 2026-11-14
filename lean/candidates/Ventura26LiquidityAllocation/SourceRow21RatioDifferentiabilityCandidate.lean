@@ -25,7 +25,9 @@ theorem source_row21_log_ratio_fderiv_of_constituent_regularities
     fderiv ℝ (fun y => Real.log (J y / V y)) x =
       (V x)⁻¹ • (fderiv ℝ J x - fderiv ℝ V x) := by
   have hratio : DifferentiableAt ℝ (fun y => J y / V y) x :=
-    hJ.div hV (ne_of_gt hpositive)
+    by
+      simpa only [div_eq_mul_inv] using
+        hJ.mul (hV.inv (ne_of_gt hpositive))
   exact source_row21_log_ratio_fderiv_of_ratio_derivative
     J V x hpositive hroot hratio hratio_deriv
 
