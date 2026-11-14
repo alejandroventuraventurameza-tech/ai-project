@@ -108,7 +108,6 @@ theorem sourceStateSix_logDeviation_on_chart
       (localPrefixStateSixVector x0 j * Real.exp (z j)) /
         localPrefixStateSixVector x0 j = Real.exp (z j) := by
     field_simp [hne]
-    ring
   rw [hratio, Real.log_exp]
 
 #print axioms sourceStateSix_logDeviation_on_chart
@@ -189,7 +188,6 @@ theorem sourceLogLinearContinuation_exact_log_response
         localPrefixControlsTenVector u0 j =
       Real.exp (∑ k : Fin 6, C j k * z k) := by
     field_simp [hne]
-    ring
   rw [hratio, Real.log_exp]
 
 #print axioms sourceLogLinearContinuation_exact_log_response
