@@ -237,6 +237,7 @@ jobs:
             code/irf/output/frozen_frontier_source_dual_scalar_root_bracket.json
             code/irf/output/frozen_python_34_analytic_dual_elimination_diagnostic.json
             code/irf/output/frozen_python_reduced33_dual_eliminated_search.json
+            code/irf/output/frozen_python_reduced33_ad_rational_gate.json
             code/irf/output/frozen_python_frontier_source_shaped_row_transport.json
           if-no-files-found: error
           retention-days: 30
