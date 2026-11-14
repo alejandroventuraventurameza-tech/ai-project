@@ -435,6 +435,13 @@ if __name__ == "__main__":
                     str(HERE / "irf" / "search_frozen_python_reduced33_dual_eliminated.py")],
                    check=True)
 
+    # Derive the 33x33 reduced Jacobian by forward AD and the analytic
+    # z15 chain rule. Certify Neumann bounds for its rationalized PYTHON
+    # matrix only; true SOURCE 33-derivative validation remains open.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "audit_frozen_python_reduced33_ad_rational_gate.py")],
+                   check=True)
+
     # At the actual 34-equation Python boundary, test the conditional
     # SOURCE-shaped 8+16+9 residual partition and T-row transformation
     # against the independently forward-differentiated original Python map.
