@@ -116,3 +116,32 @@ coefficient comparisons in Python; `NUMERICO` to h*, forward AD
 and Python finite-prefix roots; `PENDIENTE` to functional
 SOURCE-Python equality, exact SOURCE root, economic Jacobian and
 full equilibrium.
+
+
+## 6. New independent gates submitted after this checkpoint
+
+- The pinned Lean workflow now explicitly imports
+  `SourceFrozenP0ExactDecimalTailCandidate` and
+  `SourceCanonical34Row5ActualFrechetCandidate`, printing axiom
+  dependencies for **seven specified economic claims** in its
+  `CandidateAxioms.lean` audit. Any detected `sorryAx` in these
+  declarations causes the pinned CI to fail. Added in commit
+  `a9b75b5687367df44e4cbd46bc7bb400fab15d43`.
+  Status: **PENDIENTE until terminal successful run**.
+- The original Python `audit_frozen_34_boundary_source_shaped_row_transport.py`
+  now probes the NONLINEAR source-shaped/Python transcription at **70**
+  nearby 34-dimensional coordinate perturbations
+  (68 signed coordinate moves + 2 combined movements), while fixing
+  inherited `X0` and recomputing the nonlinear scalar
+  normalizations and Euler shears at every probe.
+  This is a local **NUMERICAL** check of the Python implementation,
+  NOT the original SOURCE Lean operator. Submitted in commit
+  `43996fe1d8122f0e4463ef2eea9646c32c11b552`;
+  [build #43592139342](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43592139342).
+  Status: **PENDIENTE until terminal success and logged discrepancy**.
+- The exact SOURCE typed data check of all 60 P0 coefficients **PASSED**
+  in the job `Run code/verify.py` of
+  [build #43591905778](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43591905778);
+  it reported `exact_decimal_matches=60` and
+  `first_six_p0_rows_are_identity=true`. This is a data
+  certificate, not a Lean theorem or a true policy continuation.
