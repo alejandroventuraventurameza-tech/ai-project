@@ -77,6 +77,37 @@ invertible. This particular Schur route is a sufficient certificate
 *strategy* and a biconditional conditional on A invertible, not a
 necessary prerequisite for every possible full-rank J.
 
+## 3a. Link to the actual reduced policy multiplier in EconomicModel
+
+`EconomicModel.lean` already defines
+`localScalarReducedMap P Z0 solutionLog y` as
+`localNormalizedCollateralDualL P (localPrefixLogChart Z0 (solutionLog y))`.
+The five-dimensional intervention coordinate
+`localScalarReserveRateDirection` selects the remuneration innovation,
+while `LocalScalarImplicitReduction` contains the **assumed** strict
+inequality
+
+    (fderiv Real (localScalarReducedMap ...) 0)
+      localScalarReserveRateDirection < 0.
+
+Provided the exact augmented SOURCE 33-row equation `B(z,h)=0`
+coincides with the appropriate slice of the five-dimensional reduced
+system and the verified local solution map is differentiable, the chain
+rule together with the implicit derivative yields
+
+    D_h M(0) = c'(-A^{-1}b) = s.
+
+Therefore a *verified* strict negativity of `D_h M(0)` would imply
+`s < 0` and certify the nonzero Schur gate when A is already certified
+invertible. The existing `LocalScalarImplicitReduction` includes this
+strict derivative sign only as part of a PROP/PREMISE, not as an
+independently numerically proven theorem. Do not report it as achieved.
+
+The exact identification of the policy slice, normalization,
+economic derivative and inverse is the next SOURCE bridge to construct.
+This equivalence is independent of the Euler-shear preservation of
+33-row invertibility; the two statements have different logical roles.
+
 ## 4. Numerically auditable SOURCE certificate
 
 An eventual rigorous inverse check must evaluate and enclose the
