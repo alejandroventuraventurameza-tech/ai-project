@@ -3,17 +3,46 @@ import Ventura26LiquidityAllocation.SourceEulerLogEconomicFrechetCandidate
 /-!
 # Complete SOURCE Euler shear: all 33 Frechet derivative rows
 
-This candidate works on the genuine SOURCE residuals and the original
-positive log chart. Regularity is an explicit input, not inferred.
-The proposition is rowwise for all 33 actual economic equation labels.
-It does not assert invertibility of the economic Jacobian.
+All rows are the genuine economic SOURCE rows on the original
+positive logarithmic chart. The original residual derivatives and
+the two coefficient derivatives are explicit hypotheses.
+
+The SOURCE row shear on scalar residuals has to be lifted to
+continuous linear maps before it can act on Frechet derivatives.
+This module does not assume that the economic Jacobian is invertible.
 -/
 
 namespace Ventura26LiquidityAllocation
 
-/-- The genuine SOURCE 33-row economic Frechet derivatives after the
-double Euler shear are the SOURCE rowmap of the original derivatives,
-at any point where the common pledge residual vanishes. -/
+/-- Lift the actual economic SOURCE double row shear from real residual
+values to continuous linear derivative rows at a fixed point. -/
+noncomputable def sourceEulerRowsFrechetForward
+    (aH aL : ℝ)
+    (dF : LocalPrefixEquation → (Fin 33 → ℝ) →L[ℝ] ℝ) :
+    LocalPrefixEquation → (Fin 33 → ℝ) →L[ℝ] ℝ :=
+  fun row => match row with
+  | .firmCapitalEulerOneH =>
+      dF .firmCapitalEulerOneH + aH • dF .commonPledgeOne
+  | .firmCapitalEulerOneL =>
+      dF .firmCapitalEulerOneL + aL • dF .commonPledgeOne
+  | _ => dF row
+
+/-- Pointwise compatibility: applying each Frechet row to a direction
+agrees with the earlier, already verified scalar SOURCE row shear. -/
+theorem sourceEulerRowsFrechetForward_apply
+    (aH aL : ℝ)
+    (dF : LocalPrefixEquation → (Fin 33 → ℝ) →L[ℝ] ℝ)
+    (h : Fin 33 → ℝ) (row : LocalPrefixEquation) :
+    sourceEulerRowsFrechetForward aH aL dF row h =
+      sourceEulerRowsForward aH aL (fun r => dF r h) row := by
+  cases row <;>
+    simp [sourceEulerRowsFrechetForward, sourceEulerRowsForward, smul_eq_mul]
+
+#print axioms sourceEulerRowsFrechetForward_apply
+
+/-- The genuine 33-row sheared residual has the Frechet derivative
+given by the fixed-at-the-root SOURCE row shear of the original
+economic derivative rows. Every SOURCE row is included. -/
 theorem sourceNominalPledgeShearedLog_all_rows_hasFDerivAt
     (branch : LocalPrefixBranch)
     (P : Primitives LocalBridgePhase) (I : InheritedState)
@@ -43,7 +72,7 @@ theorem sourceNominalPledgeShearedLog_all_rows_hasFDerivAt
       HasFDerivAt
         (fun z => sourceNominalPledgeShearedResidual branch P I
           (localPrefixLogChart Z0 z) dateOne recurrent tail eqn)
-        (sourceEulerRowsForward
+        (sourceEulerRowsFrechetForward
           (sourceDateOneEulerShearCoefficient P
             (localPrefixLogChart Z0 zstar) dateOne recurrent tail .H)
           (sourceDateOneEulerShearCoefficient P
@@ -66,7 +95,9 @@ theorem sourceNominalPledgeShearedLog_all_rows_hasFDerivAt
       (sourceNominalPledgeShearedResidual_eq_linear_rowmap
         branch P I (localPrefixLogChart Z0 z) dateOne recurrent tail) eqn
   rw [hrow]
-  cases eqn <;> simp only [sourceEulerRowsForward] <;> try { exact hF _ }
+  cases eqn <;>
+    simp only [sourceEulerRowsForward, sourceEulerRowsFrechetForward] <;>
+    try { exact hF _ }
   · exact sourceShear_hasFDerivAt_at_pledge_zero
       (fun z => localReducedPrefixResidual branch P I
         (localPrefixLogChart Z0 z) dateOne recurrent tail .firmCapitalEulerOneH)
