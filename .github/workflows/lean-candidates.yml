@@ -187,6 +187,7 @@ jobs:
           import Ventura26LiquidityAllocation.SourcePythonLogResidualDirectionalJacobianCandidate
           import Ventura26LiquidityAllocation.SourceSixLogRowJacobianRankTransportCandidate
           import Ventura26LiquidityAllocation.SourceConcreteBankRenewalCalibrationCandidate
+          import Ventura26LiquidityAllocation.SourceReserveRulesLogRatioBridgeCandidate
           import Ventura26LiquidityAllocation.SourceReduced33FrechetChartTransportCandidate
           import Ventura26LiquidityAllocation.SourceFundingDualExact33FreeCoordinatesCandidate
           import Ventura26LiquidityAllocation.SourceFundingDualScalarEliminationCandidate
@@ -343,6 +344,9 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.concreteSOURCE_bankRenewalFactor_eq_inverse_loanRate
           #print axioms Ventura26LiquidityAllocation.concreteSOURCE_bankFaceLog_zero_iff_original_row
           #print axioms Ventura26LiquidityAllocation.concreteSOURCE_workerLabor_parameters
+          #print axioms Ventura26LiquidityAllocation.sourceLogPolicyDeviation_eq_logRatio
+          #print axioms Ventura26LiquidityAllocation.sourceReserveRateRule_actual_logRatio
+          #print axioms Ventura26LiquidityAllocation.sourceReserveQuantityRule_actual_logRatio
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_differentiableAt_iff
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_fderiv_first
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_fderiv_dual_zero
