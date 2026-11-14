@@ -78,3 +78,47 @@ Reproducibility: the successful Python verifier generated
 code/irf/output/frozen_frontier_source_dual_rational_interval.json,
 which is retained in the build artifact named
 frozen-python-34-boundary-and-rational-sign.
+
+
+## Exact-rational single-row zero bracket (reproducible new result)
+
+A second auditor, code/irf/audit_frozen_frontier_source_dual_scalar_root.py,
+was executed successfully in build
+https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43637042030
+at SHA b5c3d3498522f3b09b83563faf2c7f5f42b8462f.
+
+Keeping the OTHER three funding-dual log coordinates exactly at their
+binary64-as-rational Python frontier values, change ONLY z15. The
+strict exact-rational Taylor/rate endpoint signs prove that the
+stationary sigmaE=1 SOURCE-formula scalar
+
+    g(t) = exp(-t)/R0 - (24/25)*exp(z8-z24-z28)
+
+has one and only one real zero with offset
+
+    8.8867187500000e-11 < t-z15 < 8.9843750000000e-11.
+
+The rational bracket width is exactly 9.765625e-13. The 13 exact
+interval evaluations in GitHub Actions checked that the lower
+endpoint residual is strictly positive and the upper endpoint is
+strictly negative, and retained exact Fraction sign witnesses.
+Continuity and strict negativity of
+g'(t) = -exp(-t)/R0 (for positive R0) imply unique scalar zero.
+
+Proof-status firewall:
+- DEMOSTRADO BY EXACT RATIONAL SIGN ENCLOSURES: one zero of this
+  analytic *scalar formula* at pinned numerical input coordinates.
+- PENDIENTE: same-coordinate identification of the scalar numerical
+  values with an exact Lean SOURCE parameter instance and all of its
+  other 33 equations, an actual SOURCE 34-equation root, a uniform
+  derivative enclosure and complete KKT/equilibrium validity.
+- Candidate Lean theorem
+  sourceFundingDual_scalar_zero_by_adjusting_log_loan_rate shows a
+  formal one-coordinate existential zero at positive stationary
+  SOURCE parameters, but must not be marked DEMOSTRADO until its
+  dedicated Lean CI run succeeds with an axiom audit.
+- Changing z15 alone generally destroys other SOURCE equalities,
+  so this is NOT a root of the economic 34-vector.
+
+These results together isolate the financial scalar obstruction,
+rather than closing the SOURCE system.
