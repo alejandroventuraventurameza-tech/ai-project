@@ -95,9 +95,13 @@ class Dual:
     def __pow__(self, power):
         if isinstance(power, Dual):
             return (power*self.log()).exp()
-        require(self.value > 0 or
-                (self.value == 0 and isinstance(power, (int,float))
-                 and power >= 2), "Power outside smooth positive domain")
+        if power == 0:
+            return Dual(1.0, (0.0,) * DIM)
+        if self.value <= 0:
+            require(isinstance(power, (int,float))
+                    and float(power).is_integer()
+                    and (self.value != 0 or power > 0),
+                    "Noninteger power outside smooth positive domain")
         value = self.value ** power
         derivative = power * self.value ** (power-1)
         return Dual(value, (derivative*a for a in self.grad))
