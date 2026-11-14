@@ -29,6 +29,49 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def conditional_schur_sign_enclosure(q33, c33norm, n, c, u, residual_norm,
+                                     schur_center, eps):
+    """Exact-rational *conditional* perturbation enclosure.
+
+    Let a hypothetical real 34x34 Jacobian H be within eps ENTRYWISE of
+    the rationalized forward-AD matrix Jq, in the same output ordering
+    and coordinates. Its 33x33 block A differs from Aq by at most n*eps
+    in infinity operator norm, its forcing b by at most eps in infinity
+    norm, and its funding gradient c by at most n*eps in one-norm.
+    Even allowing an arbitrary |H[33,33]| <= eps, the true Schur
+    complement H[33,33] - c*(A^-1*b) is strictly negative whenever the
+    returned rational upper bound is negative.
+
+    This proves ONLY a perturbation implication. It does not certify
+    the required entrywise distance from SOURCE, or that the real
+    SOURCE Jacobian is evaluated in these Python coordinates.
+    """
+    require(eps >= 0, "Negative perturbation radius")
+    require(q33 >= 0 and c33norm > 0 and q33 < 1,
+            "Noninvertible rational reference A")
+    defect = q33 + c33norm*n*eps
+    require(defect < 1, "Perturbed 33-block not Neumann certified")
+    inverse_norm_bound = c33norm/(1-defect)
+    u_inf = max(abs(t) for t in u)
+    c_one = sum(abs(t) for t in c)
+    tangent_residual_bound = residual_norm + eps*(n*u_inf+1)
+    tangent_error = inverse_norm_bound*tangent_residual_bound
+    # |c_true u_true - c_ref u_ref|
+    # <= ||c_ref||_1 ||u_true-u_ref||_inf
+    #    + ||c_true-c_ref||_1 ||u_true||_inf.
+    # The final eps encloses the true last-row policy derivative.
+    schur_error = (c_one*tangent_error
+                   + n*eps*(u_inf+tangent_error) + eps)
+    return {
+        "33_defect_upper": defect,
+        "33_inverse_norm_upper": inverse_norm_bound,
+        "tangent_residual_upper": tangent_residual_bound,
+        "tangent_error_upper": tangent_error,
+        "schur_lower": schur_center-schur_error,
+        "schur_upper": schur_center+schur_error,
+    }
+
+
 def main():
     require(all(path.is_file() for path in (AD, FD_BASE, FD_GATE)),
             "Regenerate AD/FD boundary and previous rational gate first")
@@ -76,6 +119,31 @@ def main():
     eps = min(eps33, eps34)
     require(eps > 0, "No uniform rational entrywise tolerance")
 
+    # The old eps certifies only 33/34 Neumann invertibility for a
+    # hypothetical Jacobian within eps entrywise of rounded forward AD.
+    # Add a separate exact-rational STRONGER radius that additionally
+    # encloses the sign of the *actual* Schur scalar of such a matrix.
+    # This includes a possibly nonzero (34,34) coefficient, bounded
+    # by eps, and perturbations of A,b,c simultaneously.
+    sign_eps = eps
+    sign_gate = None
+    for _ in range(256):
+        require(q34 + n34*FULL*sign_eps < 1,
+                "Full 34x34 Neumann budget was lost")
+        candidate = conditional_schur_sign_enclosure(
+            q33, n33, N, cq, u, rn, s, sign_eps)
+        if candidate["schur_upper"] < 0:
+            sign_gate = candidate
+            break
+        sign_eps /= 2
+    require(sign_gate is not None,
+            "Could not derive a strictly negative robust Schur gate")
+    require(sign_eps > 0 and sign_gate["schur_upper"] < 0,
+            "Incorrect rational robust Schur certificate")
+    require(sign_gate["33_defect_upper"] < 1
+            and q34 + n34*FULL*sign_eps < 1,
+            "Neumann test not strict at robust sign radius")
+
     # A second algebraically exact cross-comparison: rationalized
     # forward-AD matrix sits strictly within the independently certified
     # finite-difference *rounded* Jacobian perturbation budget.
@@ -113,6 +181,34 @@ def main():
         "rational_34_inverse_upper": str(K34),
         "conditional_34_entry_error_tolerance": str(eps),
         "conditional_34_entry_error_tolerance_float": float(eps),
+        "conditional_joint_inverse_and_negative_schur_entry_tolerance":
+            str(sign_eps),
+        "conditional_joint_inverse_and_negative_schur_entry_tolerance_float":
+            float(sign_eps),
+        "conditional_perturbed_33_neumann_defect_upper":
+            str(sign_gate["33_defect_upper"]),
+        "conditional_perturbed_34_neumann_defect_upper":
+            str(q34 + n34*FULL*sign_eps),
+        "conditional_perturbed_33_inverse_norm_upper":
+            str(sign_gate["33_inverse_norm_upper"]),
+        "conditional_perturbed_tangent_error_upper":
+            str(sign_gate["tangent_error_upper"]),
+        "conditional_perturbed_schur_lower":
+            str(sign_gate["schur_lower"]),
+        "conditional_perturbed_schur_upper":
+            str(sign_gate["schur_upper"]),
+        "conditional_perturbed_schur_lower_float":
+            float(sign_gate["schur_lower"]),
+        "conditional_perturbed_schur_upper_float":
+            float(sign_gate["schur_upper"]),
+        "conditional_neumann_and_schur_sign_uniformly_stable": True,
+        "conditional_hypothesis":
+            "Any real 34x34 matrix H in the SAME ORDERING and "
+            "COORDINATES as this rationalized forward-AD matrix, with "
+            "entrywise |H[i,j]-Jq[i,j]| <= the joint tolerance, "
+            "has invertible 33x33 and 34x34 blocks and a strictly "
+            "negative Schur complement. No true SOURCE enclosure "
+            "is provided by this script.",
         "AD_FD_rounded_max_entry_difference_exact": str(difference),
         "AD_FD_rounded_max_entry_difference_float": float(difference),
         "old_FD_entry_tolerance_exact": str(old_eps),
@@ -129,6 +225,11 @@ def main():
             "Forward AD eliminates finite-difference truncation, but still uses float64.",
             "An exact Neumann test of rounded AD coefficients is NOT a directed-rounding derivative certificate.",
             "Both matrices are evaluated at the frozen-predecessor Python boundary h*.",
+            "The new uniform entry radius preserves both invertibility and the "
+            "strict Schur sign for an unspecified real matrix in precisely the "
+            "same Jacobian coordinates as the rationalized Python AD matrix.",
+            "SOURCE-to-Python/normalized-row derivative conversion and the "
+            "genuine SOURCE entrywise enclosure are NOT established here.",
             "The actual SOURCE 34-row derivative and nonlinear root require separate proof.",
         ],
     }
@@ -138,6 +239,8 @@ def main():
         "status","approx_33_defect_float","approx_34_defect_float",
         "rational_schur_lower_float","rational_schur_upper_float",
         "conditional_34_entry_error_tolerance_float",
+        "conditional_joint_inverse_and_negative_schur_entry_tolerance_float",
+        "conditional_perturbed_schur_upper_float",
         "AD_FD_rounded_max_entry_difference_float",
     )}, indent=2))
 
