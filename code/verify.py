@@ -470,6 +470,12 @@ if __name__ == "__main__":
                     str(HERE / "irf" / "audit_source_python_p0_tail_structure.py")],
                    check=True)
 
+    # The ORIGINAL Python 33-row call chain must carry frozen P0 controls
+    # into date-one economics; this is not SOURCE economic equivalence.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "audit_source_dateone_p0_operational_wiring.py")],
+                   check=True)
+
     # EXACT rational bound on decimal P0 coefficient conversion to
     # binary64 over a six-state log cube. Does not cover arithmetic
     # rounding in matvec, exp/log or SOURCE economic semantic identity.
