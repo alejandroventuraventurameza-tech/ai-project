@@ -148,3 +148,35 @@ identities are all established for the exact functions and parameters.
   Nor do they prove an actual SOURCE root, a verified bounded inverse
   of its 34x34 derivative, the Schur transversality interval,
   nonlinear continuation or long-run growth effects.
+
+## Latest certified checkpoint: full Frechet factorization (2026-11-14)
+
+The row-21 tactic error documented above was corrected in commit
+`2695a401b64e70895567215006874b7ae8bf95f1`. Its
+[Lean candidate audit #43631356189](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43631356189)
+completed **SUCCESS**, and the precise `#print axioms` checks for
+
+- `source34_actual_full_fderiv_factorization_at_root`; and
+- `source34_actual_source_jacobian_bijective_iff_log_normalized`
+
+reported **only** `propext`, `Classical.choice`, and `Quot.sound`,
+with no `sorryAx`. This promotes the exact conditional identity
+
+`D G(w*) = P · diag(1, ..., -1 [source row 5], ...,
+  V2(w*)^-1 [source row 21], ..., 1) · D F(w*)`
+
+and its bijectivity biconditional to **DEMOSTRADO**, *conditional on*
+`F` and `G` differentiability, differentiability of the original
+L slack, `J2` and `V2` differentiability, `V2(w*)>0`, and a genuine
+`F(w*)=0` SOURCE root. The Python-style `P` here only reorders SOURCE
+equations; this is not a cross-language numerical identity.
+
+The follow-up `SourceAugmented34LogRegularityCandidate` seeks to
+derive `G` differentiability from the original `F` regularity
+and `J2,V2` regularity, rather than assuming it. The
+`SourceAugmented34MinimalRegularityRankCandidate` additionally derives
+the slack-row regularity directly from `F`; its audit is pending.
+`SourceAugmented34LogSchurTransportCandidate` is a pending direct
+connection to the genuine SOURCE 33+1 Schur-transversality gate,
+still conditional on an invertible economic 33-block. None supplies
+a numerical existence or inverse certificate.
