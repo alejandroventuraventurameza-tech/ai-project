@@ -23,6 +23,8 @@ actual A-invertibility, nonzero Schur scalar, existence or dynamics.
 namespace Ventura26LiquidityAllocation
 namespace ProposedLocalScalarAugmented34Source
 
+open ProposedLocalScalarEconomicSlice
+
 variable {S : Type*} [Fintype S] [DecidableEq S]
 
 private abbrev Economic33 := Fin 33 → ℝ
