@@ -141,7 +141,7 @@ theorem sourceCanonicalTwoPledgeLog34_eq_zero_iff_original_source_boundary
         (congrArg Prod.fst hz)
       exact (sourceCanonicalTwoPledgeLog34_row_zero_iff
         P I Z0 dateOne recurrent tail z h row hlevel hvaluation).mp heq
-    · exact congrArg Prod.snd hz
+    · simpa only [sourceCanonicalTwoPledgeLog34] using (congrArg Prod.snd hz)
   · intro hz
     have ho := hc.mpr hz
     apply Prod.ext
@@ -150,7 +150,7 @@ theorem sourceCanonicalTwoPledgeLog34_eq_zero_iff_original_source_boundary
         (congrArg Prod.fst ho)
       exact (sourceCanonicalTwoPledgeLog34_row_zero_iff
         P I Z0 dateOne recurrent tail z h row hlevel hvaluation).mpr heq
-    · exact congrArg Prod.snd ho
+    · simpa only [sourceCanonicalTwoPledgeLog34] using (congrArg Prod.snd ho)
 
 #print axioms sourceCanonicalTwoPledgeLog34_eq_zero_iff_original_source_boundary
 
