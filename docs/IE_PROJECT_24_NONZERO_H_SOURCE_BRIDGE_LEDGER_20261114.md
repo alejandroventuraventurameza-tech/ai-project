@@ -83,7 +83,7 @@ for date-two controls. Its new structural audit
 `code/verify.py` and upload-artifact, run from commit
 `68dd4f47448cd3000309403b5587a2f7f5a9ac58`:
 [build #43590089450](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43590089450).
-Treat its automated outcome as PENDING until verified.
+The pinned [build #43590089450](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43590089450) completed **SUCCESS** at the cited code SHA. The audit logged the exact-rational 6x6 identity and the following NUMERICAL Python results: maximum source-state log-chart error `1.0585878961605344e-16`, maximum ten-control log-response error `1.0007186052041206e-16`, and baseline controls error `0.0`. The report explicitly records `p0_full_equilibrium_continuation_proved=false`.
 
 IMPORTANT: exact decimal P0 strings and Python float64 numbers
 do not have identical real-number semantics. The correct long-run
