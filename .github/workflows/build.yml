@@ -215,6 +215,13 @@ jobs:
           path: code/irf/output/source_python_p0_tail_structure.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve original Python reserve-rule SOURCE-shaped log target audit
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-python-reserve-rule-log-targets
+          path: code/irf/output/source_python_reserve_rule_log_targets.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve numerical six-row directional Jacobian scale audit
         uses: actions/upload-artifact@v7
         with:
