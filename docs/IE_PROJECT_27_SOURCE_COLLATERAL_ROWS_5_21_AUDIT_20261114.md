@@ -87,7 +87,7 @@ index is also 21.
   face ratio in row 5, and positive level and future valuation
   in row 21. It makes **no** claim about derivative equality
   away from a root.
-- Candidate compiled under
+- Candidate submitted to
   [Lean #43593555252](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43593555252)
   and separate expanded axiom audit
   [Lean #43593665074](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43593665074):
