@@ -180,3 +180,47 @@ the slack-row regularity directly from `F`; its audit is pending.
 connection to the genuine SOURCE 33+1 Schur-transversality gate,
 still conditional on an invertible economic 33-block. None supplies
 a numerical existence or inverse certificate.
+
+## Certified SOURCE economic Schur gate (2026-11-14; current checkpoint)
+
+The candidate `SourceAugmented34LogRegularityCandidate.lean` has now
+passed pinned [Lean audit #43631567017](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43631567017)
+at SHA `96f79a9deec639b347ca9392a7793fc7defba105`.
+Its exact `#print axioms` reported `propext`, `Classical.choice`,
+`Quot.sound`, without `sorryAx`: differentiability of the SOURCE
+two-log-collateral residual is derived from original SOURCE 34-output
+differentiability, J2/V2 differentiability, a root and positive valuation.
+
+[Lean audit #43632109749](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43632109749)
+at SHA `6f8c03477143fec61d8db7ba255c222702a54151`
+completed **SUCCESS**. Both
+
+- `source34_actual_jacobian_bijective_iff_with_primitive_regularity`, and
+- `source34_twoPledge_log_jacobian_bijective_iff_source_schur`
+
+were axiom-audited with only those standard three axioms.
+
+Thus **DEMOSTRADO, CONDITIONALLY**: when the *genuine* augmented
+SOURCE 34 map has a boundary root, a positive J2/V2 valuation chart,
+the listed genuine SOURCE derivative hypotheses, and an invertible
+economic first-33-row block `A = D_z B`, the log-normalized 34
+Jacobian is bijective iff the actual SOURCE scalar
+`c(A^{-1}b)` is nonzero, with `b=D_h B`,
+`c=D_z(normalized L funding dual)`. The usual Schur complement is
+`s=-c(A^{-1}b)`, with the **same nonzero criterion**.
+Neither `A` invertibility nor `s != 0` has been numerically proven.
+
+A further theorem `SourceAugmented34LogLinearizedMultiplierCandidate`
+has been submitted for review to express the same gate directly in
+terms of a linearized SOURCE funding-dual response. Its exact
+audit status must be checked before promotion.
+
+**Next independent mathematical / numerical tasks:** (i) verify
+smoothness of the actual continuation `tail` on a fixed regime
+neighborhood, (ii) provide a genuine SOURCE boundary root and
+certified residual enclosure (not Python alone), (iii) certify the
+33x33 SOURCE block `A` inverse, (iv) enclose
+`s=-c A^{-1}b` away from zero, (v) verify local strict derivative
+hypotheses for IFT, and (vi) complete KKT, continuation, IRFs and
+long-run growth. The frozen Python boundary h* and source-shaped
+floating calculations remain `NUMERICO`, not a Lean SOURCE root.
