@@ -669,3 +669,53 @@ SUBMITTED. A green Python build does not imply green Lean proofs.
 The scientific next gate remains complete zero-set/Jacobian transport
 for all original 33 rows, using identical positive data and a
 certified same-operator real derivative enclosure.
+
+## 15. Actual SOURCE residual nonlinear conjugacy, OFF ROOT (new candidate)
+
+A major clarification beyond zero-set and at-root Jacobian
+equivalence: the three original SOURCE level/ratio residuals have
+exact **nonlinear** log normalizations at EVERY admissible chart point:
+
+```text
+SRC bank = A-B, B>0
+  -> Python-shaped bank = log(1 + SRC bank / B)
+SRC labor = w-W, W>0
+  -> Python-shaped labor = log(1 + SRC labor / W)
+SRC deposit Euler = 1 - A/B
+  -> Python-shaped Euler = log(1 - SRC deposit Euler).
+```
+
+The denominators `B`, `W` themselves vary with endogenous
+economic coordinates. Therefore a constant six-row matrix is NOT
+an off-root global equality between residual vectors. At a
+COMMON economic root, however, these exact expressions differentiate
+into the previously derived six diagonal row scales. On a full
+closed box, bounding those endogenous denominators and keeping
+all logarithm arguments positive are necessary interval-domain
+obligations.
+
+This off-root SOURCE reparameterization is the new Lean module
+`SourcePythonOffRootLogResidualReparameterizationCandidate.lean`,
+commit `07b32acf83359ea8ea9673a2b7a96aebe259f8c5`.
+It instantiates the true SOURCE
+`localReducedRemainingResidual` rows 0,3,4 and has five requested
+`#print axioms` checks in the pinned workflow, as of commit
+`304e3178c1e3ee95ccf3e868b4cce73b767ccdcd`.
+**Compiler status PENDING until run completes.**
+
+The previous exact SOURCE reserve-rule bridge similarly expresses
+rows 6/7 as actual log deviations from exponential policy targets.
+The original Python `auxiliary` uses the corresponding log rules,
+but their cross-language equality still needs explicit source data
+and parameter identification (plus numerical rounding control).
+The new Python audit is called
+`audit_source_python_reserve_rule_log_targets.py`,
+archived as
+`source_python_reserve_rule_log_targets.json` in build artifacts.
+No green run is presumed at this documentation checkpoint.
+
+**What remains open:** prove original SOURCE economic row
+correspondence, positivity and lower bounds over the 33-dimensional
+box, exact or rigorous-interval Jacobian transport at a common point,
+local true SOURCE existence and KKT, then global dynamic continuation.
+None of the new algebraic identities closes that sequence alone.
