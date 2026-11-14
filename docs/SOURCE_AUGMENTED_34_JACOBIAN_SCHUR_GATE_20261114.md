@@ -108,6 +108,56 @@ economic derivative and inverse is the next SOURCE bridge to construct.
 This equivalence is independent of the Euler-shear preservation of
 33-row invertibility; the two statements have different logical roles.
 
+## 3b. Exact sparse funding-dual gradient: four original SOURCE coordinates
+
+The literal source definition is
+
+    nu_L = 1/R^L_0
+           - beta_E * (c_L1^(-sigma_E)/c_L0^(-sigma_E))/Pi_1.
+
+In the SOURCE positive log chart, set
+
+    R(z) = Z0.controlsZero.loanRate * exp(z_15),
+    C0(z) = Z0.controlsZero.consumptionL * exp(z_8),
+    C1(z) = Z0.controlsOne.consumptionL * exp(z_24),
+    Pi(z) = Z0.controlsOne.inflation * exp(z_28),
+    G(z) = beta_E * C1(z)^(-sigma_E) / C0(z)^(-sigma_E) / Pi(z).
+
+Then nu_L(z) = 1/R(z) - G(z). Under strict positivity
+of those four economic levels, its partial derivatives are:
+
+    partial_8 nu_L  = -sigma_E * G(z),
+    partial_15 nu_L = -1 / R(z),
+    partial_24 nu_L = +sigma_E * G(z),
+    partial_28 nu_L = +G(z),
+    partial_j nu_L  = 0 for all other 29 SOURCE log indices j.
+
+No sign of G or sigma_E is inferred here without explicit primitive
+restrictions. The four coordinate indices are from the literal SOURCE
+`localPrefixCoordinatesVector` definition (not the distinct Python
+residual-row permutation). The equalities are mathematical
+differentiation identities; their explicit coefficients are not yet
+presented as kernel-certified derivative formulas.
+
+The zero-coordinate sparsity gives a practical **SOURCE-focused
+interval certificate**: writing w = A^{-1}b for the actual 33-row
+Jacobian system, the exact Schur scalar is
+
+    s = -c' w
+      = sigma_E * G * w_8 + (1/R) * w_15
+        - sigma_E * G * w_24 - G * w_28.
+
+Only four components of the rigorously enclosed *solution* w are
+needed in the final scalar contraction. This does **not** mean
+that the other 29 variables or residuals can be omitted from the
+33x33 solve: all equations contribute indirectly to w through A.
+
+SOURCE Lean proof milestones added for review:
+`SourceFundingDualFourLogCoordinatesCandidate.lean` and
+`SourceFundingDualPositiveLogRegularityCandidate.lean`; do not
+classify them as verified until the exact CI run and axiom audit
+are recorded.
+
 ## 4. Numerically auditable SOURCE certificate
 
 An eventual rigorous inverse check must evaluate and enclose the
