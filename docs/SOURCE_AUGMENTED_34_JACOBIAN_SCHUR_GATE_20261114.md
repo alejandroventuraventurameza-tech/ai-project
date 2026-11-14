@@ -211,6 +211,46 @@ independently verified. This regularity firewall prevents any claim
 that a vector-level derivative identity plus a synthetic 16x16
 transition stability check already proves the nonlinear equilibrium.
 
+## 3d. Exact audit of newly compiled SOURCE bridge modules
+
+At code SHA `7b9fe01b9223a8c54cbeace706026bfccc65528c`,
+the per-module logs in
+[Actions #43573491522](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43573491522)
+prove that:
+
+- `SourceAugmented34ActualFrechetBlockCandidate.lean` compiled with
+  `Build completed successfully (2169 jobs)`.
+  `sourceAugmented34Map_eq_pair`,
+  `sourceAugmented34Map_hasFDerivAt`,
+  `sourceAugmented34_linear_split`, and
+  `sourceAugmented34_actualJacobian_bijective_iff_schur`
+  each list precisely `[propext, Classical.choice, Quot.sound]`.
+  These are **SOURCE-level conditional mathematical proofs**, not a
+  certificate that its derivative block A is nonsingular.
+- `SourceFundingDualFourLogCoordinatesCandidate.lean` compiled with
+  `Build completed successfully (2140 jobs)`. Its three declarations
+  list the same three axioms, with no `sorryAx`.
+
+The *overall* Actions run #43573491522 ended in failure at the
+subsequent module
+`SourceFundingDualPositiveLogRegularityCandidate.lean`
+because the type of a constant function was not inferred.
+That error has been repaired at code SHA
+`0d9746c93baaddc0cb5d4dcc3dfd87e090a0fcf0`
+with an explicitly typed `Fin 33 -> Real` domain; proof/CI
+validation of that later declaration and its dependent specialized
+Schur theorem must still be checked separately.
+
+Additional candidate
+`SourceAugmented34ReducedMarginalZeroSetCandidate.lean`
+identifies the genuine 34-row residual on the conditional 33-row
+implicit solution as `(0, source reduced L funding dual)`, and hence
+its augmented roots with zeros of that same reduced marginal.
+This consumes the SOURCE predicate `LocalScalarImplicitReduction`
+as an explicit *hypothesis*, not a numerically certified existence
+statement. Do not mark this candidate VERIFIED until its own module
+CI log and axioms are inspected.
+
 ## 4. Numerically auditable SOURCE certificate
 
 An eventual rigorous inverse check must evaluate and enclose the
