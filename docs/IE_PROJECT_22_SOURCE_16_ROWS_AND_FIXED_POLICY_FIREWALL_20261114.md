@@ -297,3 +297,53 @@ this stationary inherited reference; reconcile real decimal/rational
 constants with binary64 and normalized rows, then rigorously bound
 the SOURCE residual and Jacobian on a full box. Only after these
 can a rational Neumann/Banach result establish a true SOURCE root.
+
+## 8. Discharging the date-two log-index/P0 premise
+
+The previous eight-date-one-row composite needed the hypothesis
+
+```text
+(localPrefixLogChart Z0 z).stateTwo
+  = localPrefixStateSixLogChart x0 z2.
+```
+
+The SOURCE basepoint `fullyPinnedStationarySOURCEZ0` is now defined
+literally, so this hypothesis can be discharged rather than assumed.
+The new candidate
+`SourcePinnedDateTwoLogIndexP0Candidate.lean` (commit
+`691e83571fd7ea4681b7c536469028a19437626d`)
+defines the six-state SOURCE extraction by original log indices
+
+```text
+z2 = (z17, z18, z19, z20, z21, z22)
+```
+
+and submits the exact real identity of the original SOURCE 33-log
+date-two state with the six-coordinate log state. It then applies the
+previous audited `sourceFrozenP0_dateOne_nextControl_level` and
+`source16_dateOne_actual_rows_with_exact_frozenP0` to establish that
+the ACTUAL date-one SOURCE economic equations 23,24,27,28,29,30,31,32
+use the P0 future controls with those six exact SOURCE logs at every
+`z,h`, with NO new chart-matching premise.
+
+These declarations have been added to `#print axioms` in
+`.github/workflows/lean-candidates.yml` at
+`bbdd5f692a29978a2733bd5f181c24224797ce7a`.
+Their audited CI run is
+[GitHub Actions #43652154747](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43652154747).
+**Do not promote them to DEMOSTRADO until that particular run
+completes successfully.** They do not make any claim about binary64
+numerical equality, an infinite-horizon P0 continuation, a SOURCE
+root, or a fixed-shock equilibrium.
+
+For the previous fully pinned reference, the fail-closed Python
+data provenance script is
+`code/irf/audit_fully_pinned_source_python_reference.py`,
+wired into `code/verify.py` and archived by `build.yml`. It checks
+all 33 original Python frozen baseline levels are positive and in
+the 7+10+6+10 order, while explicitly rejecting the older
+`make_boundary()` baseline as the stationary predecessor.
+This is only an AST/declaration/data-order guard, not execution of
+SOURCE real arithmetic in Python. Source economic operator equality,
+certified derivative bounds and root existence still require
+an independent proof.
