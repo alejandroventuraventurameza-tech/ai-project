@@ -52,7 +52,7 @@ theorem fullyPinnedSOURCE_dateOne_frozenP0_nextControls
     (G : ℝ) (z : Fin 33 → ℝ) (h : ℝ) (j : Fin 10) :
     let Pv := initialIntervenedPrimitives
       (ProposedStationaryPrimitives.primitives G)
-      (ProposedLocalScalarEconomicSlice.localScalarParameterIntervention
+      (localScalarParameterIntervention
         (ProposedLocalScalarEconomicSlice.reserveRemunerationSlice 0 h));
     let Z := localPrefixLogChart fullyPinnedStationarySOURCEZ0 z;
     let tail := sourceLogLinearContinuation
@@ -68,7 +68,7 @@ theorem fullyPinnedSOURCE_dateOne_frozenP0_nextControls
   exact sourceFrozenP0_dateOne_nextControl_level
     (initialIntervenedPrimitives
       (ProposedStationaryPrimitives.primitives G)
-      (ProposedLocalScalarEconomicSlice.localScalarParameterIntervention
+      (localScalarParameterIntervention
         (ProposedLocalScalarEconomicSlice.reserveRemunerationSlice 0 h)))
     (localPrefixLogChart fullyPinnedStationarySOURCEZ0 z)
     LocalBridgePhase.dateOne LocalBridgePhase.recurrent
@@ -91,7 +91,7 @@ theorem fullyPinnedSOURCE_dateOne_eight_rows_with_P0
     let I := ProposedStationaryInheritedState.inheritedState G;
     let Z0 := fullyPinnedStationarySOURCEZ0;
     let Pv := initialIntervenedPrimitives P
-      (ProposedLocalScalarEconomicSlice.localScalarParameterIntervention
+      (localScalarParameterIntervention
         (ProposedLocalScalarEconomicSlice.reserveRemunerationSlice 0 h));
     let Z := localPrefixLogChart Z0 z;
     let tail := sourceLogLinearContinuation
