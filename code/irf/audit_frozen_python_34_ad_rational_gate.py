@@ -72,6 +72,33 @@ def conditional_schur_sign_enclosure(q33, c33norm, n, c, u, residual_norm,
     }
 
 
+def conditional_root_contraction_gate(q34, preconditioner_norm, n, eps,
+                                      box_radius):
+    """Exact-rational a posteriori zero gate, WITHOUT a SOURCE enclosure.
+
+    For a hypothetical C1 map F on the closed sup-norm box B(x0,R)
+    in R^n, assume a separately certified uniform bound
+      max_ij |D F(x)[i,j] - Jq[i,j]| <= eps  for ALL x in B,
+    where q34 = ||I-C Jq||_inf and ||C||_inf <= preconditioner_norm.
+    Then T(x)=x-C F(x) has contraction bound
+      delta=q34+n*||C||_inf*eps.
+    A separate source residual bound ||F(x0)||_inf < (1-delta)*R/||C||
+    makes T map B into itself. Banach yields a unique zero in B.
+    This helper computes ONLY the exact conditional required threshold.
+    """
+    require(box_radius > 0 and eps >= 0 and preconditioner_norm > 0,
+            "Invalid root-box or preconditioner parameters")
+    delta = q34 + n*preconditioner_norm*eps
+    require(delta < 1, "No valid contraction bound")
+    cap = (1-delta)*box_radius/preconditioner_norm
+    require(cap > 0, "No positive SOURCE residual budget")
+    return {
+        "box_radius": box_radius,
+        "maximum_source_residual_sup_norm_strict": cap,
+        "uniform_contraction_upper": delta,
+    }
+
+
 def main():
     require(all(path.is_file() for path in (AD, FD_BASE, FD_GATE)),
             "Regenerate AD/FD boundary and previous rational gate first")
@@ -144,6 +171,17 @@ def main():
             and q34 + n34*FULL*sign_eps < 1,
             "Neumann test not strict at robust sign radius")
 
+    # Exact conditional Banach contraction thresholds for an actual
+    # SOURCE 34-dimensional root: these are NOT evaluated on SOURCE.
+    # A valid future enclosure must cover the ENTIRE closed box,
+    # not merely the centre Jacobian at the Python numerical root.
+    root_radii = (Fraction(1, 1000000), Fraction(1, 100000),
+                  Fraction(1, 10000))
+    root_gates = [
+        conditional_root_contraction_gate(q34, n34, FULL, sign_eps, radius)
+        for radius in root_radii
+    ]
+
     # A second algebraically exact cross-comparison: rationalized
     # forward-AD matrix sits strictly within the independently certified
     # finite-difference *rounded* Jacobian perturbation budget.
@@ -202,6 +240,32 @@ def main():
         "conditional_perturbed_schur_upper_float":
             float(sign_gate["schur_upper"]),
         "conditional_neumann_and_schur_sign_uniformly_stable": True,
+        "conditional_source_root_boxes": [
+            {
+                "box_radius_exact": str(g["box_radius"]),
+                "box_radius_float": float(g["box_radius"]),
+                "uniform_contraction_upper_exact":
+                    str(g["uniform_contraction_upper"]),
+                "uniform_contraction_upper_float":
+                    float(g["uniform_contraction_upper"]),
+                "source_center_residual_sup_norm_must_be_strictly_less_than":
+                    str(g["maximum_source_residual_sup_norm_strict"]),
+                "source_center_residual_budget_float":
+                    float(g["maximum_source_residual_sup_norm_strict"]),
+                "verified_SOURCE_box_derivative": False,
+                "verified_SOURCE_center_residual": False,
+                "certified_SOURCE_root": False,
+            }
+            for g in root_gates
+        ],
+        "conditional_root_proof_obligation":
+            "For some displayed radius R, prove the actual SOURCE 34-map "
+            "is C1 and uses the SAME residual rows and log coordinates "
+            "throughout the closed ||w-wstar||_inf <= R ball; prove "
+            "entrywise |D SOURCE(w)-Jq| <= joint epsilon UNIFORMLY on "
+            "that ball, and rigorously bound the true SOURCE centre "
+            "residual sup norm STRICTLY below the listed limit. Only "
+            "then Banach contraction gives a unique 34-equation zero.",
         "conditional_hypothesis":
             "Any real 34x34 matrix H in the SAME ORDERING and "
             "COORDINATES as this rationalized forward-AD matrix, with "
@@ -230,6 +294,9 @@ def main():
             "same Jacobian coordinates as the rationalized Python AD matrix.",
             "SOURCE-to-Python/normalized-row derivative conversion and the "
             "genuine SOURCE entrywise enclosure are NOT established here.",
+            "The exact contraction thresholds demand independently "
+            "validated SOURCE residual AND derivative bounds throughout "
+            "the selected 34-dimensional box; neither is available yet.",
             "The actual SOURCE 34-row derivative and nonlinear root require separate proof.",
         ],
     }
@@ -243,6 +310,17 @@ def main():
         "conditional_perturbed_schur_upper_float",
         "AD_FD_rounded_max_entry_difference_float",
     )}, indent=2))
+    print(json.dumps({
+        "conditional_root_boxes": [
+            {
+                "radius": float(g["box_radius"]),
+                "source_center_residual_budget":
+                    float(g["maximum_source_residual_sup_norm_strict"]),
+                "contraction_upper": float(g["uniform_contraction_upper"]),
+            } for g in root_gates
+        ],
+        "true_SOURCE_residual_and_box_derivative_enclosed": False,
+    }, indent=2))
 
 
 if __name__ == "__main__":
