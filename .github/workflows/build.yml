@@ -215,6 +215,13 @@ jobs:
           path: code/irf/output/source_python_p0_tail_structure.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve SOURCE-level versus Python-log three-row normalization audit
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-python-three-log-normalizations
+          path: code/irf/output/source_python_three_log_normalizations.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve fully pinned SOURCE and frozen Python 33-reference scope audit
         uses: actions/upload-artifact@v7
         with:
