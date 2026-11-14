@@ -173,6 +173,13 @@ jobs:
           path: code/irf/output/frozen_python_33_jacobian_float_diagnostic.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve SOURCE exact-decimal 60 P0 Lean-coefficient audit
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-frozen-p0-lean-exact-decimal-contract
+          path: code/irf/output/source_frozen_p0_lean_exact_decimal_contract.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve exact rational P0 binary coefficient conversion bounds
         uses: actions/upload-artifact@v7
         with:
