@@ -39,6 +39,23 @@ Por consiguiente, **las matrices racionalizadas 33 x 33 y 34 x 34 son invertible
 
 Los intervalos citados son redondeos para lectura; los extremos y desigualdades efectivos se almacenan como fracciones exactas en JSON. No se ha certificado la matriz real de derivadas económicas.
 
+## Verificación independiente por diferenciación automática (código posterior)
+
+El commit `ba85f5f4a20a6239365caca0bcaa4c7e6ad8ab41` superó por completo
+[GitHub Actions build #43587365649](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43587365649),
+incluidos ambos jobs de Python y PDF. Se archivó el artefacto
+`frozen-python-34-boundary-and-rational-sign`, ID `14110574662`,
+SHA256 del ZIP `625c8c725472725504e560581deeca07133682006168b823907ab6ece22ae3cc`.
+
+- `audit_frozen_python_34_forward_ad.py`: deriva de forma automática, en float64, las **33 filas originales de `finite_irf.prefix_residual` sin transcribirlas**, y agrega por separado la fórmula SOURCE-shaped de financiación de L en las cuatro coordenadas `8,15,24,28`.
+- Diferencia máxima del bloque `A` frente al Jacobiano de diferencias centrales: `4.2561794089124305e-09`. Diferencia máxima de la columna `b`: `1.44771306054281e-10`. Error de la fila `c` frente a la fórmula analítica dispersa: `1.1102230246251565e-16`.
+- Derivada automática de la fila 34 respecto de `h`: `0.0`. Schur automático: `-4.212023217372646`.
+- `audit_frozen_python_34_ad_rational_gate.py`: redondea la matriz derivada automáticamente a 12 decimales y verifica con **fracciones exactas** la invertibilidad de esa matriz racionalizada. Defectos `q33 = 2.79684733361678e-10` y `q34 = 2.8881849479728e-10`.
+- Intervalo racionalizado de Schur mostrado decimalmente: `[-4.212023236694934,-4.212023198052517]`, completamente negativo. Presupuesto condicional por entrada `7.957357478193563e-05`.
+- La diferencia exacta de entradas entre las DOS matrices redondeadas (forward AD y diferencias centrales) está acotada por `4.257e-09`, muy por debajo del presupuesto condicional de la primera.
+
+Esta es una **doble validación NUMÉRICA/ALGEBRAICA de Python**; la autodiferenciación elimina el error de truncamiento de diferencias centrales, **no** la aritmética de punto flotante ni la falta de equivalencia SOURCE. Ninguna de las matrices racionalizadas contiene por sí sola una caja de derivadas de SOURCE.
+
 ## Presupuesto condicional de error SOURCE
 
 El nuevo programa define el presupuesto racional
