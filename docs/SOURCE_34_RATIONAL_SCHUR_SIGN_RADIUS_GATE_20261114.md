@@ -72,3 +72,37 @@ The rational auditor now computes exact conditional root residual budgets for R 
 MISSING SOURCE INPUTS: (i) actual centre residual F(w0), with directed or certified absolute enclosure; (ii) uniform derivative enclosure of DF over the WHOLE box, in matching coordinates; (iii) chart smoothness including the continuation-tail derivative; (iv) validity of the smooth analytic extension and strictly positive denominators over the box, with the KKT regime evaluated at the resulting root; (v) a SOURCE/native representation of the centre; (vi) proof that the SOURCE residual transformed to the Python comparison basis includes EVERY nonlinear row shear and normalization, not merely the Lean-certified SOURCE two-pledge row scaling. Python forward AD or a small floating residual cannot fill these obligations.
 
 The regression script test_schur_sign_perturbation_bound.py also checks the exact root-budget algebra on a synthetic 2x2 map and rejects a non-contraction case. This is not a SOURCE numerical execution or a proof of a complete dynamic competitive equilibrium.
+
+
+## Verified rational root budgets (2026-11-14)
+
+The Python verification job 132571182237 within
+[Actions build #43635465740](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43635465740)
+completed SUCCESS for SHA 0a32874b1ae3f0955f7f2c742b056036b98e0b64.
+The exact-fraction program printed the following decimal approximations
+of its rational thresholds, with all SOURCE enclosure flags FALSE:
+
+| Sup-norm box radius R | Strict SOURCE centre-residual limit |
+| ---: | ---: |
+| 1e-6 | 1.1298503741097344e-8 |
+| 1e-5 | 1.1298503741097344e-7 |
+| 1e-4 | 1.1298503741097343e-6 |
+
+The uniform contraction upper bound at the conditional entrywise
+derivative tolerance is 0.056482857300755855. The exact-fraction
+synthetic regression also reported
+EXACT_RATIONAL_SCHUR_CUBE_REGRESSION_PASSED 512, plus the root-bound
+algebra and rejection of an invalid noncontraction parameter.
+
+These numerical thresholds are NOT a verified SOURCE interval evaluation.
+For context only, the Python-only source-shaped frontier residual in the
+same build was 3.681499549657019e-13. This cannot substitute for a
+validated true SOURCE residual or the uniform derivative enclosure.
+
+Before any source-root certification, a machine-checked or validated
+SOURCE centre F(w0) and a derivative enclosure of the WHOLE smooth
+34-dimensional box must be tied to the same actual continuation rule,
+frozen inherited state and chart. At an L binding boundary, do NOT
+assert that every nearby point satisfies the same complementary
+inequality: the chosen smooth equation may be analytically continued
+through the boundary and KKT verified at the resulting zero.
