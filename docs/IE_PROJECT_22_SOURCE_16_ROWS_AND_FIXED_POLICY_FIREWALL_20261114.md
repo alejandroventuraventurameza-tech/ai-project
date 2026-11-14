@@ -564,3 +564,40 @@ finite-difference comparisons. Its conclusion must only be
 reported after reviewing the specific successful CI. This audit
 cannot certify a SOURCE root because it does not evaluate
 Lean's actual real SOURCE operator.
+
+## 13. Verified Python fixed-shock six-row directional numerical audit
+
+Exact pinned [build #43653979860](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43653979860)
+completed SUCCESS. The new original-Python directional audit printed:
+
+```json
+{
+  "status": "NUMERICAL_ORIGINAL_PYTHON_SIX_ROW_DIRECTIONAL_TRANSPORT_ONLY",
+  "original_python_fixed_policy_root_count": 4,
+  "directional_row_comparisons": 96,
+  "max_absolute_python_root_residual": 1.6597400537277096e-14,
+  "maximum_relative_directional_scale_discrepancy": 1.0387292710674047e-09,
+  "SOURCE_root_at_fixed_negative_policy_certified": false
+}
+```
+
+The four original fixed-policy numerical roots are
+(2 regimes S/B) x (2 innovations h=0,-1e-5). Each is evaluated
+on four deterministic 33-dimensional real-log perturbation directions
+and six original Python positions (6,9,10,22,25,26). This is a
+**NUMERICO** verification of the predicted six derivative scalings
+in the original Python evaluator at near-zeros, NOT a rigorous
+interval enclosure for the SOURCE 33x33 Jacobian or a cross-language
+functional identity.
+
+The old original-SOURCE exact positive zero-set bridge is
+**DEMOSTRADO** by Lean #43653293903. The newer real-calculus
+directional Jacobian candidate, six-row rank-transport theorem, and
+concrete bank calibration specialization remain **PENDIENTE DE
+COMPILACION** until their exact pinned Lean CI runs complete
+successfully and printed axioms are checked.
+
+The future existence certificate must identify all 33 original
+economic rows, including normalizations and different inherited
+states, and derive a true real SOURCE Jacobian enclosure. A
+Python fixed-policy approximate root is not that theorem.
