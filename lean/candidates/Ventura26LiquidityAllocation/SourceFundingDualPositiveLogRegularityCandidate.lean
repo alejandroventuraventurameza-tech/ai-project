@@ -78,12 +78,14 @@ theorem sourceFundingDual_differentiableAt_positive_log
   have hfirst : DifferentiableAt ℝ
       (fun w => (1 : ℝ) / r0 w) z :=
     hone.div hdr0 (ne_of_gt hr0_pos)
+  have hbeta : DifferentiableAt ℝ
+      (fun _w : Fin 33 → ℝ => P.entrepreneurDiscount) z :=
+    differentiableAt_const P.entrepreneurDiscount
   have hmiddle : DifferentiableAt ℝ
       (fun w => P.entrepreneurDiscount *
         (c1 w) ^ (-P.entrepreneurRiskAversion) /
         (c0 w) ^ (-P.entrepreneurRiskAversion)) z :=
-    ((differentiableAt_const P.entrepreneurDiscount).mul hpow1).div
-      hpow0 (ne_of_gt hpow0_pos)
+    (hbeta.mul hpow1).div hpow0 (ne_of_gt hpow0_pos)
   have hlast : DifferentiableAt ℝ
       (fun w => (P.entrepreneurDiscount *
         (c1 w) ^ (-P.entrepreneurRiskAversion) /
