@@ -483,6 +483,12 @@ if __name__ == "__main__":
                     str(HERE / "irf" / "audit_fully_pinned_source_python_reference.py")],
                    check=True)
 
+    # Original Python log normalizations and SOURCE level residuals
+    # share zeros on a positive chart; their functions are NOT equal.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "audit_source_python_three_log_normalizations.py")],
+                   check=True)
+
     # EXACT rational bound on decimal P0 coefficient conversion to
     # binary64 over a six-state log cube. Does not cover arithmetic
     # rounding in matvec, exp/log or SOURCE economic semantic identity.
