@@ -409,6 +409,13 @@ if __name__ == "__main__":
                     str(HERE / "irf" / "audit_source_python_33_index_contract.py")],
                    check=True)
 
+    # Exact-decimal P0 coefficient and six-state/ten-control finite tail
+    # structural contract, including original Python float64 reproduction.
+    # This is NOT an infinite-horizon SOURCE equilibrium continuation.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "audit_source_python_p0_tail_structure.py")],
+                   check=True)
+
     # Cross-baseline SOURCE/Python provenance: no phantom economic Jacobian inverse.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_jacobian_cross_baseline_firewall.py")], check=True)
 
