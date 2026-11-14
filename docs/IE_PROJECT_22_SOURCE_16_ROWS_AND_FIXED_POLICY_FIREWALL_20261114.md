@@ -409,3 +409,42 @@ positivity and primitive identities;
 (4) transformed *actual SOURCE* Jacobian and verified box;
 (5) root certificate on that same economic branch and prescribed
 policy innovation. The latter three gates remain OPEN.
+
+## 10. Verification of the three-row normalization diagnostic
+
+The targeted original-Python normalization audit was integrated in
+`code/verify.py` and its JSON uploaded as a build artifact at commit
+`1b46f572cb664c0e157bca8390585038d1d034b3`.
+
+The exact [build #43653361195](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43653361195)
+completed SUCCESS with both code verification and PDF compilation.
+The source-normalization report printed the following values:
+
+```json
+{
+  "status": "SOURCE_LEVEL_AND_ORIGINAL_PYTHON_LOG_ZEROS_DISTINCT_FUNCTIONS",
+  "tested_date_records": 24,
+  "maximum_same_engine_normalization_abs_discrepancy": 8.069174668723367e-17,
+  "actual_source_full_33_row_functional_equivalence": false
+}
+```
+
+These are 12 off-root cases, each evaluated at two dates, in the
+original Python float64 evaluator. The errors are internal consistency
+differences after applying the analytically identified normalization;
+they are **not** an error bound on the original Lean SOURCE operator.
+
+Lean's exact real positive-domain zero-set bridge and its axiom audit
+were separately submitted in
+`SourcePythonLogResidualZeroSetBridgeCandidate.lean` at commit
+`9916465657a09c5e5200528fed9b68b546256e27` with CI axiom
+registration at `03d6f311e23f3d2558049778485404e2afa185d1`.
+The corresponding pinned [Lean run #43653293903](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43653293903)
+must complete SUCCESS before these three source-level zero-set
+equivalences are called proved. Do not conflate the successful Python
+build with the still-pending Lean theorem audit.
+
+Remaining priority: calibrate SOURCE nominal bank-face rollover factor
+and worker/labor primitives against exact Python values, prove the
+row-specific transformed Jacobian at the SAME economically identified
+point, and derive rigorous box enclosures for the actual SOURCE map.
