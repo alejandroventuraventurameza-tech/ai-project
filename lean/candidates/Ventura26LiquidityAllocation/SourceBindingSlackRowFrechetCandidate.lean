@@ -21,6 +21,7 @@ invertibility, a numerical certificate, or economic existence.
 namespace Ventura26LiquidityAllocation
 
 open Filter
+open scoped Topology
 
 /-- General real-valued Fréchet quotient identity at a zero numerator,
 on any real normed vector space. -/
