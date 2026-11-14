@@ -62,7 +62,11 @@ def main():
     # The AST has two append statements INSIDE the two-firm loop,
     # plus one common-pledge append AFTER that loop; runtime unrolls
     # two budget/Euler pairs (4 rows) before the log row.
-    require(len(calls)==3 and calls[-1]==expected,
+    common=[n for n in binding.body
+            if isinstance(n,ast.Expr) and isinstance(n.value,ast.Call)
+            and ast.unparse(n.value.func)=="result.append"]
+    require(len(calls)==3 and len(common)==1
+            and ast.unparse(common[0].value.args[0])==expected,
             "Original Python row 21 ordering changed")
     loops=[n for n in binding.body if isinstance(n,ast.For)
            and ast.unparse(n.target)=="i" and ast.unparse(n.iter)=="range(2)"]
