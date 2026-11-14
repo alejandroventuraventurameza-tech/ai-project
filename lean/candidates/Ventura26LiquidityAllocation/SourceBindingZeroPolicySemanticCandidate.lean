@@ -62,11 +62,15 @@ theorem sourceModifiedBinding33_zeroPolicy_eachRow
           (localPrefixLogChart Z0 z)
           dateOne recurrent tail (localPrefixEquationOfIndex row) := by
   have hP := sourceReserveRemunerationSlice_zero_primitives P
+  have hP0 : initialIntervenedPrimitives P
+      (localScalarParameterIntervention (0 : Fin 5 → ℝ)) = P := by
+    simpa only [ProposedLocalScalarEconomicSlice.reserveRemunerationSlice_zero]
+      using hP
   by_cases hrow :
       localPrefixEquationOfIndex row = LocalPrefixEquation.firmRegimeZeroL
-  · simp [localBindingResidualWithSlack, hrow, hP,
+  · simp [localBindingResidualWithSlack, hrow, hP0,
       ProposedLocalScalarEconomicSlice.reserveRemunerationSlice_zero]
-  · simp [localBindingResidualWithSlack, hrow, hP,
+  · simp [localBindingResidualWithSlack, hrow, hP0,
       ProposedLocalScalarEconomicSlice.reserveRemunerationSlice_zero]
 
 #print axioms sourceModifiedBinding33_zeroPolicy_eachRow
