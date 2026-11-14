@@ -151,6 +151,56 @@ def main():
                             for row in worst_raw)) < 1e-30,
             "Source-shaped residual report disagrees with the raw values")
 
+    # Test the NONLINEAR residual transformation off root in a local
+    # 34-dimensional neighborhood, not merely at h*. The exact root-only
+    # row matrix T is NOT used away from the root: the nonlinear
+    # logarithms and endogenous pledge/Euler shears are recomputed.
+    # This remains a float64 Python-transcription test, not a proof
+    # that the Lean SOURCE operator equals the Python implementation.
+    local_radius = 8e-5
+    probes = []
+    for index in range(FULL):
+        for direction in (-1., 1.):
+            trial_z = list(z)
+            trial_h = h
+            if index == N:
+                trial_h += direction * local_radius
+            else:
+                trial_z[index] += direction * local_radius
+            probes.append((trial_z, trial_h))
+    probes.append((
+        [z[k] + local_radius * math.sin(0.63*(k+1)) for k in range(N)],
+        h + 0.5*local_radius,
+    ))
+    probes.append((
+        [z[k] - local_radius * math.cos(0.49*(k+1)) for k in range(N)],
+        h - 0.5*local_radius,
+    ))
+    max_neighborhood_functional_error = 0.
+    max_neighborhood_raw_residual = 0.
+    for trial_z, trial_h in probes:
+        shaped, local_scalar, local_coeff, _shear, _g = build_source_shaped(
+            base, p0, trial_z, "binding", (trial_h, 0., 0., 0.)
+        )
+        reconstructed = nonlinear_pullback(
+            shaped, local_scalar, local_coeff
+        )
+        original_probe = engine.prefix_residual(
+            base, p0, "binding", (trial_h, 0., 0., 0.), trial_z
+        )
+        max_neighborhood_functional_error = max(
+            max_neighborhood_functional_error,
+            max(abs(x-y) for x,y in zip(reconstructed, original_probe))
+        )
+        max_neighborhood_raw_residual = max(
+            max_neighborhood_raw_residual,
+            max(abs(v) for v in shaped.values())
+        )
+        require(tuple(base.X0) == frozen,
+                "Inherited nominal state drifted during neighborhood audit")
+    require(max_neighborhood_functional_error < 5e-8,
+            "Nonlinear SOURCE-shaped/Python row transform fails near the frontier")
+
     w = list(z)+[h]
     S = engine.numerical_jacobian(
         lambda v: candidate_rows(base,p0,v), w, step=2e-6)
@@ -184,6 +234,13 @@ def main():
         "root_reconstructed_normalized_max_abs":root_normalized,
         "largest_unscaled_source_shaped_residuals":worst_raw,
         "max_reconstructed_functional_error":functional_error,
+        "nonlinear_offroot_34_dimension_probe_count":len(probes),
+        "nonlinear_offroot_log_radius":local_radius,
+        "nonlinear_offroot_max_original_vs_transformed_Python_error":
+            max_neighborhood_functional_error,
+        "nonlinear_offroot_max_raw_source_shaped_residual":
+            max_neighborhood_raw_residual,
+        "offroot_row_transform_recomputed_at_each_probe":True,
         "source_to_python_indices":{str(i):SOURCE_TO_PY[i] for i in range(N)},
         "source_to_python_row_transform_T":T,
         "source_shape_jacobian_33_by_34":S,
@@ -205,6 +262,8 @@ def main():
     print(json.dumps({k:report[k] for k in (
         "status","innovation_h","root_source_shaped_max_abs","root_reconstructed_normalized_max_abs",
         "max_reconstructed_functional_error",
+        "nonlinear_offroot_34_dimension_probe_count",
+        "nonlinear_offroot_max_original_vs_transformed_Python_error",
         "max_derivative_error_vs_original_Python_AD",
         "max_33_block_error_vs_original_Python_AD",
         "max_policy_forcing_error_vs_original_Python_AD",
