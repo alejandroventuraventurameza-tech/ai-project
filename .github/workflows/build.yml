@@ -173,6 +173,13 @@ jobs:
           path: code/irf/output/frozen_python_33_jacobian_float_diagnostic.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve original Python row5 exact log-gradient audit
+        uses: actions/upload-artifact@v7
+        with:
+          name: original-python-row5-exact-log-gradient
+          path: code/irf/output/frozen_python_row5_exact_log_gradient.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve exact SOURCE/Python L collateral row-5 AST index contract
         uses: actions/upload-artifact@v7
         with:
