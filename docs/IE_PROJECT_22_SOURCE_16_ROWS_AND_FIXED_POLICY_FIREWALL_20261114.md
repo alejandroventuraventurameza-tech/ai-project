@@ -515,3 +515,52 @@ fixed-policy IRF remain PENDIENTE. Correct next step is to establish
 the remaining SOURCE/Python row translations, economic calibration,
 positive box and interval derivative bounds, then apply an exact
 rational local-root gate on that SAME economic operator.
+
+## 12. Verified zero-set gate and concrete SOURCE bank factor
+
+The older original SOURCE log-row conversion (bank-face, labor supply,
+household deposit Euler) is now **DEMOSTRADO**, not merely a
+submitted candidate. The exact pinned Lean run
+[#43653293903](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43653293903)
+completed SUCCESS, including explicit `#print axioms` for the five
+`sourceLevelDifference_zero_iff_logRatio`,
+`sourceOneMinusRatio_zero_iff_logRatio` and three concrete
+`localReducedRemainingResidual` row theorems. Their only recorded
+logical dependencies are Lean's standard `propext`,
+`Classical.choice` and `Quot.sound`, NOT `sorryAx`.
+
+On the actual stationary SOURCE primitives,
+`P.bankExit = 1/10` and
+`P.bankSeedShare = 10/ProposedStationaryBank.loanRate - 9`.
+The already proved `ProposedStationaryReducedSystem.renewalFactor_identity`
+therefore gives
+
+```text
+bankRenewalFactor(P) = 1 / ProposedStationaryBank.loanRate.
+```
+
+The ORIGINAL Python code separately defines `s.aB = 1/s.rate`.
+The new proof specialization in
+`SourceConcreteBankRenewalCalibrationCandidate.lean`, commit
+`a865ffdf7ab7839d4c1d513399a6510004a112b6`, explicitly
+instantiates the SOURCE bank factor and the SOURCE bank-face
+positive-domain log-row zero equivalence, and pins the four
+worker/labor scalar parameters to the exact rational values
+`(99/100,1,1,1)`. Its dedicated Lean CI is
+[#43654103683](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43654103683).
+Until that CI is SUCCESS and audited, this further specialization is
+a **candidate**. Even if successful, identifying Python's computed
+binary64 `s.rate` with the EXACT Lean
+`ProposedStationaryBank.loanRate` and transporting all 33 original
+economic functions remain distinct tasks.
+
+An independent original-Python directional normalization audit,
+`audit_six_log_row_directional_jacobian_at_python_roots.py`,
+is integrated in `code/verify.py` and archives JSON. It uses four
+original Python fixed-policy root calculations (both branches,
+zero and negative remuneration shocks), and four deterministic
+directions per root for six rows, totaling up to 96 directional
+finite-difference comparisons. Its conclusion must only be
+reported after reviewing the specific successful CI. This audit
+cannot certify a SOURCE root because it does not evaluate
+Lean's actual real SOURCE operator.
