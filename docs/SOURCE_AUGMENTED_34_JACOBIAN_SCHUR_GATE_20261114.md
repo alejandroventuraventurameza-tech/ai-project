@@ -251,6 +251,46 @@ as an explicit *hypothesis*, not a numerically certified existence
 statement. Do not mark this candidate VERIFIED until its own module
 CI log and axioms are inspected.
 
+## 3e. Rigorous SOURCE local-inverse / implicit-function gate
+
+Mathlib's pinned implicit and inverse function theorem APIs
+(`Mathlib/Analysis/Calculus/ImplicitFunction/ProdDomain.lean` and
+`Mathlib/Analysis/Calculus/InverseFunctionTheorem/FDeriv.lean`)
+require stronger local hypotheses than the **pointwise**
+`HasFDerivAt` identity assembled above. In particular,
+`HasStrictFDerivAt` with invertible derivative supports a local
+inverse theorem; sufficiently smooth `ContDiffAt` data on an
+open regime-specific neighborhood can supply strict differentiability.
+The existing SOURCE 34x34 Schur biconditional alone does not provide
+the strict differentiability or an economic reference root.
+
+The exact remaining steps are:
+1. Establish a positive-domain SOURCE reference `(z*,h*)` and
+   `augmentedBoundaryZeroResidual P I Z0 dateOne recurrent tail
+     z* h* = (0,0)`, not merely a Python transcription root.
+2. Prove adequate SOURCE neighborhood regularity of the 33
+   modified-binding rows. This entails explicit regularity of the
+   inherited `tail : LocalPrefixStateSix -> LocalPrefixControlsTen`
+   and fixed bank/firm regime within the neighborhood.
+3. Produce a verified 33x33 SOURCE derivative equivalence `A`
+   or an exact enclosure proving that block invertible.
+4. Evaluate `b = D_h B`, `c = D_z nu_L` at the same SOURCE
+   reference and certify `-c A^{-1} b` excludes zero.
+5. Instantiate a strict-derivative/local-IFT theorem, carefully
+   recording the input/output coordinates, radius of validity and
+   unique local branch. The existing
+   `LocalScalarImplicitReduction` already **assumes**
+   differentiability, uniqueness and strict shock-sign premises;
+   reusing it is conditional reasoning, not an existence proof.
+6. Only then check economic admissibility (KKT and global
+   sufficiency) and the independent infinite-horizon continuation,
+   stochastic bank balance, transversality and policy-growth effects.
+
+Even a certified SOURCE local inverse would establish a **local
+34-equation zero** or implicit policy branch under those conditions,
+not automatically a full dynamic competitive equilibrium. This
+firewall must remain explicit in both the paper and presentation.
+
 ## 4. Numerically auditable SOURCE certificate
 
 An eventual rigorous inverse check must evaluate and enclose the
