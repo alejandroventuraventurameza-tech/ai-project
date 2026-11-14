@@ -59,8 +59,18 @@ def main():
         "Original 33-prefix does not use binding-period function")
     # First date-0 block is 6 firm rows + 11 common rows = 17.
     # Date-one firm block adds 4; therefore common pledge is row 21.
-    require(len(calls)>=5 and calls[4]==expected,
+    # The AST has two append statements INSIDE the two-firm loop,
+    # plus one common-pledge append AFTER that loop; runtime unrolls
+    # two budget/Euler pairs (4 rows) before the log row.
+    require(len(calls)==3 and calls[-1]==expected,
             "Original Python row 21 ordering changed")
+    loops=[n for n in binding.body if isinstance(n,ast.For)
+           and ast.unparse(n.target)=="i" and ast.unparse(n.iter)=="range(2)"]
+    require(len(loops)==1 and sum(
+        isinstance(n,ast.Expr) and isinstance(n.value,ast.Call)
+        and ast.unparse(n.value.func)=="result.append"
+        for n in loops[0].body)==2,
+        "Two-firm date-one loop no longer emits exactly four residual rows")
 
     src=SOURCE.read_text(encoding="utf-8")
     marker="| .commonPledgeOne => Z.stateTwo.commonPledgeValue -"
