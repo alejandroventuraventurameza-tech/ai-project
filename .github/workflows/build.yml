@@ -215,6 +215,13 @@ jobs:
           path: code/irf/output/source_python_p0_tail_structure.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve numerical six-row directional Jacobian scale audit
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-python-six-row-directional-jacobian
+          path: code/irf/output/six_log_row_directional_jacobian_python_roots.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve SOURCE-level versus Python-log three-row normalization audit
         uses: actions/upload-artifact@v7
         with:
