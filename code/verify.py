@@ -445,6 +445,13 @@ if __name__ == "__main__":
                     str(HERE / "irf" / "audit_source_python_l_collateral_row5_ast.py")],
                    check=True)
 
+    # Source-code contract for the OTHER collateral normalization:
+    # date-one common pledge J2 vs (1-delta)*Pi2*q2 at Python row21.
+    # This checks AST/indices, not cross-language economic semantics.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "audit_source_python_common_pledge_row21_ast.py")],
+                   check=True)
+
     # Cross-baseline SOURCE/Python provenance: no phantom economic Jacobian inverse.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_jacobian_cross_baseline_firewall.py")], check=True)
 
