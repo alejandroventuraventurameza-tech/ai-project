@@ -170,3 +170,56 @@ Next scientific gate (unchanged): instantiate SAME source primitives,
 inherited base, date-one data and tail as Python; prove off-root
 functional equality of economic rows and a certified full SOURCE
 derivative enclosure before any existence, policy IRF or growth claim.
+
+
+## 6. Follow-up: compiled original rows, original Python P0 wiring, P0 composite candidate
+
+Exact source-commit scope for this checkpoint:
+
+- SOURCE 16-row parser repair: commit `3fbf263521fc89a548ca72bdf3ea80655f49cf73`.
+  The pinned Lean audit
+  [#43649204171](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43649204171)
+  has status **success**, including original SOURCE 16-row identities,
+  unchanged source/Python row permutation positions, and the
+  fixed-policy SOURCE root subtype equivalence. Axiom printouts list
+  standard Lean `propext`, `Classical.choice` and `Quot.sound`
+  for the nontrivial source correspondences. This does **not** imply a
+  SOURCE economic root.
+- Finite P0 SOURCE calendar candidate:
+  `SourceFrozenP0LiteralDateCalendarCandidate.lean`, added at
+  `e63f1d17a02d8b64fb8ed8253581b8fa88c9bd22`. The exact-run Lean audit
+  [#43649329765](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43649329765)
+  was in progress when this note was written; no success is inferred.
+- Direct same-engine Python structural path:
+  `code/irf/audit_source_dateone_p0_operational_wiring.py` at
+  `125e4e6d56c14a8b22d2bdc744350ebafd4604f8`. The script verifies
+  with Python AST that the original `prefix_residual` computes
+  `u2 = s.base[6+i]*exp((P0 @ z[17:23])[6+i])` for every i=0,...,9
+  and passes those SAME ten controls to `binding_period_residual`,
+  which uses `remaining_residuals` for the eight non-firm economic
+  equations. Original Python code, not a rewritten surrogate, is used.
+  The [build #43650031798](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43650031798)
+  completed its `Run code/verify.py` job successfully. The audit's
+  12 off-root cases (2 regimes x 2 policy vectors x 3 charts) have
+  zero internal Python-call discrepancy and the JSON explicitly
+  retains `SOURCE_Python_16_row_functional_equality_proved=false`.
+  The [latest build #43650031798](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43650031798)
+  must be used for full aggregate workflow status.
+- Composite Lean SOURCE/P0 module:
+  `SourceSixteenRowsFrozenP0CompositeCandidate.lean` at
+  `5927bd541a7f72919af6a7e454a7d32856c96c67`, which submits
+  one proposition jointly covering the eight original SOURCE
+  date-one economic rows and the exact future control evaluation
+  from the frozen real P0 matrix under explicit positivity and
+  date-two log-chart hypotheses. CI print-axiom registration at
+  `02b84392355d253b43fffc8ea476c5bb9f09895f`.
+  Its dedicated Lean run must PASS before it is marked DEMOSTRADO.
+
+**Scientific implication and remaining gate.** These three improvements
+make the calendar/policy/continuation contract more explicit in both
+source and numerical code. They do not yet instantiate the same
+`Primitives`, `InheritedState`, `Z0` and exact real-versus-float
+calibration for all 33 economic rows. A complete cross-language
+functional identity (or rigorous interval discrepancy on a common
+box) and the true SOURCE Jacobian enclosure remain mandatory before
+claiming a certified root, equilibrium IRF, or permanent growth effect.
