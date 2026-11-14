@@ -136,8 +136,14 @@ theorem source34_actual_full_fderiv_factorization_at_root
         hdf] using hdf
     · by_cases h21 : row = (21 : Fin 33)
       · subst row
+        have hscaled := congrArg
+          (fun t : ℝ =>
+            (sourceDateOneCommonPledgeValuation
+              (sourceReserveSlicePrimitives P wstar.2)
+              (localPrefixLogChart Z0 wstar.1)
+              dateOne recurrent tail)⁻¹ * t) hdf
         simpa [source34TwoRowRescale, pythonToSource33Index,
-          hdf, smul_eq_mul] using hdf
+          smul_eq_mul] using hscaled
       · have hsource5 : pythonToSource33Index row ≠ (5 : Fin 33) :=
           source34_python_nonfive_stays_nonfive row h5
         have hsource21 : pythonToSource33Index row ≠ (21 : Fin 33) := by
