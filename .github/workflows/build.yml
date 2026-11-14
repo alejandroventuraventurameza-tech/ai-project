@@ -181,6 +181,7 @@ jobs:
             code/irf/output/frozen_stationary_dual_rational_enclosure.json
             code/irf/output/frozen_python_augmented34_basepoint_obstruction.json
             code/irf/output/frozen_python_augmented34_boundary_search.json
+            code/irf/output/frozen_python_augmented34_rational_preconditioner.json
           if-no-files-found: error
           retention-days: 30
       - name: Preserve reduced-prefix inherited-field support audit
