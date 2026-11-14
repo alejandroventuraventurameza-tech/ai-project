@@ -172,6 +172,7 @@ jobs:
           import Ventura26LiquidityAllocation.SourceAugmented34LogLinearizedMultiplierCandidate
           import Ventura26LiquidityAllocation.SourceAugmented34LogSchurTransportCandidate
           import Ventura26LiquidityAllocation.SourceAugmented34MinimalRegularityRankCandidate
+          import Ventura26LiquidityAllocation.SourceFundingDualScalarEliminationCandidate
           import Ventura26LiquidityAllocation.SourceFundingDualStationaryScalarZeroCandidate
           import Ventura26LiquidityAllocation.SourceFundingDualSigmaOneStationaryFrontierCandidate
           import Ventura26LiquidityAllocation.SourceAugmented34LogRegularityCandidate
@@ -271,6 +272,12 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34_logJacobian_bijective_iff_linearized_source_dual_ne
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34_twoPledge_log_jacobian_bijective_iff_source_schur
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34_actual_jacobian_bijective_iff_with_primitive_regularity
+          #print axioms Ventura26LiquidityAllocation.sourceDual_loanLog_scalar_zero_iff
+          #print axioms Ventura26LiquidityAllocation.sourceFundingDual_zero_iff_loanLog_target
+          #print axioms Ventura26LiquidityAllocation.sourceDualLoanLogEliminate_target_invariant
+          #print axioms Ventura26LiquidityAllocation.sourceDualLoanLogEliminate_dual_zero
+          #print axioms Ventura26LiquidityAllocation.sourceDualLoanLogEliminate_eq_self_of_source_root
+          #print axioms Ventura26LiquidityAllocation.source34_root_exists_iff_33rows_on_eliminated_loanLog
           #print axioms Ventura26LiquidityAllocation.sourceFundingDual_scalar_zero_by_adjusting_log_loan_rate
           #print axioms Ventura26LiquidityAllocation.sourceFundingDual_sigmaOne_stationary_fourLog
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34_twoPledge_differentiableAt_of_original_at_positive_root
