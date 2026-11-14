@@ -184,6 +184,7 @@ jobs:
           import Ventura26LiquidityAllocation.SourceFullyPinnedStationaryP0OperatorCandidate
           import Ventura26LiquidityAllocation.SourcePinnedDateTwoLogIndexP0Candidate
           import Ventura26LiquidityAllocation.SourcePythonLogResidualZeroSetBridgeCandidate
+          import Ventura26LiquidityAllocation.SourcePythonLogResidualDirectionalJacobianCandidate
           import Ventura26LiquidityAllocation.SourceReduced33FrechetChartTransportCandidate
           import Ventura26LiquidityAllocation.SourceFundingDualExact33FreeCoordinatesCandidate
           import Ventura26LiquidityAllocation.SourceFundingDualScalarEliminationCandidate
@@ -330,6 +331,10 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.sourceBankFaceLevelRow_zero_iff_pythonShapedLog
           #print axioms Ventura26LiquidityAllocation.sourceLaborSupplyLevelRow_zero_iff_pythonShapedLog
           #print axioms Ventura26LiquidityAllocation.sourceHouseholdDepositLevelRow_zero_iff_pythonShapedLog
+          #print axioms Ventura26LiquidityAllocation.sourceLogRatio_hasDerivAt_of_common_positive_root
+          #print axioms Ventura26LiquidityAllocation.sourceLevelAndLog_hasDerivAt_at_common_root
+          #print axioms Ventura26LiquidityAllocation.sourceEulerOneMinusRatioAndLog_hasDerivAt_at_common_root
+          #print axioms Ventura26LiquidityAllocation.sourceLevelAndLog_derivative_zero_iff
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_differentiableAt_iff
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_fderiv_first
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_fderiv_dual_zero
