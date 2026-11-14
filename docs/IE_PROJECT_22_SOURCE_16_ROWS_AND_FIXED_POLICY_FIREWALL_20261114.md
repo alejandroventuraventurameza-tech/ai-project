@@ -448,3 +448,70 @@ Remaining priority: calibrate SOURCE nominal bank-face rollover factor
 and worker/labor primitives against exact Python values, prove the
 row-specific transformed Jacobian at the SAME economically identified
 point, and derive rigorous box enclosures for the actual SOURCE map.
+
+## 11. Directional derivative and six-row rank transport (new candidate gate)
+
+Mathematical correction: even after positive-domain zero equivalence is
+established, the original SOURCE level and Python logarithmic residual
+Jacobians **cannot be identified row for row**. At every common
+positive root, and for any differentiable real economic perturbation
+`A(t),B(t)` with `A(t0)=B(t0)>0`:
+
+```text
+d/dt log(A/B) at t0 = (A'(t0)-B'(t0))/B(t0).
+d/dt (A-B) at t0   = A'(t0)-B'(t0).
+d/dt (1-A/B) at t0 = -d/dt log(A/B) at t0.
+```
+
+New candidate `SourcePythonLogResidualDirectionalJacobianCandidate.lean`,
+commit `dda884e0518e5b7a96b1bd4be61261f75a589b23` proves the
+scalar directional identity using *actual Mathlib differentiation rules*
+on differentiable numerator/denominator paths, not a postulated
+derivative identity. It specializes the algebraic signs to the
+bank/labor level rows and household deposit Euler ratio. These are
+GENERAL calculus results and not a proof of the original SOURCE/Python
+data or 33-row operator identity.
+
+New candidate `SourceSixLogRowJacobianRankTransportCandidate.lean`,
+commit `f9aa50b4584462a3e161d0d31f6b95e707fca5c4`, defines
+the zero-based six-row diagonal scaling:
+
+```text
+D[6]  = 1 / bankFaceTarget_0
+D[9]  = 1 / laborSupplyTarget_0
+D[10] = -1
+D[22] = 1 / bankFaceTarget_1
+D[25] = 1 / laborSupplyTarget_1
+D[26] = -1
+D[i]  = +1 otherwise
+```
+
+with strictly positive bank/labor target hypotheses. Its planned
+`#print axioms` audit proves that nonzero diagonal row reweighting
+preserves injectivity / full-column-rank of ANY 33-output linear
+Jacobian (or arbitrary map). It does **not** establish that all 27
+unchanged positions truly coincide SOURCE vs Python; that remains
+an independent economic identity obligation.
+
+The new original-Python diagnostics script
+`audit_six_log_row_directional_jacobian_at_python_roots.py`
+(commit `d501f22eed8c2576406116a0283a93f0e401d1f6`) reproduces
+4 original `make_boundary()` Python fixed-policy branch roots
+(S/B, h=0 and -1e-5). For 4 deterministic perturbation directions
+per root and 6 original positions, it compares finite-difference
+log-row derivatives against the predicted level/ratio scale. It
+executes only ORIGINAL PYTHON economic functions and must not be
+construed as evaluation of Lean real SOURCE values. The report
+explicitly says `SOURCE_root_at_fixed_negative_policy_certified=false`.
+Its `code/verify.py` and build-artifact registration is at
+`d4dc0ab92d1e406f5c3493ca705fb716d9b6babc`.
+
+**Evidence gate:** the Lean candidates and the new Python audit are
+SUBMITTED, not DEMOSTRADO/NUMERICO until their exact GitHub Actions
+runs report success. Relevant pinned Lean audit:
+[workflow](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/workflows/lean-candidates.yml).
+The full-SOURCE Jacobian rank at a genuine root and any exact
+fixed-policy IRF remain PENDIENTE. Correct next step is to establish
+the remaining SOURCE/Python row translations, economic calibration,
+positive box and interval derivative bounds, then apply an exact
+rational local-root gate on that SAME economic operator.
