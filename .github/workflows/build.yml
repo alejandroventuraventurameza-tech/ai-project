@@ -173,6 +173,13 @@ jobs:
           path: code/irf/output/frozen_python_33_jacobian_float_diagnostic.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve exact SOURCE/Python 33-row index and label contract
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-python-33-row-index-contract
+          path: code/irf/output/source_python_33_row_index_contract.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve frozen Python 34-row boundary and rational sign audits
         uses: actions/upload-artifact@v7
         with:
