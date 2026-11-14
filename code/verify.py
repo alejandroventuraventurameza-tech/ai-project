@@ -387,6 +387,13 @@ if __name__ == "__main__":
                     str(HERE / "irf" / "audit_frozen_python_34_rational_preconditioner.py")],
                    check=True)
 
+    # Exact rational Neumann/Schur for rounded forward-AD 34x34 matrix,
+    # compared entrywise with the previous independent FD rational gate.
+    # Neither matrix is a directed enclosure of the true SOURCE derivative.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "audit_frozen_python_34_ad_rational_gate.py")],
+                   check=True)
+
     # Cross-baseline SOURCE/Python provenance: no phantom economic Jacobian inverse.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_jacobian_cross_baseline_firewall.py")], check=True)
 
