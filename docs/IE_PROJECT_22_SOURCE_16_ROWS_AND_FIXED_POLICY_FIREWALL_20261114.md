@@ -719,3 +719,50 @@ correspondence, positivity and lower bounds over the 33-dimensional
 box, exact or rigorous-interval Jacobian transport at a common point,
 local true SOURCE existence and KKT, then global dynamic continuation.
 None of the new algebraic identities closes that sequence alone.
+
+## 16. Latest ledger: compiler blocker fixed, monetary tests green
+
+- **DEMOSTRADO, prior exact SHA only**: 16 genuine SOURCE
+  other-row index equalities, positive real P0 continuation/date-one
+  composition, stationary 33-level positive reference, SOURCE 34/33
+  root-set equivalences under explicit hypotheses, and three positive
+  SOURCE bank/labor/deposit Euler zero-set normalizations. See their
+  earlier successful exact Lean runs in this document. Do not elevate
+  root existence or infinite equilibrium from these statements.
+- **NUMERICO, new result**: exact
+  [build #43655028206](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43655028206)
+  completed SUCCESS for the original Python reserve-rate and reserve-
+  quantity logarithmic-target audit: 48 date records, maximum binary64
+  same-engine discrepancy `2.1494308069525125e-16`. The script
+  carries `fixed_policy_SOURCE_root_certified=false`. This result
+  is a second internal consistency test; it does not evaluate SOURCE
+  real functions or provide cross-language equality.
+- **CORRECTION NECESSARY, prior failed Lean run**:
+  [#43654868357](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43654868357)
+  now exposed the next downstream compiler error at
+  `SourceSixLogRowJacobianRankTransportCandidate.lean:100`:
+  `rw [hab]` could not rewrite the lambda-composed goal after
+  `apply hJ`. This is a Lean proof-elaboration failure; it does not
+  constitute a mathematical counterexample.
+- **CODE FIX SUBMITTED**: commit
+  `e58602ccc88c22ba4a26b9abb450f136fda96aac`
+  replaces the invalid rewrite with
+  `congrArg (sourceSixLogRowReweight ...) hab`, which transports
+  the source equality through the exact row map. Lean CI for this
+  revision is
+  [#43655583015](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43655583015).
+  Do not mark this proof or its downstream concrete bank calibration
+  as DEMOSTRADO until that run is green and `#print axioms` is clean.
+
+**Open structural issues**: (a) prove equality of original SOURCE
+bank-/labor-/Euler numerator-denominator economic expressions with
+Python's exact calibration and inherited data, not just algebraic
+normalization; (b) prove original SOURCE reserve policy targets match
+the Python auxiliary evaluator with the same date phase; (c) extend
+the row transformation to all 33 actual economic equations on one
+positive chart; (d) certify full real residual/Jacobian interval
+bounds at a FIXED policy innovation; (e) only then derive an
+existence theorem with actual KKT and terminal equilibrium obligations.
+
+This ledger is evidence-scoped to the explicitly named runs; it
+does not automatically advance with later Actions jobs.
