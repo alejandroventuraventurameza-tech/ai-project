@@ -173,6 +173,13 @@ jobs:
           path: code/irf/output/frozen_python_33_jacobian_float_diagnostic.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve SOURCE/Python date-one common pledge row21 AST contract
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-python-common-pledge-row21-ast
+          path: code/irf/output/source_python_common_pledge_row21_ast.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve original Python row5 exact log-gradient audit
         uses: actions/upload-artifact@v7
         with:
