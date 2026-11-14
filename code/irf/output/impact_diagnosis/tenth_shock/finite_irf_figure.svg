@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="720" viewBox="0 0 1080 720">
+<rect width="100%" height="100%" fill="white"/>
+<style>text{font-family:DejaVu Sans,Arial,sans-serif;fill:#222}.title{font-size:14px;font-weight:600}.tick{font-size:10px}.note{font-size:11px}</style>
+<text class="title" x="65.0" y="43.0">Loan rate (bp)</text>
+<rect x="65.0" y="55.0" width="286.6666666666667" height="277.5" fill="none" stroke="#bbb"/>
+<line x1="65.0" y1="193.75" x2="351.6666666666667" y2="193.75" stroke="#999" stroke-dasharray="3 3"/>
+<text class="tick" x="65.0" y="347.5" text-anchor="middle">0</text>
+<text class="tick" x="122.33333333333334" y="347.5" text-anchor="middle">4</text>
+<text class="tick" x="179.66666666666669" y="347.5" text-anchor="middle">8</text>
+<text class="tick" x="237.0" y="347.5" text-anchor="middle">12</text>
+<text class="tick" x="294.33333333333337" y="347.5" text-anchor="middle">16</text>
+<text class="tick" x="351.6666666666667" y="347.5" text-anchor="middle">20</text>
+<text class="tick" x="59.0" y="59.0" text-anchor="end">0.017</text>
+<text class="tick" x="59.0" y="336.5" text-anchor="end">-0.017</text>
+<polyline points="65.00,245.62 79.33,205.33 93.67,129.99 108.00,84.17 122.33,71.90 136.67,90.17 151.00,130.57 165.33,181.69 179.67,231.78 194.00,271.03 208.33,293.23 222.67,296.37 237.00,282.44 251.33,256.44 265.67,224.98 280.00,194.73 294.33,171.17 308.67,157.68 323.00,155.22 337.33,162.48 351.67,176.48" fill="none" stroke="#1769aa" stroke-width="2"/>
+<polyline points="65.00,267.85 79.33,174.75 93.67,106.47 108.00,70.99 122.33,69.87 136.67,97.85 151.00,144.88 165.33,198.73 179.67,247.71 194.00,282.83 208.33,299.10 222.67,295.95 237.00,276.64 251.33,247.08 265.67,214.29 280.00,184.88 294.33,163.86 308.67,153.87 323.00,155.05 337.33,165.38 351.67,181.37" fill="none" stroke="#c23b22" stroke-width="2"/>
+<text class="title" x="396.6666666666667" y="43.0">Reserve remuneration (bp)</text>
+<rect x="396.6666666666667" y="55.0" width="286.6666666666667" height="277.5" fill="none" stroke="#bbb"/>
+<line x1="396.6666666666667" y1="193.75" x2="683.3333333333334" y2="193.75" stroke="#999" stroke-dasharray="3 3"/>
+<text class="tick" x="396.6666666666667" y="347.5" text-anchor="middle">0</text>
+<text class="tick" x="454.0" y="347.5" text-anchor="middle">4</text>
+<text class="tick" x="511.33333333333337" y="347.5" text-anchor="middle">8</text>
+<text class="tick" x="568.6666666666667" y="347.5" text-anchor="middle">12</text>
+<text class="tick" x="626.0" y="347.5" text-anchor="middle">16</text>
+<text class="tick" x="683.3333333333334" y="347.5" text-anchor="middle">20</text>
+<text class="tick" x="390.6666666666667" y="59.0" text-anchor="end">0.0169</text>
+<text class="tick" x="390.6666666666667" y="336.5" text-anchor="end">-0.0169</text>
+<polyline points="396.67,245.91 411.00,205.95 425.33,130.26 439.67,84.23 454.00,71.91 468.33,90.27 482.67,130.86 497.00,182.19 511.33,232.47 525.67,271.85 540.00,294.09 554.33,297.19 568.67,283.15 583.00,256.99 597.33,225.35 611.67,194.95 626.00,171.27 640.33,157.73 654.67,155.26 669.00,162.55 683.33,176.61" fill="none" stroke="#1769aa" stroke-width="2"/>
+<polyline points="396.67,268.78 411.00,175.22 425.33,106.62 439.67,70.98 454.00,69.87 468.33,97.98 482.67,145.22 497.00,199.29 511.33,248.46 525.67,283.68 540.00,299.97 554.33,296.75 568.67,277.30 583.00,247.57 597.33,214.60 611.67,185.05 626.00,163.93 640.33,153.90 654.67,155.08 669.00,165.46 683.33,181.52" fill="none" stroke="#c23b22" stroke-width="2"/>
+<text class="title" x="728.3333333333334" y="43.0">Output (log %, local)</text>
+<rect x="728.3333333333334" y="55.0" width="286.6666666666667" height="277.5" fill="none" stroke="#bbb"/>
+<line x1="728.3333333333334" y1="193.75" x2="1015.0" y2="193.75" stroke="#999" stroke-dasharray="3 3"/>
+<text class="tick" x="728.3333333333334" y="347.5" text-anchor="middle">0</text>
+<text class="tick" x="785.6666666666667" y="347.5" text-anchor="middle">4</text>
+<text class="tick" x="843.0" y="347.5" text-anchor="middle">8</text>
+<text class="tick" x="900.3333333333334" y="347.5" text-anchor="middle">12</text>
+<text class="tick" x="957.6666666666667" y="347.5" text-anchor="middle">16</text>
+<text class="tick" x="1015.0" y="347.5" text-anchor="middle">20</text>
+<text class="tick" x="722.3333333333334" y="59.0" text-anchor="end">0.000666</text>
+<text class="tick" x="722.3333333333334" y="336.5" text-anchor="end">-0.000666</text>
+<polyline points="728.33,194.49 742.67,274.85 757.00,161.52 771.33,109.23 785.67,78.32 800.00,71.77 814.33,87.39 828.67,119.04 843.00,158.39 857.33,196.85 871.67,227.26 886.00,245.08 900.33,248.86 914.67,240.05 929.00,222.32 943.33,200.49 957.67,179.48 972.00,163.28 986.33,154.37 1000.67,153.47 1015.00,159.61" fill="none" stroke="#1769aa" stroke-width="2"/>
+<polyline points="728.33,280.05 742.67,204.81 757.00,140.54 771.33,93.30 785.67,69.87 800.00,71.39 814.33,94.04 828.67,130.47 843.00,171.75 857.33,209.34 871.67,236.67 886.00,250.10 900.33,249.23 914.67,236.43 929.00,216.05 943.33,193.22 957.67,172.78 972.00,158.41 986.33,152.03 1000.67,153.75 1015.00,162.11" fill="none" stroke="#c23b22" stroke-width="2"/>
+<text class="title" x="65.0" y="375.5">H credit (log %)</text>
+<rect x="65.0" y="387.5" width="286.6666666666667" height="277.5" fill="none" stroke="#bbb"/>
+<line x1="65.0" y1="526.25" x2="351.6666666666667" y2="526.25" stroke="#999" stroke-dasharray="3 3"/>
+<text class="tick" x="65.0" y="680.0" text-anchor="middle">0</text>
+<text class="tick" x="122.33333333333334" y="680.0" text-anchor="middle">4</text>
+<text class="tick" x="179.66666666666669" y="680.0" text-anchor="middle">8</text>
+<text class="tick" x="237.0" y="680.0" text-anchor="middle">12</text>
+<text class="tick" x="294.33333333333337" y="680.0" text-anchor="middle">16</text>
+<text class="tick" x="351.6666666666667" y="680.0" text-anchor="middle">20</text>
+<text class="tick" x="59.0" y="391.5" text-anchor="end">0.000367</text>
+<text class="tick" x="59.0" y="669.0" text-anchor="end">-0.000367</text>
+<polyline points="65.00,484.87 79.33,513.12 93.67,527.85 108.00,521.20 122.33,498.91 136.67,468.79 151.00,438.92 165.33,416.06 179.67,404.54 194.00,405.80 208.33,418.53 222.67,439.35 237.00,463.79 251.33,487.26 265.67,506.01 280.00,517.73 294.33,521.74 308.67,518.92 323.00,511.31 337.33,501.52 351.67,492.18" fill="none" stroke="#1769aa" stroke-width="2"/>
+<polyline points="65.00,494.48 79.33,525.34 93.67,532.23 108.00,518.72 122.33,491.68 136.67,459.48 151.00,430.17 165.33,409.98 179.67,402.37 194.00,407.81 208.33,424.12 222.67,447.30 237.00,472.57 251.33,495.39 265.67,512.34 280.00,521.59 294.33,523.02 308.67,518.03 323.00,508.97 337.33,498.63 351.67,489.58" fill="none" stroke="#c23b22" stroke-width="2"/>
+<text class="title" x="396.6666666666667" y="375.5">L credit (log %)</text>
+<rect x="396.6666666666667" y="387.5" width="286.6666666666667" height="277.5" fill="none" stroke="#bbb"/>
+<line x1="396.6666666666667" y1="526.25" x2="683.3333333333334" y2="526.25" stroke="#999" stroke-dasharray="3 3"/>
+<text class="tick" x="396.6666666666667" y="680.0" text-anchor="middle">0</text>
+<text class="tick" x="454.0" y="680.0" text-anchor="middle">4</text>
+<text class="tick" x="511.33333333333337" y="680.0" text-anchor="middle">8</text>
+<text class="tick" x="568.6666666666667" y="680.0" text-anchor="middle">12</text>
+<text class="tick" x="626.0" y="680.0" text-anchor="middle">16</text>
+<text class="tick" x="683.3333333333334" y="680.0" text-anchor="middle">20</text>
+<text class="tick" x="390.6666666666667" y="391.5" text-anchor="end">0.000276</text>
+<text class="tick" x="390.6666666666667" y="669.0" text-anchor="end">-0.000276</text>
+<polyline points="396.67,550.12 411.00,458.21 425.33,467.16 439.67,462.20 454.00,448.02 468.33,430.27 482.67,414.35 497.00,404.40 511.33,402.70 525.67,409.53 540.00,423.38 554.33,441.56 568.67,460.85 583.00,478.26 597.33,491.51 611.67,499.43 626.00,502.00 640.33,500.16 654.67,495.54 669.00,490.01 683.33,485.30" fill="none" stroke="#1769aa" stroke-width="2"/>
+<polyline points="396.67,446.76 411.00,466.65 425.33,470.15 439.67,460.76 454.00,443.82 468.33,425.22 482.67,410.17 497.00,402.37 511.33,403.43 525.67,412.98 540.00,428.96 554.33,448.30 568.67,467.70 583.00,484.25 597.33,495.97 611.67,502.05 626.00,502.85 640.33,499.61 654.67,494.17 669.00,488.44 683.33,484.09" fill="none" stroke="#c23b22" stroke-width="2"/>
+<text class="title" x="728.3333333333334" y="375.5">Conditional loss (pp)</text>
+<rect x="728.3333333333334" y="387.5" width="286.6666666666667" height="277.5" fill="none" stroke="#bbb"/>
+<line x1="728.3333333333334" y1="526.25" x2="1015.0" y2="526.25" stroke="#999" stroke-dasharray="3 3"/>
+<text class="tick" x="728.3333333333334" y="680.0" text-anchor="middle">0</text>
+<text class="tick" x="785.6666666666667" y="680.0" text-anchor="middle">4</text>
+<text class="tick" x="843.0" y="680.0" text-anchor="middle">8</text>
+<text class="tick" x="900.3333333333334" y="680.0" text-anchor="middle">12</text>
+<text class="tick" x="957.6666666666667" y="680.0" text-anchor="middle">16</text>
+<text class="tick" x="1015.0" y="680.0" text-anchor="middle">20</text>
+<text class="tick" x="722.3333333333334" y="391.5" text-anchor="end">1.65e-06</text>
+<text class="tick" x="722.3333333333334" y="669.0" text-anchor="end">-1.65e-06</text>
+<polyline points="728.33,547.16 742.67,428.53 757.00,407.89 771.33,415.44 785.67,445.47 800.00,488.78 814.33,534.97 828.67,574.65 843.00,601.06 857.33,611.02 871.67,605.00 886.00,586.47 900.33,560.80 914.67,533.96 929.00,511.24 943.33,496.36 957.67,490.98 972.00,494.69 986.33,505.38 1000.67,519.92 1015.00,534.90" fill="none" stroke="#1769aa" stroke-width="2"/>
+<polyline points="728.33,454.44 742.67,413.35 757.00,402.37 771.33,419.05 785.67,455.99 800.00,503.00 814.33,549.45 828.67,586.41 843.00,608.09 857.33,612.52 871.67,601.37 886.00,579.03 900.33,551.42 914.67,524.60 929.00,503.57 943.33,491.49 957.67,489.31 972.00,495.95 986.33,508.77 1000.67,524.35 1015.00,539.25" fill="none" stroke="#c23b22" stroke-width="2"/>
+<line x1="825" y1="22" x2="855" y2="22" stroke="#1769aa" stroke-width="3"/><text class="note" x="862" y="26">S: L collateral slack</text>
+<line x1="825" y1="40" x2="855" y2="40" stroke="#c23b22" stroke-width="3"/><text class="note" x="862" y="44">B: L collateral binding</text>
+<text class="note" x="65" y="705">Finite-payment internal case; -0.01 bp date-0 rule innovation; local-linear recurrent continuation; no empirical calibration.</text>
+</svg>

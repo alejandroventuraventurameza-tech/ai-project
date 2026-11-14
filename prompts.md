@@ -2,17 +2,22 @@
 
 Registro acumulativo. Los veredictos del autor se distinguen de los controles automáticos.
 
+Nota de edición pública (5 de noviembre de 2026): se sustituyeron las rutas
+personales por marcadores y se omitió un detalle privado sobre una cuenta.
+Las solicitudes históricas se conservan con esas omisiones señaladas; no son
+instrucciones de ejecución vigentes. La autoría corresponde a Alejandro Ventura.
+
 ## 2026-10-07 — Auditoría e incorporación de la plantilla
 
 ### Solicitud inicial (texto original)
 
 Trabajaremos en el repositorio local:
 
-`C:\Users\ASUS\Downloads\IE_project\ai-project`
+`[RAIZ_LOCAL]/ai-project`
 
 La carpeta padre:
 
-`C:\Users\ASUS\Downloads\IE_project`
+`[RAIZ_LOCAL]`
 
 contiene los papers, notas, datos y notebooks de mi investigación, pero no es el repositorio de entrega.
 
@@ -340,13 +345,13 @@ La carpeta `IE_project` es una fuente local de investigación, no el repositorio
 
 **El repositorio está limpio y conectado a GitHub, pero no contiene la plantilla oficial.** No modifiqué archivos, creé commits ni hice push.
 
-1. **Git, ramas e historial.** En `C:\Users\ASUS\Downloads\IE_project\ai-project`, la rama activa es `feat/topic-presentation`. Esta rama y `main` apuntan al único commit: `58103dc` — `Initial commit`. No aparecen cambios locales.
+1. **Git, ramas e historial.** En `[RAIZ_LOCAL]/ai-project`, la rama activa es `feat/topic-presentation`. Esta rama y `main` apuntan al único commit: `58103dc` — `Initial commit`. No aparecen cambios locales.
 
 2. **Plantilla oficial.** No está instalada: el único archivo versionado es `.gitattributes`. Faltan las carpetas y archivos exigidos por el [issue #7](https://github.com/alexanderquispe/AI-Econ-Modeling/issues/7): `proposal/`, `slides/`, `paper/`, `code/`, `lean/`, `hand/`, `README.md` y `prompts.md`, entre otros. Leí el issue completo; la consulta directa de la plantilla no respondió.
 
 3. **`origin`.** Existe y apunta a [ai-final-project](https://github.com/alejandroventuraventurameza-tech/ai-final-project). Verifiqué directamente en GitHub que `main` y `feat/topic-presentation` existen y coinciden con el commit local. La rama predeterminada remota es `main`.
 
-4. **Instrucciones, exclusiones y estructura.** No existen `AGENTS.md` ni `.gitignore` dentro del repositorio. El [AGENTS.md de la carpeta padre](/C:/Users/ASUS/Downloads/IE_project/AGENTS.md) solo contiene el encabezado de instrucciones importadas. `.gitattributes` normaliza finales de línea. Antes de incorporar contenido habrá que revisar las exclusiones para microdatos, entornos, credenciales, papers y auxiliares de LaTeX, conservando los PDF de entrega.
+4. **Instrucciones, exclusiones y estructura.** No existen `AGENTS.md` ni `.gitignore` dentro del repositorio. El AGENTS.md de la carpeta padre solo contiene el encabezado de instrucciones importadas. `.gitattributes` normaliza finales de línea. Antes de incorporar contenido habrá que revisar las exclusiones para microdatos, entornos, credenciales, papers y auxiliares de LaTeX, conservando los PDF de entrega.
 
 5. **Qué falta para establecer la base.** `main` ya está limpio, pero le falta toda la plantilla. También hay una discrepancia de nombre: el issue exige un repositorio público llamado `ai-project`; el remoto actual se llama `ai-final-project`. La visibilidad pública no quedó verificada.
 
@@ -393,12 +398,12 @@ Veredicto del usuario sobre el diff y el commit: pendiente.
 ### Prompt original del usuario
 
 ```text
-Continuemos mi proyecto final de AI Econ Modeling. Primero confirma que la ruta de trabajo sea `C:\Users\ASUS\projects\IE_project` y localiza el repositorio `ai-project` dentro de ella. Comprueba la rama, los cambios pendientes y el remoto antes de editar.
+Continuemos mi proyecto final de AI Econ Modeling. Primero confirma que la ruta de trabajo sea `[RAIZ_LOCAL]` y localiza el repositorio `ai-project` dentro de ella. Comprueba la rama, los cambios pendientes y el remoto antes de editar.
 La consigna es [https://github.com/alexanderquispe/AI-Econ-Modeling/issues/7](https://github.com/alexanderquispe/AI-Econ-Modeling/issues/7). Mi presentación de tema es hoy, 7 de octubre, a las 08:20 (Lima); para este grupo, la propuesta de 2–4 páginas y las diapositivas deben estar integradas en `main` antes de las 07:30. Prioriza esa entrega. Usa la estructura de la plantilla oficial, elimina todos los recuadros “Replace”, compila y revisa los PDF. Trabaja en una rama y muéstrame los PDF para revisión antes de integrar el PR. Verifica también que el repositorio público cumpla el nombre `ai-project` y que se publique su enlace en el comentario del issue.
-El autor soy **Alejandro Ventura**. Fernando Condori aparece en unas notas porque un amigo me prestó su cuenta; no lo uses como autor.
+El autor soy **Alejandro Ventura**. [Se omitió un detalle privado sobre una cuenta; no modifica la autoría.]
 Ya acordamos desarrollar **A como núcleo demostrable** y dejar **B como objetivo de la presentación final**. A conecta un banco que administra reservas, depósitos y crédito con dos empresas heterogéneas en productividad, patrimonio y colateral. El problema de cada empresa usa (Rk_i=x_i+b_i), (t b_i\le h_i) y (y_i=A_i k_i^\alpha). Una expansión de reservas reduce (t) cuando escasea la liquidez. Si la empresa más productiva está limitada y la otra se autofinancia, puede mejorar la asignación. Si ambas están limitadas, (k_H=K(tn_H+h_H)/(t(n_H+n_L)+h_H+h_L)), y la caída de (t) dirige más capital a la empresa productiva solo si (h_H/n_H>h_L/n_L). Presenta ambos resultados como condicionales y verifica sus supuestos. No atribuyas nuestro costo bancario simplificado directamente a Bianchi y Bigio.
 El antecedente más cercano es González, Nuño, Thaler y Albrizio: ya estudian política monetaria y mala asignación, por lo que esa relación sola no es nuestra novedad. Bianchi y Bigio (2022) aportan reservas, depósitos y gestión de liquidez interbancaria. Los papers están en las carpetas `saki_research` y `gonzales_nuno_thaler_albrizio_firm_heterogeneity_capital_misallocation_optimal_monetary_policy`, dentro de `IE_project`.
-Lee también mis instrucciones originales en `C:\Users\ASUS\.codex\attachments\8af0b6ad-2a8d-4126-80eb-978950237dff\Texto pegado.txt` y la nueva plantilla maestra para Lean en `C:\Users\ASUS\.codex\attachments\85816578-d1f8-44ff-b0fd-678d71423631\Texto pegado.txt`. Incorpora lo pertinente a Lean en el plan, pero atiende primero la propuesta y las diapositivas. La formalización completa corresponde después de fijar el artículo en un commit, según el issue.
+Lee también mis instrucciones originales en `[ADJUNTO_INSTRUCCIONES_ORIGINALES]` y la nueva plantilla maestra para Lean en `[ADJUNTO_PLANTILLA_LEAN]`. Incorpora lo pertinente a Lean en el plan, pero atiende primero la propuesta y las diapositivas. La formalización completa corresponde después de fijar el artículo en un commit, según el issue.
 El repositorio tenía instalada la plantilla oficial en una rama y el remoto se llamaba anteriormente `ai-final-project`; vuelve a comprobar ambos datos, porque pueden haber cambiado. No escribas directamente en `main`, no inventes evidencia causal a partir de EEA/ENAHO y no afirmes que una reducción de tasas siempre disminuye la mala asignación. Avanza con la redacción y compilación, y comunícame cualquier bloqueo concreto.
 ```
 
@@ -491,3 +496,63 @@ ec. 4, p. 7; ec. 6, p. 8; proposición 1, p. 19; proposición 2, pp. 20–21;
 pruebas B.7.1–B.7.2. Se distingue su notación (m_t: precio real del insumo,
 R_t: costo del capital) de m (reservas) y R (pago inicial de alquiler) del
 modelo propio. La versión histórica 2023 no se usa como baseline activo.
+
+
+## Preparación del artículo NK V0-M para revisión
+
+### Alcance autorizado
+
+Petición original del autor:
+
+```text
+Sí, prepara el artículo y su PDF en una rama
+```
+
+La preparación se realiza en una rama. No implica aceptación del artículo,
+commit, publicación, PR o integración. Se mantiene fuera del repositorio la guía
+privada de exposición y los registros personales de preparación.
+
+### Trabajo y límites de la asistencia
+
+Se trasladaron los 57 enunciados y sus pruebas escritas, conservando su contenido
+literal y etiquetas estables. Se adaptaron encabezados a las siete secciones de
+la plantilla, se numeraron supuestos del entorno y se añadieron registro de
+resultados, bibliografía por versión y un punto de entrada reproducible.
+La extensión completa se conserva antes de compactar la entrega final.
+
+Se verificaron los cálculos internos del paquete migrado. Esto no es una
+auditoría integral de todos los argumentos ni una corrida de Lean. Se registra
+una revisión escrita acotada de 30 resultados y solo inventario para otros 27.
+No se simularon IRF ni se usaron datos reales. El modelo conserva ambas ramas.
+
+Durante la migración se corrigió una referencia de directorio del comprobador
+de muestras, detectada por una ejecución fallida. También se corrigió el
+clasificador de revisión: una nota de inventario no cuenta como revisión
+sustantiva. La tabla final diferencia las 30 revisiones de las otras 27 filas.
+
+### Veredicto del autor sobre esta versión
+
+Pendiente de revisión del artículo y su PDF. La autorización de prepararlos no
+se registra como aprobación científica. La integración previa de la entrega
+del tema y su comentario del issue son hitos históricos; el NK V0-M sigue
+pendiente de revisión e integración.
+
+
+## 2 de noviembre: integración de IRF internas
+
+El autor autorizó comenzar la entrega dentro de `ai-project`, priorizando
+resultados reproducibles e interpretación económica. Se creó una rama de entrega
+conservando los cambios previos. Se adaptó el reproductor local a rutas relativas,
+se añadieron figuras, tabla automática y sensibilidades de choque, tolerancia y
+horizonte. La caída inicial de producción se conserva y se verifican identidades
+laborales y contables, sin imponer un signo favorable. Se distingue el certificado
+externo reducido de la validación completa y de las pruebas Lean preliminares.
+No se usaron datos reales, no se asignó deuda pública, y no se hicieron commits,
+push ni integración. La revisión y aceptación científica del autor siguen pendientes.
+
+
+## Observaciones recuperadas de Desktop (7 de noviembre)
+
+El autor suministró en la conversación del 7 de noviembre de 2026 una transcripción de instrucciones anteriores a su migración de Desktop a la nube. Su texto, incluidas erratas, queda conservado en [docs/OBSERVACIONES_DESKTOP_2026-11-07.md](docs/OBSERVACIONES_DESKTOP_2026-11-07.md). No se ha comprobado el historial local original de esas instrucciones ni su fecha de emisión anterior. Esta referencia **no** afirma que se hayan ejecutado esos encargos.
+
+La interpretación científica, la evidencia disponible en código y las obligaciones de modelación, simulación, visualización y escritura se distinguen en [docs/PROTOCOLO_CIENTIFICO_DESKTOP_2026-11-07.md](docs/PROTOCOLO_CIENTIFICO_DESKTOP_2026-11-07.md). El plan maestro vigente es [PLAN_REFINAMIENTO_EDITORIAL_VISUAL.md](PLAN_REFINAMIENTO_EDITORIAL_VISUAL.md).

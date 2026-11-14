@@ -1,0 +1,107 @@
+name: Finite bridge source point-Jacobian export (NOT IFT)
+
+on:
+  push:
+    branches:
+      - 'work/lean-ci-validation-*'
+    paths:
+      - 'code/v0m/cierre_interno_2026_10_17/finite_bridge.py'
+      - 'code/v0m/certified_ift/verify_point_candidate.py'
+      - 'code/v0m/certified_ift/audit_point_schur.py'
+      - 'code/v0m/certified_ift/audit_uniform_schur.py'
+      - '.github/workflows/finite-source-point-export.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  point-only-export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Checkout research branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install pinned Python dependency
+        run: |
+          python3 -m pip install 'numpy==2.1.3' 'mpmath==1.3.0'
+      - name: Recompute finite bridge and extract point-only matrix boxes
+        env:
+          VENTURA_EXPORT_POINT_MATRICES: "1"
+          VENTURA_EXPORT_UNIFORM_BOX: "1"
+          VENTURA_STATE_LOG_RADIUS: "1e-10"
+          VENTURA_POLICY_RADIUS: "1e-15"
+        run: |
+          set -euo pipefail
+          python3 code/v0m/cierre_interno_2026_10_17/finite_bridge.py
+      - name: Reject accidental elevation to a nonlinear certificate
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('code/v0m/cierre_interno_2026_10_17/binding_source_point_jacobian_CANDIDATE.json')
+          d=json.loads(p.read_text())
+          assert d['state_dimension']==33 and d['parameter_dimension']==5
+          assert d['rows_recomputed_as_source_style']==[4,5,21]
+          expected=[0,3,1,4,2,5,*range(6,17),17,19,18,20,*range(21,33)]
+          assert d['source_to_legacy_row_permutation']==expected
+          assert len(d['point_jacobian_box'])==33
+          assert all(len(row)==33 for row in d['point_jacobian_box'])
+          assert len(d['point_policy_derivative_box'])==33
+          assert all(len(row)==5 for row in d['point_policy_derivative_box'])
+          assert d['point_policy_derivative_box'][5][0]==['-1','-1']
+          assert len(d['funding_dual_state_gradient_box']) == 33
+          from fractions import Fraction as Q
+          assert len(d['funding_dual_direct_parameter_derivatives'])==4
+          assert all(Q(lo)==0 and Q(hi)==0 for lo,hi
+                     in d['funding_dual_direct_parameter_derivatives'])
+          assert d['uniform_ball_jacobian_enclosures_proven'] is False
+          assert d['exact_zero_center_proven'] is False
+          assert d['economic_source_row_map_proven'] is False
+          assert d['formal_Lean_witness_established'] is False
+          assert type(d['point_inverse_gate_pass']) is bool
+          assert len(d['point_defect_row_upper_bounds'])==33
+          assert len(d['jacobian_row_interval_width_sum'])==33
+          print('Point-only diagnostic exported. q=',d['point_preconditioned_defect_upper'])
+          print('Source derivative provenance still open; NO IFT witness asserted.')
+          PY
+      - name: Independently check the exact rational point inverse defect
+        run: |
+          python3 code/v0m/certified_ift/verify_point_candidate.py \
+            code/v0m/cierre_interno_2026_10_17/binding_source_point_jacobian_CANDIDATE.json
+      - name: Conditional Schur-derivative sign certificate using exact rationals
+        run: |
+          python3 code/v0m/certified_ift/audit_point_schur.py \
+            code/v0m/cierre_interno_2026_10_17/binding_source_point_jacobian_CANDIDATE.json \
+            --output code/v0m/cierre_interno_2026_10_17/binding_point_schur_audit_CANDIDATE.json
+      - name: Conditional uniform 33-state 5-policy Banach contraction arithmetic
+        run: |
+          python3 code/v0m/certified_ift/check_quantitative_ift.py \
+            --certificate code/v0m/cierre_interno_2026_10_17/binding_source_uniform_box_CANDIDATE.json \
+            --output code/v0m/cierre_interno_2026_10_17/binding_uniform_ball_arithmetic_audit_CANDIDATE.json
+      - name: Conditional uniform Schur signs over product box
+        run: |
+          python3 code/v0m/certified_ift/audit_uniform_schur.py \
+            --ball code/v0m/cierre_interno_2026_10_17/binding_source_uniform_box_CANDIDATE.json \
+            --arithmetic-report code/v0m/cierre_interno_2026_10_17/binding_uniform_ball_arithmetic_audit_CANDIDATE.json \
+            --output code/v0m/cierre_interno_2026_10_17/binding_uniform_schur_audit_CANDIDATE.json
+      - name: Conditional augmented 34x34 exact-rational root arithmetic
+        run: |
+          python3 code/v0m/certified_ift/audit_augmented_34.py \
+            --candidate code/v0m/cierre_interno_2026_10_17/binding_source_uniform_box_CANDIDATE.json \
+            --output code/v0m/cierre_interno_2026_10_17/binding_augmented34_arithmetic_CANDIDATE.json
+      - name: Upload point-only candidate matrices even when inverse gate fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: binding-33x33-source-point-CANDIDATE
+          path: |
+            code/v0m/cierre_interno_2026_10_17/binding_source_point_jacobian_CANDIDATE.json
+            code/v0m/cierre_interno_2026_10_17/binding_point_schur_audit_CANDIDATE.json
+            code/v0m/cierre_interno_2026_10_17/binding_source_uniform_box_CANDIDATE.json
+            code/v0m/cierre_interno_2026_10_17/binding_uniform_ball_arithmetic_audit_CANDIDATE.json
+            code/v0m/cierre_interno_2026_10_17/binding_uniform_schur_audit_CANDIDATE.json
+            code/v0m/cierre_interno_2026_10_17/binding_augmented34_arithmetic_CANDIDATE.json
+          retention-days: 30

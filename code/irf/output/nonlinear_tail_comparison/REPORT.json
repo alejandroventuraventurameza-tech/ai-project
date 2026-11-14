@@ -1,0 +1,613 @@
+{
+  "status": "completed_finite_horizon_comparison",
+  "full_equilibrium_validated": false,
+  "experiments": [
+    {
+      "branch": "slack",
+      "T": 20,
+      "terminal": "linear_graph",
+      "unknowns": 331,
+      "newton_residual_history": [
+        6.491345493477105e-08,
+        3.608528406640055e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -3.5591946962009606e-05,
+        "worker_consumption": -0.0005051681679231442,
+        "input_price": -0.000611944008814976,
+        "wage": -0.0005763520618323776,
+        "labor": -7.118389394644135e-05,
+        "credit_H": 0.0010951712440950224,
+        "credit_L": -0.0004739226758688212,
+        "loss_100_log_difference": -2.4812799787055084e-06
+      },
+      "original_impact_output_log_pct": -3.5797571985807056e-05,
+      "impact_output_difference_log_pct": 2.056250237974502e-07,
+      "terminal_state_log_sup": 1.1281099805180436e-05,
+      "strict_regime_failures": {},
+      "runtime_seconds": 0.1410000000000764
+    },
+    {
+      "branch": "binding",
+      "T": 20,
+      "terminal": "linear_graph",
+      "unknowns": 331,
+      "newton_residual_history": [
+        6.842146443191734e-08,
+        3.6648364464680894e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -0.004142226407515126,
+        "worker_consumption": -0.0004833646746812036,
+        "input_price": -0.012910043897193163,
+        "wage": -0.008767817489682904,
+        "labor": -0.00828445281500817,
+        "credit_H": 0.0008406454154186894,
+        "credit_L": 0.00157802891195124,
+        "loss_100_log_difference": 8.519008566068229e-06
+      },
+      "original_impact_output_log_pct": -0.004142551019065471,
+      "impact_output_difference_log_pct": 3.2461155034455014e-07,
+      "terminal_state_log_sup": 1.1892535516638411e-05,
+      "strict_regime_failures": {},
+      "runtime_seconds": 0.125
+    },
+    {
+      "branch": "slack",
+      "T": 40,
+      "terminal": "linear_graph",
+      "unknowns": 651,
+      "newton_residual_history": [
+        6.491345493477105e-08,
+        2.987062366118648e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -3.559161617094168e-05,
+        "worker_consumption": -0.0005051665327229019,
+        "input_price": -0.0006119413812007574,
+        "wage": -0.0005763497650341556,
+        "labor": -7.118323233076332e-05,
+        "credit_H": 0.0010951705607824388,
+        "credit_L": -0.0004739218015862503,
+        "loss_100_log_difference": -2.4812795804563664e-06
+      },
+      "original_impact_output_log_pct": -3.5797571985807056e-05,
+      "impact_output_difference_log_pct": 2.0595581486537485e-07,
+      "terminal_state_log_sup": 2.2656444220966096e-06,
+      "strict_regime_failures": {},
+      "runtime_seconds": 0.20299999999997453
+    },
+    {
+      "branch": "binding",
+      "T": 40,
+      "terminal": "linear_graph",
+      "unknowns": 651,
+      "newton_residual_history": [
+        6.842146443191734e-08,
+        4.5236600923481696e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -0.0041422208878793415,
+        "worker_consumption": -0.0004833628363872383,
+        "input_price": -0.012910025500021438,
+        "wage": -0.008767804612131724,
+        "labor": -0.00828444177576786,
+        "credit_H": 0.0008406449865431402,
+        "credit_L": 0.0015780273123893525,
+        "loss_100_log_difference": 8.518995003739885e-06
+      },
+      "original_impact_output_log_pct": -0.004142551019065471,
+      "impact_output_difference_log_pct": 3.301311861294426e-07,
+      "terminal_state_log_sup": 1.890052276663529e-06,
+      "strict_regime_failures": {},
+      "runtime_seconds": 0.18699999999989814
+    },
+    {
+      "branch": "slack",
+      "T": 80,
+      "terminal": "linear_graph",
+      "unknowns": 1291,
+      "newton_residual_history": [
+        6.491345493477105e-08,
+        3.660938739658004e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -3.5591604036199705e-05,
+        "worker_consumption": -0.000505166531135275,
+        "input_price": -0.0006119413432531022,
+        "wage": -0.0005763497392102192,
+        "labor": -7.118320809457744e-05,
+        "credit_H": 0.0010951705565414333,
+        "credit_L": -0.00047392180281860373,
+        "loss_100_log_difference": -2.4812796025740907e-06
+      },
+      "original_impact_output_log_pct": -3.5797571985807056e-05,
+      "impact_output_difference_log_pct": 2.0596794960735048e-07,
+      "terminal_state_log_sup": 3.030760722492254e-07,
+      "strict_regime_failures": {},
+      "runtime_seconds": 0.36000000000012733
+    },
+    {
+      "branch": "binding",
+      "T": 80,
+      "terminal": "linear_graph",
+      "unknowns": 1291,
+      "newton_residual_history": [
+        6.842146443191734e-08,
+        3.739944551967023e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -0.004142220870670172,
+        "worker_consumption": -0.0004833628368757387,
+        "input_price": -0.012910025448900173,
+        "wage": -0.00876780457822254,
+        "labor": -0.008284441741348094,
+        "credit_H": 0.0008406449838786274,
+        "credit_L": 0.0015780273079707343,
+        "loss_100_log_difference": 8.518995003739885e-06
+      },
+      "original_impact_output_log_pct": -0.004142551019065471,
+      "impact_output_difference_log_pct": 3.3014839529929563e-07,
+      "terminal_state_log_sup": 2.773742947326248e-07,
+      "strict_regime_failures": {},
+      "runtime_seconds": 0.43699999999989814
+    },
+    {
+      "branch": "slack",
+      "T": 160,
+      "terminal": "linear_graph",
+      "unknowns": 2571,
+      "newton_residual_history": [
+        6.491345493477105e-08,
+        3.396364949264513e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -3.559160232645564e-05,
+        "worker_consumption": -0.0005051665333557322,
+        "input_price": -0.0006119413403665048,
+        "wage": -0.0005763497380222737,
+        "labor": -7.118320466398586e-05,
+        "credit_H": 0.001095170557229764,
+        "credit_L": -0.00047392180298513794,
+        "loss_100_log_difference": -2.4812796025740907e-06
+      },
+      "original_impact_output_log_pct": -3.5797571985807056e-05,
+      "impact_output_difference_log_pct": 2.0596965935141826e-07,
+      "terminal_state_log_sup": 4.086066678013254e-08,
+      "strict_regime_failures": {},
+      "runtime_seconds": 0.9690000000000509
+    },
+    {
+      "branch": "binding",
+      "T": 160,
+      "terminal": "linear_graph",
+      "unknowns": 2571,
+      "newton_residual_history": [
+        6.842146443191734e-08,
+        5.288857459623264e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -0.004142220871336333,
+        "worker_consumption": -0.00048336283899627495,
+        "input_price": -0.012910025452986319,
+        "wage": -0.008767804581642325,
+        "labor": -0.008284441742680473,
+        "credit_H": 0.0008406449843449172,
+        "credit_L": 0.0015780273089255113,
+        "loss_100_log_difference": 8.518995025857609e-06
+      },
+      "original_impact_output_log_pct": -0.004142551019065471,
+      "impact_output_difference_log_pct": 3.301477291377253e-07,
+      "terminal_state_log_sup": 3.7090145130386667e-08,
+      "strict_regime_failures": {},
+      "runtime_seconds": 1.0
+    },
+    {
+      "branch": "slack",
+      "T": 320,
+      "terminal": "linear_graph",
+      "unknowns": 5131,
+      "newton_residual_history": [
+        6.491345493477105e-08,
+        2.9106424183426545e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -3.559159897358091e-05,
+        "worker_consumption": -0.0005051665377633399,
+        "input_price": -0.0006119413346377189,
+        "wage": -0.000576349735657485,
+        "labor": -7.118319793602955e-05,
+        "credit_H": 0.0010951705585398128,
+        "credit_L": -0.00047392180329600185,
+        "loss_100_log_difference": -2.4812796025740907e-06
+      },
+      "original_impact_output_log_pct": -3.5797571985807056e-05,
+      "impact_output_difference_log_pct": 2.0597301222614525e-07,
+      "terminal_state_log_sup": 3.155995026984317e-09,
+      "strict_regime_failures": {},
+      "runtime_seconds": 1.3130000000001019
+    },
+    {
+      "branch": "binding",
+      "T": 320,
+      "terminal": "linear_graph",
+      "unknowns": 5131,
+      "newton_residual_history": [
+        6.842146443191734e-08,
+        4.559091819344996e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -0.004142220872679759,
+        "worker_consumption": -0.00048336284325955207,
+        "input_price": -0.012910025461258549,
+        "wage": -0.008767804588581828,
+        "labor": -0.008284441745356332,
+        "credit_H": 0.0008406449853663137,
+        "credit_L": 0.0015780273109460854,
+        "loss_100_log_difference": 8.518995003739885e-06
+      },
+      "original_impact_output_log_pct": -0.004142551019065471,
+      "impact_output_difference_log_pct": 3.3014638571235433e-07,
+      "terminal_state_log_sup": 2.8616725742475553e-09,
+      "strict_regime_failures": {},
+      "runtime_seconds": 1.4679999999998472
+    },
+    {
+      "branch": "slack",
+      "T": 640,
+      "terminal": "linear_graph",
+      "unknowns": 10251,
+      "newton_residual_history": [
+        6.491345493477105e-08,
+        4.6640805367176297e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -3.559159238995603e-05,
+        "worker_consumption": -0.0005051665463121004,
+        "input_price": -0.0006119413235243184,
+        "wage": -0.0005763497311166467,
+        "labor": -7.118318480208181e-05,
+        "credit_H": 0.001095170561115502,
+        "credit_L": -0.000473921803928832,
+        "loss_100_log_difference": -2.481279624691815e-06
+      },
+      "original_impact_output_log_pct": -3.5797571985807056e-05,
+      "impact_output_difference_log_pct": 2.0597959585102587e-07,
+      "terminal_state_log_sup": 1.9245923910162325e-11,
+      "strict_regime_failures": {},
+      "runtime_seconds": 3.3279999999999745
+    },
+    {
+      "branch": "binding",
+      "T": 640,
+      "terminal": "linear_graph",
+      "unknowns": 10251,
+      "newton_residual_history": [
+        6.842146443191734e-08,
+        4.5132381989651527e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -0.004142220875599766,
+        "worker_consumption": -0.0004833628526187774,
+        "input_price": -0.012910025479424145,
+        "wage": -0.008767804603826528,
+        "labor": -0.008284441751207692,
+        "credit_H": 0.0008406449875867411,
+        "credit_L": 0.001578027315320295,
+        "loss_100_log_difference": 8.518995048018702e-06
+      },
+      "original_impact_output_log_pct": -0.004142551019065471,
+      "impact_output_difference_log_pct": 3.301434657052363e-07,
+      "terminal_state_log_sup": 1.7448787242991184e-11,
+      "strict_regime_failures": {},
+      "runtime_seconds": 3.030999999999949
+    },
+    {
+      "branch": "slack",
+      "T": 80,
+      "terminal": "zero_controls",
+      "unknowns": 1291,
+      "newton_residual_history": [
+        3.151785167662681e-07,
+        2.0157571828838435e-08,
+        5.841702989395348e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -0.0012044498930926515,
+        "worker_consumption": 0.0010196044048091928,
+        "input_price": -0.0025937452744596197,
+        "wage": -0.0013892953813654414,
+        "labor": -0.002408899786176953,
+        "credit_H": 0.0006346127984515118,
+        "credit_L": -0.000362600569502146,
+        "loss_100_log_difference": -2.143108126682544e-06
+      },
+      "original_impact_output_log_pct": -3.5797571985807056e-05,
+      "impact_output_difference_log_pct": -0.0011686523211068445,
+      "terminal_state_log_sup": 1.0523083214621775e-05,
+      "strict_regime_failures": {},
+      "runtime_seconds": 0.9209999999998217
+    },
+    {
+      "branch": "binding",
+      "T": 80,
+      "terminal": "zero_controls",
+      "unknowns": 1291,
+      "newton_residual_history": [
+        3.3942245612544586e-07,
+        2.6769984848209333e-08,
+        3.1973230486814774e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -0.003685700419143987,
+        "worker_consumption": 0.0009698842950548085,
+        "input_price": -0.010087216962404957,
+        "wage": -0.006401516543259402,
+        "labor": -0.0073714008382946995,
+        "credit_H": 0.0004969772473443975,
+        "credit_L": 0.0008967726272337515,
+        "loss_100_log_difference": 4.618833986591228e-06
+      },
+      "original_impact_output_log_pct": -0.004142551019065471,
+      "impact_output_difference_log_pct": 0.000456850599921484,
+      "terminal_state_log_sup": 1.00872466581321e-05,
+      "strict_regime_failures": {},
+      "runtime_seconds": 0.625
+    },
+    {
+      "branch": "slack",
+      "T": 160,
+      "terminal": "zero_controls",
+      "unknowns": 2571,
+      "newton_residual_history": [
+        6.491345493477105e-08,
+        1.7579275329252658e-10,
+        4.052057219492214e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -0.00014387105425830957,
+        "worker_consumption": -0.0003639124682389292,
+        "input_price": -0.0007955256309756674,
+        "wage": -0.0006516545767066105,
+        "labor": -0.00028774210852624546,
+        "credit_H": 0.0010525285190537909,
+        "credit_L": -0.000463617128327874,
+        "loss_100_log_difference": -2.4502190110620853e-06
+      },
+      "original_impact_output_log_pct": -3.5797571985807056e-05,
+      "impact_output_difference_log_pct": -0.00010807348227250251,
+      "terminal_state_log_sup": 9.776615366582695e-07,
+      "strict_regime_failures": {},
+      "runtime_seconds": 1.2350000000001273
+    },
+    {
+      "branch": "binding",
+      "T": 160,
+      "terminal": "zero_controls",
+      "unknowns": 2571,
+      "newton_residual_history": [
+        6.842146443191734e-08,
+        2.1167328263446694e-10,
+        4.564861363089395e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -0.0041017442356641905,
+        "worker_consumption": -0.0003544095660380489,
+        "input_price": -0.012659642272953967,
+        "wage": -0.008557898037302551,
+        "labor": -0.00820348847130485,
+        "credit_H": 0.0008101732658927745,
+        "credit_L": 0.0015175859546970464,
+        "loss_100_log_difference": 8.172753342096037e-06
+      },
+      "original_impact_output_log_pct": -0.004142551019065471,
+      "impact_output_difference_log_pct": 4.080678340128048e-05,
+      "terminal_state_log_sup": 8.976655991372648e-07,
+      "strict_regime_failures": {},
+      "runtime_seconds": 1.5149999999998727
+    },
+    {
+      "branch": "slack",
+      "T": 320,
+      "terminal": "zero_controls",
+      "unknowns": 5131,
+      "newton_residual_history": [
+        6.491345493477105e-08,
+        2.944025394562705e-12,
+        4.694783109363346e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -4.881879864062089e-05,
+        "worker_consumption": -0.0004879111076525545,
+        "input_price": -0.0006343675035872749,
+        "wage": -0.0005855487049610443,
+        "labor": -9.763759726639059e-05,
+        "credit_H": 0.0010899614878567203,
+        "credit_L": -0.00047266295458572014,
+        "loss_100_log_difference": -2.4774850067299514e-06
+      },
+      "original_impact_output_log_pct": -3.5797571985807056e-05,
+      "impact_output_difference_log_pct": -1.3021226654813837e-05,
+      "terminal_state_log_sup": 1.2008070223610512e-07,
+      "strict_regime_failures": {},
+      "runtime_seconds": 3.2029999999999745
+    },
+    {
+      "branch": "binding",
+      "T": 320,
+      "terminal": "zero_controls",
+      "unknowns": 5131,
+      "newton_residual_history": [
+        6.842146443191734e-08,
+        3.203463752946001e-12,
+        4.965051671667817e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -0.004137335855968841,
+        "worker_consumption": -0.0004677996052974267,
+        "input_price": -0.012879807173198215,
+        "wage": -0.00874247131721684,
+        "labor": -0.008274671711933924,
+        "credit_H": 0.0008369674405032924,
+        "credit_L": 0.0015707328076806394,
+        "loss_100_log_difference": 8.4772079925622e-06
+      },
+      "original_impact_output_log_pct": -0.004142551019065471,
+      "impact_output_difference_log_pct": 5.215163096630206e-06,
+      "terminal_state_log_sup": 1.0892862780994474e-07,
+      "strict_regime_failures": {},
+      "runtime_seconds": 3.3910000000000764
+    },
+    {
+      "branch": "slack",
+      "T": 640,
+      "terminal": "zero_controls",
+      "unknowns": 10251,
+      "newton_residual_history": [
+        6.491345493477105e-08,
+        4.1135335155512154e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -3.567631946774773e-05,
+        "worker_consumption": -0.0005050560162349311,
+        "input_price": -0.0006120849746507325,
+        "wage": -0.0005764086551888317,
+        "labor": -7.135263894033278e-05,
+        "credit_H": 0.0010951371943496413,
+        "credit_L": -0.00047391374030748265,
+        "loss_100_log_difference": -2.481255309853478e-06
+      },
+      "original_impact_output_log_pct": -3.5797571985807056e-05,
+      "impact_output_difference_log_pct": 1.2125251805932696e-07,
+      "terminal_state_log_sup": 7.775784000865047e-10,
+      "strict_regime_failures": {},
+      "runtime_seconds": 2.5160000000000764
+    },
+    {
+      "branch": "binding",
+      "T": 640,
+      "terminal": "zero_controls",
+      "unknowns": 10251,
+      "newton_residual_history": [
+        6.842146443191734e-08,
+        4.671338296174531e-14
+      ],
+      "reference_residual_history": [
+        3.552713678800501e-15
+      ],
+      "prefix_assembly_difference": 0.0,
+      "impact": {
+        "output": -0.00414218960079832,
+        "worker_consumption": -0.0004832632136064507,
+        "input_price": -0.012909832016028933,
+        "wage": -0.00876764241522187,
+        "labor": -0.008284379201589743,
+        "credit_H": 0.0008406214432627757,
+        "credit_L": 0.0015779806145257101,
+        "loss_100_log_difference": 8.51872754064828e-06
+      },
+      "original_impact_output_log_pct": -0.004142551019065471,
+      "impact_output_difference_log_pct": 3.61418267150887e-07,
+      "terminal_state_log_sup": 7.049977651559116e-10,
+      "strict_regime_failures": {},
+      "runtime_seconds": 3.375
+    }
+  ],
+  "scope": "Finite deterministic reduced paths with nonlinear rows through T-1 and an explicit boundary at T; no exact infinite-path or bank-optimality claim.",
+  "shock": -1e-05,
+  "method": "Sparse stacked Newton; central finite-difference local Jacobian blocks; backtracking; no value function iteration.",
+  "terminal_conditions": {
+    "linear_graph": "u_T=P0_controls*x_T in log deviations",
+    "zero_controls": "u_T=0 in log deviations; x_T remains endogenous"
+  },
+  "remaining": [
+    "Full source-to-code audit",
+    "Exact infinite nonlinear continuation comparison beyond finite terminal experiments",
+    "Dynamic policy optimality and complete economic equilibrium correspondence"
+  ],
+  "inputs_sha256": {
+    "finite_irf.py": "159db3022f3f6f3e2bf388fd3ba5ccf79d4b0ff8068b4c5b974df2b83cc55445",
+    "inputs\\rational_preconditioners.json": "d0cef14050de9f4725e51e5cd28b1ea77e33733dfb2c78d2e38a193200337e94"
+  },
+  "jacobian_directional_checks": {
+    "slack": 1.0321689028780745e-10,
+    "binding": 8.437095502028764e-11
+  },
+  "all_tested_regime_margins_passed": true
+}

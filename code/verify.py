@@ -261,3 +261,143 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # Retain the static laboratory, then verify the current NK package.
+    import subprocess
+    import sys
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "v0m" / "verify_v0m.py")], check=True)
+
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "audit_claim_scope.py")], check=True)
+
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_boundary_labor.py")], check=True)
+
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_prefix_rows.py")], check=True)
+
+    # Frozen predecessor: numerical starting-point audit, not an equilibrium/IRF certificate.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "frozen_stationary_prefix_audit.py")], check=True)
+
+    # Four small date-zero instrument tests, same frozen predecessor; not a structural IRF theorem.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "frozen_four_tool_impact_audit.py")], check=True)
+
+    # Independent direct-forcing and centered nonlinear/implicit-Jacobian audit.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "frozen_four_tool_local_derivative_audit.py")], check=True)
+
+    # Six policy pairs at two shock sizes; quantify interactions, not causal multipliers.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "frozen_four_tool_joint_interaction_audit.py")], check=True)
+
+    # Separate KKT-necessary roots S/B using one inherited X0; do not claim
+    # full dynamic equilibrium or global multiplicity from a reduced system.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "frozen_same_predecessor_branch_audit.py")], check=True)
+
+    # Finite exact-rational certificate for the pinned LINEAR tail matrix F0.
+    # Not a certificate for the nonlinear SOURCE operator or economic TVC.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "exact_linear_tail_power_certificate.py")], check=True)
+
+    # Transport a separately pinned 80-digit HAND-STENCIL F0 error through
+    # its own exact rational change of basis. SOURCE semantics still open.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_stencil_transition_bridge.py")], check=True)
+
+    # Compare nonlinear Python 16-row source with hand Euler reduction via
+    # the INVERTIBLE nominal-pledge row operation, not literal row equality.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_stencil_nonlinear_16_rows.py")], check=True)
+
+    # Mechanical coverage/order map for all 33 original Lean names and
+    # Python residual slots. This is NOT a symbolic equality certificate.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_python_lean_prefix_row_permutation.py")], check=True)
+
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "reproduce.py")], check=True)
+
+    # Branch-wise finite IRF accounting identity, NOT a policy causal theorem.
+    # At t=0 in S, L's pledge-based price is hypothetical (L is slack).
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_effective_price_wedge_irf.py")], check=True)
+
+    # Re-evaluate the literal SOURCE's normalized firm-L funding dual
+    # from the generated finite CSV. This does NOT close the other 33 rows.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_L_funding_dual_irf.py")], check=True)
+
+    # Source level firm regime gaps vs Python positive-domain log ratios
+    # (B for H/L, S for L, and common pledge in recurrent periods).
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_firm_regime_log_vs_level_irf.py")], check=True)
+
+    # SOURCE rows 0, 3, 4 versus bank-face, worker-labor, household-Euler
+    # logarithmic forms, with independent positive off-root perturbations.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_remaining_log_rows.py")], check=True)
+
+    # Assemble only nine ROOT scalar Jacobian factors at date 0/1;
+    # the other 24 SOURCE rows, Euler shear and coordinate chart stay OPEN.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_partial_jacobian_row_scales.py")], check=True)
+
+    # Conditional SOURCE transcription tests; do NOT promote to an operator proof.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_identity_row_candidates.py")], check=True)
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_firm_budget_euler_shear.py")], check=True)
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_log_coordinate_chart.py")], check=True)
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_full_transform_candidate.py")], check=True)
+
+    # Strictly separate 33 candidate row slots from full SOURCE certification.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_33_claim_readiness.py")], check=True)
+
+    # Literal SOURCE date-zero/date-one field and four-tool timing contract.
+    # This is semantic provenance, not runtime equivalence of Lean residuals.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_python_calendar_contract.py")], check=True)
+
+    # Distinguish the fixed predecessor from the switching-frontier boundary.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_predecessor_provenance.py")], check=True)
+
+    # Explicit conditional projection of SOURCE 12-field inheritance to Python X0.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_inherited_12_to_7_projection.py")], check=True)
+
+    # This scope claim is restricted to the 33 residuals, not the full equilibrium.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_reduced_prefix_inherited_support.py")], check=True)
+
+    # Diagnostic of the FLOAT64 Python frozen binding Jacobian only: not SOURCE IFT.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_frozen_python_jacobian_float_diagnostic.py")], check=True)
+
+    # Cross-baseline SOURCE/Python provenance: no phantom economic Jacobian inverse.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_jacobian_cross_baseline_firewall.py")], check=True)
+
+    # Eight SOURCE-shaped firm rows now tested on the SAME fixed inherited base.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_frozen_firm_row_same_base_candidates.py")], check=True)
+
+    # Sixteen additional SOURCE-shaped rows, now on same stationary predecessor.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_frozen_16_remaining_row_candidates.py")], check=True)
+
+    # Nine remaining SOURCE-shaped level/log rows, recomputed at frozen base.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_frozen_nine_scalar_source_shapes.py")], check=True)
+
+    # Exactly 33 same-base candidate row slots, NOT 33 SOURCE functional proofs.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_frozen_33_candidate_partition.py")], check=True)
+
+    # Same-root scalar Jacobian normalization, NOT original SOURCE derivative.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_frozen_nine_root_jacobian_normalization.py")], check=True)
+
+    # Same-base full 33x33 candidate root row transform; NO true Lean SOURCE identity.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_frozen_33_root_candidate_matrix_bridge.py")], check=True)
+
+    # Nonlinear, state-dependent 33-row candidate mapping on a positive chart.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_frozen_33_offroot_nonlinear_transform.py")], check=True)
+
+    # Explicit full 33-row off-root chain, product and quotient rule audit.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_frozen_33_offroot_product_rule.py")], check=True)
+
+    # Two-way nonlinear residual row map and residual-coordinate inverse.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_frozen_33_offroot_rowmap_inverse.py")], check=True)
+
+    # Literal date-zero policy support in SOURCE vs fixed-coordinate Python rows.
+    # This does NOT assert zero date-one endogenous equilibrium responses.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_four_tool_direct_support.py")], check=True)
+    # Exact OTC candidate identification: source lambda=log(2) corresponds to Python share aa=1/2.
+    # Restrict to 0<tau<=1; the SOURCE high-tightness branch is DIFFERENT.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_otc_log_two_bridge.py")], check=True)
+
+    # Conditional SOURCE bankExit/bankSeedShare witness and nominal-face log/level row bridge.
+    # Not a complete Primitives instance, bank optimality theorem or SOURCE Jacobian inverse.
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_source_bank_renewal_face_bridge.py")], check=True)
+
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "diagnose_impact.py")], check=True)
+
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "compare_nonlinear_tail.py")], check=True)
+
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "trace_transmission.py")], check=True)
+
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_financial_blocks.py")], check=True)
+
+    subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "render_mechanism_table.py")], check=True)

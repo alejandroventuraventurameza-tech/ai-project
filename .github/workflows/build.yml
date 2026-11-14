@@ -19,6 +19,208 @@ jobs:
           python-version: "3.12"
       - run: python -m pip install --quiet -r code/requirements.txt
       - run: python code/verify.py
+      - name: Preserve four-tool pairwise interaction audit
+        uses: actions/upload-artifact@v7
+        with:
+          name: four-tool-pairwise-frozen-prefix
+          path: code/irf/output/four_tool_pairwise_audit.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve same-predecessor S/B economic branch diagnostic
+        uses: actions/upload-artifact@v7
+        with:
+          name: same-predecessor-branch-diagnostic
+          path: code/irf/output/same_predecessor_branch_audit.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve exact rational local-linear graph stability certificate
+        uses: actions/upload-artifact@v7
+        with:
+          name: exact-linear-tail-power-certificate
+          path: code/irf/output/exact_linear_tail_power_certificate.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve audited V0-M-stencil-to-IRF coordinate bound
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-stencil-transition-coordinate-bridge
+          path: code/irf/output/stencil_transition_bridge.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve pledge-row-equivalent 16-row nonlinear Jacobian audit
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-stencil-pledge-row-equivalence
+          path: code/irf/output/stencil_nonlinear_16_rows_audit.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve the exact 33-row SOURCE/Python indexing ledger
+        uses: actions/upload-artifact@v7
+        with:
+          name: lean-python-prefix-row-permutation
+          path: code/irf/output/lean_python_33_row_permutation.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve numerical collateral-wedge branch decomposition
+        uses: actions/upload-artifact@v7
+        with:
+          name: finite-irf-collateral-wedge-decomposition
+          path: code/irf/output/effective_price_wedge_irf_audit.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve the literal SOURCE 34th funding-dual numerical audit
+        uses: actions/upload-artifact@v7
+        with:
+          name: finite-irf-source-row34-funding-dual
+          path: code/irf/output/source_L_funding_dual_irf_audit.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve source/Python log-to-level regime row evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: finite-irf-source-log-regime-bridge
+          path: code/irf/output/source_python_firm_regime_log_level_audit.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve household, labor and bank-face SOURCE row conversions
+        uses: actions/upload-artifact@v7
+        with:
+          name: finite-irf-source-remaining-log-row-bridge
+          path: code/irf/output/remaining_log_rows_audit.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve branch-specific candidate 33-row invertible transformation
+        uses: actions/upload-artifact@v7
+        with:
+          name: conditional-source-33-row-transform-inverse
+          path: code/irf/output/conditional_source_33_row_transform_inverse.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve invertible nonlinear 33-row SOURCE-shaped residual map
+        uses: actions/upload-artifact@v7
+        with:
+          name: frozen-33-source-shaped-offroot-rowmap-inverse
+          path: code/irf/output/frozen_33_offroot_inverse_rowmap_candidate.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve explicit off-root 33-row product-rule derivative audit
+        uses: actions/upload-artifact@v7
+        with:
+          name: frozen-33-source-shaped-offroot-product-rule
+          path: code/irf/output/frozen_33_offroot_explicit_product_rule.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve nonlinear off-root 33 SOURCE-shaped row transform
+        uses: actions/upload-artifact@v7
+        with:
+          name: frozen-33-source-shaped-offroot-nonlinear
+          path: code/irf/output/frozen_33_offroot_nonlinear_transform_candidate.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve frozen 33x33 SOURCE-shaped candidate matrix bridge
+        uses: actions/upload-artifact@v7
+        with:
+          name: frozen-33-root-source-shaped-matrix-bridge
+          path: code/irf/output/frozen_33_root_candidate_matrix_bridge.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve frozen nine SOURCE-shaped root derivative normalization
+        uses: actions/upload-artifact@v7
+        with:
+          name: frozen-nine-root-derivative-normalization
+          path: code/irf/output/frozen_nine_scalar_root_jacobian_normalization.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve frozen 33 SOURCE-shaped candidate partition audit
+        uses: actions/upload-artifact@v7
+        with:
+          name: frozen-33-source-shaped-candidate-partition
+          path: code/irf/output/frozen_33_source_shaped_candidate_partition.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve frozen nine scalar SOURCE-shaped level-log candidates
+        uses: actions/upload-artifact@v7
+        with:
+          name: frozen-nine-scalar-source-shapes
+          path: code/irf/output/frozen_nine_scalar_source_shape_candidates.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve frozen predecessor sixteen SOURCE-shaped row candidates
+        uses: actions/upload-artifact@v7
+        with:
+          name: frozen-same-base-sixteen-row-candidates
+          path: code/irf/output/frozen_source_16_remaining_row_candidates.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve frozen predecessor SOURCE-shaped firm row candidates
+        uses: actions/upload-artifact@v7
+        with:
+          name: frozen-same-base-firm-row-candidates
+          path: code/irf/output/frozen_source_firm_same_base_candidate.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve SOURCE versus Python Jacobian baseline firewall
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-python-jacobian-cross-baseline-firewall
+          path: code/irf/output/jacobian_provenance_cross_baseline_firewall.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve frozen Python 33x33 float Jacobian diagnostics
+        uses: actions/upload-artifact@v7
+        with:
+          name: frozen-python-jacobian-float-diagnostic
+          path: code/irf/output/frozen_python_33_jacobian_float_diagnostic.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve reduced-prefix inherited-field support audit
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-reduced-inherited-support
+          path: code/irf/output/source_reduced_prefix_inherited_support.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve conditional SOURCE inherited-state 12-to-7 projection
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-inherited-12-to-7-projection
+          path: code/irf/output/source_predecessor_12_to_7_conditional_chart.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve inherited SOURCE versus frozen/frontier predecessor provenance
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-inherited-predecessor-provenance
+          path: code/irf/output/source_python_predecessor_provenance.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve SOURCE/Python calendar and four-policy semantic contract
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-python-calendar-contract
+          path: code/irf/output/source_python_calendar_contract.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve strict 33-row SOURCE candidate readiness audit
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-33-row-claim-readiness
+          path: code/irf/output/source_python_33_row_claim_readiness.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Preserve 9-of-33 partial Jacobian row-scale ledger
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-jacobian-partial-9-row-scales
+          path: code/irf/output/partial_source_jacobian_row_scale_ledger.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Verify rational frontier endpoint boxes without floating-point acceptance
+        run: python code/boundary/verify_endpoint_boxes_exact.py
+      - name: Verify SOURCE bank-rate roots and slopes with exact fractions
+        run: python code/boundary/verify_source_bank_rate_boxes_exact.py
+      - name: Verify SOURCE collateral wedge and firm capital-scale ordering
+        run: python code/boundary/verify_source_firm_cost_boxes_exact.py
 
   pdfs:
     name: Compile the PDFs from LaTeX

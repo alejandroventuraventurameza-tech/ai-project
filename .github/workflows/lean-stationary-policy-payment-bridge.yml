@@ -1,0 +1,358 @@
+name: Lean stationary policy and payment bridge (pinned)
+
+on:
+  push:
+    branches:
+      - 'work/lean-ci-validation-*'
+    paths:
+      - '.github/workflows/lean-stationary-policy-payment-bridge.yml'
+      - 'lean/candidates/Ventura26LiquidityAllocation/StationaryInterventionSourceBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/StationaryPrimitivesCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/HandStencilPledgeRowEquivalenceCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/ReducedPrefixInheritedExtCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/StationaryFiscalFiberReducedPrefixCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/StationaryFiscalPrimitivesScopeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/NonlinearResidualRowmapExactCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceCommonPledgeLogBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceSixScalarRowsLogBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceCollateralRegimeLogBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerPledgeWedgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerCommonPledgeShearCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerThreeRowZeroSetCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerShearDerivativeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerRowLinearEquivalenceCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerEconomicLinearRowmapCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerJacobianBijectiveTransportCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceEuler33RowDirectionalDerivativeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerLogChartDirectionalBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerLogChartRowIndexCandidate.lean'
+      - 'lean/checkpoint/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/lean-stationary-policy-payment-bridge.yml'
+      - 'lean/candidates/Ventura26LiquidityAllocation/StationaryInterventionSourceBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/StationaryPrimitivesCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/HandStencilPledgeRowEquivalenceCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/ReducedPrefixInheritedExtCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/StationaryFiscalFiberReducedPrefixCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/StationaryFiscalPrimitivesScopeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/NonlinearResidualRowmapExactCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceCommonPledgeLogBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceSixScalarRowsLogBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceCollateralRegimeLogBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerPledgeWedgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerCommonPledgeShearCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerThreeRowZeroSetCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceFirmEulerShearDerivativeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerRowLinearEquivalenceCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerEconomicLinearRowmapCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerJacobianBijectiveTransportCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceEuler33RowDirectionalDerivativeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerLogChartDirectionalBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/SourceEulerLogChartRowIndexCandidate.lean'
+      - 'lean/checkpoint/**'
+  workflow_dispatch:
+
+concurrency:
+  group: lean-stationary-payment-single-branch
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  payment-bridge:
+    name: Kernel and axiom check for SOURCE intervened Primitives
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - name: Checkout review branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Restore fixed SOURCE and library
+        shell: bash
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor 16e24fe828a5a0002ef13bb82bae9e295f190f86 HEAD
+          mkdir -p lean-stationary-payment-logs
+          git clone --quiet --filter=blob:none https://github.com/nikhgarg/AppliedModelingLib.git upstream
+          git -C upstream checkout --quiet --detach 194edcc95df74806a39b961d10dedddc6e730cce
+          test "$(git -C upstream rev-parse HEAD)" = 194edcc95df74806a39b961d10dedddc6e730cce
+          cmp lean/checkpoint/dependencies/lean-toolchain upstream/lean-toolchain
+          cmp lean/checkpoint/dependencies/lake-manifest.json upstream/lake-manifest.json
+          python3 - <<'PY'
+          from pathlib import Path
+          a = Path("upstream/lakefile.toml").read_bytes()
+          b = Path("lean/checkpoint/dependencies/lakefile.toml").read_bytes()
+          assert b == a + b'\n[[lean_lib]]\nname = "Ventura26LiquidityAllocation"\nsrcDir = "papers"\n'
+          PY
+          cp lean/checkpoint/dependencies/lakefile.toml upstream/lakefile.toml
+          mkdir -p upstream/papers/Ventura26LiquidityAllocation
+          cp lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/checkpoint/module_root.lean upstream/papers/Ventura26LiquidityAllocation.lean
+          cp lean/candidates/Ventura26LiquidityAllocation/*.lean upstream/papers/Ventura26LiquidityAllocation/
+          sha256sum lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean lean/candidates/Ventura26LiquidityAllocation/StationaryPrimitivesCandidate.lean lean/candidates/Ventura26LiquidityAllocation/HandStencilPledgeRowEquivalenceCandidate.lean lean/candidates/Ventura26LiquidityAllocation/StationaryInterventionSourceBridgeCandidate.lean > lean-stationary-payment-logs/source-sha256.txt
+      - name: Install pinned Lean toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o "$RUNNER_TEMP/elan-init.sh"
+          sh "$RUNNER_TEMP/elan-init.sh" -y --no-modify-path
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Restore Mathlib cache
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          lean --version
+          grep -Fx 'leanprover/lean4:v4.30.0-rc2' lean-toolchain
+          lake exe cache get > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/cache.log" 2>&1 || {
+            tail -n 100 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/cache.log"
+            exit 1
+          }
+      - name: Compile stationary policy/payment bridge and inspect axioms
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          lake build Ventura26LiquidityAllocation.StationaryInterventionSourceBridgeCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/bridge.log" 2>&1 || {
+            tail -n 180 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/bridge.log"
+            exit 1
+          }
+          lake build Ventura26LiquidityAllocation.ReducedPrefixInheritedExtCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/inherited-ext.log" 2>&1 || {
+            tail -n 150 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/inherited-ext.log"
+            exit 1
+          }
+          grep 'localReducedPrefixResidual_inherited_extensionality' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/inherited-ext.log"
+          grep 'localReducedPrefixLogResidualVector_inherited_extensionality' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/inherited-ext.log"
+          grep 'localReducedPrefixLogJacobian_inherited_extensionality' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/inherited-ext.log"
+          grep 'localReducedPrefixLogJacobianCertifiedAt_inherited_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/inherited-ext.log"
+          lake build Ventura26LiquidityAllocation.StationaryFiscalFiberReducedPrefixCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-fiscal-fiber.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-fiscal-fiber.log"
+            exit 1
+          }
+          grep 'stationaryInherited_five_fields_independent_of_G' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-fiscal-fiber.log"
+          grep 'stationaryInherited_householdBonds_difference' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-fiscal-fiber.log"
+          grep 'stationaryInherited_fiscalFiber_logResidual_eq' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-fiscal-fiber.log"
+          grep 'stationaryInherited_fiscalFiber_certificate_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-fiscal-fiber.log"
+          lake build Ventura26LiquidityAllocation.StationaryFiscalPrimitivesScopeCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"
+            exit 1
+          }
+          grep 'stationaryPrimitives_only_bond_supply_changes' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"
+          grep 'stationaryFiscal_dateZeroData_eq' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"
+          grep 'stationaryFiscal_dateOneData_eq' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"
+          grep 'stationaryFiscal_reducedResidual_row_eq' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"
+          grep 'stationaryFiscal_reducedLogOperator_eq' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"
+          grep 'stationaryFiscal_reducedLogJacobian_eq' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"
+          grep 'stationaryFiscal_reducedLogJacobianCertified_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"
+          grep 'stationaryFiscal_reducedEquationsHold_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"
+          lake build Ventura26LiquidityAllocation.NonlinearResidualRowmapExactCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"
+            exit 1
+          }
+          grep 'scalarLogLevel_roundtrip' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"
+          grep 'scalarLevelLog_roundtrip' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"
+          grep 'negativeScalarLogLevel_roundtrip' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"
+          grep 'negativeScalarLevelLog_roundtrip' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"
+          grep 'pledgeEulerShear_roundtrip' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"
+          grep 'pledgeEulerShear_reverse_roundtrip' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"
+          lake build Ventura26LiquidityAllocation.SourceCommonPledgeLogBridgeCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-common-pledge-log.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-common-pledge-log.log"
+            exit 1
+          }
+          grep 'sourceCommonPledgeResidual_exact_level' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-common-pledge-log.log"
+          grep 'sourceCommonPledgeResidual_levelLog_roundtrip' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-common-pledge-log.log"
+          grep 'sourceCommonPledgeResidual_log_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-common-pledge-log.log"
+          lake build Ventura26LiquidityAllocation.SourceSixScalarRowsLogBridgeCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+            exit 1
+          }
+          grep 'sourceBankFace_level_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceWorkerWage_level_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceHouseholdEuler_level_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceBankFace_log_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceWorkerWage_log_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceHouseholdEuler_log_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceBankFace_dateZero_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceBankFace_dateOne_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceWorkerWage_dateZero_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceWorkerWage_dateOne_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceHouseholdEuler_dateZero_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          grep 'sourceHouseholdEuler_dateOne_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"
+          lake build Ventura26LiquidityAllocation.SourceCollateralRegimeLogBridgeCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
+            exit 1
+          }
+          grep 'sourceBindingFirmRegime_exact_level' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
+          grep 'sourceSlackFirmLRegime_exact_level' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
+          grep 'sourceBindingFirmRegime_log_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
+          grep 'sourceSlackFirmLRegime_log_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
+          grep 'sourceBindingDateZeroH_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
+          grep 'sourceBindingDateZeroL_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
+          grep 'sourceSlackDateZeroL_row' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"
+          lake build Ventura26LiquidityAllocation.SourceFirmEulerPledgeWedgeCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-wedge.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-wedge.log"
+            exit 1
+          }
+          grep 'sourceFirmEuler_binding_decomposition' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-wedge.log"
+          grep 'sourceFirmEuler_slack_L_unconstrained' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-wedge.log"
+          grep 'sourceFirmEuler_dateOne_H_binding' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-wedge.log"
+          grep 'sourceFirmEuler_dateOne_L_binding' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-wedge.log"
+          grep 'sourceFirmEuler_dateZero_H_binding' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-wedge.log"
+          grep 'sourceFirmEuler_dateZero_L_slack' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-wedge.log"
+          lake build Ventura26LiquidityAllocation.SourceFirmEulerCommonPledgeShearCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-common-shear.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-common-shear.log"
+            exit 1
+          }
+          grep 'sourceFirmEuler_nominalPledge_shear' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-common-shear.log"
+          grep 'sourceFirmEuler_dateOne_commonPledge_difference' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-common-shear.log"
+          grep 'sourceFirmEuler_dateOne_nominalPledge_shear' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-common-shear.log"
+          grep 'sourceFirmEuler_dateOne_equivalent_on_pledge_zero' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-common-shear.log"
+          lake build Ventura26LiquidityAllocation.SourceFirmEulerThreeRowZeroSetCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log"
+            exit 1
+          }
+          grep 'sourceFirmEuler_dateOne_H_nominal_eq_of_pledge_zero' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log"
+          grep 'sourceFirmEuler_dateOne_L_nominal_eq_of_pledge_zero' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log"
+          grep 'sourceFirmEuler_dateOne_threeRow_zeroSet_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log"
+          grep 'sourceNominalPledgeShearedResidual_eq_of_pledge_zero' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log"
+          grep 'sourceNominalPledgeShearedResidual_all_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log"
+          lake build Ventura26LiquidityAllocation.SourceFirmEulerShearDerivativeCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-shear-derivative.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-shear-derivative.log"
+            exit 1
+          }
+          grep 'sourceShear_derivative_at_pledge_zero' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-shear-derivative.log"
+          grep 'sourceFirmNominalEulerPath_shear_identity' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-shear-derivative.log"
+          grep 'sourceFirmNominalEulerPath_derivative_at_pledge_zero' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-shear-derivative.log"
+          lake build Ventura26LiquidityAllocation.SourceEulerRowLinearEquivalenceCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-row-linear-equiv.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-row-linear-equiv.log"
+            exit 1
+          }
+          grep 'sourceEulerRows_backward_forward' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-row-linear-equiv.log"
+          grep 'sourceEulerRows_forward_backward' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-row-linear-equiv.log"
+          grep 'sourceEulerRowsForward_add' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-row-linear-equiv.log"
+          grep 'sourceEulerRowsForward_smul' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-row-linear-equiv.log"
+          grep 'sourceEulerRowsForward_all_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-row-linear-equiv.log"
+          lake build Ventura26LiquidityAllocation.SourceEulerEconomicLinearRowmapCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-economic-rowmap.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-economic-rowmap.log"
+            exit 1
+          }
+          grep 'sourceDateOneEulerH_sheared_eq' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-economic-rowmap.log"
+          grep 'sourceDateOneEulerL_sheared_eq' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-economic-rowmap.log"
+          grep 'sourceNominalPledgeShearedResidual_eq_linear_rowmap' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-economic-rowmap.log"
+          grep 'sourceReducedPrefixResidual_eq_inverse_rowmap' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-economic-rowmap.log"
+          lake build Ventura26LiquidityAllocation.SourceEulerJacobianBijectiveTransportCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-jacobian-bijective.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-jacobian-bijective.log"
+            exit 1
+          }
+          grep 'sourceEulerRowsForward_bijective' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-jacobian-bijective.log"
+          grep 'sourceEulerRowsForward_comp_bijective_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-jacobian-bijective.log"
+          grep 'sourceEulerJacobian_bijective_iff_of_rowmap' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-jacobian-bijective.log"
+          lake build Ventura26LiquidityAllocation.SourceEuler33RowDirectionalDerivativeCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-33-directional-derivative.log" 2>&1 || {
+            tail -n 170 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-33-directional-derivative.log"
+            exit 1
+          }
+          grep 'sourceEulerRowsForward_path_derivative_at_pledge_zero' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-33-directional-derivative.log"
+          grep 'sourceNominalPledgeShearedResidual_33row_path_derivative' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-33-directional-derivative.log"
+          lake build Ventura26LiquidityAllocation.SourceEulerLogChartDirectionalBridgeCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-chart-bridge.log" 2>&1 || {
+            tail -n 160 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-chart-bridge.log"
+            exit 1
+          }
+          grep 'sourceNominalPledgeShearedLogResidualVector_eq_source_rowmap' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-chart-bridge.log"
+          grep 'sourceOriginalLogResidualVector_row_eq_source' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-chart-bridge.log"
+          grep 'sourceNominalPledgeShearedLogResidualVector_path_derivative' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-chart-bridge.log"
+          lake build Ventura26LiquidityAllocation.SourceEulerLogChartRowIndexCandidate > "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-row-index.log" 2>&1 || {
+            tail -n 160 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-row-index.log"
+            exit 1
+          }
+          grep 'sourceLogRowIndex_bijective' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-row-index.log"
+          grep 'sourceShearedLogResidual_all_zero_iff' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-row-index.log"
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-row-index.log"; then
+            echo 'UNCHECKED SOURCE LOG INDEX BRIDGE'
+            exit 1
+          fi
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-log-chart-bridge.log"; then
+            echo 'UNCHECKED SOURCE LOG CHART EULER DERIVATIVE'
+            exit 1
+          fi
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-33-directional-derivative.log"; then
+            echo 'UNCHECKED SOURCE 33 ROW DIRECTIONAL DERIVATIVE'
+            exit 1
+          fi
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-jacobian-bijective.log"; then
+            echo 'UNCHECKED SOURCE JACOBIAN BIJECTIVITY TRANSPORT'
+            exit 1
+          fi
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-economic-rowmap.log"; then
+            echo 'UNCHECKED ECONOMIC SOURCE EULER LINEAR ROWMAP'
+            exit 1
+          fi
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-euler-row-linear-equiv.log"; then
+            echo 'UNCHECKED SOURCE EULER LINEAR ROW EQUIVALENCE'
+            exit 1
+          fi
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-shear-derivative.log"; then
+            echo 'UNCHECKED SOURCE EULER SHEAR DERIVATIVE'
+            exit 1
+          fi
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-three-row-zero-set.log"; then
+            echo 'UNCHECKED SOURCE THREE-ROW ZERO-SET EQUIVALENCE'
+            exit 1
+          fi
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-common-shear.log"; then
+            echo 'UNCHECKED SOURCE EULER COMMON PLEDGE SHEAR'
+            exit 1
+          fi
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-firm-euler-wedge.log"; then
+            echo 'UNCHECKED SOURCE FIRM EULER WEDGE'
+            exit 1
+          fi
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-collateral-regime-log.log"; then
+            echo 'UNCHECKED SOURCE COLLATERAL REGIME LOG BRIDGE'
+            exit 1
+          fi
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-six-scalar-log.log"; then
+            echo 'UNCHECKED SOURCE SIX SCALAR LOG BRIDGES'
+            exit 1
+          fi
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/source-common-pledge-log.log"; then
+            echo 'UNCHECKED SOURCE COMMON-PLEDGE LOG BRIDGE'
+            exit 1
+          fi
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/nonlinear-rowmap-exact.log"; then
+            echo 'UNCHECKED NONLINEAR ROW-MAP LEMMAS'
+            exit 1
+          fi
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-primitive-scope.log"; then
+            echo 'UNCHECKED STATIONARY FISCAL PRIMITIVES SCOPE'
+            exit 1
+          fi
+
+          if grep -E 'sorryAx|Lean\\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/stationary-fiscal-fiber.log"; then
+            echo 'UNCHECKED STATIONARY FISCAL FIBER LEMMA'
+            exit 1
+          fi
+
+          if grep -E 'sorryAx|Lean\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/inherited-ext.log"; then
+            echo 'UNCHECKED INHERITED EXTENSIONALITY PROOF'
+            exit 1
+          fi
+          grep -E 'intervened_binary_payment_law|intervened_mean_absolute_payment|intervened_bank_renewal_matches_stationary|intervened_reserve_deposit_ratio|intervened_otc_deficit_slope_low_tightness|intervened_otc_surplus_slope_low_tightness' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/bridge.log"
+          if grep -E 'sorryAx|Lean\.sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-stationary-payment-logs/bridge.log"; then
+            echo 'UNEXPECTED AXIOM OR UNCHECKED PROOF'
+            exit 1
+          fi
+          tail -n 35 "$GITHUB_WORKSPACE/lean-stationary-payment-logs/bridge.log"
+      - name: Archive SOURCE payment bridge logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stationary-policy-payment-bridge-logs
+          path: lean-stationary-payment-logs/
+          if-no-files-found: warn
+          retention-days: 30

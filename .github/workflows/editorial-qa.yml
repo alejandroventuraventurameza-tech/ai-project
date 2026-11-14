@@ -1,0 +1,157 @@
+name: editorial-qa
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: editorial-qa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  syntax:
+    name: Python syntax
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: python -m compileall -q code
+      - name: Check exact rational 33D Neumann criterion and negative controls
+        run: python code/irf/test_exact_neumann_33.py
+      - name: Verify 33D chain rule across permutation, nonlinear chart, and variable row transform
+        run: python code/irf/test_operator_transport_chain_rule.py
+      - name: Check positive off-root bank-face log level equality and 33 gradients
+        run: python code/irf/test_bank_face_offroot_log_level.py
+      - name: Regress candidate 33-row inverse and infinity norms without economic dependencies
+        run: python code/irf/test_conditional_row_transform_norm.py
+      - name: Audit illustrative firm scale without changing calibration
+        run: python code/irf/audit_firm_scale.py
+      - name: Install pinned numerical dependency for the directed interval producer
+        run: |
+          python -m pip install --disable-pip-version-check --only-binary=:all: numpy==2.3.5
+      - name: Check directed stationary scalar rate and renewal bridge
+        run: python code/v0m/certified_ift/audit_stationary_scalar_bridge.py
+      - name: Audit same-predecessor S/B local exclusion and bounded root search
+        run: python code/irf/frozen_same_predecessor_branch_audit.py
+      - name: Preserve S/B root and obstruction evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: same-predecessor-branch-diagnostic
+          path: code/irf/output/same_predecessor_branch_audit.json
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Audit deterministic boundary worker FOC and cubic wage
+        run: python code/irf/audit_boundary_labor.py
+      - name: Verify all 33 reduced-prefix rows independently
+        run: python code/irf/audit_prefix_rows.py
+      - name: Check H transmission table is generated from the audited nonlinear solution
+        run: python code/irf/render_mechanism_table.py --check
+      - name: Audit sixteen additional conditional SOURCE identity row shapes and 33-column derivatives
+        run: python code/irf/audit_source_identity_row_candidates.py
+      - name: Archive conditional SOURCE row-shape candidate report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-identity-row-candidates
+          path: code/irf/output/source_identity_row_candidates.json
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Audit six direct firm SOURCE rows and two date-one common-pledge Euler shears
+        run: python code/irf/audit_source_firm_budget_euler_shear.py
+      - name: Archive conditional firm SOURCE/Python row bridge
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-firm-euler-shear-audit
+          path: code/irf/output/source_firm_budget_euler_shear_audit.json
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Audit SOURCE coordinate chart and Python 33-dimensional decoder
+        run: python code/irf/audit_source_log_coordinate_chart.py
+      - name: Archive SOURCE/Python positive chart comparison
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-python-log-chart-alignment
+          path: code/irf/output/source_python_log_chart_alignment.json
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Audit SOURCE four-tool date-zero announcement support in fixed Python coordinates
+        run: python code/irf/audit_source_four_tool_direct_support.py
+      - name: Archive literal SOURCE/Python direct policy support comparison
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-four-tool-direct-support
+          path: code/irf/output/source_four_tool_direct_support_audit.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Audit SOURCE OTC log-two primitive mapping and high-tightness counterexample
+        run: python code/irf/audit_source_otc_log_two_bridge.py
+      - name: Archive conditional SOURCE/Python OTC low-tightness bridge
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-python-otc-log-two-bridge
+          path: code/irf/output/source_python_otc_log_two_bridge.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Audit SOURCE bank renewal seed witness and exact bank-face log level correspondence
+        run: python code/irf/audit_source_bank_renewal_face_bridge.py
+      - name: Archive SOURCE bank renewal witness and bank-face bridge
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-bank-renewal-face-bridge
+          path: code/irf/output/source_bank_renewal_witness_and_face_rows.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Audit proposition scope, 57-row ledger and Lean obstruction
+        run: python code/audit_claim_scope.py
+      - name: Audit all 57 Lean correspondence pointers without promoting theorem coverage
+        run: python code/audit_lean_crosswalk.py
+      - name: Audit printed branch S-B loss and capital derivative identity
+        run: python code/audit_allocation_loss_table.py
+      - name: Verify exact-integer SOURCE interval translation (not a Lean certificate)
+        run: python scripts/audit_source_inherited_nominal_faces_exact_intervals.py
+
+  latex-logs:
+    name: Final LaTeX references and layout
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: xu-cheng/latex-action@v4
+        with:
+          root_file: |
+            proposal/proposal.tex
+            slides/topic.tex
+            slides/final.tex
+            paper/paper.tex
+          work_in_root_file_dir: true
+      - run: python code/audit_latex_logs.py
+      # The official build.yml only checks that PDFs are tracked. This
+      # scoped development-branch step also commits current generated bytes.
+      - name: Sync freshly compiled PDFs on the development branch
+        if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/work/') }}
+        shell: bash
+        run: |
+          git fetch --quiet origin "${GITHUB_REF_NAME}"
+          remote_sha="$(git rev-parse "refs/remotes/origin/${GITHUB_REF_NAME}")"
+          if [ "${remote_sha}" != "${GITHUB_SHA}" ]; then
+            echo "Skip stale PDF sync: source ${GITHUB_SHA} is not current head ${remote_sha}"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add proposal/proposal.pdf slides/topic.pdf slides/final.pdf paper/paper.pdf
+          if git diff --cached --quiet; then
+            echo "Compiled PDFs already match this commit"
+          else
+            git commit -m "build(pdf): synchronize compiled artifacts [skip ci]"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi

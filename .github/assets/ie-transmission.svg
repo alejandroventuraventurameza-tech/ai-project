@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="280" viewBox="0 0 1100 280">
+<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L7 4 L0 8" fill="none" stroke="#497387" stroke-width="1.5"/></marker></defs>
+<rect x="1" y="1" width="1098" height="278" rx="19" fill="#F6FAFC" stroke="#C9DEE8"/>
+<text x="28" y="35" font-size="19" font-family="Arial,Helvetica,sans-serif" font-weight="700" fill="#1A4358">Transmisión monetaria: mecanismo condicionado al sistema reducido</text>
+<g font-family="Arial,Helvetica,sans-serif" text-anchor="middle">
+<rect x="27" y="58" width="225" height="71" rx="12" fill="#E3F0F6" stroke="#9DBDCA"/><text x="139" y="85" font-size="16" fill="#39556A">Innovación de remuneración</text><text x="139" y="111" font-size="20" font-weight="700" fill="#0C6481">vR,0 &lt; 0</text>
+<rect x="303" y="58" width="213" height="71" rx="12" fill="#E3F0F6" stroke="#9DBDCA"/><text x="409" y="85" font-size="16" fill="#39556A">OTC y bancos</text><text x="409" y="111" font-size="20" font-weight="700" fill="#0C6481">tasas ↓</text>
+<rect x="567" y="58" width="213" height="71" rx="12" fill="#E3F0F6" stroke="#9DBDCA"/><text x="674" y="85" font-size="16" fill="#39556A">Crédito a firma H</text><text x="674" y="111" font-size="20" font-weight="700" fill="#0C6481">aumenta ↑</text>
+<rect x="831" y="58" width="241" height="71" rx="12" fill="#1D4B60" stroke="#4984A1"/><text x="952" y="85" font-size="16" fill="#D7EDF7">Respuesta agregada</text><text x="952" y="111" font-size="20" font-weight="700" fill="#FFFFFF">depende de S / B</text>
+<path d="M258 95 H295 M522 95 H559 M786 95 H823" stroke="#4B7589" stroke-width="2.5" fill="none" marker-end="url(#arr)"/>
+<path d="M953 130 V156 H292 V178 M953 156 H813 V178" stroke="#4B7589" stroke-width="2.3" fill="none" marker-end="url(#arr)"/>
+<rect x="112" y="179" width="435" height="62" rx="12" fill="#D9F1EC" stroke="#80B9AA"/>
+<text x="330" y="202" font-size="18" font-weight="700" fill="#125F56">Rama S · L inicialmente con holgura</text><text x="330" y="225" font-size="17" fill="#276056">Capital H ↑ · pérdida asignativa ↓</text>
+<rect x="596" y="179" width="476" height="62" rx="12" fill="#FFF0E9" stroke="#DEB3A0"/>
+<text x="833" y="202" font-size="18" font-weight="700" fill="#8F513F">Rama B · H y L restringidas</text><text x="833" y="225" font-size="17" fill="#935643">Capital H ↓ · pérdida asignativa ↑</text>
+</g>
+<text x="30" y="263" font-family="Arial,Helvetica,sans-serif" font-size="13.5" fill="#687D8B">Flechas: relaciones observadas en soluciones conjuntas auditadas, no efectos causales aislados.</text>
+</svg>

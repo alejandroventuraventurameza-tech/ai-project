@@ -1,0 +1,58 @@
+name: same-predecessor-nonlinear-tail
+
+on:
+  push:
+    paths:
+      - .github/workflows/same-predecessor-nonlinear-tail.yml
+      - code/irf/frozen_same_predecessor_nonlinear_tail_probe.py
+      - code/irf/exact_linear_tail_power_certificate.py
+      - code/irf/finite_irf.py
+      - code/irf/compare_nonlinear_tail.py
+      - code/irf/frozen_stationary_prefix_audit.py
+      - code/irf/inputs/rational_preconditioners.json
+  pull_request:
+    paths:
+      - .github/workflows/same-predecessor-nonlinear-tail.yml
+      - code/irf/frozen_same_predecessor_nonlinear_tail_probe.py
+      - code/irf/exact_linear_tail_power_certificate.py
+      - code/irf/finite_irf.py
+      - code/irf/compare_nonlinear_tail.py
+      - code/irf/frozen_stationary_prefix_audit.py
+      - code/irf/inputs/rational_preconditioners.json
+  workflow_dispatch:
+
+concurrency:
+  group: same-predecessor-nonlinear-tail-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  finite-nonlinear-tail:
+    name: Independent finite nonlinear S/B continuation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --quiet -r code/requirements.txt
+      - name: Exact rational block-power certificate of local linear tail
+        run: python code/irf/exact_linear_tail_power_certificate.py
+      - name: Archive exact linear-tail arithmetic evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: exact-linear-tail-power-certificate
+          path: code/irf/output/exact_linear_tail_power_certificate.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Probe same inherited state against nonlinear T-horizon closures
+        run: python code/irf/frozen_same_predecessor_nonlinear_tail_probe.py
+      - name: Archive candidate paths and closure failures
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: same-predecessor-nonlinear-tail
+          path: code/irf/output/same_predecessor_nonlinear_tail_probe.json
+          if-no-files-found: warn
+          retention-days: 30

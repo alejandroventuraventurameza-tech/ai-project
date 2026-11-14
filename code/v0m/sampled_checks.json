@@ -1,0 +1,30 @@
+{
+  "seed": 20261017,
+  "checked_at_utc": "2026-11-03T02:43:25.999597+00:00",
+  "script_sha256": "0a28b948ce45697f80b8fea61b289068c1dcd6ef30bd7c94f1cb125d482f216d",
+  "source_sha256": "3457ae3ff2c3b83e672b0709f5ad453ca976ec99c3a0bc5e6e25aeecc56c2dc4",
+  "funding": {
+    "raw_portfolio_draws": 5000,
+    "financial_regime_draws": {
+      "deposit": 1000,
+      "zero_face": 1000,
+      "slack_positive_loan": 1000,
+      "active_zero_dual": 1000,
+      "active_positive_dual": 1000
+    },
+    "exact_rational_support_comparisons": 40000,
+    "invalid_slopes_rejected": 10000,
+    "scope": "Exact rational checks on sampled inputs; not universal theorem verification."
+  },
+  "allocation": {
+    "draws": 5000,
+    "maximum_loss_identity_absolute_error": 1.1102230246251565e-15,
+    "maximum_complex_step_derivative_error": 6.782768791069316e-16,
+    "maximum_feasible_competitor_output_ratio": 0.9999726026227996,
+    "scope": "Floating-point stress checks; no stochastic equilibrium, welfare or data validation."
+  },
+  "status": "passed",
+  "lean_verification": false,
+  "macro_simulation": false,
+  "external_data": false
+}

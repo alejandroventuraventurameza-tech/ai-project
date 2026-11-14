@@ -1,0 +1,512 @@
+
+\paragraph{Interpretación económica de la proposición.}
+El signo de la derivada \(-a_R/b\) indica cómo aparece una
+raíz interior de holgura cuando la innovación cambia de signo.
+La raíz \(s=0\) corresponde al extremo con garantía activa,
+mientras \(s(h)>0\) permite el régimen de préstamo no restringido
+para L. \emph{Exactamente dos raíces de una complementariedad}
+no significa exactamente dos equilibrios competitivos: falta
+establecer que las 33 variables recuperadas satisfacen, además,
+suficiencia individual, todos los mercados y la continuación infinita.
+En particular, no se identifica un multiplicador privado con una
+variable libre de una estructura Lean sin demostrar la condición
+marginal que lo determina.
+
+El lema Lean \texttt{scalar\_complementarity\_exactly\_two} prueba
+una equivalencia de soluciones escalares suponiendo monotonicidad
+estricta, una raíz positiva y signo positivo en el borde.
+No demuestra por sí mismo que el Schur complement del modelo
+satisfaga esas condiciones. El resultado del cuerpo conserva
+explícitamente la regularidad \(C^1\) y los signos locales como
+premisas. El anexo recoge la derivación de las filas, los
+Jacobianos y la versión histórica de la comparación S/B.
+
+\section{Resultados numéricos reproducibles}\label{sec:compact_irf}
+El experimento fija los mismos estados heredados y la misma
+secuencia de innovaciones posteriores para ambas ramas.
+Al impacto se perturba \(\epsilon_0^R\) en
+\(-10^{-5}\), aproximadamente \(-0.1\) punto básico en la
+convención de log tasa, con las demás herramientas constantes.
+Las tasas se reportan como \(10^4(R_t-R_t^0)\), sin anualizar,
+y las cantidades positivas como \(100\log(x_t/x_t^0)\).
+El capital elegido en \(t\) se instala en \(t+1\): no debe
+confundirse la producción \emph{corriente} con esa inversión.
+
+\begin{table}[htbp]\centering\small
+\caption{Impacto de una innovación inicial de remuneración de reservas de
+aproximadamente \(-0.1\) pb. Dos ramas del sistema reducido;
+parámetros ilustrativos, no estimaciones.}
+\label{tab:compact_impact}
+\input{irf_impact_table}
+\end{table}
+
+La caída del costo de crédito y el incremento de préstamos a H
+ocurren en ambas ramas. Sin embargo, la pérdida asignativa
+\(\mathscr L\) \emph{disminuye} en S y \emph{aumenta} en B.
+Esta pérdida compara producción con un referente eficiente
+que reasigna factores manteniendo su disponibilidad:
+\begin{equation}\label{eq:compact_loss}
+\mathscr L_t=
+\log\left(\frac{Y^{\mathrm{ef}}_{t+1}}{Y_{t+1}}\right),
+\qquad
+Y^{\mathrm{ef}}_{t+1}=
+\left(\sum_i\nu_i A_i^{1/(1-\alpha-\beta)}\right)^{
+1-\alpha-\beta}
+ K_{t+1}^{\alpha}L_{t+1}^{\beta}.
+\end{equation}
+Con masas, tecnología y dotación total de factores comunes
+para cada comparación, esta medida es no negativa bajo la
+referencia tecnológica indicada. No mide directamente bienestar:
+se omiten las ponderaciones de utilidad de trabajadores y
+empresarios, costos de inflación y riesgo intertemporal.
+
+\subsection{Por qué más crédito puede coexistir con menos inversión}
+La identidad \eqref{eq:compact_capacity} para la firma H
+tiene una forma exacta entre referencia y trayectoria perturbada:
+\begin{align}
+100\Delta\log k_{H,t+1}&=
+100\Delta\log(N_{Ht}-c_{Ht})
+-100\Delta\log(q_t-H_{Ht}/R_t^L),
+\label{eq:compact_decomp_k}\\
+100\Delta\log b_{Ht}&=
+100\Delta\log H_{Ht}+
+100\Delta\log k_{H,t+1}-
+100\Delta\log R_t^L.
+\label{eq:compact_decomp_b}
+\end{align}
+El primer componente de \eqref{eq:compact_decomp_k} son recursos
+invertibles, no patrimonio bancario. El segundo es la variación
+negativa del precio efectivo del capital financiable. Ambas
+identidades se calculan \emph{después} de resolver el sistema
+conjunto: no son descomposiciones causales con precios fijados.
+
+\begin{table}[htbp]\centering\small
+\caption{Componentes exactos del mecanismo empresarial H,
+solución reducida no lineal finita de horizonte \(T=640\).
+Contribuciones de logaritmos escaladas por 100 y dual normalizado
+escalado por \(10^6\).}
+\label{tab:compact_mechanism}
+\input{irf_mechanism_table}
+\end{table}
+
+En S los recursos propios netos y el abaratamiento efectivo
+contribuyen positivamente al capital. En B domina la contracción
+de recursos invertibles, pese al menor costo financiero. Por eso
+H puede tomar más crédito pero escoger menos capital; también
+el dual normalizado aumenta en B y disminuye en S. Una restricción
+activa y un multiplicador de financiación no se intercambian
+conceptualmente.
+
+\subsection{Transmisión nominal y producción contemporánea}
+La identidad de condiciones de trabajo y consumo, con capital
+instalado fijo al impacto, conduce en la parametrización
+ilustrativa a
+\begin{equation}\label{eq:compact_labor_mechanism}
+\Delta\log Y_0
+=\frac{\Delta\log m_0-\Delta\log C_0^W}{3}.
+\end{equation}
+La curva de Phillips con ajuste de precios conecta \(m_0\)
+con inflación presente, inflación esperada y actividad futura.
+El código reconstruye las contribuciones contemporáneas y
+futuras de la identidad, así como la ecuación de Euler del hogar.
+El componente futuro puede dominar el contemporáneo incluso
+cuando la tasa nominal y real de depósitos disminuyen al inicio.
+Estas son identidades evaluadas sobre una solución conjunta,
+no choques estructurales adicionales ni experimentos ceteris paribus.
+
+\begin{figure}[p]\centering
+\includegraphics[width=\textwidth]{figures/irf_transmission.pdf}
+\caption{Respuestas financieras por rama, reproducidas desde
+código y archivos de salida: S y B utilizan las mismas posiciones
+heredadas. Las tasas no se anualizan; ninguna trayectoria
+constituye una estimación empírica ni un equilibrio infinito
+certificado.}
+\label{fig:compact_irf_financial}
+\end{figure}
+\begin{figure}[p]\centering
+\includegraphics[width=\textwidth]{figures/irf_real_allocation.pdf}
+\caption{Capital seleccionado, producción corriente y pérdida
+asignativa condicional en las dos ramas. La inversión elegida hoy
+se instala mañana, mientras la pérdida usa los recursos del
+período siguiente.}
+\label{fig:compact_irf_allocation}
+\end{figure}
+
+\subsection{Sensibilidad y condiciones de admisibilidad}
+El reproductor resuelve el prefijo no lineal y propaga una
+gráfica estable \emph{local lineal} desde la fecha dos.
+Una auditoría aparte resuelve sistemas no lineales finitos
+con horizontes de hasta \(T=640\), bajo cierres terminales
+distintos. Las comparaciones reportan residuos, márgenes
+de conjunto activo y errores de identidades KKT necesarias.
+Cambios en tamaño del shock y paso de Jacobiano preservan
+el signo de la producción inicial en los casos ensayados.
+Un cierre terminal demasiado cercano puede dar raíces con
+signos de régimen inadmisibles; esos ensayos se conservan
+como fallos, no se incluyen entre las IRF económicas.
+
+La caída inicial de producción no fue impuesta por el algoritmo,
+pero su atribución completa depende de expectativas, consumo
+y fijación de precios del sistema. Tampoco está certificado
+que la trayectoria con \(h=-10^{-5}\) se encuentre dentro
+del radio diminuto de intervención cubierto por los argumentos
+intervalares de existencia locales. No usamos la cifra del
+radio para defender un experimento de magnitud mayor.
+
+\section{Pruebas, Lean y reproducibilidad}\label{sec:compact_proofs}
+La jerarquía de la evidencia es deliberada. Las igualdades
+KKT, de presupuesto y de asignación deben examinarse como
+fórmulas del modelo fuente; las pruebas aritméticas sobre
+coeficientes de un evaluador Python son evidencia numérica
+para \emph{ese evaluador}, no automáticamente para Lean.
+La auditoría especializada de Lean compiló candidatos que
+conectan componentes monetarios (filas 12, 13, 28, 29),
+renovación bancaria (6, 22), garantía común (21) y dual
+empresarial (33) con sus expresiones fuente bajo premisas
+explícitas. También verificó la compatibilidad exacta
+\[
+a_B=1-\eta_B+\eta_B\psi_B
+=\frac{1}{R^L},
+\qquad \eta_B=\frac{1}{10},
+\quad \psi_B=\frac{10}{R^L}-9,
+\]
+para la instancia estacionaria correspondiente. La
+comparación con Python de siete fórmulas escalares pasó
+aritmética intervalar dirigida de 80 cifras. Ninguno de
+estos hechos elimina, por sí mismo, la necesidad de
+identificar los arreglos externos, las derivadas del operador
+económico completo y el calendario de su continuación.
+
+\paragraph{Complementariedad escalar (prueba matemática condicional).}
+El resultado del cuerpo demuestra dos raíces locales bajo regularidad
+y signos de derivadas. El lema Lean acredita la proposición de orden
+con premisas explícitas, pero no la recuperación de un equilibrio
+competitivo de horizonte infinito.
+
+\paragraph{Puentes fuente--Python (ocho filas identificadas).}
+Las filas 6, 12, 13, 21, 22, 28, 29 y 33 tienen teoremas de
+correspondencia condicional compilados y auditados. Falta demostrar
+el mapeo de datos y la igualdad de los operadores de derivadas
+de las 34 filas para transferir las cotas numéricas.
+
+\paragraph{IRF en los regímenes S y B (evidencia numérica).}
+Se comprueban residuos, sensibilidad y condiciones KKT
+necesarias sobre soluciones finitas. Permanecen abiertas
+la suficiencia dinámica, la continuación económica infinita y
+la regla de selección entre ramas.
+
+\begin{proposition}[Decaimiento por bloques del grafo lineal decimal]
+\label{prop:compact_exact_tail_power}
+Sea $F_0\in\mathbb{Q}^{6\times6}$ la matriz cuyos coeficientes
+son exactamente los literales decimales fijados en el insumo
+de los precondicionadores. La auditoría de fracciones enteras
+verifica $\|F_0^{48}\|_\infty<24/25$ y
+$\max_{0\le r<48}\|F_0^r\|_\infty<61/10$.
+Para todo $x\in\mathbb{R}^6$ y todo $k\ge0$ entero,
+\[
+ \|F_0^kx\|_\infty\le\frac{61}{10}
+ \left(\frac{24}{25}\right)^{\lfloor k/48\rfloor}
+ \|x\|_\infty.
+\]
+\end{proposition}
+\begin{proof}
+Escriba $k=48m+r$, $0\le r<48$. La afirmación se obtiene
+de $F_0^k=(F_0^{48})^mF_0^r$ y de la submultiplicatividad
+de la norma inducida.
+\end{proof}
+\begin{lemma}[Robustez matricial del bloque de 48 pasos]
+\label{lem:compact_robust_tail_power}
+Para cualquier matriz real $A\in\mathbb R^{6\times6}$ con
+$\|A-F_0\|_\infty\le10^{-4}$ se tiene
+$\|A^{48}\|_\infty<49/50$ y
+$\max_{0\le r<48}\|A^r\|_\infty<7$.
+En consecuencia,
+\[
+ \|A^kx\|_\infty
+ \le 7\left(\frac{49}{50}\right)^{\lfloor k/48\rfloor}
+ \|x\|_\infty,\qquad k\ge0.
+\]
+\end{lemma}
+\begin{proof}
+La identidad telescópica
+$A^n-F_0^n=\sum_{j=0}^{n-1}F_0^{n-1-j}(A-F_0)A^j$
+da por inducción $\|A^n\|_\infty\le a_n$, donde
+$a_0=1$ y
+\[
+ a_n=\|F_0^n\|_\infty+
+ 10^{-4}\sum_{j=0}^{n-1}
+ \|F_0^{n-1-j}\|_\infty a_j.
+\]
+El cálculo de estas fracciones exactas verifica
+$a_{48}<49/50$ y $\max_{r<48}a_r<7$.
+El resto sigue por submultiplicatividad.
+\end{proof}
+Ambos resultados corresponden a una \emph{matriz decimal}
+y a una clase explícita de matrices próximas a ella.
+El verificador intervalar independiente del sistema de
+\emph{16 filas linealizadas a mano} acota, en su propia
+base racional $R_s$, una transición corregida
+$F_{\mathrm{st}}$ mediante
+\[
+ \bigl\|R_s^{-1}(F_{\mathrm{st}}-F_0)R_s\bigr\|_\infty
+ \le \varepsilon_F,\qquad
+ \varepsilon_F<1.617\cdot10^{-47}.
+\]
+Al verificar que la matriz $F_0$ de ambos módulos es
+literalmente idéntica, invertir racionalmente \emph{la base
+del verificador original} y obtener
+$\|R_s\|_\infty\|R_s^{-1}\|_\infty<20.055$, se sigue
+\[
+ \|F_{\mathrm{st}}-F_0\|_\infty
+ \le \|R_s\|_\infty\|R_s^{-1}\|_\infty\varepsilon_F
+ <3.25\cdot10^{-46}<10^{-4}.
+\]
+La conclusión es \emph{condicional a la validez de la cota
+intervalar original} y alcanza únicamente a ese sistema
+linealizado; permite invocar el lema de robustez
+para $F_{\mathrm{st}}$. No se ha demostrado que esta
+transición sea el Jacobiano de las 34 condiciones del
+equilibrio SOURCE de \texttt{EconomicModel.lean}.
+Las bases racionales guardadas en los dos módulos difieren
+ligeramente en once entradas: usar la de IRF para transportar
+sin justificación la cota original sería incorrecto.
+El código independiente
+\path{code/irf/audit_stencil_transition_bridge.py}
+documenta las identidades, el inverso racional y las
+huellas de los archivos auditados.
+
+\paragraph{Las Euler de capital y la fila de garantía.}
+La comparación directa de los 16 Jacobianos recurrentes muestra
+un desacuerdo de $0.37908$ en dos condiciones empresariales.
+No es un defecto de la linealización que invalide el grafo:
+el \emph{stencil} emplea previamente
+$J_{t+1}=(1-\delta)\Pi_{t+1}q_{t+1}$,
+mientras el evaluador no lineal conserva la identidad como
+una fila adicional $g=\log[J_{t+1}/((1-\delta)
+\Pi_{t+1}q_{t+1})]$. Las condiciones de Euler satisfacen
+exactamente
+\[
+ f_i^{\mathrm{raw}}-f_i^{\mathrm{red}}
+ =m_i\theta_i(1-\delta)q_{t+1}(e^g-1).
+\]
+En la raíz estacionaria, su diferencial difiere en
+$\lambda_iDg$, $\lambda_i=\beta_E\theta_i J$.
+La transformación triangular de filas es invertible;
+el error máximo al cotejar los Jacobianos tras aplicar
+esta transformación cae a $3.87\cdot10^{-9}$
+en la prueba numérica. La identidad fuera de la
+variedad contractual se verifica también independientemente.
+Las identidades exactas de Euler, la preservación de ceros
+por la operación de fila y la simplificación de la Euler
+literal del modelo fuente se han formalizado en Lean~4:
+los cuatro lemas del archivo
+\path{lean/candidates/Ventura26LiquidityAllocation/HandStencilPledgeRowEquivalenceCandidate.lean}
+compilaron sin \texttt{sorryAx} (GitHub Actions
+\texttt{42918395877}, revisión \texttt{4a0dfb52}).
+La comprobación de los restantes residuos es todavía
+numérica y el puente integral con las 34 condiciones del
+modelo fuente, una obligación formal. También están
+formalizadas en Lean las igualdades de conjuntos de
+ceros de las filas de patrimonio bancario, oferta laboral
+y Euler del hogar, con condiciones de positividad
+(Actions \texttt{42924055334}, sin \texttt{sorryAx}).
+En la raíz, las dos primeras conversiones logarítmicas
+escalan la derivada de la fila en niveles por el inverso
+de su denominador positivo. En la Euler del hogar la
+derivada cambia de signo:
+$D\log r=-D(1-r)$ cuando $r=1$.
+Estas son normalizaciones de filas específicas,
+\emph{no} la equivalencia de los Jacobianos estructurales
+completos.
+
+\paragraph{Orden de filas y condición adicional.}
+El orden de las ecuaciones fuente de fecha cero no coincide
+con el orden de las primeras seis filas de Python:
+la permutación fuente--Python es $(0,3,1,4,2,5)$.
+La auditoría automatizada de las 33 etiquetas comprueba
+su correspondencia biyectiva; no prueba por sí misma
+equivalencia funcional de los residuos. La condición
+trigésima cuarta del sistema aumentado es el \emph{dual
+normalizado de financiamiento de la firma L}, y no una
+segunda identidad de garantía ni otra perturbación
+de política. La verificación de este último renglón
+y de las transformaciones económicas necesarias es
+una compuerta abierta. Véase
+\path{docs/PUENTE_STENCIL_EULER_GARANTIA_20261110.md}.
+
+\paragraph{La ecuación 34 es una condición de frontera, no una ecuación B adicional.}
+En las definiciones del modelo fuente, la complementariedad de L
+exige que su holgura de colateral $s_L$ y su dual de
+financiamiento $\mu_L$ satisfagan
+\[
+ s_L\geq 0,\qquad \mu_L\geq 0,\qquad s_L\mu_L=0.
+\]
+Así, $s_L>0$ obliga $\mu_L=0$ (rama S), mientras que
+$\mu_L>0$ obliga $s_L=0$ (rama B).
+Las tres implicaciones sobre complementariedad de L
+se probaron contra las definiciones fuente en Lean~4,
+sin \texttt{sorryAx} (Actions \texttt{42922148946}).
+El mismo módulo prueba la igualdad de conjuntos de
+ceros entre la garantía nominal común de fecha uno y
+su representación logarítmica, bajo positividad.
+El sistema aumentado que impone el residuo adicional
+$\mu_L=0$ sirve para localizar la \emph{frontera} entre
+ramas: no constituye una ecuación suplementaria que deba
+anularse en cualquier punto interior de la rama B.
+En el ejercicio finito, el dual L al impacto tras el shock
+es prácticamente nulo en S y positivo
+($3.2188\cdot10^{-5}$) en B; imponerle cero a B
+descartaría una raíz que satisface esas condiciones
+necesarias de complementariedad. La auditoría de Python
+replica la fórmula literal de ese dual con discrepancia
+inferior a $3\cdot10^{-16}$ y ahora también verifica los
+márgenes de L desde la fecha uno hasta el final del
+horizonte reportado. Esta comprobación no sustituye
+el análisis de suficiencia ni de las condiciones
+terminales.
+
+\begin{proposition}[Cuña de precio efectivo del capital bajo garantía vinculante]
+\label{prop:compact_source_collateral_effective_wedge}
+Supóngase que ambas empresas enfrentan la misma tasa
+crediticia bruta $R_t^L>0$, con depreciación $\delta<1$,
+inflación futura $\Pi_{t+1}>0$, precio futuro del capital
+$q_{t+1}>0$, y pignorabilidades
+$\theta_H<\theta_L$. Defina
+\[
+J_{t+1}=(1-\delta)\Pi_{t+1}q_{t+1},
+\quad
+p_{i,t}^{\mathrm{eff}}
+=q_t-\frac{\theta_iJ_{t+1}}{R_t^L}.
+\]
+Entonces, para las firmas con garantía vinculante,
+\[
+W_t:=p_{H,t}^{\mathrm{eff}}-p_{L,t}^{\mathrm{eff}}
+=(\theta_L-\theta_H)\frac{J_{t+1}}{R_t^L}>0.
+\]
+\end{proposition}
+\begin{proof}
+El presupuesto fuente se reduce al precio efectivo
+cuando la igualdad nominal de garantía se cumple.
+Al restar los precios efectivos, desaparece $q_t$.
+El orden de $\theta_i$ y la positividad de
+$J_{t+1}/R_t^L$ establecen la desigualdad.
+\end{proof}
+Las tres identidades del presupuesto empresarial y los
+dos lemas de esta cuña se compilaron en Lean~4 sin
+\texttt{sorryAx}; para los últimos dos, véase la ejecución
+\texttt{42919617934} del mismo módulo fuente.
+El supuesto $\theta_H<\theta_L$ corresponde al experimento
+ilustrativo, pero no es una restricción universal de la
+estructura \texttt{Primitives}, que sí exige productividad
+$A_H>A_L$. La desigualdad de precios no demuestra
+una asignación relativa determinada ni bienestar superior.
+
+\paragraph{Descomposición contable de la respuesta}
+Con pignorabilidades fijas y $W,J,R^L>0$,
+\[
+\Delta\log W_t
+=\Delta\log J_{t+1}-\Delta\log R_t^L.
+\]
+Manteniendo $J$ fijo, la derivada parcial de $W$ con
+respecto a $R_t^L$ es estrictamente negativa; una reducción
+aislada de la tasa bruta puede ampliar la desventaja
+de precio efectivo de H. En el experimento de remuneración
+de reservas, sin embargo, tasa y valor de la garantía
+varían endógenamente. La identidad no identifica sus
+efectos causales por separado.
+
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+Impacto, $100\Delta\log$ (log \%) & S & B\\
+\midrule
+Cuña financiera $W$ & $+0.000931$ & $+0.001913$\\
+Valor futuro de garantía $J$ & $+0.000313$ & $+0.001030$\\
+Menos variación de tasa $R^L$ & $+0.000618$ & $+0.000883$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\noindent\emph{Nota.} Innovación de fecha cero de $-0.1$
+puntos básicos aproximados en la regla de remuneración de
+reservas, parámetros ilustrativos y continuación local
+finita. En S, L tiene colateral holgado al impacto:
+su precio efectivo pignorable es una magnitud hipotética,
+\emph{no} el costo marginal de inversión de la rama S.
+En B, ambas empresas están restringidas al impacto.
+La auditoría independiente sobre 160 fechas por rama
+obtiene un error de identidad en niveles inferior a
+$2\cdot10^{-16}$. Véase
+\path{docs/CUNA_FINANCIERA_COLATERAL_Y_DESCOMPOSICION_IRF_20261110.md}
+y \path{code/irf/audit_effective_price_wedge_irf.py}.
+El signo de la cuña cambia en fechas posteriores del
+ejercicio finito; no se extrapola al largo plazo.
+
+De hecho, $\|F_0^7\|_\infty>6$: es posible una
+amplificación transitoria aunque la cola lineal decaiga.
+Una extensión no lineal requeriría construir y validar una
+ley local $C^1$ cuya derivada en el punto fijo se encontrara
+a distancia matricial a lo sumo $10^{-4}$ de $F_0$,
+además de verificar sus restricciones, optimalidad y terminalidad. Véase el comprobador
+\path{code/irf/exact_linear_tail_power_certificate.py}.
+La proposición no establece una condición de transversalidad
+bancaria ni dos equilibrios competitivos infinitos.
+
+El comando reproducible de entrada es
+\texttt{python code/verify.py}, ejecutado desde la raíz.
+El mismo repositorio contiene archivos de entrada,
+reproductores de figuras, material Lean, comprobadores
+de restricciones, JSON de auditoría y fuentes \LaTeX{}.
+Los apéndices conservan las derivaciones históricas
+completas y su registro de estatus; no se presenta
+un lema más débil como formalización automática
+de una proposición más fuerte.
+
+\section{Discusión, límites y agenda de investigación}
+\label{sec:compact_discussion}
+La \emph{pignorabilidad} \(\theta_i\), la utilización
+contractual y el dual de colateral son tres objetos
+distintos. Una menor tasa eleva la capacidad para
+recursos dados, pero la comparación de equilibrio incluye
+precios de capital, consumo, patrimonio bancario y
+expectativas. Por ello no sería correcto inferir que
+toda expansión de reservas o reducción de remuneración
+reduce la mala asignación. Un resultado sobre producción
+a dotaciones dadas tampoco prueba mejoras de bienestar.
+
+Nuestra implementación permite conceptualizar remuneración
+de reservas, cantidad, coeficiente de encaje, corredor y
+operaciones de balance del banco central, pero el
+experimento reproducido a lo largo del tiempo
+corresponde \emph{solo} a remuneración.
+La heterogeneidad de firmas y la garantía robusta son
+primitivas modeladas, no estimadas; la economía
+recurrente a horizonte infinito y la determinación
+del equilibrio requieren una verificación adicional.
+La propiedad de crecimiento de largo plazo exigiría
+incorporar e identificar el mecanismo de acumulación
+persistente y distinguir transiciones de cambios
+en la tasa de crecimiento asintótica.
+
+La siguiente prueba estructural necesaria es una
+identificación fila por fila del operador de fuente y del
+evaluador de intervalos externos, seguida de una demostración
+de factibilidad, optimalidad y terminalidad de las
+asignaciones recuperadas. Los objetivos generales del programa
+de investigación deben tratarse como agenda, no como
+resultados que se desprendan de las IRF.
+
+\section{Conclusión}
+La interbancaria OTC y la remuneración de reservas
+influyen en las condiciones de préstamo, pero la
+transmisión hacia inversión depende de las restricciones
+y los recursos endógenos de cada empresa. En un sistema
+reducido con dos regímenes financieros, la misma innovación
+puede aumentar el crédito a la firma más productiva y, aun
+así, generar respuestas opuestas de capital y pérdida
+asignativa. El resultado analítico central es
+\emph{condicional} a las propiedades de una complementariedad
+escalar. Las simulaciones ilustran el mecanismo; no
+demuestran todavía equilibrio competitivo infinito,
+selección de rama, política óptima o crecimiento sostenido.
+La distinción es necesaria para interpretar rigurosamente
+un modelo monetario con fricciones financieras.

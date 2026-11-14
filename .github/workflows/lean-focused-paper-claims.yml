@@ -1,0 +1,407 @@
+# Quick kernel gate for the paper's newest financial/allocative claims.
+# source-chain-rule-20261108: rerun complete kernel/axiom gate after fixed imports and association.
+# The complete Lean audit must still pass before delivery.
+name: Lean paper claims (focused, pinned)
+
+# Retain only the newest proof gate for this review branch.
+concurrency:
+  group: lean-focused-paper-claims-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/lean-focused-paper-claims.yml'
+      - 'lean/candidates/Ventura26LiquidityAllocation/**'
+      - 'lean/checkpoint/**'
+  push:
+    branches:
+      - 'work/lean-ci-validation-*'
+    paths:
+      - '.github/workflows/lean-focused-paper-claims.yml'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperRepaymentExactCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperAllocationLossElasticityCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperAllocationEfficiencySupportCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperAllocationSourceAlgebraBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperOptimalLaborCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperOriginalLaborGlobalCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperJointEfficiencySourceCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperJointEfficiencyBoundCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperJointEfficiencyPhysicalCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperOriginalLogLossCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperSourceDifferentiationCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperSourceDifferentialSharesCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperSourceLossChainRuleCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperSourceOutputShareCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperSourceLogCapitalRatioCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperLemma43StaticIntegratedCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperLemma43DynamicIntegratedCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperLemma43SourceCompleteCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperLemma43PhysicalMPKCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankStaticSupergradientSufficiencyCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankBellmanStaticSufficiencyCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankKKTGlobalSufficiencyCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankBellmanEnvironmentFromStaticCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankKKTFullCornerCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankFiniteHorizonEnvelopeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankMonotoneBellmanEnvelopeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankFiniteSupportContinuationCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankSourceTransitionMonotonicityCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankJointContinuationMonotonicityCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankLiteralBellmanMonotonicityCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankSourceOneStepEnvelopeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankSourceNextEquityBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankDividendRetentionDominanceCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankNormalizedPortfolioEnvelopeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankGlobalDividendBoundFromNormalizedCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankZeroEquityBoundaryCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankUnitKKTAllEquityBridgeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankDynamicOptimalityFromEnvelopeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankScaledCandidateAttainmentCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankConcreteFullRetentionOptimalityCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankFullRetentionTerminalEnvelopeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankSurvivingContractionCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankPathwiseOTCDiscountedReturnCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankContinuationPathProbabilityMassCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankExpectedSurvivorEnvelopeCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankPathwiseGrowthInductionCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankZeroEquityAbsorptionCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankConditionalOTCMeanCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankConditionalExpectedContractionCandidate.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PaperBankConditionalOTCTransitionIdentityCandidate.lean'
+      - 'lean/checkpoint/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  focused-paper-claims:
+    name: Kernel and axioms for repayment and allocative-loss lemmata
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - name: Checkout pinned review branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Verify checkpoint and construct isolated pinned workspace
+        shell: bash
+        env:
+          PINNED_SHA: 16e24fe828a5a0002ef13bb82bae9e295f190f86
+          UPSTREAM_SHA: 194edcc95df74806a39b961d10dedddc6e730cce
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor "$PINNED_SHA" HEAD
+          mkdir -p lean-focused-logs
+          git clone --quiet --filter=blob:none https://github.com/nikhgarg/AppliedModelingLib.git upstream
+          git -C upstream checkout --quiet --detach "$UPSTREAM_SHA"
+          test "$(git -C upstream rev-parse HEAD)" = "$UPSTREAM_SHA"
+          cmp lean/checkpoint/dependencies/lean-toolchain upstream/lean-toolchain
+          cmp lean/checkpoint/dependencies/lake-manifest.json upstream/lake-manifest.json
+          python3 - <<'PY'
+          from pathlib import Path
+          orig=Path("upstream/lakefile.toml").read_bytes()
+          candidate=Path("lean/checkpoint/dependencies/lakefile.toml").read_bytes()
+          extra=b'\n[[lean_lib]]\nname = "Ventura26LiquidityAllocation"\nsrcDir = "papers"\n'
+          assert candidate == orig + extra, "Unexpected change in pinned Lake overlay"
+          PY
+          cp lean/checkpoint/dependencies/lakefile.toml upstream/lakefile.toml
+          mkdir -p upstream/papers/Ventura26LiquidityAllocation
+          cp lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/checkpoint/module_root.lean upstream/papers/Ventura26LiquidityAllocation.lean
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperRepaymentExactCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperAllocationLossElasticityCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperAllocationEfficiencySupportCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperAllocationSourceAlgebraBridgeCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperOptimalLaborCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperOriginalLaborGlobalCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperJointEfficiencySourceCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperJointEfficiencyBoundCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperJointEfficiencyPhysicalCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperOriginalLogLossCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperSourceDifferentiationCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperSourceDifferentialSharesCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperSourceLossChainRuleCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperSourceOutputShareCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperSourceLogCapitalRatioCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperLemma43StaticIntegratedCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperLemma43DynamicIntegratedCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperLemma43SourceCompleteCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperLemma43PhysicalMPKCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankStaticSupergradientSufficiencyCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankBellmanStaticSufficiencyCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankKKTGlobalSufficiencyCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankBellmanEnvironmentFromStaticCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankKKTFullCornerCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankFiniteHorizonEnvelopeCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankMonotoneBellmanEnvelopeCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankFiniteSupportContinuationCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankSourceTransitionMonotonicityCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankJointContinuationMonotonicityCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankLiteralBellmanMonotonicityCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankSourceOneStepEnvelopeCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankSourceNextEquityBridgeCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankDividendRetentionDominanceCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankNormalizedPortfolioEnvelopeCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankGlobalDividendBoundFromNormalizedCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankZeroEquityBoundaryCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankUnitKKTAllEquityBridgeCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankDynamicOptimalityFromEnvelopeCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankScaledCandidateAttainmentCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankConcreteFullRetentionOptimalityCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankFullRetentionTerminalEnvelopeCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankSurvivingContractionCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankPathwiseOTCDiscountedReturnCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankContinuationPathProbabilityMassCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankExpectedSurvivorEnvelopeCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankPathwiseGrowthInductionCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankZeroEquityAbsorptionCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankConditionalOTCMeanCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankConditionalExpectedContractionCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/candidates/Ventura26LiquidityAllocation/PaperBankConditionalOTCTransitionIdentityCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          sha256sum lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean > lean-focused-logs/checkpoint-sha256.txt
+          sha256sum lean/candidates/Ventura26LiquidityAllocation/Paper*Candidate.lean > lean-focused-logs/paper-candidates-sha256.txt
+      - name: Install exact Lean toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o "$RUNNER_TEMP/elan-init.sh"
+          sh "$RUNNER_TEMP/elan-init.sh" -y --no-modify-path
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Restore pinned dependencies
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          grep -Fx 'leanprover/lean4:v4.30.0-rc2' lean-toolchain
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('lake-manifest.json').read_text())
+          refs={x['name']:x['rev'] for x in p['packages']}
+          assert refs['mathlib']=='5450b53e5ddc75d46418fabb605edbf36bd0beb6'
+          assert refs['cslib']=='95fdc7dc863ff83e9d6c3a68fcb2505540462a4d'
+          PY
+          lean --version
+          lake exe cache get > "$GITHUB_WORKSPACE/lean-focused-logs/mathlib-cache.log" 2>&1 || {
+            tail -n 70 "$GITHUB_WORKSPACE/lean-focused-logs/mathlib-cache.log"
+            exit 1
+          }
+      - name: Compile bank Bellman bridges first, then all paper claims
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          for module in PaperBankSourceNextEquityBridgeCandidate PaperBankDividendRetentionDominanceCandidate PaperBankNormalizedPortfolioEnvelopeCandidate PaperBankGlobalDividendBoundFromNormalizedCandidate PaperBankZeroEquityBoundaryCandidate PaperBankUnitKKTAllEquityBridgeCandidate PaperBankDynamicOptimalityFromEnvelopeCandidate PaperBankScaledCandidateAttainmentCandidate PaperBankConcreteFullRetentionOptimalityCandidate PaperBankFullRetentionTerminalEnvelopeCandidate PaperBankSurvivingContractionCandidate PaperBankPathwiseOTCDiscountedReturnCandidate PaperBankContinuationPathProbabilityMassCandidate PaperBankExpectedSurvivorEnvelopeCandidate PaperBankPathwiseGrowthInductionCandidate PaperBankZeroEquityAbsorptionCandidate PaperBankConditionalOTCMeanCandidate PaperBankConditionalExpectedContractionCandidate PaperBankConditionalOTCTransitionIdentityCandidate PaperBankLiteralBellmanMonotonicityCandidate PaperBankJointContinuationMonotonicityCandidate PaperBankFiniteSupportContinuationCandidate PaperBankMonotoneBellmanEnvelopeCandidate PaperBankFiniteHorizonEnvelopeCandidate PaperBankSourceOneStepEnvelopeCandidate PaperBankSourceTransitionMonotonicityCandidate PaperRepaymentExactCandidate PaperAllocationLossElasticityCandidate PaperAllocationEfficiencySupportCandidate PaperAllocationSourceAlgebraBridgeCandidate PaperOptimalLaborCandidate PaperOriginalLaborGlobalCandidate PaperJointEfficiencySourceCandidate PaperJointEfficiencyBoundCandidate PaperJointEfficiencyPhysicalCandidate PaperOriginalLogLossCandidate PaperSourceDifferentiationCandidate PaperSourceDifferentialSharesCandidate PaperSourceLossChainRuleCandidate PaperSourceOutputShareCandidate PaperSourceLogCapitalRatioCandidate PaperLemma43StaticIntegratedCandidate PaperLemma43DynamicIntegratedCandidate PaperLemma43SourceCompleteCandidate PaperLemma43PhysicalMPKCandidate PaperBankStaticSupergradientSufficiencyCandidate PaperBankBellmanStaticSufficiencyCandidate PaperBankKKTGlobalSufficiencyCandidate PaperBankBellmanEnvironmentFromStaticCandidate PaperBankKKTFullCornerCandidate; do
+            echo "::group::Compile $module"
+            if lake build "Ventura26LiquidityAllocation.$module" > "$GITHUB_WORKSPACE/lean-focused-logs/$module.log" 2>&1; then
+              echo "COMPILED $module"
+            else
+              tail -n 120 "$GITHUB_WORKSPACE/lean-focused-logs/$module.log"
+              echo "::endgroup::"
+              exit 1
+            fi
+            echo "::endgroup::"
+          done
+      - name: Audit exact proofs for unsupported axioms
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          cat > FocusedPaperAxioms.lean <<'LEAN'
+          import Ventura26LiquidityAllocation.PaperRepaymentExactCandidate
+          import Ventura26LiquidityAllocation.PaperAllocationLossElasticityCandidate
+          import Ventura26LiquidityAllocation.PaperAllocationEfficiencySupportCandidate
+          import Ventura26LiquidityAllocation.PaperAllocationSourceAlgebraBridgeCandidate
+          import Ventura26LiquidityAllocation.PaperOptimalLaborCandidate
+          import Ventura26LiquidityAllocation.PaperOriginalLaborGlobalCandidate
+          import Ventura26LiquidityAllocation.PaperJointEfficiencySourceCandidate
+          import Ventura26LiquidityAllocation.PaperJointEfficiencyBoundCandidate
+          import Ventura26LiquidityAllocation.PaperJointEfficiencyPhysicalCandidate
+          import Ventura26LiquidityAllocation.PaperOriginalLogLossCandidate
+          import Ventura26LiquidityAllocation.PaperSourceDifferentiationCandidate
+          import Ventura26LiquidityAllocation.PaperSourceDifferentialSharesCandidate
+          import Ventura26LiquidityAllocation.PaperSourceLossChainRuleCandidate
+          import Ventura26LiquidityAllocation.PaperSourceOutputShareCandidate
+          import Ventura26LiquidityAllocation.PaperSourceLogCapitalRatioCandidate
+          import Ventura26LiquidityAllocation.PaperLemma43StaticIntegratedCandidate
+          import Ventura26LiquidityAllocation.PaperLemma43DynamicIntegratedCandidate
+          import Ventura26LiquidityAllocation.PaperLemma43SourceCompleteCandidate
+          import Ventura26LiquidityAllocation.PaperLemma43PhysicalMPKCandidate
+          import Ventura26LiquidityAllocation.PaperBankStaticSupergradientSufficiencyCandidate
+          import Ventura26LiquidityAllocation.PaperBankBellmanStaticSufficiencyCandidate
+          import Ventura26LiquidityAllocation.PaperBankKKTGlobalSufficiencyCandidate
+          import Ventura26LiquidityAllocation.PaperBankBellmanEnvironmentFromStaticCandidate
+          import Ventura26LiquidityAllocation.PaperBankKKTFullCornerCandidate
+          import Ventura26LiquidityAllocation.PaperBankMonotoneBellmanEnvelopeCandidate
+          import Ventura26LiquidityAllocation.PaperBankFiniteSupportContinuationCandidate
+          import Ventura26LiquidityAllocation.PaperBankSourceTransitionMonotonicityCandidate
+          import Ventura26LiquidityAllocation.PaperBankJointContinuationMonotonicityCandidate
+          import Ventura26LiquidityAllocation.PaperBankLiteralBellmanMonotonicityCandidate
+          import Ventura26LiquidityAllocation.PaperBankSourceOneStepEnvelopeCandidate
+          import Ventura26LiquidityAllocation.PaperBankSourceNextEquityBridgeCandidate
+          import Ventura26LiquidityAllocation.PaperBankDividendRetentionDominanceCandidate
+          import Ventura26LiquidityAllocation.PaperBankNormalizedPortfolioEnvelopeCandidate
+          import Ventura26LiquidityAllocation.PaperBankGlobalDividendBoundFromNormalizedCandidate
+          import Ventura26LiquidityAllocation.PaperBankZeroEquityBoundaryCandidate
+          import Ventura26LiquidityAllocation.PaperBankUnitKKTAllEquityBridgeCandidate
+          import Ventura26LiquidityAllocation.PaperBankDynamicOptimalityFromEnvelopeCandidate
+          import Ventura26LiquidityAllocation.PaperBankScaledCandidateAttainmentCandidate
+          import Ventura26LiquidityAllocation.PaperBankConcreteFullRetentionOptimalityCandidate
+          import Ventura26LiquidityAllocation.PaperBankFullRetentionTerminalEnvelopeCandidate
+          import Ventura26LiquidityAllocation.PaperBankSurvivingContractionCandidate
+          import Ventura26LiquidityAllocation.PaperBankPathwiseOTCDiscountedReturnCandidate
+          import Ventura26LiquidityAllocation.PaperBankContinuationPathProbabilityMassCandidate
+          import Ventura26LiquidityAllocation.PaperBankExpectedSurvivorEnvelopeCandidate
+          import Ventura26LiquidityAllocation.PaperBankPathwiseGrowthInductionCandidate
+          import Ventura26LiquidityAllocation.PaperBankZeroEquityAbsorptionCandidate
+          import Ventura26LiquidityAllocation.PaperBankConditionalOTCMeanCandidate
+          import Ventura26LiquidityAllocation.PaperBankConditionalExpectedContractionCandidate
+          import Ventura26LiquidityAllocation.PaperBankConditionalOTCTransitionIdentityCandidate
+          import Ventura26LiquidityAllocation.PaperBankFiniteHorizonEnvelopeCandidate
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperRepaymentExact.exact_repaymentSpec
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationLossElasticity.allocation_loss_log_differential_algebra
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationLossElasticity.output_share_gt_capital_share_iff_productivity
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationLossElasticity.loss_direction_negative_of_reallocation
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationEfficiencySupport.normalized_two_type_output_le_benchmark
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationEfficiencySupport.normalized_benchmark_attained
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationEfficiencySupport.normalized_log_loss_nonneg
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationEfficiencySupport.efficient_candidate_clears_resources
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationSourceAlgebraBridge.productivity_weight_recovers_A
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationSourceAlgebraBridge.positive_aggregate_loss_log_formula
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationSourceAlgebraBridge.source_weight_pow_identity
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationSourceAlgebraBridge.source_output_at_weighted_labor
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationSourceAlgebraBridge.positive_labor_aggregate_power
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationSourceAlgebraBridge.source_two_type_output_at_optimal_labor
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperAllocationSourceAlgebraBridge.source_labor_candidate_clears_resources
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperOptimalLabor.normalized_labor_global_bound
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperOptimalLabor.source_output_with_scaled_labor
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperOptimalLabor.source_two_type_global_labor_optimality
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperOptimalLabor.source_labor_global_bound_attained
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperOriginalLaborGlobal.original_two_type_labor_global_bound
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperOriginalLaborGlobal.original_labor_candidate_attains_global_bound
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperJointEfficiencySource.normalized_source_firm_output
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperJointEfficiencySource.normalized_joint_scale_identity
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperJointEfficiencyBound.normalized_two_type_source_output_le_efficient
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperJointEfficiencyBound.source_resource_budget_normalizes
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperJointEfficiencyPhysical.original_physical_two_type_joint_output_bound
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperJointEfficiencyPhysical.original_physical_joint_candidate_attains_frontier
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperOriginalLogLoss.original_physical_log_loss_nonnegative
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperOriginalLogLoss.original_labor_candidate_log_loss_formula
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperSourceDifferentiation.source_total_capital_hasDerivAt
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperSourceDifferentiation.source_productivity_aggregate_hasDerivAt
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperSourceDifferentiation.source_log_total_capital_hasDerivAt
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperSourceDifferentiation.source_log_productivity_aggregate_hasDerivAt
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperSourceDifferentialShares.original_capital_log_share_identity
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperSourceDifferentialShares.original_productivity_log_share_identity
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperSourceLossChainRule.original_source_loss_hasDerivAt_relative_capital
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperSourceOutputShare.original_output_share_equals_adjusted_weight
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperSourceLogCapitalRatio.original_log_capital_ratio_hasDerivAt
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperLemma43StaticIntegrated.original_source_static_lemma43_bundle
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperLemma43DynamicIntegrated.original_source_dynamic_lemma43_bundle
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperLemma43SourceComplete.sourceLemma43CompleteSpec_proved
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperLemma43PhysicalMPK.original_firm_production_hasDerivAt_capital
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperLemma43PhysicalMPK.original_firm_mpk_equals_elasticity_times_output_per_capital
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperBankStaticSupergradientSufficiency.source_bank_static_portfolio_optimal_of_supergradients
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperBankStaticSupergradientSufficiency.source_bank_static_portfolio_optimal_of_selected_marginal
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperBankBellmanStaticSufficiency.source_bellman_portfolio_ranking_of_static_global_optimality
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperBankBellmanStaticSufficiency.source_bellman_portfolio_ranking_with_derived_weight
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperBankKKTGlobalSufficiency.bank_cap_corner_global_direction
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperBankKKTGlobalSufficiency.source_bank_static_optimal_with_bank_caps_and_corners
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperBankBellmanEnvironmentFromStatic.source_bank_bellman_environment_of_static_optimality
+          #print axioms Ventura26LiquidityAllocation.ProposedPaperBankKKTFullCorner.source_bank_static_optimal_with_all_bank_nonneg_corners
+          #print axioms Ventura26LiquidityAllocation.ProposedBankMonotoneBellmanEnvelope.recurse_le_value
+          #print axioms Ventura26LiquidityAllocation.ProposedBankMonotoneBellmanEnvelope.recurse_eq_value
+          #print axioms Ventura26LiquidityAllocation.ProposedBankFiniteSupportContinuation.weightedContinuation_monotone
+          #print axioms Ventura26LiquidityAllocation.ProposedBankFiniteSupportContinuation.weightedContinuation_finite_horizon_bound
+          #print axioms Ventura26LiquidityAllocation.ProposedBankSourceTransitionMonotonicity.sourceSurvivalContinuation_monotone
+          #print axioms Ventura26LiquidityAllocation.ProposedBankSourceTransitionMonotonicity.sourceSurvivalContinuation_monotone_of_consumption
+          #print axioms Ventura26LiquidityAllocation.ProposedBankJointContinuationMonotonicity.jointSurvivalContinuation_monotone_of_consumption
+          #print axioms Ventura26LiquidityAllocation.ProposedBankLiteralBellmanMonotonicity.bankBellmanContinuationAt_monotone_of_consumption
+          #print axioms Ventura26LiquidityAllocation.ProposedBankSourceOneStepEnvelope.bankContinuationPayoffAt_le_tailEnvelope
+          #print axioms Ventura26LiquidityAllocation.ProposedBankSourceNextEquityBridge.bankContinuationFeasibleAt_nextEquity_eq_realPortfolioReturn
+          #print axioms Ventura26LiquidityAllocation.ProposedBankSourceNextEquityBridge.bankTailEnvelopeAt_eq_dividend_add_sourceBellman
+          #print axioms Ventura26LiquidityAllocation.ProposedBankSourceNextEquityBridge.bankContinuationPayoffAt_le_sourceBellman_of_tailBound
+          #print axioms Ventura26LiquidityAllocation.ProposedBankSourceNextEquityBridge.bankContinuationFeasibleAt_initialStaticPortfolio
+          #print axioms Ventura26LiquidityAllocation.ProposedBankDividendRetentionDominance.dividend_retention_algebraic_upper_bound
+          #print axioms Ventura26LiquidityAllocation.ProposedBankDividendRetentionDominance.source_bank_dividend_portfolio_upper_bound
+          #print axioms Ventura26LiquidityAllocation.ProposedBankDividendRetentionDominance.source_bank_joint_dividend_portfolio_ranking
+          #print axioms Ventura26LiquidityAllocation.ProposedBankNormalizedPortfolioEnvelope.source_static_payoff_le_retained_mul_unit_optimum
+          #print axioms Ventura26LiquidityAllocation.ProposedBankNormalizedPortfolioEnvelope.source_bellman_le_retained_mul_unit_value
+          #print axioms Ventura26LiquidityAllocation.ProposedBankGlobalDividendBoundFromNormalized.source_feasible_positive_initial_retention
+          #print axioms Ventura26LiquidityAllocation.ProposedBankGlobalDividendBoundFromNormalized.source_positive_equity_global_portfolio_bound
+          #print axioms Ventura26LiquidityAllocation.ProposedBankGlobalDividendBoundFromNormalized.source_positive_equity_dividend_and_portfolio_bound
+          #print axioms Ventura26LiquidityAllocation.ProposedBankZeroEquityBoundary.source_zero_initial_equity_controls
+          #print axioms Ventura26LiquidityAllocation.ProposedBankZeroEquityBoundary.source_static_zero_portfolio_payoff
+          #print axioms Ventura26LiquidityAllocation.ProposedBankZeroEquityBoundary.source_zero_equity_one_step_value
+          #print axioms Ventura26LiquidityAllocation.ProposedBankZeroEquityBoundary.source_all_equity_dividend_portfolio_upper_bound
+          #print axioms Ventura26LiquidityAllocation.ProposedBankUnitKKTAllEquityBridge.source_unit_static_optimal_of_five_dual_kkt
+          #print axioms Ventura26LiquidityAllocation.ProposedBankUnitKKTAllEquityBridge.source_all_equity_bank_bellman_bound_of_unit_kkt
+          #print axioms Ventura26LiquidityAllocation.ProposedBankDynamicOptimalityFromEnvelope.source_bank_dynamic_optimal_of_all_equity_envelope
+          #print axioms Ventura26LiquidityAllocation.ProposedBankDynamicOptimalityFromEnvelope.source_bank_dynamic_optimal_of_unit_kkt_and_tail_bounds
+          #print axioms Ventura26LiquidityAllocation.ProposedBankScaledCandidateAttainment.source_scaled_candidate_attains_one_step_bellman
+          #print axioms Ventura26LiquidityAllocation.ProposedBankScaledCandidateAttainment.source_candidate_actual_payoff_eq_one_step_bellman
+          #print axioms Ventura26LiquidityAllocation.ProposedBankScaledCandidateAttainment.source_scaled_candidate_actual_payoff_attains_unit_value
+          #print axioms Ventura26LiquidityAllocation.ProposedBankConcreteFullRetentionOptimality.source_full_retention_candidate_feasible
+          #print axioms Ventura26LiquidityAllocation.ProposedBankConcreteFullRetentionOptimality.source_full_retention_candidate_scaled_initial_controls
+          #print axioms Ventura26LiquidityAllocation.ProposedBankConcreteFullRetentionOptimality.source_full_retention_candidate_attains_bellman
+          #print axioms Ventura26LiquidityAllocation.ProposedBankConcreteFullRetentionOptimality.source_full_retention_candidate_optimal_of_kkt_and_growth
+          #print axioms Ventura26LiquidityAllocation.ProposedBankFullRetentionTerminalEnvelope.zero_dividend_owner_payoff_eq_exit_survivor
+          #print axioms Ventura26LiquidityAllocation.ProposedBankFullRetentionTerminalEnvelope.zero_dividend_objective_summable_of_survivor_summable
+          #print axioms Ventura26LiquidityAllocation.ProposedBankFullRetentionTerminalEnvelope.source_full_retention_dividends_zero
+          #print axioms Ventura26LiquidityAllocation.ProposedBankFullRetentionTerminalEnvelope.source_full_retention_objective_and_terminal_of_surviving_envelope
+          #print axioms Ventura26LiquidityAllocation.ProposedBankSurvivingContraction.nonnegative_contraction_gives_geometric_bound
+          #print axioms Ventura26LiquidityAllocation.ProposedBankSurvivingContraction.full_retention_analytic_conditions_of_survivor_contraction
+          #print axioms Ventura26LiquidityAllocation.ProposedBankSurvivingContraction.full_retention_analytic_conditions_of_survival_return_bound
+          #print axioms Ventura26LiquidityAllocation.ProposedBankPathwiseOTCDiscountedReturn.source_full_retention_discounted_equity_pathwise_le
+          #print axioms Ventura26LiquidityAllocation.ProposedBankPathwiseOTCDiscountedReturn.source_discounted_equity_growth_factor_le_two_bounds
+          #print axioms Ventura26LiquidityAllocation.ProposedBankContinuationPathProbabilityMass.source_aggregate_future_path_mass_one
+          #print axioms Ventura26LiquidityAllocation.ProposedBankContinuationPathProbabilityMass.source_payment_future_path_mass_one
+          #print axioms Ventura26LiquidityAllocation.ProposedBankContinuationPathProbabilityMass.source_aggregate_future_path_weight_nonneg
+          #print axioms Ventura26LiquidityAllocation.ProposedBankContinuationPathProbabilityMass.source_payment_future_path_weight_nonneg
+          #print axioms Ventura26LiquidityAllocation.ProposedBankContinuationPathProbabilityMass.source_joint_future_path_mass_one
+          #print axioms Ventura26LiquidityAllocation.ProposedBankContinuationPathProbabilityMass.source_joint_future_path_weight_nonneg
+          #print axioms Ventura26LiquidityAllocation.ProposedBankExpectedSurvivorEnvelope.source_surviving_value_nonneg_of_pathwise_nonneg
+          #print axioms Ventura26LiquidityAllocation.ProposedBankExpectedSurvivorEnvelope.source_expected_surviving_equity_geometric_upper_bound
+          #print axioms Ventura26LiquidityAllocation.ProposedBankExpectedSurvivorEnvelope.source_full_retention_analytic_conditions_of_pathwise_growth
+          #print axioms Ventura26LiquidityAllocation.ProposedBankPathwiseGrowthInduction.source_bank_cumulative_sdf_pos
+          #print axioms Ventura26LiquidityAllocation.ProposedBankPathwiseGrowthInduction.source_full_retention_initial_discounted_equity
+          #print axioms Ventura26LiquidityAllocation.ProposedBankPathwiseGrowthInduction.source_full_retention_pathwise_discounted_equity_power_bound
+          #print axioms Ventura26LiquidityAllocation.ProposedBankPathwiseGrowthInduction.source_full_retention_analytic_conditions_of_otc_pathwise_factor
+          #print axioms Ventura26LiquidityAllocation.ProposedBankZeroEquityAbsorption.source_zero_portfolio_detailed_return
+          #print axioms Ventura26LiquidityAllocation.ProposedBankZeroEquityAbsorption.source_feasible_zero_equity_is_absorbing
+          #print axioms Ventura26LiquidityAllocation.ProposedBankConditionalOTCMean.source_conditional_otc_mean_weighted_bound
+          #print axioms Ventura26LiquidityAllocation.ProposedBankConditionalExpectedContraction.source_surviving_value_eq_survival_pow_mul_mass
+          #print axioms Ventura26LiquidityAllocation.ProposedBankConditionalExpectedContraction.source_discounted_bank_mass_contracts_of_conditional_otc_bound
+          #print axioms Ventura26LiquidityAllocation.ProposedBankConditionalExpectedContraction.source_surviving_equity_contracts_of_conditional_otc_bound
+          #print axioms Ventura26LiquidityAllocation.ProposedBankConditionalExpectedContraction.source_full_retention_tvc_of_conditional_otc_return
+          #print axioms Ventura26LiquidityAllocation.ProposedBankConditionalOTCTransitionIdentity.sum_pi_cons
+          #print axioms Ventura26LiquidityAllocation.ProposedBankConditionalOTCTransitionIdentity.source_transition_weight_child
+          #print axioms Ventura26LiquidityAllocation.ProposedBankConditionalOTCTransitionIdentity.source_payment_weight_child
+          #print axioms Ventura26LiquidityAllocation.ProposedBankConditionalOTCTransitionIdentity.weighted_finite_conditional_factorization
+          #print axioms Ventura26LiquidityAllocation.ProposedBankConditionalOTCTransitionIdentity.source_discounted_bank_mass_next_eq_conditional_growth
+          #print axioms Ventura26LiquidityAllocation.ProposedBankConditionalOTCTransitionIdentity.source_full_retention_tvc_of_source_conditional_otc_growth
+          #print axioms Ventura26LiquidityAllocation.ProposedBankFiniteHorizonEnvelope.finite_horizon_le_value
+          #print axioms Ventura26LiquidityAllocation.ProposedBankFiniteHorizonEnvelope.finite_horizon_eq_value
+          LEAN
+          lake env lean FocusedPaperAxioms.lean > "$GITHUB_WORKSPACE/lean-focused-logs/axioms.log" 2>&1 || {
+            tail -n 120 "$GITHUB_WORKSPACE/lean-focused-logs/axioms.log"
+            exit 1
+          }
+          cat "$GITHUB_WORKSPACE/lean-focused-logs/axioms.log"
+          if grep -E '(sorryAx|Lean\.sorryAx)' "$GITHUB_WORKSPACE/lean-focused-logs/axioms.log"; then
+            echo "ERROR: a targeted theorem depends on sorryAx"
+            exit 1
+          fi
+          echo "PASS focused Lean kernel and axiom audit"
+      - name: Save focused Lean logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lean-focused-paper-claims-logs
+          path: lean-focused-logs/
+          retention-days: 30

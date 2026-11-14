@@ -1,2 +1,18 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Keep source/certificate hashes stable across Windows and Ubuntu checkouts.
+/.gitattributes text eol=lf
+*.tex text eol=lf
+*.bib text eol=lf
+*.py text eol=lf
+*.json text eol=lf
+*.pdf binary
+*.npz binary
+
+# Preserve byte-identical preliminary Lean checkpoint files.
+/lean/checkpoint/** -text whitespace=cr-at-eol
+
+# Existing IRF manifests hash raw artifact bytes, including line endings.
+/code/irf/output/** -text whitespace=cr-at-eol
+/paper/irf_impact_table.tex -text whitespace=cr-at-eol

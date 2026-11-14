@@ -1,8 +1,15 @@
-# Handwritten appendix — pending
+# Apéndice manuscrito del autor — todavía pendiente
 
-Alejandro Ventura will write every derivation by hand, naming each rule and
-checking its assumptions. Planned derivations: firm KKT conditions and four
-regions; mixed-regime implicit derivatives; two-constrained market clearing and
-finite-difference identity; banking derivative with endogenous loan demand;
-efficient allocation and the direction of the output and MRPK-gap changes.
-The typed preliminary derivation is not a substitute for this appendix.
+La guía [GUIA_DERIVACION_MANUSCRITA_NUCLEO.md](GUIA_DERIVACION_MANUSCRITA_NUCLEO.md)
+expone los pasos formales que deben cotejarse **personalmente y a mano**:
+complementariedad escalar, teorema de función implícita y las identidades
+de recursos invertibles, crédito y capital de la empresa H.
+
+**Estado verificable:** existe una guía tipografiada, pero todavía no se
+ha incorporado ningún escaneo manuscrito, juicio personal ni evidencia
+independiente de comprensión. Esta guía NO cumple por sí sola la exigencia
+manuscrita de la consigna del curso.
+
+Después se deberán escribir las restantes derivaciones que sobrevivan
+la revisión editorial definitiva del paper, sin saltos ni referencias
+que sustituyan pasos matemáticos explícitos.

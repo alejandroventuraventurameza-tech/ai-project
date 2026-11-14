@@ -1,0 +1,271 @@
+CONTINUIDAD DEL PROYECTO EN CHAT
+
+ACTUALIZACION PRIORITARIA: 10 DE NOVIEMBRE DE 2026 (LEER ANTES DEL HISTORIAL)
+Rama de investigación: work/lean-ci-validation-otc-20261106. PR #2 en borrador.
+El commit matemático 3c881026632f78122566f21abd30aff4391ee04b pasó
+Lean boundary proof gate #42902110667: compilación y auditoría de axiomas
+sin sorryAx. Están DEMOSTRADAS sobre SOURCE las dos desigualdades del
+residual (en 1.029135 es negativo; en 1.029136 es positivo), la raíz
+única dentro de ese intervalo y la brecha uniforme de obligaciones
+nominales heredadas superior a 0.08. La parte de firmas supera 0.11;
+la parte bancaria es mayor que -0.03. El teorema
+ProposedFirmFaceUniformGap.source_boundary_candidate_not_competitive_equilibrium
+descarta el candidato SOURCE con el estado inicial boundaryInitialState G R.
+NO demuestra inexistencia de todos los equilibrios dinámicos ni de un
+candidato distinto con inheritedState G fijo: el estado SOURCE depende de R.
+
+Registro de teoremas, cuantificadores, limites y enlace al gate:
+lean/SOURCE_CERTIFICATE_STATUS_2026-11-10.md.
+Se corrigió paper/paper.tex para sustituir la antigua proposición positiva
+"Un equilibrio en la frontera de L" por la raíz REDUCIDA y la obstrucción
+nominal demostrada; referencia histórica LaTeX: prop:boundary_equilibrium.
+Los cambios científicos están en commits a8d75d76, da8def32 y 5bb7f79b.
+El commit 84d785641ce0a2bf701f3d6863e6e1b13f722c21 actualiza las
+huellas SHA-256 de paper/result_ledger.json: 57 resultados retenidos,
+solo el enunciado/prueba de SOURCE alterados. El job code/verify.py de ese
+commit pasó; revisar el estado de la compilación de PDFs y de los otros
+workflows antes de afirmar que la nueva entrega editorial está cerrada.
+
+SIGUIENTE TRABAJO EFECTIVO: (1) compuertas del manuscrito y lectura visual
+PDF (no confundir con la prueba Lean); (2) trasladar a las diapositivas la
+refutación de SOURCE sin borrar resultados reducidos válidos;
+(3) CONSTRUIR un nuevo sistema con inheritedState predeterminado e idéntico
+bajo la intervención monetaria, sus presupuestos y KKT originales;
+(4) resolver y simular las cuatro herramientas (tasa, corredor, balance,
+encaje) con IRF reproducibles, heterogeneidad y mala asignación dinámica.
+No modificar main ni elevar el PR #2 a final sin revisión integral.
+
+FIN DE LA ACTUALIZACION PRIORITARIA. SIGUE EL CONTEXTO HISTORICO.
+
+Autor: Alejandro Ventura. Estado preparado el 5 de noviembre de 2026.
+
+Este es el punto de entrada para retomar el proyecto desde GitHub en la pestaña
+Chat. Su preparación no inicia una corrida ni acredita nuevos resultados.
+La versión de continuidad se prepara en work/chat-continuity. Antes de usarla,
+el asistente debe identificar la rama y el commit que realmente puede leer.
+La preparación local no significa que esa versión ya esté subida a GitHub.
+
+1. OBJETIVO Y FORMA DE TRABAJAR
+
+La investigación estudia cuándo los instrumentos de política monetaria, al
+afectar implementación, liquidación interbancaria y bancos comerciales, cambian
+el crédito, la inversión y la asignación entre empresas con distinta
+productividad, patrimonio y pignorabilidad. H puede ser más productiva y tener
+menor capital o garantía: recibe crédito positivo, pero su escala está limitada.
+
+El autor quiere utilizar exclusivamente Chat para desarrollar los argumentos
+y candidatos Lean. Prefiere GPT-6 Sol con esfuerzo xhigh; debe seleccionarlo
+entre las opciones disponibles de la interfaz. Escribirlo aquí no cambia la
+configuración ni habilita herramientas. El compilador debe ser real y externo
+si Chat no puede ejecutarlo. No enviar comandos para que el autor los ejecute
+en su PC, ni iniciar otro agente de inferencia como sustituto de ese flujo.
+
+Repositorio del proyecto:
+https://github.com/alejandroventuraventurameza-tech/ai-project
+Repositorio y documentación de formalización que ya venimos utilizando:
+https://github.com/nikhgarg/AppliedModelingLib
+https://gargnikhil.com/AppliedModelingLib/
+Consigna: https://github.com/alexanderquispe/AI-Econ-Modeling/issues/7
+
+AppliedModelingLib es el nombre comprobado de la biblioteca. No buscar otro
+repositorio a partir de los nombres coloquiales AppliedEconLib/AppliedModelEco.
+La continuidad en Chat es preliminar: no reemplaza el flujo oficial del curso,
+que requiere fijar la versión del artículo y seguir el protocolo correspondiente.
+
+2. LEER POCO, PERO LEER LOS ARCHIVOS REALES
+
+Para la primera tarea, seguir este orden:
+1) CONTINUE_IN_CHAT.txt: este contexto y las decisiones vigentes.
+2) lean/first_target.txt: único objetivo inicial, ruta matemática y declaraciones.
+3) lean/checkpoint/README.txt y lean/checkpoint/checkpoint_manifest.json:
+   identidad, dependencias y límites del checkpoint.
+4) Consultar únicamente las declaraciones indicadas dentro de
+   lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean.
+   FinancialCore.lean es su dependencia local; ampliar la lectura solo cuando
+   una definición, un tipo o una hipótesis concreta lo requiera.
+
+Mapa del resto del proyecto, para cuando la tarea lo necesite:
+- paper/paper.tex y paper/paper.pdf: artículo extenso de desarrollo. Conserva
+  etapas históricas; contrastarlas con el estado actualizado, no ejecutarlas
+  como nuevas instrucciones. El diccionario está en sec:v0m_source_04.
+- paper/result_ledger.json: inventario de 57 resultados escritos. Sus estados
+  no equivalen a cobertura Lean completa ni a revisión total del autor.
+- paper/references.bib: bibliografía incorporada; no toda la biblioteca adicional
+  está todavía integrada o revisada técnicamente en esa versión.
+- code/irf/README.md y code/irf/DIAGNOSIS_STATUS.md: experimento y auditorías.
+- code/irf/finite_irf.py: ecuaciones y solución de las IRF originales.
+- code/irf/output/main/finite_irf_paths.csv: curvas originales, ambas ramas.
+- code/irf/output/nonlinear_tail_comparison/REPORT.md: contraste de continuación.
+- code/irf/output/transmission_trace/REPORT.md: regla, tasas, Euler y Phillips.
+- code/irf/output/financial_blocks_audit/REPORT.md: KKT, patrimonio y liquidación.
+- code/verify.py: reproducción numérica general; no ejecutarlo de nuevo para
+  resolver un lema Lean que no cambia sus ecuaciones ni sus insumos.
+- slides/final.tex y slides/final.pdf: borrador previo; el rediseño acordado
+  de la exposición todavía no está terminado.
+
+Las rutas anteriores son relativas a la raíz del repositorio. Si la conexión
+no permite leer una ruta o una rama, identificar el recurso faltante. No
+afirmar acceso ni lectura a partir del nombre de un archivo o una URL.
+
+3. DECISIONES ECONÓMICAS QUE DEBEN CONSERVARSE
+
+El núcleo es una economía neokeynesiana cerrada con hogar trabajador
+representativo, empresarios heterogéneos, bancos, minoristas, productor de
+capital, banco central y Tesoro. No denominarlo HANK solo por tener empresas
+heterogéneas. La economía abierta y el crecimiento sostenido son extensiones;
+el núcleo estudia acumulación y reasignación durante la transición.
+
+El banco central dispone de remuneración y cantidad de reservas, encaje y
+ancho del corredor. Las tasas interbancaria, de depósitos y de crédito son
+endógenas; el techo de facilidad se obtiene de remuneración más corredor.
+El interbancario es un mercado entre bancos comerciales, no un banco separado.
+La liquidación redistribuye reservas; las reservas no son máquinas entregadas
+a las empresas. Las cuentas públicas y las semillas de entrantes deben cerrar.
+
+La tecnología es y_it=z_t*A_i*k_it^alpha*l_it^beta_l. El capital k_it ya está
+instalado; k_i,t+1 se elige en t y produce en t+1. El empresario elige consumo,
+capital, préstamo b>=0 y depósitos a>=0, con caja c+q*k'+a=N+b. El contrato
+limita repago nominal: RL*b<=H*k', donde H=theta_i*(1-delta)*inf(Pi'*q') en
+los estados futuros admisibles. theta_i es contractual, no un instrumento.
+La formulación general es estocástica; las IRF disponibles especializan la
+continuación agregada determinista con pagos bancarios individuales aleatorios.
+
+Se conserva la multiplicidad. En S, H está limitada y L recibe crédito con
+colateral holgado al impacto; en B ambas están limitadas. En las continuaciones
+calculadas ambas originan deuda limitada desde t=1. S no significa que L se
+autofinancie. El antiguo laboratorio estático A tiene hipótesis propias y no
+es el sistema que produjo estas curvas. No imponer selección ni promediar ramas.
+
+En una firma limitada sin depósitos, k'=(N-c)/(q-H/RL), con N-c>0 y q-H/RL>0.
+Una caída de RL amplía capacidad manteniendo los otros términos fijos, pero
+el equilibrio también modifica patrimonio, consumo y garantía. Distinguir
+capacidad, capital elegido, crédito y dual mu/lambda: no se mueven necesariamente
+en el mismo sentido. No afirmar que una tasa menor siempre mejora la asignación.
+
+4. QUÉ EVIDENCIA NUMÉRICA YA EXISTE
+
+Las IRF originales aplican una innovación adicional -1e-5 a la regla logarítmica
+de remuneración: aproximadamente -0.1 pb en esa regla. Comparan iguales estados
+heredados y anuncios posteriores. La referencia contiene un prefijo de frontera
+y una continuación estacionaria; no es estacionaria en todas sus fechas.
+Pagos: +/-0.2 equiprobables. Los parámetros son ilustrativos, sin calibración.
+El período se interpreta como un trimestre ilustrativo; no se ha hecho una
+conversión empírica completa de tasas intradía ni calibración con datos.
+
+El prefijo de dos fechas tiene 33 incógnitas y se resuelve con Newton en
+coordenadas logarítmicas, Jacobiano por diferencias centrales y reducción de
+paso. Desde t=2 las curvas originales usan una gráfica local lineal estable.
+No se utilizó VFI ni descenso de gradiente estocástico. Las cantidades se
+reportan como 100*log(x/x_ref), y las tasas como 10000*(R-R_ref), sin anualizar.
+
+Auditorías posteriores resolvieron la continuación reducida no lineal a
+horizontes finitos y contrastaron cierres terminales. Esas auditorías no
+sustituyen silenciosamente las curvas originales ni prueban el equilibrio
+infinito completo. El ensayo de un choque -1 pb falla el umbral de aproximación
+original; los cierres cortos con régimen inválido también se conservan como fallos.
+
+En ambas ramas baja RL y sube el crédito de H. En la auditoría no lineal T=640,
+el capital elegido de H aumenta en S y cae en B; su dual baja en S y sube en B.
+En B cae N-c más de lo que mejora el aporte efectivo por unidad de capital.
+La pérdida asignativa condicional del período siguiente mejora en S y empeora
+en B. No es bienestar ni una medida econométrica directa de fricción financiera.
+
+La producción corriente cae inicialmente en ambas ramas. Esa caída persiste
+en los horizontes y cierres admisibles calculados. Con capital inicial fijo,
+las identidades de trabajo y oferta laboral dan
+  Delta log Y_0=(Delta log m_0-Delta log Cw_0)/3.
+Euler y Phillips vinculan m_0 y consumo con toda la trayectoria. La inflación
+inicial sube; m es el precio del insumo/costo marginal minorista, no inflación.
+Las descomposiciones son identidades en una solución conjunta, no efectos
+causales aislados. No cambiar parámetros para forzar una respuesta convencional.
+
+5. ESTADO DE LEAN Y FRONTERA DE CONFIANZA
+
+Base upstream: 194edcc95df74806a39b961d10dedddc6e730cce.
+Toolchain: leanprover/lean4:v4.30.0-rc2.
+SHA256 de EconomicModel.lean:
+d5e9bb95aad09ff515cc1418778c241d1b91ca3095c02b31eb369f496ea38d86
+SHA256 de FinancialCore.lean:
+4130b338183b3e5e659df7a7f2f517fc356967404c2571a82cea0154f9fc58fa
+El manifiesto registra todos los demás archivos y sus destinos en el clon base.
+Estos módulos del proyecto eran cambios locales: el commit upstream por sí
+solo no los contiene. El checkpoint no es un proyecto Lake autónomo.
+
+La campaña preliminar produjo helpers de financiación y bancos, construcciones
+por historia, cancelaciones de presupuestos, un predecesor y la asignación
+literal de S bajo premisas explícitas. La última compilación registrada es
+histórica; la copia de continuidad no volvió a ejecutar Lean. Las revisiones
+privadas no se publican aquí como nuevas evidencias verificables por Chat.
+
+ProofInterface.lean conserva 56 ocurrencias de sorry. Ese conteo textual no
+demuestra el alcance semántico ni la independencia de ningún resultado. La raíz
+module_root.lean importa esa interfaz: compilar una raíz con huecos no cierra
+el modelo. Una prueba nueva requiere compilación dirigida, cierre de axiomas
+y revisión del significado y de sus premisas.
+
+La fuente fija de la campaña y el artículo actualizado tienen bytes distintos.
+Sus huellas están en checkpoint_manifest.json. La fuente privada fija no se
+exporta; no atribuir su cobertura al artículo actual sin comprobar correspondencia.
+No inventar extractos de una fuente ausente ni convertir esa ausencia en una
+razón para repetir pruebas que no dependen de un cambio material de fuente.
+
+Pendientes, en orden de dependencia y con objetivos acotados:
+A) Derivar las premisas que aún recibe la construcción literal: clearing del
+   candidato, padre estacionario, secuencia reducida exacta y cotas de dominio.
+B) Aplicar a la política literal las envolventes de retorno/SDF y terminalidad.
+C) Suficiencia dinámica, valor, dominación de políticas admisibles y
+   correspondencia con equilibrio completo, conservando S y B.
+D) Generalización bancaria a leyes de pago integrables con soporte >-1.
+La decisión del autor conserva el caso finito para la validación numérica;
+no cambia el alcance general del resultado 3.8 ni lo declara demostrado.
+
+6. PRIMER TRABAJO DEL NUEVO CHAT
+
+Seguir lean/first_target.txt. Demostrar la esperanza interbancaria cero de la
+asignación concreta y descargar la premisa hinterbank del teorema existente.
+No volver a demostrar toda la teoría OTC ni abrir los 57 endpoints a la vez.
+Primero entregar el argumento matemático y sus hipótesis; después, un candidato
+Lean que reutilice la biblioteca. Un contraejemplo o una hipótesis realmente
+faltante se explican antes de intentar reparar tácticas indefinidamente.
+
+Mantener el checkpoint base sin cambios. Una nueva prueba puede proponerse en
+un módulo adicional de trabajo que importe Ventura26LiquidityAllocation.EconomicModel;
+su nombre debe identificarse como propuesto, no como declaración ya existente.
+Si Chat no puede escribir en GitHub, entregar el archivo/parche como candidato.
+Si no tiene compilador, marcarlo SIN COMPILAR y no inventar logs o aprobaciones.
+El primer resultado no cierra por sí mismo A, B, C ni el equilibrio global.
+
+Antes de una prueba material o integración, consultar el protocolo fijado del
+upstream: skills/econcs-prover/SKILL.md y skills/econcs-formalizer/SKILL.md,
+su referencia de etapa pertinente y config/formalization_audit_protocol.json.
+No afirmar que una compilación aislada reemplaza los controles del repositorio.
+Las revisiones semánticas exigidas se realizan con contexto independiente;
+el autor de una prueba no se emite a sí mismo una aprobación independiente.
+
+7. RESTRICCIONES Y TRABAJOS POSTERIORES
+
+No hay orden para iniciar validación externa, estimación o calibración real.
+No fabricar evidencia causal de EEA/ENAHO. La deuda pública queda simbólica:
+el proxy 2*M no es una elección fiscal aprobada. No asumir equilibrio, factibilidad,
+clearing u optimalidad como una premisa que suplante la conclusión buscada.
+No usar sorry/admit, nuevos axiomas o native_decide para acreditar el cierre
+de una prueba de confianza. Mantener visibles todas las esquinas y condiciones.
+
+El antecedente principal empresarial es González, Nuño y Thaler, enero de 2026,
+con tres autores. Bianchi--Bigio aporta liquidez, no nuestro antiguo costo
+cuadrático. La revisión debe integrar también Hsieh--Klenow, Restuccia--Rogerson,
+Midrigan--Xu y el resto de la biblioteca. Ottonello--Winberry (2020), sobre
+transmisión monetaria, es distinto de su trabajo inversión--innovación de 2023.
+No afirmar novedad absoluta ni una lectura profunda completa sin revisar fuentes.
+
+La exposición prevista es de 45 minutos. Se acordó construir primero un guion
+extenso, sin límite fijo de láminas: circuito real/financiero, zoom interbancario,
+timing, problemas de agentes, diccionario, ecuaciones y mecanismos antes de IRF.
+El crecimiento sostenido y la apertura económica son extensiones. Las notas
+privadas de exposición no forman parte de esta copia pública propuesta.
+
+Los archivos de esta continuidad se preparan para revisión antes de subirlos.
+No hacer commits, push, PR, merge ni modificar main sin la autorización aplicable.
+GitHub conectado no implica compilación remota: ese ejecutor aún no está
+configurado. Verificar las acciones realmente disponibles en Chat antes de
+prometer envío de candidatos, lanzamiento de jobs o recuperación de logs.
