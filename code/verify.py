@@ -489,6 +489,12 @@ if __name__ == "__main__":
                     str(HERE / "irf" / "audit_source_python_three_log_normalizations.py")],
                    check=True)
 
+    # Numerical validation at ORIGINAL fixed-policy Python branch roots:
+    # six SOURCE-shaped level/log row-derivative scales, not Lean parity.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "audit_six_log_row_directional_jacobian_at_python_roots.py")],
+                   check=True)
+
     # EXACT rational bound on decimal P0 coefficient conversion to
     # binary64 over a six-state log cube. Does not cover arithmetic
     # rounding in matvec, exp/log or SOURCE economic semantic identity.
