@@ -429,6 +429,12 @@ if __name__ == "__main__":
                     str(HERE / "irf" / "audit_frozen_python_34_analytic_dual_elimination.py")],
                    check=True)
 
+    # Numerical-only 33-dimensional Newton solve after the analytic
+    # elimination of SOURCE-shaped L funding dual (32 logs + policy h).
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "search_frozen_python_reduced33_dual_eliminated.py")],
+                   check=True)
+
     # At the actual 34-equation Python boundary, test the conditional
     # SOURCE-shaped 8+16+9 residual partition and T-row transformation
     # against the independently forward-differentiated original Python map.
