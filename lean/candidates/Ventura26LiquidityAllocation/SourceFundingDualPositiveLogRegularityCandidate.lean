@@ -72,9 +72,12 @@ theorem sourceFundingDual_differentiableAt_positive_log
     hdc1.rpow_const (Or.inl (ne_of_gt hc1_pos))
   have hpow0_pos : 0 < (c0 z) ^ (-P.entrepreneurRiskAversion) :=
     Real.rpow_pos_of_pos hc0_pos _
+  have hone : DifferentiableAt ℝ
+      (fun _w : Fin 33 → ℝ => (1 : ℝ)) z :=
+    differentiableAt_const (1 : ℝ)
   have hfirst : DifferentiableAt ℝ
       (fun w => (1 : ℝ) / r0 w) z :=
-    (differentiableAt_const (1 : ℝ)).div hdr0 (ne_of_gt hr0_pos)
+    hone.div hdr0 (ne_of_gt hr0_pos)
   have hmiddle : DifferentiableAt ℝ
       (fun w => P.entrepreneurDiscount *
         (c1 w) ^ (-P.entrepreneurRiskAversion) /
