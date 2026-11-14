@@ -65,6 +65,36 @@ or long-run growth result follows from this step alone.
 6. Only afterwards attempt a source-strength, interval-audited bound
    on the inverse of DF, with verified parameter region and dimensions.
 
+## Additional verified gates (14 November 2026)
+
+- **DEMOSTRADO EN LEAN — equivalence of linearized responses:**
+  `sourceEconomicLog_linearized_response_iff_at_pledge_zero` from
+  `SourceEulerLogLinearizedResponseCandidate.lean`, SHA
+  `8eb17a554b1c30cd884f5a776caa9b495296bbf3`,
+  [CI #43568479418](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43568479418),
+  2144 jobs; exact original and sheared SOURCE right-hand sides
+  yield identical sets of linearized coordinate perturbations.
+- **DEMOSTRADO EN LEAN — vector-valued Frechet derivative:**
+  `sourceNominalPledgeShearedLog_vector_hasFDerivAt` and
+  `sourceNominalPledgeShearedLog_vector_fderiv_eq` from
+  `SourceEulerLogVectorFrechetCandidate.lean`, SHA
+  `ab6d20087ef08b550fea4f0d2fde11c1f8b1e045`,
+  [CI #43569087322](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43569087322),
+  2144 jobs for the exact module. This assembles genuine 33-row
+  SOURCE derivatives into the `R^33 ->L R^33` map that has the
+  correct interface for the paper's Jacobian.
+- The three new declarations above have `#print axioms` exactly
+  `[propext, Classical.choice, Quot.sound]` in the corresponding
+  uploaded, independently inspected candidate-module logs.
+
+**Still pending:** regularity of all economic primitives, a verified
+economic root, a SOURCE enclosure of the actual original Jacobian and
+its inverse norm, a semantic bridge to the distinct source 34x34
+augmented boundary operator, and a source-strength IFT/equilibrium
+certificate. A fully explicit continuous-linear-equivalence object
+for the 33-output row shear is still a possible interface improvement,
+not a prerequisite for the now-verified row/vector identities.
+
 ## Verified checkpoint (14 November 2026)
 
 **DEMOSTRADO EN LEAN, CON HIPOTESIS EXPLICITAS:** commit
