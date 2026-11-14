@@ -416,6 +416,13 @@ if __name__ == "__main__":
                     str(HERE / "irf" / "audit_source_python_p0_tail_structure.py")],
                    check=True)
 
+    # EXACT rational bound on decimal P0 coefficient conversion to
+    # binary64 over a six-state log cube. Does not cover arithmetic
+    # rounding in matvec, exp/log or SOURCE economic semantic identity.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "audit_source_p0_exact_binary_coefficient_bounds.py")],
+                   check=True)
+
     # Cross-baseline SOURCE/Python provenance: no phantom economic Jacobian inverse.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_jacobian_cross_baseline_firewall.py")], check=True)
 
