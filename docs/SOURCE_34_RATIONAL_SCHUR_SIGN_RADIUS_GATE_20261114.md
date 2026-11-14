@@ -54,7 +54,7 @@ The full build's other jobs are independent checks. These numbers are classified
 
 ## Conditional 34-dimensional SOURCE root-box budget (audit pending)
 
-The root-existence obligation now has an explicit Banach fixed-point gate rather than a numerical-root assertion. Let F denote the actual SOURCE 34-equation residual, evaluated in EXACTLY the same ordering, variables, and residual normalization as the rationalized Python AD reference Jq. Choose a candidate centre w0 and a closed sup-norm ball B_R of radius R entirely inside a single smooth SOURCE chart and fixed economic regime.
+The root-existence obligation now has an explicit Banach fixed-point gate rather than a numerical-root assertion. Let F denote the actual SOURCE 34-equation residual, evaluated in EXACTLY the same ordering, variables, and residual normalization as the rationalized Python AD reference Jq. Choose a candidate centre w0 and a closed sup-norm ball B_R of radius R in an open chart where the selected SOURCE residual FORMULA extends smoothly. At a binding boundary the funding dual can change sign across the box, so an entire open box CANNOT be presumed economically admissible. Impose KKT and complementarity separately at the resulting root; no unconditional economic-regime admissibility is claimed.
 
 Let C34 be the exact rational approximate inverse, q=||I-C34*Jq||_infinity<1, and nC=||C34||_infinity. Assume that an INDEPENDENT validated SOURCE evaluation proves, for every w in B_R:
 
@@ -69,6 +69,6 @@ then G maps B_R into itself, and Banach yields a unique zero in that box, given 
 
 The rational auditor now computes exact conditional root residual budgets for R = 1/1000000, 1/100000, and 1/10000, using exactly the same 34x34 preconditioner and Schur-sign radius. Their numerical values must be read from an audited run.
 
-MISSING SOURCE INPUTS: (i) actual centre residual F(w0), with directed or certified absolute enclosure; (ii) uniform derivative enclosure of DF over the WHOLE box, in matching coordinates; (iii) chart smoothness including the continuation-tail derivative; (iv) regime validity and all positive denominators over the box; (v) a source/native representation of the centre. Python forward AD or a small floating residual cannot fill these obligations.
+MISSING SOURCE INPUTS: (i) actual centre residual F(w0), with directed or certified absolute enclosure; (ii) uniform derivative enclosure of DF over the WHOLE box, in matching coordinates; (iii) chart smoothness including the continuation-tail derivative; (iv) validity of the smooth analytic extension and strictly positive denominators over the box, with the KKT regime evaluated at the resulting root; (v) a SOURCE/native representation of the centre; (vi) proof that the SOURCE residual transformed to the Python comparison basis includes EVERY nonlinear row shear and normalization, not merely the Lean-certified SOURCE two-pledge row scaling. Python forward AD or a small floating residual cannot fill these obligations.
 
 The regression script test_schur_sign_perturbation_bound.py also checks the exact root-budget algebra on a synthetic 2x2 map and rejects a non-contraction case. This is not a SOURCE numerical execution or a proof of a complete dynamic competitive equilibrium.
