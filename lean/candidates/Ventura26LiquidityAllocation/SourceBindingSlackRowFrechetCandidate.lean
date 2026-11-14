@@ -20,6 +20,8 @@ invertibility, a numerical certificate, or economic existence.
 
 namespace Ventura26LiquidityAllocation
 
+open Filter
+
 /-- General real-valued Fréchet quotient identity at a zero numerator,
 on any real normed vector space. -/
 theorem sourceNegDiv_fderiv_at_numerator_zero
