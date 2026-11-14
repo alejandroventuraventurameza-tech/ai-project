@@ -86,9 +86,22 @@ Candidate module:
 - exact algebraic quotient identity under nonzero pledge face;
 - zero set equivalence of the two SOURCE collateral residuals.
 
-**Status: PENDIENTE of exact SHA CI compile and axiom audit** as of
-writing; the displayed derivative and full 33x33 diagonal transport
-are mathematical derivations, NOT kernel-verified SOURCE theorems.
+**DEMOSTRADO EN LEAN — algebraic SOURCE identities and zero sets:**
+SHA `0aca77066991b8727d47b701a992a3e14ffd513a`,
+[Actions #43578845239](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43578845239),
+`SourceBindingSlackRowScalingCandidate.lean`: 2140 build jobs and
+`#print axioms` for all four declarations yields exactly
+`[propext, Classical.choice, Quot.sound]` (without `sorryAx`).
+The four direct SOURCE identities and conditional zero-set equivalence
+above are now kernel-verified.
+
+**Pending Lean candidates** created after this successful SHA:
+`SourceBindingSlackRowFrechetCandidate.lean` (source row-5 Fréchet
+scaling at a genuine binding root; SHA `fd98c6ee`) and
+`SourceBinding33Row5RankTransportCandidate.lean` (invertibility of
+single-row output rescaling and conditional full Jacobian transport;
+SHA `590d81a6`). Their proof and axiom audits must be checked at
+the exact candidate SHAs before promotion.
 
 Independent future proof obligations:
 
