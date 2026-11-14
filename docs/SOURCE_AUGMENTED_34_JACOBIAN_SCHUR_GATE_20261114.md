@@ -140,8 +140,14 @@ semantic or derivative equality. Neither result alone is the SOURCE
   differentiability and common pledge zero; CI #43567568344.
 - DEMOSTRADO Lean (pre-existing SOURCE): fixed-z independence of the
   34th funding-dual residual from the remuneration innovation.
-- DERIVADO algebraically, NOT YET in Lean: displayed Schur-complement
-  factorization and 34-system transversality equivalence.
+- DEMOSTRADO EN LEAN (ABSTRACTO, CON A INVERTIBLE): the
+  `sourceAugmentedSchurBlock_bijective_iff` theorem establishes the
+  33+1 Schur transversality equivalence. Exact verification SHA
+  `ab6d20087ef08b550fea4f0d2fde11c1f8b1e045`,
+  [CI #43569087322](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43569087322),
+  2168 build jobs, `#print axioms` =
+  `[propext, Classical.choice, Quot.sound]`. This is an abstract
+  linear-algebra theorem, NOT a SOURCE derivative/rank certificate.
 - PENDIENTE: actual SOURCE C1 regularity; source-sensitive interval
   enclosure of A,b,c; rigorous inverse defect bound; nonzero interval
   for the Schur scalar; exact relation between original 33 sheared
