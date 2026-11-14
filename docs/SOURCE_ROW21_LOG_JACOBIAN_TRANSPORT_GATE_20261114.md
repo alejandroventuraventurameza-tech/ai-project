@@ -94,3 +94,57 @@ an unqualified diagonal factor. The 34th funding-dual component is unchanged.
 No claim of a full SOURCE derivative identity may be promoted until the
 permutation, row-5 reference, row-21 joint derivative, and other 31 row
 identities are all established for the exact functions and parameters.
+
+## Checkpoint: compiled 34-coordinate rows and pending full operator (2026-11-14)
+
+### DEMOSTRADO / checked in pinned Lean
+
+1. The direct positive-root Frechet log-quotient identity requires NO
+   separately assumed quotient derivative formula. Together with the
+   genuine SOURCE instantiations at fixed h and joint (z,h), the proof
+   appears without `sorryAx` in
+   [Lean audit #43625072852](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43625072852),
+   SHA `c6ca9c859b3eb7734663be0919c6a2b4f5942bcd`.
+2. Joint SOURCE row 5: `D log(faceL/pledgeL) = -D(normalizedSlackL)`
+   at a binding root. Joint SOURCE row 21: `D log(J2/V2) =
+   V2^(-1) * D(J2-V2)`. Both were compiled and audited in
+   [Lean audit #43625217245](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43625217245),
+   SHA `43674e2addd8f33a3edd276cecf288f009b92d6e`.
+3. The SOURCE-to-Python **index** permutation, two-row rank-preserving
+   scaling, and unchanged other SOURCE rows and unchanged final dual
+   were checked in
+   [Lean audit #43626670403](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43626670403),
+   SHA `c447e4321b95448c8af47256a9cd87b6792e4280`.
+4. The exact 34 SOURCE derivative-row identities (33 scalar rows
+   and one funding-dual row) were checked in
+   [Lean audit #43626744848](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43626744848),
+   SHA `3638cb0ee1699f51eacea49302fe051c065989e1`.
+
+### PENDIENTE / never promote a failed build
+
+- [Lean audit #43626878574](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43626878574)
+  and [#43626917712](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43626917712)
+  both FAILED at `SourceAugmented34FullFrechetFactorizationCandidate.lean:139`.
+  The row-21 branch had an incorrectly invoked `simp` that
+  converted a scaled equality to a disjunction on a zero factor.
+  In SHA `2695a401b64e70895567215006874b7ae8bf95f1`,
+  the proof was modified to apply `congrArg` to the already
+  certified scalar derivative equality before simplification.
+  [Lean audit #43631356189](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43631356189)
+  must finish SUCCESS and its specific `#print axioms` be inspected
+  before certifying full Jacobian factorization or the economic
+  invertibility biconditional.
+- `SourceAugmented34LogRegularityCandidate.lean` at
+  SHA `cbd5fee14d1c3f2c713ccd06fa0ca56b73bb4543`
+  is an additional candidate that derives differentiability of the
+  SOURCE two-log-collateral vector map from regularity of the
+  original map plus J2 and V2. Its
+  [pinned workflow](https://github.com/alejandroventuraventurameza-tech/ai-project/actions)
+  must be inspected separately. If proved, the later Jacobian
+  result can avoid an independent differentiability premise for
+  the log-transformed map.
+- All exact results concern two **SOURCE-defined** economic maps,
+  not an already verified SOURCE/Python floating operator identity.
+  Nor do they prove an actual SOURCE root, a verified bounded inverse
+  of its 34x34 derivative, the Schur transversality interval,
+  nonlinear continuation or long-run growth effects.
