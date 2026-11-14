@@ -38,3 +38,19 @@ With eps=(1-q)/(4*33*||C||), any hypothetical SOURCE reduced map whose derivativ
 Remaining: identify SOURCE/Python functions row by row (8 firm, 9 scalar and 16 other rows), match inherited states and finite tail, prove SOURCE interval residual/derivative bounds on a full box, verify regime KKT, and only then interpret structural IRFs or long-run growth.
 
 Status: SOURCE scalar elimination DEMOSTRADO, direct 32+policy operator CANDIDATE, reduced Python root NUMERICO, rational reduced-AD Jacobian audit PENDIENTE CI, real SOURCE reduced root PENDIENTE.
+
+## Audited reference numerical values (2026-11-14)
+
+GitHub Actions build #43643040813 completed SUCCESS on code revision 8bffb89a212bcf3993376d8bfb57fc6e1af8107a. The verification step code/verify.py and editorial QA #43643040810 also passed.
+
+The direct reduced forward AD derivative was assembled from the ORIGINAL Python 34-output AD and the exact analytic chain factors. Its floating comparison against centered finite differences had maximum absolute difference 4.385725560496212e-09. The eliminated L-dual row derivative along the reduced chart had maximum absolute value 1.1102230246251565e-16.
+
+Exact Fraction arithmetic on the rounded Python 33x33 reference matrix and rounded inverse produced the strict Neumann defect 2.8052425878694e-10 and the conditional uniform entrywise derivative tolerance 9.137410321981649e-05.
+
+At the stricter imposed tolerance, a *hypothetical* SOURCE map with the same normalized coordinates would have contraction upper bound 0.2500000002103932. The conditional strict true SOURCE centre-residual budgets for sup-norm boxes of radius 1e-6, 1e-5 and 1e-4 are respectively 9.046036218761833e-09, 9.046036218761833e-08 and 9.046036218761834e-07.
+
+The updated float64 Python reduced root had max residual 8.43769498715119e-15. This number is NOT a SOURCE centre-residual enclosure and cannot be substituted into the Banach gate.
+
+The JSON witness is archived as frozen_python_reduced33_ad_rational_gate.json in artifact frozen-python-34-boundary-and-rational-sign of build #43643040813. It records explicit false flags for SOURCE/Python full semantic equivalence, genuine SOURCE derivative intervals, SOURCE root and full equilibrium.
+
+DEMOSTRADO EXACT RATIONAL: invertibility of the ROUNDED Python reduced reference matrix and conditional Neumann/box algebra. NUMERICO: forward-mode AD, finite differences and Newton on Python. PENDIENTE: Lean full 32+policy root equivalence audit, SOURCE cross-language equality, validated true SOURCE root and dynamic economic results.
