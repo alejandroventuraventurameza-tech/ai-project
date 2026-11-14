@@ -76,21 +76,23 @@ theorem sourceFundingDual_differentiableAt_positive_log
       (fun _w : Fin 33 → ℝ => (1 : ℝ)) z :=
     differentiableAt_const (1 : ℝ)
   have hfirst : DifferentiableAt ℝ
-      (fun w => (1 : ℝ) / r0 w) z :=
-    hone.div hdr0 (ne_of_gt hr0_pos)
+      (fun w => (1 : ℝ) / r0 w) z := by
+    simpa only [one_div] using hdr0.inv (ne_of_gt hr0_pos)
   have hbeta : DifferentiableAt ℝ
       (fun _w : Fin 33 → ℝ => P.entrepreneurDiscount) z :=
     differentiableAt_const P.entrepreneurDiscount
   have hmiddle : DifferentiableAt ℝ
       (fun w => P.entrepreneurDiscount *
         (c1 w) ^ (-P.entrepreneurRiskAversion) /
-        (c0 w) ^ (-P.entrepreneurRiskAversion)) z :=
-    (hbeta.mul hpow1).div hpow0 (ne_of_gt hpow0_pos)
+        (c0 w) ^ (-P.entrepreneurRiskAversion)) z := by
+    simpa only [div_eq_mul_inv] using
+      (hbeta.mul hpow1).mul (hpow0.inv (ne_of_gt hpow0_pos))
   have hlast : DifferentiableAt ℝ
       (fun w => (P.entrepreneurDiscount *
         (c1 w) ^ (-P.entrepreneurRiskAversion) /
-        (c0 w) ^ (-P.entrepreneurRiskAversion)) / pi1 w) z :=
-    hmiddle.div hdpi1 (ne_of_gt hpi1_pos)
+        (c0 w) ^ (-P.entrepreneurRiskAversion)) / pi1 w) z := by
+    simpa only [div_eq_mul_inv] using
+      hmiddle.mul (hdpi1.inv (ne_of_gt hpi1_pos))
   have hformula :
       (fun w : Fin 33 → ℝ =>
         localNormalizedCollateralDualL P (localPrefixLogChart Z0 w)) =
