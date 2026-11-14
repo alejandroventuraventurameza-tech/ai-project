@@ -165,6 +165,7 @@ jobs:
         run: |
           set -euo pipefail
           cat > CandidateAxioms.lean <<'LEAN'
+          import Ventura26LiquidityAllocation.SourceCanonicalTwoPledgeLogBoundaryCandidate
           import Ventura26LiquidityAllocation.SourceCanonicalPythonCollateralFourCoordinatesCandidate
           import Ventura26LiquidityAllocation.SourceFrozenP0ExactDecimalTailCandidate
           import Ventura26LiquidityAllocation.SourceCanonical34Row5ActualFrechetCandidate
@@ -423,6 +424,9 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.sourceCanonicalPythonOrder34_dual_fderiv_policy_zero
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.sourceCanonicalPythonOrder34_row5_eq_fourCoordinates
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.sourceCanonicalPythonOrder34_row5_only_four_coordinates
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.sourceCanonicalPythonOrder34_row21_eq_source_pledge_level
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.sourceCanonicalTwoPledgeLog34_row_zero_iff
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.sourceCanonicalTwoPledgeLog34_eq_zero_iff_original_source_boundary
           LEAN
           lake env lean CandidateAxioms.lean > "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log" 2>&1 || {
             tail -n 140 "$GITHUB_WORKSPACE/lean-ci-logs/axioms.log"
