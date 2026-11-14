@@ -153,5 +153,17 @@ jobs:
             echo "Compiled PDFs already match this commit"
           else
             git commit -m "build(pdf): synchronize compiled artifacts [skip ci]"
-            git push origin "HEAD:${GITHUB_REF_NAME}"
+            if ! git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              # A later proof/CI commit may have advanced this branch between
+              # the initial fetch and the push. Do not fail PDF QA over that
+              # expected race; never mask a push failure on an unchanged head.
+              git fetch --quiet origin "${GITHUB_REF_NAME}"
+              newer_sha="$(git rev-parse "refs/remotes/origin/${GITHUB_REF_NAME}")"
+              if [ "${newer_sha}" != "${GITHUB_SHA}" ]; then
+                echo "Skip stale PDF sync after concurrent branch update: ${newer_sha}"
+              else
+                echo "PDF sync push failed without a concurrent branch update" >&2
+                exit 1
+              fi
+            fi
           fi
