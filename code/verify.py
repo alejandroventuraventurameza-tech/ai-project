@@ -416,6 +416,13 @@ if __name__ == "__main__":
                     str(HERE / "irf" / "audit_frozen_frontier_source_dual_interval.py")],
                    check=True)
 
+    # Bisection with Fraction/Taylor SIGN bounds for the SINGLE genuine
+    # SOURCE funding-dual formula, holding the other 32 coordinates
+    # fixed; this is NOT a 34-equation SOURCE root certificate.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "audit_frozen_frontier_source_dual_scalar_root.py")],
+                   check=True)
+
     # At the actual 34-equation Python boundary, test the conditional
     # SOURCE-shaped 8+16+9 residual partition and T-row transformation
     # against the independently forward-differentiated original Python map.
