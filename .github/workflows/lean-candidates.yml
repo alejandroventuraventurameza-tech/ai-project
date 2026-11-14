@@ -169,6 +169,7 @@ jobs:
           import Ventura26LiquidityAllocation.SourceRow21ActualLogFrechetCandidate
           import Ventura26LiquidityAllocation.SourceRow21LogQuotientDirectCandidate
           import Ventura26LiquidityAllocation.SourceAugmented34ActualJacobianRankCandidate
+          import Ventura26LiquidityAllocation.SourceAugmented34LogRegularityCandidate
           import Ventura26LiquidityAllocation.SourceAugmented34FullFrechetFactorizationCandidate
           import Ventura26LiquidityAllocation.SourceAugmented34RowFrechetFactorizationCandidate
           import Ventura26LiquidityAllocation.SourceAugmented34ExactRowCorrespondenceCandidate
@@ -262,6 +263,7 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34_fderiv_firstCoord
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34_fderiv_dualCoord
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34_actual_source_jacobian_bijective_iff_log_normalized
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34_twoPledge_differentiableAt_of_original_at_positive_root
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34_actual_full_fderiv_factorization_at_root
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34_actual_twoPledge_fderiv_eachRow
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34_actual_twoPledge_fderiv_dual
