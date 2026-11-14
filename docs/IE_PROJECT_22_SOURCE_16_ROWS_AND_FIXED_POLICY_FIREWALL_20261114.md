@@ -347,3 +347,65 @@ This is only an AST/declaration/data-order guard, not execution of
 SOURCE real arithmetic in Python. Source economic operator equality,
 certified derivative bounds and root existence still require
 an independent proof.
+
+## 9. Critical correction: ORIGINAL SOURCE/Python zero sets versus residual values
+
+The phrase "prove all 33 SOURCE/Python residuals identical" is
+**too strong and false without a row-normalization map** for the original
+implementations. On identical positive economic data, original SOURCE
+`localReducedRemainingResidual` has:
+
+| Local economic row | Genuine SOURCE level/ratio residual | Original Python `remaining_residuals` | Exact positive-domain relationship |
+|---:|---|---|---|
+| 0 (bank-face rollover) | `A - B` | `log(A/B)` | same zeros if A,B>0; at zero, `D Py = D SRC / B` |
+| 3 (labor supply) | `w - W` | `log(w/W)` | same zeros if w,W>0; at zero, `D Py = D SRC / W` |
+| 4 (household deposit Euler) | `1 - A/B` | `log(A/B)` | same zeros if A,B>0; at zero, `D Py = -D SRC` |
+
+Here bank `B = bankRenewalFactor(P)*loanRate*currentBankFace/inflation`;
+Python's corresponding original term uses `s.aB`, so an ADDITIONAL
+`bankRenewalFactor(P)=s.aB` calibrated-source identification is needed.
+For labor supply `W = laborScale*workerConsumption^sigmaW*
+aggregateLabor^laborCurvature`, matching Python's `chiW * L * cw`
+requires the actual stationary exponents and identical labor aggregation.
+For Euler `A/B=(workerDiscount*marginalUtilityNext/marginalUtilityNow)
+*depositRate/nextInflation`, matching Python's `s.bw*cw/cwNext`
+requires log utility and exact common controls.
+
+The correct future SOURCE/Python contract is
+```text
+Py(T(z,h)) = N( SOURCE(z,h); baseline, positivity, row order )
+```
+where `T` is the economically verified coordinate/calibration map
+and `N` performs row-specific logarithmic/level transformations and
+any identified Euler shears, rather than an assumed literal equality
+of unnormalized residual vectors. At a common root, Jacobians must be
+related by the chain rule and their row scalings, not identified naively.
+Proof of coincident zeros and Jacobian rank still requires a complete,
+consistent 33-row transformation.
+
+New Lean candidate:
+`SourcePythonLogResidualZeroSetBridgeCandidate.lean`
+(commit `9916465657a09c5e5200528fed9b68b546256e27`), compiling
+the exact positive-domain real conversion for three actual SOURCE
+economic rows 0,3,4, without executing the Python interpreter.
+The targeted axiom audit is
+[GitHub Actions #43653293903](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43653293903).
+Do not mark DEMOSTRADO until the run succeeds.
+
+New original-Python structural and off-root test:
+`code/irf/audit_source_python_three_log_normalizations.py`
+(commit `ccf7d03874d3cb5430572bec2d5800e20fe1c92a`), added to
+`code/verify.py` and `build.yml`. It checks AST of the THREE original
+log expressions and 12 positive off-root scenarios at BOTH dates and
+BOTH regime branches. A zero float discrepancy in that diagnostic
+would only validate original Python internal normalization, not a
+cross-language proof of the genuine SOURCE value/Jacobian.
+
+Source/Python comparison now has a more precise sequence:
+(1) identical positive baseline and inherited financial positions;
+(2) exact state/calendar/P0 coordinate identification;
+(3) row-by-row algebraic zero-set normalization with all required
+positivity and primitive identities;
+(4) transformed *actual SOURCE* Jacobian and verified box;
+(5) root certificate on that same economic branch and prescribed
+policy innovation. The latter three gates remain OPEN.
