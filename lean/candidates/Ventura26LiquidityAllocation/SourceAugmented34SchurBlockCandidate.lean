@@ -20,7 +20,7 @@ private abbrev Source33 := Fin 33 → ℝ
 
 /-- Abstract 34-by-34 block action with lower-right block structurally
 zero, matching the genuine SOURCE augmented funding-dual experiment. -/
-def sourceAugmentedSchurBlock
+noncomputable def sourceAugmentedSchurBlock
     (A : Source33 ≃ₗ[ℝ] Source33)
     (b : Source33) (c : Source33 →ₗ[ℝ] ℝ) :
     (Source33 × ℝ) → (Source33 × ℝ) :=
@@ -28,7 +28,7 @@ def sourceAugmentedSchurBlock
 
 /-- Explicit inverse of the SOURCE-shaped Schur block, defined when
 c(A^-1 b) is nonzero. -/
-private def sourceAugmentedSchurBlockInverse
+private noncomputable def sourceAugmentedSchurBlockInverse
     (A : Source33 ≃ₗ[ℝ] Source33)
     (b : Source33) (c : Source33 →ₗ[ℝ] ℝ) :
     (Source33 × ℝ) → (Source33 × ℝ) :=
@@ -77,8 +77,8 @@ theorem sourceAugmentedSchurBlock_bijective_iff
         simp [map_add, map_smul, sub_add_cancel]
       · exact hq
     have hright : Function.RightInverse
-        (sourceAugmentedSchurBlock A b c)
-        (sourceAugmentedSchurBlockInverse A b c) := by
+        (sourceAugmentedSchurBlockInverse A b c)
+        (sourceAugmentedSchurBlock A b c) := by
       intro p
       rcases p with ⟨y,s⟩
       let q : ℝ := (c (A.symm y) - s) / c (A.symm b)
