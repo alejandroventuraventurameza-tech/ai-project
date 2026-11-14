@@ -372,6 +372,13 @@ if __name__ == "__main__":
                     str(HERE / "irf" / "search_frozen_python_augmented34_boundary.py")],
                    check=True)
 
+    # Forward-mode automatic differentiation of all 33 literal PYTHON
+    # residual rows plus the independently SOURCE-shaped funding-dual row.
+    # Removes finite-difference truncation but NOT float64 or SOURCE gaps.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "audit_frozen_python_34_forward_ad.py")],
+                   check=True)
+
     # Exact rational Neumann inverse-defect and Schur sign for the DECIMAL-
     # ROUNDED numerical Python 34x34 matrix, not the SOURCE derivative.
     # The reported entrywise tolerance is conditional: still requires an
