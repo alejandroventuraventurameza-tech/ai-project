@@ -175,6 +175,7 @@ jobs:
           import Ventura26LiquidityAllocation.SourceReduced33ActualEconomicMapCandidate
           import Ventura26LiquidityAllocation.SourceReduced33PointwiseChartCandidate
           import Ventura26LiquidityAllocation.SourceReduced33RootEquivCandidate
+          import Ventura26LiquidityAllocation.SourceFundingDualAffineIncrementCandidate
           import Ventura26LiquidityAllocation.SourceReduced33FrechetChartTransportCandidate
           import Ventura26LiquidityAllocation.SourceFundingDualExact33FreeCoordinatesCandidate
           import Ventura26LiquidityAllocation.SourceFundingDualScalarEliminationCandidate
@@ -293,6 +294,10 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.sourceFundingDualLift32_recovers_original_root
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_root_from_original
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_root_equiv_original34
+          #print axioms Ventura26LiquidityAllocation.sourceDualLoanLogTarget_exact_affine
+          #print axioms Ventura26LiquidityAllocation.sourceFundingDualLift32_loanLog_affine
+          #print axioms Ventura26LiquidityAllocation.sourceFundingDualLift32_loanLog_increment
+          #print axioms Ventura26LiquidityAllocation.sourceFundingDualLift32_other_increment
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_differentiableAt_iff
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_fderiv_first
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_fderiv_dual_zero
