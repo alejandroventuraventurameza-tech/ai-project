@@ -365,6 +365,13 @@ if __name__ == "__main__":
                     str(HERE / "irf" / "audit_frozen_python_augmented34_basepoint.py")],
                    check=True)
 
+    # Explore whether changing only the reserve-rate rule (with identical
+    # inherited X0) can bring the frozen Python B prefix to nu_L=0.
+    # An exploratory absence of a bracket is NOT a nonexistence theorem.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "search_frozen_python_augmented34_boundary.py")],
+                   check=True)
+
     # Cross-baseline SOURCE/Python provenance: no phantom economic Jacobian inverse.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_jacobian_cross_baseline_firewall.py")], check=True)
 
