@@ -4,7 +4,9 @@ This tests the certificate code, not an enclosure of the true SOURCE Jacobian.
 """
 from fractions import Fraction
 from itertools import product
-from audit_frozen_python_34_ad_rational_gate import conditional_schur_sign_enclosure
+from audit_frozen_python_34_ad_rational_gate import (
+    conditional_schur_sign_enclosure, conditional_root_contraction_gate,
+)
 
 def verify_two_by_two_corners():
     eps = Fraction(1, 100)
@@ -36,6 +38,32 @@ def verify_two_by_two_corners():
     assert checks == 512
     return checks
 
+def verify_source_root_budget_formula():
+    # Jq = diag(2, 3), C=diag(1/2, 1/3): exact q=0,
+    # infinity preconditioner norm 1/2. With entrywise derivative
+    # error 1/100, the uniform norm contraction bound is 1/100.
+    radius = Fraction(1, 1000)
+    gate = conditional_root_contraction_gate(
+        Fraction(0), Fraction(1, 2), 2, Fraction(1, 100), radius)
+    assert gate["uniform_contraction_upper"] == Fraction(1, 100)
+    assert gate["maximum_source_residual_sup_norm_strict"] == (
+        Fraction(99, 50000))
+    # This is a HYPOTHETICAL exact linear model, not SOURCE:
+    # F(x)=diag(2,3)*x + (r,0). The unique root is
+    # (-r/2,0), lies in the certified box if r<budget.
+    r = gate["maximum_source_residual_sup_norm_strict"] / 2
+    assert abs(-r / 2) < radius
+    try:
+        conditional_root_contraction_gate(
+            Fraction(0), Fraction(1, 2), 2, Fraction(1), radius)
+    except AssertionError:
+        pass
+    else:
+        raise AssertionError("Non-contractive source-root gate was accepted")
+    return True
+
+
 if __name__ == "__main__":
     count = verify_two_by_two_corners()
+    assert verify_source_root_budget_formula()
     print("EXACT_RATIONAL_SCHUR_CUBE_REGRESSION_PASSED", count)
