@@ -22,6 +22,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 INFILE = HERE / "inputs/rational_preconditioners.json"
+FRONTIER = HERE / "output/frozen_python_augmented34_boundary_search.json"
 OUT = HERE / "output/source_p0_exact_decimal_binary_conversion_bounds.json"
 RADIUS = Fraction(1, 4)
 
@@ -53,6 +54,25 @@ def main():
                   for j in range(16) for k in range(6))
     max_row=max(row_errors)
     max_output=RADIUS*max_row
+
+    require(FRONTIER.is_file(), "Regenerate the Python 34-row boundary report")
+    frontier=json.loads(FRONTIER.read_text(encoding="utf-8"))
+    require(frontier["status"] ==
+            "NUMERICAL_PYTHON_34_BOUNDARY_CANDIDATE_FOUND_NOT_SOURCE_PROOF",
+            "No candidate frontier point for the coefficient bound")
+    z=frontier["numerical_candidate"]["baseline_33_unknowns"]
+    require(len(z)==33, "Wrong Python finite-prefix log-chart dimension")
+    z2=[Fraction.from_float(float(z[17+k])) for k in range(6)]
+    max_z2=max(abs(v) for v in z2)
+    require(max_z2 <= RADIUS,
+            "Frozen Python frontier lies outside verified log-state cube")
+    actual_point_bound=max(
+        sum(abs(binary[j+6][k]-exact[j+6][k])*abs(z2[k])
+            for k in range(6))
+        for j in range(10)
+    )
+    require(actual_point_bound <= max_output,
+            "Exact coefficient-point bound exceeds exact cube bound")
     require(max_row>0 and max_output>0, "Expected nonzero conversion error")
     require(max_entry < Fraction(1,10**14)
             and max_output < Fraction(1,10**14),
@@ -60,6 +80,14 @@ def main():
     report={
         "status":"EXACT_RATIONAL_P0_DECIMAL_TO_BINARY64_CONVERSION_BOUND_ONLY",
         "p0_source_sha256":sha(INFILE),
+        "frozen_boundary_report_sha256":sha(FRONTIER),
+        "frozen_boundary_h_float":float(frontier["numerical_candidate"]["innovation_h"]),
+        "frozen_boundary_tail_state_log_max_abs_exact":str(max_z2),
+        "frozen_boundary_tail_state_log_max_abs_float":float(max_z2),
+        "frozen_boundary_tail_state_within_cube_exact":True,
+        "frozen_boundary_max_control_log_coefficient_error_exact":str(actual_point_bound),
+        "frozen_boundary_max_control_log_coefficient_error_float":float(actual_point_bound),
+        "economic_SOURCE_boundary_root_proved":False,
         "source_model_sha256":
             sha(ROOT/"lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean"),
         "P0_dimensions":[16,6],
@@ -88,6 +116,8 @@ def main():
         "status","max_coefficient_abs_error_float",
         "max_control_row_l1_coefficient_error_float",
         "max_tail_log_response_abs_error_for_cube_float",
+        "frozen_boundary_tail_state_log_max_abs_float",
+        "frozen_boundary_max_control_log_coefficient_error_float",
         "source_python_economic_operator_identity_proved",
     )},indent=2))
 
