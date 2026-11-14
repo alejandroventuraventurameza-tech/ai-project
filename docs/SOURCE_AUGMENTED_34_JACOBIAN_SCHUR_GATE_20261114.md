@@ -158,6 +158,26 @@ SOURCE Lean proof milestones added for review:
 classify them as verified until the exact CI run and axiom audit
 are recorded.
 
+## 3b2. Primal/adjoint certification strategy
+
+At the same SOURCE point and with the same exact bounded 33x33
+economic derivative, there are two algebraically equivalent ways
+to enclose the Schur scalar:
+
+    A w = b,       s = -c' w  (primal response solve),
+    A' y = c,      s = -y' b  (adjoint response solve).
+
+For each route, directed interval arithmetic must enclose the
+**same true** A,b,c with explicit log/level scaling. Compare the two
+independently enclosed intervals for s and verify that at least one
+rigorously excludes zero (the intersection may tighten an enclosure
+only when both contain the same true scalar).
+
+The sparse exact SOURCE c row needs only coordinates 8,15,24,28,
+but the 33-by-33 equations in A still couple all coordinates.
+A 16-by-16 recurrent hand stencil or a synthetic inverse regression
+is not an admissible substitute for either verified SOURCE solve.
+
 ## 3c. A genuine regularity blocker in the 33-row SOURCE subsystem
 
 The source declares
