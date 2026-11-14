@@ -50,3 +50,25 @@ The code/verify.py job 132568704888 of GitHub Actions build #43634657181 complet
 - Unperturbed rational-reference Schur interval: [-4.212023236694934, -4.212023198052517].
 
 The full build's other jobs are independent checks. These numbers are classified EXACT RATIONAL CONDITIONAL on the rounded forward-AD matrix, NOT a verified SOURCE derivative/root certificate. The bound makes no claim about unknown SOURCE/Python transformation error.
+
+
+## Conditional 34-dimensional SOURCE root-box budget (audit pending)
+
+The root-existence obligation now has an explicit Banach fixed-point gate rather than a numerical-root assertion. Let F denote the actual SOURCE 34-equation residual, evaluated in EXACTLY the same ordering, variables, and residual normalization as the rationalized Python AD reference Jq. Choose a candidate centre w0 and a closed sup-norm ball B_R of radius R entirely inside a single smooth SOURCE chart and fixed economic regime.
+
+Let C34 be the exact rational approximate inverse, q=||I-C34*Jq||_infinity<1, and nC=||C34||_infinity. Assume that an INDEPENDENT validated SOURCE evaluation proves, for every w in B_R:
+
+    max_ij |DF(w)[i,j]-Jq[i,j]| <= epsilon
+    delta = q + 34*nC*epsilon < 1.
+
+Then the map G(w)=w-C34*F(w) contracts the ball with Lipschitz constant at most delta. If a separately validated SOURCE centre residual satisfies
+
+    ||F(w0)||_infinity < (1-delta)*R/nC,
+
+then G maps B_R into itself, and Banach yields a unique zero in that box, given complete-domain regularity. The same epsilon may be the stricter previously audited budget preserving invertibility and negative Schur sign throughout the box.
+
+The rational auditor now computes exact conditional root residual budgets for R = 1/1000000, 1/100000, and 1/10000, using exactly the same 34x34 preconditioner and Schur-sign radius. Their numerical values must be read from an audited run.
+
+MISSING SOURCE INPUTS: (i) actual centre residual F(w0), with directed or certified absolute enclosure; (ii) uniform derivative enclosure of DF over the WHOLE box, in matching coordinates; (iii) chart smoothness including the continuation-tail derivative; (iv) regime validity and all positive denominators over the box; (v) a source/native representation of the centre. Python forward AD or a small floating residual cannot fill these obligations.
+
+The regression script test_schur_sign_perturbation_bound.py also checks the exact root-budget algebra on a synthetic 2x2 map and rejects a non-contraction case. This is not a SOURCE numerical execution or a proof of a complete dynamic competitive equilibrium.
