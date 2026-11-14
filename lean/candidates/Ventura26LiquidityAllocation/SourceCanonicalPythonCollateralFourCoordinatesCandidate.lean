@@ -52,7 +52,7 @@ theorem sourceCanonicalPythonOrder34_row5_eq_fourCoordinates
   simp [sourceCanonicalPythonOrder34,
     sourceRowsInPython33Order, pythonToSource33Index,
     sourceCanonicalLogBindingResidual,
-    sourceReserveSlice_pledgeFace_invariant,
+    sourceReserveSlicePrimitives,
     sourceBindingLPledgeFace,
     sourcePythonLBindingFourCoordinates,
     localPrefixLogChart,
