@@ -32,3 +32,18 @@ Module SourceFundingDualScalarEliminationCandidate.lean formalizes the uniquenes
 Crucial open requirements: match all 33 SOURCE/Python row functions in a single positive chart and frozen inherited state; enclose the full 33-vector residual and its derivative on a validated box; prove a genuine SOURCE root; verify KKT and the dynamic continuation and long-run economic mechanism.
 
 DEMOSTRADO: SOURCE stationary four-log scalar formula and existence of one scalar zero under positivity. NUMERICO: corrected Python frontier test. PENDIENTE: full 34-to-33 Lean CI, SOURCE/Python identity, original economic root, global equilibrium and IRFs.
+
+## Reproducible reduced 33-dimensional Python solve
+
+On build #43638310762 (SUCCESS), code/verify.py ran search_frozen_python_reduced33_dual_eliminated.py and generated code/irf/output/frozen_python_reduced33_dual_eliminated_search.json. The exact report is preserved in its GitHub Actions artifact.
+
+- Starting reduced 33-row max residual: 6.668336993698176e-10.
+- Final reduced 33-row max residual: 8.43769498715119e-15.
+- Final funding dual L: 1.1102230246251565e-16 (float64).
+- Final 34-equation Python maximum residual: 8.43769498715119e-15.
+- Starting remuneration innovation h=0.007616947889328002; final h=0.007616947910146871.
+- All six local numerical branch/regime checks passed. No nonlinear solver exception.
+
+NUMERICO, NOT SOURCE-PROVED: the reduced solve uses finite_irf.py, its P0 finite continuation, inherited state frozen in Python and binary64 Newton. h is selected ENDOGENOUSLY to find the binding/slack frontier, not held fixed as an exogenous IRF shock. This exercise establishes neither the IRF response at a prescribed h nor any long-run growth effect.
+
+Priority next: pin this improved centre as candidate, prove SOURCE/Python economic row identities, certify the true SOURCE full 33-dimensional reduced residual in an interval, enclose its derivative on the entire box, and then apply Banach/IFT to the original SOURCE instance. Green build and small float residual cannot stand in for these missing inequalities.
