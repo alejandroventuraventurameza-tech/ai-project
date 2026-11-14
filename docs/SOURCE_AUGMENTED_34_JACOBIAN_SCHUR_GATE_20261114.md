@@ -313,6 +313,51 @@ Even a certified SOURCE local inverse would establish a **local
 not automatically a full dynamic competitive equilibrium. This
 firewall must remain explicit in both the paper and presentation.
 
+## 3f. Formal Schur-to-reduced-sign bridges — pending CI
+
+The next four candidate modules are now on the review branch:
+
+1. `SourceFundingDualPositiveLogRegularityCandidate.lean`
+   (latest fix `1c47ab96d76e607b8f48d807eecf77b5566a477b`):
+   actual positive-log CRRA dual differentiability. Previous three
+   runs failed because Lean resolved `DifferentiableAt.div` as a
+   one-variable scalar-domain theorem. Latest implementation
+   uses `DifferentiableAt.inv` and `DifferentiableAt.mul`
+   over `Fin 33 -> Real`, with explicit nonzero levels.
+   Verify per-module log before marking DEMOSTRADO.
+2. `SourceReducedFundingDualChainCandidate.lean`
+   (candidate `67c559e4093b88fe6e450a13525817e2e5c5aa98`):
+   differentiability and exact Frechet chain rule of the original
+   economic `localScalarReducedMap`, given differentiable
+   `solutionLog` and positive chart origin.
+3. `SourceAugmented34LinearizedMultiplierCandidate.lean`
+   (candidate `5a658a51866c3501672e8e119b0e0f5d59565050`):
+   if the actual SOURCE first-row derivative satisfies
+   `dB(u,1)=0` and its 33x33 block is a supplied linear
+   equivalence A, then `D nu_L(u)=-c(A^-1 b)`; the actual
+   augmented 34-Jacobian is bijective iff this linearized
+   multiplier response is nonzero. Both premises remain OPEN.
+4. `SourceAugmented34ReducedMarginalSignGateCandidate.lean`
+   (candidate `e66bef88ac0061aa1f7e89df49be5e8a085b1fbb`):
+   uses the genuine `LocalScalarImplicitReduction` predicate's
+   ASSUMED negative reserve-remuneration derivative and the
+   preceding chain rule to infer conditional nonzero Schur
+   response and rank of the actual augmented SOURCE Jacobian,
+   provided the 33 economic linearization and A-invertibility.
+
+Important: this proves a conditional implication from a negative
+derivative ALREADY INCLUDED as an assumption in
+`LocalScalarImplicitReduction`. It must never be reported as
+independent confirmation of the negative derivative sign,
+calibrated SOURCE inverse bound, an actual economic root,
+a dynamic competitive equilibrium or a causal long-run policy result.
+
+The separately source-verified
+`augmentedBoundaryZeroResidual_base_iff_source_dual_zero`
+also shows that `LocalScalarImplicitReduction` lacks the
+basepoint's scalar funding-dual zero. Even a proven derivative
+and nonzero Schur scalar cannot substitute for this root.
+
 ## 4. Numerically auditable SOURCE certificate
 
 An eventual rigorous inverse check must evaluate and enclose the
