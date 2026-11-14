@@ -38,3 +38,15 @@ EXACT RATIONAL CONDITIONAL: the robust 33/34 inverse and negative Schur bounds f
 PENDIENTE: SOURCE/Python semantic derivative and normalization alignment; validated enclosure of the true SOURCE Jacobian; a true SOURCE boundary root; regularity of the actual continuation tail and fixed economic regime; the 33-block SOURCE inverse and the nonzero Schur scalar; IFT, KKT, dynamic equilibrium and long-run growth.
 
 The nominal Python forward AD values are binary64 calculations. Rationalizing their decimal output does NOT enclose the real derivative or prove equilibrium existence.
+## Reproduced candidate numbers (Python verification job; 2026-11-14)
+
+The code/verify.py job 132568704888 of GitHub Actions build #43634657181 completed successfully on source commit 095659116b8420989a138d9bb9dbff8923d1562a. Its stdout reported the following exact-Fraction-derived quantities (decimal displays are approximations):
+
+- 33x33 rational reference Neumann defect: 2.79684733361678e-10.
+- 34x34 rational reference Neumann defect: 2.8881849479728e-10.
+- Original inverse-only conditional uniform entry tolerance: 7.957357478193563e-05.
+- NEW joint inverse-and-negative-Schur tolerance: 1.989339369548391e-05.
+- Upper Schur value valid inside this hypothetical same-coordinate ball: -1.1598717884709056.
+- Unperturbed rational-reference Schur interval: [-4.212023236694934, -4.212023198052517].
+
+The full build's other jobs are independent checks. These numbers are classified EXACT RATIONAL CONDITIONAL on the rounded forward-AD matrix, NOT a verified SOURCE derivative/root certificate. The bound makes no claim about unknown SOURCE/Python transformation error.
