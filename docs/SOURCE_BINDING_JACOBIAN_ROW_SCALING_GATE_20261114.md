@@ -103,6 +103,36 @@ single-row output rescaling and conditional full Jacobian transport;
 SHA `590d81a6`). Their proof and axiom audits must be checked at
 the exact candidate SHAs before promotion.
 
+## New SOURCE semantic and 33-Jacobian candidate gates (14 November 2026)
+
+Additional modules now in the review branch, each requiring per-SHA
+CI and axiom verification before promotion:
+
+- `SourceBindingZeroPolicySemanticCandidate.lean`
+  (`59f3d9486c52bc9a5d4a43c3e60654e1aa708387`,
+  [Actions #43581337524](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43581337524)):
+  prove the exact zero-policy identity for the intervened SOURCE
+  primitives and the literal 33-row modified binding formula
+  (all other 32 rows unchanged).
+- `SourceBinding33ZeroSetBridgeCandidate.lean`
+  (`fa2d256d6096c7fb7703249a9dc70de8386c6b6c`,
+  [Actions #43581381765](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43581381765)):
+  preserve the zeros of all 33 SOURCE binding rows in the
+  zero-policy/zero-slack experiment, conditional on `Gamma_L != 0`.
+- `SourceBinding33JacobianActualTransportCandidate.lean`
+  (`6e12fc6f65e5d753a6e6f82752ba26e03015055c`,
+  [Actions #43581449000](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43581449000)):
+  derive the actual SOURCE all-directions derivative-row equality
+  `J_modified = D * J_binding` at a binding root, then the
+  conditional biconditional of 33-Jacobian bijectivity.
+
+**These are candidate proofs, not verified results** until their
+corresponding Lean module logs and `#print axioms` have been
+independently examined. Even once compiled, they give a conditional
+logical equivalence of SOURCE rank rather than actual economic
+invertibility, because no numerical source-strength inverse bound or
+economic root has yet been produced.
+
 Independent future proof obligations:
 
 1. Verify at y=0, `initialIntervenedPrimitives P v_0 = P`
