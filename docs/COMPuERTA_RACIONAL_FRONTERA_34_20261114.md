@@ -56,6 +56,20 @@ SHA256 del ZIP `625c8c725472725504e560581deeca07133682006168b823907ab6ece22ae3cc
 
 Esta es una **doble validación NUMÉRICA/ALGEBRAICA de Python**; la autodiferenciación elimina el error de truncamiento de diferencias centrales, **no** la aritmética de punto flotante ni la falta de equivalencia SOURCE. Ninguna de las matrices racionalizadas contiene por sí sola una caja de derivadas de SOURCE.
 
+## Transporte de las 33 filas SOURCE-shaped en la misma frontera
+
+El código `audit_frozen_34_boundary_source_shaped_row_transport.py` fue
+ejecutado en [GitHub Actions build #43587698801](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43587698801) y pasó los trabajos de Python y PDF.
+
+- Punto idéntico `h*=0.007616947889328002`, misma `X0`, misma continuación `P0`, y **33 ecuaciones originales Python** frente a las 33 transcripciones condicionadas SOURCE-shaped.
+- Partición verificable: **8 filas empresariales** con cizallamientos de Euler; **16 filas adicionales**; **9 filas escalares de cocientes logarítmicos y niveles**.
+- El residuo bruto máximo de las transcripciones en niveles es `32` unidades originales; el residuo reconstruido y normalizado máximo es `3.681499549657019e-13`. **Ambos se preservan**; no se debe usar el valor 32 sin identificar su escala económica.
+- Error máximo al reconstruir los 33 residuos originales Python: `1.7763568394002505e-15`.
+- El `T` numérico de filas posee pivote mínimo `0.13148182680592024` e inversas flotantes con defecto máximo `1.1102230246251565e-16`.
+- Diferencia máxima entre `T*D(filas_SOURCE-shaped)` (diferencias centrales) y `D(filas_Python)` (diferenciación automática): `4.2561794089124305e-09`; la columna de innovación monetaria tiene error máximo `1.44771306054281e-10`.
+
+**Interpretación controlada:** queda comprobada numéricamente la composición del operador de transformación de filas *entre implementaciones Python*. No se ha llamado al kernel Lean para evaluar las 33 derivadas de `EconomicModel.lean`, ni se ha demostrado que las transcripciones Python correspondan funcionalmente a ellas. Las identificaciones de invariancia de Schur bajo `T` se proponen por separado en `SourceAugmented34RowTransportSchurCandidate.lean`, con ejecución Lean [#43587381916](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43587381916).
+
 ## Presupuesto condicional de error SOURCE
 
 El nuevo programa define el presupuesto racional
