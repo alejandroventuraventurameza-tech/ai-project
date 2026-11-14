@@ -68,7 +68,7 @@ ejecutado en [GitHub Actions build #43587698801](https://github.com/alejandroven
 - El `T` numérico de filas posee pivote mínimo `0.13148182680592024` e inversas flotantes con defecto máximo `1.1102230246251565e-16`.
 - Diferencia máxima entre `T*D(filas_SOURCE-shaped)` (diferencias centrales) y `D(filas_Python)` (diferenciación automática): `4.2561794089124305e-09`; la columna de innovación monetaria tiene error máximo `1.44771306054281e-10`.
 
-**Interpretación controlada:** queda comprobada numéricamente la composición del operador de transformación de filas *entre implementaciones Python*. No se ha llamado al kernel Lean para evaluar las 33 derivadas de `EconomicModel.lean`, ni se ha demostrado que las transcripciones Python correspondan funcionalmente a ellas. Las identificaciones de invariancia de Schur bajo `T` se proponen por separado en `SourceAugmented34RowTransportSchurCandidate.lean`, con ejecución Lean [#43587381916](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43587381916).
+**Interpretación controlada:** queda comprobada numéricamente la composición del operador de transformación de filas *entre implementaciones Python*. No se ha llamado al kernel Lean para evaluar las 33 derivadas de `EconomicModel.lean`, ni se ha demostrado que las transcripciones Python correspondan funcionalmente a ellas. Las identificaciones de invariancia de Schur bajo `T` se proponen por separado en `SourceAugmented34RowTransportSchurCandidate.lean`, compilado exitosamente sin `sorryAx` en [#43587381916](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43587381916).
 
 ## Presupuesto condicional de error SOURCE
 
@@ -90,7 +90,7 @@ Sea la matriz SOURCE económica exacta `J_SOURCE = [[A_S,b_S],[c_S,0]]`, con las
 
 `-c_S (T A_S)^(-1) (T b_S) = -c_S A_S^(-1) b_S`.
 
-La igualdad anterior es un hecho algebraico independiente de las cifras. Un candidato Lean para esa invariancia se encuentra en `SourceAugmented34RowTransportSchurCandidate.lean`; su compilación precisa todavía debe auditarse en el commit correspondiente.
+La igualdad anterior es un hecho algebraico independiente de las cifras. La invariancia abstracta se DEMOSTRÓ en Lean en `SourceAugmented34RowTransportSchurCandidate.lean`, commit `110e72f3fa07877eb740face3df05f7847e96af6`, [CI #43587381916](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43587381916) **success**, módulo `COMPILED` y auditoría de axiomas sin `sorryAx`. La identificación de `T` con la transformación económica SOURCE/Python sigue PENDIENTE.
 
 Para el segmento que conecta la matriz racionalizada con la matriz SOURCE **transportada**, ambos bloques permanecen invertibles, siempre que la misma cota de perturbación rija a lo largo de ese segmento. Si además permanece la estructura de bloques de esquina inferior derecha cero, el complemento de Schur es continuo y no puede cambiar de signo sin anularse.
 
