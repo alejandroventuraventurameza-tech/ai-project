@@ -97,7 +97,8 @@ theorem sourceSixLogRowReweight_injective_iff
   constructor
   · intro hJ a b hab
     apply hJ
-    rw [hab]
+    exact congrArg (sourceSixLogRowReweight
+      bank0 labor0 bank1 labor1) hab
   · intro hJ a b hab
     apply hJ
     exact (sourceSixLogRowReweight_injective
