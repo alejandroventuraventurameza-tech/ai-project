@@ -158,6 +158,39 @@ SOURCE Lean proof milestones added for review:
 classify them as verified until the exact CI run and axiom audit
 are recorded.
 
+## 3c. A genuine regularity blocker in the 33-row SOURCE subsystem
+
+The source declares
+
+    abbrev LocalPrefixContinuationRule :=
+      LocalPrefixStateSix -> LocalPrefixControlsTen
+
+and the date-one economic data explicitly include
+
+    nextControls := tail Z.stateTwo.
+
+Consequently, the original 33-row SOURCE derivative is NOT automatically
+differentiable for an arbitrary continuation rule: the type of `tail`
+places no continuity, differentiability, or fixed-regime restriction on
+that function. Merely proving positive coordinates or smoothness of
+finite algebraic primitives does not supply that missing regularity.
+
+To discharge `hB : HasFDerivAt sourceAugmented34Rows dB (z*,h*)`,
+the proof must identify a genuine smooth continuation rule on a
+neighborhood of the state-two coordinates, verify the required
+`D(tail)` including dimensions and log/level scaling, and ensure
+denominators and nonsmooth OTC/collateral regime switches do not
+invalidate differentiation. The SOURCE normalized L funding-dual is
+special: its literal formula is independent of `tail`, which is
+why its differentiability can be attacked separately by positive-log
+calculus.
+
+Even if `hB` is eventually established, a root, the 33x33 inverse
+and its interval norm, and the nonzero 34th-row Schur scalar must be
+independently verified. This regularity firewall prevents any claim
+that a vector-level derivative identity plus a synthetic 16x16
+transition stability check already proves the nonlinear equilibrium.
+
 ## 4. Numerically auditable SOURCE certificate
 
 An eventual rigorous inverse check must evaluate and enclose the
