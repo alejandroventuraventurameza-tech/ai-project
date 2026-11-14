@@ -351,6 +351,13 @@ if __name__ == "__main__":
     # Diagnostic of the FLOAT64 Python frozen binding Jacobian only: not SOURCE IFT.
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_frozen_python_jacobian_float_diagnostic.py")], check=True)
 
+    # Exact Fraction-based rational square-root bounds prove that the
+    # frozen stationary B funding-dual expression is strictly positive.
+    # This is NOT a SOURCE/Python equivalence or a SOURCE root certificate.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "audit_frozen_stationary_dual_rational.py")],
+                   check=True)
+
     # Frozen B satisfies the 33 Python rows but not the 34th funding-dual
     # boundary equation. Also audit the numerical four-coordinate policy tangent.
     # This is a diagnostic, never a SOURCE inverse or full-equilibrium theorem.
