@@ -79,11 +79,15 @@ theorem sourceAugmented34Map_hasFDerivAt
     HasFDerivAt (sourceAugmented34Map P I Z0 dateOne recurrent tail)
       (dB.prod (dc.comp (ContinuousLinearMap.fst ℝ Economic33 ℝ)))
       (zstar, hstar) := by
+  have hfst : HasFDerivAt
+      (fun zh : Economic33 × ℝ => zh.1)
+      (ContinuousLinearMap.fst ℝ Economic33 ℝ)
+      (zstar, hstar) := hasFDerivAt_fst
   have hdual : HasFDerivAt
       (fun zh : Economic33 × ℝ => sourceAugmented34Dual P Z0 zh.1)
       (dc.comp (ContinuousLinearMap.fst ℝ Economic33 ℝ))
-      (zstar, hstar) :=
-    hc.comp (zstar, hstar) hasFDerivAt_fst
+      (zstar, hstar) := by
+    exact hc.comp (zstar, hstar) hfst
   have hpair := hB.prodMk hdual
   have hfun : sourceAugmented34Map P I Z0 dateOne recurrent tail =
       (fun zh => (sourceAugmented34Rows P I Z0 dateOne recurrent tail zh,
