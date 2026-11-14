@@ -61,7 +61,6 @@ theorem sourceLogRatio_hasDerivAt_of_common_positive_root
         (a' - b') / B x := by
     rw [hroot]
     field_simp [hBne]
-    ring
   simpa only [hscale] using hlog
 
 #print axioms sourceLogRatio_hasDerivAt_of_common_positive_root
@@ -106,7 +105,6 @@ theorem sourceEulerOneMinusRatioAndLog_hasDerivAt_at_common_root
         -(a' - b') / B x := by
     rw [hroot]
     field_simp [hBne]
-    ring
   constructor
   · simpa only [hscale] using hsource
   · exact sourceLogRatio_hasDerivAt_of_common_positive_root
