@@ -1469,12 +1469,25 @@ Son 33 logvariables alrededor del enlace. Las promesas de $\mathcal X_1$ se mant
 
 Las 17 relaciones de fecha 0 y las 16 de fecha 1 forman $F_r(Z,\mathbf v)=0$, para $r=S$ (L holgada) o $r=B$ (ambas activas). El código de auditoría enumera presupuestos, Euler, reglas, recursos, precios y clearing de esas fechas; las cantidades futuras se valoran con la continuación exacta, no se congelan al perturbarnos.
 
-La diferenciación automática intervalar de este bloque encierra ambos Jacobianos. Gauss--Jordan excluye cero en cada pivote y da
+En la implementación numérica interna, la diferenciación automática
+intervalar produce encierros para ambos Jacobianos computacionales y
+la eliminación de Gauss--Jordan reporta
 \begin{equation}
-\|(\partial_ZF_S)^{-1}\|_\infty<54.297,\qquad
-\|(\partial_ZF_B)^{-1}\|_\infty<75.023.
+\|(J_S^{\mathrm{num}})^{-1}\|_\infty<54.297,\qquad
+\|(J_B^{\mathrm{num}})^{-1}\|_\infty<75.023.
 \end{equation}
-Las incertidumbres del estado estacionario, de la raíz escalar y de $\mathsf P_*$ están incluidas. Como control independiente, el bloque de fecha 1, comprimido y transformado, coincide con el stencil analítico anterior: errores superiores menores que $1.1\,10^{-55}$ en coeficientes corrientes y $1.2\,10^{-42}$ en los futuros. No se sustituye una prueba de rango por una cuenta de ecuaciones.
+Estos valores describen la representación evaluada por el auditor numérico:
+todavía está pendiente demostrar que sus entradas y derivadas coinciden
+exactamente con las del operador económico \texttt{SOURCE} en Lean, con
+idénticas coordenadas, regímenes y regla de continuación. Por tanto, estas
+cotas no constituyen aún certificados SOURCE de invertibilidad.
+El cálculo reporta la propagación de incertidumbres del estado estacionario,
+de la raíz escalar y de $\mathsf P_*$. Como comprobación interna, el bloque
+numérico de fecha 1, comprimido y transformado, presenta errores menores
+que $1.1\,10^{-55}$ en coeficientes corrientes y $1.2\,10^{-42}$ en los futuros
+frente al stencil analítico implementado. Esa concordancia no sustituye
+una identidad semántica con el Jacobiano SOURCE ni una prueba de rango del
+sistema económico original.
 
 \subsubsection{Reducir la condición de L a una complementariedad escalar}
 Defina la holgura normalizada, mientras el préstamo sea positivo,
@@ -1487,14 +1500,20 @@ $\upsilon_{L0}=\mathcal M(s,\mathbf v)$. La restricción original exige
 \begin{equation}\label{eq:scalar_macro_complementarity}
 0\leq s\ \perp\ \mathcal M(s,\mathbf v)\geq0.
 \end{equation}
-La expansión local verificada es
+La expansión local reportada por el cálculo numérico interno,
+condicionada a la existencia y regularidad de la solución reducida, es
 \begin{align}\label{eq:negative_schur}
 \mathcal M(s,\mathbf v)
 &=\mathbf a^\top\mathbf v+b\,s+o(\|(\mathbf v,s)\|),\\
 \mathbf a&\simeq(-3.219277533,\ 0.007527280,\ -0.057726221,\ -1.477041281),\\
 b&\in(-2.376742673,-2.376742670).
 \end{align}
-En particular $b<0$: al variar la holgura, también cambian todos los precios y decisiones de equilibrio. No es una derivada parcial del problema de la empresa a precios dados.
+En esa evaluación $b<0$: el efecto total incluye los ajustes endógenos
+de precios y decisiones; no es la derivada parcial del problema de la
+empresa a precios dados. Para el operador SOURCE original, la validez
+de este intervalo y de la negatividad sigue pendiente de certificación
+diferencial e intervalar independiente. En Lean, ese signo figura por
+ahora como una premisa de \texttt{LocalScalarImplicitReduction}.
 
 \paragraph{Traslado editorial de la prueba central.}
 La proposición \ref{prop:local_macro_multiplicity} y su demostración exacta
