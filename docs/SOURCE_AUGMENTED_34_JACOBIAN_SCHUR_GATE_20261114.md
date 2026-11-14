@@ -251,6 +251,28 @@ as an explicit *hypothesis*, not a numerically certified existence
 statement. Do not mark this candidate VERIFIED until its own module
 CI log and axioms are inspected.
 
+## 3d2. Boundary basepoint is a separate SOURCE obligation
+
+Careful inspection of the literal `LocalScalarImplicitReduction`
+predicate shows that it assumes `solutionLog 0 = 0`, local
+differentiability, all 33 modified binding-prefix rows equal zero,
+local uniqueness, and strict derivative signs. It **does not include**
+`localScalarReducedMap P Z0 solutionLog 0 = 0`, i.e.,
+the 34th normalized L funding-dual residual at the basepoint is
+not fixed by the predicate. Accordingly, the SOURCE augmented
+34-equation baseline root
+
+    augmentedBoundaryZeroResidual P I Z0 dateOne recurrent tail
+      0 0 = (0,0)
+
+requires the extra scalar equality
+`localNormalizedCollateralDualL P Z0 = 0`
+(or an equivalent independently certified boundary condition).
+This distinction is not removable by Jacobian invertibility or a
+strict derivative sign. A Schur transversality theorem describes
+how the zero set crosses a boundary **conditional on a boundary root**;
+it does not create such a root.
+
 ## 3e. Rigorous SOURCE local-inverse / implicit-function gate
 
 Mathlib's pinned implicit and inverse function theorem APIs
