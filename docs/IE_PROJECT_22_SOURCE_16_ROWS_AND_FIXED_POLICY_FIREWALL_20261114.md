@@ -223,3 +223,77 @@ calibration for all 33 economic rows. A complete cross-language
 functional identity (or rigorous interval discrepancy on a common
 box) and the true SOURCE Jacobian enclosure remain mandatory before
 claiming a certified root, equilibrium IRF, or permanent growth effect.
+
+## 7. Fully pinned stationary SOURCE baseline (exact Lean input target)
+
+The original SOURCE 34-equation boundary previously retained arbitrary
+`Primitives`, `InheritedState`, `Z0`, time labels and a generic
+continuation. This makes it impossible to identify a specific numerical
+SOURCE root merely by calling a Python evaluator.
+
+Two new candidate modules eliminate those discretionary choices:
+
+1. `SourceStationaryFrozenP0ConcreteOperatorCandidate.lean`
+   (commit `bef0b3e575eb0950b37e0c73effd9fae1377a06c`):
+   instantiates the ACTUAL SOURCE 34 and 33 residual maps with
+   `ProposedStationaryPrimitives.primitives G`,
+   `ProposedStationaryInheritedState.inheritedState G`,
+   the literal `.dateOne`/`.recurrent` calendar and
+   `sourceLogLinearContinuation x0 u0 sourceFrozenP0TenControls`.
+   Proposes exact 34-to-33 root-set equivalence and distinguishes
+   the date-zero remuneration policy innovation from unchanged
+   date-one primitive fields at *fixed* economic coordinates.
+2. `SourceFullyPinnedStationaryP0OperatorCandidate.lean`
+   (commit `2e52075c7641ba42bc77cae307939b2cfd876f59`):
+   constructs the actual 33-component stationary SOURCE reference
+   `fullyPinnedStationarySOURCEZ0` from the already proved stationary
+   capital, nominal promises, bank face, reserve lags and all ten
+   controls at dates zero and one; the date-two compact state uses
+   `ProposedStationaryRealScale.stateSix`. Proposes:
+   `LocalPrefixCoordinatesPositive fullyPinnedStationarySOURCEZ0`,
+   the conditional exact SOURCE root-set equivalence with no
+   arbitrary Z0, and the exact P0 return to baseline controls.
+
+The resulting concrete original-SOURCE object is
+
+```text
+P_G = ProposedStationaryPrimitives.primitives G
+I_G = ProposedStationaryInheritedState.inheritedState G
+Z0  = fullyPinnedStationarySOURCEZ0           -- 7+10+6+10 levels
+tail = sourceLogLinearContinuation stateSix controls frozenP0Ten
+F_G(z,h) = augmentedBoundaryZeroResidual P_G I_G Z0
+             .dateOne .recurrent tail z h
+L_G(u) = sourceFundingDualLift32 P_G Z0 u
+R_G(u,h) = (F_G(L_G(u),h)).1                -- 33 genuine economic rows
+```
+
+Only the public-debt supply parameter `G` remains a stationary
+SOURCE parameter; neither `Z0` nor the inherited state nor finite
+tail is a caller-chosen surrogate. The free-h switching frontier is
+**not** the fixed-negative-IRF shock experiment.
+
+A new Python provenance audit
+`code/irf/audit_fully_pinned_source_python_reference.py`
+(commit `ec97cceb28282feb7799c1983ed6e780be4a6e03`) checks the
+actual SOURCE Lean declaration anchors, the original Python
+`frozen_stationary_seed(steady_case())` 7+10+6+10 ordering, its 33
+positive binary64 reference values, and the fact that the OLD
+`make_boundary()` baseline is a different inherited economy.
+`code/verify.py` runs it and build archives its JSON. This audit
+does **NOT** evaluate Lean real expressions in Python, certify
+SOURCE/Python cross-language function equality or supply a root.
+
+Status boundary at note-writing time: the new proofs and audit are
+**submitted**, not promoted to DEMOSTRADO/NUMERICO until their
+specific GitHub Actions runs conclude and outputs are inspected.
+The last independently established Lean gate was
+[#43650128978](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43650128978)
+for the SOURCE/P0 8-row composite, with green pinned compilation
+and `#print axioms`.
+
+Next obligations are substantive: compare the actual SOURCE
+`R_G(u,h)` with original Python's 33-row evaluator under exactly
+this stationary inherited reference; reconcile real decimal/rational
+constants with binary64 and normalized rows, then rigorously bound
+the SOURCE residual and Jacobian on a full box. Only after these
+can a rational Neumann/Banach result establish a true SOURCE root.
