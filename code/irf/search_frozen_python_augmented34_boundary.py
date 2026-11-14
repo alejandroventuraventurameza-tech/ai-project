@@ -15,7 +15,7 @@ import json
 import math
 from pathlib import Path
 
-from finite_irf import max_abs, newton, prefix_residual, steady_case
+from finite_irf import max_abs, newton, numerical_jacobian, prefix_residual, solve_linear, steady_case
 from frozen_stationary_prefix_audit import frozen_stationary_seed
 from frozen_four_tool_impact_audit import unpack_solution
 from audit_frozen_python_augmented34_basepoint import exact_shape_dual
@@ -139,6 +139,84 @@ def main():
             "baseline_33_unknowns": best_z,
         }
 
+    # At the NEW boundary candidate (never the stationary B point),
+    # evaluate the 33-by-33 float Jacobian, its inverse defect and the
+    # SOURCE-shaped sparse row-34 Schur scalar. No interval claim follows.
+    if result is not None:
+        try:
+            hstar = result["innovation_h"]
+            zstar = result["baseline_33_unknowns"]
+            fstar = lambda z: prefix_residual(
+                seed, p0, "binding", (hstar, 0., 0., 0.), z
+            )
+            A = numerical_jacobian(fstar, zstar, step=2e-6)
+            dh = 1e-6
+            fplus = prefix_residual(
+                seed, p0, "binding", (hstar+dh, 0., 0., 0.), zstar
+            )
+            fminus = prefix_residual(
+                seed, p0, "binding", (hstar-dh, 0., 0., 0.), zstar
+            )
+            b = [(u-v)/(2*dh) for u,v in zip(fplus,fminus)]
+            _nu, G, rate = exact_shape_dual(s, seed, zstar)
+            c = [0.]*N
+            c[8], c[15], c[24], c[28] = (
+                -s.sigmaE*G, -1.0/rate, s.sigmaE*G, G
+            )
+            dz, pivots = solve_linear(A, [-v for v in b])
+            schur = sum(c[j]*dz[j] for j in range(N))
+            tangent_residual = max_abs([
+                sum(A[i][j]*dz[j] for j in range(N)) + b[i]
+                for i in range(N)
+            ])
+            inverse_cols = []
+            for k in range(N):
+                e = [0.]*N
+                e[k] = 1.
+                col, _ = solve_linear(A, e)
+                inverse_cols.append(col)
+            inverse = [
+                [inverse_cols[k][i] for k in range(N)]
+                for i in range(N)
+            ]
+            left_error = max(
+                abs(sum(inverse[i][k]*A[k][j] for k in range(N))
+                    - (1. if i == j else 0.))
+                for i in range(N) for j in range(N)
+            )
+            right_error = max(
+                abs(sum(A[i][k]*inverse[k][j] for k in range(N))
+                    - (1. if i == j else 0.))
+                for i in range(N) for j in range(N)
+            )
+            _zm, num, _rm, _ = solve(hstar-dh, zstar)
+            _zp, nup, _rp, _ = solve(hstar+dh, zstar)
+            centered_schur = (nup-num)/(2*dh)
+            result["float_jacobian_probe"] = {
+                "first33_jacobian": A,
+                "first33_inverse_approximation": inverse,
+                "policy_forcing_column_b": b,
+                "sparse_funding_dual_gradient_c": {
+                    str(k): c[k] for k in (8,15,24,28)
+                },
+                "approximate_schur_minus_c_Ainv_b": schur,
+                "centered_nonlinear_dual_policy_derivative": centered_schur,
+                "schur_centered_abs_difference": abs(schur-centered_schur),
+                "min_abs_float_pivot": min(pivots),
+                "max_left_inverse_defect": left_error,
+                "max_right_inverse_defect": right_error,
+                "float_inverse_infinity_norm":
+                    max(sum(abs(t) for t in row) for row in inverse),
+                "max_33_tangent_residual": tangent_residual,
+                "true_SOURCE_Jacobian_evaluated": False,
+                "directed_interval_inverse_proved": False,
+            }
+        except (ArithmeticError, AssertionError, OverflowError,
+                ZeroDivisionError, ValueError) as exc:
+            result["float_jacobian_probe_failure"] = {
+                "exception": type(exc).__name__, "details": str(exc)
+            }
+
     status = (
         "NUMERICAL_PYTHON_34_BOUNDARY_CANDIDATE_FOUND_NOT_SOURCE_PROOF"
         if result is not None and result["max_34_residual"] < 1e-9
@@ -175,6 +253,10 @@ def main():
         "bracket_found": report["sign_crossing_bracket_found"],
         "candidate_h": result["innovation_h"] if result else None,
         "candidate_max_34_residual": result["max_34_residual"] if result else None,
+        "float_schur": result.get("float_jacobian_probe", {}).get(
+            "approximate_schur_minus_c_Ainv_b") if result else None,
+        "centered_float_schur": result.get("float_jacobian_probe", {}).get(
+            "centered_nonlinear_dual_policy_derivative") if result else None,
         "all_local_regime_checks_pass":
             result["all_local_regime_checks_pass"] if result else None,
         "failure": failure, "report": str(REPORT)
