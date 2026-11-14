@@ -168,6 +168,7 @@ jobs:
           import Ventura26LiquidityAllocation.SourceRow21Joint34FrechetCandidate
           import Ventura26LiquidityAllocation.SourceRow21ActualLogFrechetCandidate
           import Ventura26LiquidityAllocation.SourceRow21LogQuotientDirectCandidate
+          import Ventura26LiquidityAllocation.SourceAugmented34PermutationRescaleCandidate
           import Ventura26LiquidityAllocation.SourceAugmented34JacobianTransportCandidate
           import Ventura26LiquidityAllocation.SourceAugmented34TwoRowRescaleCandidate
           import Ventura26LiquidityAllocation.SourceRow21EconomicFrechetBridgeCandidate
@@ -251,6 +252,8 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source_row21_joint34_log_fderiv_at_positive_root
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source_row21_actual_log_fderiv_at_positive_root
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source_row21_log_ratio_fderiv_at_positive_root
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34RowsInPythonOrder_bijective
+          #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34PythonPermutation_twoRowScale_bijective_iff
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34EconomicJacobian_bijective_iff_of_two_rows
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34TwoRowRescale_inverse
           #print axioms Ventura26LiquidityAllocation.ProposedLocalScalarAugmented34Source.source34TwoRowRescale_comp_bijective_iff
