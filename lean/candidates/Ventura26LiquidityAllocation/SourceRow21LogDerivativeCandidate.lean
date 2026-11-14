@@ -26,8 +26,8 @@ theorem source_row21_log_ratio_fderiv_of_ratio_derivative
     fderiv ℝ (fun y => Real.log (J y / V y)) x =
       (V x)⁻¹ • (fderiv ℝ J x - fderiv ℝ V x) := by
   have hne : J x / V x ≠ 0 := by
-    rw [hroot]
-    exact ne_of_gt (by simpa using (div_self (ne_of_gt hpositive) : V x / V x = 1))
+    rw [hroot, div_self (ne_of_gt hpositive)]
+    norm_num
   rw [fderiv.log hratio hne, hratio_deriv]
   have hratio_one : J x / V x = 1 := by
     rw [hroot]
