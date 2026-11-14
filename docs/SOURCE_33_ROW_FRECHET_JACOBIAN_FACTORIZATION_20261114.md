@@ -65,17 +65,46 @@ or long-run growth result follows from this step alone.
 6. Only afterwards attempt a source-strength, interval-audited bound
    on the inverse of DF, with verified parameter region and dimensions.
 
-## Status ledger
+## Verified checkpoint (14 November 2026)
 
-- DEMOSTRADO (Lean local, prior commit): Euler 19/20 component Frechet
-  derivative identity at pledge zero, conditional on differentiability.
-- DEMOSTRADO (earlier Lean modules): exact SOURCE row index bijection,
-  zero set equivalence, and algebraic row-shear bridge.
-- DERIVADO MATEMATICAMENTE, AUN NO COMPILADO EN LEAN: 33-row
-  operator factorization and invertibility equivalence.
-- PENDIENTE: verification of unaffected rows, vector-level Lean theorem,
-  full Jacobian nonsingularity, existence, dynamic equilibrium, economic
-  policy-to-growth transmission, and IRF certification.
+**DEMOSTRADO EN LEAN, CON HIPOTESIS EXPLICITAS:** commit
+`40e7ed41d9eb0fdc3a54c50028000d057693f284` and
+[GitHub Actions candidate audit #43567568344](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43567568344)
+successfully compiled:
 
-This note is not an executable Lean proof and does not promote the
-operator factorization to verified status.
+- `sourceEulerRowsFrechetForward_apply`: lifting the SOURCE scalar row
+  map to the continuous-linear derivative rows;
+- `sourceNominalPledgeShearedLog_all_rows_hasFDerivAt`: derivative of
+  every actual SOURCE row at a common-pledge zero, conditional on
+  differentiability of all 33 original economic rows and both
+  state-dependent shear coefficients;
+- `sourceEulerRowsFrechetForward_bijective_iff`: equivalence of
+  bijectivity of the sheared and original derivative-row operators;
+- `sourceEconomicLogJacobian_bijective_iff_at_pledge_zero`: economic
+  source-level instantiation in the genuine positive log chart.
+
+The exact compiled logs for the two last modules report 2142 and 2143
+build jobs respectively and for each of the four cited declarations
+`#print axioms` returned precisely
+`[propext, Classical.choice, Quot.sound]`. No `sorryAx` was reported
+for these declarations.
+
+**Scope:** the proof is componentwise across the genuine 33 SOURCE
+rows, and the assembled map from log-coordinate directions to SOURCE
+row derivatives has a bijectivity biconditional. This is the
+`DG=S*DF` property at the level of all directions/rows. A separate
+vector-valued `fderiv` lemma and an explicit continuous-linear
+equivalence of the output row space could improve the interface but
+are not necessary to state the verified bijectivity biconditional.
+
+**NOT DEMONSTRATED:** differentiability of the economic primitives
+from their definitions (currently premises), the existence of a
+SOURCE common-pledge root, nonsingularity of the original 33x33 SOURCE
+Jacobian, semantic equality with a numerically evaluated Python
+surrogate, invertibility of the distinct 34x34 augmented
+funding-dual system, a full dynamic competitive equilibrium or a
+long-run growth theorem. The earlier algebraic derivation is now
+formally supported *only to the conditional extent above*.
+
+The subsequent 34-by-34 boundary gate is tracked separately in
+`docs/SOURCE_AUGMENTED_34_JACOBIAN_SCHUR_GATE_20261114.md`.
