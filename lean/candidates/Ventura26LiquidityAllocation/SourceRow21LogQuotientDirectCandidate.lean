@@ -16,6 +16,8 @@ This abstract lemma is not a SOURCE equilibrium existence theorem.
 namespace Ventura26LiquidityAllocation
 namespace ProposedLocalScalarAugmented34Source
 
+open scoped Topology
+
 theorem source_row21_log_ratio_fderiv_at_positive_root
     {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
     (J V : E → ℝ) (x : E)
