@@ -58,6 +58,7 @@ theorem sourceCanonicalPythonOrder34_row5_eq_fourCoordinates
     localPrefixLogChart,
     localPrefixCoordinatesOfVector,
     localPrefixCoordinatesVector]
+  rfl
 
 #print axioms sourceCanonicalPythonOrder34_row5_eq_fourCoordinates
 
