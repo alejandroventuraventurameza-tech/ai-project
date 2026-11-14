@@ -173,6 +173,16 @@ jobs:
           path: code/irf/output/frozen_python_33_jacobian_float_diagnostic.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve frozen Python 34-row boundary and rational sign audits
+        uses: actions/upload-artifact@v7
+        with:
+          name: frozen-python-34-boundary-and-rational-sign
+          path: |
+            code/irf/output/frozen_stationary_dual_rational_enclosure.json
+            code/irf/output/frozen_python_augmented34_basepoint_obstruction.json
+            code/irf/output/frozen_python_augmented34_boundary_search.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve reduced-prefix inherited-field support audit
         uses: actions/upload-artifact@v7
         with:
