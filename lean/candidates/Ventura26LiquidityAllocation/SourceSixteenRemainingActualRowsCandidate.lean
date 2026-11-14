@@ -41,11 +41,11 @@ theorem source16_actual_remaining_rows
     (tail : LocalPrefixContinuationRule)
     (z : Fin 33 → ℝ) (h : ℝ) :
     let Pv := initialIntervenedPrimitives P
-      (localScalarParameterIntervention (reserveRemunerationSlice 0 h))
-    let Z := localPrefixLogChart Z0 z
-    let d0 := localPrefixDateZeroData Pv I Z dateOne
-    let d1 := localPrefixDateOneData Pv Z dateOne recurrent tail
-          (augmentedBoundaryZeroResidual P I Z0 dateOne recurrent tail z h).1
+      (localScalarParameterIntervention (reserveRemunerationSlice 0 h));
+    let Z := localPrefixLogChart Z0 z;
+    let d0 := localPrefixDateZeroData Pv I Z dateOne;
+    let d1 := localPrefixDateOneData Pv Z dateOne recurrent tail;
+    (augmentedBoundaryZeroResidual P I Z0 dateOne recurrent tail z h).1
         (7 : Fin 33) = localReducedRemainingResidual Pv d0 (1 : Fin 11) ∧
           (augmentedBoundaryZeroResidual P I Z0 dateOne recurrent tail z h).1
         (8 : Fin 33) = localReducedRemainingResidual Pv d0 (2 : Fin 11) ∧
