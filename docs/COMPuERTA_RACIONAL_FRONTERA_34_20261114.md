@@ -45,11 +45,25 @@ El nuevo programa define el presupuesto racional
 
 `epsilon = min( (1-q33)/(4*33*||C33||_inf), (1-q34)/(4*34*||C34||_inf) )`.
 
-Su representación decimal es `epsilon = 7.957357483780976e-05`. **Si** todas las 1156 entradas del Jacobiano SOURCE real de dimensión 34 (y por ende de su bloque 33) están encerradas en la misma carta económica, idéntica herencia y el mismo punto, con error absoluto individual `< epsilon` frente a las matrices racionalizadas, entonces por la desigualdad submultiplicativa los defectos SOURCE de ambos bloques siguen estrictamente menores que 1.
+Su representación decimal es `epsilon = 7.957357483780976e-05` **para el Jacobiano obtenido por diferencias centrales Python**, no para una matriz SOURCE arbitrariamente normalizada.
 
-Para el segmento que conecta la matriz racionalizada con la SOURCE, ambos bloques permanecen invertibles; suponiendo además la auténtica estructura de bloques SOURCE (esquina inferior derecha cero), la continuidad del complemento de Schur y la imposibilidad de cruzar cero conservan su signo estrictamente negativo.
+### Corrección fundamental: transportar las filas SOURCE ANTES de comparar las matrices
 
-**Esto es una implicación condicional, no un certificado SOURCE.** Ninguna rutina actual produce cotas de redondeo dirigidas de todas las entradas de `D SOURCE`, ni demuestra que difieren menos del presupuesto. La identidad semántica completa SOURCE/Python, diferenciabilidad de una continuación `tail` económicamente admisible, existencia exacta de la raíz (Newton–Kantorovich o equivalente), KKT global, equilibrio infinito y crecimiento de largo plazo permanecen abiertos.
+Las 33 filas originales SOURCE y las 33 filas Python pueden diferir por una permutación, escalados y cizallamientos de Euler. Por tanto, la obligación correcta NO es verificar `||J_SOURCE-Jhat_Python||_max<epsilon` directamente.
+
+Sea la matriz SOURCE económica exacta `J_SOURCE = [[A_S,b_S],[c_S,0]]`, con las **mismas** coordenadas logarítmicas, instrumento h, herencia y punto. Se debe construir y demostrar invertible el operador de filas `T` en la raíz económica SOURCE. El objeto comparable es
+
+`J_SOURCE_transportado = diag(T,1) J_SOURCE = [[T A_S,T b_S],[c_S,0]]`.
+
+**Solo si** las 1156 entradas del `J_SOURCE_transportado` están encerradas con error absoluto individual `< epsilon` respecto de `Jhat_Python` racionalizado, entonces el defecto de Neumann sigue siendo menor que 1 y los bloques económico-físicos son invertibles, porque `T` también es invertible. Además, el escalar de Schur se conserva exactamente:
+
+`-c_S (T A_S)^(-1) (T b_S) = -c_S A_S^(-1) b_S`.
+
+La igualdad anterior es un hecho algebraico independiente de las cifras. Un candidato Lean para esa invariancia se encuentra en `SourceAugmented34RowTransportSchurCandidate.lean`; su compilación precisa todavía debe auditarse en el commit correspondiente.
+
+Para el segmento que conecta la matriz racionalizada con la matriz SOURCE **transportada**, ambos bloques permanecen invertibles, siempre que la misma cota de perturbación rija a lo largo de ese segmento. Si además permanece la estructura de bloques de esquina inferior derecha cero, el complemento de Schur es continuo y no puede cambiar de signo sin anularse.
+
+**Esto es una implicación condicional, no un certificado SOURCE.** Ninguna rutina actual produce cotas de redondeo dirigidas de todas las entradas de `diag(T,1) D SOURCE`, ni demuestra que difieren menos del presupuesto. La igualdad funcional de las 33 filas tras la transformación, la invertibilidad real de `T` en un punto común, la diferenciabilidad de la continuación `tail`, la existencia exacta de la raíz (Newton–Kantorovich o equivalente), KKT global, equilibrio infinito y crecimiento permanecen abiertos.
 
 ## Obligaciones siguientes
 
