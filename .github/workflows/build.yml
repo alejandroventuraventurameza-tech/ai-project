@@ -215,6 +215,13 @@ jobs:
           path: code/irf/output/source_python_p0_tail_structure.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve original date-one P0 operational wiring audit
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-python-dateone-p0-operational-wiring
+          path: code/irf/output/source_dateone_p0_operational_wiring.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve exact SOURCE/Python 33-row index and label contract
         uses: actions/upload-artifact@v7
         with:
