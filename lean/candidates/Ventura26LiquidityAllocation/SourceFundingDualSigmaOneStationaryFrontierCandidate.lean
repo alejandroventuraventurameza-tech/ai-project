@@ -31,7 +31,7 @@ theorem sourceFundingDual_sigmaOne_stationary_fourLog
         P.entrepreneurDiscount * Real.exp (z (8 : Fin 33)) /
           (Real.exp (z (24 : Fin 33)) * Real.exp (z (28 : Fin 33))) := by
   rw [sourceFundingDual_four_log_coordinate_formula, hsigma]
-  simp only [neg_one_mul, Real.rpow_neg_one]
+  simp only [Real.rpow_neg_one]
   rw [← hc_same, hpi]
   have hc : Z0.controlsZero.consumptionL ≠ 0 :=
     ne_of_gt hc_positive
@@ -42,7 +42,6 @@ theorem sourceFundingDual_sigmaOne_stationary_fourLog
   have he28 : Real.exp (z (28 : Fin 33)) ≠ 0 :=
     Real.exp_ne_zero _
   field_simp [hc, he8, he24, he28]
-  ring
 
 #print axioms sourceFundingDual_sigmaOne_stationary_fourLog
 
