@@ -59,4 +59,45 @@ theorem sourceActualDateOne_twoCollateralRows_zero_of_commonPledge
 
 #print axioms sourceActualDateOne_twoCollateralRows_zero_of_commonPledge
 
+/-- Python-coordinate variant of SOURCE's genuine constrained date-one
+Euler equation: it uses the independent common terminal pledge coordinate
+in place of the next-inflation/next-capital-price valuation. -/
+noncomputable def sourceDateOneEulerAtCommonPledgeCoordinate
+    (P : Primitives S) (Z : LocalPrefixCoordinates)
+    (dateOne recurrent : S) (tail : LocalPrefixContinuationRule)
+    (i : FirmType) : ℝ :=
+  let d := localPrefixDateOneData P Z dateOne recurrent tail
+  let sdf := localPrefixEntrepreneurSDF P d i
+  let pledge := P.pledgeability i * Z.stateTwo.commonPledgeValue
+  d.controls.capitalPrice - pledge / d.controls.loanRate -
+    sdf * (localPrefixNextMarginalProduct P d i +
+      (1 - P.depreciation) * d.nextControls.capitalPrice -
+      pledge / d.nextControls.inflation)
+
+/-- The exact off-root date-one Euler correction factors through
+the SAME common pledge gap as BOTH original firm collateral rows.
+At an actual common-pledge root the correction is zero. -/
+theorem sourceActualDateOne_EulerCommonPledge_correction
+    (P : Primitives S) (Z : LocalPrefixCoordinates)
+    (dateOne recurrent : S) (tail : LocalPrefixContinuationRule)
+    (i : FirmType) :
+    sourceDateOneEulerAtCommonPledgeCoordinate
+      P Z dateOne recurrent tail i -
+      localReducedFirmCapitalEulerResidual LocalPrefixBranch.binding P
+        (localPrefixDateOneData P Z dateOne recurrent tail) i =
+      P.pledgeability i *
+        (Z.stateTwo.commonPledgeValue -
+          (1 - P.depreciation) *
+            (tail Z.stateTwo).inflation * (tail Z.stateTwo).capitalPrice) *
+        (-(1 / (localPrefixDateOneData P Z dateOne recurrent tail).controls.loanRate) +
+          localPrefixEntrepreneurSDF P
+            (localPrefixDateOneData P Z dateOne recurrent tail) i /
+            (tail Z.stateTwo).inflation) := by
+  simp only [sourceDateOneEulerAtCommonPledgeCoordinate,
+    localReducedFirmCapitalEulerResidual, localPrefixPledgeUnit,
+    localPrefixDateOneData]
+  ring
+
+#print axioms sourceActualDateOne_EulerCommonPledge_correction
+
 end Ventura26LiquidityAllocation
