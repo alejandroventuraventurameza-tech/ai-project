@@ -3,8 +3,9 @@
 
 For date zero, check six separate H/L budget, constrained Euler, and
 binding collateral rows. For date one, check the four H/L budget/Euler
-rows, while both binding collateral equalities follow BY CONSTRUCTION
-from the six-coordinate common-pledge date-two chart. A separate
+rows, while both binding collateral gaps factor through the ONE common
+pledge value gap of the six-coordinate date-two chart. They vanish
+only when the common-pledge row vanishes, not off-root. A separate
 common-pledge equation identifies next nominal liquidation value.
 
 Uses the original Python production and auxiliary primitives for
@@ -107,13 +108,17 @@ def main():
         # SOURCE reduced date-one firm's two nominal face constraints
         # are encoded into the common date-two pledge chart, not 2 rows.
         date1, implied = firm_rows(s, x1, u1, x2, u2, aux2, aux1, "binding")
-        for i in range(2):
-            date_one_regime_max = max(date_one_regime_max, abs(date1[3*i+2]))
-            worst = max(worst, compare(date1[3*i+2], 0.0, "date1 collateral identity"))
-            checked += 1
-        # The common pledge itself is a separate date-one residual row
-        # in the SOURCE reduced finite prefix; its Python index is 21.
+        # Both original SOURCE date-one raw collateral equations
+        # are proportional to the SINGLE common-pledge mismatch.
+        # They only vanish IF the Python row 21 vanishes.
         expected_pledge = (1.0 - s.delta) * u2[5] * u2[6]
+        common_pledge_gap = x2compact[2] - expected_pledge
+        for i in range(2):
+            expected_gap = s.pledge[i] * x2[i] * common_pledge_gap
+            date_one_regime_max = max(date_one_regime_max, abs(date1[3*i+2]))
+            worst = max(worst, compare(date1[3*i+2], expected_gap,
+                        "date1 raw collateral gap proportional to common pledge row"))
+            checked += 1
         for shock in shocks:
             e0 = [base.e0[0] + shock[0], base.e0[1] + shock[1]]
             aux0 = model.auxiliary(s, base.X0, u0, x1[:2], e0,
@@ -151,7 +156,8 @@ def main():
         "four_instrument_scenarios_plus_baseline": len(shocks),
         "firm_rows_and_collateral_identities_checked": checked,
         "max_abs_firm_row_error": worst,
-        "date_one_embedded_collateral_gap_max_abs": date_one_regime_max,
+        "date_one_raw_collateral_gap_max_abs_off_root": date_one_regime_max,
+        "date_one_raw_collateral_gaps_proportional_to_common_pledge_gap": True,
         "date_zero_regime_normalization": "log face-to-pledge ratio vs SOURCE raw gap",
         "date_one_common_pledge_normalization": "log common pledge value ratio",
         "source_firm_primitive_functions_actually_evaluated": False,
