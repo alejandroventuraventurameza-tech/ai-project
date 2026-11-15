@@ -1477,10 +1477,18 @@ la eliminación de Gauss--Jordan reporta
 \|(J_B^{\mathrm{num}})^{-1}\|_\infty<75.023.
 \end{equation}
 Estos valores describen la representación evaluada por el auditor numérico:
-todavía está pendiente demostrar que sus entradas y derivadas coinciden
-exactamente con las del operador económico \texttt{SOURCE} en Lean, con
-idénticas coordenadas, regímenes y regla de continuación. Por tanto, estas
-cotas no constituyen aún certificados SOURCE de invertibilidad.
+todavía está pendiente demostrar una correspondencia de ceros y una relación
+rigurosa entre Jacobianos con el operador económico \texttt{SOURCE} en Lean,
+bajo idénticos estados heredados, coordenadas, regímenes y continuación.
+La comparación no admite igualdad literal de todas las filas: algunas
+ecuaciones SOURCE usan residuos en niveles, mientras Python utiliza
+normalizaciones logarítmicas. Además, las condiciones bancarias originales
+SOURCE utilizan tasa y cantidad de reservas \emph{realizadas}, mientras
+ciertas filas Python sustituyen los \emph{objetivos} de las reglas monetarias.
+Fuera de una raíz común esas sustituciones generan términos cruzados
+dependientes de los residuos de política, también relevantes al derivar.
+Por tanto, las cotas numéricas anteriores no constituyen certificados
+SOURCE de invertibilidad.
 El cálculo reporta la propagación de incertidumbres del estado estacionario,
 de la raíz escalar y de $\mathsf P_*$. Como comprobación interna, el bloque
 numérico de fecha 1, comprimido y transformado, presenta errores menores
