@@ -988,3 +988,74 @@ equal their policy targets. The missing theorem is to account for
 the resulting cross-row transformations and their derivatives,
 including original SOURCE OTC slope and banking reserve-ratio
 dependence, before applying a true SOURCE 33x33 Jacobian certificate.
+
+## 20. Reproduced 60-record banking mismatch and source deposit-rate cross-rule identity
+
+The original-Python bank-row mismatch auditor now has reproducible
+**NUMERICO** evidence from the exact successful
+[build #43656900442](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43656900442)
+on commit `166b6e3010aa7ee0eec8be4989a8330683e26e6d`.
+It checked 60 date records (2 regime labels x 5 four-tool shock
+vectors x 3 off-root charts x 2 dates) against the ORIGINAL
+`finite_irf.py` evaluator:
+
+```json
+{
+  "status": "EXPOSED_OFF_ROOT_SOURCE_VS_PYTHON_MONETARY_STATE_TARGET_MISMATCH",
+  "date_records": 60,
+  "max_relative_polynomial_exponential_identity_error": 4.763442244815064e-16,
+  "max_abs_original_python_vs_realized_proxy_banking_row_gap": 0.002569338840958224,
+  "nonzero_banking_row_mismatch_records": 44,
+  "true_SOURCE_fixed_policy_root_certified": false
+}
+```
+
+The first error key denotes ABSOLUTE same-engine algebraic consistency
+error despite its legacy name; the published numeric magnitude is
+not a rigorous floating-point enclosure of a genuine SOURCE
+operator. The max gap is in raw banking residual units; it is NOT
+a monetary percentage, basis point figure, or SOURCE/Python error
+bound. The SOURCE-shaped proxy holds the original Python OTC slope
+data fixed, making the structural scope limitation explicit.
+
+**Further exact SOURCE proof candidate:** commit
+`7c5816452920d23725f00a8186036fb415682f35`
+adds `sourceDepositPricing_rateTarget_substitution`,
+proposing the genuine SOURCE deposit-pricing monetary cross-row
+correction including the endogenous `xi = depositRate/R_real`:
+
+```text
+deposit_targetized - deposit_SOURCE
+ = -(R_real - R_target) *
+      [1 + depositRate*paymentSize*slopeDifference/
+           (2*R_real*R_target)],
+R_real - R_target = R_target*(exp(reserveRateRuleSOURCE)-1).
+```
+
+The existing SOURCE loan-price and partial balance target
+substitutions are in the same candidate module.
+Dedicated `#print axioms` registration is commit
+`5a4644b919c2bc42a4f452279822b02e32fdc9cc`;
+pinned [Lean #43657063851](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43657063851)
+must be successful before the deposit theorem is DEMOSTRADO.
+The exact SOURCE OTC slope and money-ratio dependence still
+requires its full cross-language identification.
+
+**Scientific and editorial correction:** the 16-row conditional
+transcription audit has been amended so its six banking
+root-factor placeholders are `null`, with the true SOURCE
+realized-versus-target mismatch recorded explicitly. The
+33-row readiness checker now FAILS if these missing shear
+obligations are silently elevated to equality. The original
+paper's numerical Jacobian paragraph in `paper/paper.tex`
+was updated at commit `86b1ac7af6d30641cae4dee2b5d7c2e3266511b8`
+to require ZERO-SET/JACOBIAN transport rather than literal
+equality of the vectors, with the realized/target example
+stated. The corresponding PDF compilation and editorial QA
+must be inspected on that exact paper commit before claiming
+new final artifact verification.
+
+The source/Python full 33-row economic map, a true SOURCE
+33x33 Jacobian enclosure, a fixed-negative-policy SOURCE
+root, infinite-horizon equilibrium, and any permanent
+growth theorem are still PENDIENTE.
