@@ -191,6 +191,7 @@ jobs:
           import Ventura26LiquidityAllocation.SourcePythonOffRootLogResidualReparameterizationCandidate
           import Ventura26LiquidityAllocation.SourceSixNonlinearLogRowRootTransportCandidate
           import Ventura26LiquidityAllocation.SourceActualLogNormalizationDomainCandidate
+          import Ventura26LiquidityAllocation.SourceNonlinearPythonOrderZeroSetTransportCandidate
           import Ventura26LiquidityAllocation.SourceReduced33FrechetChartTransportCandidate
           import Ventura26LiquidityAllocation.SourceFundingDualExact33FreeCoordinatesCandidate
           import Ventura26LiquidityAllocation.SourceFundingDualScalarEliminationCandidate
@@ -364,6 +365,9 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.sourceActualBank_logArgument_pos
           #print axioms Ventura26LiquidityAllocation.sourceActualLabor_logArgument_pos
           #print axioms Ventura26LiquidityAllocation.sourceActualDepositEuler_logArgument_pos
+          #print axioms Ventura26LiquidityAllocation.sourcePythonOrder33_zero_iff
+          #print axioms Ventura26LiquidityAllocation.sourceNonlinearPythonOrder33_zero_iff
+          #print axioms Ventura26LiquidityAllocation.fullyPinnedSOURCE33_pythonOrderNormalized_zero_iff
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_differentiableAt_iff
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_fderiv_first
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_fderiv_dual_zero
