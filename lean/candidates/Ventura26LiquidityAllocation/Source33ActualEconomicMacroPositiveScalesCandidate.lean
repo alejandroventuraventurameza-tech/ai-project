@@ -100,4 +100,60 @@ theorem source33ActualDateFullOutputTransform_injective
 
 #print axioms source33ActualDateFullOutputTransform_injective
 
+/-- As an algebraic consequence, applying the full SOURCE
+bank-firm-macro output transformation to ANY 33-coordinate linear
+Jacobian map preserves and reflects its injectivity, conditional on
+strictly positive original nominal bank faces and wages. This does
+NOT establish injectivity of the economic Jacobian itself. -/
+theorem source33ActualDateFullOutputTransform_jacobian_injective_iff
+    (P : Primitives S) (I : InheritedState)
+    (Z : LocalPrefixCoordinates) (dateOne recurrent : S)
+    (tail : LocalPrefixContinuationRule)
+    (loan0 deposit0 loan1 deposit1
+      rate0 quantity0 rate1 quantity1 : ℝ)
+    (coeffH coeffL : ℝ)
+    (hbank0 : 0 < (localPrefixDateZeroData P I Z dateOne).nextBankFace)
+    (hwage0 : 0 < (localPrefixDateZeroData P I Z dateOne).controls.wage)
+    (hbank1 : 0 <
+      (localPrefixDateOneData P Z dateOne recurrent tail).nextBankFace)
+    (hwage1 : 0 <
+      (localPrefixDateOneData P Z dateOne recurrent tail).controls.wage)
+    (L : (Fin 33 → ℝ) → (Fin 33 → ℝ)) :
+    Function.Injective
+      (fun h => source33FullBankFirmMacroOutputTransform
+        loan0 deposit0 loan1 deposit1
+        rate0 quantity0 rate1 quantity1
+        coeffH coeffL
+        (source33MacroRowScalesOfActualDates P I Z dateOne recurrent tail 0)
+        (source33MacroRowScalesOfActualDates P I Z dateOne recurrent tail 1)
+        (source33MacroRowScalesOfActualDates P I Z dateOne recurrent tail 2)
+        (source33MacroRowScalesOfActualDates P I Z dateOne recurrent tail 3)
+        (source33MacroRowScalesOfActualDates P I Z dateOne recurrent tail 4)
+        (source33MacroRowScalesOfActualDates P I Z dateOne recurrent tail 5)
+        (L h)) ↔ Function.Injective L := by
+  have hTransform := source33ActualDateFullOutputTransform_injective
+    P I Z dateOne recurrent tail
+    loan0 deposit0 loan1 deposit1
+    rate0 quantity0 rate1 quantity1 coeffH coeffL
+    hbank0 hwage0 hbank1 hwage1
+  constructor
+  · intro h x y hxy
+    apply h
+    exact congrArg
+      (source33FullBankFirmMacroOutputTransform
+        loan0 deposit0 loan1 deposit1
+        rate0 quantity0 rate1 quantity1
+        coeffH coeffL
+        (source33MacroRowScalesOfActualDates P I Z dateOne recurrent tail 0)
+        (source33MacroRowScalesOfActualDates P I Z dateOne recurrent tail 1)
+        (source33MacroRowScalesOfActualDates P I Z dateOne recurrent tail 2)
+        (source33MacroRowScalesOfActualDates P I Z dateOne recurrent tail 3)
+        (source33MacroRowScalesOfActualDates P I Z dateOne recurrent tail 4)
+        (source33MacroRowScalesOfActualDates P I Z dateOne recurrent tail 5)) hxy
+  · intro h x y hxy
+    apply h
+    exact hTransform hxy
+
+#print axioms source33ActualDateFullOutputTransform_jacobian_injective_iff
+
 end Ventura26LiquidityAllocation
