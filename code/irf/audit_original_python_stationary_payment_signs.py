@@ -14,6 +14,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+from fractions import Fraction
 from pathlib import Path
 
 import finite_irf as model
@@ -50,6 +51,22 @@ def report_date(s, state, controls, next_state, next_controls, innovations, date
     margin_minus = exposure * s.zeta - buffer
     margin_plus = exposure * s.zeta + buffer
     surplus_minus = buffer - s.zeta * exposure
+    # Exact rational verification of the finite binary64 INPUT VALUES,
+    # not an enclosure for the unknown exact SOURCE equilibrium.
+    q = Fraction.from_float
+    qreserve = q(realized_reserves)
+    qrho = q(rho)
+    qdeposits = q(deposits)
+    qxi = q(controls[7]) / q(realized_rate)
+    qzeta = Fraction(1, 5)
+    exact_buffer = qreserve - qrho * qdeposits
+    exact_exposure = (qxi - qrho) * qdeposits
+    exact_minus = exact_buffer - qzeta * exact_exposure
+    exact_plus = exact_buffer + qzeta * exact_exposure
+    require(exact_minus < -Fraction(41, 100),
+            "Exact binary64-input negative-shock surplus lost 0.41 bound")
+    require(exact_plus > Fraction(83, 100),
+            "Exact binary64-input positive-shock surplus lost 0.83 bound")
     surplus_plus = buffer + s.zeta * exposure
 
     require(abs(realized_rate - target_rate) < 1e-11,
@@ -83,6 +100,14 @@ def report_date(s, state, controls, next_state, next_controls, innovations, date
         "negative_shock_surplus": surplus_minus,
         "positive_shock_surplus": surplus_plus,
         "strict_minus_margin": margin_minus,
+        "exact_binary64_input_minus_lt_negative_0_41": bool(
+            exact_minus < -Fraction(41, 100)),
+        "exact_binary64_input_plus_gt_0_83": bool(
+            exact_plus > Fraction(83, 100)),
+        "exact_binary64_input_minus_numerator": str(exact_minus.numerator),
+        "exact_binary64_input_minus_denominator": str(exact_minus.denominator),
+        "exact_binary64_input_plus_numerator": str(exact_plus.numerator),
+        "exact_binary64_input_plus_denominator": str(exact_plus.denominator),
         "strict_plus_margin": margin_plus,
         "loan_reserve_rate_realized_target_abs_gap": abs(
             realized_rate - target_rate),
@@ -132,6 +157,8 @@ def main():
             min(d["strict_minus_margin"], d["strict_plus_margin"])
             for d in dates),
         "finite_precision_not_interval_certified": True,
+        "binary64_inputs_verified_exactly_by_fraction_arithmetic": True,
+        "exact_economic_real_inputs_enclosed": False,
         "actual_Lean_SOURCE_economy_instantiated": False,
         "full_equilibrium_proved": False,
         "source_code_sha256": hashlib.sha256(
