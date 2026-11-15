@@ -876,3 +876,115 @@ real map before establishing the missing full 33-row correspondence
 and rigorous derivative/residual enclosures. A full infinite-horizon
 competitive equilibrium and permanent endogenous growth remain
 separate unresolved objectives.
+
+## 19. CORRECTION: banking "identity rows" use monetary TARGETS in Python, REALIZED states in SOURCE
+
+A direct re-reading of the actual original
+`lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean`
+(`localPrefixDateZeroData`, `localPrefixDateOneData`,
+`localReducedRemainingResidual`, `localPrefixReserveDepositRatio`)
+against the original `code/irf/finite_irf.py`
+(`auxiliary`, `remaining_residuals`) exposed a material
+off-root SOURCE/Python mismatch missed by the earlier
+`audit_source_identity_row_candidates.py`:
+
+- SOURCE date-zero and date-one `currentReserveRate` are the
+  REALIZED state entries `Z.stateOne.reserveRateLag` and
+  `Z.stateTwo.reserveRateLag`, respectively. The original Python
+  auxiliary `aux["rr"]` is the monetary policy-rule TARGET,
+  while the realized state rate is `next_state[5]`.
+- SOURCE `currentReservesPre` is the REALIZED state entry, not
+  the Python `aux["money"]` policy-rule TARGET.
+- SOURCE loan pricing `row 8` uses realized reserve rate;
+  Python `remaining_residuals[8]` uses policy target rate.
+- SOURCE deposit pricing `row 9` uses realized rate directly
+  and in `xi=rd/realized_rate`; Python uses target rate and
+  `xi=rd/target_rate`.
+- SOURCE bank balance `row 10` uses actual money and a
+  reserve/deposit ratio evaluated at the realized rate; Python
+  uses target money and a ratio evaluated at the target rate.
+
+These are six actual SOURCE positions over two dates:
+`14,15,16,30,31,32` (zero-based original SOURCE/Python
+remaining-row order). The earlier Python "sixteen identity rows"
+audit is only a comparison against a SOURCE-*shaped transcription
+where these banking terms had already been replaced by policy
+TARGETS*. It is NOT a literal off-root SOURCE operator or
+Jacobian equivalence. Retaining its formerly asserted unit
+Jacobian factors for these six positions would be UNSOUND.
+
+The ORIGINAL SOURCE monetary policy rules give
+
+```text
+r_R = log(R_real / R_target)
+r_M = log(M_real / M_target)
+
+R_real - R_target = R_target*(exp(r_R)-1)
+M_real - M_target = M_target*(exp(r_M)-1).
+```
+
+For loan pricing, if the original SOURCE OTC average slope is held
+fixed on both sides, the Python-targetized row differs from the
+SOURCE row by `R_target*(exp(r_R)-1)`. The original OTC slope
+correspondence itself still requires separate exact identification.
+
+For the bank balance, if the genuine SOURCE reserve ratio `h_real`
+is held fixed temporarily, replacement of actual reserves by target
+reserves gives the cross-row term
+
+```text
+(1/h_real-1)*M_target*(exp(r_M)-1).
+```
+
+Python additionally uses a `h_target` computed from target
+reserve rate, creating another term proportional to
+`(1/h_real-1/h_target)*M_target`. Deposit pricing also contains
+the target-versus-realized `xi` discrepancy.
+
+**New SOURCE exact real proof candidate:**
+`SourceReserveRuleTargetSubstitutionCandidate.lean`,
+commit `e086d2ec342dac8b5cd7f224eb88144113af4a2b`,
+contains the two real policy-target substitution identities and
+their propagation to genuine SOURCE loan-pricing and (partial)
+bank-balance rows. Registered with `#print axioms` at
+`a354d26e1f46e0605216622d6ee70eb834e088e5`.
+A successful, exact-sha Lean audit is required to mark these
+as DEMOSTRADO. The banking balance theorem holds the genuine
+SOURCE realized-rate deposit ratio fixed; it is not yet the entire
+Python target-rate substitution theorem.
+
+**New Python numerical audit:**
+`code/irf/audit_original_python_realized_vs_policy_target_bank_rows.py`,
+commit `c83168e0f69a2ceee8c107ad4857fb9b95c392d1`,
+runs 60 original-Python two-date records (two branches, five
+policy interventions, three log-chart probes, two dates). It checks
+cross-policy-rule expressions for loan pricing, deposits and
+bank balance, and reports genuinely NONZERO off-root banking
+discrepancies; all comparisons are constructed from the actual
+Python engine, NOT from an evaluation of the Lean SOURCE operator.
+The audit is executed by `code/verify.py` and its JSON archived
+in the GitHub build workflow at commit
+`166b6e3010aa7ee0eec8be4989a8330683e26e6d`.
+At this note-writing checkpoint, its exact CI result had not yet
+been reviewed: no NUMERICO status is presumed.
+
+**Fail-closed change to prior 33-row readiness gate:**
+`audit_source_identity_row_candidates.py` commit
+`bf6aae8ff08b503be29e13709d9b4842125c1fd6`
+marks these six banking "unit root factor" claims as `null`,
+adds explicit flags for unresolved monetary cross-row shears and
+preserves its numerical comparison strictly as an auxiliary-targetized
+same-engine candidate. `audit_source_33_claim_readiness.py`,
+commit `a66bffe86a931be6c042c40612bda821d8d10933`,
+now REQUIRES those false certification flags. This prevents
+the earlier 16-row audit from silently promoting its proxy functions
+into genuine SOURCE/Python off-root identities.
+
+This is a substantive correction to the scientific ledger, not
+a retreat on the proved SOURCE/SOURCE row indexing or on the
+independent same-engine Python simulation. On the common set where
+both monetary policy residuals are zero, realized monetary states
+equal their policy targets. The missing theorem is to account for
+the resulting cross-row transformations and their derivatives,
+including original SOURCE OTC slope and banking reserve-ratio
+dependence, before applying a true SOURCE 33x33 Jacobian certificate.
