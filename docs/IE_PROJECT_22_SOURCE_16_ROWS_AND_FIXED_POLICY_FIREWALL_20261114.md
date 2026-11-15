@@ -1059,3 +1059,57 @@ The source/Python full 33-row economic map, a true SOURCE
 33x33 Jacobian enclosure, a fixed-negative-policy SOURCE
 root, infinite-horizon equilibrium, and any permanent
 growth theorem are still PENDIENTE.
+
+## 21. Lean kernel verdict for six nonlinear SOURCE rows and positive domains
+
+The exact pinned
+[Lean audit #43656484357](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43656484357)
+for source commit `6c575f4e55b29b4185964a5a24554d82004f5f49`
+has now COMPLETED SUCCESS. The kernel compiled:
+
+- `sourceSixNonlinearLogRow_vector_zero_iff`:
+  exact equivalence of zeros of all 33 ORIGINAL SOURCE residual rows
+  after modifying just the six bank/labor/Euler log normalizations,
+  conditional on explicitly positive targets/log arguments;
+- `fullyPinnedSOURCE33_sixLogNormalized_root_iff`:
+  the same equivalence applied to the fully pinned original
+  SOURCE real-economy reduced33 residual (32 economic logs plus h);
+- `sourcePositiveLevel_normalizedLogArgument`,
+  `sourceActualBank_logArgument_pos`,
+  `sourceActualLabor_logArgument_pos`, and
+  `sourceActualDepositEuler_logArgument_pos`:
+  exact domain-positivity implications from genuine SOURCE economic
+  variables.
+
+Explicit `#print axioms` for these six named declarations shows
+only Lean standard `propext`, `Classical.choice`, and `Quot.sound`,
+with no `sorryAx` in THOSE declarations. It is not an assertion
+that all other logged declarations throughout the checkpoint have
+an identical axiom footprint.
+
+Scientific status: **DEMOSTRADO** for this exact SOURCE/SOURCE
+33-row zero-set and pointwise log-domain mathematics. **NOT
+DEMOSTRADO** for correspondence of these transformed SOURCE
+functions to the original floating-point Python evaluator.
+Indeed the newly identified realized-vs-policy-target banking gap
+requires additional cross-row corrections beyond the six log
+normalizations. This is recorded in sections 19 and 20.
+
+The Python-order permutation composition candidate is
+`SourceNonlinearPythonOrderZeroSetTransportCandidate.lean`
+(commit `2a2914bf1d1aa4172f99f4477463b3fd9fffb6c5`);
+its axiom audit is the distinct
+[Lean run #43656730393](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43656730393).
+At note-writing time the combined permutation candidate and
+the later monetary realized-target substitutions remain subject
+to their own CI verdicts.
+
+The manuscript was amended to describe this distinction precisely
+outside the numbered propositions; the full-paper SHA256 ledger
+is synchronized at commit
+`8a2abd62c8e040f141708a6c7828e3346d28c25f`.
+The hash was reproduced with the original paper before edit as
+a control before replacing the ledger's top-level `paper_sha256`.
+The existing 57 proposition/proof text hashes were not deliberately
+changed. The current workflow still must verify that proposition
+ledger consistency and rebuild the revised PDFs.
