@@ -83,4 +83,46 @@ theorem sourcePaymentLaw_pythonMagnitude_fromActualFields
 
 #print axioms sourcePaymentLaw_pythonMagnitude_fromActualFields
 
+/-- The explicit Python payment law now discharges the binary
+symmetric witness used by the genuine SOURCE two-date calibration
+theorem, instead of passing it as an uninstantiated premise. -/
+theorem sourceTwoDate_pythonPaymentCalibration_fromActualFields
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (I : InheritedState)
+    (Z : LocalPrefixCoordinates) (dateOne recurrent : S)
+    (tail : LocalPrefixContinuationRule)
+    (hSupport : P.paymentSupport = pythonPaymentSupport)
+    (hProbability : P.paymentProbability = pythonPaymentProbability)
+    (hShock : P.paymentShock = pythonPaymentShock)
+    (hmatch : P.matchingIntensity = Real.log 2)
+    (htight0 :
+      (localPrefixDateZeroData P I Z dateOne).controls.tightness ≤ 1)
+    (htight1 :
+      (localPrefixDateOneData P Z dateOne recurrent tail).controls.tightness ≤ 1) :
+    localPrefixMeanAbsolutePaymentShock P = (1 / 5 : ℝ) ∧
+    (localPrefixReserveDepositRatio P (localPrefixDateZeroData P I Z dateOne) =
+      (localPrefixDateZeroData P I Z dateOne).reserveRequirement +
+      ((localPrefixDateZeroData P I Z dateOne).controls.depositRate /
+        (localPrefixDateZeroData P I Z dateOne).currentReserveRate -
+        (localPrefixDateZeroData P I Z dateOne).reserveRequirement) *
+        (1 / 5 : ℝ) * (1 -
+          (localPrefixDateZeroData P I Z dateOne).controls.tightness) /
+          (1 + (localPrefixDateZeroData P I Z dateOne).controls.tightness)) ∧
+    (localPrefixReserveDepositRatio P
+      (localPrefixDateOneData P Z dateOne recurrent tail) =
+      (localPrefixDateOneData P Z dateOne recurrent tail).reserveRequirement +
+      ((localPrefixDateOneData P Z dateOne recurrent tail).controls.depositRate /
+        (localPrefixDateOneData P Z dateOne recurrent tail).currentReserveRate -
+        (localPrefixDateOneData P Z dateOne recurrent tail).reserveRequirement) *
+        (1 / 5 : ℝ) * (1 -
+          (localPrefixDateOneData P Z dateOne recurrent tail).controls.tightness) /
+          (1 + (localPrefixDateOneData P Z dateOne recurrent tail).controls.tightness)) := by
+  exact sourcePrefixTwoDate_paymentOTC_calibration
+    P I Z dateOne recurrent tail 0 1 (1 / 5 : ℝ)
+    (sourcePaymentLaw_binaryWitness_fromActualFields
+      P hSupport hProbability hShock)
+    hmatch htight0 htight1
+
+#print axioms sourceTwoDate_pythonPaymentCalibration_fromActualFields
+
 end Ventura26LiquidityAllocation
