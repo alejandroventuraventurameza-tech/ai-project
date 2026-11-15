@@ -766,3 +766,62 @@ existence theorem with actual KKT and terminal equilibrium obligations.
 
 This ledger is evidence-scoped to the explicitly named runs; it
 does not automatically advance with later Actions jobs.
+
+## 17. Closed audit of six scaling proofs and new 33-row nonlinear zero-map
+
+**Formally verified on the specific commit:** GitHub Actions
+[Lean #43655583015](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43655583015)
+on `e58602ccc88c22ba4a26b9abb450f136fda96aac` completed
+SUCCESS. The exact axiom printouts of
+`sourceLogRatio_hasDerivAt_of_common_positive_root`,
+`sourceSixLogRowReweight_injective_iff`,
+`concreteSOURCE_bankRenewalFactor_eq_inverse_loanRate`,
+`concreteSOURCE_bankFaceLog_zero_iff_original_row`,
+`sourceReserveRateRule_actual_logRatio`,
+`sourceReserveQuantityRule_actual_logRatio`,
+`sourceBankFace_actual_offRootLogTransformation`,
+and `sourceDepositEuler_actual_offRootLogTransformation` show
+only Lean standard axioms `propext`, `Classical.choice`, and
+`Quot.sound`, not `sorryAx`. Earlier failing compiler runs
+were corrected; the successful commit, not the older broken runs,
+is the evidence for DEMOSTRADO.
+
+**Next algebraic gate, newly submitted:** a full 33-output
+source-side nonlinear row-reparameterization,
+`SourceSixNonlinearLogRowRootTransportCandidate.lean`, commit
+`48e84fe5ce50b1d590ae02d212540f0cb74813c2`,
+with explicit `#print axioms` registration in
+`.github/workflows/lean-candidates.yml` commit
+`025c17bb600a590688660d069399d91d81dbe080`.
+Its six changed SOURCE positions (zero based)
+`6,9,10,22,25,26` use respectively
+
+```text
+N_6(v)  = log(1 + v6 / bankTarget0)
+N_9(v)  = log(1 + v9 / laborTarget0)
+N_10(v) = log(1 - v10)
+N_22(v) = log(1 + v22 / bankTarget1)
+N_25(v) = log(1 + v25 / laborTarget1)
+N_26(v) = log(1 - v26)
+N_j(v)  = v_j, for the other 27 rows.
+```
+
+The four bank/labor targets must be strictly positive, and
+all six logarithm arguments must be strictly positive.
+Under these exact domain constraints, the candidate proves
+`N(v)=0 <-> v=0` for the ENTIRE 33-row vector and
+specializes the result to the REAL fully pinned SOURCE reduced33
+operator. This is an exact algebraic SOURCE/SOURCE root-set
+transport, *not* an assertion of the other 27 SOURCE/Python
+economic formula identities. At a common root its differential
+has the six nonzero row scales already audited in Lean. No root
+exists merely because two root sets are equivalent.
+
+**Status at writing:** this latest 33-row theorem is an
+UNCERTIFIED CANDIDATE until its exact Lean run is successful.
+Even after success, a genuine SOURCE root and any fixed-negative-
+shock structural IRF require all 33 economic SOURCE/Python row
+correspondences, a common inherited state and exact calibration,
+and true SOURCE interval center-residual/Jacobian enclosures.
+The infinite-horizon optimum and endogenous permanent growth
+remain further separate open goals.
