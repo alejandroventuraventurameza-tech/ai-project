@@ -825,3 +825,54 @@ correspondences, a common inherited state and exact calibration,
 and true SOURCE interval center-residual/Jacobian enclosures.
 The infinite-horizon optimum and endogenous permanent growth
 remain further separate open goals.
+
+## 18. Exact six-row nonlinear SOURCE root-preserving map and log positivity
+
+The GREEN audited [Lean run #43655583015](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43655583015)
+at `e58602ccc88c22ba4a26b9abb450f136fda96aac`
+certified the earlier six-row derivative/rank transport, the concrete
+bank renewal calibration, the SOURCE reserve rate/quantity logarithmic
+formulas, and the scalar off-root bank/labor/deposit log normalizations.
+Review of explicit `#print axioms` found only standard Lean axioms,
+not `sorryAx`. That run, not older failed runs, supports the status
+DEMOSTRADO for these exact propositions.
+
+**Submitted, not yet certified:** new
+`SourceSixNonlinearLogRowRootTransportCandidate.lean`
+(commit `48e84fe5ce50b1d590ae02d212540f0cb74813c2`)
+defines the 33-output nonlinear row-normalization `N`.
+It leaves 27 source economic rows unchanged, and replaces precisely
+SOURCE indices `6,9,10,22,25,26` by the real logarithmic formulas
+`log(1+v_i/b_i)` for bank/labor and `log(1-v_i)` for Euler.
+Its vector theorem states `N(v)=0 iff v=0` if the four bank/labor
+targets and all six logarithm arguments are strictly positive.
+It also explicitly specializes to the already pinned genuine SOURCE
+reduced-33 economic map; this does not assert that an actual root exists.
+Registered for axiom audit at commit
+`025c17bb600a590688660d069399d91d81dbe080`.
+
+**Submitted, not yet certified:** new
+`SourceActualLogNormalizationDomainCandidate.lean`
+(commit `da348d2bf161e988ac764e5a55f1b26b66c08532`;
+factorization refinement `0f51269324f16c41e620dbf9852787a3aebf08ee`)
+derives all three scalar log-argument positivity conditions directly
+from strict positivity of actual source bank renewal flows and faces,
+wages and marginal-labor targets, and the deposit Euler ratio. It uses
+the ORIGINAL `localReducedRemainingResidual`, not reconstructed
+Python levels. An extra positivity-lemma axiom audit was registered at
+`6c575f4e55b29b4185964a5a24554d82004f5f49`.
+This does **not yet** close the quantitative positivity of the entire
+33-dimensional closed validation box; those must be bounded with
+certified interval enclosures.
+
+Scientific interpretation:
+the normalized SOURCE map and original SOURCE map would have
+identical roots on their common economically positive domain,
+but there is still NO proof that Python's OTHER 27 economic
+functions match the SOURCE functions under identical inherited
+state, policy and continuation data. The numerical Python Jacobian
+and rational Neumann defect cannot be transplanted to the SOURCE
+real map before establishing the missing full 33-row correspondence
+and rigorous derivative/residual enclosures. A full infinite-horizon
+competitive equilibrium and permanent endogenous growth remain
+separate unresolved objectives.
