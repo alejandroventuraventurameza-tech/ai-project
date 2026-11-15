@@ -39,8 +39,8 @@ theorem sourceTwoDateBankShear_injective_iff
       Function.Injective L := by
   constructor
   · intro h x y hxy
-    apply h
-    rw [hxy]
+    exact h (congrArg
+      (sourceTwoDateMonetaryBankRowShear a0 b0 a1 b1) hxy)
   · intro h x y hxy
     apply h
     exact sourceTwoDateMonetaryBankRowShear_injective
