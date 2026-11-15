@@ -46,6 +46,17 @@ def main():
     nine=set(s["known_source_indices"])
     sixteen={int(x["source"]) for x in identity["source_to_python_rows"]}
     eight=set(firm["direct_indices"])|set(firm["pledge_shear_indices"])
+    # Six banking rows are Python-TARGETIZED, not genuine SOURCE
+    # off-root identities. Their monetary-rule shears remain OPEN.
+    check(identity.get("true_SOURCE_bank_rows_using_realized_policy_state") ==
+          [14,15,16,30,31,32] and
+          identity.get("python_targetized_bank_rows_are_literal_source_offroot_equal") is False and
+          identity.get("bank_monetary_cross_row_jacobian_shears_proved") is False,
+          "Original SOURCE realized-vs-target monetary banking gap lost")
+    for row in identity["source_to_python_rows"]:
+        if row["source"] in (14,15,16,30,31,32):
+            check(row["root_factor_candidate"] is None,
+                  "Invalid unit Jacobian factor in targetized banking row")
     check(len(nine)==9 and len(sixteen)==16 and len(eight)==8,
           "Expected exactly 9+16+8 independent row slots")
     check(not (nine & sixteen or nine & eight or sixteen & eight),
@@ -111,6 +122,9 @@ def main():
                        "sixteen_identity":sorted(sixteen),
                        "eight_firm":sorted(eight)},
       "rows_with_candidate":33,
+      "true_source_banking_rows_offroot_identical_to_python":False,
+      "monetary_realized_target_cross_row_shears_certified":False,
+      "bank_rows_requiring_monetary_rule_transport":[14,15,16,30,31,32],
       "source_to_python_permutation_verified_from_report":True,
       "input_source_sha256":source_hash,
       "input_python_sha256":python_hash,
@@ -123,8 +137,8 @@ def main():
       "distinct_branch_equilibria_certified_by_this_audit":False,
       "gates_remaining":[
         "Common SOURCE Primitives, LocalPrefixDateData, inherited state and Python decoding",
-        "Functional equality of all 33 residuals on one open positive chart",
-        "Proof of the complete 33x33 Jacobian transport including product rule",
+        "Row-normalized SOURCE/Python zero-set correspondence, including monetary realized-versus-target shears",
+        "Proof of full 33x33 Jacobian transport, including monetary cross-row corrections",
         "Validated numerical or formal bound for source Jacobian inverse",
         "Economic KKT, global sufficiency, transversality and infinite equilibrium"
       ],
