@@ -79,4 +79,52 @@ theorem sourceInstalledPythonLaw_buffer_implies_strictSigns
 
 #print axioms sourceInstalledPythonLaw_buffer_implies_strictSigns
 
+/-- With an actual SOURCE reserve-buffer interval, the strict
+deficit/surplus signs are now DERIVED rather than supplied as
+separate hypotheses. Hence original bank-marginal expectations
+reduce to Python's binary OTC average/difference expressions. -/
+theorem sourceInstalledPythonLaw_buffer_implies_actualBankExpectations
+    (P : Primitives S) (X : Allocation S)
+    (t : ℕ) (h : History S t)
+    (hbuffer :
+      -(sourceBankShockLiquidityExposure
+          (sourceWithConcretePythonPaymentLaw P) X t h / 5) <
+        sourceBankPreSettlementBuffer
+          (sourceWithConcretePythonPaymentLaw P) X t h ∧
+      sourceBankPreSettlementBuffer
+        (sourceWithConcretePythonPaymentLaw P) X t h <
+        sourceBankShockLiquidityExposure
+          (sourceWithConcretePythonPaymentLaw P) X t h / 5) :
+    finiteSupportExpectation
+      (sourceWithConcretePythonPaymentLaw P).paymentSupport
+      (sourceWithConcretePythonPaymentLaw P).paymentProbability
+      (localBankLiquidityMarginal
+        (sourceWithConcretePythonPaymentLaw P) X t h) =
+        (bankOTCDeficitSlopeAt
+          (sourceWithConcretePythonPaymentLaw P) X t h
+          (X.bankTightness t h) +
+          bankOTCSurplusSlopeAt
+            (sourceWithConcretePythonPaymentLaw P) X t h
+            (X.bankTightness t h)) / 2 ∧
+    finiteSupportExpectation
+      (sourceWithConcretePythonPaymentLaw P).paymentSupport
+      (sourceWithConcretePythonPaymentLaw P).paymentProbability
+      (fun ω =>
+        localBankLiquidityMarginal
+          (sourceWithConcretePythonPaymentLaw P) X t h ω *
+        (sourceWithConcretePythonPaymentLaw P).paymentShock ω) =
+        -(1 / 5 : ℝ) *
+          (bankOTCDeficitSlopeAt
+            (sourceWithConcretePythonPaymentLaw P) X t h
+            (X.bankTightness t h) -
+            bankOTCSurplusSlopeAt
+              (sourceWithConcretePythonPaymentLaw P) X t h
+              (X.bankTightness t h)) / 2 := by
+  obtain ⟨hminus, hplus⟩ :=
+    sourceInstalledPythonLaw_buffer_implies_strictSigns P X t h hbuffer
+  exact sourceInstalledPythonLaw_strictSigns_actualBankExpectations
+    P X t h hminus hplus
+
+#print axioms sourceInstalledPythonLaw_buffer_implies_actualBankExpectations
+
 end Ventura26LiquidityAllocation
