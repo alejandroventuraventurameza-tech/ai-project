@@ -44,16 +44,16 @@ theorem sourceTwoDateBankPricingRowShear_inverse
   classical
   by_cases h14 : i = 14
   · subst i
-    simp [sourceTwoDateBankPricingRowShear]
+    simp [sourceTwoDateBankPricingRowShear] <;> ring
   by_cases h15 : i = 15
   · subst i
-    simp [sourceTwoDateBankPricingRowShear]
+    simp [sourceTwoDateBankPricingRowShear] <;> ring
   by_cases h30 : i = 30
   · subst i
-    simp [sourceTwoDateBankPricingRowShear]
+    simp [sourceTwoDateBankPricingRowShear] <;> ring
   by_cases h31 : i = 31
   · subst i
-    simp [sourceTwoDateBankPricingRowShear]
+    simp [sourceTwoDateBankPricingRowShear] <;> ring
   simp [sourceTwoDateBankPricingRowShear, h14, h15, h30, h31]
 
 #print axioms sourceTwoDateBankPricingRowShear_inverse
@@ -73,13 +73,13 @@ theorem sourceTwoDateBankPricingRowShear_zero_iff
         (-loan0) (-deposit0) (-loan1) (-deposit1)
         (0 : Fin 33 → ℝ) = 0 := by
       funext i
-      simp [sourceTwoDateBankPricingRowShear]
+      simp [sourceTwoDateBankPricingRowShear] <;> ring
     rw [hz] at hi
     exact hi.symm
   · intro h
     subst v
     funext i
-    simp [sourceTwoDateBankPricingRowShear]
+    simp [sourceTwoDateBankPricingRowShear] <;> ring
 
 #print axioms sourceTwoDateBankPricingRowShear_zero_iff
 
