@@ -29,6 +29,21 @@ namespace Ventura26LiquidityAllocation
 
 variable {S : Type*} [Fintype S] [DecidableEq S]
 
+/-- Strictly positive realized and target levels imply the correct
+logarithmic normalization domain. Its proof treats B as a single
+positive economic target, avoiding any assumption on its internal
+division or factorization beyond B>0. -/
+theorem sourcePositiveLevel_normalizedLogArgument
+    (A B : ℝ) (hA : 0 < A) (hB : 0 < B) :
+    0 < 1 + (A - B) / B := by
+  have hBne : B ≠ 0 := ne_of_gt hB
+  have hid : 1 + (A - B) / B = A / B := by
+    field_simp [hBne] <;> ring
+  rw [hid]
+  exact div_pos hA hB
+
+#print axioms sourcePositiveLevel_normalizedLogArgument
+
 /-- A genuine SOURCE date bank-renewal row has a valid normalized
 logarithm wherever the next nominal face and bank-renewal target
 are strictly positive. -/
@@ -47,18 +62,7 @@ theorem sourceActualBank_logArgument_pos
         d.currentBankFace / d.controls.inflation) /
       (bankRenewalFactor P * d.controls.loanRate *
         d.currentBankFace / d.controls.inflation)
-  have hid :
-    1 + (d.nextBankFace -
-      bankRenewalFactor P * d.controls.loanRate *
-        d.currentBankFace / d.controls.inflation) /
-      (bankRenewalFactor P * d.controls.loanRate *
-        d.currentBankFace / d.controls.inflation) =
-    d.nextBankFace /
-      (bankRenewalFactor P * d.controls.loanRate *
-        d.currentBankFace / d.controls.inflation) := by
-    field_simp [ne_of_gt hflow] <;> ring
-  rw [hid]
-  exact div_pos hnext hflow
+  exact sourcePositiveLevel_normalizedLogArgument _ _ hnext hflow
 
 #print axioms sourceActualBank_logArgument_pos
 
@@ -80,18 +84,7 @@ theorem sourceActualLabor_logArgument_pos
         localPrefixAggregateLabor P d ^ P.laborCurvature) /
       (P.laborScale * d.controls.workerConsumption ^ P.workerRiskAversion *
         localPrefixAggregateLabor P d ^ P.laborCurvature)
-  have hid :
-    1 + (d.controls.wage -
-      P.laborScale * d.controls.workerConsumption ^ P.workerRiskAversion *
-        localPrefixAggregateLabor P d ^ P.laborCurvature) /
-      (P.laborScale * d.controls.workerConsumption ^ P.workerRiskAversion *
-        localPrefixAggregateLabor P d ^ P.laborCurvature) =
-    d.controls.wage /
-      (P.laborScale * d.controls.workerConsumption ^ P.workerRiskAversion *
-        localPrefixAggregateLabor P d ^ P.laborCurvature) := by
-    field_simp [ne_of_gt htarget] <;> ring
-  rw [hid]
-  exact div_pos hwage htarget
+  exact sourcePositiveLevel_normalizedLogArgument _ _ hwage htarget
 
 #print axioms sourceActualLabor_logArgument_pos
 
