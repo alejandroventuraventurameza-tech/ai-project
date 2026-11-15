@@ -158,7 +158,7 @@ theorem sourceBankBalance_quantityTarget_substitution
           (d.currentReservesPre - sourceQuantityRuleTarget P d) := by
             rw [hrow]
             ring
-    _ = _ := by rw [hGap]
+    _ = _ := by rw [hGap]; ring
 
 #print axioms sourceBankBalance_quantityTarget_substitution
 
