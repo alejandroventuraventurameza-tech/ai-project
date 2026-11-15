@@ -14,6 +14,7 @@ on:
       - code/irf/audit_original_python_source_shaped_firm_rows.py
       - code/irf/audit_original_python_date_one_euler_jacobian_shear.py
       - code/irf/audit_original_python_combined_bank_firm_jacobian_shear.py
+      - code/irf/audit_original_python_source_shaped_macro_normalizations.py
       - lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean
       - .github/workflows/source-python-row-layout-audit.yml
   workflow_dispatch:
@@ -42,3 +43,5 @@ jobs:
         run: python code/irf/audit_original_python_date_one_euler_jacobian_shear.py
       - name: Audit combined bank and firm 33-dimensional Jacobian shears
         run: python code/irf/audit_original_python_combined_bank_firm_jacobian_shear.py
+      - name: Audit SOURCE-shaped macro and policy row normalization
+        run: python code/irf/audit_original_python_source_shaped_macro_normalizations.py
