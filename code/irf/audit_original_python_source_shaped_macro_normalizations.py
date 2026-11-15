@@ -113,7 +113,7 @@ def main():
             original=m.prefix_residual(base,p0,"binding",shock,z)
             for args in ((base.X0,u0,x1,u1,aux0,aux1,e0,6,0),
                          (x1,u1,x2,u2,aux1,aux2,base.e1,22,1)):
-                errs,_=check_date(s,*args,original=original)
+                errs,_=check_date(s,*args[:7],original,*args[7:])
                 checked+=len(errs)
                 max_error=max(max_error,*errs)
     report={
