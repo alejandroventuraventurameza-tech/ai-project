@@ -110,7 +110,7 @@ def python_and_realized_proxy(base, p0, z):
 
 
 def main():
-    p0 = json.loads(P0.read_text(encoding="utf-8"))["P0"]
+    p0 = [[float(v) for v in row]\n          for row in json.loads(P0.read_text(encoding="utf-8"))["P0"]]
     check(len(p0) == 16 and all(len(x) == 6 for x in p0),
           "Frozen P0 matrix unexpectedly changed")
     s = model.steady_case()
