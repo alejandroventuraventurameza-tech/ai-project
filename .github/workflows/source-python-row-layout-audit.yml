@@ -1,0 +1,23 @@
+name: SOURCE Python 33-row permutation audit
+
+on:
+  push:
+    branches:
+      - work/lean-ci-validation-source-33-row-20261114
+    paths:
+      - code/irf/audit_source_python_33_row_permutation.py
+      - code/irf/finite_irf.py
+      - lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean
+      - .github/workflows/source-python-row-layout-audit.yml
+  workflow_dispatch:
+
+jobs:
+  row-layout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify exact original SOURCE/Python 33-row ordering
+        run: python code/irf/audit_source_python_33_row_permutation.py
