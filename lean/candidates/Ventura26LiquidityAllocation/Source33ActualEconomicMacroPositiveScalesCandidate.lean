@@ -51,11 +51,15 @@ theorem source33ActualDateMacroScales_all_ne_zero
       source33MacroRowScalesOfActualDates P I Z dateOne recurrent tail i ≠ 0 := by
   intro i
   fin_cases i
-  · exact div_ne_zero (by norm_num) (ne_of_gt hbank0)
-  · exact div_ne_zero (by norm_num) (ne_of_gt hwage0)
+  · simpa [source33MacroRowScalesOfActualDates] using
+      (div_ne_zero (by norm_num : (1 : ℝ) ≠ 0) (ne_of_gt hbank0))
+  · simpa [source33MacroRowScalesOfActualDates] using
+      (div_ne_zero (by norm_num : (1 : ℝ) ≠ 0) (ne_of_gt hwage0))
   · norm_num [source33MacroRowScalesOfActualDates]
-  · exact div_ne_zero (by norm_num) (ne_of_gt hbank1)
-  · exact div_ne_zero (by norm_num) (ne_of_gt hwage1)
+  · simpa [source33MacroRowScalesOfActualDates] using
+      (div_ne_zero (by norm_num : (1 : ℝ) ≠ 0) (ne_of_gt hbank1))
+  · simpa [source33MacroRowScalesOfActualDates] using
+      (div_ne_zero (by norm_num : (1 : ℝ) ≠ 0) (ne_of_gt hwage1))
   · norm_num [source33MacroRowScalesOfActualDates]
 
 #print axioms source33ActualDateMacroScales_all_ne_zero
