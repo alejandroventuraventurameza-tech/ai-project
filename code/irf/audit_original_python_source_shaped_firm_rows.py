@@ -34,13 +34,15 @@ OUT = HERE / "output/original_python_source_shaped_firm_rows.json"
 # variables have the original SOURCE date timing: current controls and
 # NEXT-period inflation/capital-price form nominal pledge face.
 def firm_rows(s, current, controls, following, following_controls, next_aux,
-              current_aux, branch):
+              current_aux, branch, common_pledge=None):
     residuals = []
     implied_faces = []
     for i in range(2):
         pledge = (s.pledge[i] * (1.0 - s.delta)
                   * following_controls[5] * following_controls[6])
         sdf = s.be * controls[i] / following_controls[i]
+        euler_pledge = (s.pledge[i] * common_pledge
+                        if common_pledge is not None else pledge)
         wealth = current_aux["N"][i]
         budget = (controls[i] + controls[6] * following[i]
                   - following[2 + i] / controls[8] - wealth)
@@ -49,10 +51,10 @@ def firm_rows(s, current, controls, following, following_controls, next_aux,
                      (next_aux["uk"][i] + (1.0 - s.delta) * following_controls[6]))
             regime = controls[8] * sdf / following_controls[5] - 1.0
         else:
-            euler = (controls[6] - pledge / controls[8] -
+            euler = (controls[6] - euler_pledge / controls[8] -
                      sdf * (next_aux["uk"][i] +
                             (1.0 - s.delta) * following_controls[6] -
-                            pledge / following_controls[5]))
+                            euler_pledge / following_controls[5]))
             regime = following[2 + i] - pledge * following[i]
         residuals.extend([budget, euler, regime])
         implied_faces.append(pledge * following[i])
@@ -108,6 +110,9 @@ def main():
         # SOURCE reduced date-one firm's two nominal face constraints
         # are encoded into the common date-two pledge chart, not 2 rows.
         date1, implied = firm_rows(s, x1, u1, x2, u2, aux2, aux1, "binding")
+        date1_python_coordinate, _ = firm_rows(
+            s, x1, u1, x2, u2, aux2, aux1, "binding",
+            common_pledge=x2compact[2])
         # Both original SOURCE date-one raw collateral equations
         # are proportional to the SINGLE common-pledge mismatch.
         # They only vanish IF the Python row 21 vanishes.
@@ -143,8 +148,23 @@ def main():
             for i in range(2):
                 for offset in (0, 1):
                     idx = 17 + 2*i + offset
+                    # Original SOURCE Euler is expressed with the
+                    # inflation/capital-price pledge, while Python's
+                    # off-root chart uses the independent common pledge.
+                    # Their difference is exactly linear in row-21's
+                    # UNLOGGED common pledge gap.
+                    if offset == 1:
+                        sdf = s.be * u1[i] / u2[i]
+                        correction = (s.pledge[i] * common_pledge_gap *
+                            (-1.0 / u1[8] + sdf / u2[5]))
+                        worst = max(worst, compare(
+                            date1_python_coordinate[3*i+1] -
+                            date1[3*i+1], correction,
+                            f"date1 Euler common-pledge shear firm {i}"))
+                        checked += 1
                     worst = max(worst, compare(residuals[idx],
-                         date1[3*i+offset], f"date1 firm row {idx}"))
+                         date1_python_coordinate[3*i+offset],
+                         f"date1 Python-coordinate firm row {idx}"))
                     checked += 1
             worst = max(worst, compare(residuals[21],
                     math.log(x2compact[2] / expected_pledge),
@@ -158,6 +178,7 @@ def main():
         "max_abs_firm_row_error": worst,
         "date_one_raw_collateral_gap_max_abs_off_root": date_one_regime_max,
         "date_one_raw_collateral_gaps_proportional_to_common_pledge_gap": True,
+        "date_one_euler_correction_proportional_to_common_pledge_gap": True,
         "date_zero_regime_normalization": "log face-to-pledge ratio vs SOURCE raw gap",
         "date_one_common_pledge_normalization": "log common pledge value ratio",
         "source_firm_primitive_functions_actually_evaluated": False,
