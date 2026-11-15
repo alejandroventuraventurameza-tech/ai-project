@@ -192,6 +192,7 @@ jobs:
           import Ventura26LiquidityAllocation.SourceSixNonlinearLogRowRootTransportCandidate
           import Ventura26LiquidityAllocation.SourceActualLogNormalizationDomainCandidate
           import Ventura26LiquidityAllocation.SourceNonlinearPythonOrderZeroSetTransportCandidate
+          import Ventura26LiquidityAllocation.SourceReserveRuleTargetSubstitutionCandidate
           import Ventura26LiquidityAllocation.SourceReduced33FrechetChartTransportCandidate
           import Ventura26LiquidityAllocation.SourceFundingDualExact33FreeCoordinatesCandidate
           import Ventura26LiquidityAllocation.SourceFundingDualScalarEliminationCandidate
@@ -368,6 +369,11 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.sourcePythonOrder33_zero_iff
           #print axioms Ventura26LiquidityAllocation.sourceNonlinearPythonOrder33_zero_iff
           #print axioms Ventura26LiquidityAllocation.fullyPinnedSOURCE33_pythonOrderNormalized_zero_iff
+          #print axioms Ventura26LiquidityAllocation.sourceRealized_minus_target_eq_policy_exponential_gap
+          #print axioms Ventura26LiquidityAllocation.sourceActualReserveRate_target_gap
+          #print axioms Ventura26LiquidityAllocation.sourceActualReserves_target_gap
+          #print axioms Ventura26LiquidityAllocation.sourceLoanPricing_rateTarget_substitution
+          #print axioms Ventura26LiquidityAllocation.sourceBankBalance_quantityTarget_substitution
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_differentiableAt_iff
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_fderiv_first
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_fderiv_dual_zero
