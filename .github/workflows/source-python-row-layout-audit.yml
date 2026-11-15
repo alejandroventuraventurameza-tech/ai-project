@@ -8,6 +8,7 @@ on:
       - code/irf/audit_source_python_33_row_permutation.py
       - code/irf/finite_irf.py
       - code/irf/audit_original_python_realized_vs_policy_target_bank_rows.py
+      - code/irf/audit_original_python_33_bank_jacobian_shear.py
       - lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean
       - .github/workflows/source-python-row-layout-audit.yml
   workflow_dispatch:
@@ -24,3 +25,5 @@ jobs:
         run: python code/irf/audit_source_python_33_row_permutation.py
       - name: Audit exact off-root Python bank rate/reserve gaps on 60 records
         run: python code/irf/audit_original_python_realized_vs_policy_target_bank_rows.py
+      - name: Verify Python 33x33 banking derivative row-shear at monetary root
+        run: python code/irf/audit_original_python_33_bank_jacobian_shear.py
