@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Audit 16 additional SOURCE/Python row-shape candidates on the positive chart.
+"""Audit 16 SOURCE-SHAPED/Python row candidates, NOT literal SOURCE equality.
+
+CRITICAL: for bank loan/deposit/balance rows (SOURCE 14,15,16,30,31,32),
+this Python transcription uses aux policy TARGETS, whereas genuine
+SOURCE functions use realized reserve rate and quantity OFF ROOT.
+Substitutions induce monetary cross-row corrections at a common root's
+Jacobian. These six are NOT literal off-root SOURCE/Python identities.
 
 This is a conditional transcription audit. SOURCE Lean is not executed here:
 the code uses the same aggregate intermediates as finite_irf. It tests the
@@ -73,8 +79,10 @@ def hash_file(path):
 
 
 def source_shape_rows(s, state, controls, next_state, next_controls, aux, aux_next, eps):
-    """Independent transcription of SOURCE remaining rows 1,2,5,...,10.
+    """Python-targetized SOURCE-shaped remaining rows 1,2,5,...,10.
 
+    Rows 8,9,10 use aux policy TARGETS rather than actual SOURCE realized
+    rate/reserves; source functional and derivative parity is NOT certified.
     Conditional identification of source P with s and source LocalPrefixDateData
     with these arguments is NOT proved by evaluating this function.
     """
@@ -231,9 +239,14 @@ def main():
         "status":"CONDITIONAL_16_ADDITIONAL_IDENTITY_ROW_SHAPES_NOT_SOURCE_OPERATOR_PROOF",
         "source_to_python_rows":[{"source":i,"python":j,"name":name,
                                   "source_remaining_row":k,
-                                  "root_factor_candidate":1.0}
+                                  "root_factor_candidate":(None if k in (8,9,10) else 1.0)}
                                  for i,j,name,k in ROWS],
         "existing_nine_scalar_candidates":sorted(PRIOR_SCALAR_ROWS),
+        "true_SOURCE_bank_rows_using_realized_policy_state":
+            [14,15,16,30,31,32],
+        "python_targetized_bank_rows_are_literal_source_offroot_equal":False,
+        "bank_monetary_cross_row_jacobian_shears_proved":False,
+        "max_level_error_is_ONLY_same_engine_targetized_shape_error":True,
         "distinct_row_shape_candidates_total":25,
         "rows_without_a_transcription_candidate":sorted(FIRM_ROWS_OPEN),
         "off_root_scenarios_checked":evaluations,
