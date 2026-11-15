@@ -189,6 +189,7 @@ jobs:
           import Ventura26LiquidityAllocation.SourceConcreteBankRenewalCalibrationCandidate
           import Ventura26LiquidityAllocation.SourceReserveRulesLogRatioBridgeCandidate
           import Ventura26LiquidityAllocation.SourcePythonOffRootLogResidualReparameterizationCandidate
+          import Ventura26LiquidityAllocation.SourceSixNonlinearLogRowRootTransportCandidate
           import Ventura26LiquidityAllocation.SourceReduced33FrechetChartTransportCandidate
           import Ventura26LiquidityAllocation.SourceFundingDualExact33FreeCoordinatesCandidate
           import Ventura26LiquidityAllocation.SourceFundingDualScalarEliminationCandidate
@@ -353,6 +354,11 @@ jobs:
           #print axioms Ventura26LiquidityAllocation.sourceBankFace_actual_offRootLogTransformation
           #print axioms Ventura26LiquidityAllocation.sourceLabor_actual_offRootLogTransformation
           #print axioms Ventura26LiquidityAllocation.sourceDepositEuler_actual_offRootLogTransformation
+          #print axioms Ventura26LiquidityAllocation.sourceLogOnePlusLevel_zero_iff
+          #print axioms Ventura26LiquidityAllocation.sourceLogOneMinusEuler_zero_iff
+          #print axioms Ventura26LiquidityAllocation.sourceSixNonlinearLogRow_zero_iff
+          #print axioms Ventura26LiquidityAllocation.sourceSixNonlinearLogRow_vector_zero_iff
+          #print axioms Ventura26LiquidityAllocation.fullyPinnedSOURCE33_sixLogNormalized_root_iff
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_differentiableAt_iff
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_fderiv_first
           #print axioms Ventura26LiquidityAllocation.sourceReduced33_chart_fderiv_dual_zero
