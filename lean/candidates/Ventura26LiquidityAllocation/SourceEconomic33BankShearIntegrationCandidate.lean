@@ -24,6 +24,62 @@ namespace Ventura26LiquidityAllocation
 
 variable {S : Type*} [Fintype S] [DecidableEq S]
 
+/-- The certified SOURCE dispatch instantiated on the original
+33-vector: loan, deposit and balance rows of date zero. -/
+theorem sourceEconomicPrefix33_bankRowsZero_fromCertifiedDispatch
+    (branch : LocalPrefixBranch) (P : Primitives S) (I : InheritedState)
+    (dateOne recurrent : S) (tail : LocalPrefixContinuationRule)
+    (z : Fin 33 → ℝ) :
+    (localReducedPrefixResidualVector branch P I dateOne recurrent tail
+        z (14 : Fin 33) =
+      localReducedRemainingResidual P
+        (localPrefixDateZeroData P I
+          (localPrefixCoordinatesOfVector z) dateOne) 8) ∧
+    (localReducedPrefixResidualVector branch P I dateOne recurrent tail
+        z (15 : Fin 33) =
+      localReducedRemainingResidual P
+        (localPrefixDateZeroData P I
+          (localPrefixCoordinatesOfVector z) dateOne) 9) ∧
+    (localReducedPrefixResidualVector branch P I dateOne recurrent tail
+        z (16 : Fin 33) =
+      localReducedRemainingResidual P
+        (localPrefixDateZeroData P I
+          (localPrefixCoordinatesOfVector z) dateOne) 10) := by
+  simpa only [localReducedPrefixResidualVector,
+    localPrefixEquationOfIndex] using
+    (sourcePrefix33_bankRowsZero_original branch P I
+      (localPrefixCoordinatesOfVector z) dateOne recurrent tail)
+
+#print axioms sourceEconomicPrefix33_bankRowsZero_fromCertifiedDispatch
+
+/-- The certified SOURCE dispatch instantiated on the original
+33-vector: loan, deposit and balance rows of date one. -/
+theorem sourceEconomicPrefix33_bankRowsOne_fromCertifiedDispatch
+    (branch : LocalPrefixBranch) (P : Primitives S) (I : InheritedState)
+    (dateOne recurrent : S) (tail : LocalPrefixContinuationRule)
+    (z : Fin 33 → ℝ) :
+    (localReducedPrefixResidualVector branch P I dateOne recurrent tail
+        z (30 : Fin 33) =
+      localReducedRemainingResidual P
+        (localPrefixDateOneData P
+          (localPrefixCoordinatesOfVector z) dateOne recurrent tail) 8) ∧
+    (localReducedPrefixResidualVector branch P I dateOne recurrent tail
+        z (31 : Fin 33) =
+      localReducedRemainingResidual P
+        (localPrefixDateOneData P
+          (localPrefixCoordinatesOfVector z) dateOne recurrent tail) 9) ∧
+    (localReducedPrefixResidualVector branch P I dateOne recurrent tail
+        z (32 : Fin 33) =
+      localReducedRemainingResidual P
+        (localPrefixDateOneData P
+          (localPrefixCoordinatesOfVector z) dateOne recurrent tail) 10) := by
+  simpa only [localReducedPrefixResidualVector,
+    localPrefixEquationOfIndex] using
+    (sourcePrefix33_bankRowsOne_original branch P I
+      (localPrefixCoordinatesOfVector z) dateOne recurrent tail)
+
+#print axioms sourceEconomicPrefix33_bankRowsOne_fromCertifiedDispatch
+
 /-- Explicit SOURCE reduced residual vector, now transformed by
 the date-zero/date-one bank-price and bank-balance row shear. -/
 noncomputable def sourceEconomicPrefix33BankShearedResidual
