@@ -215,6 +215,13 @@ jobs:
           path: code/irf/output/source_python_p0_tail_structure.json
           if-no-files-found: error
           retention-days: 30
+      - name: Preserve monetary realized versus target bank-row discrepancy audit
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-python-realized-versus-policy-target-banking
+          path: code/irf/output/original_python_realized_vs_policy_target_bank_rows.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Preserve original Python reserve-rule SOURCE-shaped log target audit
         uses: actions/upload-artifact@v7
         with:
