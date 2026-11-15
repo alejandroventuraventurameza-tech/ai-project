@@ -501,6 +501,14 @@ if __name__ == "__main__":
                     str(HERE / "irf" / "audit_source_python_reserve_rule_log_targets.py")],
                    check=True)
 
+    # Original SOURCE bank rows use realized reserve rate and money;
+    # original Python bank rows use policy-rule targets OFF ROOT.
+    # This guard quantifies a mandatory cross-row correction rather
+    # than falsely declaring the 16 residual functions identical.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "irf" / "audit_original_python_realized_vs_policy_target_bank_rows.py")],
+                   check=True)
+
     # EXACT rational bound on decimal P0 coefficient conversion to
     # binary64 over a six-state log cube. Does not cover arithmetic
     # rounding in matvec, exp/log or SOURCE economic semantic identity.
