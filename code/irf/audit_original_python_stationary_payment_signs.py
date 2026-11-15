@@ -39,6 +39,12 @@ def report_date(s, state, controls, next_state, next_controls, innovations, date
     require(deposits > 0 and realized_rate > 0 and realized_reserves > 0,
             "Nonpositive banking domain")
     xi_real = controls[7] / realized_rate
+    spread = xi_real - rho
+    require(spread > 0, "Deposit-to-reserve rate ratio does not exceed requirement")
+    stationary_ratio_reserves = (rho + spread / 15.0) * deposits
+    ratio_gap = abs(realized_reserves - stationary_ratio_reserves)
+    require(ratio_gap < 1e-10,
+            "Stationary 1/15 reserve/deposit ratio fails numerical audit")
     buffer = realized_reserves - rho * deposits
     exposure = (xi_real - rho) * deposits
     margin_minus = exposure * s.zeta - buffer
@@ -69,6 +75,9 @@ def report_date(s, state, controls, next_state, next_controls, innovations, date
     return {
         "date": date,
         "buffer": buffer,
+        "rate_requirement_spread": spread,
+        "bank_deposits": deposits,
+        "stationary_reserve_ratio_abs_gap": ratio_gap,
         "shock_exposure": exposure,
         "buffer_to_exposure": buffer / exposure,
         "negative_shock_surplus": surplus_minus,
