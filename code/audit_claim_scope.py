@@ -79,6 +79,12 @@ def main() -> None:
         require("existen exactamente dos equilibrios" not in raw.lower(),
                 f"Full equilibrium claimed without proof: {label}")
 
+    # The original SOURCE bank equations use realized monetary states;
+    # Python's target-substituted bank rows require additional cross-row
+    # transformations. Never let this important semantic scope caveat vanish.
+    require("reservas \\emph{realizadas}" in paper and
+            "Fuera de una raíz común esas sustituciones generan términos cruzados" in paper,
+            "Missing original SOURCE realized-versus-policy-target banking gap in paper")
     require("BoundaryWorkerLaborPackage" in paper,
             "Missing the explicit unresolved date-zero labor FOC")
     require("collateralDual" in paper,
