@@ -4,7 +4,7 @@ import Ventura26LiquidityAllocation.SourceInstalledPythonBankStrictSignsExpectat
 # Original SOURCE strict bank settlement signs from a reserve-buffer bound
 
 For the genuine installed two-atom SOURCE payment law with shock
-magnitudes +/-1/5, define:
+magnitudes positive and negative one fifth, define:
   b = reservesPre - reserveRequirement * bankDeposits
   c = (depositRate/reserveRate - reserveRequirement) * bankDeposits.
 
