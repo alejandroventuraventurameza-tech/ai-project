@@ -152,4 +152,56 @@ theorem sourceBankBalance_quantityTarget_substitution
 
 #print axioms sourceBankBalance_quantityTarget_substitution
 
+
+/-- The source deposit-pricing banking row is NOT literally equal to
+the Python-style target-rate equation OFF ROOT. Holding the genuine
+SOURCE OTC slope at the realized-rate evaluation, its difference
+is an EXACT policy-rule cross-row term, including the nonlinear
+xi := depositRate / realizedReserveRate correction.
+
+This result uses no approximation, but does not establish the
+separate OTC slope correspondence to Python's auxiliary, nor
+the full SOURCE/Python Jacobian bridge. -/
+theorem sourceDepositPricing_rateTarget_substitution
+    (P : Primitives S) (d : LocalPrefixDateData)
+    (hr : 0 < d.currentReserveRate) :
+    sourceRateRuleTarget P d +
+      (1 - d.reserveRequirement) *
+        (localPrefixBankDeficitSlope P d +
+          localPrefixBankSurplusSlope P d) / 2 -
+      (d.controls.depositRate / sourceRateRuleTarget P d -
+        d.reserveRequirement) *
+        localPrefixMeanAbsolutePaymentShock P *
+          (localPrefixBankDeficitSlope P d -
+            localPrefixBankSurplusSlope P d) / 2 -
+      d.controls.depositRate =
+    localReducedRemainingResidual P d (9 : Fin 11) -
+      sourceRateRuleTarget P d *
+        (Real.exp (localReducedRemainingResidual P d (6 : Fin 11)) - 1) *
+        (1 +
+          d.controls.depositRate *
+            localPrefixMeanAbsolutePaymentShock P *
+              (localPrefixBankDeficitSlope P d -
+                localPrefixBankSurplusSlope P d) /
+                (2 * d.currentReserveRate *
+                  sourceRateRuleTarget P d)) := by
+  have hrow : localReducedRemainingResidual P d (9 : Fin 11) =
+      d.currentReserveRate +
+        (1 - d.reserveRequirement) *
+          (localPrefixBankDeficitSlope P d +
+            localPrefixBankSurplusSlope P d) / 2 -
+        (d.controls.depositRate / d.currentReserveRate -
+          d.reserveRequirement) *
+          localPrefixMeanAbsolutePaymentShock P *
+            (localPrefixBankDeficitSlope P d -
+              localPrefixBankSurplusSlope P d) / 2 -
+        d.controls.depositRate := by
+    rfl
+  rw [hrow, ← sourceActualReserveRate_target_gap P d hr]
+  have hRne : d.currentReserveRate ≠ 0 := ne_of_gt hr
+  have hTne : sourceRateRuleTarget P d ≠ 0 := ne_of_gt (Real.exp_pos _)
+  field_simp [hRne, hTne] <;> ring
+
+#print axioms sourceDepositPricing_rateTarget_substitution
+
 end Ventura26LiquidityAllocation
