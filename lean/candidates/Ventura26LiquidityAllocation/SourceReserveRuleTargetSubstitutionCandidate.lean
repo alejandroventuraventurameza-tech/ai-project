@@ -147,8 +147,18 @@ theorem sourceBankBalance_quantityTarget_substitution
           (1 / localPrefixReserveDepositRatio P d - 1) *
             d.currentReservesPre) := by
     rfl
-  rw [hrow, ← sourceActualReserves_target_gap P d hM]
-  ring
+  have hGap := sourceActualReserves_target_gap P d hM
+  calc
+    localPrefixReducedBankLoans P d -
+        (d.currentBankFace / d.controls.inflation +
+          (1 / localPrefixReserveDepositRatio P d - 1) *
+            sourceQuantityRuleTarget P d) =
+      (localReducedRemainingResidual P d (10 : Fin 11)) +
+        (1 / localPrefixReserveDepositRatio P d - 1) *
+          (d.currentReservesPre - sourceQuantityRuleTarget P d) := by
+            rw [hrow]
+            ring
+    _ = _ := by rw [hGap]
 
 #print axioms sourceBankBalance_quantityTarget_substitution
 
@@ -196,7 +206,8 @@ theorem sourceDepositPricing_rateTarget_substitution
             (localPrefixBankDeficitSlope P d -
               localPrefixBankSurplusSlope P d) / 2 -
         d.controls.depositRate := by
-    rfl
+    simp only [localReducedRemainingResidual]
+    ring
   rw [hrow, ← sourceActualReserveRate_target_gap P d hr]
   have hRne : d.currentReserveRate ≠ 0 := ne_of_gt hr
   have hTne : sourceRateRuleTarget P d ≠ 0 := ne_of_gt (Real.exp_pos _)
