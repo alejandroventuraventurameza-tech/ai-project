@@ -1,6 +1,6 @@
 {
   "schema": "ie-paper-lean-crosswalk-v1",
-  "paper_sha256": "5a17b827db72a472216fb42d31f7f3e70741535a0a51ef00788a044f36c62960",
+  "paper_sha256": "4a72f55ce8f0feec08f702681dc1073700e36eb3aadd880c5f1d3fc127b0f7dd",
   "ledger_source": "paper/result_ledger.json",
   "checked_branch": "work/lean-ci-validation-otc-20261106",
   "reviewed_date": "2026-11-10",
