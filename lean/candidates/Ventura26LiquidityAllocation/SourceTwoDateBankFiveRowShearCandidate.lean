@@ -41,7 +41,20 @@ theorem sourceTwoDateBankPricingRowShear_inverse
       (sourceTwoDateBankPricingRowShear
         loan0 deposit0 loan1 deposit1 v) = v := by
   funext i
-  fin_cases i <;> norm_num [sourceTwoDateBankPricingRowShear] <;> ring
+  classical
+  by_cases h14 : i = 14
+  · subst i
+    simp [sourceTwoDateBankPricingRowShear]
+  by_cases h15 : i = 15
+  · subst i
+    simp [sourceTwoDateBankPricingRowShear]
+  by_cases h30 : i = 30
+  · subst i
+    simp [sourceTwoDateBankPricingRowShear]
+  by_cases h31 : i = 31
+  · subst i
+    simp [sourceTwoDateBankPricingRowShear]
+  simp [sourceTwoDateBankPricingRowShear, h14, h15, h30, h31]
 
 #print axioms sourceTwoDateBankPricingRowShear_inverse
 
