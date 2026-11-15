@@ -103,4 +103,43 @@ theorem source33SixMacroNormalization_injective
 
 #print axioms source33SixMacroNormalization_injective
 
+/-- The final 33-dimensional SOURCE residual OUTPUT transformation:
+six bank row shears, two date-one Euler coordinate shears, and
+six positive-domain macro Jacobian normalizations. -/
+def source33FullBankFirmMacroOutputTransform
+    (loan0 deposit0 loan1 deposit1
+      rate0 quantity0 rate1 quantity1 : ℝ)
+    (coeffH coeffL : ℝ)
+    (b0 w0 e0 b1 w1 e1 : ℝ)
+    (v : Fin 33 → ℝ) : Fin 33 → ℝ :=
+  source33SixMacroNormalization b0 w0 e0 b1 w1 e1
+    (source33BankAndFirmOutputShear
+      loan0 deposit0 loan1 deposit1
+      rate0 quantity0 rate1 quantity1 coeffH coeffL v)
+
+/-- This complete economic output transformation preserves
+injectivity of all 33-dimensional linear Jacobian actions, provided
+only the six level/log multipliers are nonzero. All bank and firm
+shear coefficients may be arbitrary reals. -/
+theorem source33FullBankFirmMacroOutputTransform_injective
+    (loan0 deposit0 loan1 deposit1
+      rate0 quantity0 rate1 quantity1 : ℝ)
+    (coeffH coeffL : ℝ)
+    (b0 w0 e0 b1 w1 e1 : ℝ)
+    (hb0 : b0 ≠ 0) (hw0 : w0 ≠ 0) (he0 : e0 ≠ 0)
+    (hb1 : b1 ≠ 0) (hw1 : w1 ≠ 0) (he1 : e1 ≠ 0) :
+    Function.Injective
+      (source33FullBankFirmMacroOutputTransform
+        loan0 deposit0 loan1 deposit1
+        rate0 quantity0 rate1 quantity1
+        coeffH coeffL b0 w0 e0 b1 w1 e1) := by
+  intro v w h
+  apply source33BankAndFirmOutputShear_injective
+    loan0 deposit0 loan1 deposit1
+    rate0 quantity0 rate1 quantity1 coeffH coeffL
+  exact source33SixMacroNormalization_injective
+    b0 w0 e0 b1 w1 e1 hb0 hw0 he0 hb1 hw1 he1 h
+
+#print axioms source33FullBankFirmMacroOutputTransform_injective
+
 end Ventura26LiquidityAllocation
