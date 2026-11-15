@@ -3,8 +3,8 @@ import Ventura26LiquidityAllocation.SourceEconomicBankPolicyRootParityCandidate
 /-!
 # Invertible monetary cross-row shear on a 33-output Jacobian row vector
 
-An algebraic 33-row operator: row 10 receives coefficients times rows
-6 and 7; all other rows are preserved. Its inverse is the shear
+An algebraic 33-row operator: row 16 receives coefficients times rows
+12 and 13; all other rows are preserved. Its inverse is the shear
 with opposite coefficients. This is the linear-algebra prerequisite
 for any future SOURCE/Python Jacobian comparison.
 
@@ -17,13 +17,13 @@ with original row conventions and normalization accounted for.
 namespace Ventura26LiquidityAllocation
 
 /-- Add arbitrary multiples of the two monetary policy rows
-(indices 6 and 7) to the bank-balance row (index 10).
-Indices refer to the eleven-row SOURCE remaining block embedded
-in a general 33-output vector only for this abstract lemma;
-the actual 33-row flattening requires a separate index theorem. -/
+(indices 12 and 13) to the bank-balance row (index 16).
+These are the ACTUAL date-zero SOURCE 33-output indices, as recorded
+in EconomicModel.localPrefixEquationOfIndex. Date-one analogous rows
+are 28, 29 and 32, not modified in this one-row shear. -/
 def sourceMonetaryBankRowShear
     (a b : ℝ) (v : Fin 33 → ℝ) : Fin 33 → ℝ :=
-  fun i => if i = 10 then v i + a * v 6 + b * v 7 else v i
+  fun i => if i = 16 then v i + a * v 12 + b * v 13 else v i
 
 /-- This shear has an explicit left and right inverse, obtained
 by negating its coefficients. -/
@@ -32,7 +32,7 @@ theorem sourceMonetaryBankRowShear_inverse
     sourceMonetaryBankRowShear (-a) (-b)
       (sourceMonetaryBankRowShear a b v) = v := by
   funext i
-  by_cases hi : i = (10 : Fin 33)
+  by_cases hi : i = (16 : Fin 33)
   · subst i
     simp [sourceMonetaryBankRowShear]
     ring
@@ -49,7 +49,12 @@ theorem sourceMonetaryBankRowShear_zero_iff
   · intro h
     have hinv := sourceMonetaryBankRowShear_inverse a b v
     rw [h] at hinv
-    simpa [sourceMonetaryBankRowShear] using hinv.symm
+    have hz : sourceMonetaryBankRowShear (-a) (-b)
+        (0 : Fin 33 → ℝ) = 0 := by
+      funext j
+      simp [sourceMonetaryBankRowShear]
+    rw [hz] at hinv
+    exact hinv.symm
   · intro h
     subst v
     funext i
