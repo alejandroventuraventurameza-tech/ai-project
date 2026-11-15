@@ -113,4 +113,64 @@ theorem sourceWithConcretePythonPaymentLaw_binaryWitness
 
 #print axioms sourceWithConcretePythonPaymentLaw_binaryWitness
 
+/-- Under the remaining explicit matching and tightness hypotheses,
+the installed calibrated payment law yields SOURCE's actual two-date
+Python reserve-ratio formulas with NO payment-law hypotheses left. -/
+theorem sourceWithConcretePythonPaymentLaw_twoDateRatios
+    {S : Type*} [Fintype S] [DecidableEq S]
+    (P : Primitives S) (I : InheritedState)
+    (Z : LocalPrefixCoordinates) (dateOne recurrent : S)
+    (tail : LocalPrefixContinuationRule)
+    (hmatch :
+      (sourceWithConcretePythonPaymentLaw P).matchingIntensity = Real.log 2)
+    (htight0 :
+      (localPrefixDateZeroData
+        (sourceWithConcretePythonPaymentLaw P) I Z dateOne).controls.tightness ≤ 1)
+    (htight1 :
+      (localPrefixDateOneData
+        (sourceWithConcretePythonPaymentLaw P) Z dateOne recurrent tail).controls.tightness ≤ 1) :
+    localPrefixMeanAbsolutePaymentShock
+      (sourceWithConcretePythonPaymentLaw P) = (1 / 5 : ℝ) ∧
+    (localPrefixReserveDepositRatio
+      (sourceWithConcretePythonPaymentLaw P)
+      (localPrefixDateZeroData
+        (sourceWithConcretePythonPaymentLaw P) I Z dateOne) =
+      (localPrefixDateZeroData
+        (sourceWithConcretePythonPaymentLaw P) I Z dateOne).reserveRequirement +
+      ((localPrefixDateZeroData
+        (sourceWithConcretePythonPaymentLaw P) I Z dateOne).controls.depositRate /
+        (localPrefixDateZeroData
+          (sourceWithConcretePythonPaymentLaw P) I Z dateOne).currentReserveRate -
+        (localPrefixDateZeroData
+          (sourceWithConcretePythonPaymentLaw P) I Z dateOne).reserveRequirement) *
+        (1 / 5 : ℝ) *
+        (1 - (localPrefixDateZeroData
+          (sourceWithConcretePythonPaymentLaw P) I Z dateOne).controls.tightness) /
+        (1 + (localPrefixDateZeroData
+          (sourceWithConcretePythonPaymentLaw P) I Z dateOne).controls.tightness)) ∧
+    (localPrefixReserveDepositRatio
+      (sourceWithConcretePythonPaymentLaw P)
+      (localPrefixDateOneData
+        (sourceWithConcretePythonPaymentLaw P) Z dateOne recurrent tail) =
+      (localPrefixDateOneData
+        (sourceWithConcretePythonPaymentLaw P) Z dateOne recurrent tail).reserveRequirement +
+      ((localPrefixDateOneData
+        (sourceWithConcretePythonPaymentLaw P) Z dateOne recurrent tail).controls.depositRate /
+        (localPrefixDateOneData
+          (sourceWithConcretePythonPaymentLaw P) Z dateOne recurrent tail).currentReserveRate -
+        (localPrefixDateOneData
+          (sourceWithConcretePythonPaymentLaw P) Z dateOne recurrent tail).reserveRequirement) *
+        (1 / 5 : ℝ) *
+        (1 - (localPrefixDateOneData
+          (sourceWithConcretePythonPaymentLaw P) Z dateOne recurrent tail).controls.tightness) /
+        (1 + (localPrefixDateOneData
+          (sourceWithConcretePythonPaymentLaw P) Z dateOne recurrent tail).controls.tightness)) := by
+  exact sourcePrefixTwoDate_paymentOTC_calibration
+    (sourceWithConcretePythonPaymentLaw P) I Z dateOne recurrent tail
+    0 1 (1 / 5 : ℝ)
+    (sourceWithConcretePythonPaymentLaw_binaryWitness P)
+    hmatch htight0 htight1
+
+#print axioms sourceWithConcretePythonPaymentLaw_twoDateRatios
+
 end Ventura26LiquidityAllocation
