@@ -500,7 +500,7 @@ optimalidad se obtiene un multiplicador común:
 G_K=\mu H_{H,t},\qquad G_b=\mu R^L_t,\qquad\mu\geq0,
 \]
 \[
-\mu(\Gamma_{H,t+1}k_{H,t+1}-R^L_tb_{H,t})=0.
+\mu(H_{H,t}k_{H,t+1}-R^L_tb_{H,t})=0.
 \]
 \footnotesize
 La prueba Lean construye este escalar bajo hipótesis explícitas, pero
@@ -698,9 +698,9 @@ c_H+qk'_H=N_H+b_H,\qquad R^L b_H=H_H k'_H.
 \textbf{Paso 1:} despejar la promesa de préstamo y sustituir:
 \[
 b_H=\frac{H_H}{R^L}k'_H,\qquad
-c_H+\left(q-\frac{\Gamma_H}{R^L}\right)k'_H=N_H.
+c_H+\left(q-\frac{H_H}{R^L}\right)k'_H=N_H.
 \]
-\textbf{Paso 2:} si $R^L>0$ y $q-\Gamma_H/R^L>0$,
+\textbf{Paso 2:} si $R^L>0$ y $q-H_H/R^L>0$,
 \[
 k'_H=\frac{N_H-c_H}{q-H_H/R^L}.
 \]
