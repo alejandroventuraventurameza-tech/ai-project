@@ -18,7 +18,7 @@
 \title{Política monetaria, liquidez bancaria\\y asignación de capital}
 \subtitle{Modelo NK, colateral nominal y respuestas locales condicionadas}
 \author{Alejandro Ventura}
-\date{Revisión técnica: 7 de noviembre de 2026}
+\date{Revisión para exposición: 18 de noviembre de 2026}
 \begin{document}
 \begin{frame}[plain]\titlepage
 \centering\footnotesize
@@ -35,11 +35,25 @@
 \begin{itemize}
 \item El experimento interno conserva dos ramas del sistema reducido.
 \item En ambas baja la tasa de crédito y aumenta el crédito de H.
-\item La pérdida asignativa cae en S y sube en B: el signo es condicional.
+\item La pérdida asignativa cae en S y sube en B: el signo es condicional, y la mejora no se infiere solo de $A_H>A_L$.
 \end{itemize}
 \medskip
 \textbf{Alcance:} parámetros ilustrativos, pagos finitos e IRF locales;
 la correspondencia completa con equilibrio óptimo sigue pendiente.
+\end{frame}
+
+\begin{frame}{Convenciones: agentes, empresas y ramas}
+\small
+\begin{itemize}
+\item $W$: hogar trabajador; $E$: empresario; $i\in\{H,L\}$: tipo de firma.
+\item $H$: productividad tecnológica alta ($A_H>A_L$); $L$: productividad tecnológica baja. La productividad marginal del capital depende también de $k_i$ y $\ell_i$.
+\item $j$: banco; el superíndice $B$ en $l^B,m^B,s^B$ significa \emph{bancario}, no la rama B.
+\item $S,B$: ramas \emph{del sistema reducido}, no tipos de hogar o empresa.
+\item $R^R$: remuneración de reservas; $R^W$: facilidad; $R^F$: interbancaria; $R^L$: préstamo; $R^D$: depósito. Todas son tasas brutas.
+\item $\rho$: coeficiente de encaje; $\Delta=R^W-R^R$: amplitud del corredor.
+\end{itemize}
+\medskip
+\textbf{Advertencia:} $H_{it}$ es el valor pignorable por unidad de capital, no el tipo de empresa H; el contexto y los índices los distinguen.
 \end{frame}
 
 \begin{frame}{Entorno, decisiones y secuencia}
@@ -116,7 +130,7 @@ S^-=\sum_j u_j\mathbb E_\omega(-s_j^B)^+,\quad
 S^+=\sum_j u_j\mathbb E_\omega(s_j^B)^+,\quad
 \vartheta=S^-/S^+.
 \]
-La negociación y el corredor determinan la tasa interbancaria:
+La negociación y el corredor determinan la tasa interbancaria; $R^W$ es el techo y $R^R$ el piso en el cierre adoptado:
 \[
 R^F_t=R^R_t+(R^W_t-R^R_t)v(\vartheta_t).
 \]
@@ -132,6 +146,21 @@ R^D_t=R^R_t+(1-\rho)\bar\chi_t-
 \footnotesize
 El shock cambia $R^R$; la respuesta de $R^F,R^L,R^D$
 depende del ajuste simultáneo de matching, pagos y carteras.
+\end{frame}
+
+\begin{frame}{Corredor: nivel, amplitud e incentivos}
+\small
+\[
+R^W_t=R^R_t+\Delta_t,\qquad
+R^F_t=R^R_t+\Delta_t\,v(\vartheta_t),\qquad 0\leq v(\vartheta_t)\leq 1.
+\]
+\begin{itemize}
+\item \textbf{Subir $R^W$ manteniendo $R^R$:} ensancha el corredor por arriba; no es un desplazamiento paralelo.
+\item \textbf{Bajar $\Delta$ manteniendo $R^R$:} estrecha el corredor; cambia el costo máximo de obtener liquidez, no necesariamente la remuneración de excedentes.
+\item \textbf{Mover $R^R$ y $R^W$ en igual magnitud:} desplaza el corredor conservando su amplitud.
+\item Un banco excedentario compara colocar reservas remuneradas con prestarlas en OTC, considerando probabilidad de encuentro y condiciones de negociación.
+\end{itemize}
+\textbf{Importante:} la respuesta de $R^D$ y $R^L$ es endógena a balances, depósitos, márgenes de cartera y liquidez; no se deduce únicamente del dibujo del corredor.
 \end{frame}
 
 \begin{frame}{Literatura I: ¿por qué la política podría reasignar capital?}
@@ -228,6 +257,21 @@ la tasa de crecimiento de largo plazo requiere otros mecanismos.
 \footnotesize
 El resultado actual es numérico y reducido; no demuestra
 crecimiento endógeno ni identifica la política óptima.
+\end{frame}
+
+\begin{frame}{Productividad marginal, colateral y reasignación}
+\small
+Para $F_i=A_i k_i^\alpha \ell_i^\beta$, con $\alpha,\beta>0$:
+\[
+MPK_i=\alpha A_i k_i^{\alpha-1}\ell_i^\beta,\qquad
+MPL_i=\beta A_i k_i^\alpha\ell_i^{\beta-1}.
+\]
+\begin{itemize}
+\item $A_H>A_L$ \emph{no} implica $MPK_H>MPK_L$: importan también las dotaciones de capital y trabajo.
+\item Una reasignación marginal de capital a trabajo dado aumenta producción solo si el $MPK$ del receptor excede el del cedente, con precios y restricciones pertinentes.
+\item Si el colateral está activo, $R^L b_i=H_{it}k'_i$; bajar $R^L$ aumenta \emph{parcialmente} la capacidad financiable, no necesariamente reduce el multiplicador $\mu_i$.
+\item Subir $\theta_i$ expande el valor pignorable $H_{it}$ manteniendo los demás factores constantes. $\theta_i$ es parámetro contractual, no un instrumento monetario.
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Experimento reproducible y significado de las ramas}
@@ -444,16 +488,16 @@ no intervenciones causales separadas.
 
 \begin{frame}{Condiciones KKT conjuntas de capital y préstamo}
 \small
-Si la restricción de colateral de H está activa,
-$R^L_tb_{H,t}=\Gamma_{H,t+1}k_{H,t+1}$, la dirección
+Si la restricción de colateral de la empresa H está activa,
+$R^L_tb_{H,t}=H_{H,t}k_{H,t+1}$, la dirección
 \[
 dk_{H,t+1}=R^L_t\,d\varepsilon,\qquad
-db_{H,t}=\Gamma_{H,t+1}\,d\varepsilon
+db_{H,t}=H_{H,t}\,d\varepsilon
 \]
 conserva la igualdad exactamente. Con factibilidad bilateral local y
 optimalidad se obtiene un multiplicador común:
 \[
-G_K=\mu\Gamma_{H,t+1},\qquad G_b=\mu R^L_t,\qquad\mu\geq0,
+G_K=\mu H_{H,t},\qquad G_b=\mu R^L_t,\qquad\mu\geq0,
 \]
 \[
 \mu(\Gamma_{H,t+1}k_{H,t+1}-R^L_tb_{H,t})=0.
@@ -649,19 +693,19 @@ en horizonte infinito siguen pendientes.
 Si H está restringida con depósitos empresariales nulos, el
 presupuesto y la cobertura activa son
 \[
-c_H+qk'_H=N_H+b_H,\qquad R^L b_H=\Gamma_H k'_H.
+c_H+qk'_H=N_H+b_H,\qquad R^L b_H=H_H k'_H.
 \]
 \textbf{Paso 1:} despejar la promesa de préstamo y sustituir:
 \[
-b_H=\frac{\Gamma_H}{R^L}k'_H,\qquad
+b_H=\frac{H_H}{R^L}k'_H,\qquad
 c_H+\left(q-\frac{\Gamma_H}{R^L}\right)k'_H=N_H.
 \]
 \textbf{Paso 2:} si $R^L>0$ y $q-\Gamma_H/R^L>0$,
 \[
-k'_H=\frac{N_H-c_H}{q-\Gamma_H/R^L}.
+k'_H=\frac{N_H-c_H}{q-H_H/R^L}.
 \]
 \textbf{Juicio crítico:} una caída de $R^L$ no impone
-$\Delta k'_H>0$, porque $N_H-c_H$, $q$ y $\Gamma_H$
+$\Delta k'_H>0$, porque $N_H-c_H$, $q$ y $H_H$
 también cambian endógenamente.
 \medskip
 \footnotesize
@@ -694,14 +738,14 @@ inferencia causal para la economía peruana.
 Para H restringida sin depósitos empresariales,
 \[
 c_{H,t}+q_t k_{H,t+1}=N_{H,t}+b_{H,t},\qquad
-R^L_t b_{H,t}=\Gamma_{H,t+1} k_{H,t+1}.
+R^L_t b_{H,t}=H_{H,t} k_{H,t+1}.
 \]
 Por sustitución,
 \[
 \boxed{k_{H,t+1}=
-\frac{N_{H,t}-c_{H,t}}{q_t-\Gamma_{H,t+1}/R^L_t}},
+\frac{N_{H,t}-c_{H,t}}{q_t-H_{H,t}/R^L_t}},
 \qquad
-b_{H,t}=\frac{\Gamma_{H,t+1}k_{H,t+1}}{R^L_t}.
+b_{H,t}=\frac{H_{H,t}k_{H,t+1}}{R^L_t}.
 \]
 En B puede aumentar el crédito mientras disminuye la inversión: la
 caída de recursos propios supera la mejora del costo efectivo. En S,
