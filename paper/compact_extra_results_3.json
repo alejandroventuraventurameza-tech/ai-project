@@ -1,0 +1,42 @@
+{
+  "schema": "ie-compact-extra-claims-v1",
+  "date": "2026-11-25",
+  "source": "paper/body_compact_after.tex",
+  "original_ledger": "paper/result_ledger.json",
+  "original_results": 57,
+  "extra_results": 3,
+  "combined_numbered_results_to_audit": 60,
+  "caution": "Las tres declaraciones no estan en el ledger original de 57; no se atribuye cobertura Lean o manuscrita automaticamente",
+  "entries": [
+    {
+      "label": "prop:compact_exact_tail_power",
+      "title": "Decaimiento por bloques del grafo lineal decimal",
+      "paper_source": "paper/body_compact_after.tex",
+      "mathematical_scope": "Condicional a dos cotas estrictas de normas matriciales racionales verificadas por el script",
+      "evidence": "code/irf/exact_linear_tail_power_certificate.py: fracciones exactas para F0^48 y potencias r<48; paper prueba la propagación por submultiplicatividad",
+      "lean_full_literal_match": "not_established",
+      "handwritten_review": "pending",
+      "status": "conditional_analytic_plus_exact_rational_computational"
+    },
+    {
+      "label": "lem:compact_robust_tail_power",
+      "title": "Robustez matricial del bloque de 48 pasos",
+      "paper_source": "paper/body_compact_after.tex",
+      "mathematical_scope": "Matriz real A a distancia infinito <=1e-4 de F0, con mayorantes racionales para k<=48",
+      "evidence": "code/irf/exact_linear_tail_power_certificate.py: recursión exacta de mayorantes; paper prueba telescopado y norma inducida",
+      "lean_full_literal_match": "not_established",
+      "handwritten_review": "pending",
+      "status": "conditional_analytic_plus_exact_rational_computational"
+    },
+    {
+      "label": "prop:compact_source_collateral_effective_wedge",
+      "title": "Cuña de precio efectivo del capital bajo garantía vinculante",
+      "paper_source": "paper/body_compact_after.tex",
+      "mathematical_scope": "Dos firmas con la misma tasa bruta R^L>0, delta<1, J>0, theta_H<theta_L; identidad de precios",
+      "evidence": "Diferencia algebraica de precios efectivos. El texto vincula lemas Lean auxiliares de cuña, no promueve equivalencia literal global",
+      "lean_full_literal_match": "not_established",
+      "handwritten_review": "pending",
+      "status": "conditional_algebraic"
+    }
+  ]
+}
