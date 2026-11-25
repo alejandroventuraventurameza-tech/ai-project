@@ -43,3 +43,12 @@
 El mantenimiento de \`references.bib\` y \`paper.pdf\` en sincronía exige que las correcciones de metadatos se apliquen juntas y con nueva compilación reproducible. El inventario presente no debe usarse como certificado de cotejo de todas las afirmaciones de la literatura.
 
 **Conservación de PDFs:** en esta fase se restaura el archivo \`references.bib\` original del commit \`c52cabd\` para que \`paper/paper.pdf\` siga correspondiendo a la fuente exacta previamente compilada. Aplicar cambios editoriales bibliográficos implica recompilar y confirmar el PDF nuevo antes de integrarlo en main.
+
+
+## Precisión localizada: capítulo 3 de Céspedes et al. (2016)
+
+El cuerpo técnico de \`paper/paper.tex\` cita \`\citet{cespedes2016}\` al explicar sesgo de simultaneidad y selección de firmas (líneas 306 y 339). Esos resultados proceden del **capítulo 3**, titulado *Productividad sectorial en el Perú: un análisis a nivel de firmas*, cuyos autores son **Nikita Céspedes, María E. Aquije, Alan Sánchez y Rafael Vera-Tudela**, en las páginas impresas **69–92** del libro de 2016. La referencia de prueba es la ficha original de GRADE: https://grade.org.pe/publicaciones/productividad-sectorial-en-el-peru-un-analisis-a-nivel-de-firmas/ y la ficha institucional de la Universidad del Pacífico: https://gestion-repo.up.edu.pe/items/1fe948d0-dc88-470f-8fb1-403c5c694b39/full .
+
+La entrada actual \`@book{cespedes2016}\` identifica correctamente a los **editores del libro**, pero no constituye una cita bibliográfica individual de la autoría del **capítulo 3**. Por rigor, en la **siguiente compilación** debe añadirse \`@incollection{cespedesAquije2016,...}\` con esos cuatro autores, título del capítulo, \`booktitle\`, editores y páginas 69–92; cambiar los dos usos de \`\citet{cespedes2016}\` cuando atribuyen directamente los resultados del capítulo. Conservar adicionalmente la entrada del libro si se cita el volumen como obra colectiva.
+
+Este hallazgo no altera el mecanismo matemático del paper; es una corrección bibliográfica **material** de atribución. **No se ha cambiado todavía \`paper/paper.tex\`, \`references.bib\` ni \`paper.pdf\`**, para evitar desincronizar artefactos sin recompilar. La corrección requiere editar fuentes y generar un nuevo PDF conjuntamente.
