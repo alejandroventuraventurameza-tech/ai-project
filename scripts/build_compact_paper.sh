@@ -29,12 +29,31 @@ pdflatex -interaction=nonstopmode -halt-on-error -file-line-error paper.tex
 pdflatex -interaction=nonstopmode -halt-on-error -file-line-error paper.tex
 
 printf '\n=== COMPACT BODY PAGE COUNT ===\n'
-grep 'IE_COMPACT_BODY_PAGES=' paper.log | tail -n 1
+body_pages="$(sed -n 's/.*IE_COMPACT_BODY_PAGES=\([0-9][0-9]*\).*/\1/p' paper.log | tail -n 1)"
+if [ -z "$body_pages" ]; then
+  echo 'ERROR: missing IE_COMPACT_BODY_PAGES in paper.log' >&2
+  exit 4
+fi
+if [ "$body_pages" -lt 8 ] || [ "$body_pages" -gt 20 ]; then
+  printf 'ERROR: %s body pages (allowed 8..20)\n' "$body_pages" >&2
+  exit 4
+fi
+printf 'Body pages: %s (required 8..20)\n' "$body_pages"
 
-printf '\n=== HARD WARNINGS TO REVIEW ===\n'
-grep -Ei 'undefined references|undefined citation|citation.*undefined|overfull \\hbox|LaTeX Error' paper.log || true
+printf '\n=== UNRESOLVED REFERENCES AND OVERFULL BOXES ===\n'
+if grep -Ei 'undefined references|Citation.*undefined|overfull \\hbox|LaTeX Error' paper.log; then
+  echo 'ERROR: blocking warning in final LaTeX log' >&2
+  exit 5
+fi
+echo 'No blocking warnings.'
 
 printf '\n=== PDF INFORMATION ===\n'
-pdfinfo paper.pdf | grep -E 'Pages:|Page size:|File size:' || true
+if command -v pdfinfo >/dev/null 2>&1; then
+  pdfinfo paper.pdf | grep -E 'Pages:|Page size:|File size:'
+else
+  echo 'pdfinfo unavailable; body page count verified via TeX log'
+fi
+printf '\n=== PDF SHA-256 ===\n'
+sha256sum paper.pdf
 
-printf '\nIMPORTANT: a successful compile is not a complete Lean or economic-equilibrium proof.\n'
+echo 'Important: LaTeX compilation is not a proof of economic equilibrium.'
