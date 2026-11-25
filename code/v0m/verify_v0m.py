@@ -33,7 +33,7 @@ def sha(path):
 
 
 def check_manuscript():
-    source = REPO / "paper/paper.tex"
+    source = REPO / "paper/historical/paper_full_20261118.tex"
     text = source.read_text(encoding="utf-8")
     ledger = json.loads((REPO / "paper/result_ledger.json").read_text(encoding="utf-8"))
     assert sha(source) == ledger["paper_sha256"], "Update result ledger after a manuscript edit."
@@ -59,6 +59,7 @@ def main():
     report = {
         "scope": "Internal arithmetic prerequisites and source inventory, not all analytical proofs or Lean coverage.",
         "source_sha256": check_manuscript(), "numbered_results_retained": 57,
+        "source_kind": "historical_20261118_archive_not_current_compact_paper",
         "python": sys.version, "run_started_utc": datetime.now(timezone.utc).isoformat(),
         "formalization_started": False, "macro_irfs_in_this_step": False, "external_data": False,
         "equilibrium_selection": "Both admissible local branches retained; no selector imposed.",
@@ -93,7 +94,7 @@ def main():
     finally:
         report["run_finished_utc"] = datetime.now(timezone.utc).isoformat()
         target.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8', newline='\n')
-    print("All six V0-M prerequisite checks passed; 57 literal results retained. This step runs neither Lean nor IRFs.")
+    print("All six V0-M prerequisite checks passed against the archived 57-result source. This step runs neither Lean nor IRFs.")
 
 
 if __name__ == "__main__":
