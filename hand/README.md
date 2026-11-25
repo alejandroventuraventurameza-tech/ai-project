@@ -27,3 +27,10 @@ La primera tanda manuscrita pedida al autor comprende:
 **Archivo sugerido:** hand/ANEXO_MANUSCRITO_AUTOR_2026-11-25.pdf, con hojas fechadas y numeradas, etiquetas del paper y justificaciones sin pasos saltados. Incorporar únicamente un archivo genuinamente manuscrito entregado por el autor.
 
 **Límite obligatorio:** estas cinco pruebas no cubren todos los resultados del dossier. El PDF del paper sigue reteniendo 57 resultados numerados en cuerpo y anexos. Antes de declarar cumplida la consigna de manuscritos, cotejar el contenido final del paper y cubrir sus derivaciones restantes, o reducir formalmente su alcance con una nueva compilación y auditoría. Nunca presentar como completado un desarrollo que solo existe tipografiado.
+
+
+### Tres resultados adicionales en el cuerpo compacto
+
+La auditoría del 25/11 identificó tres resultados formalmente enunciados en `paper/body_compact_after.tex` que **no aparecen** en la matriz original de 57: decaimiento por bloques, robustez matricial y cuña de precio efectivo. Su guía, todavía **no manuscrita**, está en [GUIA_CUERPO_3_RESULTADOS_20261125.md](GUIA_CUERPO_3_RESULTADOS_20261125.md). Ver `paper/compact_extra_results_3.json`.
+
+**Cobertura conjunta: 57 enunciados inventariados originalmente + 3 resultados nuevos en el cuerpo compacto = 60 resultados a auditar. Ninguno tiene un escaneo auténtico registrado todavía.**
