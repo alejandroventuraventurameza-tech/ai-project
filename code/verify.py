@@ -587,3 +587,8 @@ if __name__ == "__main__":
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "audit_financial_blocks.py")], check=True)
 
     subprocess.run([sys.executable, "-B", "-X", "utf8", str(HERE / "irf" / "render_mechanism_table.py")], check=True)
+
+    # New eight-result paper checks. Historical 57-result source remains separately
+    # pinned for legacy regressions; this new check never claims Lean equivalence.
+    subprocess.run([sys.executable, "-B", "-X", "utf8",
+                    str(HERE / "verify_compact_paper.py")], check=True)
