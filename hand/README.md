@@ -13,3 +13,17 @@ manuscrita de la consigna del curso.
 Después se deberán escribir las restantes derivaciones que sobrevivan
 la revisión editorial definitiva del paper, sin saltos ni referencias
 que sustituyan pasos matemáticos explícitos.
+
+
+## Protocolo de incorporación tras la exposición (25/11/2026)
+
+La primera tanda manuscrita pedida al autor comprende:
+1. Proposición 4.2: monotonía local, frontera, función implícita, exclusión de otra raíz y caso h>0.
+2. Proposición 3.3: presupuesto, garantía, límite de capacidad, derivada parcial y distinción capital/crédito.
+3. Lema 4.3: asignación óptima de trabajo, referente eficiente, derivada de pérdida y MPK.
+4. Lema 3.1: cobertura en cada estado y patrimonio futuro no negativo.
+5. Lema 3.2: contradicción de depósitos y préstamos positivos simultáneos bajo spread positivo.
+
+**Archivo sugerido:** hand/ANEXO_MANUSCRITO_AUTOR_2026-11-25.pdf, con hojas fechadas y numeradas, etiquetas del paper y justificaciones sin pasos saltados. Incorporar únicamente un archivo genuinamente manuscrito entregado por el autor.
+
+**Límite obligatorio:** estas cinco pruebas no cubren todos los resultados del dossier. El PDF del paper sigue reteniendo 57 resultados numerados en cuerpo y anexos. Antes de declarar cumplida la consigna de manuscritos, cotejar el contenido final del paper y cubrir sus derivaciones restantes, o reducir formalmente su alcance con una nueva compilación y auditoría. Nunca presentar como completado un desarrollo que solo existe tipografiado.
