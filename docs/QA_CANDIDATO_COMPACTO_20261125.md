@@ -28,3 +28,8 @@
 5. **Entrega:** no convertir esta rama en la versión oficial hasta que `paper/paper.pdf` sea regenerado y cotejado con su fuente, se aplique QA, y la PR de cambio de alcance esté lista para integrarse.
 
 **Veredicto:** rama de edición científicamente acotada y estáticamente consistente; **NO lista para fusionar** por ausencia de PDF recompilado y manuscritos reales.
+
+
+## Compilación aislada disponible
+
+Se añadió `scripts/build_compact_paper.sh`: ejecutarlo desde la raíz con `bash scripts/build_compact_paper.sh` en un entorno con pdflatex, bibtex y fuentes del repositorio. Compila el PDF del paper y presenta el mensaje `IE_COMPACT_BODY_PAGES=` sin disparar Lean ni el conjunto amplio de Actions; **todavía no se ha ejecutado sobre la rama candidata completa** en este chat, porque el contenedor local no tiene una copia de la rama de GitHub. Un éxito del script sería una comprobación de LaTeX, no del equilibrio económico ni de todos los lemas Lean.
