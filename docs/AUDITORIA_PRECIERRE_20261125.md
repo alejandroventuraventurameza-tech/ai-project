@@ -27,3 +27,15 @@ Se inspeccionaron conjuntamente `paper/paper.tex`, `paper/body_compact_intro.tex
 ### Verificaciones y costos de CI
 
 El último conjunto de comprobaciones completo corresponde a #44308365992 y #44308365993 del 18/11; **la rama de release no tiene una ejecución nueva de Actions** porque sus commits documentales contienen `skip ci`. Se evitó disparar indiscriminadamente múltiples workflows Lean pesados en un repositorio cuyo uso previo de minutos se había señalado como costoso. Una ejecución final sobre el SHA definitivo, o una validación oficial de código y PDF equivalente, continúa pendiente antes del merge.
+
+
+## Segundo corte de control independiente (25/11)
+
+- **PDF de CI:** recuperados los cuatro PDF del artefacto `pdfs` (ID 14429203142). Se inspeccionaron visualmente 4/4 páginas de propuesta, 11/11 diapositivas iniciales, 41/41 finales y una muestra estratificada de 28/145 páginas del paper. Control geométrico del texto aplicado a las 145 páginas: cero spans fuera del rectángulo de página. Informe: [QA visual](QA_VISUAL_PDFS_20261125.md).
+- **Identidad binaria:** los SHA de Git blob de los cuatro PDF del ZIP **difieren** de los cuatro objetos PDF incorporados posteriormente al repositorio, pese a tamaños idénticos. No afirmar identidad de bytes ni su causa; verificar las versiones efectivamente entregadas.
+- **Tablas:** las 12 cifras de la tabla de impacto coinciden con `delivery_audit.json` al redondear a ocho decimales. Las dos identidades contables de capital de `irf_mechanism_table.tex` también cierran con las cifras publicadas. Véase [QA numérica](QA_NUMERICA_TABLAS_20261125.md).
+- **README:** condensado a unas 430 palabras para ajustarse al criterio de una página, con punto decimal y enlaces al material técnico. Las tablas y figuras extensas se mantienen fuera del resumen.
+- **Lean:** generado el [índice editorial de 60 resultados](../paper/lean_formalization_matrix_60.md) a partir del crosswalk conservador (57) y los 3 adicionales. **La tabla de 60 aún no está incorporada al PDF:** requiere una compilación final y no acredita ninguna nueva prueba kernel-verified.
+- **Bibliografía:** confirmada fuente primaria de la versión de enero de 2026 de González–Nuño–Thaler y autoría del capítulo 3 del libro de Céspedes et al.; la cita de capítulo debe especializarse a Céspedes–Aquije–Sánchez–Vera-Tudela cuando se regenere el paper y su PDF juntos.
+
+**Conclusión de la auditoría:** todavía no puede fusionarse la PR de entrega como cerrada. Faltan manuscritos, tabla Lean integrada al PDF y validación compilada del último SHA. El estudio visual de un artefacto de CI no demuestra ni identidad binaria ni suficiencia económica de un equilibrio dinámico.
