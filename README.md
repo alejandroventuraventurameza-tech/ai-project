@@ -33,7 +33,7 @@ Economía neokeynesiana cerrada con firmas **H** (más productiva) y **L**, banc
 ```math
 c_{i,t}+q_t k_{i,t+1}+a_{i,t}=N_{i,t}+b_{i,t},
 \qquad
-R_t^L b_{i,t}\leq \Gamma_{i,t+1} k_{i,t+1}.
+R_t^L b_{i,t}\leq H_{it} k_{i,t+1}.
 ```
 
 **Shock:** innovación inicial `v_{R,0}=-10^{-5}` (aproximadamente **−0,1 pb**) en la regla de remuneración de reservas. El coeficiente de encaje queda **fijo** en `ρ=0,10`; los futuros shocks agregados se mantienen nulos. Se comparan las mismas posiciones heredadas, con pagos `ω=±0,2` equiprobables y parámetros ilustrativos — **no estimados para Perú**.
@@ -42,7 +42,7 @@ R_t^L b_{i,t}\leq \Gamma_{i,t+1} k_{i,t+1}.
 
 <p align="center"><img src=".github/assets/ie-transmission.svg" width="100%" alt="Flechas de transmisión: menor remuneración, menores tasas, más crédito H, pero signos de inversión opuestos entre S y B."></p>
 
-El **sistema reducido local de 33 ecuaciones** tiene un prefijo no lineal de dos fechas y una continuación local recurrente. La firma H está restringida en ambas ramas; **L tiene holgura inicial en S** y **ambas firmas están restringidas en B**. No se impone una regla de selección.
+El **sistema reducido local de 33 ecuaciones** tiene un prefijo no lineal de dos fechas y una continuación local recurrente. La firma H está restringida en ambas ramas del evaluador reducido; **L tiene holgura inicial en S** y **ambas firmas están restringidas en B**. No se impone selección de ramas ni se demuestra correspondencia completa con el equilibrio SOURCE.
 
 | Respuesta al impacto | Rama **S** | Rama **B** |
 |:--|--:|--:|
@@ -61,25 +61,30 @@ El **sistema reducido local de 33 ecuaciones** tiene un prefijo no lineal de dos
 
 ## 03 · Qué está verificado
 
-Se comprueban residuos, márgenes de régimen, KKT necesarias y liquidación bancaria en ambas ramas. La robustez se compara con soluciones reducidas **no lineales finitas hasta T=640**. En S aumenta el capital elegido por H y disminuye la pérdida asignativa; en B ocurre lo contrario, aunque su crédito también aumenta.
+Se comprueban residuos, márgenes de régimen, KKT necesarias y liquidación bancaria en ambas ramas. La robustez se compara con soluciones reducidas **no lineales finitas hasta T=640**. En el evaluador reducido, S tiene mayor capital H y menor pérdida, mientras B tiene la respuesta opuesta. El manuscrito identifica una **obstrucción SOURCE** a recuperar ambas ramas bajo un mismo estado heredado cerca del punto auditado: estos resultados no son dos equilibrios competitivos SOURCE certificados.
 
-**Límite:** no se ha demostrado que estas IRF sean equilibrios competitivos infinitos ni una respuesta empírica causal. La auditoría Lean más reciente verifica lemas y correspondencias condicionadas de ocho filas del operador aumentado, además de una compatibilidad estacionaria; **no** equivale a formalizar exactamente los **57 resultados inventariados en el paper**, ni las 34 derivadas del evaluador numérico.
+**Límite:** no se ha demostrado que estas IRF sean equilibrios competitivos infinitos ni una respuesta empírica causal. La auditoría Lean verifica lemas y correspondencias condicionadas de filas del operador aumentado, además de una compatibilidad estacionaria; **no** equivale a formalizar exactamente los **57 resultados inventariados en el paper**, ni las 34 derivadas del evaluador numérico.
 
 ## 04 · Archivos y reproducción
 
 | Entregable | Acceso | Estado |
 |:--|:--|:--|
-| **Paper** | [PDF](paper/paper.pdf) · [LaTeX](paper/paper.tex) · [Referencias](paper/references.bib) | **Cuerpo compacto de 9 páginas**, verificado por CI; dossier técnico extenso conservado en anexo, revisión científica pendiente |
-| **Presentación final** | [PDF](slides/final.pdf) · [Fuente](slides/final.tex) · [Guion formal](slides/GUIA_EXPOSICION_FORMAL.md) | Comparación literal paper–Lean y prueba de alcance añadidas; última compilación y manuscrito del autor pendientes |
+| **Paper** | [PDF](paper/paper.pdf) · [LaTeX](paper/paper.tex) · [Referencias](paper/references.bib) | **Cuerpo compacto de 12 páginas**, verificado en compilación del 18/11; 145 páginas totales con el dossier histórico; revisión científica pendiente |
+| **Presentación final** | [PDF](slides/final.pdf) · [Fuente](slides/final.tex) · [Guion formal](slides/GUIA_EXPOSICION_FORMAL.md) | Comparación paper–Lean incorporada; compilación aprobada el 18/11; inspección visual y manuscrito del autor pendientes |
 | **IRF y código** | [Reproducción](code/irf/README.md) · [Entrada única](code/verify.py) · [Auditoría](code/irf/output/delivery_audit.json) | Verificaciones internas aprobadas |
 | **Lean** | [Código](lean/README.md) · [Auditoría](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42454446386) | Candidatos compilados y axiomas auditados en módulos escogidos; mapa exacto de los 57 resultados pendiente |
-| **Derivaciones a mano** | [hand/](hand/README.md) · [Guía detallada](hand/GUIA_DERIVACION_MANUSCRITA_NUCLEO.md) | Guía tipografiada; escaneos y juicio personal del autor **pendientes** |
+| **Derivaciones a mano** | [hand/](hand/README.md) · [Guía detallada](hand/GUIA_DERIVACION_MANUSCRITA_NUCLEO.md) | Guía tipografiada; escaneos auténticos y juicio crítico personal **pendientes** |
 | **Material de tema** | [Propuesta](proposal/proposal.pdf) · [Slides](slides/topic.pdf) | Conservados |
-| **Colaboración con IA** | [Prompts](prompts.md) · [Informe de cierre](AUDITORIA_CIERRE_2026-11-07.md) | Registro y límites documentados |
+| **Colaboración con IA** | [Prompts](prompts.md) · [Informe de cierre](AUDITORIA_CIERRE_2026-11-07.md) | Registro histórico documentado; registrar el cierre posterior sin inventar transcripciones |
 
 ```bash
 python -m pip install -r code/requirements.txt
 python code/verify.py
 ```
 
-<sub>**Entrega final: 26 de noviembre de 2026 a las 22:00 (Lima)**. Se califica el contenido integrado en `main`, no únicamente las ramas. Seguir el flujo rama → pull request → merge y las [instrucciones oficiales](https://github.com/alexanderquispe/AI-Econ-Modeling/issues/7).</sub>
+<sub>**Precierre al 25 de noviembre: NO fusionado en main. Entrega: 26 de noviembre de 2026 a las 22:00 (Lima)**. Se califica el contenido integrado en `main`, no únicamente las ramas. Seguir el flujo rama → pull request → merge y las [instrucciones oficiales](https://github.com/alexanderquispe/AI-Econ-Modeling/issues/7).</sub>
+
+
+## Auditoría de precierre
+
+Consultar [estado de la entrega al 25/11](docs/AUDITORIA_PRECIERRE_20261125.md). El paper conserva 57 resultados numerados; hay 24 comparaciones semánticas dirigidas, pero **0/57 equivalencias literales completas** promovidas en la matriz conservadora. Los resultados certificados por kernel son condicionales o auxiliares salvo correspondencia expresamente justificada. Se mantienen abiertos el manuscrito auténtico del autor, el cierre de bibliografía, la revisión final de artefactos y la integración a main.
