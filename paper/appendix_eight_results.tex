@@ -49,8 +49,9 @@ positivo: ambas propiedades requieren restricciones adicionales.
 Considere una empresa con $R^L>R^D>0$, descuento
 $\beta_E>0$, inflación futura $\Pi'>0$ y
 utilidad marginal de patrimonio $V'_N>0$ casi seguramente.
-Suponga que las condiciones de primer orden de depósito y
-préstamo, para posiciones interiores $a,b>0$, son
+Suponga que las expectativas indicadas son finitas y que
+las condiciones de primer orden de depósito y préstamo,
+para posiciones interiores $a,b>0$, son
 \[
 \lambda=\beta_E\mathbb E_t[V'_N R^D/\Pi'],
 \quad
@@ -249,9 +250,9 @@ Abierto en Lean: majorantes racionales y telescopado
 no están certificados como teorema literal en Lean.\\
 \ref{prop:compact_source_collateral_effective_wedge} &
 Cuña de precios efectivos bajo garantías activas &
-\texttt{SourceCollateralWedgeCandidate} &
-Abierto: lemas de cuña relacionados no equivalen por
-sí solos al enunciado económico completo.\\
+\texttt{SourceFirmEulerPledgeWedgeCandidate} &
+Abierto: el lema Euler--pignorabilidad verificado en SOURCE
+no es la identidad literal de precios efectivos entre H y L.\\
 \ref{lem:repayment} &
 Repago robusto y patrimonio no negativo &
 \texttt{PaperRepaymentExactCandidate} &
