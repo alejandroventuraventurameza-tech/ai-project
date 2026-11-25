@@ -229,66 +229,66 @@ En la fecha del precierre, ninguna de las ocho filas tiene
 una equivalencia integral paper--Lean acreditada en la matriz
 conservadora; el estatus es \emph{abierto con evidencia parcial}.
 
-\begingroup\footnotesize
-\begin{longtable}{@{}p{1.15cm}p{5.0cm}p{4.0cm}p{4.0cm}@{}}
+\begingroup\small
+\begin{longtable}{@{}p{1.05cm}p{4.0cm}p{3.1cm}p{5.8cm}@{}}
 \toprule
 Resultado & Enunciado del artículo & Prueba o módulo relacionado & Estado y limitación\\\midrule\endhead
 \ref{prop:local_macro_multiplicity} &
 Dos raíces locales de complementariedad condicionadas &
-\texttt{ScalarComplementarityMultiplicityCandidate} &
+Conteo escalar (Lean) &
 Abierto: el lema de conteo supone una raíz interior y
 monotonía; falta puente con la función reducida $C^1$ y SOURCE.\\
 \ref{prop:compact_exact_tail_power} &
 Decaimiento por bloques del operador lineal decimal &
-\texttt{exact\_linear\_tail\_power\_certificate.py} &
+Certificado racional (Python) &
 Abierto en Lean: cotas racionales comprobadas por Python;
 la prueba de normas es condicional a ellas.\\
 \ref{lem:compact_robust_tail_power} &
 Robustez de matriz a $10^{-4}$ &
-\texttt{exact\_linear\_tail\_power\_certificate.py} &
+Certificado racional (Python) &
 Abierto en Lean: majorantes racionales y telescopado
 no están certificados como teorema literal en Lean.\\
 \ref{prop:compact_source_collateral_effective_wedge} &
 Cuña de precios efectivos bajo garantías activas &
-\texttt{SourceFirmEulerPledgeWedgeCandidate} &
+Cuña de Euler (Lean) &
 Abierto: el lema Euler--pignorabilidad verificado en SOURCE
 no es la identidad literal de precios efectivos entre H y L.\\
 \ref{lem:repayment} &
 Repago robusto y patrimonio no negativo &
-\texttt{PaperRepaymentExactCandidate} &
+Interfaz de repago (Lean) &
 Abierto en matriz: existe candidato kernel-verificado
 en interfaz fuente; falta cotejar formalmente el paper
 definitivo y su SHA.\\
 \ref{lem:v0m_original_6_2} &
 No ahorrar y endeudarse simultáneamente &
-\texttt{PaperFinancialMainExactCandidate} &
+KKT financiera (Lean) &
 Abierto en matriz: existe prueba relacionada sobre
 KKT normalizadas; falta validar equivalencia de
 hipótesis del manuscrito definitivo.\\
 \ref{prop:v0m_original_6_3} &
 Máximo financiable y derivada respecto de tasa &
-\texttt{FinancialCore} &
+Derivada financiera (Lean) &
 Abierto en matriz: derivada auxiliar probada;
 se requiere correspondencia literal de restricciones
 y cuantificadores.\\
 \ref{lem:allocation_loss_identity} &
 Referencia eficiente y derivada de reasignación &
-\texttt{PaperAllocationLossElasticityCandidate} &
+Asignación y MPK (Lean) &
 Abierto en matriz: 42 declaraciones relacionadas;
 faltan igualdad literal de la especificación y
 cotejo integral de todas las hipótesis.\\
 \bottomrule
 \end{longtable}
 \endgroup
-El registro más amplio permanece en
-\texttt{paper/lean\_crosswalk\_57.json} y
-\texttt{paper/lean\_formalization\_matrix\_60.md}
-para auditoría histórica. Ninguna ejecución previa
-de CI constituye un chequeo nuevo de la versión aquí
-sometida. La compilación rápida oficial por repetir
-desde \texttt{AppliedModelingLib} es
-\texttt{python3 scripts/paper\_contribution.py check
-Ventura26LiquidityAllocation --fast}.
+Los nombres completos de las declaraciones y sus archivos se
+encuentran en \path{paper/lean_formalization_matrix_8.md}; el
+historial se conserva en \path{paper/lean_crosswalk_57.json}.
+Ninguna ejecución previa constituye un chequeo nuevo de esta
+revisión. El control oficial pendiente es:
+\begin{quote}\small
+\texttt{python3} \path{scripts/paper_contribution.py}
+\texttt{check Ventura26LiquidityAllocation --fast}.
+\end{quote}
 
 \section{Colaboración con IA y veredictos documentados}
 \label{app:compact_ai_log}
