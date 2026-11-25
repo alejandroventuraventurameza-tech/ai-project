@@ -16,3 +16,21 @@
 Para cada demostración, colocar: etiqueta, hipótesis, manipulación sin saltos, nombre de teorema/regla aplicado, dominio y signos, conclusión y comentario propio sobre verificación o corrección de IA.
 
 **Evidencia requerida:** archivo(s) PDF auténticos exportados del iPad (con hojas numeradas y legibles) vinculados por etiqueta. Antes de marcar «aprobada», cotejar su enunciado con el PDF *definitivo*, no con la versión extensa de 145 páginas. No suponer que el autor ha finalizado notas sin recibirlas.
+
+
+## Correspondencia entre las hojas de iPad y la numeración nueva del PDF
+
+**Verificación directa:** se extrajeron los encabezados de las ocho proposiciones/lemas del PDF compacto compilado (16 páginas, SHA-256 `5672d626f3bc4a79227ede4d61b7bde1f826607699bfe8b789e7300f70747e92`). La numeración cambia al mover cuatro resultados al apéndice; la **etiqueta LaTeX** constituye el identificador estable.
+
+| Etiqueta LaTeX | Numeración histórica que usa la primera tanda | Numeración impresa en el PDF compacto | Página del PDF |
+|---|---|---|---:|
+| `prop:local_macro_multiplicity` | Proposición **4.2** | Proposición **3.1** | 4 |
+| `lem:repayment` | Lema **3.1** | Lema **A.1.1** | 13 |
+| `lem:v0m_original_6_2` | Lema **3.2** | Lema **A.1.2** | 13 |
+| `prop:v0m_original_6_3` | Proposición **3.3** | Proposición **A.1.3** | 14 |
+| `lem:allocation_loss_identity` | Lema **4.3** | Lema **A.1.4** | 14 |
+| `prop:compact_exact_tail_power` | Resultado nuevo del cuerpo compacto | Proposición **5.1** | 8 |
+| `lem:compact_robust_tail_power` | Resultado nuevo del cuerpo compacto | Lema **5.2** | 8 |
+| `prop:compact_source_collateral_effective_wedge` | Resultado nuevo del cuerpo compacto | Proposición **5.3** | 10 |
+
+**Instrucción para el autor:** no rehacer las hojas ya escritas. Añadir, en el encabezado o índice de la digitalización, ambos números y la etiqueta LaTeX. La demostración y sus hipótesis deben cotejarse contra **la versión compacta** antes de marcarse revisadas. Las hojas no se han recibido todavía; este cuadro no constituye evidencia de manuscritos auténticos.
