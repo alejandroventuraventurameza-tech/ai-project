@@ -91,3 +91,6 @@ Consultar [estado de la entrega al 25/11](docs/AUDITORIA_PRECIERRE_20261125.md).
 
 
 **Control adicional de resultados:** el inventario histórico contiene 57 resultados; `paper/body_compact_after.tex` añade 3 enunciados autónomos no incluidos en ese ledger. Total a conciliar: **60**. Véanse [los 3 enunciados adicionales](paper/compact_extra_results_3.json) y [la guía de comprobación manuscrita](hand/GUIA_CUERPO_3_RESULTADOS_20261125.md). Esta cifra no equivale a 60 pruebas Lean completas.
+
+
+**Control estático adicional (25/11):** 17/17 claves citadas presentes en BibTeX, 366 etiquetas únicas y 403 referencias cruzadas con destinos existentes. El detalle del cotejo bibliográfico externo figura en [docs/COTEJO_BIBLIOGRAFICO_20261125.md](docs/COTEJO_BIBLIOGRAFICO_20261125.md). Estos controles no reemplazan la compilación final ni la revisión visual.
