@@ -13,3 +13,8 @@ El articulo distingue dos soluciones escalares locales de complementariedad, con
 Bloqueos de entrega: (1) apendice manuscrito autentico y veredicto del autor, (2) auditoria final de correspondencia entre paper y Lean, (3) cierre del registro de colaboracion IA, (4) inspeccion visual final de los PDF y bibliografia, (5) fusion de una PR desde la rama avanzada a main y verificacion de sus checks. El PR #2 existente parte de una rama anterior y no debe fusionarse como entrega completa sin conciliar el trabajo posterior.
 
 No declarar el repositorio FINAL hasta cumplir estas condiciones. No se inventan pruebas, notas manuscritas ni verificaciones bibliograficas.
+
+
+**Hallazgo adicional del 25/11:** al inventario de 57 resultados numerados en `paper/result_ledger.json` deben agregarse 3 proposiciones/lemas del cuerpo de `paper/body_compact_after.tex`; total de **60 resultados** con obligación de cotejo de alcance y manuscrito. Se creó `paper/compact_extra_results_3.json` y una guía de estudio en `hand/GUIA_CUERPO_3_RESULTADOS_20261125.md`. La tabla de formalización del PDF actual enumera solo los 57 originales: falta conciliar la tabla con estos 3 adicionales en una futura compilación, sin inventar cobertura Lean.
+
+**Bibliografía:** se cotejaron metadatos de ocho referencias con fuentes editoriales; véase `docs/COTEJO_BIBLIOGRAFICO_20261125.md`. No se alteró finalmente `paper/references.bib` para preservar su correspondencia con el PDF compilado hasta regenerar ambas piezas de forma coherente.
