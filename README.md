@@ -88,3 +88,6 @@ python code/verify.py
 ## Auditoría de precierre
 
 Consultar [estado de la entrega al 25/11](docs/AUDITORIA_PRECIERRE_20261125.md). El paper conserva 57 resultados numerados; hay 24 comparaciones semánticas dirigidas, pero **0/57 equivalencias literales completas** promovidas en la matriz conservadora. Los resultados certificados por kernel son condicionales o auxiliares salvo correspondencia expresamente justificada. Se mantienen abiertos el manuscrito auténtico del autor, el cierre de bibliografía, la revisión final de artefactos y la integración a main.
+
+
+**Control adicional de resultados:** el inventario histórico contiene 57 resultados; `paper/body_compact_after.tex` añade 3 enunciados autónomos no incluidos en ese ledger. Total a conciliar: **60**. Véanse [los 3 enunciados adicionales](paper/compact_extra_results_3.json) y [la guía de comprobación manuscrita](hand/GUIA_CUERPO_3_RESULTADOS_20261125.md). Esta cifra no equivale a 60 pruebas Lean completas.
