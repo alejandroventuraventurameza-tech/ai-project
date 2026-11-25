@@ -18,3 +18,12 @@ No declarar el repositorio FINAL hasta cumplir estas condiciones. No se inventan
 **Hallazgo adicional del 25/11:** al inventario de 57 resultados numerados en `paper/result_ledger.json` deben agregarse 3 proposiciones/lemas del cuerpo de `paper/body_compact_after.tex`; total de **60 resultados** con obligación de cotejo de alcance y manuscrito. Se creó `paper/compact_extra_results_3.json` y una guía de estudio en `hand/GUIA_CUERPO_3_RESULTADOS_20261125.md`. La tabla de formalización del PDF actual enumera solo los 57 originales: falta conciliar la tabla con estos 3 adicionales en una futura compilación, sin inventar cobertura Lean.
 
 **Bibliografía:** se cotejaron metadatos de ocho referencias con fuentes editoriales; véase `docs/COTEJO_BIBLIOGRAFICO_20261125.md`. No se alteró finalmente `paper/references.bib` para preservar su correspondencia con el PDF compilado hasta regenerar ambas piezas de forma coherente.
+
+
+### Control de integridad LaTeX y referencias (25/11)
+
+Se inspeccionaron conjuntamente `paper/paper.tex`, `paper/body_compact_intro.tex`, `paper/body_compact_after.tex` y `paper/references.bib` en la rama de release. Resultado del análisis estático: **17 claves BibTeX, 17 claves únicas citadas, 0 citas sin entrada, 366 etiquetas, 0 etiquetas duplicadas y 403 referencias cruzadas con 0 destinos ausentes**. Se verificó además que los tres resultados compactos figuran en el archivo de inventario complementario. Este recuento de fuente no sustituye la compilación ni prueba la corrección matemática de las proposiciones.
+
+### Verificaciones y costos de CI
+
+El último conjunto de comprobaciones completo corresponde a #44308365992 y #44308365993 del 18/11; **la rama de release no tiene una ejecución nueva de Actions** porque sus commits documentales contienen `skip ci`. Se evitó disparar indiscriminadamente múltiples workflows Lean pesados en un repositorio cuyo uso previo de minutos se había señalado como costoso. Una ejecución final sobre el SHA definitivo, o una validación oficial de código y PDF equivalente, continúa pendiente antes del merge.
