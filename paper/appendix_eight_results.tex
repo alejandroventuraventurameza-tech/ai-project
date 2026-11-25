@@ -1,0 +1,349 @@
+\section{Derivaciones financieras y asignativas que sustentan el mecanismo}
+\label{app:compact_financial_derivations}
+Esta sección presenta cuatro argumentos completos del dossier previo,
+ahora en forma autocontenida. Se conservan sus etiquetas originales para
+hacer posible el cotejo con el registro de resultados y con la formalización.
+Las hipótesis declaradas son suficientes para cada afirmación, pero no
+convierten estas conclusiones en existencia de equilibrio dinámico.
+
+\begin{lemma}[Suficiencia del colateral para repago]
+\label{lem:repayment}
+Suponga $0\leq\delta<1$, $0\leq\theta_i<1$,
+$R^L,R^D,\Pi',q'>0$ y $a,b,k'\geq0$.
+En cada estado admisible, los beneficios operativos cumplen
+$\pi^{op}{}'\geq0$ y el contrato de garantía robusta implica
+\[
+\frac{R^L b}{\Pi'}\leq
+\theta_i(1-\delta)q'k'.
+\]
+Si el patrimonio siguiente es
+\[
+N'=\pi^{op}{}'+(1-\delta)q'k'
+-\frac{R^L b}{\Pi'}+\frac{R^D a}{\Pi'},
+\]
+el préstamo queda cubierto por el valor pignorable del capital
+remanente y $N'\geq0$. El patrimonio es estrictamente positivo
+cuando $k'>0$ o $a>0$.
+\end{lemma}
+\begin{proof}
+La desigualdad contractual se ha formulado después de dividir
+la promesa nominal por la inflación realizada positiva, de modo
+que conserva el sentido de la desigualdad. Sustituyendo su cota
+superior en el término negativo del balance de patrimonio,
+\begin{align*}
+N'&=\pi^{op}{}'+(1-\delta)q'k'
+-\frac{R^L b}{\Pi'}+\frac{R^D a}{\Pi'}\\
+&\geq
+\pi^{op}{}'+(1-\theta_i)(1-\delta)q'k'
++\frac{R^D a}{\Pi'}\geq0.
+\end{align*}
+La última desigualdad sigue de las hipótesis de signos.
+Si $k'>0$, entonces $(1-\theta_i)(1-\delta)q'k'>0$;
+si $a>0$, entonces $R^D a/\Pi'>0$. No se demuestra
+por ello solvencia agregada del banco ni consumo empresarial
+positivo: ambas propiedades requieren restricciones adicionales.
+\end{proof}
+
+\begin{lemma}[Incompatibilidad de ahorro y endeudamiento interiores]
+\label{lem:v0m_original_6_2}
+Considere una empresa con $R^L>R^D>0$, descuento
+$\beta_E>0$, inflación futura $\Pi'>0$ y
+utilidad marginal de patrimonio $V'_N>0$ casi seguramente.
+Suponga que las condiciones de primer orden de depósito y
+préstamo, para posiciones interiores $a,b>0$, son
+\[
+\lambda=\beta_E\mathbb E_t[V'_N R^D/\Pi'],
+\quad
+\lambda=\beta_E\mathbb E_t[V'_N R^L/\Pi']+\mu R^L,
+\quad \mu\geq0.
+\]
+Entonces ninguna solución óptima que satisfaga esas
+condiciones puede tener simultáneamente $a>0$ y $b>0$.
+\end{lemma}
+\begin{proof}
+Supongamos por contradicción que ambas posiciones son
+estrictamente positivas, de modo que sus duales de no
+negatividad son nulos. Al igualar las dos expresiones para
+$\lambda$ y restar,
+\[
+0=\beta_E\mathbb E_t
+\left[V'_N\frac{R^L-R^D}{\Pi'}\right]+\mu R^L.
+\]
+El primer término es estrictamente positivo por las
+hipótesis de signos y el segundo no negativo.
+Esto contradice la igualdad a cero. Las condiciones KKT
+son aquí necesarias; no se ha demostrado suficiencia global
+del problema intertemporal a partir de ellas.
+\end{proof}
+
+\begin{proposition}[Efecto parcial de abaratar el préstamo]
+\label{prop:v0m_original_6_3}
+Sea $n:=N-c-a>0$, $q>0$, $H>0$ y $R^L>0$,
+con $q>H/R^L$. Suponga el presupuesto empresarial
+$qk'=n+b$, el límite de colateral $R^L b\leq Hk'$
+y $b,k'\geq0$. El máximo capital financiable es
+\[
+k^{\max}=\frac{n}{q-H/R^L},\qquad
+\frac{\partial k^{\max}}{\partial R^L}
+=-\frac{nH}{(R^L)^2(q-H/R^L)^2}<0.
+\]
+\end{proposition}
+\begin{proof}
+La garantía implica $b\leq Hk'/R^L$. Sustituyéndola
+en el presupuesto se obtiene
+$qk'\leq n+Hk'/R^L$. Como el denominador es
+estrictamente positivo,
+\[
+0\leq k'\leq \frac{n}{q-H/R^L}.
+\]
+El máximo es alcanzable con $b=Hk'/R^L\geq0$,
+que satisface el presupuesto por construcción.
+Aplicando la regla de la cadena al recíproco,
+\[
+\frac{\partial}{\partial R^L}
+\frac{n}{q-H/R^L}
+=-\frac{n}{(q-H/R^L)^2}
+\frac{H}{(R^L)^2}<0.
+\]
+La comparación mantiene fijos $n,q,H$.
+Una mayor capacidad financiable no demuestra
+un mayor capital óptimo ni una restricción menos
+vinculante en equilibrio general.
+\end{proof}
+
+\begin{lemma}[Referencia eficiente y derivada de reasignación]
+\label{lem:allocation_loss_identity}
+Sean $v_i,A_i,k_i>0$ para $i=H,L$, $L>0$,
+$\alpha,\beta>0$ y $d=1-\alpha-\beta>0$.
+Manténganse fijas las masas, productividades y elasticidades.
+En la economía con tecnología
+$Y_i=A_i k_i^\alpha\ell_i^\beta$ y
+trabajo total $\sum_i v_i\ell_i=L$, defina
+\[
+G=\sum_i v_i A_i^{1/(1-\beta)}
+k_i^{\alpha/(1-\beta)},\quad
+K=\sum_i v_i k_i,\quad Z_A=\sum_i v_iA_i^{1/d}.
+\]
+Con empleo óptimamente distribuido entre empresas,
+\[
+Y=L^\beta G^{1-\beta},\quad
+Y^{eff}=K^\alpha L^\beta Z_A^d,\quad
+\mathscr L=\log(Y^{eff}/Y)\geq0.
+\]
+Si $\kappa_H=v_Hk_H/K$ y
+$\omega_H=v_HY_H/Y$, a lo largo de cualquier
+trayectoria diferenciable positiva de capital,
+\[
+\mathrm d\mathscr L=
+\alpha(\kappa_H-\omega_H)
+\mathrm d\log(k_H/k_L).
+\]
+Finalmente, $\omega_H>\kappa_H$ si y solo si el
+producto marginal físico de capital de H es
+mayor que el de L, evaluados en el empleo óptimo.
+\end{lemma}
+\begin{proof}
+Dado el capital, el problema cóncavo de empleo es
+$\max_{\ell_i\geq0}\sum_i v_iA_i k_i^\alpha\ell_i^\beta$
+sujeto a $\sum_i v_i\ell_i=L$.
+Las condiciones de primer orden interiores igualan
+$\beta A_i k_i^\alpha\ell_i^{\beta-1}$ entre empresas.
+Escribiendo $g_i=A_i^{1/(1-\beta)}
+k_i^{\alpha/(1-\beta)}$, resultan
+$\ell_i=Lg_i/G$. En efecto,
+$\sum_i v_i\ell_i=L(\sum_i v_i g_i)/G=L$,
+y la estricta concavidad en trabajo certifica
+que se trata del máximo. Al sustituir se obtiene
+\[
+Y=\sum_i v_iA_i k_i^\alpha (Lg_i/G)^\beta
+=L^\beta G^{1-\beta}.
+\]
+
+Para permitir también reasignación de capital, tome
+$k_i^*=K A_i^{1/d}/Z_A$ y
+$\ell_i^*=L A_i^{1/d}/Z_A$. Satisfacen
+$\sum_i v_i k_i^*=K$ y $\sum_i v_i\ell_i^*=L$.
+En estos puntos tanto
+$\alpha A_i(k_i^*)^{\alpha-1}(\ell_i^*)^\beta$
+como
+$\beta A_i(k_i^*)^\alpha(\ell_i^*)^{\beta-1}$
+son independientes de $i$, porque sus factores
+de $A_i$ tienen exponente total
+$1+(\alpha+\beta-1)/d=0$.
+La tecnología es cóncava para
+$\alpha+\beta<1$; la desigualdad del plano de soporte,
+sumada con pesos $v_i$, muestra que esta asignación
+maximiza producto a dotaciones $(K,L)$.
+Al sustituir los niveles óptimos resulta
+$Y^{eff}=K^\alpha L^\beta Z_A^d$.
+Por su optimalidad $Y^{eff}\geq Y>0$, y al tomar
+logaritmos,
+\[
+\mathscr L=\alpha\log K+d\log Z_A
+-(1-\beta)\log G\geq0.
+\]
+
+Con $\gamma:=\alpha/(1-\beta)$,
+\begin{align*}
+\mathrm d\log K&=\kappa_H\,\mathrm d\log k_H+
+(1-\kappa_H)\,\mathrm d\log k_L,\\
+\mathrm d\log G&=\gamma\big[
+\omega_H\,\mathrm d\log k_H+
+(1-\omega_H)\,\mathrm d\log k_L\big].
+\end{align*}
+La segunda igualdad usa
+$\omega_i=v_i g_i/G=v_iY_i/Y$,
+con el trabajo ya distribuido óptimamente.
+Como $Z_A$ es fijo y $(1-\beta)\gamma=\alpha$,
+restar las dos diferenciales produce
+\[
+\mathrm d\mathscr L=
+\alpha(\kappa_H-\omega_H)
+(\mathrm d\log k_H-\mathrm d\log k_L),
+\]
+como se afirmó; la variación de $L$ se cancela
+incluso si el empleo total cambia a lo largo de
+la trayectoria.
+
+Finalmente, $MPK_i=\alpha Y_i/k_i$.
+La desigualdad $\omega_H>\kappa_H$ equivale a
+$\omega_H(1-\kappa_H)>
+\kappa_H(1-\omega_H)$, y por las
+definiciones de $\omega_H,\kappa_H$ esta última
+equivale a $Y_H/k_H>Y_L/k_L$.
+Multiplicar por $\alpha>0$ prueba
+$MPK_H>MPK_L$. Por tanto, $A_H>A_L$
+por sí sola no determina el signo de la
+derivada asignativa.
+\end{proof}
+
+\section{Formalización en Lean: correspondencia de los ocho resultados}
+\label{app:compact_lean_matrix}
+El paper evaluable está fijado sobre una revisión específica;
+la versión histórica de los otros 52 resultados se conserva
+por separado en la rama
+\texttt{archive/ie-paper-full-20261118}. La tabla no convierte
+pruebas auxiliares o condicionales en equivalencias literales.
+En la fecha del precierre, ninguna de las ocho filas tiene
+una equivalencia integral paper--Lean acreditada en la matriz
+conservadora; el estatus es \emph{abierto con evidencia parcial}.
+
+\begingroup\footnotesize
+\begin{longtable}{@{}p{1.15cm}p{5.0cm}p{4.0cm}p{4.0cm}@{}}
+\toprule
+Resultado & Enunciado del artículo & Prueba o módulo relacionado & Estado y limitación\\\midrule\endhead
+\ref{prop:local_macro_multiplicity} &
+Dos raíces locales de complementariedad condicionadas &
+\texttt{ScalarComplementarityMultiplicityCandidate} &
+Abierto: el lema de conteo supone una raíz interior y
+monotonía; falta puente con la función reducida $C^1$ y SOURCE.\\
+\ref{prop:compact_exact_tail_power} &
+Decaimiento por bloques del operador lineal decimal &
+\texttt{exact\_linear\_tail\_power\_certificate.py} &
+Abierto en Lean: cotas racionales comprobadas por Python;
+la prueba de normas es condicional a ellas.\\
+\ref{lem:compact_robust_tail_power} &
+Robustez de matriz a $10^{-4}$ &
+\texttt{exact\_linear\_tail\_power\_certificate.py} &
+Abierto en Lean: majorantes racionales y telescopado
+no están certificados como teorema literal en Lean.\\
+\ref{prop:compact_source_collateral_effective_wedge} &
+Cuña de precios efectivos bajo garantías activas &
+\texttt{SourceCollateralWedgeCandidate} &
+Abierto: lemas de cuña relacionados no equivalen por
+sí solos al enunciado económico completo.\\
+\ref{lem:repayment} &
+Repago robusto y patrimonio no negativo &
+\texttt{PaperRepaymentExactCandidate} &
+Abierto en matriz: existe candidato kernel-verificado
+en interfaz fuente; falta cotejar formalmente el paper
+definitivo y su SHA.\\
+\ref{lem:v0m_original_6_2} &
+No ahorrar y endeudarse simultáneamente &
+\texttt{PaperFinancialMainExactCandidate} &
+Abierto en matriz: existe prueba relacionada sobre
+KKT normalizadas; falta validar equivalencia de
+hipótesis del manuscrito definitivo.\\
+\ref{prop:v0m_original_6_3} &
+Máximo financiable y derivada respecto de tasa &
+\texttt{FinancialCore} &
+Abierto en matriz: derivada auxiliar probada;
+se requiere correspondencia literal de restricciones
+y cuantificadores.\\
+\ref{lem:allocation_loss_identity} &
+Referencia eficiente y derivada de reasignación &
+\texttt{PaperAllocationLossElasticityCandidate} &
+Abierto en matriz: 42 declaraciones relacionadas;
+faltan igualdad literal de la especificación y
+cotejo integral de todas las hipótesis.\\
+\bottomrule
+\end{longtable}
+\endgroup
+El registro más amplio permanece en
+\texttt{paper/lean\_crosswalk\_57.json} y
+\texttt{paper/lean\_formalization\_matrix\_60.md}
+para auditoría histórica. Ninguna ejecución previa
+de CI constituye un chequeo nuevo de la versión aquí
+sometida. La compilación rápida oficial por repetir
+desde \texttt{AppliedModelingLib} es
+\texttt{python3 scripts/paper\_contribution.py check
+Ventura26LiquidityAllocation --fast}.
+
+\section{Colaboración con IA y veredictos documentados}
+\label{app:compact_ai_log}
+El autor reconoce asistencia en la formulación, las
+derivaciones, la programación, la exposición y el examen
+crítico. Los intercambios disponibles se preservan
+en \texttt{prompts.md}; se prohíbe imputar respuestas
+no recuperadas o aprobaciones personales inexistentes.
+\begin{longtable}{@{}p{4.8cm}p{6.0cm}p{3.35cm}@{}}
+\toprule
+Afirmación o contribución & Revisión y contraste & Juicio atribuible al autor\\\midrule\endhead
+$A_H>A_L$ implica $MPK_H>MPK_L$ &
+Rechazada: la escala de capital y trabajo también
+determina el producto marginal. Véase el Lema
+\ref{lem:allocation_loss_identity}. &
+El autor objetó explícitamente esa inferencia.\\
+Una menor tasa garantiza mejor asignación &
+Rechazada: la capacidad parcial y la respuesta
+en equilibrio son conceptos distintos; las ramas
+numéricas tienen signos opuestos. &
+El autor pidió revisar las dos ramas; aceptación
+de prueba general pendiente.\\
+Dos raíces escalares prueban dos equilibrios dinámicos &
+Rechazada: faltan recuperación SOURCE, optimalidad
+y condiciones terminales; hay obstrucción con
+antecedente heredado común. &
+La presentación distingue ambos objetos;
+veredicto formal del paper pendiente.\\
+CI verde implica equivalencia literal de todas las pruebas &
+Rechazada: la interfaz Lean conserva brechas
+específicas y candidatos condicionales. &
+El autor solicitó una auditoría completa;
+no se imputa aprobación automática.\\
+Guion oral como evidencia de demostración &
+Rechazada: el guion apoya la exposición, pero
+el apéndice a mano y la prueba formal son objetos
+diferentes. &
+El autor pidió un guion natural y señaló su
+carácter inicialmente esquemático.\\
+\bottomrule
+\end{longtable}
+Los cálculos manuscritos genuinos y el juicio crítico
+final sobre cada prueba deben incorporarse en
+\texttt{hand/}; estas tablas no son prueba de que
+el autor ya haya escrito o validado sus hojas.
+
+\section{Reproducción, límites y procedencia}
+\label{app:compact_reproduction}
+Las figuras, tablas y experimentos numéricos son
+reproducibles, bajo los parámetros ilustrativos y
+tolerancias del código, mediante
+\texttt{python code/verify.py} desde la raíz del repositorio
+tras instalar \texttt{code/requirements.txt}.
+Las cuatro figuras/PDF oficiales se compilan
+por el workflow \texttt{.github/workflows/build.yml}.
+El cuerpo compacto no demuestra una respuesta
+empírica para Perú, selección de rama, equilibrio
+competitivo de horizonte infinito ni cambio
+permanente de la tasa de crecimiento.
