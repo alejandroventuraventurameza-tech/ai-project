@@ -30,7 +30,7 @@ function BashQuote([string]$s) {
 if (!(Test-Path -LiteralPath (Join-Path $repoRoot '.git'))) {
   throw "No existe un repositorio Git en: $repoRoot"
 }
-if (![string]::IsNullOrWhiteSpace($SourcePdf) -and !(Test-Path -LiteralPath $SourcePdf)) {
+if ((-not [string]::IsNullOrWhiteSpace($SourcePdf)) -and (-not (Test-Path -LiteralPath $SourcePdf))) {
   throw "PDF de origen inexistente: $SourcePdf"
 }
 if (!(Test-Path -LiteralPath (Join-Path $repoRoot 'paper\paper.tex'))) {
