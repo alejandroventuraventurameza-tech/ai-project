@@ -33,3 +33,16 @@
 ## Compilación aislada disponible
 
 Se añadió `scripts/build_compact_paper.sh`: ejecutarlo desde la raíz con `bash scripts/build_compact_paper.sh` en un entorno con pdflatex, bibtex y fuentes del repositorio. Compila el PDF del paper y presenta el mensaje `IE_COMPACT_BODY_PAGES=` sin disparar Lean ni el conjunto amplio de Actions; **todavía no se ha ejecutado sobre la rama candidata completa** en este chat, porque el contenedor local no tiene una copia de la rama de GitHub. Un éxito del script sería una comprobación de LaTeX, no del equilibrio económico ni de todos los lemas Lean.
+
+
+## Compilación local completa y revisión posterior (25/11, nuevo corte)
+
+Se construyó un PDF **fuera de GitHub Actions** con `pdflatex > bibtex8 > pdflatex > pdflatex` a partir de siete archivos de fuente del candidato. El cotejo de fuentes utilizó longitud y FNV-1a 32-bit de contenido UTF-8: **7/7 fuentes de texto coinciden** con los archivos de la rama (el `irf_impact_table.tex` original mantiene saltos de línea CRLF). La compilación produjo **11 páginas de cuerpo y 16 páginas totales**, dentro del límite oficial de 8–20 páginas del cuerpo.
+
+**QA ejecutada sobre el PDF local:** se corrigió una página huérfana de conclusión ajustando el espacio entre párrafos a 2 pt (sin tocar fuente de 11 pt ni márgenes de una pulgada); se compactó la tabla Lean para no desbordar. El log final presenta **0 errores LaTeX**, **0 overfull hbox** y **0 avisos de citas o referencias indefinidas**. La revisión geométrica de todos los spans en las 16 páginas encontró **0 spans fuera del rectángulo de página**, y se inspeccionaron contactos visuales de portada, resultados, figuras, tabla Lean y apéndice.
+
+SHA-256 del PDF local: `5672d626f3bc4a79227ede4d61b7bde1f826607699bfe8b789e7300f70747e92`. El PDF está disponible como artefacto de la conversación, **NO se ha subido todavía a `paper/paper.pdf` en GitHub**. Esta distinción es crítica: el repositorio sigue conteniendo el PDF histórico desincronizado en la rama de la PR #4.
+
+**Procedencia de figuras:** al no poder descargar los PDF binarios originales desde la conexión GitHub a este contenedor, las dos figuras para la compilación local se reconstituyeron como recortes vectoriales de la página de gráficos del PDF de CI del 18/11, conservando contenido visible. **No son binariamente iguales** a los recursos `paper/figures/irf_*.pdf` del repositorio. Para una entrega reproducible byte a byte, regenerar el PDF en checkout local usando las figuras originales del repositorio.
+
+**Bloqueos finales:** incorporar el nuevo PDF coherente (o recompilar desde fuentes GitHub y subirlo), completar las ocho notas manuscritas auténticas, certificar el alcance de la formalización de la versión fijada y comprobar/merge de PR #4 a #3 y luego a main.
