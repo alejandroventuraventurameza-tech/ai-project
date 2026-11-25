@@ -17,7 +17,14 @@ for src in paper.tex body_compact_intro.tex body_compact_after.tex \
 done
 
 pdflatex -interaction=nonstopmode -halt-on-error -file-line-error paper.tex
-bibtex paper
+if command -v bibtex >/dev/null 2>&1; then
+  bibtex paper
+elif command -v bibtex8 >/dev/null 2>&1; then
+  bibtex8 paper
+else
+  echo 'ERROR: neither bibtex nor bibtex8 found' >&2
+  exit 3
+fi
 pdflatex -interaction=nonstopmode -halt-on-error -file-line-error paper.tex
 pdflatex -interaction=nonstopmode -halt-on-error -file-line-error paper.tex
 
