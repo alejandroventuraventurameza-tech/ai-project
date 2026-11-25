@@ -556,3 +556,45 @@ push ni integración. La revisión y aceptación científica del autor siguen pe
 El autor suministró en la conversación del 7 de noviembre de 2026 una transcripción de instrucciones anteriores a su migración de Desktop a la nube. Su texto, incluidas erratas, queda conservado en [docs/OBSERVACIONES_DESKTOP_2026-11-07.md](docs/OBSERVACIONES_DESKTOP_2026-11-07.md). No se ha comprobado el historial local original de esas instrucciones ni su fecha de emisión anterior. Esta referencia **no** afirma que se hayan ejecutado esos encargos.
 
 La interpretación científica, la evidencia disponible en código y las obligaciones de modelación, simulación, visualización y escritura se distinguen en [docs/PROTOCOLO_CIENTIFICO_DESKTOP_2026-11-07.md](docs/PROTOCOLO_CIENTIFICO_DESKTOP_2026-11-07.md). El plan maestro vigente es [PLAN_REFINAMIENTO_EDITORIAL_VISUAL.md](PLAN_REFINAMIENTO_EDITORIAL_VISUAL.md).
+
+
+---
+
+## Fase de exposición y precierre: 18–25 de noviembre de 2026
+
+Extractos literales de los mensajes del autor y las respuestas efectivamente visibles en esta conversación. Se documentan fragmentos comprobables; no se sustituye ni reconstruye una transcripción integral que no esté disponible. El juicio científico se conserva separado de los resultados asistidos.
+
+**Solicitud literal del autor (18/11):**
+> Ok, corrige los slides y dame el script final
+
+**Fragmento literal de respuesta:**
+> He incorporado las correcciones a la presentación del **IE project** y preparado el guion oral para la exposición del 18 de noviembre de 2026.
+
+Evidencia de fuente: commits 3b6510cb7eec92ad5d80711ca79e81824eace8e9 y 71bc6a119aefd9ec7515b36f4e6beb422541bd84; la compilación del 18/11 terminó con éxito. La respuesta no equivale a certificado científico de equilibrio dinámico.
+
+**Solicitud literal del autor:**
+> El script damelo en word por favor
+
+**Fragmento literal de respuesta:**
+> Ya convertí el **guion completo de exposición del IE project** a Word, conservando las explicaciones de las 41 diapositivas, las transiciones y las respuestas a posibles preguntas del profesor.
+
+**Crítica literal del autor:**
+> Una pregunta para la redacción del script utilizaste la skill académica de @Redaccion Academica y Cierre Formal  porque veo que no hay transicicon con conectores etc para que al momento de presentar con el script se note natural claro y formal macro y matemáticamente reucerda que ese script lo aprenderé para expoenr?
+
+**Fragmento literal de respuesta:**
+> Sí, había utilizado la skill **@Redacción Académica y Cierre Formal**, pero tu observación es correcta: **la primera versión no cumplía suficientemente sus exigencias de redacción para una exposición oral**.
+
+**Solicitud literal del autor después de exponer:**
+> Ok, ya expuse, ahora bien, que nos falta para cerrar la entregra final.
+
+La respuesta efectuó una auditoría del repo y reportó la falta de handnotes auténticos, conciliación paper–Lean y la integración a main. El autor no afirmó haber aprobado ya el manuscrito.
+
+**Solicitud literal del autor para el iPad:**
+> Ok, comencemos entonces, dime exactamente que tengo que derivar en mi Ipad
+
+La respuesta proporcionó un plan detallado para Proposición 4.2, Proposición 3.3, Lema 4.3 y lemas 3.1/3.2. Se registró que la primera tanda no satisface automáticamente la cobertura de todos los 57 resultados conservados.
+
+**Solicitud literal del autor durante la elaboración del manuscrito:**
+> Ok, mientras voy haciendo ese handnote, ¿Puedes ir avanzando lo faltante?
+
+Acción resultante: auditoría documental, mejora del README, manifiesto provisional, registro de IA y rama de release. El escaneo manuscrito y el veredicto matemático personal siguen pendientes. Ver docs/REGISTRO_IA_CIERRE_20261125.md.
