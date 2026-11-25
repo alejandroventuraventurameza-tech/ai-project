@@ -230,53 +230,47 @@ una equivalencia integral paper--Lean acreditada en la matriz
 conservadora; el estatus es \emph{abierto con evidencia parcial}.
 
 \begingroup\small
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.2}
 \begin{longtable}{@{}p{1.05cm}p{4.0cm}p{3.1cm}p{5.8cm}@{}}
 \toprule
-N.º & Resultado & Evidencia & Estado de correspondencia\\\midrule\endhead
+N.º & Resultado & Evidencia relacionada & Estado de correspondencia\\\midrule\endhead
 \ref{prop:local_macro_multiplicity} &
-Dos raíces locales de complementariedad condicionadas &
+Dos raíces locales de complementariedad &
 Conteo escalar (Lean) &
-Abierto: el lema de conteo supone una raíz interior y
-monotonía; falta puente con la función reducida $C^1$ y SOURCE.\\
+Abierto: el conteo supone raíz positiva y monotonía;
+falta construirlas desde la función reducida $C^1$.\\
 \ref{prop:compact_exact_tail_power} &
-Decaimiento por bloques del operador lineal decimal &
+Decaimiento del grafo lineal decimal &
 Certificado racional (Python) &
-Abierto en Lean: cotas racionales comprobadas por Python;
-la prueba de normas es condicional a ellas.\\
+Abierto en Lean: las cotas de normas son verificaciones
+racionales externas.\\
 \ref{lem:compact_robust_tail_power} &
-Robustez de matriz a $10^{-4}$ &
-Certificado racional (Python) &
-Abierto en Lean: majorantes racionales y telescopado
-no están certificados como teorema literal en Lean.\\
+Robustez de matriz en bola de radio $10^{-4}$ &
+Mayorantes racionales (Python) &
+Abierto en Lean: telescopado y recursión no son aún
+teorema literal de la especificación.\\
 \ref{prop:compact_source_collateral_effective_wedge} &
-Cuña de precios efectivos bajo garantías activas &
+Cuña de precios efectivos entre H y L &
 Cuña de Euler (Lean) &
-Abierto: el lema Euler--pignorabilidad verificado en SOURCE
-no es la identidad literal de precios efectivos entre H y L.\\
+Abierto: la prueba fuente de Euler no equivale a la
+identidad literal entre los precios efectivos.\\
 \ref{lem:repayment} &
 Repago robusto y patrimonio no negativo &
 Interfaz de repago (Lean) &
-Abierto en matriz: existe candidato kernel-verificado
-en interfaz fuente; falta cotejar formalmente el paper
-definitivo y su SHA.\\
+Abierto: cotejar hipótesis con el enunciado definitivo.\\
 \ref{lem:v0m_original_6_2} &
-No ahorrar y endeudarse simultáneamente &
+Depósitos y préstamos interiores incompatibles &
 KKT financiera (Lean) &
-Abierto en matriz: existe prueba relacionada sobre
-KKT normalizadas; falta validar equivalencia de
-hipótesis del manuscrito definitivo.\\
+Abierto: cotejar interioridad, signos y normalización.\\
 \ref{prop:v0m_original_6_3} &
-Máximo financiable y derivada respecto de tasa &
+Capital financiable y derivada parcial &
 Derivada financiera (Lean) &
-Abierto en matriz: derivada auxiliar probada;
-se requiere correspondencia literal de restricciones
-y cuantificadores.\\
+Abierto: cotejar máximo y derivada con cuantificadores.\\
 \ref{lem:allocation_loss_identity} &
-Referencia eficiente y derivada de reasignación &
+Referencia eficiente, pérdida y reasignación &
 Asignación y MPK (Lean) &
-Abierto en matriz: 42 declaraciones relacionadas;
-faltan igualdad literal de la especificación y
-cotejo integral de todas las hipótesis.\\
+Abierto: faltan hipótesis y correspondencia integral.\\
 \bottomrule
 \end{longtable}
 \endgroup
