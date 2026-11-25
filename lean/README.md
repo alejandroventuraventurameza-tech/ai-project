@@ -52,3 +52,12 @@ Los bytes de la fuente privada fijada, notas de exposición, reportes internos,
 registros de sesión y cachés permanecen fuera de esta propuesta. La preparación
 no vuelve a compilar módulos sin cambios ni acredita nuevas pruebas. La rama
 de continuidad está pendiente de revisión antes de cualquier subida.
+
+
+## Precierre del paper — 25/11/2026
+
+La fuente científica y la versión PDF de referencia se fijan inicialmente en el commit `c52cabde53e67a6a70500b52318c0f1fe84f42f7`. En ese commit, GitHub identifica `paper/paper.tex` con Git blob `033dfbd41ff30eb1c167a4d468cb3751d6fe2d46`. Esta huella **no** es un SHA-256 de los bytes ni un comprobante de nueva ejecución del formalizador oficial. La rama `release/ie-project-entrega-20261125` contiene cambios documentales que no modificaron las proposiciones, el código de simulación ni los archivos Lean de ese commit.
+
+**Inventario de cobertura:** la matriz `paper/lean_crosswalk_57.json` conserva 57 resultados inventariados; 24/57 cuentan con comparación semántica dirigida y 0/57 tienen equivalencia literal completa promovida. Los tres enunciados independientes de `paper/body_compact_after.tex` se registran adicionalmente en `paper/compact_extra_results_3.json` y **no** están cubiertos por la matriz original. Esto impide declarar una formalización integral de los 60 resultados del PDF. La existencia de lemas Lean condicionales compilados sigue siendo evidencia válida exclusivamente para sus enunciados y supuestos.
+
+**Obligación oficial pendiente:** ejecutar o acreditar nuevamente el protocolo de `AppliedModelingLib` desde la versión del paper efectivamente entregada, conservar el commit fijo formalizado y el registro del comando `python3 scripts/paper_contribution.py check Ventura26LiquidityAllocation --fast`. Presentar en la tabla del artículo un estado por resultado: demostrado literalmente, demostrado con hipótesis adicionales (especificarlas), o abierto (bloqueo concreto). Si se modifica un enunciado, fijar un nuevo commit y revisar la correspondencia. No presentar las candidatas previas como si fueran una ejecución nueva del flujo oficial.
