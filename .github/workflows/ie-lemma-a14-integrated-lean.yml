@@ -9,6 +9,7 @@ on:
       - lean/candidates/Ventura26LiquidityAllocation/PaperLemma43CompactIntegratedCandidate.lean
       - lean/candidates/Ventura26LiquidityAllocation/PaperLemma43CompactPathDerivativeCandidate.lean
       - lean/candidates/Ventura26LiquidityAllocation/PaperLemma43CompactPhysicalPathCandidate.lean
+      - lean/candidates/Ventura26LiquidityAllocation/PaperLemma43CurrentFullCandidate.lean
       - lean/current/CurrentCompactLogLossBridge.lean
       - .github/workflows/ie-lemma-a14-integrated-lean.yml
   pull_request:
@@ -17,6 +18,7 @@ on:
       - lean/candidates/Ventura26LiquidityAllocation/PaperLemma43CompactIntegratedCandidate.lean
       - lean/candidates/Ventura26LiquidityAllocation/PaperLemma43CompactPathDerivativeCandidate.lean
       - lean/candidates/Ventura26LiquidityAllocation/PaperLemma43CompactPhysicalPathCandidate.lean
+      - lean/candidates/Ventura26LiquidityAllocation/PaperLemma43CurrentFullCandidate.lean
       - .github/workflows/ie-lemma-a14-integrated-lean.yml
 
 permissions:
@@ -78,7 +80,7 @@ jobs:
           mkdir -p upstream/papers/Ventura26LiquidityAllocation
           cp ai-project/lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean upstream/papers/Ventura26LiquidityAllocation/
           cp ai-project/lean/checkpoint/module_root.lean upstream/papers/Ventura26LiquidityAllocation.lean
-          for m in PaperAllocationLossElasticityCandidate PaperAllocationEfficiencySupportCandidate PaperAllocationSourceAlgebraBridgeCandidate PaperOptimalLaborCandidate PaperOriginalLaborGlobalCandidate PaperJointEfficiencySourceCandidate PaperJointEfficiencyBoundCandidate PaperJointEfficiencyPhysicalCandidate PaperOriginalLogLossCandidate PaperSourceDifferentiationCandidate PaperSourceDifferentialSharesCandidate PaperSourceLossChainRuleCandidate PaperSourceOutputShareCandidate PaperSourceLogCapitalRatioCandidate PaperLemma43StaticIntegratedCandidate PaperLemma43DynamicIntegratedCandidate PaperLemma43SourceCompleteCandidate PaperLemma43CompactIntegratedCandidate PaperLemma43CompactPathDerivativeCandidate PaperLemma43CompactPhysicalPathCandidate; do
+          for m in PaperAllocationLossElasticityCandidate PaperAllocationEfficiencySupportCandidate PaperAllocationSourceAlgebraBridgeCandidate PaperOptimalLaborCandidate PaperOriginalLaborGlobalCandidate PaperJointEfficiencySourceCandidate PaperJointEfficiencyBoundCandidate PaperJointEfficiencyPhysicalCandidate PaperOriginalLogLossCandidate PaperSourceDifferentiationCandidate PaperSourceDifferentialSharesCandidate PaperSourceLossChainRuleCandidate PaperSourceOutputShareCandidate PaperSourceLogCapitalRatioCandidate PaperLemma43StaticIntegratedCandidate PaperLemma43DynamicIntegratedCandidate PaperLemma43SourceCompleteCandidate PaperLemma43CompactIntegratedCandidate PaperLemma43CompactPathDerivativeCandidate PaperLemma43CompactPhysicalPathCandidate PaperLemma43CurrentFullCandidate; do
             cp "ai-project/lean/candidates/Ventura26LiquidityAllocation/${m}.lean" upstream/papers/Ventura26LiquidityAllocation/
           done
           cp ai-project/lean/current/CurrentCompactLogLossBridge.lean upstream/papers/Ventura26LiquidityAllocation/
@@ -96,7 +98,9 @@ jobs:
           lake env lean papers/Ventura26LiquidityAllocation/PaperLemma43CompactPathDerivativeCandidate.lean 2>&1 | tee /tmp/ie-a14-path-kernel.log
           lake build Ventura26LiquidityAllocation.PaperLemma43CompactPhysicalPathCandidate 2>&1 | tee /tmp/ie-a14-physical-build.log
           lake env lean papers/Ventura26LiquidityAllocation/PaperLemma43CompactPhysicalPathCandidate.lean 2>&1 | tee /tmp/ie-a14-physical-kernel.log
-          if grep -E 'sorryAx|admit|unsolved goals|error:' /tmp/ie-a14-kernel.log /tmp/ie-a14-path-kernel.log /tmp/ie-a14-physical-kernel.log; then
+          lake build Ventura26LiquidityAllocation.PaperLemma43CurrentFullCandidate 2>&1 | tee /tmp/ie-a14-full-build.log
+          lake env lean papers/Ventura26LiquidityAllocation/PaperLemma43CurrentFullCandidate.lean 2>&1 | tee /tmp/ie-a14-full-kernel.log
+          if grep -E 'sorryAx|admit|unsolved goals|error:' /tmp/ie-a14-kernel.log /tmp/ie-a14-path-kernel.log /tmp/ie-a14-physical-kernel.log /tmp/ie-a14-full-kernel.log; then
             echo 'ERROR: kernel audit found a forbidden placeholder or failure' >&2
             exit 2
           fi
@@ -106,7 +110,9 @@ jobs:
           grep -F 'depends on axioms' /tmp/ie-a14-path-kernel.log
           grep -F 'compactLossRatioPhysical_hasDerivAt' /tmp/ie-a14-physical-kernel.log
           grep -F 'depends on axioms' /tmp/ie-a14-physical-kernel.log
-          echo 'A14_PATHWISE_LEAN_OK: derivative of log ratio for both physical firms'
+          grep -F 'compactLemmaA14CurrentFull_exact' /tmp/ie-a14-full-kernel.log
+          grep -F 'depends on axioms' /tmp/ie-a14-full-kernel.log
+          echo 'A14_FULL_LEAN_OK: one current-paper Spec with physical ratio derivative'
 
       - name: Archive compiler evidence
         if: always()
@@ -120,4 +126,6 @@ jobs:
             /tmp/ie-a14-path-kernel.log
             /tmp/ie-a14-physical-build.log
             /tmp/ie-a14-physical-kernel.log
+            /tmp/ie-a14-full-build.log
+            /tmp/ie-a14-full-kernel.log
           if-no-files-found: ignore
