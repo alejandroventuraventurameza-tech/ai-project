@@ -39,14 +39,14 @@ theorem expectedRealMarginal_pos
     0 < expectedRealMarginal probability marginalValue inflationNext := by
   have hexists : ∃ w : W, 0 < probability w := by
     by_contra hnone
-    push_neg at hnone
+    push Not at hnone
     have hnonpos : (∑ w : W, probability w) ≤ 0 := by
       apply Finset.sum_nonpos
       intro w hw
       exact hnone w
     linarith
   unfold expectedRealMarginal
-  apply Finset.sum_pos
+  apply Finset.sum_pos'
   · intro w hw
     by_cases hweight : 0 < probability w
     · exact le_of_lt (mul_pos hweight
