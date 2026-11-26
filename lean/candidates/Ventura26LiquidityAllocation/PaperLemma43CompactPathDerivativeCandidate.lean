@@ -23,6 +23,8 @@ total labor, and elasticities a,b,d with a+b+d=1.
 namespace Ventura26LiquidityAllocation
 namespace CurrentCompact
 
+open Filter
+
 /-- The *function* of output loss as the paper's log of the ratio,
 using employment optimally allocated at each nearby capital level.
 The mathematical derivative is local at t; no optimization of dynamic
