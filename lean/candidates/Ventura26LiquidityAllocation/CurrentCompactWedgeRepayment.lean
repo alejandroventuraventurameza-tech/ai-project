@@ -54,6 +54,12 @@ theorem repaymentCurrent_exact : repaymentCurrentSpec := by
     hloan0 hdeposit0 hcapital0 hprofit0 hcoverage
   have hthetaGap : 0 < 1 - theta := sub_pos.mpr htheta1
   have hdeltaGap : 0 < 1 - depreciation := sub_pos.mpr hdelta1
+  have hcapitalComponentNonneg :
+      0 ≤ (1 - theta) * (1 - depreciation) * qNext * capitalNext := by
+    positivity
+  have hdepositComponentNonneg :
+      0 ≤ depositRate * deposit / inflationNext := by
+    positivity
   have hlowerNonneg :
       0 ≤ operatingProfit +
         (1 - theta) * (1 - depreciation) * qNext * capitalNext +
