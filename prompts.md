@@ -646,3 +646,14 @@ Acción resultante: auditoría documental, mejora del README, manifiesto provisi
 **Objetivo de esta interacción:** probar en el kernel las dos cotas finitas restantes de `F0` y conectarlas con el teorema universal de decaimiento por bloques.
 
 **Prueba auditada:** `prop51FiniteBound_proved` y `prop51_unconditional_exact` aceptados por Lean 4.30.0-rc2, [Actions #45865176408](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45865176408), axiomas `[propext, Classical.choice, Quot.sound]`, sin `sorryAx`. Corresponde exactamente al grafo lineal decimal de 36 entradas, NO al Jacobiano económico SOURCE. Los fallos intermedios de `decide` y del puente `NNReal` se conservan en Actions. El protocolo paper-scoped oficial y manuscritos personales (0/8) siguen pendientes.
+
+---
+
+## Continuación IE project — mayorante robusto Lema 5.2 (26/11/2026)
+
+**Mensaje literal del autor:**
+> Ok, sigue
+
+**Objetivo:** una vez cerrada íntegramente en Lean la Proposición 5.1 para el grafo decimal, vincular la identidad telescópica de Lema 5.2 con una sucesión abstracta de mayorantes y la cota de bloques para toda matriz perturbada.
+
+**Evidencia:** `matrix_robust_majorant_induction`, `matrix_robust_block48_decay_of_norm_bounds` y `lemma52_conditional_uniform_decay` fueron aceptadas por Lean 4.30.0-rc2 en [Actions #45866200744](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45866200744), sin `sorryAx`, axiomas `[propext, Classical.choice, Quot.sound]`. El primer workflow #45865472657 falló por checkout somero que no incluía el commit fuente; se corrigió `fetch-depth:0`. Las cotas finitas robustas en Lean y la semántica SOURCE siguen abiertas.
