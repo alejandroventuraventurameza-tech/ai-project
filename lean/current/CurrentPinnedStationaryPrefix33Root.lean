@@ -94,7 +94,12 @@ theorem pinned_stationary_binding_prefix33_root (G : ℝ) :
     cases eq <;>
       simp [localReducedPrefixResidual, hdata0, hdata1,
         hremaining, hH.1, hH.2.1, hH.2.2,
-        hL.1, hL.2.1, hL.2.2, hpledge]
+        hL.1, hL.2.1, hL.2.2]
+    change Z.stateTwo.commonPledgeValue -
+      (1 - P.depreciation) *
+        ProposedStationaryRealScale.controls.inflation *
+        ProposedStationaryRealScale.controls.capitalPrice = 0
+    exact hpledge
   funext i
   change localReducedPrefixResidual .binding P I
     (localPrefixLogChart Z (0 : Fin 33 → ℝ))
