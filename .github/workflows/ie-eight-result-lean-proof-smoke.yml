@@ -7,6 +7,7 @@ on:
     paths:
       - .github/workflows/ie-eight-result-lean-proof-smoke.yml
       - lean/candidates/Ventura26LiquidityAllocation/CurrentCompactWedgeRepayment.lean
+      - lean/candidates/Ventura26LiquidityAllocation/CurrentCompactFinancingCapacity.lean
       - lean/current_paper_source_inventory_8.json
       - .github/lean-current-run-request.txt
 
@@ -78,24 +79,32 @@ jobs:
           export PATH="$HOME/.elan/bin:$PATH"
           lake exe cache get
 
-      - name: Compile the two current-source-specific claims
+      - name: Compile all three current-source-specific claims
         shell: bash
         run: |
           set -euo pipefail
           export PATH="$HOME/.elan/bin:$PATH"
           cp ai-project/lean/candidates/Ventura26LiquidityAllocation/CurrentCompactWedgeRepayment.lean AppliedModelingLib/CurrentCompactWedgeRepayment.lean
+          cp ai-project/lean/candidates/Ventura26LiquidityAllocation/CurrentCompactFinancingCapacity.lean AppliedModelingLib/CurrentCompactFinancingCapacity.lean
           cd AppliedModelingLib
           lake env lean CurrentCompactWedgeRepayment.lean 2>&1 | tee /tmp/lean-compact-two-proofs.log
           if grep -E 'sorryAx|admit|unsolved goals|error:' /tmp/lean-compact-two-proofs.log; then
             echo "ERROR: Lean proof audit reported a blocker" >&2
             exit 2
           fi
-          echo "LEAN_CHECK_OK: repaymentCurrent_exact and effectiveWedgeCurrent_exact"
+          lake env lean CurrentCompactFinancingCapacity.lean 2>&1 | tee /tmp/lean-compact-capacity.log
+          if grep -E 'sorryAx|admit|unsolved goals|error:' /tmp/lean-compact-capacity.log; then
+            echo "ERROR: Financing-capacity proof reported a blocker" >&2
+            exit 2
+          fi
+          echo "LEAN_CHECK_OK: repaymentCurrent_exact, effectiveWedgeCurrent_exact, and financingCapacityCurrent_exact"
 
       - name: Preserve command outputs for independent QA
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ie-compact-lean-source-two-proof-log
-          path: /tmp/lean-compact-two-proofs.log
+          name: ie-compact-lean-source-three-proof-log
+          path: |
+            /tmp/lean-compact-two-proofs.log
+            /tmp/lean-compact-capacity.log
           if-no-files-found: ignore
