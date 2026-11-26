@@ -1,0 +1,106 @@
+name: IE compact A.1.4 integrated Lean proof
+
+on:
+  push:
+    branches:
+      - work/ie-lemma-a14-integrated-20261126
+    paths:
+      - lean/candidates/Ventura26LiquidityAllocation/PaperLemma43CompactIntegratedCandidate.lean
+      - lean/current/CurrentCompactLogLossBridge.lean
+      - .github/workflows/ie-lemma-a14-integrated-lean.yml
+  pull_request:
+    branches: [main]
+    paths:
+      - lean/candidates/Ventura26LiquidityAllocation/PaperLemma43CompactIntegratedCandidate.lean
+      - .github/workflows/ie-lemma-a14-integrated-lean.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ie-lemma-a14-integrated-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  compile-exact-current-loss-bundle:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - name: Checkout scientific repository
+        uses: actions/checkout@v4
+        with:
+          path: ai-project
+          fetch-depth: 0
+
+      - name: Checkout pinned AppliedModelingLib
+        uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+
+      - name: Verify fixed original manuscript
+        working-directory: ai-project
+        shell: bash
+        run: |
+          set -euo pipefail
+          git cat-file -e bac3c6255da39cd1169a965df35bb5e9a230e6e8^{commit}
+          git show bac3c6255da39cd1169a965df35bb5e9a230e6e8:paper/appendix_eight_results.tex | grep -F 'lem:allocation_loss_identity'
+          python3 - <<'PY'
+          import pathlib
+          p=pathlib.Path('lean/candidates/Ventura26LiquidityAllocation/PaperLemma43CompactIntegratedCandidate.lean')
+          s=p.read_text(encoding='utf-8')
+          assert 'sourceLemma43CompleteSpec_proved' in s
+          assert 'currentCompactLogLoss_exact' in s
+          assert 'compactLemmaA14Integrated_exact' in s
+          print('SOURCE_LOCK_OK: frozen lemma and both proof dependencies referenced')
+          PY
+
+      - name: Install pinned Lean toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Prepare historical and current modules
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = "194edcc95df74806a39b961d10dedddc6e730cce"
+          cp ai-project/lean/checkpoint/dependencies/lakefile.toml upstream/lakefile.toml
+          mkdir -p upstream/papers/Ventura26LiquidityAllocation
+          cp ai-project/lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp ai-project/lean/checkpoint/module_root.lean upstream/papers/Ventura26LiquidityAllocation.lean
+          for m in PaperAllocationLossElasticityCandidate PaperAllocationEfficiencySupportCandidate PaperAllocationSourceAlgebraBridgeCandidate PaperOptimalLaborCandidate PaperOriginalLaborGlobalCandidate PaperJointEfficiencySourceCandidate PaperJointEfficiencyBoundCandidate PaperJointEfficiencyPhysicalCandidate PaperOriginalLogLossCandidate PaperSourceDifferentiationCandidate PaperSourceDifferentialSharesCandidate PaperSourceLossChainRuleCandidate PaperSourceOutputShareCandidate PaperSourceLogCapitalRatioCandidate PaperLemma43StaticIntegratedCandidate PaperLemma43DynamicIntegratedCandidate PaperLemma43SourceCompleteCandidate PaperLemma43CompactIntegratedCandidate; do
+            cp "ai-project/lean/candidates/Ventura26LiquidityAllocation/${m}.lean" upstream/papers/Ventura26LiquidityAllocation/
+          done
+          cp ai-project/lean/current/CurrentCompactLogLossBridge.lean upstream/papers/Ventura26LiquidityAllocation/
+
+      - name: Fetch cache and compile integrated proof with kernel
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake exe cache get
+          lake build Ventura26LiquidityAllocation.PaperLemma43CompactIntegratedCandidate 2>&1 | tee /tmp/ie-a14-build.log
+          lake env lean papers/Ventura26LiquidityAllocation/PaperLemma43CompactIntegratedCandidate.lean 2>&1 | tee /tmp/ie-a14-kernel.log
+          if grep -E 'sorryAx|admit|unsolved goals|error:' /tmp/ie-a14-kernel.log; then
+            echo 'ERROR: kernel audit found a forbidden placeholder or failure' >&2
+            exit 2
+          fi
+          grep -F 'compactLemmaA14Integrated_exact' /tmp/ie-a14-kernel.log
+          grep -F 'depends on axioms' /tmp/ie-a14-kernel.log
+          echo 'A14_INTEGRATED_LEAN_OK: historical clauses plus physical compact log ratio'
+
+      - name: Archive compiler evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ie-a14-integrated-lean-kernel-logs
+          path: |
+            /tmp/ie-a14-build.log
+            /tmp/ie-a14-kernel.log
+          if-no-files-found: ignore
