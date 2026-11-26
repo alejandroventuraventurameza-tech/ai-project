@@ -153,6 +153,15 @@ private theorem rationalF0_pow48_row_norm_lt :
         (24 / 25 : ℚ) := by
   decide +kernel
 
+
+private theorem rationalF0_all_transient_rows :
+    ∀ r : Fin 48, ∀ i : Fin 6,
+      (∑ j : Fin 6, |((exactDecimalF0Rat ^ r.val) i j)|) <
+        (61 / 10 : ℚ) := by
+  decide +kernel
+
+#print axioms rationalF0_all_transient_rows
+
 #print axioms rationalF0_pow7_row_norm_lt
 #print axioms rationalF0_pow48_row_norm_lt
 
