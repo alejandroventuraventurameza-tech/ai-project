@@ -57,7 +57,17 @@ theorem financingCapacityCurrent_exact : financingCapacityCurrentSpec := by
       nlinarith [hpledge]
     have hcapitalBound :
         (capitalPrice - collateral / loanRate) * capital ≤ ownResources := by
-      nlinarith [hbudget, hloanUpper]
+      calc
+        (capitalPrice - collateral / loanRate) * capital =
+          capitalPrice * capital - (collateral / loanRate) * capital := by ring
+        _ = ownResources + loan - (collateral / loanRate) * capital := by
+          rw [hbudget]
+        _ ≤ ownResources := by
+          have hring :
+              (collateral / loanRate) * capital =
+                collateral * capital / loanRate := by ring
+          rw [hring]
+          linarith [hloanUpper]
     exact (le_div_iff₀ hdenomPos).2 (by nlinarith [hcapitalBound])
   · let maxCapital := ownResources / (capitalPrice - collateral / loanRate)
     let maxLoan := collateral * maxCapital / loanRate
@@ -74,11 +84,22 @@ theorem financingCapacityCurrent_exact : financingCapacityCurrentSpec := by
         (capitalPrice - collateral / loanRate) * maxCapital =
           ownResources := by
       dsimp [maxCapital]
-      field_simp [hdenomNe]
+      calc
+        (capitalPrice - collateral / loanRate) *
+            (ownResources / (capitalPrice - collateral / loanRate)) =
+          ownResources * (capitalPrice - collateral / loanRate) /
+            (capitalPrice - collateral / loanRate) := by ring
+        _ = ownResources := mul_div_cancel₀ _ hdenomNe
     have hbudgetEq : capitalPrice * maxCapital =
         ownResources + maxLoan := by
-      dsimp [maxLoan]
-      nlinarith [hdenomEq]
+      calc
+        capitalPrice * maxCapital =
+          (capitalPrice - collateral / loanRate) * maxCapital +
+            (collateral / loanRate) * maxCapital := by ring
+        _ = ownResources + maxLoan := by
+          rw [hdenomEq]
+          dsimp [maxLoan]
+          ring
     exact ⟨maxCapital, maxLoan, rfl, le_of_lt hmaxCapital, hmaxLoan,
       hbudgetEq, hpledgeEq⟩
   · have hquotRaw := (hasDerivAt_inv hloanRate.ne').const_mul collateral
