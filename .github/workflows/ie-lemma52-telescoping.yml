@@ -1,0 +1,75 @@
+name: IE Lemma 5.2 telescoping and operator-norm proof
+
+on:
+  push:
+    branches:
+      - work/ie-lemma52-telescoping-20261126
+    paths:
+      - lean/current/CurrentCompactRobustTelescoping.lean
+      - .github/workflows/ie-lemma52-telescoping.yml
+  pull_request:
+    branches: [main]
+    paths:
+      - lean/current/CurrentCompactRobustTelescoping.lean
+      - .github/workflows/ie-lemma52-telescoping.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ie-lemma52-telescope-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  telescoping-kernel:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out scientific repository
+        uses: actions/checkout@v4
+        with:
+          path: ai-project
+          fetch-depth: 0
+      - name: Check out pinned AppliedModelingLib
+        uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Check fixed manuscript label
+        shell: bash
+        working-directory: ai-project
+        run: |
+          set -euo pipefail
+          git show bac3c6255da39cd1169a965df35bb5e9a230e6e8:paper/body_compact_after.tex |
+            grep -F 'lem:compact_robust_tail_power'
+      - name: Install Lean4
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Build kernel-checked robust telescoping
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake exe cache get
+          cp ../ai-project/lean/current/CurrentCompactRobustTelescoping.lean ./CurrentCompactRobustTelescoping.lean
+          lake env lean CurrentCompactRobustTelescoping.lean 2>&1 | tee /tmp/ie-lemma52-kernel.log
+          if grep -E 'sorryAx|error:|unsolved goals' /tmp/ie-lemma52-kernel.log; then
+            exit 2
+          fi
+          grep -F 'matrix_pow_difference_telescoping' /tmp/ie-lemma52-kernel.log
+          grep -F 'matrix_power_norm_telescoping' /tmp/ie-lemma52-kernel.log
+          grep -F 'depends on axioms' /tmp/ie-lemma52-kernel.log
+          echo 'LEMMA52_TELESCOPING_KERNEL_OK: still pending finite rational majorants'
+      - name: Save compiler evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ie-lemma52-kernel-evidence
+          path: /tmp/ie-lemma52-kernel.log
+          if-no-files-found: ignore
