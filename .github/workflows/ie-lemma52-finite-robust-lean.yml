@@ -6,6 +6,7 @@ on:
     paths:
       - lean/current/CurrentCompactBlock48Tail.lean
       - lean/current/CurrentCompactRobustFiniteCertificate.lean
+      - lean/current/CurrentCompactRobustFiniteBridge.lean
       - code/irf/check_lean_robust_majorants.py
       - .github/workflows/ie-lemma52-finite-robust-lean.yml
   pull_request:
@@ -68,9 +69,21 @@ jobs:
           mkdir -p papers/Ventura26LiquidityAllocation
           cp ../ai-project/lean/checkpoint/module_root.lean papers/Ventura26LiquidityAllocation.lean
           cp ../ai-project/lean/current/CurrentCompactBlock48Tail.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentCompactRobustTelescoping.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentCompactRobustMajorant.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentCompactRobustFiniteBridge.lean papers/Ventura26LiquidityAllocation/
           cp ../ai-project/lean/current/CurrentCompactRobustFiniteCertificate.lean papers/Ventura26LiquidityAllocation/
           lake build Ventura26LiquidityAllocation.CurrentCompactBlock48Tail 2>&1 | tee /tmp/ie-robust-49-prereq.log
+          lake build Ventura26LiquidityAllocation.CurrentCompactRobustTelescoping 2>&1 | tee -a /tmp/ie-robust-49-prereq.log
+          lake build Ventura26LiquidityAllocation.CurrentCompactRobustMajorant 2>&1 | tee -a /tmp/ie-robust-49-prereq.log
+          lake build Ventura26LiquidityAllocation.CurrentCompactRobustFiniteBridge 2>&1 | tee -a /tmp/ie-robust-49-prereq.log
           lake build Ventura26LiquidityAllocation.CurrentCompactRobustFiniteCertificate 2>&1 | tee /tmp/ie-robust-49-build.log
+          lake env lean papers/Ventura26LiquidityAllocation/CurrentCompactRobustFiniteBridge.lean 2>&1 | tee /tmp/ie-robust-49-bridge.log
+          if grep -E 'sorryAx|error:|unsolved goals' /tmp/ie-robust-49-bridge.log; then
+            exit 2
+          fi
+          grep -F 'matrix_robust_majorant_finite_48' /tmp/ie-robust-49-bridge.log
+          grep -F 'lemma52_uniform_of_finite_majorant' /tmp/ie-robust-49-bridge.log
           lake env lean papers/Ventura26LiquidityAllocation/CurrentCompactRobustFiniteCertificate.lean 2>&1 | tee /tmp/ie-robust-49-axioms.log
           if grep -E 'sorryAx|error:|unsolved goals' /tmp/ie-robust-49-axioms.log; then
             exit 2
@@ -79,7 +92,9 @@ jobs:
           grep -F 'finiteRobustStepVerified' /tmp/ie-robust-49-axioms.log
           grep -F 'finiteRobust48Verified' /tmp/ie-robust-49-axioms.log
           grep -F 'finiteRobustTransientVerified' /tmp/ie-robust-49-axioms.log
-          echo 'ROBUST_49_KERNEL_CERTIFIED: finite rational data only; analytic bridge separate'
+          grep -F 'lemma52_decimal_full_uniform_decay' /tmp/ie-robust-49-axioms.log
+          grep -F 'depends on axioms' /tmp/ie-robust-49-axioms.log
+          echo 'LEMMA52_DECIMAL_FULL_KERNEL_OK: exact 49-step rational source and universal robust decay'
       - name: Archive logs
         if: always()
         uses: actions/upload-artifact@v4
@@ -89,5 +104,6 @@ jobs:
             /tmp/ie-robust-49-source.log
             /tmp/ie-robust-49-prereq.log
             /tmp/ie-robust-49-build.log
+            /tmp/ie-robust-49-bridge.log
             /tmp/ie-robust-49-axioms.log
           if-no-files-found: ignore

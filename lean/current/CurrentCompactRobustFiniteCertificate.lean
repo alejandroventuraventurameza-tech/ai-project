@@ -1,4 +1,5 @@
 import Ventura26LiquidityAllocation.CurrentCompactBlock48Tail
+import Ventura26LiquidityAllocation.CurrentCompactRobustFiniteBridge
 
 /-!
 # Exact finite robustness majorants for the current Lemma 5.2
@@ -100,6 +101,121 @@ private theorem finiteRobust48Verified :
 private theorem finiteRobustTransientVerified :
     ∀ n : Fin 48, robustUpperRat n.val < (7 : ℚ) := by
   decide +kernel
+
+
+/-! ## Source-specific bridge from 49 rational entries to universal decay -/
+
+/-- The actual 49-entry table, cast to real, is extended by zero outside
+its verified finite domain. No infinite majorant recurrence is postulated. -/
+private def robustUpperReal (n : ℕ) : ℝ := (robustUpperRat n : ℝ)
+
+private theorem robustUpperReal_nonneg (n : ℕ) :
+    0 ≤ robustUpperReal n := by
+  unfold robustUpperReal robustUpperRat normScale
+  split_ifs <;> positivity
+
+private theorem finiteNormRealUpper
+    (n : ℕ) (hn : n < 49) :
+    ‖exactDecimalF0 ^ n‖ ≤ ((sharpUpperRat n : ℚ) : ℝ) := by
+  have hpos : 0 < sharpUpperRat n :=
+    finiteSharpPositive ⟨n, hn⟩
+  have hrow : ∀ i : Fin 6,
+      (∑ j : Fin 6, |((exactDecimalF0Rat ^ n) i j)|) <
+        sharpUpperRat n :=
+    finiteSourceRowsVerified ⟨n, hn⟩
+  exact (rational_rows_imply_real_operator_norm n
+    (sharpUpperRat n) hpos hrow).le
+
+/-- The very same 48 finite recurrence checks, now interpreted in real
+matrix operator norm rather than as unrelated rational arithmetic. -/
+private theorem certifiedFiniteRecurrenceReal :
+    ∀ n : ℕ, 0 < n → n ≤ 48 →
+      ‖exactDecimalF0 ^ n‖ +
+        ∑ j ∈ Finset.range n,
+          (‖exactDecimalF0 ^ j‖ * (1 / 10000 : ℝ)) *
+            robustUpperReal (n - 1 - j) ≤ robustUpperReal n := by
+  intro n hn hn48
+  have hnlt : n < 49 := by omega
+  have hmain : ‖exactDecimalF0 ^ n‖ ≤ ((sharpUpperRat n : ℚ) : ℝ) :=
+    finiteNormRealUpper n hnlt
+  have hsum :
+      (∑ j ∈ Finset.range n,
+        (‖exactDecimalF0 ^ j‖ * (1 / 10000 : ℝ)) *
+          robustUpperReal (n - 1 - j)) ≤
+      ∑ j ∈ Finset.range n,
+        (((sharpUpperRat j : ℚ) : ℝ) * (1 / 10000 : ℝ)) *
+          robustUpperReal (n - 1 - j) := by
+    apply Finset.sum_le_sum
+    intro j hj
+    have hjlt : j < 49 := by
+      have h := Finset.mem_range.mp hj
+      omega
+    have hjBound := finiteNormRealUpper j hjlt
+    have hp : 0 ≤ (1 / 10000 : ℝ) * robustUpperReal (n - 1 - j) :=
+      mul_nonneg (by norm_num) (robustUpperReal_nonneg _)
+    calc
+      (‖exactDecimalF0 ^ j‖ * (1 / 10000 : ℝ)) *
+          robustUpperReal (n - 1 - j) =
+        ‖exactDecimalF0 ^ j‖ *
+          ((1 / 10000 : ℝ) * robustUpperReal (n - 1 - j)) := by ring
+      _ ≤ ((sharpUpperRat j : ℚ) : ℝ) *
+          ((1 / 10000 : ℝ) * robustUpperReal (n - 1 - j)) :=
+            mul_le_mul_of_nonneg_right hjBound hp
+      _ = (((sharpUpperRat j : ℚ) : ℝ) * (1 / 10000 : ℝ)) *
+          robustUpperReal (n - 1 - j) := by ring
+  have hRat := finiteRobustStepVerified ⟨n, hnlt⟩ hn
+  have hReal :
+      ((sharpUpperRat n : ℚ) : ℝ) +
+        ∑ j ∈ Finset.range n,
+          (((sharpUpperRat j : ℚ) : ℝ) * (1 / 10000 : ℝ)) *
+            robustUpperReal (n - 1 - j) ≤ robustUpperReal n := by
+    dsimp only [robustUpperReal]
+    exact_mod_cast hRat
+  calc
+    ‖exactDecimalF0 ^ n‖ +
+        ∑ j ∈ Finset.range n,
+          (‖exactDecimalF0 ^ j‖ * (1 / 10000 : ℝ)) *
+            robustUpperReal (n - 1 - j) ≤
+        ((sharpUpperRat n : ℚ) : ℝ) +
+          ∑ j ∈ Finset.range n,
+            (((sharpUpperRat j : ℚ) : ℝ) * (1 / 10000 : ℝ)) *
+              robustUpperReal (n - 1 - j) :=
+                add_le_add hmain hsum
+    _ ≤ robustUpperReal n := hReal
+
+private theorem robustUpperReal_zero :
+    (1 : ℝ) ≤ robustUpperReal 0 := by
+  unfold robustUpperReal
+  exact_mod_cast finiteRobustBaseVerified
+
+private theorem robustUpperReal_48 :
+    robustUpperReal 48 < (49 / 50 : ℝ) := by
+  unfold robustUpperReal
+  exact_mod_cast finiteRobust48Verified
+
+private theorem robustUpperReal_transient :
+    ∀ r : ℕ, r < 48 → robustUpperReal r < (7 : ℝ) := by
+  intro r hr
+  unfold robustUpperReal
+  exact_mod_cast (finiteRobustTransientVerified ⟨r, hr⟩)
+
+/-- COMPLETE LEMMA 5.2 FOR THE LITERAL DECIMAL F0.
+All numerical inequalities are now kernel-checked without hypotheses.
+The only remaining hypothesis is the theorem's explicit norm-ball premise
+for the arbitrary real perturbation A. This does NOT assert that the
+economic 34-row SOURCE Jacobian lies in the ball. -/
+theorem lemma52_decimal_full_uniform_decay
+    (A : Matrix (Fin 6) (Fin 6) ℝ)
+    (hGap : ‖A - exactDecimalF0‖ ≤ (1 / 10000 : ℝ))
+    (k : ℕ) (x : Fin 6 → ℝ) :
+    ‖(A ^ k) *ᵥ x‖ ≤
+      (7 : ℝ) * (49 / 50 : ℝ) ^ (k / 48) * ‖x‖ := by
+  exact lemma52_uniform_of_finite_majorant
+    exactDecimalF0 A robustUpperReal hGap robustUpperReal_zero
+    certifiedFiniteRecurrenceReal robustUpperReal_48
+    robustUpperReal_transient k x
+
+#print axioms lemma52_decimal_full_uniform_decay
 
 #print axioms finiteSourceRowsVerified
 #print axioms finiteRobustStepVerified
