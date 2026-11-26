@@ -1,0 +1,80 @@
+name: IE robust matrix majorant kernel proof
+
+on:
+  push:
+    branches: [work/ie-lemma52-majorant-checked-20261126]
+    paths:
+      - lean/current/CurrentCompactRobustMajorant.lean
+      - .github/workflows/ie-lemma52-majorant-lean.yml
+  pull_request:
+    branches: [main]
+    paths:
+      - lean/current/CurrentCompactRobustMajorant.lean
+      - .github/workflows/ie-lemma52-majorant-lean.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ie-robust-majorant-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  general-majorant-kernel:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ai-project
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Check frozen source
+        working-directory: ai-project
+        run: |
+          set -euo pipefail
+          git cat-file -e bac3c6255da39cd1169a965df35bb5e9a230e6e8^{commit}
+          git show bac3c6255da39cd1169a965df35bb5e9a230e6e8:paper/body_compact_after.tex | grep -F 'lem:compact_robust_tail_power'
+      - name: Install pinned Lean toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Build telescoping prerequisite and majorant theorem
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake exe cache get
+          cp ../ai-project/lean/checkpoint/dependencies/lakefile.toml ./lakefile.toml
+          mkdir -p papers/Ventura26LiquidityAllocation
+          cp ../ai-project/lean/checkpoint/module_root.lean papers/Ventura26LiquidityAllocation.lean
+          cp ../ai-project/lean/current/CurrentCompactRobustTelescoping.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentCompactRobustMajorant.lean papers/Ventura26LiquidityAllocation/
+          lake build Ventura26LiquidityAllocation.CurrentCompactRobustTelescoping 2>&1 | tee /tmp/ie-robust-majorant-prereq.log
+          lake build Ventura26LiquidityAllocation.CurrentCompactRobustMajorant 2>&1 | tee /tmp/ie-robust-majorant-build.log
+          lake env lean papers/Ventura26LiquidityAllocation/CurrentCompactRobustMajorant.lean 2>&1 | tee /tmp/ie-robust-majorant-kernel.log
+          if grep -E 'sorryAx|error:|unsolved goals' /tmp/ie-robust-majorant-kernel.log; then
+            exit 2
+          fi
+          grep -F 'matrix_robust_majorant_induction' /tmp/ie-robust-majorant-kernel.log
+          grep -F 'matrix_robust_block48_decay_of_norm_bounds' /tmp/ie-robust-majorant-kernel.log
+          grep -F 'lemma52_conditional_uniform_decay' /tmp/ie-robust-majorant-kernel.log
+          grep -F 'depends on axioms' /tmp/ie-robust-majorant-kernel.log
+          echo 'LEMMA52_UNIFORM_CONDITIONAL_OK: all-A proof, robust finite bounds still open in Lean'
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ie-robust-majorant-kernel
+          path: |
+            /tmp/ie-robust-majorant-prereq.log
+            /tmp/ie-robust-majorant-build.log
+            /tmp/ie-robust-majorant-kernel.log
+          if-no-files-found: ignore
