@@ -24,6 +24,7 @@ namespace Ventura26LiquidityAllocation
 namespace CurrentCompact
 
 open Filter
+open scoped Topology
 
 /-- The *function* of output loss as the paper's log of the ratio,
 using employment optimally allocated at each nearby capital level.
