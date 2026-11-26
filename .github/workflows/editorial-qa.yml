@@ -150,7 +150,7 @@ jobs:
           # Only a branch that actually changes publication files should
           # synchronize rebuilt PDFs; a successful LaTeX audit still runs.
           git fetch --quiet --no-tags origin main:refs/remotes/origin/main
-          if git diff --quiet refs/remotes/origin/main...HEAD -- proposal/ slides/ paper/; then
+          if git diff --quiet refs/remotes/origin/main HEAD -- proposal/ slides/ paper/; then
             echo "Skip PDF sync: no publication-tree change relative to main"
             exit 0
           fi
