@@ -1,0 +1,65 @@
+name: IE SOURCE five-bank exact nonlinear targetization
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - lean/current/CurrentSourceFiveBankTargetization.lean
+      - .github/workflows/ie-source-five-bank-targetization.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ie-source-five-bank
+  cancel-in-progress: true
+
+jobs:
+  exact-source-banking-kernel:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ai-project
+      - uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Install pinned Lean
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Compile exact economic SOURCE five-row bridge and audit axioms
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          test "$(git rev-parse HEAD)" = "194edcc95df74806a39b961d10dedddc6e730cce"
+          lake exe cache get
+          cp ../ai-project/lean/checkpoint/dependencies/lakefile.toml ./lakefile.toml
+          mkdir -p papers/Ventura26LiquidityAllocation
+          cp ../ai-project/lean/checkpoint/module_root.lean papers/Ventura26LiquidityAllocation.lean
+          cp ../ai-project/lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/candidates/Ventura26LiquidityAllocation/*.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceFiveBankTargetization.lean papers/Ventura26LiquidityAllocation/
+          lake build Ventura26LiquidityAllocation.CurrentSourceFiveBankTargetization 2>&1 | tee /tmp/ie-source-five-bank-build.log
+          lake env lean papers/Ventura26LiquidityAllocation/CurrentSourceFiveBankTargetization.lean 2>&1 | tee /tmp/ie-source-five-bank-axioms.log
+          if grep -E 'sorryAx|unsolved goals|error:' /tmp/ie-source-five-bank-axioms.log; then exit 2; fi
+          grep -F 'sourceTargetFiveRows_eq_nonlinearShear' /tmp/ie-source-five-bank-axioms.log
+          grep -F 'sourceTargetFiveRows_zero_iff_sourceFiveRows_zero' /tmp/ie-source-five-bank-axioms.log
+          echo 'SOURCE_FIVE_BANK_EXACT_NONLINEAR_TARGETIZATION_KERNEL_OK'
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ie-source-five-bank-exact-bridge
+          path: |
+            /tmp/ie-source-five-bank-build.log
+            /tmp/ie-source-five-bank-axioms.log
+          if-no-files-found: ignore
