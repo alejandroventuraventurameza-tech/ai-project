@@ -93,6 +93,8 @@ jobs:
           grep -F 'finiteRobust48Verified' /tmp/ie-robust-49-axioms.log
           grep -F 'finiteRobustTransientVerified' /tmp/ie-robust-49-axioms.log
           grep -F 'lemma52_decimal_full_uniform_decay' /tmp/ie-robust-49-axioms.log
+          grep -F 'lemma52_decimal_finite_norms' /tmp/ie-robust-49-axioms.log
+          grep -F 'lemma52_decimal_current_exact' /tmp/ie-robust-49-axioms.log
           grep -F 'depends on axioms' /tmp/ie-robust-49-axioms.log
           echo 'LEMMA52_DECIMAL_FULL_KERNEL_OK: exact 49-step rational source and universal robust decay'
       - name: Archive logs

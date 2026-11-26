@@ -233,6 +233,47 @@ theorem lemma52_decimal_full_uniform_decay
     certifiedFiniteRecurrenceReal robustUpperReal_48
     robustUpperReal_transient k x
 
+
+/-- The literal two finite-power statements appearing in Lemma 5.2,
+not merely an intermediate unexported bound. -/
+theorem lemma52_decimal_finite_norms
+    (A : Matrix (Fin 6) (Fin 6) ℝ)
+    (hGap : ‖A - exactDecimalF0‖ ≤ (1 / 10000 : ℝ)) :
+    ‖A ^ 48‖ < (49 / 50 : ℝ) ∧
+      (∀ r : ℕ, r < 48 → ‖A ^ r‖ < (7 : ℝ)) := by
+  have hδ : (0 : ℝ) ≤ 1 / 10000 := by norm_num
+  have hMaj := matrix_robust_majorant_finite_48
+    A exactDecimalF0 (1 / 10000) robustUpperReal
+    hδ hGap robustUpperReal_zero certifiedFiniteRecurrenceReal
+  constructor
+  · exact lt_of_le_of_lt (hMaj 48 (by omega)) robustUpperReal_48
+  · intro r hr
+    exact lt_of_le_of_lt (hMaj r (by omega))
+      (robustUpperReal_transient r hr)
+
+/-- Current paper-scoped mathematical specification for Lemma 5.2:
+both strict finite bounds AND the all-k, all-x robust decay.
+The only assumption is the source's explicit 10^-4 norm ball. -/
+def lemma52_decimal_current_spec : Prop :=
+  ∀ A : Matrix (Fin 6) (Fin 6) ℝ,
+    ‖A - exactDecimalF0‖ ≤ (1 / 10000 : ℝ) →
+      ‖A ^ 48‖ < (49 / 50 : ℝ) ∧
+      (∀ r : ℕ, r < 48 → ‖A ^ r‖ < (7 : ℝ)) ∧
+      (∀ (k : ℕ) (x : Fin 6 → ℝ),
+        ‖(A ^ k) *ᵥ x‖ ≤
+          (7 : ℝ) * (49 / 50 : ℝ) ^ (k / 48) * ‖x‖)
+
+/-- Proof of all three clauses of the literal mathematical Lemma 5.2. -/
+theorem lemma52_decimal_current_exact : lemma52_decimal_current_spec := by
+  unfold lemma52_decimal_current_spec
+  intro A hGap
+  obtain ⟨h48, hTransient⟩ := lemma52_decimal_finite_norms A hGap
+  exact ⟨h48, hTransient,
+    fun k x => lemma52_decimal_full_uniform_decay A hGap k x⟩
+
+#print axioms lemma52_decimal_finite_norms
+#print axioms lemma52_decimal_current_exact
+
 #print axioms lemma52_decimal_full_uniform_decay
 
 #print axioms finiteSourceRowsVerified
