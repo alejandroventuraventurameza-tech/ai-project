@@ -80,6 +80,90 @@ theorem matrix_robust_majorant_induction
                       (add_le_add_left hSum (‖F ^ (n + 1)‖))
             _ ≤ a (n + 1) := hStep (n + 1) (by omega)
 
+
+/-- Geometric decay from the robust constants of the compact paper.
+The matrix is arbitrary, but the two finite norm bounds are hypotheses. -/
+theorem matrix_robust_block48_decay_of_norm_bounds
+    (A : Matrix (Fin 6) (Fin 6) ℝ)
+    (hBlock : ‖A ^ 48‖ < (49 / 50 : ℝ))
+    (hTransient : ∀ r : ℕ, r < 48 → ‖A ^ r‖ < (7 : ℝ))
+    (k : ℕ) (x : Fin 6 → ℝ) :
+    ‖(A ^ k) *ᵥ x‖ ≤
+      (7 : ℝ) * (49 / 50 : ℝ) ^ (k / 48) * ‖x‖ := by
+  let m : ℕ := k / 48
+  let r : ℕ := k % 48
+  have hr : r < 48 := by
+    dsimp [r]
+    exact Nat.mod_lt _ (by omega)
+  have hk : k = 48 * m + r := by
+    dsimp [m, r]
+    omega
+  have hPowerIdentity : A ^ k = (A ^ 48) ^ m * A ^ r := by
+    calc
+      A ^ k = A ^ (48 * m + r) := by rw [← hk]
+      _ = (A ^ 48) ^ m * A ^ r := by rw [pow_add, pow_mul]
+  have hMainPower : ‖(A ^ 48) ^ m‖ ≤ (49 / 50 : ℝ) ^ m := by
+    calc
+      ‖(A ^ 48) ^ m‖ ≤ ‖A ^ 48‖ ^ m := norm_pow_le _ _
+      _ ≤ (49 / 50 : ℝ) ^ m := by
+        exact pow_le_pow_left₀ (norm_nonneg _) hBlock.le _
+  have hTransientBound : ‖A ^ r‖ ≤ (7 : ℝ) :=
+    (hTransient r hr).le
+  have hMatrix :
+      ‖A ^ k‖ ≤ (7 : ℝ) * (49 / 50 : ℝ) ^ (k / 48) := by
+    calc
+      ‖A ^ k‖ = ‖(A ^ 48) ^ m * A ^ r‖ := by rw [hPowerIdentity]
+      _ ≤ ‖(A ^ 48) ^ m‖ * ‖A ^ r‖ := norm_mul_le _ _
+      _ ≤ (49 / 50 : ℝ) ^ m * (7 : ℝ) := by
+        exact mul_le_mul hMainPower hTransientBound (norm_nonneg _)
+          (pow_nonneg (by norm_num) _)
+      _ = (7 : ℝ) * (49 / 50 : ℝ) ^ (k / 48) := by
+        dsimp [m]
+        ring
+  calc
+    ‖(A ^ k) *ᵥ x‖ ≤ ‖A ^ k‖ * ‖x‖ :=
+      Matrix.linfty_opNorm_mulVec _ _
+    _ ≤ ((7 : ℝ) * (49 / 50 : ℝ) ^ (k / 48)) * ‖x‖ :=
+      mul_le_mul_of_nonneg_right hMatrix (norm_nonneg x)
+    _ = (7 : ℝ) * (49 / 50 : ℝ) ^ (k / 48) * ‖x‖ := rfl
+
+/-- Uniform statement for every real 6x6 A within 10^-4 of F,
+conditional ONLY on existence of a sequence satisfying the source
+majorant recursion and its finite inequalities.
+
+The existence and finite numerical bounds of that source-specific
+sequence are not proved in this declaration. -/
+theorem lemma52_conditional_uniform_decay
+    (F A : Matrix (Fin 6) (Fin 6) ℝ)
+    (a : ℕ → ℝ)
+    (hGap : ‖A - F‖ ≤ (1 / 10000 : ℝ))
+    (hZero : (1 : ℝ) ≤ a 0)
+    (hStep : ∀ n : ℕ, 0 < n →
+      ‖F ^ n‖ +
+        ∑ j ∈ Finset.range n,
+          (‖F ^ j‖ * (1 / 10000 : ℝ)) * a (n - 1 - j) ≤ a n)
+    (h48 : a 48 < (49 / 50 : ℝ))
+    (hTransient : ∀ r : ℕ, r < 48 → a r < (7 : ℝ))
+    (k : ℕ) (x : Fin 6 → ℝ) :
+    ‖(A ^ k) *ᵥ x‖ ≤
+      (7 : ℝ) * (49 / 50 : ℝ) ^ (k / 48) * ‖x‖ := by
+  have hDelta : (0 : ℝ) ≤ 1 / 10000 := by norm_num
+  have hBound48 : ‖A ^ 48‖ < (49 / 50 : ℝ) :=
+    lt_of_le_of_lt
+      (matrix_robust_majorant_induction A F (1 / 10000) a
+        hDelta hGap hZero hStep 48) h48
+  have hBoundTransient : ∀ r : ℕ, r < 48 → ‖A ^ r‖ < (7 : ℝ) := by
+    intro r hr
+    exact lt_of_le_of_lt
+      (matrix_robust_majorant_induction A F (1 / 10000) a
+        hDelta hGap hZero hStep r)
+      (hTransient r hr)
+  exact matrix_robust_block48_decay_of_norm_bounds
+    A hBound48 hBoundTransient k x
+
+#print axioms matrix_robust_block48_decay_of_norm_bounds
+#print axioms lemma52_conditional_uniform_decay
+
 #print axioms matrix_robust_majorant_induction
 
 end CurrentCompact
