@@ -1,36 +1,9 @@
-# Apéndice manuscrito del autor — todavía pendiente
+# Apéndice manuscrito — artículo evaluable de ocho resultados
 
-La guía [GUIA_DERIVACION_MANUSCRITA_NUCLEO.md](GUIA_DERIVACION_MANUSCRITA_NUCLEO.md)
-expone los pasos formales que deben cotejarse **personalmente y a mano**:
-complementariedad escalar, teorema de función implícita y las identidades
-de recursos invertibles, crédito y capital de la empresa H.
+**Estado verificable al 26/11/2026: 0 de 8 hojas manuscritas auténticas incorporadas.** Las guías tipografiadas de este directorio sirven para preparar pruebas, pero **no** cumplen por sí solas la exigencia de escritura a mano del issue #7.
 
-**Estado verificable:** existe una guía tipografiada, pero todavía no se
-ha incorporado ningún escaneo manuscrito, juicio personal ni evidencia
-independiente de comprensión. Esta guía NO cumple por sí sola la exigencia
-manuscrita de la consigna del curso.
+El artículo sometido es el compacto de 11 páginas de cuerpo (16 totales), con **ocho resultados numerados**. Los 57 resultados históricos y otros antecedentes quedan preservados separadamente en la rama `archive/ie-paper-full-20261118` y el archivo `paper/historical/paper_full_20261118.tex`. **No son 60 obligaciones manuscritas del paper compacto actual.**
 
-Después se deberán escribir las restantes derivaciones que sobrevivan
-la revisión editorial definitiva del paper, sin saltos ni referencias
-que sustituyan pasos matemáticos explícitos.
+La [matriz de ocho resultados](CONTROL_COBERTURA_MANUSCRITA_8.md) vincula cada proposición/lema a su etiqueta LaTeX y a la numeración original de las notas del iPad. La primera tanda cubre Proposición 4.2, Proposición 3.3 y Lemas 4.3, 3.1 y 3.2 de la versión extensa. La segunda tanda cubre decaimiento matricial, robustez matricial y cuña financiera. Las guías respectivas se conservan en [núcleo](GUIA_DERIVACION_MANUSCRITA_NUCLEO.md) y [tres resultados adicionales](GUIA_CUERPO_3_RESULTADOS_20261125.md).
 
-
-## Protocolo de incorporación tras la exposición (25/11/2026)
-
-La primera tanda manuscrita pedida al autor comprende:
-1. Proposición 4.2: monotonía local, frontera, función implícita, exclusión de otra raíz y caso h>0.
-2. Proposición 3.3: presupuesto, garantía, límite de capacidad, derivada parcial y distinción capital/crédito.
-3. Lema 4.3: asignación óptima de trabajo, referente eficiente, derivada de pérdida y MPK.
-4. Lema 3.1: cobertura en cada estado y patrimonio futuro no negativo.
-5. Lema 3.2: contradicción de depósitos y préstamos positivos simultáneos bajo spread positivo.
-
-**Archivo sugerido:** hand/ANEXO_MANUSCRITO_AUTOR_2026-11-25.pdf, con hojas fechadas y numeradas, etiquetas del paper y justificaciones sin pasos saltados. Incorporar únicamente un archivo genuinamente manuscrito entregado por el autor.
-
-**Límite obligatorio:** estas cinco pruebas no cubren todos los resultados del dossier. El PDF del paper sigue reteniendo 57 resultados numerados en cuerpo y anexos. Antes de declarar cumplida la consigna de manuscritos, cotejar el contenido final del paper y cubrir sus derivaciones restantes, o reducir formalmente su alcance con una nueva compilación y auditoría. Nunca presentar como completado un desarrollo que solo existe tipografiado.
-
-
-### Tres resultados adicionales en el cuerpo compacto
-
-La auditoría del 25/11 identificó tres resultados formalmente enunciados en `paper/body_compact_after.tex` que **no aparecen** en la matriz original de 57: decaimiento por bloques, robustez matricial y cuña de precio efectivo. Su guía, todavía **no manuscrita**, está en [GUIA_CUERPO_3_RESULTADOS_20261125.md](GUIA_CUERPO_3_RESULTADOS_20261125.md). Ver `paper/compact_extra_results_3.json`.
-
-**Cobertura conjunta: 57 enunciados inventariados originalmente + 3 resultados nuevos en el cuerpo compacto = 60 resultados a auditar. Ninguno tiene un escaneo auténtico registrado todavía.**
+**Para incorporar una prueba auténtica:** exportar un PDF legible desde el iPad, identificar número nuevo y original, hipótesis, cada igualdad/desigualdad con su regla, dominio y condiciones de signo, y un comentario propio sobre la revisión de IA. Contrastar con el enunciado definitivo antes de marcarla validada. Nunca presentar una guía impresa ni una transcripción generada como manuscrito del autor.

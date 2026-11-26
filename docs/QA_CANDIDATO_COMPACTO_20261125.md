@@ -46,3 +46,10 @@ SHA-256 del PDF local: `5672d626f3bc4a79227ede4d61b7bde1f826607699bfe8b789e7300f
 **Procedencia de figuras:** al no poder descargar los PDF binarios originales desde la conexión GitHub a este contenedor, las dos figuras para la compilación local se reconstituyeron como recortes vectoriales de la página de gráficos del PDF de CI del 18/11, conservando contenido visible. **No son binariamente iguales** a los recursos `paper/figures/irf_*.pdf` del repositorio. Para una entrega reproducible byte a byte, regenerar el PDF en checkout local usando las figuras originales del repositorio.
 
 **Bloqueos finales:** incorporar el nuevo PDF coherente (o recompilar desde fuentes GitHub y subirlo), completar las ocho notas manuscritas auténticas, certificar el alcance de la formalización de la versión fijada y comprobar/merge de PR #4 a #3 y luego a main.
+
+
+## Actualización del 26 de noviembre — PDF subido y verificación pública
+
+La advertencia anterior («PDF no incorporado») describía el estado del 25/11 y **ha quedado superada**. El workflow público [compact-paper-pdf-one-shot #45840946621](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45840946621) compiló el artículo **con las figuras originales del repositorio**, confirmó 11 páginas de cuerpo y publicó `paper/paper.pdf` en el commit `857806e`. El workflow oficial [build #45841282486](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45841282486) y la [auditoría editorial #45841282448](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45841282448) aprobaron en el último corte de código `58cdcc2`. La auditoría editorial sincronizó los cuatro PDF compilados en `270192d`. Todas las divergencias de escritura identificadas en los scripts históricos se corrigieron sin retirar pruebas.
+
+La equivalencia en contenido visual de las compilaciones no equivale a identidad de bytes: los metadatos internos de PDF pueden modificar SHA-256 entre dos compilaciones. El historial de Git conserva la identidad del PDF efectivamente entregado.
