@@ -657,3 +657,14 @@ Acción resultante: auditoría documental, mejora del README, manifiesto provisi
 **Objetivo:** una vez cerrada íntegramente en Lean la Proposición 5.1 para el grafo decimal, vincular la identidad telescópica de Lema 5.2 con una sucesión abstracta de mayorantes y la cota de bloques para toda matriz perturbada.
 
 **Evidencia:** `matrix_robust_majorant_induction`, `matrix_robust_block48_decay_of_norm_bounds` y `lemma52_conditional_uniform_decay` fueron aceptadas por Lean 4.30.0-rc2 en [Actions #45866200744](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45866200744), sin `sorryAx`, axiomas `[propext, Classical.choice, Quot.sound]`. El primer workflow #45865472657 falló por checkout somero que no incluía el commit fuente; se corrigió `fetch-depth:0`. Las cotas finitas robustas en Lean y la semántica SOURCE siguen abiertas.
+
+---
+
+## Continuación IE project — cierre formal Lema 5.2, 26/11/2026
+
+**Mensaje literal del autor:**
+> Ok, sigue
+
+**Trabajo concluido y trazado:** se construyeron y cotejaron 49 límites racionales `M_n` y 49 mayorantes `B_n` de la matriz F0 decimal (SHA-256 de fuente fijo), con `B_48/10^12=0.972103438404<49/50` y `max_{r<48}B_r/10^12=6.105134003467<7`. Se probó en Lean la inducción robusta FINITA de 48 pasos y la especificación literal `lemma52_decimal_current_exact`, incluyendo contracción, transitorio y decaimiento universal para toda matriz real 6×6 dentro de la bola `‖A−F0‖∞≤10^-4`. Evidencia: [Actions #45871289804](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45871289804), sin `sorryAx`, axiomas `[propext, Classical.choice, Quot.sound]`. Las primeras variantes fallaron por target Lake y coerciones racional–real; se conservaron los logs (Actions #45869124532, #45869911037, #45870369716) y se corrigieron sin alterar datos ni umbrales.
+
+**Pendiente separado:** identificar el Jacobiano SOURCE de las 34 filas, certificación paper-scoped oficial y ocho handnotes personales auténticos. El cierre matemático de este lema no acredita el equilibrio dinámico infinito.

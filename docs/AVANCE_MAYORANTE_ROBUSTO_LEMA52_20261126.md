@@ -1,4 +1,7 @@
-# Lema 5.2 — inducción de mayorantes y decaimiento condicional
+# Lema 5.2 — inducción de mayorantes y decaimiento condicional (registro histórico)
+
+> **Actualización posterior, 26/11/2026:** este documento registra la fase condicional histórica del PR #16. Las desigualdades finitas de F0 y su puente a la norma real se demostraron después en `CurrentCompactRobustFiniteCertificate.lean`: [Actions #45871289804](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45871289804), sin `sorryAx`. El Lema 5.2 está completo matemáticamente para matrices de la bola explícita alrededor de F0; el puente al Jacobiano SOURCE continúa abierto. Ver [cierre](CIERRE_LEMA52_KERNEL_EXACTO_20261126.md).
+
 
 **Fecha:** 26/11/2026. **Fuente científica:** `ai-project@bac3c6255da39cd1169a965df35bb5e9a230e6e8`, etiqueta `lem:compact_robust_tail_power`. **Lean:** 4.30.0-rc2; **AppliedModelingLib:** `194edcc95df74806a39b961d10dedddc6e730cce`.
 

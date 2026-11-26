@@ -27,7 +27,7 @@ namespace CurrentCompact
 
 /-- Raw decimal literals of the local graph, interpreted as exact rational
 values; any E-notation zeros in source are exactly zero in the rationals. -/
-private def exactDecimalF0Rat : Matrix (Fin 6) (Fin 6) ℚ :=
+def exactDecimalF0Rat : Matrix (Fin 6) (Fin 6) ℚ :=
 -- BEGIN EXACT_DECIMAL_F0
   ![
     ![((1007684401252265346095141001581161545920059067858232663 : ℚ) / (10 ^ 54 : ℚ)),
@@ -166,7 +166,7 @@ private theorem rationalF0_all_transient_rows :
 
 /-- The rational-to-real 6x6 row-sum bridge uses the actual matrix
 operator norm, preserving the precise pinned decimal coefficients. -/
-private theorem rational_rows_imply_real_operator_norm
+theorem rational_rows_imply_real_operator_norm
     (n : ℕ) (c : ℚ) (hc : 0 < c)
     (hRows : ∀ i : Fin 6,
       (∑ j : Fin 6, |((exactDecimalF0Rat ^ n) i j)|) < c) :

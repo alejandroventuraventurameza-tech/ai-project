@@ -26,13 +26,15 @@ El módulo `lean/current/CurrentCompactRobustMajorant.lean` añade tres pruebas 
 
 Los tres `#print axioms` muestran `[propext, Classical.choice, Quot.sound]`, sin `sorryAx`. Su carácter condicional no se disimula bajo un nombre de teorema.
 
-## Obligaciones no demostradas
+## Actualización final: cotas del Lema 5.2 acreditadas en Lean
 
-1. Construir dentro de Lean **la sucesión numérica literal de mayorantes para F0**, con definición verificable de `a_0=1` y la recurrencia. Su dominación general ya está demostrada; falta acreditar que el objeto concreto satisface las hipótesis del endpoint.
-2. Formalizar en el kernel las desigualdades finitas de esa sucesión, `a_48<49/50` y `max_{0≤r<48}a_r<7`, que `code/irf/exact_linear_tail_power_certificate.py` acredita mediante fracciones exactas **fuera de Lean**.
-3. Conectar la matriz decimal 6×6 con el Jacobiano de 34 filas del modelo `EconomicModel.lean`, si es matemáticamente procedente. Esa identidad no está demostrada.
+La fase condicional documentada arriba fue superada: el certificado `CurrentCompactRobustFiniteCertificate.lean` contiene 49 límites racionales estrictos de la verdadera norma matricial de F0, 48 recurrencias racionales de mayorantes y umbrales numéricos, todos aceptados por `decide +kernel`. El script `code/irf/check_lean_robust_majorants.py` coteja las **98 entradas enteras** contra las 36 cadenas originales y el SHA-256 fijado. El archivo `CurrentCompactRobustFiniteBridge.lean` establece por inducción fuerte que los 49 valores bastan, sin inventar una recurrencia infinita.
 
-**Clasificación:** DEMOSTRADA en Lean la cadena telescópica, la dominación universal de mayorantes y el resultado de bloques **condicional a desigualdades finitas**; NUMÉRICO el certificado externo del mayorante de F0; PENDIENTE la instancia literal y la correspondencia SOURCE. No declarar completo el Lema 5.2.
+Los endpoints `lemma52_decimal_finite_norms` y `lemma52_decimal_current_exact` prueban respectivamente las **dos desigualdades finitas estrictas** y el **conjunto de tres conclusiones** del Lema 5.2 para cualquier matriz real A de orden 6 que satisfaga `‖A−F0‖∞≤10^-4`. El control [Actions #45871289804](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45871289804) recompiló las dependencias en Lean 4.30.0-rc2/AppliedModelingLib fijada, verificó los 98 enteros, no encontró `sorryAx`, y registró solo `[propext, Classical.choice, Quot.sound]`.
+
+**DEMOSTRADO:** el enunciado matemático literal del Lema 5.2 sobre el F0 decimal y su bola normativa. **NO DEMOSTRADO:** que el Jacobiano de 34 condiciones SOURCE o la transición económica infinita satisfaga la hipótesis de proximidad. El argumento de 16 filas linealizadas a mano es una evidencia aparte y no reemplaza ese puente. **PENDIENTES DOCUMENTALES:** protocolo `PaperContribution` oficial y ocho manuscritos personales auténticos (0/8).
+
+Ver [informe de cierre](CIERRE_LEMA52_KERNEL_EXACTO_20261126.md) y [tabla de 49 pasos](CERTIFICADO_RACIONAL_LEMA52_49_PASOS_20261126.md).
 
 ## Trazabilidad de errores
 
