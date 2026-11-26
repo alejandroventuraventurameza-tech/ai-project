@@ -1,0 +1,82 @@
+name: IE compact log-loss bridge (Lean)
+
+on:
+  push:
+    branches:
+      - work/ie-compact-log-loss-bridge-20261126
+    paths:
+      - lean/current/CurrentCompactLogLossBridge.lean
+      - .github/workflows/ie-compact-log-loss-bridge.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - lean/current/CurrentCompactLogLossBridge.lean
+      - .github/workflows/ie-compact-log-loss-bridge.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ie-compact-log-loss-bridge-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  lean-kernel-current-loss:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Check out exact research source
+        uses: actions/checkout@v4
+        with:
+          path: ai-project
+          fetch-depth: 0
+
+      - name: Check out pinned AppliedModelingLib
+        uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: AppliedModelingLib
+
+      - name: Confirm original statement and revision
+        shell: bash
+        working-directory: ai-project
+        run: |
+          set -euo pipefail
+          git cat-file -e bac3c6255da39cd1169a965df35bb5e9a230e6e8^{commit}
+          git show bac3c6255da39cd1169a965df35bb5e9a230e6e8:paper/appendix_eight_results.tex | grep -F 'lem:allocation_loss_identity'
+          echo 'SOURCE_LOCK_OK: compact allocation lemma present in frozen paper'
+
+      - name: Set up pinned Lean toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Retrieve Mathlib cache and compile proof
+        shell: bash
+        working-directory: AppliedModelingLib
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          test "$(git rev-parse HEAD)" = "194edcc95df74806a39b961d10dedddc6e730cce"
+          lake exe cache get
+          cp ../ai-project/lean/current/CurrentCompactLogLossBridge.lean ./CurrentCompactLogLossBridge.lean
+          lake env lean CurrentCompactLogLossBridge.lean 2>&1 | tee /tmp/ie-current-log-loss.log
+          if grep -E 'sorryAx|admit|unsolved goals|error:' /tmp/ie-current-log-loss.log; then
+            echo "LEAN_BRIDGE_INVALID: unresolved proof or unsound axiom" >&2
+            exit 2
+          fi
+          grep -F 'axioms' /tmp/ie-current-log-loss.log
+          echo 'LEAN_BRIDGE_OK: compact log-ratio and nonnegative loss'
+
+      - name: Archive proof output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ie-current-log-loss-proof
+          path: /tmp/ie-current-log-loss.log
+          if-no-files-found: ignore
