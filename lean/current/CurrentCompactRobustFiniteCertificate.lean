@@ -183,8 +183,9 @@ private theorem certifiedFiniteRecurrenceReal :
               robustUpperRat (n - 1 - j) : ℚ) : ℝ) ≤
               ((robustUpperRat n : ℚ) : ℝ) :=
       Rat.cast_le.mpr hRat0
-    simpa only [Rat.cast_add, Rat.cast_sum, Rat.cast_mul,
-      Rat.cast_div, Rat.cast_ofNat] using hCast
+    have hOne : (((1 / 10000 : ℚ) : ℝ)) = (1 / 10000 : ℝ) := by
+      norm_num
+    simpa only [Rat.cast_add, Rat.cast_sum, Rat.cast_mul, hOne] using hCast
   calc
     ‖exactDecimalF0 ^ n‖ +
         ∑ j ∈ Finset.range n,
