@@ -145,13 +145,13 @@ private theorem rationalF0_pow7_row_norm_lt :
     ∀ i : Fin 6,
       (∑ j : Fin 6, |((exactDecimalF0Rat ^ 7) i j)|) <
         (61 / 10 : ℚ) := by
-  decide
+  decide +kernel
 
 private theorem rationalF0_pow48_row_norm_lt :
     ∀ i : Fin 6,
       (∑ j : Fin 6, |((exactDecimalF0Rat ^ 48) i j)|) <
         (24 / 25 : ℚ) := by
-  decide
+  decide +kernel
 
 #print axioms rationalF0_pow7_row_norm_lt
 #print axioms rationalF0_pow48_row_norm_lt
