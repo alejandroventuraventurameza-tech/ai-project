@@ -1,13 +1,14 @@
 # SOURCE: transporte de Jacobianos en una raíz — auditoría condicional
 
-**Corte:** 26 de noviembre de 2026. **Estado:** transporte Fréchet y preservación condicional de inyectividad DEMOSTRADOS EN LEAN para el operador SOURCE exacto. La verificación de las hipótesis económicas y las cotas numéricas continúa PENDIENTE.  
+**Corte:** 26 de noviembre de 2026. **Estado:** transporte Fréchet, equivalencia condicional de rango e inversa algebraica del shear SOURCE, junto al transporte condicional de un inverso del Jacobiano, DEMOSTRADOS EN LEAN. Los testigos económicos de raíz, regularidad local y cotas intervalares permanecen PENDIENTES.  
 **Antecedente comprobado:** PR #20, `CurrentSourceTwoDateBankTargetization.lean`, teoremas `targetizedPrefix33_eq_fullEconomicBankShear`, `targetizedPrefix33_zero_iff_originalPrefix33_zero`, `targetizedLogPrefix33_zero_iff_sourceLogPrefix33_zero`. Compilación referida: Actions #45880659556.
 
 ## Evidencia formal posterior a esta auditoría
 
 - **PR #24 — transporte Fréchet condicional SOURCE:** `CurrentSourceTwoDateFDerivTransport.lean`, teorema `targetizedLogPrefix33_hasFDerivAt_at_source_root`. [Actions #45891228241](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45891228241): 2,278 trabajos; solo `[propext, Classical.choice, Quot.sound]`, sin `sorryAx`. Se demuestra la identidad de derivadas **supuestas la raíz, diferenciabilidad y admisibilidad en un entorno**.
 - **PR #26 — preservación de inyectividad del Jacobiano SOURCE:** `CurrentSourceTwoDateFDerivRank.lean`, teorema `targetizedLogPrefix33_jacobian_injective_iff`. [Actions #45891910632](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45891910632): 2,279 trabajos; los mismos axiomas fundacionales, sin `sorryAx`. Inyectividad de los dos Jacobianos es equivalente **bajo las premisas explícitas**. En dimensión finita 33×33, ello implica equivalencia condicional de invertibilidad.
-- **NO certificados:** existencia de una raíz SOURCE, diferenciabilidad de las expresiones económicas en una bola admisible, la norma del inverso SOURCE, identidad funcional con `finite_irf.py`, raíz 34 dual-cero, S/B y `PaperContribution`.
+- **PR #28 — inversa exacta de la transformación bancaria SOURCE:** `CurrentSourceTwoDateFDerivInverse.lean`, teoremas `sourceShearInvCLM_left`, `sourceShearInvCLM_right` y `targetizedLogPrefix33_inverse_from_source`. [Actions #45897691177](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45897691177): 2,280 trabajos; `[propext, Classical.choice, Quot.sound]`, sin `sorryAx`. Demuestra que el shear admite inversa lineal continua por negación de los ocho coeficientes, y que **un inverso SOURCE supuesto** se transporta al targetizado con una cota submultiplicativa simbólica. Test auxiliar con aritmética racional exacta: 12 casos estructurales sintéticos; NO es un dato económico.
+- **NO certificados:** existencia de una raíz SOURCE, diferenciabilidad de las expresiones económicas en una bola admisible, valor/cota cuantitativa del inverso SOURCE, identidad funcional con `finite_irf.py`, raíz 34 dual-cero, ramas S/B y `PaperContribution`.
 
 ## Alcance exacto
 
@@ -39,7 +40,7 @@ En la norma infinito de vectores y la correspondiente norma máxima de suma abso
 
 `||E⁻¹||∞ = 1 + max(|loan0|, |deposit0|, |balanceRate0|+|balanceQuantity0|, |loan1|, |deposit1|, |balanceRate1|+|balanceQuantity1|)`.
 
-Esta es una **deducción algebraica matemática**, no un nuevo teorema de normas certificado por Lean ni una cota económica numérica. Harán falta intervalos validados de los ocho coeficientes y una cota verificada para el inverso del Jacobiano SOURCE. Entonces, *si existe la raíz común y son invertibles los dos Jacobianos*:
+**La inversa algebraica del shear y su transporte de cotas ya son teoremas Lean (PR #28)**. La fórmula cerrada de la **norma infinito** anterior sigue siendo una deducción matemática y un test racional estructural, no un teorema de norma infinita certificado en Lean ni una cota económica evaluada. Harán falta intervalos validados de los ocho coeficientes y una cota verificada para el inverso del Jacobiano SOURCE. Entonces, *si existe la raíz común y son invertibles los dos Jacobianos*:
 
 `||(DG(z₀))⁻¹||∞ ≤ ||(DF(z₀))⁻¹||∞ · (1 + M)`.
 
@@ -62,14 +63,20 @@ Si SOURCE emplea la carta `z=φ(x)`, es preciso incorporar `Dφ(x₀)` mediante 
 1. Probar que las condiciones del PR #20 valen en un entorno abierto de un candidato SOURCE económico, no solo en un punto.
 2. **Acreditar para SOURCE concreto** diferenciabilidad de `E` y `F` en ese entorno. El transporte condicional de `fderiv` y la equivalencia de inyectividad **ya** están formalizados en Lean (PR #24/#26); no confundir estas premisas todavía abiertas con la estructura del teorema demostrada.
 3. Obtener una raíz SOURCE certificada (o inclusión validada) y demostrar las hipótesis del teorema en esa raíz.
-4. Certificar cuantitativamente la invertibilidad y norma del Jacobiano SOURCE 33×33; transportar correctamente la cota.
+4. Certificar cuantitativamente la invertibilidad y la norma del inverso del Jacobiano SOURCE 33×33. El transporte **simbólico** al Jacobiano targetizado está probado en Lean (PR #28), pero falta una cota efectiva de los ocho coeficientes del shear y del inverso SOURCE sobre un mismo testigo económico.
 5. Auditar las 23 filas restantes de la comparación SOURCE–Python; reconciliar la caja numérica, carta, parametrización y ley de pagos.
 6. Conectar con reducción escalar, raíz aumentada 34 dual-cero, ambas ramas S/B para idéntico estado heredado, condiciones intertemporales y `PaperContribution`.
 
 ## Ledger de evidencia
 
-- **DEMOSTRADO EN LEAN:** igualdad exacta y equivalencia de ceros SOURCE–SOURCE targetizado (PR #20); transporte Fréchet condicional de las 33 filas (PR #24); equivalencia condicional de inyectividad del Jacobiano de 33×33 (PR #26).
-- **DERIVACIÓN ALGEBRAICA AÚN NO FORMALIZADA EN LEAN:** inversa triangular `E⁻¹=I-N` y fórmula explícita de norma infinita, sin valores económicos certificados.
+- **DEMOSTRADO EN LEAN:** igualdad exacta y equivalencia de ceros SOURCE–SOURCE targetizado (PR #20); transporte Fréchet condicional de las 33 filas (PR #24); equivalencia condicional de inyectividad del Jacobiano 33×33 (PR #26); inversa exacta del shear y transporte condicional del inverso Jacobiano y su cota submultiplicativa (PR #28).
+- **DERIVACIÓN MATEMÁTICA Y REGRESIÓN RACIONAL SINTÉTICA, TODAVÍA SIN TEOREMA DE NORMA INFINITA:** la fórmula explícita `||E⁻¹||∞ = 1+M`. El inverso E⁻¹ en ambas direcciones SÍ está probado en Lean (PR #28); ninguna cota numérica de parámetros económicos ha sido certificada.
 - **PENDIENTE:** demostrar que las hipótesis de regularidad y dominio valen para un entorno de raíz SOURCE; construir/certificar la raíz; obtener la norma del inverso económico; comprobar correspondencia funcional con Python y equilibrio dinámico completo.
+
+## Ruta cuantitativa mínima restante
+
+El verificador existente `code/v0m/certified_ift/check_quantitative_ift.py` acepta racionales exactos en un JSON `ie-quantitative-ift-v1`. Con (R) una matriz precondicionadora y una bola SOURCE legítima de radio `r`, la aritmética demanda `q = sup ||I-R DF(z)||∞ < 1`, `eta = ||R F(z0)||∞`, `eta + q*r < r`. El programa declara explícitamente `verified_economic_source_enclosures=False`: su éxito aritmético NO acredita procedencia SOURCE de `F`, `DF` ni regularidad de la bola.
+
+El testigo de referencia `fullyPinnedStationarySOURCEZ0` es positivo en sus 33 coordenadas y la calibración estacionaria fija `matchingIntensity = Real.log 2` y `tightness=1/2`. Sin embargo, `fullyPinnedStationaryP0SOURCE_root_exists_iff` prueba equivalencia entre dos problemas de raíces, **no** existencia de una raíz. Aún debe fijarse/validarse el parámetro gubernamental `G` compatible con la prueba y comprobarse todas las ecuaciones, denominadores, régimen y entorno abierto en el mismo candidato.
 
 Esta nota es exclusivamente documental. No modifica Lean, manuscrito, parámetros, figuras, outputs ni IRF.
