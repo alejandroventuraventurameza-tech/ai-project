@@ -30,7 +30,11 @@ theorem sourcePinnedDateZero_eq_stationary (G : ℝ) :
       (ProposedStationaryInheritedState.inheritedState G)
       fullyPinnedStationarySOURCEZ0 .dateOne =
     ProposedStationaryRealScale.dateData := by
-  rfl
+  unfold localPrefixDateZeroData ProposedStationaryRealScale.dateData
+  congr 1 <;> try rfl
+  all_goals
+    funext i
+    cases i <;> rfl
 
 #print axioms sourcePinnedDateZero_eq_stationary
 
@@ -53,13 +57,26 @@ theorem sourcePinnedDateOne_eq_stationary (G : ℝ) :
     ProposedStationaryRealScale.stateSix_faces
       (ProposedStationaryPrimitives.primitives G) (by intro i; rfl)
   have htail := fullyPinnedStationaryP0_tail_baseline
-  ext <;> first
-    | rfl
-    | simp [localPrefixDateOneData,
-        fullyPinnedStationarySOURCEZ0,
-        ProposedStationaryPrimitives.primitives,
-        ProposedStationaryRealScale.dateData,
-        hfaces, htail]
+  have hfaces' :
+      localPrefixStateSixFace
+        (ProposedStationaryPrimitives.primitives G)
+        fullyPinnedStationarySOURCEZ0.stateTwo =
+      ProposedStationaryRealScale.firmFace := by
+    simpa only [fullyPinnedStationarySOURCEZ0] using hfaces
+  have htail' :
+      sourceLogLinearContinuation
+        ProposedStationaryRealScale.stateSix
+        ProposedStationaryRealScale.controls
+        sourceFrozenP0TenControls
+        fullyPinnedStationarySOURCEZ0.stateTwo =
+      ProposedStationaryRealScale.controls := by
+    simpa only [fullyPinnedStationarySOURCEZ0] using htail
+  unfold localPrefixDateOneData ProposedStationaryRealScale.dateData
+  simp only [hfaces', htail']
+  congr 1 <;> try rfl
+  all_goals
+    funext i
+    cases i <;> rfl
 
 #print axioms sourcePinnedDateOne_eq_stationary
 
