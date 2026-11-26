@@ -72,7 +72,6 @@ noncomputable def targetizedPrefix33
     (tail : LocalPrefixContinuationRule) : Fin 33 → ℝ :=
   let d0 := dateZero P I Z dateOneState
   let d1 := dateOne P Z dateOneState recurrent tail
-  let F := originalPrefix33 branch P I Z dateOneState recurrent tail
   fun i =>
     if i = 14 then sourceTargetLoanRow P d0
     else if i = 15 then sourceTargetDepositRow P d0
@@ -142,29 +141,29 @@ theorem targetizedPrefix33_eq_fullEconomicBankShear
     threeTargetRows_eq_crossRows
       P (dateOne P Z dateOneState recurrent tail) hmatch h1
   let F := originalPrefix33 branch P I Z dateOneState recurrent tail
-  have hF12 : F 12 =
+  have hF12 : originalPrefix33 branch P I Z dateOneState recurrent tail 12 =
       localReducedRemainingResidual P (dateZero P I Z dateOneState) 6 := by rfl
-  have hF13 : F 13 =
+  have hF13 : originalPrefix33 branch P I Z dateOneState recurrent tail 13 =
       localReducedRemainingResidual P (dateZero P I Z dateOneState) 7 := by rfl
-  have hF14 : F 14 =
+  have hF14 : originalPrefix33 branch P I Z dateOneState recurrent tail 14 =
       localReducedRemainingResidual P (dateZero P I Z dateOneState) 8 := by rfl
-  have hF15 : F 15 =
+  have hF15 : originalPrefix33 branch P I Z dateOneState recurrent tail 15 =
       localReducedRemainingResidual P (dateZero P I Z dateOneState) 9 := by rfl
-  have hF16 : F 16 =
+  have hF16 : originalPrefix33 branch P I Z dateOneState recurrent tail 16 =
       localReducedRemainingResidual P (dateZero P I Z dateOneState) 10 := by rfl
-  have hF28 : F 28 =
+  have hF28 : originalPrefix33 branch P I Z dateOneState recurrent tail 28 =
       localReducedRemainingResidual P
         (dateOne P Z dateOneState recurrent tail) 6 := by rfl
-  have hF29 : F 29 =
+  have hF29 : originalPrefix33 branch P I Z dateOneState recurrent tail 29 =
       localReducedRemainingResidual P
         (dateOne P Z dateOneState recurrent tail) 7 := by rfl
-  have hF30 : F 30 =
+  have hF30 : originalPrefix33 branch P I Z dateOneState recurrent tail 30 =
       localReducedRemainingResidual P
         (dateOne P Z dateOneState recurrent tail) 8 := by rfl
-  have hF31 : F 31 =
+  have hF31 : originalPrefix33 branch P I Z dateOneState recurrent tail 31 =
       localReducedRemainingResidual P
         (dateOne P Z dateOneState recurrent tail) 9 := by rfl
-  have hF32 : F 32 =
+  have hF32 : originalPrefix33 branch P I Z dateOneState recurrent tail 32 =
       localReducedRemainingResidual P
         (dateOne P Z dateOneState recurrent tail) 10 := by rfl
   funext i
