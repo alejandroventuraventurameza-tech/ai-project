@@ -82,6 +82,14 @@ Si SOURCE emplea la carta `z=φ(x)`, es preciso incorporar `Dφ(x₀)` mediante 
 - **DEMOSTRADO EN LEAN (alcance finito):** PR #30 (reservas y estrechez), PR #33 (dominio bancario completo), PR #36 (vecindad y transporte en raíz con dos hipótesis de derivadas), PR #37 (bola explícita y razones >2/25), PR #31 (paridad de fechas), PR #32 (raíz B 33 exacta) y PR #34 (dual L positivo/no-raíz 34 en punto fijo) y PR #39 (dual positivo y obstrucción 34 en una vecindad no cuantificada). No implica óptimo global ni equilibrio infinito.
 - **PENDIENTE:** regularidad/diferenciabilidad del operador SOURCE completo en una bola, certificado de la norma del inverso del Jacobiano, raíz de frontera 34 fuera de `z=0`, correspondencia funcional SOURCE–Python, rama S y equilibrio dinámico completo.
 
+## Radio algebraico de interioridad vinculante (derivado, NO probado en Lean)
+
+De la identidad SOURCE original de cuatro coordenadas logarítmicas (ver `sourceFundingDual_sigmaOne_stationary_fourLog`) y de `R_L<25/24` resulta
+`mu_L(z)=1/(R_L exp(z[15]))-(24/25)exp(z[8]-z[24]-z[28])`.
+Sea `m=log(25/(24 R_L))>0`; `R_L>0` ya está probado. Si `||z||∞<m/4`, entonces `z[15]+z[8]-z[24]-z[28]<m`, con lo que `exp(z[15]+z[8]-z[24]-z[28])<25/(24 R_L)` y `mu_L(z)>0`. Por tanto `r_joint=min(log(2)/2, m/4)>0` es un **candidato matemático explícito** de radio común para admisibilidad bancaria (PR #37) e interioridad vinculante (PR #39).
+
+Esta deducción es rigurosa **en papel** pero NO se ha formalizado como desigualdad de radio en Lean, NO ofrece una cota numérica de `m`, y NO sustituye la cota del Jacobiano de 33 filas. Una nueva prueba Lean debe verificar esta fórmula en la misma carta SOURCE y transportar las desigualdades sin redondear `R_L`.
+
 ## Ruta cuantitativa mínima restante
 
 El verificador existente `code/v0m/certified_ift/check_quantitative_ift.py` acepta racionales exactos en un JSON `ie-quantitative-ift-v1`. Con (R) una matriz precondicionadora y una bola SOURCE legítima de radio `r`, la aritmética demanda `q = sup ||I-R DF(z)||∞ < 1`, `eta = ||R F(z0)||∞`, `eta + q*r < r`. El programa declara explícitamente `verified_economic_source_enclosures=False`: su éxito aritmético NO acredita procedencia SOURCE de `F`, `DF` ni regularidad de la bola.
