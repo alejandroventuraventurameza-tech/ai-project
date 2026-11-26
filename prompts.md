@@ -598,3 +598,17 @@ La respuesta proporcionó un plan detallado para Proposición 4.2, Proposición 
 > Ok, mientras voy haciendo ese handnote, ¿Puedes ir avanzando lo faltante?
 
 Acción resultante: auditoría documental, mejora del README, manifiesto provisional, registro de IA y rama de release. El escaneo manuscrito y el veredicto matemático personal siguen pendientes. Ver docs/REGISTRO_IA_CIERRE_20261125.md.
+
+---
+
+## Continuación IE project — 26 de noviembre de 2026 (A.1.4)
+
+**Prompt literal del autor:**
+> Sigue
+
+**Fragmento literal de respuesta del asistente en esta fase:**
+> La integración anterior del Lema A.1.4 ya está en `main`. Ahora estamos cerrando una diferencia matemática importante: demostrar la derivada de la **función de pérdida definida en el artículo**, y no únicamente la derivada de una expresión equivalente evaluada en un punto.
+
+**Respuesta de validación comprobada:** los módulos `PaperLemma43CompactPathDerivativeCandidate.lean` y `PaperLemma43CompactPhysicalPathCandidate.lean` compilaron con Lean 4.30.0-rc2 en Actions #45858652855, sin `sorryAx`; la especificación conjunta `compactLemmaA14CurrentFull_exact` compiló después en #45859315801, con `#print axioms` limitado a `[propext, Classical.choice, Quot.sound]`.
+
+**Error detectado y corregido (auditoría crítica):** la primera ejecución #45857976522 falló por notación `𝓝` fuera del ámbito de importación. La corrección abrió `Filter` y `Topology` antes de compilar de nuevo. No se alteraron las hipótesis para obtener la prueba. El autor todavía debe elaborar las ocho derivaciones manuscritas auténticas y adjudicar personalmente los resultados; no se reconstruyen firmas ni opiniones que no haya dado.
