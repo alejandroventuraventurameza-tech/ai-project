@@ -84,12 +84,7 @@ theorem financingCapacityCurrent_exact : financingCapacityCurrentSpec := by
         (capitalPrice - collateral / loanRate) * maxCapital =
           ownResources := by
       dsimp [maxCapital]
-      calc
-        (capitalPrice - collateral / loanRate) *
-            (ownResources / (capitalPrice - collateral / loanRate)) =
-          ownResources * (capitalPrice - collateral / loanRate) /
-            (capitalPrice - collateral / loanRate) := by ring
-        _ = ownResources := mul_div_cancel₀ _ hdenomNe
+      exact mul_div_cancel₀ ownResources hdenomNe
     have hbudgetEq : capitalPrice * maxCapital =
         ownResources + maxLoan := by
       calc
