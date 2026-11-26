@@ -612,3 +612,15 @@ Acción resultante: auditoría documental, mejora del README, manifiesto provisi
 **Respuesta de validación comprobada:** los módulos `PaperLemma43CompactPathDerivativeCandidate.lean` y `PaperLemma43CompactPhysicalPathCandidate.lean` compilaron con Lean 4.30.0-rc2 en Actions #45858652855, sin `sorryAx`; la especificación conjunta `compactLemmaA14CurrentFull_exact` compiló después en #45859315801, con `#print axioms` limitado a `[propext, Classical.choice, Quot.sound]`.
 
 **Error detectado y corregido (auditoría crítica):** la primera ejecución #45857976522 falló por notación `𝓝` fuera del ámbito de importación. La corrección abrió `Filter` y `Topology` antes de compilar de nuevo. No se alteraron las hipótesis para obtener la prueba. El autor todavía debe elaborar las ocho derivaciones manuscritas auténticas y adjudicar personalmente los resultados; no se reconstruyen firmas ni opiniones que no haya dado.
+
+---
+
+## Continuación IE project — Proposición 5.1, 26/11/2026
+
+**Mensaje literal del autor:**
+> Sigue
+
+**Fragmento literal de respuesta:**
+> Continúo con la Proposición 5.1. Primero cotejaré la matriz \(F_0\) y sus certificados racionales con el enunciado del artículo; después formalizaré en Lean el argumento de decaimiento por bloques y ejecutaré la compilación.
+
+**Ejecución comprobada:** Las 36 entradas racionales de \(F_0\), el SHA de origen y el certificado de 48 potencias de Python se validaron en Actions #45861545922. Los teoremas condicionales \(\texttt{block48_decay_of_norm_bounds}\) y \(\texttt{prop51_conditional_exact}\) fueron aceptados por Lean 4.30.0-rc2 con axiomas \(\texttt{[propext, Classical.choice, Quot.sound]}\), sin \(\texttt{sorryAx}\). El primer intento (#45861172446) falló por ámbito de notación \(\texttt{*ᵥ}\) y se corrigió sin cambiar hipótesis. **No se atribuye a Lean prueba de las desigualdades finitas**: siguen como supuestos de \(\texttt{prop51FiniteBoundSpec}\), aunque se verificaron mediante aritmética racional externa.

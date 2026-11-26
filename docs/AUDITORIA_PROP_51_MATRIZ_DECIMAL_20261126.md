@@ -20,7 +20,7 @@ max_{0<=r<48} ||F0^r||_infty < 61/10
 
 El último control también exige que el máximo transitorio ocurra en `r=7`. La validación independiente de robustez para `A` próxima a `F0` se trata por separado en el Lema 5.2 y **no** debe confundirse con Prop. 5.1.
 
-El certificado acepta o rechaza las desigualdades antes de imprimir aproximaciones decimales dirigidas. La salida JSON se genera en `code/irf/output/`; puede estar ignorada por Git, por lo que su ausencia de la rama publicada no equivale a un fallo del verificador. Las Actions guardan el log como artefacto.
+La ejecución aprobada reporta los límites superiores (12 decimales, redondeados hacia arriba) **0.955246892194** para `||F0^48||_infty`, **6.097821698407** para el máximo previo a 48, con máximo en `n=7`. También reporta el mayorante robusto `a_48` inferior a **0.972103438403**; ese dato pertenece a la auditoría numérica de Lema 5.2, no a una prueba Lean de su especificación universal. El certificado acepta o rechaza las desigualdades antes de imprimir aproximaciones decimales dirigidas. La salida JSON se genera en `code/irf/output/`; puede estar ignorada por Git, por lo que su ausencia de la rama publicada no equivale a un fallo del verificador. Las Actions guardan el log como artefacto.
 
 ## 3. Demostración universal condicionada en Lean
 
@@ -35,7 +35,7 @@ La derivación usa `k=48m+r` con `0≤r<48`, `F^k=(F^48)^m F^r`, submultiplicati
 ## 4. Clasificación y tareas pendientes
 
 - **Aritmética exacta externa:** la fuente y las 48 potencias son comprobables en Python con `Fraction`, sin coma flotante.
-- **Lean condicional:** el argumento para todo `k` y todo `x` debe compilar con `#print axioms`, sin `sorryAx`. Hasta contar con el resultado de Actions, no se adjudica como aprobado.
+- **Lean condicional VERIFICADO:** `block48_decay_of_norm_bounds` y `prop51_conditional_exact` compilaron en Lean 4.30.0-rc2. El registro `#print axioms` para ambos muestra **solo** `[propext, Classical.choice, Quot.sound]`, sin `sorryAx`, [Actions #45861545922](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45861545922). La primera tentativa (#45861172446) falló por no abrir el ámbito de la notación matricial `*ᵥ`, corregido mediante `open scoped Matrix`; no se alteraron las hipótesis.
 - **Aritmética dentro de Lean pendiente:** demostrar las dos desigualdades finitas para `exactDecimalF0` en el kernel, o incorporar un certificado racional elaborado con pruebas comprobables por el kernel. Los controles actuales no cumplen esa obligación.
 - **Semántica económica pendiente:** ni este resultado ni el del Lema 5.2 establecen que `F0` sea exactamente el Jacobiano de las 34 filas del modelo SOURCE, ni existencia de equilibrio infinito, unicidad, transversalidad o crecimiento de largo plazo.
 - **Manuscritos auténticos:** esta guía no sustituye la derivación personal de la Proposición 5.1; el registro de cobertura continúa 0/8 mientras no se adjunten sus hojas.
