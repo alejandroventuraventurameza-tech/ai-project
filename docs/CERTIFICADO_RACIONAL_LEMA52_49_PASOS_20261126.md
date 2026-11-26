@@ -50,6 +50,6 @@ No se necesita extender artificialmente la tabla de mayorantes a horizontes infi
 
 **NUMÉRICO exacto:** listas de 49 valores `M_n` y `B_n` verificadas contra el JSON original por Python; el efecto del redondeo solo ensancha cotas.
 
-**Compuerta pendiente hasta aprobar Lean:** comprobar con el kernel las 49 normas fuente, las 48 recurrencias y unirlas con la inducción finita, sin `sorryAx`.
+**Compuerta matemática CUMPLIDA:** `finiteSourceRowsVerified`, `finiteRobustStepVerified`, `finiteRobust48Verified` y `finiteRobustTransientVerified` aprobaron `decide +kernel`. La inducción y el traslado a norma real respaldan `lemma52_decimal_finite_norms` y `lemma52_decimal_current_exact`; [Actions #45871289804](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45871289804), sin `sorryAx`, únicamente axiomas fundacionales. **No** equivale a resolver la identidad del Jacobiano SOURCE.
 
 **No demostrado por esta cota:** que F0 sea exactamente el Jacobiano de las 34 filas SOURCE, existencia de equilibrio infinito, TVC, crecimiento permanente o la correspondencia paper-scoped oficial. Los ocho handnotes personales auténticos siguen sin incorporarse.
