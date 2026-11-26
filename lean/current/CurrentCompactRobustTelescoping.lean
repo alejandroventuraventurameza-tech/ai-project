@@ -59,6 +59,7 @@ theorem matrix_pow_difference_telescoping
               F ^ j * (A - F) * A ^ (n + 1 - 1 - j) := by
               rw [Finset.sum_range_succ']
               simp only [pow_zero, one_mul, Nat.add_sub_cancel_right, Nat.sub_zero]
+              rw [add_comm]
               congr 1
               apply Finset.sum_congr rfl
               intro j hj
@@ -84,19 +85,27 @@ theorem matrix_power_norm_telescoping
     _ ≤ ‖F ^ n‖ +
           ∑ j ∈ Finset.range n,
             ‖F ^ j * (A - F) * A ^ (n - 1 - j)‖ := by
-          exact add_le_add_left (norm_sum_le _ _) _
+          have hs :=
+            norm_sum_le (Finset.range n)
+              (fun j : ℕ => F ^ j * (A - F) * A ^ (n - 1 - j))
+          exact add_le_add_left hs _
     _ ≤ ‖F ^ n‖ +
           ∑ j ∈ Finset.range n,
             (‖F ^ j‖ * ‖A - F‖) * ‖A ^ (n - 1 - j)‖ := by
-          apply add_le_add_left
-          apply Finset.sum_le_sum
-          intro j hj
-          calc
-            ‖F ^ j * (A - F) * A ^ (n - 1 - j)‖ ≤
-                ‖F ^ j * (A - F)‖ * ‖A ^ (n - 1 - j)‖ :=
-                  norm_mul_le _ _
-            _ ≤ (‖F ^ j‖ * ‖A - F‖) * ‖A ^ (n - 1 - j)‖ :=
-                  mul_le_mul_of_nonneg_right (norm_mul_le _ _) (norm_nonneg _)
+          have hs :
+              (∑ j ∈ Finset.range n,
+                ‖F ^ j * (A - F) * A ^ (n - 1 - j)‖) ≤
+                ∑ j ∈ Finset.range n,
+                  (‖F ^ j‖ * ‖A - F‖) * ‖A ^ (n - 1 - j)‖ := by
+            apply Finset.sum_le_sum
+            intro j hj
+            calc
+              ‖F ^ j * (A - F) * A ^ (n - 1 - j)‖ ≤
+                  ‖F ^ j * (A - F)‖ * ‖A ^ (n - 1 - j)‖ :=
+                    norm_mul_le _ _
+              _ ≤ (‖F ^ j‖ * ‖A - F‖) * ‖A ^ (n - 1 - j)‖ :=
+                    mul_le_mul_of_nonneg_right (norm_mul_le _ _) (norm_nonneg _)
+          exact add_le_add_left hs _
 
 #print axioms matrix_pow_difference_telescoping
 #print axioms matrix_power_norm_telescoping
