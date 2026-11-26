@@ -1,0 +1,76 @@
+name: compact-paper-pdf-one-shot
+
+on:
+  push:
+    branches:
+      - work/ie-paper-eight-results-candidate-20261125
+    paths:
+      - .github/workflows/compact-paper-pdf-one-shot.yml
+      - .github/compact-paper-build-request.txt
+
+permissions:
+  contents: write
+
+concurrency:
+  group: compact-paper-pdf-one-shot
+  cancel-in-progress: false
+
+jobs:
+  compile-verify-and-commit:
+    if: github.repository == 'alejandroventuraventurameza-tech/ai-project'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - name: Check out the exact PR source branch
+        uses: actions/checkout@v7
+        with:
+          ref: work/ie-paper-eight-results-candidate-20261125
+          persist-credentials: true
+
+      - name: Build compact paper with repository-native images and bibliography
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: paper/paper.tex
+          work_in_root_file_dir: true
+
+      - name: Verify final PDF and 8-20 page body
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s paper/paper.pdf
+          test -s paper/paper.log
+          python3 - <<'PY'
+          from pathlib import Path
+          import re, hashlib
+          p=Path("paper/paper.pdf")
+          raw=p.read_bytes()
+          assert raw[:5]==b"%PDF-", "Compilation did not create a valid PDF header"
+          assert len(raw)>100000, "Unexpectedly short PDF"
+          log=Path("paper/paper.log").read_text(encoding="utf-8",errors="replace")
+          found=re.findall(r"IE_COMPACT_BODY_PAGES=(\d+)",log)
+          assert found, "TeX body page count marker missing"
+          pages=int(found[-1])
+          assert 8<=pages<=20, f"Body out of bounds: {pages}"
+          forbidden=["LaTeX Error:", "Overfull \\hbox", "There were undefined references",
+                     "There were undefined citations", "Citation `", "Reference `"]
+          for term in forbidden:
+              if term in log and ("undefined" in term or term in ["LaTeX Error:", "Overfull \\hbox"]):
+                  raise AssertionError("LaTeX log contains blocking warning: "+term)
+          print("COMPACT_BODY_PAGES=",pages)
+          print("PDF_BYTES=",len(raw))
+          print("PDF_SHA256=",hashlib.sha256(raw).hexdigest())
+          PY
+
+      - name: Commit the matching PDF to the PR branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- paper/paper.pdf
+          if git diff --cached --quiet; then
+            echo "paper/paper.pdf already matches generated output"
+          else
+            git commit -m "build(paper): synchronize eight-result PDF from pinned LaTeX"
+            git push origin HEAD:refs/heads/work/ie-paper-eight-results-candidate-20261125
+          fi
