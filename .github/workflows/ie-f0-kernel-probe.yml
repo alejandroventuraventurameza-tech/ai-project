@@ -1,0 +1,65 @@
+name: IE F0 finite rational power kernel probe
+
+on:
+  push:
+    branches:
+      - work/ie-f0-rational-kernel-probe-20261126
+    paths:
+      - lean/current/CurrentCompactBlock48Tail.lean
+      - .github/workflows/ie-f0-kernel-probe.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ie-f0-kernel-probe-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  exact-rational-powers:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v4
+        with:
+          path: ai-project
+      - name: Checkout pinned AppliedModelingLib
+        uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Install Lean
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Probe decidable exact rational powers in kernel
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake exe cache get
+          cp ../ai-project/lean/current/CurrentCompactBlock48Tail.lean ./CurrentCompactBlock48Tail.lean
+          /usr/bin/time -f 'LEAN_ELAPSED_SECONDS=%e LEAN_MAX_RSS_KB=%M' -o /tmp/ie-probe-time.txt \
+            lake env lean CurrentCompactBlock48Tail.lean 2>&1 | tee /tmp/ie-f0-probe.log
+          cat /tmp/ie-probe-time.txt
+          if grep -E 'sorryAx|error:|unsolved goals' /tmp/ie-f0-probe.log; then
+            exit 1
+          fi
+          grep -F 'rationalF0_pow48_row_norm_lt' /tmp/ie-f0-probe.log
+          echo 'F0_48_KERNEL_RATIONAL_PROBE_PASSED'
+      - name: Archive evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ie-f0-kernel-probe-logs
+          path: |
+            /tmp/ie-f0-probe.log
+            /tmp/ie-probe-time.txt
+          if-no-files-found: ignore
