@@ -1,0 +1,88 @@
+name: IE F0 outward interval certificate in Lean
+
+on:
+  push:
+    branches:
+      - work/ie-f0-interval-certificate-20261126
+    paths:
+      - lean/current/CurrentCompactF0IntervalCertificate.lean
+      - .github/workflows/ie-f0-interval-lean.yml
+  pull_request:
+    branches: [main]
+    paths:
+      - lean/current/CurrentCompactF0IntervalCertificate.lean
+      - .github/workflows/ie-f0-interval-lean.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ie-f0-interval-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  kernel-outward-interval:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    steps:
+      - name: Check out scientific source
+        uses: actions/checkout@v4
+        with:
+          path: ai-project
+      - name: Check out pinned mathlib environment
+        uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Check SHA-256 and all 36 source integers
+        working-directory: ai-project
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import pathlib, re, json, hashlib
+          from decimal import Decimal
+          original=pathlib.Path('code/irf/inputs/rational_preconditioners.json')
+          h=hashlib.sha256(original.read_bytes()).hexdigest()
+          assert h=='d0cef14050de9f4725e51e5cd28b1ea77e33733dfb2c78d2e38a193200337e94',h
+          j=json.loads(original.read_text())
+          base=[int(Decimal(s)*Decimal(10)**58) for row in j['F0'] for s in row]
+          src=pathlib.Path('lean/current/CurrentCompactF0IntervalCertificate.lean').read_text()
+          span=src.split('private def f0ScaledEntries',1)[1].split('private def lowerIntervalTable',1)[0]
+          ints=[int(v) for v in re.findall(r'-?\d+',span.split(':=',1)[1])]
+          assert len(ints)==36,len(ints)
+          assert ints==base,'source integers differ from pinned matrix'
+          print('F0_INTERVAL_INPUTS_EXACT: sha256, 36 signed decimal entries, 10^58 scale')
+          PY
+      - name: Install pinned Lean
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Verify certificate decisions with kernel
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake exe cache get
+          cp ../ai-project/lean/current/CurrentCompactF0IntervalCertificate.lean ./CurrentCompactF0IntervalCertificate.lean
+          lake env lean CurrentCompactF0IntervalCertificate.lean 2>&1 | tee /tmp/ie-f0-interval-lean.log
+          if grep -E 'sorryAx|error:|unsolved goals|admit' /tmp/ie-f0-interval-lean.log; then
+            exit 2
+          fi
+          grep -F 'intervalBase_verified' /tmp/ie-f0-interval-lean.log
+          grep -F 'intervalStep_verified' /tmp/ie-f0-interval-lean.log
+          grep -F 'intervalTransient_verified' /tmp/ie-f0-interval-lean.log
+          grep -F 'intervalBlock48_verified' /tmp/ie-f0-interval-lean.log
+          echo 'INTERVAL_ARITHMETIC_KERNEL_OK: still requires interval soundness and rational-to-real bridge'
+      - name: Preserve logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ie-f0-interval-kernel-logs
+          path: /tmp/ie-f0-interval-lean.log
+          if-no-files-found: ignore
