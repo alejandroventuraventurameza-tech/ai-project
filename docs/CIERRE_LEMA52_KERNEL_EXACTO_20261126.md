@@ -22,7 +22,7 @@ La condición sobre A es **la hipótesis explícita del lema**, no un supuesto e
 
 1. **Matemática general.** `CurrentCompactRobustTelescoping.lean` prueba la identidad telescópica no conmutativa y su norma. `CurrentCompactRobustMajorant.lean` prueba la dominación abstracta y el decaimiento geométrico. `CurrentCompactRobustFiniteBridge.lean` demuestra que las cotas hasta n=48 bastan, sin requerir una sucesión numérica infinita.
 2. **Normas de fuente.** `CurrentCompactBlock48Tail.lean` expone la matriz racional literal y el puente de sumas racionales por fila a la norma matricial real. `CurrentCompactRobustFiniteCertificate.lean` verifica con `decide +kernel` las 49 potencias (0..48) contra 49 límites estrictos redondeados hacia arriba.
-3. **Mayores robustos.** El mismo módulo prueba 48 desigualdades racionales de convolución para la sucesión de 49 majorantes `B_n/10^12`. `B_0=10^12`, `B_48=972103438404`, y `max_{r<48} B_r=6105134003467`, todos expresados en unidades `10^-12`.
+3. **Mayorantes robustos.** El mismo módulo prueba 48 desigualdades racionales de convolución para la sucesión de 49 majorantes `B_n/10^12`. `B_0=10^12`, `B_48=972103438404`, y `max_{r<48} B_r=6105134003467`, todos expresados en unidades `10^-12`.
 4. **Control de procedencia independiente.** `python3 code/irf/check_lean_robust_majorants.py` reconstruye cada uno de los 98 enteros desde los 36 decimales originales mediante `Fraction`, coteja el SHA-256 y rechaza cambios silenciosos.
 5. **Teoremas literales.** `lemma52_decimal_finite_norms` cierra las dos desigualdades estrictas para A admisible. `lemma52_decimal_full_uniform_decay` prueba la cota de todo horizonte. `lemma52_decimal_current_exact : lemma52_decimal_current_spec` reúne exactamente esas tres cláusulas.
 
