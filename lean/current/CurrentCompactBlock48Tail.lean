@@ -131,6 +131,31 @@ theorem prop51_conditional_exact
       (61 / 10 : ℝ) * (24 / 25 : ℝ) ^ (k / 48) * ‖x‖ := by
   exact block48_decay_of_norm_bounds exactDecimalF0 hFinite.1 hFinite.2 k x
 
+
+/-!
+# Experimental, source-specific finite-power kernel check.
+The two bounds are *not* available for real F0 until a separate
+rational-to-real norm bridge is established. No native_decide or
+untrusted external oracle is used.
+-/
+set_option maxRecDepth 4096
+set_option maxHeartbeats 0
+
+private theorem rationalF0_pow7_row_norm_lt :
+    ∀ i : Fin 6,
+      (∑ j : Fin 6, |((exactDecimalF0Rat ^ 7) i j)|) <
+        (61 / 10 : ℚ) := by
+  decide
+
+private theorem rationalF0_pow48_row_norm_lt :
+    ∀ i : Fin 6,
+      (∑ j : Fin 6, |((exactDecimalF0Rat ^ 48) i j)|) <
+        (24 / 25 : ℚ) := by
+  decide
+
+#print axioms rationalF0_pow7_row_norm_lt
+#print axioms rationalF0_pow48_row_norm_lt
+
 #print axioms block48_decay_of_norm_bounds
 #print axioms prop51_conditional_exact
 
