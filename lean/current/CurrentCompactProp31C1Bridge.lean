@@ -158,6 +158,39 @@ theorem prop31_scalar_current_C1_exact
       M L rho eps hrho heps hzero hjoint hb ha hreg
   exact ⟨K, hK, delta, hdelta, hroots, eps, heps, hnone⟩
 
+
+/-- Paper-scoped scalar conclusion with the actual fderiv of M. No
+separate derivative operator is assumed: C1 supplies its witness. -/
+theorem prop31_scalar_from_only_C1_hypotheses
+    (M : ℝ → ℝ → ℝ)
+    (hzero : M 0 0 = 0)
+    (hC1 : ContDiffAt ℝ 1
+      (fun z : ℝ × ℝ => M z.1 z.2) ((0 : ℝ), (0 : ℝ)))
+    (hb : fderiv ℝ (fun z : ℝ × ℝ => M z.1 z.2)
+      ((0 : ℝ), (0 : ℝ)) ((1 : ℝ), (0 : ℝ)) < 0)
+    (ha : fderiv ℝ (fun z : ℝ × ℝ => M z.1 z.2)
+      ((0 : ℝ), (0 : ℝ)) ((0 : ℝ), (1 : ℝ)) < 0) :
+    ∃ K : ℝ, 0 < K ∧
+      ∃ delta : ℝ, 0 < delta ∧
+        (∀ h : ℝ, -delta < h → h < 0 →
+          ∃ r : ℝ, 0 < r ∧ r < -K * h ∧ M r h = 0 ∧
+            (∀ s : ℝ, s ∈ Set.Icc (0 : ℝ) (-K * h) →
+              (ProposedScalarComplementarityMultiplicity.ScalarComplementarity
+                (fun x => M x h) s ↔ s = 0 ∨ s = r))) ∧
+        (∃ eps : ℝ, 0 < eps ∧
+          ∀ h : ℝ, 0 < h → h < delta →
+            ¬ ∃ s : ℝ, s ∈ Set.Icc (0 : ℝ) eps ∧
+              ProposedScalarComplementarityMultiplicity.ScalarComplementarity
+                (fun x => M x h) s) := by
+  let L : (ℝ × ℝ) →L[ℝ] ℝ :=
+    fderiv ℝ (fun z : ℝ × ℝ => M z.1 z.2) ((0 : ℝ), (0 : ℝ))
+  have hF : HasFDerivAt (fun z : ℝ × ℝ => M z.1 z.2) L
+      ((0 : ℝ), (0 : ℝ)) :=
+    (hC1.differentiableAt (by norm_num)).hasFDerivAt
+  exact prop31_scalar_current_C1_exact M L hzero hC1 hF hb ha
+
+#print axioms prop31_scalar_from_only_C1_hypotheses
+
 #print axioms c1_at_origin_implies_uniform_local_slack_antitonicity
 #print axioms prop31_scalar_current_C1_exact
 

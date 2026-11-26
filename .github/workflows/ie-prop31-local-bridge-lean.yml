@@ -57,6 +57,7 @@ jobs:
           grep -F 'prop31_local_two_signs_of_joint_derivative_and_slices' /tmp/ie-prop31-axioms.log
           if grep -E 'sorryAx|unsolved goals|error:' /tmp/ie-prop31-c1-axioms.log; then exit 2; fi
           grep -F 'prop31_scalar_current_C1_exact' /tmp/ie-prop31-c1-axioms.log
+          grep -F 'prop31_scalar_from_only_C1_hypotheses' /tmp/ie-prop31-c1-axioms.log
           echo 'PROP31_C1_SCALAR_BRIDGE_KERNEL_OK'
       - name: Archive log
         if: always()
