@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - work/ie-project-lean-eight-results-20261126
+      - work/ie-compact-interior-kkt-20261126
     paths:
       - .github/workflows/ie-eight-result-lean-proof-smoke.yml
       - lean/candidates/Ventura26LiquidityAllocation/CurrentCompactWedgeRepayment.lean
       - lean/candidates/Ventura26LiquidityAllocation/CurrentCompactFinancingCapacity.lean
+      - lean/candidates/Ventura26LiquidityAllocation/CurrentCompactInteriorKKT.lean
       - lean/current_paper_source_inventory_8.json
       - .github/lean-current-run-request.txt
 
@@ -79,7 +81,7 @@ jobs:
           export PATH="$HOME/.elan/bin:$PATH"
           lake exe cache get
 
-      - name: Compile all three current-source-specific claims
+      - name: Compile all four current-source-specific claims
         shell: bash
         run: |
           set -euo pipefail
@@ -97,14 +99,21 @@ jobs:
             echo "ERROR: Financing-capacity proof reported a blocker" >&2
             exit 2
           fi
-          echo "LEAN_CHECK_OK: repaymentCurrent_exact, effectiveWedgeCurrent_exact, and financingCapacityCurrent_exact"
+          cp ../ai-project/lean/candidates/Ventura26LiquidityAllocation/CurrentCompactInteriorKKT.lean CurrentCompactInteriorKKT.lean
+          lake env lean CurrentCompactInteriorKKT.lean 2>&1 | tee /tmp/lean-compact-interior.log
+          if grep -E 'sorryAx|admit|unsolved goals|error:' /tmp/lean-compact-interior.log; then
+            echo "ERROR: Interior loan/deposit KKT proof reported a blocker" >&2
+            exit 2
+          fi
+          echo "LEAN_CHECK_OK: four current-paper kernel proof endpoints"
 
       - name: Preserve command outputs for independent QA
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ie-compact-lean-source-three-proof-log
+          name: ie-compact-lean-source-four-proof-log
           path: |
             /tmp/lean-compact-two-proofs.log
             /tmp/lean-compact-capacity.log
+            /tmp/lean-compact-interior.log
           if-no-files-found: ignore
