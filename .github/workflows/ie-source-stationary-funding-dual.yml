@@ -1,0 +1,66 @@
+name: IE SOURCE stationary firm-L dual obstruction
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - lean/current/CurrentPinnedStationaryFundingDual.lean
+      - .github/workflows/ie-source-stationary-funding-dual.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ie-source-stationary-funding-dual
+  cancel-in-progress: true
+
+jobs:
+  stationary-dual-obstruction:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ai-project
+      - uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Install pinned Lean
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Kernel-check SOURCE stationary funding dual and boundary obstruction
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          test "$(git rev-parse HEAD)" = "194edcc95df74806a39b961d10dedddc6e730cce"
+          lake exe cache get
+          cp ../ai-project/lean/checkpoint/dependencies/lakefile.toml ./lakefile.toml
+          mkdir -p papers/Ventura26LiquidityAllocation
+          cp ../ai-project/lean/checkpoint/module_root.lean papers/Ventura26LiquidityAllocation.lean
+          cp ../ai-project/lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/candidates/Ventura26LiquidityAllocation/*.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentPinnedSourceDateParity.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentPinnedStationaryFundingDual.lean papers/Ventura26LiquidityAllocation/
+          lake build Ventura26LiquidityAllocation.CurrentPinnedStationaryFundingDual 2>&1 | tee /tmp/source-stationary-dual-build.log
+          lake env lean papers/Ventura26LiquidityAllocation/CurrentPinnedStationaryFundingDual.lean 2>&1 | tee /tmp/source-stationary-dual-axioms.log
+          if grep -E 'sorryAx|unsolved goals|error:' /tmp/source-stationary-dual-axioms.log; then exit 2; fi
+          grep -F 'pinned_stationary_funding_dual_pos' /tmp/source-stationary-dual-axioms.log
+          grep -F 'pinned_stationary_SOURCE34_not_boundary_root' /tmp/source-stationary-dual-axioms.log
+          echo SOURCE_STATIONARY_DUAL_KERNEL_OK
+      - name: Keep build and axioms logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-stationary-dual
+          path: |
+            /tmp/source-stationary-dual-build.log
+            /tmp/source-stationary-dual-axioms.log
+          if-no-files-found: ignore
