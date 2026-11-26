@@ -1,1 +1,0 @@
-One-shot request for exact source-built PDF in PR #4; preserve original figures and bibliography. The workflow is restricted to this branch and does not merge main.

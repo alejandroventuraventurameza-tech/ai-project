@@ -14,7 +14,7 @@ import re
 import json
 
 getcontext().prec = 50
-PAPER = Path(__file__).resolve().parent.parent / "paper" / "paper.tex"
+PAPER = Path(__file__).resolve().parent.parent / "paper" / "historical" / "paper_full_20261118.tex"
 source = PAPER.read_text(encoding="utf-8")
 PATTERNS = {
     "capital_ratio": re.compile(
@@ -68,7 +68,7 @@ assert responses["B"]["delta_loss"] > 0
 
 print(json.dumps({
     "result": "PASS_PRINTED_TABLE_ALGEBRA_ONLY",
-    "source": "paper/paper.tex: historical 4.3 derivative table",
+    "source": "paper/historical/paper_full_20261118.tex: historical 4.3 derivative table",
     "shock": str(rate_shock),
     "factor_alpha_kappa_minus_omega_S": str(predicted_factor["S"]),
     "factor_alpha_kappa_minus_omega_B": str(predicted_factor["B"]),
