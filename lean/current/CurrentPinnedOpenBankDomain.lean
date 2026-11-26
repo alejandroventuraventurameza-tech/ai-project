@@ -21,6 +21,7 @@ namespace CurrentPinnedOpenBankDomain
 open CurrentPinnedBankDomain
 open CurrentSourceTwoDateBank
 open CurrentSourceFiveBankBridge
+open CurrentSourceFullFDeriv
 open scoped Topology
 
 /-- A positive convex mixture of the reserve requirement and the
