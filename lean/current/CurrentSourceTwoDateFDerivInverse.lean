@@ -23,6 +23,8 @@ open CurrentSourceTwoDateBank
 open CurrentSourceFiveBankBridge
 open scoped Topology
 
+set_option maxHeartbeats 800000
+
 /-- A continuous linear inverse candidate: negate precisely the eight
 SOURCE cross-row coefficients, retaining the true 33-row index order. -/
 noncomputable def sourceShearInvCLM
@@ -45,9 +47,19 @@ theorem sourceShearInvCLM_left
       (sourceShearCLM
         loan0 deposit0 loan1 deposit1
         rate0 quantity0 rate1 quantity1 v) = v := by
+  change sourceShearCLM
+    (-loan0) (-deposit0) (-loan1) (-deposit1)
+    (-rate0) (-quantity0) (-rate1) (-quantity1)
+    (sourceShearCLM loan0 deposit0 loan1 deposit1
+      rate0 quantity0 rate1 quantity1 v) = v
+  simp only [sourceShearCLM_apply]
   funext i
   fin_cases i <;>
-    simp [sourceShearInvCLM, sourceShearCLM, rowCoord] <;> ring
+    simp [sourceTwoDateBankFiveRowShear,
+      sourceTwoDateBankPricingRowShear,
+      sourceTwoDateMonetaryBankRowShear,
+      sourceDateOneMonetaryBankRowShear,
+      sourceMonetaryBankRowShear] <;> ring
 
 #print axioms sourceShearInvCLM_left
 
