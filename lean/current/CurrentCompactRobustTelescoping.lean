@@ -63,7 +63,7 @@ theorem matrix_pow_difference_telescoping
               congr 1
               apply Finset.sum_congr rfl
               intro j hj
-              have heq : n + 1 - 1 - (j + 1) = n - 1 - j := by omega
+              have heq : n - 1 - j = n - (j + 1) := by omega
               rw [heq]
 
 /-- General norm inequality underlying robust finite-horizon bounds.
@@ -88,7 +88,7 @@ theorem matrix_power_norm_telescoping
           have hs :=
             norm_sum_le (Finset.range n)
               (fun j : ℕ => F ^ j * (A - F) * A ^ (n - 1 - j))
-          exact add_le_add_left hs _
+          simpa only [add_comm] using (add_le_add_left hs (‖F ^ n‖))
     _ ≤ ‖F ^ n‖ +
           ∑ j ∈ Finset.range n,
             (‖F ^ j‖ * ‖A - F‖) * ‖A ^ (n - 1 - j)‖ := by
@@ -105,7 +105,7 @@ theorem matrix_power_norm_telescoping
                     norm_mul_le _ _
               _ ≤ (‖F ^ j‖ * ‖A - F‖) * ‖A ^ (n - 1 - j)‖ :=
                     mul_le_mul_of_nonneg_right (norm_mul_le _ _) (norm_nonneg _)
-          exact add_le_add_left hs _
+          simpa only [add_comm] using (add_le_add_left hs (‖F ^ n‖))
 
 #print axioms matrix_pow_difference_telescoping
 #print axioms matrix_power_norm_telescoping
