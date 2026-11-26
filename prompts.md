@@ -635,3 +635,14 @@ Acción resultante: auditoría documental, mejora del README, manifiesto provisi
 **Objetivo:** cerrar primero las desigualdades racionales de `F0` de la Proposición 5.1 y avanzar de manera paralela en la identidad telescópica de robustez.
 
 **Control real de Lean:** `matrix_pow_difference_telescoping` y `matrix_power_norm_telescoping` compilaron en [Actions #45864283745](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45864283745) con axiomas `[propext, Classical.choice, Quot.sound]` y sin `sorryAx`. Dos primeras variantes fallidas (#45863570793 y #45863966255) obligaron a corregir la indexación de la suma y el orden de la suma de normas; se conservan los fallos en Actions. **Límite honesto:** la verificación de `a_48`, el transitorio robusto y la estabilidad económica SOURCE siguen abiertos.
+
+---
+
+## Continuación IE project — cierre matemático de Prop. 5.1, 26/11/2026
+
+**Mensaje literal del autor:**
+> Ok, sigue
+
+**Objetivo de esta interacción:** probar en el kernel las dos cotas finitas restantes de `F0` y conectarlas con el teorema universal de decaimiento por bloques.
+
+**Prueba auditada:** `prop51FiniteBound_proved` y `prop51_unconditional_exact` aceptados por Lean 4.30.0-rc2, [Actions #45865176408](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45865176408), axiomas `[propext, Classical.choice, Quot.sound]`, sin `sorryAx`. Corresponde exactamente al grafo lineal decimal de 36 entradas, NO al Jacobiano económico SOURCE. Los fallos intermedios de `decide` y del puente `NNReal` se conservan en Actions. El protocolo paper-scoped oficial y manuscritos personales (0/8) siguen pendientes.
