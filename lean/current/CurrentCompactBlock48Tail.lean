@@ -17,7 +17,7 @@ DO NOT present the source-specific result as a complete Lean proof of Prop 5.1
 until the finite power inequalities are themselves checked by Lean.
 -/
 
-open scoped Matrix Matrix.Norms.Operator
+open scoped NNReal Matrix Matrix.Norms.Operator
 
 namespace Ventura26LiquidityAllocation
 namespace CurrentCompact
@@ -176,7 +176,12 @@ private theorem rational_rows_imply_real_operator_norm
   have hRealRows (i : Fin 6) :
       (∑ j : Fin 6, ‖(exactDecimalF0 ^ n) i j‖) =
         ((∑ j : Fin 6, |((exactDecimalF0Rat ^ n) i j)| : ℚ) : ℝ) := by
-    simp [hPow, Real.norm_eq_abs, Rat.cast_abs, Rat.cast_sum]
+    rw [hPow, Rat.cast_sum]
+    apply Finset.sum_congr rfl
+    intro j hj
+    change ‖(((exactDecimalF0Rat ^ n) i j : ℚ) : ℝ)‖ =
+      ((|((exactDecimalF0Rat ^ n) i j)| : ℚ) : ℝ)
+    rw [Real.norm_eq_abs, Rat.cast_abs]
   let cN : ℝ≥0 := ⟨(c : ℝ), by exact_mod_cast hc.le⟩
   have hcN : (0 : ℝ≥0) < cN := by
     apply NNReal.coe_lt_coe.mp
@@ -205,11 +210,13 @@ all 0..47 and the 48th power were kernel-decided over exact rationals. -/
 theorem prop51FiniteBound_proved : prop51FiniteBoundSpec := by
   unfold prop51FiniteBoundSpec
   constructor
-  · exact rational_rows_imply_real_operator_norm 48 (24 / 25) (by norm_num)
-      rationalF0_pow48_row_norm_lt
+  · simpa only [Rat.cast_div, Rat.cast_ofNat] using
+      (rational_rows_imply_real_operator_norm 48 (24 / 25) (by norm_num)
+        rationalF0_pow48_row_norm_lt)
   · intro r hr
-    exact rational_rows_imply_real_operator_norm r (61 / 10) (by norm_num)
-      (fun i => rationalF0_all_transient_rows ⟨r, hr⟩ i)
+    simpa only [Rat.cast_div, Rat.cast_ofNat] using
+      (rational_rows_imply_real_operator_norm r (61 / 10) (by norm_num)
+        (fun i => rationalF0_all_transient_rows ⟨r, hr⟩ i))
 
 /-- Source-specific, all-k/all-vector conclusion of current Prop. 5.1. -/
 theorem prop51_unconditional_exact
