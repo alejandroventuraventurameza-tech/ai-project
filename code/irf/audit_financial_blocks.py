@@ -192,7 +192,7 @@ def main():
             print(branch,report['branches'][branch]['impact_H'],flush=True)
         report['status']='passed_scoped_financial_block_audit'
         report['source_row_inventory']=source_map()
-        paper=HERE.parents[1]/'paper/paper.tex'
+        paper=HERE.parents[1]/'paper/historical/paper_full_20261118.tex'
         text=paper.read_text(encoding='utf-8')
         for row in report['source_row_inventory'].values():
             for label in row['paper_labels']:require('\\label{'+label+'}' in text,f'Missing source label: {label}')

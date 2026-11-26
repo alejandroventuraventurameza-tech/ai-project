@@ -1,0 +1,22 @@
+# Trazabilidad de las ocho proposiciones del artículo compacto
+
+**Corte:** 25/11/2026. El número de la proposición corresponde al PDF local de 16 páginas. La etiqueta LaTeX, no el número impreso, es su identificador estable.
+
+| Resultado (PDF) | Hipótesis/alcance | Control reproducible dentro de code/verify.py | Estado de evidencia |
+|---|---|---|---|
+| Proposición 3.1: raíces de complementariedad | Función C1 y signos locales ASUMIDOS | code/verify_compact_paper.py verifica 80 sistemas lineales de ejemplo con choque positivo/negativo; fuentes SOURCE se auditan aparte | **Prueba analítica condicional en paper**, sin correspondencia completa SOURCE/Lean |
+| Proposición 5.1: decaimiento de F0 | Matriz decimal racional fija, 48 pasos | code/irf/exact_linear_tail_power_certificate.py demuestra aritméticamente cotas exactas con Fraction y sha de matriz | **Aritmética exacta reproducible sobre matriz fija**, no Jacobiano económico completo |
+| Lema 5.2: robustez a perturbaciones | Norma de A-F0 a lo sumo 10^-4 | Mismo certificado calcula la recursión racional de 48 pasos y mayores | **Cota matemática condicional**, no prueba de proximidad del operador SOURCE |
+| Proposición 5.3: cuña financiera H/L | Garantía activa, theta_H menor que theta_L y precios positivos | code/verify_compact_paper.py prueba algebraica racional en 80 casos; code/irf/audit_effective_price_wedge_irf.py verifica identidades de trayectoria | **Identidad demostrada**, sin conclusión universal sobre bienestar |
+| Lema A.1.1: cobertura y patrimonio | Repago real no excede garantía, q positivo, delta menor a 1 y beneficios operativos no negativos | code/verify_compact_paper.py prueba 80 estados racionales; V0M conserva controles históricos | **Prueba analítica condicional** y muestreo independiente |
+| Lema A.1.2: no ahorro y deuda simultáneos | Spread positivo, utilidad marginal y beta positivos, KKT necesaria con dual no negativo | code/verify_compact_paper.py verifica contradicción de signos en 80 casos | **Prueba por contradicción** con FOC como premisas, no suficiencia global |
+| Proposición A.1.3: límite financiable | n,q,H,R positivos y q>H/R | code/verify_compact_paper.py usa presupuesto y garantía exactos con Fraction, y deriva signo negativo | **Identidad y derivada parcial**, no estática comparativa de equilibrio |
+| Lema A.1.4: pérdida de asignación | Cobb-Douglas cóncava, trabajo óptimamente distribuido y recursos positivos | code/verify_compact_paper.py: 80 verificaciones de derivada por paso complejo; V0M histórico: 5,000 casos de estrés | **Prueba en anexo** y contraste numérico, no bienestar |
+
+## Compuerta de integración
+
+El punto único exigido por el profesor sigue siendo python code/verify.py. Este script conserva las verificaciones históricas (sobre el texto original archivado) y ahora invoca code/verify_compact_paper.py una vez generados los certificados de trayectoria y de matriz.
+
+**No confundir**: (i) una demostración matemática escrita en el paper, (ii) controles numéricos reproducibles sobre un modelo reducido y (iii) el estatus de prueba *literal* en Lean. La tabla paper/lean_formalization_matrix_8.md acredita lo tercero solo cuando se haya cotejado un enunciado preciso, junto con su commit de origen.
+
+**Estado actual:** no se ha ejecutado todavía el script completo del último commit ni se han recibido las ocho hojas manuscritas. No certifica CI verde.

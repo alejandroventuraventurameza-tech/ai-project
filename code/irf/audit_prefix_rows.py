@@ -7,6 +7,8 @@ certificate of full equilibrium or the 640-period nonlinear tail.
 
 Tests every named row at perturbed *off-solution* states for both
 active sets, including the slack-L loan FOC and common pledge in t=1.
+Label provenance is checked against the pinned historical full manuscript,
+not the eight-result editorial compact version.
 Uses standard library only; does not modify figures or economic inputs.
 """
 from __future__ import annotations
@@ -141,7 +143,7 @@ def main():
     assert len(DATE0)==17 and len(DATE1)==16 and len(EXPECTED)==33
     assert EXPECTED==model.PREFIX_ROW_NAMES, "Row names/order drifted"
     assert len(set(EXPECTED))==33
-    text=(HERE.parents[1]/"paper/paper.tex").read_text(encoding="utf-8")
+    text=(HERE.parents[1]/"paper/historical/paper_full_20261118.tex").read_text(encoding="utf-8")
     for name in EXPECTED:
         group=next((k for k in SOURCE_LABELS if name.startswith(k)),None)
         assert group, f"No source map for {name}"

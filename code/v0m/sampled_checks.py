@@ -10,7 +10,7 @@ import math
 import random
 
 HERE = Path(__file__).resolve().parent
-PAPER = HERE.parents[1] / 'paper' / 'paper.tex'
+PAPER = HERE.parents[1] / 'paper' / 'historical' / 'paper_full_20261118.tex'
 SEED = 20261017
 DRAWS = 5000
 

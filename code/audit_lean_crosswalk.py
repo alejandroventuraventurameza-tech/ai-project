@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Audit a 57-row *scope* crosswalk. Not a formal theorem-equivalence checker.
 
-This gate catches missing paper claims, stale paper/ledger hashes, dangling
+This gate audits the PINNED historical manuscript of 57 claims, not the current
+compact eight-result paper. It catches missing historical paper claims, stale hashes, dangling
 Lean declaration references, and false promotion of evidence status.
 A present Lean `theorem` declaration is only a syntactic link; the exact
 economic statement, its hypotheses, and its mathlib proof must be reviewed
@@ -18,7 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 LEDGER = ROOT / "paper" / "result_ledger.json"
 CROSSWALK = ROOT / "paper" / "lean_crosswalk_57.json"
-PAPER = ROOT / "paper" / "paper.tex"
+PAPER = ROOT / "paper" / "historical" / "paper_full_20261118.tex"
 ALLOWED_REVIEW_STATES = {
     "targeted_semantic_comparison",
     "not_yet_semantically_reviewed",

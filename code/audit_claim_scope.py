@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Audit scientific scope of the two main conditional IRF propositions.
 
-Checks consistency between the current LaTeX manuscript, slides, the
+Checks consistency between the pinned HISTORICAL LaTeX source, slides, the
 versioned result ledger and the formal counterexample to literal
 Allocation uniqueness. It does not certify the propositions themselves.
 No third-party packages or data are needed.
@@ -13,7 +13,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PAPER = ROOT / "paper/paper.tex"
+PAPER = ROOT / "paper/historical/paper_full_20261118.tex"
 SLIDES = ROOT / "slides/final.tex"
 LEDGER = ROOT / "paper/result_ledger.json"
 LEAN_REFUTATION = ROOT / (
@@ -110,7 +110,8 @@ def main() -> None:
         "revision_note": "No theorem certification: compiled kernel and full economic correspondence require independent checking.",
         "numbered_claims": len(results),
         "conditional_scoped_claims": list(expected),
-        "paper_sha256": ledger["paper_sha256"],
+        "historical_paper_sha256": ledger["paper_sha256"],
+        "current_compact_paper_not_proved_by_this_audit": True,
         "lean_literal_spec_refuted_not_economic_claim": True,
         "full_infinite_equilibrium_proved": False,
     }
