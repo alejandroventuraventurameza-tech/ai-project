@@ -1,0 +1,72 @@
+name: IE SOURCE pinned stationary banking-domain bridge
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - lean/current/CurrentPinnedBankDomain.lean
+      - .github/workflows/ie-source-pinned-bank-domain.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ie-source-pinned-bank-domain
+  cancel-in-progress: true
+
+jobs:
+  pinned-bank-domain:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ai-project
+      - uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Install pinned Lean
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Kernel-check SOURCE pinned banking domain
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          test "$(git rev-parse HEAD)" = "194edcc95df74806a39b961d10dedddc6e730cce"
+          lake exe cache get
+          cp ../ai-project/lean/checkpoint/dependencies/lakefile.toml ./lakefile.toml
+          mkdir -p papers/Ventura26LiquidityAllocation
+          cp ../ai-project/lean/checkpoint/module_root.lean papers/Ventura26LiquidityAllocation.lean
+          cp ../ai-project/lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/candidates/Ventura26LiquidityAllocation/*.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceFiveBankTargetization.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceTwoDateBankTargetization.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceTwoDateFDerivTransport.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceTwoDateFDerivRank.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceTwoDateFDerivInverse.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentPinnedBankDomain.lean papers/Ventura26LiquidityAllocation/
+          lake build Ventura26LiquidityAllocation.CurrentPinnedBankDomain 2>&1 | tee /tmp/pinned-bank-build.log
+          lake env lean papers/Ventura26LiquidityAllocation/CurrentPinnedBankDomain.lean 2>&1 | tee /tmp/pinned-bank-axioms.log
+          if grep -E 'sorryAx|unsolved goals|error:' /tmp/pinned-bank-axioms.log; then exit 2; fi
+          grep -F 'pinned_tightness_coordinates' /tmp/pinned-bank-axioms.log
+          grep -F 'pinned_strict_tightness_two_dates' /tmp/pinned-bank-axioms.log
+          grep -F 'pinned_positive_reserve_states' /tmp/pinned-bank-axioms.log
+          grep -F 'pinned_target_admissible_iff_two_ratio_checks' /tmp/pinned-bank-axioms.log
+          echo SOURCE_PINNED_BANK_DOMAIN_KERNEL_OK
+      - name: Preserve build and axioms logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-pinned-bank-domain
+          path: |
+            /tmp/pinned-bank-build.log
+            /tmp/pinned-bank-axioms.log
+          if-no-files-found: ignore
