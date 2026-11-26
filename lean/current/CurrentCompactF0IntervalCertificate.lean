@@ -662,10 +662,18 @@ private def intervalBlock48Spec : Prop :=
 set_option maxRecDepth 8192
 set_option maxHeartbeats 0
 
-private theorem intervalBase_verified : intervalBaseSpec := by decide +kernel
-private theorem intervalStep_verified : intervalStepSpec := by decide +kernel
-private theorem intervalTransient_verified : intervalTransientSpec := by decide +kernel
-private theorem intervalBlock48_verified : intervalBlock48Spec := by decide +kernel
+private theorem intervalBase_verified : intervalBaseSpec := by
+  unfold intervalBaseSpec
+  decide +kernel
+private theorem intervalStep_verified : intervalStepSpec := by
+  unfold intervalStepSpec
+  decide +kernel
+private theorem intervalTransient_verified : intervalTransientSpec := by
+  unfold intervalTransientSpec
+  decide +kernel
+private theorem intervalBlock48_verified : intervalBlock48Spec := by
+  unfold intervalBlock48Spec
+  decide +kernel
 
 #print axioms intervalBase_verified
 #print axioms intervalStep_verified
