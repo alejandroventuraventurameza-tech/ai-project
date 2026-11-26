@@ -69,7 +69,7 @@ theorem expSecant_comp_continuousAt_at_zero
     ContinuousAt (fun y => expSecant (u y)) x := by
   have he : ContinuousAt expSecant (u x) := by
     simpa [hroot] using expSecant_continuousAt_zero
-  exact he.comp x hu
+  exact he.comp hu
 
 #print axioms expSecant_comp_continuousAt_at_zero
 
