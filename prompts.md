@@ -624,3 +624,14 @@ Acción resultante: auditoría documental, mejora del README, manifiesto provisi
 > Continúo con la Proposición 5.1. Primero cotejaré la matriz \(F_0\) y sus certificados racionales con el enunciado del artículo; después formalizaré en Lean el argumento de decaimiento por bloques y ejecutaré la compilación.
 
 **Ejecución comprobada:** Las 36 entradas racionales de \(F_0\), el SHA de origen y el certificado de 48 potencias de Python se validaron en Actions #45861545922. Los teoremas condicionales \(\texttt{block48_decay_of_norm_bounds}\) y \(\texttt{prop51_conditional_exact}\) fueron aceptados por Lean 4.30.0-rc2 con axiomas \(\texttt{[propext, Classical.choice, Quot.sound]}\), sin \(\texttt{sorryAx}\). El primer intento (#45861172446) falló por ámbito de notación \(\texttt{*ᵥ}\) y se corrigió sin cambiar hipótesis. **No se atribuye a Lean prueba de las desigualdades finitas**: siguen como supuestos de \(\texttt{prop51FiniteBoundSpec}\), aunque se verificaron mediante aritmética racional externa.
+
+---
+
+## Continuación IE project — Lema 5.2, 26/11/2026
+
+**Mensaje literal del autor:**
+> Ok, sigue
+
+**Objetivo:** cerrar primero las desigualdades racionales de `F0` de la Proposición 5.1 y avanzar de manera paralela en la identidad telescópica de robustez.
+
+**Control real de Lean:** `matrix_pow_difference_telescoping` y `matrix_power_norm_telescoping` compilaron en [Actions #45864283745](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45864283745) con axiomas `[propext, Classical.choice, Quot.sound]` y sin `sorryAx`. Dos primeras variantes fallidas (#45863570793 y #45863966255) obligaron a corregir la indexación de la suma y el orden de la suma de normas; se conservan los fallos en Actions. **Límite honesto:** la verificación de `a_48`, el transitorio robusto y la estabilidad económica SOURCE siguen abiertos.
