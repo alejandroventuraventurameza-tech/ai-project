@@ -146,6 +146,14 @@ jobs:
             echo "Skip stale PDF sync: source ${GITHUB_SHA} is not current head ${remote_sha}"
             exit 0
           fi
+          # Avoid binary-only commits on research/Lean/documentation branches.
+          # Only a branch that actually changes publication files should
+          # synchronize rebuilt PDFs; a successful LaTeX audit still runs.
+          git fetch --quiet --no-tags origin main:refs/remotes/origin/main
+          if git diff --quiet refs/remotes/origin/main...HEAD -- proposal/ slides/ paper/; then
+            echo "Skip PDF sync: no publication-tree change relative to main"
+            exit 0
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add proposal/proposal.pdf slides/topic.pdf slides/final.pdf paper/paper.pdf
