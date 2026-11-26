@@ -1,0 +1,110 @@
+name: ie-eight-result-lean-proof-smoke
+
+on:
+  push:
+    branches:
+      - work/ie-project-lean-eight-results-20261126
+    paths:
+      - .github/workflows/ie-eight-result-lean-proof-smoke.yml
+      - lean/candidates/Ventura26LiquidityAllocation/CurrentCompactWedgeRepayment.lean
+      - lean/candidates/Ventura26LiquidityAllocation/CurrentCompactFinancingCapacity.lean
+      - lean/current_paper_source_inventory_8.json
+      - .github/lean-current-run-request.txt
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ie-eight-result-lean-proof-smoke
+  cancel-in-progress: false
+
+jobs:
+  exact-source-pinned-lean-proofs:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out user project candidate
+        uses: actions/checkout@v4
+        with:
+          path: ai-project
+          fetch-depth: 0
+
+      - name: Check out exact AppliedModelingLib upstream
+        uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: AppliedModelingLib
+
+      - name: Check pinned source and inventory
+        working-directory: ai-project
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, pathlib, re, subprocess
+          root=pathlib.Path.cwd()
+          record=json.loads((root/'lean/current_paper_source_inventory_8.json').read_text())
+          assert record['source_main_sha']=='bac3c6255da39cd1169a965df35bb5e9a230e6e8'
+          assert len(record['claims']) == len({v['label'] for v in record['claims']}) == 8
+          for v in record['claims']:
+            src=subprocess.check_output(['git','show',record['source_main_sha']+':'+v['source_path']],text=True)
+            assert v['statement_latex'] in src, v['label']
+            blob=subprocess.check_output(['git','rev-parse',record['source_main_sha']+':'+v['source_path']],text=True).strip()
+            assert blob==v['source_git_blob'], v['label']
+          print('SOURCE_LOCK_OK: eight exact original LaTeX statements, commit pinned')
+          PY
+
+      - name: Set up Lean 4.30 release candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Diagnose official AppliedModelingLib environment
+        shell: bash
+        working-directory: AppliedModelingLib
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          test "$(git rev-parse HEAD)" = "194edcc95df74806a39b961d10dedddc6e730cce"
+          python3 scripts/paper_contribution.py doctor
+
+      - name: Retrieve pinned Mathlib build cache
+        shell: bash
+        working-directory: AppliedModelingLib
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake exe cache get
+
+      - name: Compile all three current-source-specific claims
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          cp ai-project/lean/candidates/Ventura26LiquidityAllocation/CurrentCompactWedgeRepayment.lean AppliedModelingLib/CurrentCompactWedgeRepayment.lean
+          cp ai-project/lean/candidates/Ventura26LiquidityAllocation/CurrentCompactFinancingCapacity.lean AppliedModelingLib/CurrentCompactFinancingCapacity.lean
+          cd AppliedModelingLib
+          lake env lean CurrentCompactWedgeRepayment.lean 2>&1 | tee /tmp/lean-compact-two-proofs.log
+          if grep -E 'sorryAx|admit|unsolved goals|error:' /tmp/lean-compact-two-proofs.log; then
+            echo "ERROR: Lean proof audit reported a blocker" >&2
+            exit 2
+          fi
+          lake env lean CurrentCompactFinancingCapacity.lean 2>&1 | tee /tmp/lean-compact-capacity.log
+          if grep -E 'sorryAx|admit|unsolved goals|error:' /tmp/lean-compact-capacity.log; then
+            echo "ERROR: Financing-capacity proof reported a blocker" >&2
+            exit 2
+          fi
+          echo "LEAN_CHECK_OK: repaymentCurrent_exact, effectiveWedgeCurrent_exact, and financingCapacityCurrent_exact"
+
+      - name: Preserve command outputs for independent QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ie-compact-lean-source-three-proof-log
+          path: |
+            /tmp/lean-compact-two-proofs.log
+            /tmp/lean-compact-capacity.log
+          if-no-files-found: ignore
