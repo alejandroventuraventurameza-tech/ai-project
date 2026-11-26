@@ -184,7 +184,7 @@ theorem targetizedLogPrefix33_hasFDerivAt_at_source_root
   filter_upwards [hadm] with z hz
   exact (targetizedLogPrefix33_eq_economicLogShear
     branch P I Z0 dateOneState recurrent tail z
-    hmatch hz.1 hz.2).symm
+    hmatch hz.1 hz.2
 
 #print axioms targetizedLogPrefix33_hasFDerivAt_at_source_root
 
