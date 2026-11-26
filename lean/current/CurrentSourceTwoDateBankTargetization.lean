@@ -141,16 +141,42 @@ theorem targetizedPrefix33_eq_fullEconomicBankShear
   obtain ⟨hLoan1, hDeposit1, hBalance1⟩ :=
     threeTargetRows_eq_crossRows
       P (dateOne P Z dateOneState recurrent tail) hmatch h1
+  let F := originalPrefix33 branch P I Z dateOneState recurrent tail
+  have hF12 : F 12 =
+      localReducedRemainingResidual P (dateZero P I Z dateOneState) 6 := by rfl
+  have hF13 : F 13 =
+      localReducedRemainingResidual P (dateZero P I Z dateOneState) 7 := by rfl
+  have hF14 : F 14 =
+      localReducedRemainingResidual P (dateZero P I Z dateOneState) 8 := by rfl
+  have hF15 : F 15 =
+      localReducedRemainingResidual P (dateZero P I Z dateOneState) 9 := by rfl
+  have hF16 : F 16 =
+      localReducedRemainingResidual P (dateZero P I Z dateOneState) 10 := by rfl
+  have hF28 : F 28 =
+      localReducedRemainingResidual P
+        (dateOne P Z dateOneState recurrent tail) 6 := by rfl
+  have hF29 : F 29 =
+      localReducedRemainingResidual P
+        (dateOne P Z dateOneState recurrent tail) 7 := by rfl
+  have hF30 : F 30 =
+      localReducedRemainingResidual P
+        (dateOne P Z dateOneState recurrent tail) 8 := by rfl
+  have hF31 : F 31 =
+      localReducedRemainingResidual P
+        (dateOne P Z dateOneState recurrent tail) 9 := by rfl
+  have hF32 : F 32 =
+      localReducedRemainingResidual P
+        (dateOne P Z dateOneState recurrent tail) 10 := by rfl
   funext i
   fin_cases i <;>
-    simp [targetizedPrefix33, originalPrefix33,
+    simp [targetizedPrefix33,
       sourceTwoDateBankFiveRowShear,
       sourceTwoDateBankPricingRowShear,
       sourceTwoDateMonetaryBankRowShear,
       sourceDateOneMonetaryBankRowShear,
       sourceMonetaryBankRowShear,
-      localPrefixEquationOfIndex,
-      dateZero, dateOne,
+      hF12, hF13, hF14, hF15, hF16,
+      hF28, hF29, hF30, hF31, hF32,
       hLoan0, hDeposit0, hBalance0,
       hLoan1, hDeposit1, hBalance1]
 
