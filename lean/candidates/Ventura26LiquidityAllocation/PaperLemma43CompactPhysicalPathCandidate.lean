@@ -17,6 +17,8 @@ not automatically the discrete calendar date of a DSGE.
 namespace Ventura26LiquidityAllocation
 namespace CurrentCompact
 
+open Filter
+
 /-- Direct derivative of log(EFFICIENT physical output / ACTUAL physical
 output) along differentiable positive capital paths. Same assumptions
 as the compact Appendix A.1.4; no global positivity of either path
