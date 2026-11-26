@@ -1,0 +1,29 @@
+\begin{tikzpicture}[
+ >=Latex,font=\scriptsize,
+ nodebox/.style={draw=blue!67!black,fill=blue!5,rounded corners=3pt,
+   minimum width=2.32cm,minimum height=.88cm,align=center,inner sep=3pt},
+ realbox/.style={nodebox,draw=black!48,fill=black!3},
+ sbox/.style={nodebox,draw=teal!70!black,fill=teal!9,minimum width=2.57cm},
+ bbox/.style={nodebox,draw=orange!70!black,fill=orange!9,minimum width=2.57cm},
+ a/.style={-{Latex[length=2.4mm]},draw=blue!70!black,line width=.8pt}
+]
+\node[nodebox] (pol) at (-4.65,1.78) {\textbf{Regla monetaria}\\$\epsilon^R_0<0,\ R_t^R$};
+\node[nodebox] (liq) at (-1.55,1.78) {\textbf{Liquidez OTC}\\$S^-/S^+,\ R^F$};
+\node[nodebox] (bank) at (1.55,1.78) {\textbf{Crédito bancario}\\$R^L,\ R^D$};
+\node[nodebox] (firm) at (4.65,1.78) {\textbf{Firma H}\\$N_H-c_H,\ H_H,\ b_H$};
+\draw[a] (pol.east) -- (liq.west);
+\draw[a] (liq.east) -- (bank.west);
+\draw[a] (bank.east) -- (firm.west);
+
+\node[realbox] (nk) at (-4.65,-.55) {\textbf{Euler + Phillips}\\precios y trabajo};
+\node[realbox] (y) at (-1.55,-.55) {\textbf{Producto corriente}\\$Y_0\downarrow$ (ambas ramas)};
+\node[sbox] (s) at (1.55,-.55) {\textbf{S: L holgada}\\$b_H\uparrow,\ k_{H,t+1}\uparrow$\\pérdida futura $\downarrow$};
+\node[bbox] (bb) at (4.65,-.55) {\textbf{B: L restringida}\\$b_H\uparrow,\ k_{H,t+1}\downarrow$\\pérdida futura $\uparrow$};
+\draw[a,densely dashed] (pol.south) -- (nk.north);
+\draw[a] (nk.east) -- (y.west);
+\draw[a] (firm.south west) to[out=-130,in=72] (s.north);
+\draw[a] (firm.south east) to[out=-50,in=85] (bb.north);
+\node[anchor=west,font=\tiny,align=left,text=black!70] at (-5.87,-1.8)
+ {Regla y OTC: eq:IBrate. Cartera: eq:bankFOCL. Empresas: eq:firmbudget y eq:collateral.\\
+  Canal $Y_0$: Euler y eq:nkpc. Todas las respuestas son conjuntas, con $\rho=0.10$ fijo.};
+\end{tikzpicture}

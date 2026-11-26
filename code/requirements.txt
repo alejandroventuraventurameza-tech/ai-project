@@ -1,1 +1,4 @@
-# Verification uses only the Python standard library (Python >= 3.10).
+# Internal numerical verification and scientific figures. No external datasets.
+numpy>=1.26,<3
+matplotlib>=3.8,<4
+scipy>=1.12,<2

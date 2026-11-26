@@ -1,0 +1,194 @@
+% Cuerpo editorial abreviado: preguntas, modelo y planteamiento escalar.
+\section{Pregunta, contribución y literatura}\label{sec:compact_question}
+Estudiamos cómo una intervención en el precio de las reservas bancarias
+afecta la asignación de capital entre firmas heterogéneas mediante
+liquidación interbancaria, cartera de los bancos y préstamos garantizados.
+Una reducción de la remuneración de reservas no equivale a una caída
+mecánica de la tasa de crédito. Tampoco más crédito implica más
+inversión: recursos propios, precio del capital y valor pignorable
+responden simultáneamente a las condiciones monetarias.
+
+La economía es neokeynesiana, cerrada, con un hogar trabajador, dos
+tipos empresariales, bancos comerciales con pagos idiosincráticos,
+mercado OTC y banco central. La empresa H es tecnológicamente más
+productiva que L, pero enfrenta menor pignorabilidad contractual.
+Distinguimos la rama S, donde H tiene garantía activa y L es
+\emph{prestataria no restringida} en la fecha inicial, de la rama B,
+donde ambas empresas están restringidas. Nuestro experimento
+perturba únicamente la \emph{remuneración de reservas}.
+
+La contribución precisa es una caracterización condicional de
+complementariedad escalar, una contabilidad explícita de transmisión
+bancaria y resultados numéricos reproducibles que no confunden
+crédito corriente, capital instalado mañana, producción hoy y
+pérdida asignativa. No afirmamos haber demostrado dos equilibrios
+competitivos de horizonte infinito ni efectos permanentes de
+crecimiento.
+
+La interrelación entre política monetaria, heterogeneidad y mala
+asignación no es inédita: véase \citet{gonzalez2026}. Los mercados
+interbancarios y pagos dialogan con \citet{bianchi2022} y
+\citet{bigioSannikov2023}; las distorsiones de capital con
+\citet{midrigan2014} y \citet{gopinath2017}. La novedad
+\emph{propuesta}, todavía de alcance condicionado, consiste en
+integrar esos canales con una restricción robusta de repago.
+El escenario se construye con parámetros ilustrativos, no con
+estimación empírica para Perú.
+
+\section{Modelo: tecnología, contrato y liquidez}\label{sec:compact_economy}
+Las fechas son \(t\geq 0\), los tipos \(i\in\{H,L\}\) y sus
+masas \(\nu_i>0\). Una empresa produce
+\begin{equation}\label{eq:compact_technology}
+Y_{it}=z_tA_i k_{it}^{\alpha}\ell_{it}^{\beta},
+\quad A_H>A_L>0,\quad 0<\alpha,\beta,\quad \alpha+\beta<1.
+\end{equation}
+El capital \(k_{it}\) se hereda al comienzo de la fecha; la
+inversión decidida en \(t\) determina \(k_{i,t+1}\). El minorista
+paga \(m_t>0\) por el insumo y elige precios nominales con costos
+de ajuste Rotemberg; el trabajo interior satisface
+\(m_tF_{\ell,i}=w_t\).
+
+\subsection{Hogar y empresas}
+El hogar trabajador ahorra en depósitos y bonos, y maximiza
+\[
+\mathbb E_0\sum_{t\geq0}\beta_W^t
+\left\{u_W(C^W_t)-\chi_WL_t^{1+\varphi}/(1+\varphi)\right\},
+\quad u_W'(C)=C^{-\sigma_W}.
+\]
+Su oferta laboral satisface
+\(w_t=\chi_WL_t^\varphi(C_t^W)^{\sigma_W}\).
+El empresario tiene utilidad marginal
+\(u'_E(c)=c^{-\sigma_E}\) y descuento \(\beta_E\);
+no se agrega su consumo al del hogar como si fueran el mismo agente.
+
+Tras producir, vender capital depreciado y pagar la deuda heredada,
+el patrimonio disponible de la empresa es
+\begin{equation}\label{eq:compact_wealth}
+N_{it}=\pi^{op}_{it}+(1-\delta)q_tk_{it}
+-\frac{R^L_{t-1}b_{i,t-1}}{\Pi_t}
++\frac{R^D_{t-1}a_{i,t-1}}{\Pi_t}.
+\end{equation}
+El presupuesto y el contrato exigen
+\begin{align}
+c_{it}+q_tk_{i,t+1}+a_{it}&=N_{it}+b_{it},
+\label{eq:compact_budget}\\
+R^L_tb_{it}&\leq H_{it}k_{i,t+1},\label{eq:compact_contract}\\
+H_{it}&=\theta_i(1-\delta)
+\inf_{s'\in\operatorname{supp}(s_{t+1}\mid s_t)}
+\bigl\{\Pi_{t+1}(s')q_{t+1}(s')\bigr\}.\nonumber
+\end{align}
+\(R_t^L\) es la tasa bruta de repago; \(b_{it}\) es el principal,
+\(\theta_i\) es la fracción pignorable del capital \emph{y no}
+el coeficiente de encaje. El ínfimo usa el soporte endógeno de
+las transiciones admisibles: reemplazarlo por una esperanza requeriría
+modelar incumplimiento y recuperación.
+
+Si \(\mu_{it}\geq0\) es el dual del colateral, la condición KKT
+de complementariedad es
+\begin{equation}\label{eq:compact_kkt}
+\mu_{it}(H_{it}k_{i,t+1}-R_t^Lb_{it})=0,\qquad
+H_{it}k_{i,t+1}-R_t^Lb_{it}\geq0.
+\end{equation}
+La igualdad del contrato no implica un dual positivo. En el
+subcaso de H con deuda positiva, depósitos empresariales nulos,
+garantía activa y \(n_{Ht}:=N_{Ht}-c_{Ht}>0\), la identidad exacta es
+\begin{equation}\label{eq:compact_capacity}
+k_{H,t+1}=\frac{n_{Ht}}{q_t-H_{Ht}/R_t^L},
+\quad b_{Ht}=\frac{H_{Ht}k_{H,t+1}}{R_t^L},
+\quad q_t>H_{Ht}/R_t^L.
+\end{equation}
+A recursos propios, precio del capital y garantía \emph{fijos},
+una menor tasa eleva la capacidad financiable; la implicación
+para inversión de equilibrio no se deduce de esa derivada parcial.
+
+\subsection{Bancos, pagos, OTC y política monetaria}
+Un banco retiene patrimonio \(x\), toma depósitos \(d^D\),
+presta \(l^B\) y mantiene reservas previas \(m^B\):
+\begin{equation}\label{eq:compact_balance}
+l^B+m^B=d^D+x,\qquad
+d^D\leq\kappa_Dx,\qquad l^B\leq\kappa_Lx.
+\end{equation}
+Después del shock de depósitos \(\omega\), el excedente anterior
+al OTC es
+\begin{equation}\label{eq:compact_surplus}
+s^B=m^B-\rho_td^D+
+\left(\frac{R_t^D}{R_t^R}-\rho_t\right)\omega d^D.
+\end{equation}
+Las fracciones de déficit y superávit negociadas dependen de matching
+y de la tasa interbancaria; el remanente deficitario acude a la
+facilidad del banco central. Su rendimiento de liquidez
+\(\chi_t(s^B)\) es lineal por tramos. Bajo precios dados, solvencia
+holgada y condiciones interiores, la condición marginal de préstamo es
+\begin{equation}\label{eq:compact_bank_foc}
+R_t^L-R_t^R=\mathbb E_t[\chi'_t(s^B)]+\nu_{L,t},
+\qquad\nu_{L,t}\geq0.
+\end{equation}
+En quiebres con masa positiva se requieren subgradientes; una
+condición marginal necesaria no sustituye la optimalidad dinámica
+del banco.
+
+El banco central establece precio y cantidad de reservas con reglas
+distintas:
+\begin{align}
+\log R_t^R&=\varrho_R\log R_{t-1}^R+
+(1-\varrho_R)\left[
+\log\bar R^R+\phi_\pi\log\Pi_t+
+\phi_y\log(Y_t/\bar Y)\right]+\epsilon_t^R,
+\label{eq:compact_rate_rule}\\
+\log M_t^{\mathrm{pre}}&=\varrho_M\log M_{t-1}^{\mathrm{pre}}
++(1-\varrho_M)\log\bar M+\epsilon_t^M.
+\label{eq:compact_quantity_rule}
+\end{align}
+El coeficiente de encaje \(\rho_t\) y el ancho del corredor
+\(\Delta_t=R_t^W-R_t^R\) son instrumentos adicionales. No se
+identifica un shock de remuneración con un cambio de encaje.
+El ejercicio numérico conserva el encaje en \(0.10\) y altera
+solo la innovación de la regla de remuneración:
+\begin{equation}\label{eq:compact_shock}
+\epsilon_0^R\longmapsto\epsilon_0^R+h,\quad
+h=-10^{-5},\qquad
+\text{sin nuevas innovaciones agregadas para }t\geq1.
+\end{equation}
+La convención es de tasa bruta por período ilustrativo, no una
+variación anualizada ni una intervención estimada.
+
+\subsection{Cronología y objeto económico}
+Se observa el estado inicial y se anuncia la política; hogares,
+firmas y bancos eligen consumo, cartera y capital futuro. Luego se
+realizan pagos de depósitos, negociación OTC, facilidad y liquidación.
+En la siguiente fecha ocurren producción, repago y recomposición
+patrimonial. Un equilibrio competitivo infinito requiere factibilidad
+por historia, solución de los problemas individuales,
+consistencia de precios, expectativas y condiciones terminales.
+Una raíz de un sistema de ecuaciones marginales necesario no es
+automáticamente un equilibrio competitivo.
+
+\section{Reducción de dos fechas y resultado central}
+\label{sec:compact_scalar}
+Con estados heredados y anuncios futuros comunes, consideramos dos
+ramas de un prefijo no lineal de 33 logvariables,
+\[
+ Z=\left(\mathcal X_1\in\mathbb R^7,\;
+u_0\in\mathbb R^{10},\;
+x_2\in\mathbb R^6,\;
+u_1\in\mathbb R^{10}\right).
+\]
+Los sistemas \(F_S(Z,h)=0\) y \(F_B(Z,h)=0\) implementan las 33
+condiciones de las dos fechas, con distinta complementariedad
+para L al inicio. H está restringida en ambas; L tiene préstamo
+positivo y garantía holgada en S, y garantía activa en B. La
+continuación local desde \(t=2\) y la regularidad de los
+Jacobianos requieren hipótesis y comprobaciones adicionales.
+
+Si \(s\geq0\) representa la holgura normalizada de L, una
+eliminación local de las demás ecuaciones induce la función
+\(\mathcal M(s,h)\), el valor marginal normalizado de financiación.
+El problema escalar es
+\begin{equation}\label{eq:compact_complementarity}
+0\leq s\ \perp\ \mathcal M(s,h)\geq0.
+\end{equation}
+El cálculo de fuente aporta como evidencia numérica el signo
+\(b=\partial_s\mathcal M(0,0)<0\) y
+\(a_R=\partial_h\mathcal M(0,0)<0\).
+Son \emph{premisas} de la proposición, no un teorema global de
+existencia, selección o unicidad de asignaciones dinámicas.

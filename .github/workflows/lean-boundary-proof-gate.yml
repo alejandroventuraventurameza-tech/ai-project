@@ -1,0 +1,315 @@
+# Specific Lean kernel and axiom check for the economic boundary root.
+# No green signal here asserts a complete competitive equilibrium.
+name: Lean boundary proof gate (pinned)
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'lean/candidates/Ventura26LiquidityAllocation/Boundary*.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/Stationary*.lean'
+      - 'lean/checkpoint/**'
+      - '.github/workflows/lean-boundary-proof-gate.yml'
+  push:
+    branches:
+      - 'work/lean-ci-validation-*'
+    paths:
+      - 'lean/candidates/Ventura26LiquidityAllocation/Boundary*.lean'
+      - 'lean/candidates/Ventura26LiquidityAllocation/Stationary*.lean'
+      - 'lean/checkpoint/**'
+      - '.github/workflows/lean-boundary-proof-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lean-boundary-proof-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  boundary:
+    name: Kernel and axioms for boundary reduced-prefix claims
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    steps:
+      - name: Checkout review branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Establish immutable pinned Lean environment
+        shell: bash
+        env:
+          PINNED_SHA: 16e24fe828a5a0002ef13bb82bae9e295f190f86
+          UPSTREAM_SHA: 194edcc95df74806a39b961d10dedddc6e730cce
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor "$PINNED_SHA" HEAD
+          mkdir -p lean-boundary-logs
+          git clone --quiet --filter=blob:none https://github.com/nikhgarg/AppliedModelingLib.git upstream
+          git -C upstream checkout --quiet --detach "$UPSTREAM_SHA"
+          test "$(git -C upstream rev-parse HEAD)" = "$UPSTREAM_SHA"
+          cmp lean/checkpoint/dependencies/lean-toolchain upstream/lean-toolchain
+          cmp lean/checkpoint/dependencies/lake-manifest.json upstream/lake-manifest.json
+          python3 - <<'PY'
+          from pathlib import Path
+          upstream = Path('upstream/lakefile.toml').read_bytes()
+          overlay = Path('lean/checkpoint/dependencies/lakefile.toml').read_bytes()
+          extra = b'\n[[lean_lib]]\nname = "Ventura26LiquidityAllocation"\nsrcDir = "papers"\n'
+          assert overlay == upstream + extra, 'Pinned Lean overlay modified'
+          PY
+          cp lean/checkpoint/dependencies/lakefile.toml upstream/lakefile.toml
+          mkdir -p upstream/papers/Ventura26LiquidityAllocation
+          cp lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/checkpoint/module_root.lean upstream/papers/Ventura26LiquidityAllocation.lean
+          cp lean/candidates/Ventura26LiquidityAllocation/*.lean upstream/papers/Ventura26LiquidityAllocation/
+          sha256sum lean/candidates/Ventura26LiquidityAllocation/Boundary*.lean > lean-boundary-logs/boundary-source-sha256.txt
+
+      - name: Install pinned Lean
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o "$RUNNER_TEMP/elan-init.sh"
+          sh "$RUNNER_TEMP/elan-init.sh" -y --no-modify-path
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Recover pinned Mathlib build artifacts
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          grep -Fx 'leanprover/lean4:v4.30.0-rc2' lean-toolchain
+          lake exe cache get > "$GITHUB_WORKSPACE/lean-boundary-logs/mathlib-cache.log" 2>&1 || {
+            tail -n 100 "$GITHUB_WORKSPACE/lean-boundary-logs/mathlib-cache.log"
+            exit 1
+          }
+
+      - name: Restore candidate compilation cache
+        uses: actions/cache/restore@v4
+        with:
+          path: upstream/.lake/build
+          key: boundary-lean-${{ runner.os }}-v4.30.0-rc2-${{ hashFiles('lean/checkpoint/dependencies/lake-manifest.json', 'lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean', 'lean/candidates/Ventura26LiquidityAllocation/Boundary*.lean', 'lean/candidates/Ventura26LiquidityAllocation/Stationary*.lean') }}
+          restore-keys: |
+            lean-ventura26-${{ runner.os }}-pinned-v4.30.0-rc2-u194edcc-
+            boundary-lean-${{ runner.os }}-v4.30.0-rc2-
+
+      - name: Compile literal boundary root and normalization chain
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          lake build Ventura26LiquidityAllocation.FrozenInheritanceFirmBudgetDiagnosticCandidate > "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log" 2>&1 || {
+            tail -n 160 "$GITHUB_WORKSPACE/lean-boundary-logs/boundary-build.log"
+            exit 1
+          }
+
+      - name: Audit exact frontier theorems without sorryAx
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          cat > BoundaryProofAudit.lean <<'LEAN'
+          import Ventura26LiquidityAllocation.FrozenInheritanceFirmBudgetDiagnosticCandidate
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryWorkerLabor.boundary_full_prefix_equations_from_root
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.boundary_analyticPackage
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryAnalyticPackage.output_ratio_fifteenth_power
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.normalized_output_eq_from_source
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.endpointSigns_of_boxes
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_reduced_prefix_from_endpoint_boxes
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_unique_reduced_prefix_rate_of_boxes
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_weight_rational_micro_box
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_slope_rational_micro_boxes
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_reserve_rate_micro_box
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_loan_rate_micro_box
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_reserve_rate_sharp_box
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_loan_rate_sharp_box
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_sharp_boxes
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_capital_scales_sharp_boxes
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_capital_cost_lo_box_from_source
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_unique_reduced_prefix_rate_of_three
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_worker_consumption_scale_lower
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_deposit_rate_lo_source_upper
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_worker_lo_box_from_source
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_unique_reduced_prefix_rate_of_two
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_output_scale_sharp_box
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_output_lo_box_from_source
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_output_hi_box_from_source
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_component_boxes_from_source
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_unique_reduced_prefix_rate_from_source
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundarySourceRate_spec
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundarySourceRate_reduced_prefix
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundarySourceRate_positiveRealDomain
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundarySourceRate_bankDomain
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundarySourceRate_firmRegime
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundarySourceRate_firmSigns
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundarySourceRate_workerLabor
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundarySourceRate_exactRootOn
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundarySourceRate_unique_of_source_root
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_paper_spec_of_source_full_witness
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryRealizedBankRows.source_boundary_bank_equity_transitions
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryRealizedBankRows.source_boundary_full_allocation_not_identified
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullAllocationCarrier.sourceBoundaryLiteralAllocation_realizes_prefix
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullAllocationCarrier.sourceBoundaryLiteralAllocation_bank_transitions
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullAllocationCarrier.sourceBoundaryLiteralAllocation_selected_clearing
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullBankBalance.sourceBoundaryDateData_zero
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullBankBalance.sourceBoundaryDateData_one
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullBankBalance.sourceBoundaryDateData_tail
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullBankBalance.sourceBoundaryDateData_bankRow
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullBankBalance.sourceBoundaryDateData_ratio_nonzero
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullBankBalance.sourceBoundaryLiteralAllocation_bankBalance
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryRealAccounting.sourceBoundary_real_accounting
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryRealAccounting.sourceBoundary_all_loan_rates_nonzero
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryRealAccounting.sourceBoundary_current_nominal_face_consistency
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryRealAccounting.sourceBoundary_fiscalClosure_of_settlement
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryRealAccounting.sourceBoundary_resourceClears_iff
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryRealAccounting.sourceBoundary_householdBudget_iff
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullResourceClearing.sourceBoundaryDateData_resource_row
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullResourceClearing.sourceBoundaryDateData_initial_capital
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullResourceClearing.sourceBoundaryDateData_capital_step
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullResourceClearing.sourceBoundaryDateData_unit_productivity
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullResourceClearing.literal_resourceClears_of_aligned_reduced_rows
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullResourceClearing.sourceBoundaryLiteralAllocation_resourceClears
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullSettlement.source_boundary_deposit_gt_reserve
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullSettlement.sourceBoundaryDateData_otc_domain
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullSettlement.sourceBoundaryDateData_reserveRequirement
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullSettlement.sourceBoundaryLiteralAllocation_settlementClears
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullSettlement.sourceBoundaryLiteralAllocation_fiscalClosure
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryCapitalProducer.sourceBoundaryDateData_currentCapital_pos
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryCapitalProducer.sourceBoundaryDateData_aggregateCapital_pos
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryCapitalProducer.sourceBoundaryDateData_zero_investment_eq
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryCapitalProducer.sourceBoundaryDateData_stationary_investment_pos
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryCapitalProducer.sourceBoundaryDateData_investment_pos
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryCapitalProducer.sourceBoundary_sourceAggregateCapital_eq
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryCapitalProducer.sourceBoundary_sourceInvestment_eq
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryCapitalProducer.sourceBoundaryLiteralAllocation_capitalProducerAccounts
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullFirmBudget.sourceBoundaryDateData_firm_budget_row
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullFirmBudget.sourceBoundaryDateData_firm_face_step
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullFirmBudget.sourceBoundaryDateData_initial_firm_face
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullFirmBudget.localSlackLiteralAllocation_firmBudgetFlows_of_aligned_rows
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFullFirmBudget.sourceBoundaryLiteralAllocation_firmBudgetFlows
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFaceGapFiscalReduction.firm_face_decline_pos_of_total_gap_pos
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFaceGapFiscalReduction.firm_face_decline_gt_eight_percent_of_gap_gt_eight_percent
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowDepositBox.source_narrow_left_deposit_rate_box
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowResourceLeft.source_narrow_left_capital_scale_box
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowResourceLeft.source_narrow_left_normalized_output_upper
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowLeftResidualSign.source_narrow_left_firm_H_lower
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowLeftResidualSign.source_narrow_left_firm_L_lower
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowLeftResidualSign.source_narrow_left_capital_cost_lower
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowLeftResidualSign.source_narrow_left_resource_residual_negative
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightCore.source_narrow_right_deposit_rate_box
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightCore.source_narrow_right_capital_scale_box
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightCore.source_narrow_right_normalized_output_lower
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightResidualSign.source_stationary_worker_scale_sharp_upper
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightResidualSign.source_narrow_right_worker_consumption_upper
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightResidualSign.source_narrow_right_capital_cost_upper
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightResidualSign.source_narrow_right_firm_H_upper
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightResidualSign.source_narrow_right_firm_L_upper
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightResidualSign.source_narrow_right_resource_residual_positive
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowRightResidualSign.source_reduced_prefix_rate_in_narrow_interval
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryBankFaceUniformLower.source_stationary_wage_gt_137
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryBankFaceUniformLower.source_credit_scale_lt_22553
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryBankFaceUniformLower.source_stationary_bank_equity_lt_44_25
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryBankFaceUniformLower.source_narrow_bank_face_contribution_gt_neg_three_percent
+          #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceAccounting.boundary_wage_labor_eq_profit_share
+          #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceAccounting.boundary_source_operating_profit_eq_output_share
+          #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceAccounting.source_firm_face_decline_exact
+          #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceNormalization.source_firm_face_decline_normalized_exact
+          #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceUniformBounds.source_stationary_wage_lt_11_8
+          #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceUniformBounds.source_stationary_credit_scale_gt_225529
+          #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceUniformGap.source_right_output_lt_1335242
+          #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceUniformGap.source_uniform_normalized_output_lt_1335242
+          #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceUniformGap.source_uniform_firm_H_gt_2957375
+          #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceUniformGap.source_uniform_firm_L_gt_3810535
+          #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceUniformGap.source_uniform_credit_term_gt_64616
+          #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceUniformGap.source_uniform_capital_revaluation_gt_207794
+          #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceUniformGap.source_uniform_firm_face_decline_gt_11_percent
+          #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceUniformGap.source_uniform_inherited_nominal_face_gap_gt_eight_percent
+          #print axioms Ventura26LiquidityAllocation.ProposedFirmFaceUniformGap.source_boundary_candidate_not_competitive_equilibrium
+          #print axioms Ventura26LiquidityAllocation.ProposedFrozenInheritanceImpactPrefix.dateZero_predetermined_fields_exact
+          #print axioms Ventura26LiquidityAllocation.ProposedFrozenInheritanceImpactPrefix.dateZero_four_instruments_exact
+          #print axioms Ventura26LiquidityAllocation.ProposedFrozenInheritanceImpactPrefix.dateOne_four_instruments_unperturbed
+          #print axioms Ventura26LiquidityAllocation.ProposedFrozenInheritanceImpactPrefix.inherited_nominal_faces_consistent_for_every_intervention
+          #print axioms Ventura26LiquidityAllocation.ProposedFrozenInheritanceImpactPrefix.sourceLike_dateZero_innovation_fields
+          #print axioms Ventura26LiquidityAllocation.ProposedFrozenInheritanceImpactPrefix.moving_SOURCE_capital_below_frozen_predecessor
+          #print axioms Ventura26LiquidityAllocation.ProposedFrozenInheritanceImpactPrefix.boundary_versus_frozen_dateZero_capital
+          #print axioms Ventura26LiquidityAllocation.ProposedFrozenInheritanceFirmBudgetDiagnostic.original_firm_budget_residual_affine_in_inherited_face
+          #print axioms Ventura26LiquidityAllocation.ProposedFrozenInheritanceFirmBudgetDiagnostic.frozen_firm_face_budget_row_exact
+          #print axioms Ventura26LiquidityAllocation.ProposedFrozenInheritanceFirmBudgetDiagnostic.face_only_frozen_aggregate_firm_budget_gt_11_percent
+          #print axioms Ventura26LiquidityAllocation.ProposedFrozenInheritanceFirmBudgetDiagnostic.old_SOURCE_controls_not_both_budget_feasible_after_face_freeze
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowDepositBox.source_narrow_left_worker_consumption_lower
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.normalized_source_resource_residual_exact
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.source_normalization_factor_pos
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.narrow_endpoints_source_normalization_exact
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.narrow_left_negative_iff_normalized_negative
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNarrowSourceResidualBridge.narrow_right_positive_iff_normalized_positive
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFaceGapFiscalReduction.source_gap_eq_at_zero_fiscal
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFaceGapFiscalReduction.uniform_gap_from_zero_fiscal_reference
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFaceGapFiscalReduction.noCompetitiveEquilibrium_from_zero_fiscal_reference
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryPredeterminedState.same_inherited_state_gap_independent_of_policy
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryPredeterminedState.same_inherited_state_consistency_iff
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryPredeterminedState.stationary_inherited_gap_zero
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryPredeterminedState.frozen_stationary_gap_zero_after_intervention
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryPredeterminedState.boundary_initial_state_ne_stationary_for_all_boundary_rates
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryPredeterminedState.source_boundary_initial_state_ne_stationary_predecessor
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceGate.inheritedNominalFaceConsistency_iff_gap_zero
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceGate.sourceBoundaryInheritedFaceConsistency_iff_gap_zero
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceGate.sourceBoundary_inheritedFace_invalid_of_gap_ne_zero
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceGate.sourceBoundary_noCompetitiveEquilibrium_of_gap_ne_zero
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceIntervalBridge.sourceBoundaryRate_in_narrow_rational_interval
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceIntervalBridge.noCompetitiveEquilibrium_of_exact_interval_inequalities
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFrozenInheritance.initialIntervention_bankRenewalFactor_eq
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFrozenInheritance.initialIntervention_inheritedNominalFaceConsistency_iff
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFrozenInheritance.initialIntervention_monetaryPrimitiveDomain_iff
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFrozenInheritance.boundaryInitialState_capital_strictMono
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryFrozenInheritance.stationaryInheritedState_consistent_under_initialIntervention
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceDecomposition.inheritedNominalFaceGap_firm_bank_update
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceDecomposition.inheritedNominalFaceGap_initialIntervention_invariant
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceDecomposition.boundaryInitialState_unchanged_fields
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceDecomposition.boundaryInheritedGap_eq_face_shifts
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceDecomposition.sourceBoundaryInheritedGap_eq_face_shifts
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceMechanism.boundaryInheritedFace_independent_of_G
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceMechanism.boundaryInheritedGap_independent_of_G
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceMechanism.sourceBoundaryInheritedGap_independent_of_G
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceMechanism.stationaryLoanRate_lt_boundaryRate
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceMechanism.boundaryBankFace_lt_stationary
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceMechanism.bankFaceContribution_neg
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryInheritedFaceMechanism.sourceBankFaceContribution_neg
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_micro_boxes
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_productivity_collateral_cost_wedge
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_user_cost_wedge_of_bank_pricing
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_stationary_capital_scale_order
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_capital_scale_L_rational_box
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_firm_L_endpoint_boxes_of_coefficient_box
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_capital_scale_L_sharp_lower
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_firm_L_endpoint_boxes_from_source
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_unique_reduced_prefix_rate_of_eight
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_capital_scale_H_rational_box
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_source_firm_H_coefficient_rational_box
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_firm_H_endpoint_boxes_from_source
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_unique_reduced_prefix_rate_of_six
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_capital_cost_hi_box_from_source
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_unique_reduced_prefix_rate_of_five
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_worker_consumption_scale_upper
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_deposit_rate_hi_source_lower
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_worker_hi_box_from_source
+          #print axioms Ventura26LiquidityAllocation.ProposedBoundaryNormalizationBridge.boundary_unique_reduced_prefix_rate_of_four
+          LEAN
+          lake env lean BoundaryProofAudit.lean > "$GITHUB_WORKSPACE/lean-boundary-logs/axioms.log" 2>&1 || {
+            cat "$GITHUB_WORKSPACE/lean-boundary-logs/axioms.log"
+            exit 1
+          }
+          cat "$GITHUB_WORKSPACE/lean-boundary-logs/axioms.log"
+          if grep -q 'sorryAx' "$GITHUB_WORKSPACE/lean-boundary-logs/axioms.log"; then
+            echo "Unsafe sorryAx in boundary proof transitive dependencies"
+            exit 1
+          fi
+
+      - name: Upload verifiable kernel and axiom logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lean-boundary-kernel-logs
+          path: lean-boundary-logs/
+          retention-days: 30

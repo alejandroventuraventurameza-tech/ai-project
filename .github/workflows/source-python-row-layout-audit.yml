@@ -1,0 +1,53 @@
+name: SOURCE Python 33-row permutation audit
+
+on:
+  push:
+    branches:
+      - work/lean-ci-validation-source-33-row-20261114
+    paths:
+      - code/irf/audit_source_python_33_row_permutation.py
+      - code/irf/finite_irf.py
+      - code/irf/audit_original_python_realized_vs_policy_target_bank_rows.py
+      - code/irf/audit_original_python_33_bank_jacobian_shear.py
+      - code/irf/audit_original_python_stationary_payment_signs.py
+      - code/irf/audit_original_python_two_date_coordinate_timing.py
+      - code/irf/audit_original_python_source_shaped_firm_rows.py
+      - code/irf/audit_original_python_date_one_euler_jacobian_shear.py
+      - code/irf/audit_original_python_combined_bank_firm_jacobian_shear.py
+      - code/irf/audit_original_python_source_shaped_macro_normalizations.py
+      - code/irf/audit_original_python_full_source_shaped_jacobian_normalizations.py
+      - code/irf/audit_original_python_stationary_33_jacobian_regularity.py
+      - lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean
+      - .github/workflows/source-python-row-layout-audit.yml
+  workflow_dispatch:
+
+jobs:
+  row-layout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify exact original SOURCE/Python 33-row ordering
+        run: python code/irf/audit_source_python_33_row_permutation.py
+      - name: Audit exact off-root Python bank rate/reserve gaps on 60 records
+        run: python code/irf/audit_original_python_realized_vs_policy_target_bank_rows.py
+      - name: Verify Python 33x33 banking derivative row-shear at monetary root
+        run: python code/irf/audit_original_python_33_bank_jacobian_shear.py
+      - name: Audit strict reserve buffer margins at the original frozen stationary root
+        run: python code/irf/audit_original_python_stationary_payment_signs.py
+      - name: Audit original Python 33-coordinate two-date state timing
+        run: python code/irf/audit_original_python_two_date_coordinate_timing.py
+      - name: Audit SOURCE-shaped firm budgets Euler and collateral rows
+        run: python code/irf/audit_original_python_source_shaped_firm_rows.py
+      - name: Audit original Python date-one Euler Jacobian pledge shear
+        run: python code/irf/audit_original_python_date_one_euler_jacobian_shear.py
+      - name: Audit combined bank and firm 33-dimensional Jacobian shears
+        run: python code/irf/audit_original_python_combined_bank_firm_jacobian_shear.py
+      - name: Audit SOURCE-shaped macro and policy row normalization
+        run: python code/irf/audit_original_python_source_shaped_macro_normalizations.py
+      - name: Audit full 33-by-33 SOURCE-shaped macro, firm and bank Jacobian transforms
+        run: python code/irf/audit_original_python_full_source_shaped_jacobian_normalizations.py
+      - name: Audit original Python stationary 33x33 Jacobian numerical regularity
+        run: python code/irf/audit_original_python_stationary_33_jacobian_regularity.py

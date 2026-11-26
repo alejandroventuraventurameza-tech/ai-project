@@ -1,0 +1,59 @@
+{
+  "scope": "Internal arithmetic prerequisites and source inventory, not all analytical proofs or Lean coverage.",
+  "source_sha256": "3457ae3ff2c3b83e672b0709f5ad453ca976ec99c3a0bc5e6e25aeecc56c2dc4",
+  "numbered_results_retained": 57,
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "run_started_utc": "2026-11-03T02:43:25.849724+00:00",
+  "formalization_started": false,
+  "macro_irfs_in_this_step": false,
+  "external_data": false,
+  "equilibrium_selection": "Both admissible local branches retained; no selector imposed.",
+  "steps": [
+    {
+      "script": "sampled_checks.py",
+      "sha256": "0a28b948ce45697f80b8fea61b289068c1dcd6ef30bd7c94f1cb125d482f216d",
+      "returncode": 0
+    },
+    {
+      "script": "cotas_2026_10_15/verified_linear_operator.py",
+      "sha256": "1369e9c04ed9774297d957ea27d8dad893f99fc17fb08c9819fa9a378ca6400b",
+      "returncode": 0
+    },
+    {
+      "script": "cotas_2026_10_15/verified_nonlinear_radius.py",
+      "sha256": "d1a78491ca06c56104ea9a3cf778bb25b0472a4795f3a2059380e578d84cf21a",
+      "returncode": 0
+    },
+    {
+      "script": "cotas_2026_10_15/audit_selector_tree.py",
+      "sha256": "e0e0a77eb17dea8721776d3e8491655fc3e2c0144c55a42da96209491a86bf6b",
+      "returncode": 0
+    },
+    {
+      "script": "regimenes_2026_10_17/audit_regime_bounds.py",
+      "sha256": "1c18161190cae2ff403817674864ab9b8e84f872d7e59d6af2ad712f36005377",
+      "returncode": 0
+    },
+    {
+      "script": "cierre_interno_2026_10_17/finite_bridge.py",
+      "sha256": "e3523811b5433a076e13fe51479a4a518e338386498898d46549b2b6929063fa",
+      "returncode": 0
+    }
+  ],
+  "status": "passed",
+  "input_sha256": {
+    "cotas_2026_10_15/inputs/directional_coefficients.npz": "b3faacefb99546f3039b6f5f7887a97b840e8e721512ef786f195d8f6c20b897",
+    "cotas_2026_10_15/inputs/hand_linearization.py": "f9492bded9b5c44ea7affb3370101f701a70b5ac19facc320faeba6da511976c",
+    "cotas_2026_10_15/inputs/selected_coefficients.npz": "cd2a9280dfe3b5d774e9e3d6860449727c3b4c84f5ab67de75ec9375af79818d"
+  },
+  "artifacts_sha256": {
+    "sampled_checks.json": "642c3534eb1c8ec017ae676944b32ce123de68157fce3fce9451c1c093e0f684",
+    "cotas_2026_10_15/verified_linear_bounds.json": "2d5216cdc1ea2ad71d9f11b265c9953e9d0e479a3c6472789ab5959d0a3885a7",
+    "cotas_2026_10_15/verified_nonlinear_radius.json": "4e86cee24afbd11a7926cb2eeedd89ef0a636eceb1ddc16b2c79bed325535836",
+    "cotas_2026_10_15/rational_preconditioners.json": "26401ce4334b105d35ff6c25e81d8d5c5d37786503212fb34368adac0d2d601b",
+    "cotas_2026_10_15/selector_tree_check.json": "3c8c34d3686ddad68727be4f432070977c305e10a66c2256f423aaf48d3f61a8",
+    "regimenes_2026_10_17/regime_bounds.json": "37df317f6d4a4d6226d1c69c466962833853c02560e2a0d9301f57bbc8464547",
+    "cierre_interno_2026_10_17/finite_bridge_certificate.json": "06eb91c4adb673e633c4652d91c62c3b8225751718192fadd55362edf292e240"
+  },
+  "run_finished_utc": "2026-11-03T02:43:44.022026+00:00"
+}

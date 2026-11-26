@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="310" viewBox="0 0 1200 310">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0B1E32"/><stop offset=".65" stop-color="#173E56"/><stop offset="1" stop-color="#0C4A53"/></linearGradient><pattern id="dots" patternUnits="userSpaceOnUse" width="23" height="23"><circle cx="2" cy="2" r=".9" fill="#9CC5CF" opacity=".17"/></pattern></defs>
+<rect width="1200" height="310" rx="22" fill="url(#bg)"/><rect width="1200" height="310" rx="22" fill="url(#dots)"/><rect x="10" y="10" width="1180" height="290" rx="15" fill="none" stroke="#4A8796" opacity=".45"/>
+<rect x="52" y="46" width="7" height="7" rx="3" fill="#77DBC0"/><text x="73" y="55" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="16" letter-spacing="2.5" fill="#8DDDCB">AI ECON MODELING  /  TRACK B</text>
+<text x="52" y="126" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="42" fill="#FFFFFF">Política monetaria, liquidez</text>
+<text x="52" y="174" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="42" fill="#FFFFFF">bancaria y asignación de capital</text>
+<text x="53" y="215" font-family="Arial,Helvetica,sans-serif" font-size="20" fill="#D1E6ED">Un shock de remuneración · dos regímenes de transmisión</text>
+<rect x="52" y="245" width="356" height="34" rx="17" fill="#245469" stroke="#426F80"/><text x="74" y="267" font-family="Arial,Helvetica,sans-serif" font-size="15" fill="#D9F5F0">Universidad del Pacífico  ·  2026-II</text>
+<g stroke="#78C3CF" stroke-width="3" fill="none"><path d="M800 147 H841 M921 147 H959 M1041 147 H1062 V109 H1083 M1062 147 V186 H1083"/></g>
+<g font-family="Arial,Helvetica,sans-serif" font-weight="700" text-anchor="middle">
+<rect x="756" y="109" width="88" height="76" rx="13" fill="#22566A" stroke="#7EC9D4"/><text x="800" y="154" font-size="21" fill="#FFFFFF">BC</text>
+<rect x="846" y="109" width="88" height="76" rx="13" fill="#22566A" stroke="#7EC9D4"/><text x="890" y="154" font-size="21" fill="#FFFFFF">OTC</text>
+<rect x="942" y="109" width="100" height="76" rx="13" fill="#22566A" stroke="#7EC9D4"/><text x="992" y="153" font-size="17" fill="#FFFFFF">Bancos</text>
+<rect x="1082" y="73" width="82" height="68" rx="12" fill="#235E59" stroke="#82DEBF"/><text x="1123" y="115" font-size="22" fill="#DBFFF3">S</text>
+<rect x="1082" y="157" width="82" height="68" rx="12" fill="#634553" stroke="#F3B59D"/><text x="1123" y="199" font-size="22" fill="#FFF0E7">B</text>
+</g>
+</svg>

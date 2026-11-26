@@ -1,0 +1,30 @@
+name: Quantitative IFT arithmetic (synthetic only)
+on:
+  push:
+    branches:
+      - 'work/lean-ci-validation-*'
+    paths:
+      - 'code/v0m/certified_ift/**'
+      - '.github/workflows/quantitative-ift-arithmetic.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exact-rational-gate-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout dedicated review branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify Python arithmetic tests
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s code/v0m/certified_ift -p 'test_*.py' -v
+      - name: Record non-economic scope
+        run: |
+          echo 'Only synthetic exact-rational arithmetic tested.'
+          echo 'No economic derivative enclosure, Lean witness or equilibrium is certified.'

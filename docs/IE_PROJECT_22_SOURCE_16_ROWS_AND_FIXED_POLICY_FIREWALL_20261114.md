@@ -1,0 +1,1115 @@
+# IE Project 22 — SOURCE remaining rows, policy-fixed fiber and boundary firewall
+
+Checkpoint: 2026-11-14. Dedicated branch:
+`work/lean-ci-validation-source-33-row-20261114`.
+Status in this note is deliberately version-scoped: the new Lean candidates
+are **pending their exact GitHub Actions run**, independently of prior
+green Lean campaigns. No full equilibrium certification is asserted.
+
+## 1. SOURCE augmented object versus the IRF object
+
+The original SOURCE augmented boundary is
+
+```text
+F(z,h) = (B(z,h), nuL(z)),  z in R^33, h in R.
+```
+
+Here B is the original 33-row binding-prefix SOURCE residual with the
+L collateral row expressed as zero normalized slack, and nuL is the
+actual financing dual of firm L. A zero of F simultaneously imposes:
+
+- Both H and L collateral faces binding at date zero (the original
+  L face is B's row 5).
+- The L normalized funding dual equal to zero (34th row).
+
+This is a **switching-frontier** configuration, not a routine root of
+the S (L slack) or B (strict L dual) IRF equations. The reduced
+32-log-plus-h construction G = B o L is a square 33x33 system
+only because h is ENDOGENOUS in that boundary root search.
+For a preassigned h_target, G(u,h_target) has 32 free economic log
+coordinates but still 33 equations; it need not have a zero.
+
+The finite IRF code solves the distinct 33-log, 33-equation
+branch-specific Python prefix residual at fixed shock v_R=-1e-5,
+with L's initial regime equation specialized separately to S/B.
+No unproved cross-equilibrium equivalence is permitted.
+
+## 2. Observed distinct innovations
+
+The saved [Python build 43646342640](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43646342640)
+reports a numerical free-h boundary solution
+
+```text
+hStar = +0.007616947910146871
+max reduced33 residual = 8.43769498715119e-15 (binary64)
+```
+
+The production IRF source `code/irf/finite_irf.py` uses a fixed,
+negative `v_R=-0.00001` (approximately -0.1 basis points).
+These are distinct policies, and the boundary root does not prove
+an IRF root at the second value. Even exact equality of h would
+leave additional inherited-state and continuation correspondence
+obligations: the free-h Python boundary uses
+`frozen_stationary_seed(steady_case())`, whereas the production
+IRF main experiment uses `make_boundary(steady_case())`.
+Their economic identity is not assumed.
+
+The new runtime firewall
+`code/irf/audit_reduced33_fixed_policy_fiber.py` compares the generated
+JSON witnesses, their SHA256 provenance and policy instrument, and
+writes `frozen_reduced33_fixed_policy_fiber_gate.json`.
+It fails on an unreviewed sign/scale change and explicitly sets the
+SOURCE root and full-equilibrium flags to false.
+This is an audit of interpretations, not an interval proof.
+
+## 3. Exact 16 SOURCE other-row interface
+
+The candidate
+`lean/candidates/Ventura26LiquidityAllocation/SourceSixteenRemainingActualRowsCandidate.lean`
+maps the actual augmented SOURCE equations to
+`localReducedRemainingResidual`, for every z,h off root and
+with the ORIGINAL two date-data objects and inherited state.
+
+| SOURCE row/date 0 | SOURCE row/date 1 | Internal remaining row | Economic equation |
+|---:|---:|---:|---|
+| 7 | 23 | 1 | Capital supply |
+| 8 | 24 | 2 | Aggregate resources |
+| 11 | 27 | 5 | Rotemberg NK Phillips |
+| 12 | 28 | 6 | Reserve remuneration rule |
+| 13 | 29 | 7 | Reserve quantity rule |
+| 14 | 30 | 8 | Loan pricing |
+| 15 | 31 | 9 | Deposit pricing |
+| 16 | 32 | 10 | Bank balance |
+
+The candidate also checks that these sixteen indices are fixed by
+the previously audited SOURCE-to-Python output permutation.
+This means ONLY that the SOURCE rows and their indexing are
+traceable to original definitions. It does **not** establish
+functional equality to Python `remaining_residuals` or validate
+its binary64 derivatives and inherited continuation.
+
+The 16 rows together with 8 firm rows and 9 scalar/normalization rows
+exhaust all 33 original SOURCE positions. Exhausting index positions
+is not a proof of cross-language equivalence.
+
+## 4. Necessary next scientific bridge
+
+1. Fix literal SOURCE `Primitives`, `InheritedState`, `Z0`,
+   `dateOne`, `recurrent`, `tail` and the exact calibration
+   interpretation (real-decimal versus binary64).
+2. Identify source date-zero and date-one `LocalPrefixDateData`
+   with Python `state, controls, next_state, next_controls, aux`
+   on an OPEN positive chart, including `P0` date-two continuation.
+3. Compare 16 SOURCE economic formulas with the corresponding
+   original Python formulas, not merely with a second Python
+   source-shaped transcription. Handle exact log normalization,
+   firm Euler shears and relevant positive domains separately.
+4. Derive a certified SOURCE center residual and 33x33 Jacobian
+   enclosure on a common closed box with rigorous rounding.
+5. Only then apply the already prepared conditional rational
+   Neumann/Banach test to a genuine SOURCE root; separately examine
+   KKT, supported histories and terminality.
+
+No structural IRF at fixed negative remuneration, original infinite
+competitive equilibrium or permanent-growth theorem is certified
+by the present 16-row identity or free-h boundary search.
+
+
+## 5. Lean compiler follow-up and SOURCE date-two P0 contract
+
+CI evidence is revision-scoped. The first 16-row audit
+[43647651031](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43647651031)
+FAILED before proof verification with a syntax error at line 79:
+`expected ';' or line break`. This is a **source code parser error** in
+the four term-level `let` bindings preceding the conjunction of 16
+SOURCE rows, not a counterexample to the economics.
+
+Commit `3fbf263521fc89a548ca72bdf3ea80655f49cf73` adds explicit
+terminators to those binders. The dedicated pinned Lean audit is
+[43649204171](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43649204171);
+do NOT label the theorem verified unless that run is a success and
+its axiom printouts are inspected.
+
+Separately the exact SOURCE-typed date-one P0 continuation candidate,
+`SourceFrozenP0LiteralDateCalendarCandidate.lean` (commit
+`e63f1d17a02d8b64fb8ed8253581b8fa88c9bd22`), targets the original
+`localPrefixDateZeroData` and `localPrefixDateOneData` builders. It
+proposes four proof obligations, all requiring a separate kernel audit:
+
+- date-zero next controls are exactly the PREFIX date-one controls
+  `Z.controlsOne`, not the finite P0 continuation;
+- actual SOURCE date-one future control levels equal
+  `u0_j*exp(sum_k sourceFrozenP0TenControls[j,k]*z_k)` when the six
+  date-two state coordinates are on the positive log chart;
+- log deviations of all ten controls are exact P0 matrix products
+  with the baseline positivity hypotheses; and
+- the date-two controls are strictly positive on that chart.
+
+The corresponding combined Lean/axiom run was launched as
+[43649329765](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43649329765).
+None of these proves the numerical binary64 `matvec` or `exp`
+operations equal real arithmetic, nor the unproved infinite terminal
+continuation or the 33-row SOURCE/Python operator equality.
+
+**Independent QA issue:** Editorial QA
+[43649204206](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43649204206)
+failed to push compiled PDFs because another commit advanced the
+development branch between its head check and push. This is not a
+LaTeX compilation error. Commit `0bc07c40662010b3584a7fb2d0cca03476d2b5a6`
+adds a guarded re-fetch and preserves a hard failure if push fails
+without a concurrent branch-head change. The new exact-sha editorial
+run must be checked rather than retroactively changing the old status.
+
+The original Python/free-h versus fixed-negative-h audit remains
+confirmed by the successful
+[build 43647840851](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43647840851).
+Neither the parser fix, the P0 controls identity, nor PDF QA has
+promoted Python's reduced33 residual to a true SOURCE root.
+
+Next scientific gate (unchanged): instantiate SAME source primitives,
+inherited base, date-one data and tail as Python; prove off-root
+functional equality of economic rows and a certified full SOURCE
+derivative enclosure before any existence, policy IRF or growth claim.
+
+
+## 6. Follow-up: compiled original rows, original Python P0 wiring, P0 composite candidate
+
+Exact source-commit scope for this checkpoint:
+
+- SOURCE 16-row parser repair: commit `3fbf263521fc89a548ca72bdf3ea80655f49cf73`.
+  The pinned Lean audit
+  [#43649204171](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43649204171)
+  has status **success**, including original SOURCE 16-row identities,
+  unchanged source/Python row permutation positions, and the
+  fixed-policy SOURCE root subtype equivalence. Axiom printouts list
+  standard Lean `propext`, `Classical.choice` and `Quot.sound`
+  for the nontrivial source correspondences. This does **not** imply a
+  SOURCE economic root.
+- Finite P0 SOURCE calendar candidate:
+  `SourceFrozenP0LiteralDateCalendarCandidate.lean`, added at
+  `e63f1d17a02d8b64fb8ed8253581b8fa88c9bd22`. The exact-run Lean audit
+  [#43649329765](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43649329765)
+  was in progress when this note was written; no success is inferred.
+- Direct same-engine Python structural path:
+  `code/irf/audit_source_dateone_p0_operational_wiring.py` at
+  `125e4e6d56c14a8b22d2bdc744350ebafd4604f8`. The script verifies
+  with Python AST that the original `prefix_residual` computes
+  `u2 = s.base[6+i]*exp((P0 @ z[17:23])[6+i])` for every i=0,...,9
+  and passes those SAME ten controls to `binding_period_residual`,
+  which uses `remaining_residuals` for the eight non-firm economic
+  equations. Original Python code, not a rewritten surrogate, is used.
+  The [build #43650031798](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43650031798)
+  completed its `Run code/verify.py` job successfully. The audit's
+  12 off-root cases (2 regimes x 2 policy vectors x 3 charts) have
+  zero internal Python-call discrepancy and the JSON explicitly
+  retains `SOURCE_Python_16_row_functional_equality_proved=false`.
+  The [latest build #43650031798](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43650031798)
+  must be used for full aggregate workflow status.
+- Composite Lean SOURCE/P0 module:
+  `SourceSixteenRowsFrozenP0CompositeCandidate.lean` at
+  `5927bd541a7f72919af6a7e454a7d32856c96c67`, which submits
+  one proposition jointly covering the eight original SOURCE
+  date-one economic rows and the exact future control evaluation
+  from the frozen real P0 matrix under explicit positivity and
+  date-two log-chart hypotheses. CI print-axiom registration at
+  `02b84392355d253b43fffc8ea476c5bb9f09895f`.
+  Its dedicated Lean run must PASS before it is marked DEMOSTRADO.
+
+**Scientific implication and remaining gate.** These three improvements
+make the calendar/policy/continuation contract more explicit in both
+source and numerical code. They do not yet instantiate the same
+`Primitives`, `InheritedState`, `Z0` and exact real-versus-float
+calibration for all 33 economic rows. A complete cross-language
+functional identity (or rigorous interval discrepancy on a common
+box) and the true SOURCE Jacobian enclosure remain mandatory before
+claiming a certified root, equilibrium IRF, or permanent growth effect.
+
+## 7. Fully pinned stationary SOURCE baseline (exact Lean input target)
+
+The original SOURCE 34-equation boundary previously retained arbitrary
+`Primitives`, `InheritedState`, `Z0`, time labels and a generic
+continuation. This makes it impossible to identify a specific numerical
+SOURCE root merely by calling a Python evaluator.
+
+Two new candidate modules eliminate those discretionary choices:
+
+1. `SourceStationaryFrozenP0ConcreteOperatorCandidate.lean`
+   (commit `bef0b3e575eb0950b37e0c73effd9fae1377a06c`):
+   instantiates the ACTUAL SOURCE 34 and 33 residual maps with
+   `ProposedStationaryPrimitives.primitives G`,
+   `ProposedStationaryInheritedState.inheritedState G`,
+   the literal `.dateOne`/`.recurrent` calendar and
+   `sourceLogLinearContinuation x0 u0 sourceFrozenP0TenControls`.
+   Proposes exact 34-to-33 root-set equivalence and distinguishes
+   the date-zero remuneration policy innovation from unchanged
+   date-one primitive fields at *fixed* economic coordinates.
+2. `SourceFullyPinnedStationaryP0OperatorCandidate.lean`
+   (commit `2e52075c7641ba42bc77cae307939b2cfd876f59`):
+   constructs the actual 33-component stationary SOURCE reference
+   `fullyPinnedStationarySOURCEZ0` from the already proved stationary
+   capital, nominal promises, bank face, reserve lags and all ten
+   controls at dates zero and one; the date-two compact state uses
+   `ProposedStationaryRealScale.stateSix`. Proposes:
+   `LocalPrefixCoordinatesPositive fullyPinnedStationarySOURCEZ0`,
+   the conditional exact SOURCE root-set equivalence with no
+   arbitrary Z0, and the exact P0 return to baseline controls.
+
+The resulting concrete original-SOURCE object is
+
+```text
+P_G = ProposedStationaryPrimitives.primitives G
+I_G = ProposedStationaryInheritedState.inheritedState G
+Z0  = fullyPinnedStationarySOURCEZ0           -- 7+10+6+10 levels
+tail = sourceLogLinearContinuation stateSix controls frozenP0Ten
+F_G(z,h) = augmentedBoundaryZeroResidual P_G I_G Z0
+             .dateOne .recurrent tail z h
+L_G(u) = sourceFundingDualLift32 P_G Z0 u
+R_G(u,h) = (F_G(L_G(u),h)).1                -- 33 genuine economic rows
+```
+
+Only the public-debt supply parameter `G` remains a stationary
+SOURCE parameter; neither `Z0` nor the inherited state nor finite
+tail is a caller-chosen surrogate. The free-h switching frontier is
+**not** the fixed-negative-IRF shock experiment.
+
+A new Python provenance audit
+`code/irf/audit_fully_pinned_source_python_reference.py`
+(commit `ec97cceb28282feb7799c1983ed6e780be4a6e03`) checks the
+actual SOURCE Lean declaration anchors, the original Python
+`frozen_stationary_seed(steady_case())` 7+10+6+10 ordering, its 33
+positive binary64 reference values, and the fact that the OLD
+`make_boundary()` baseline is a different inherited economy.
+`code/verify.py` runs it and build archives its JSON. This audit
+does **NOT** evaluate Lean real expressions in Python, certify
+SOURCE/Python cross-language function equality or supply a root.
+
+Status boundary at note-writing time: the new proofs and audit are
+**submitted**, not promoted to DEMOSTRADO/NUMERICO until their
+specific GitHub Actions runs conclude and outputs are inspected.
+The last independently established Lean gate was
+[#43650128978](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43650128978)
+for the SOURCE/P0 8-row composite, with green pinned compilation
+and `#print axioms`.
+
+Next obligations are substantive: compare the actual SOURCE
+`R_G(u,h)` with original Python's 33-row evaluator under exactly
+this stationary inherited reference; reconcile real decimal/rational
+constants with binary64 and normalized rows, then rigorously bound
+the SOURCE residual and Jacobian on a full box. Only after these
+can a rational Neumann/Banach result establish a true SOURCE root.
+
+## 8. Discharging the date-two log-index/P0 premise
+
+The previous eight-date-one-row composite needed the hypothesis
+
+```text
+(localPrefixLogChart Z0 z).stateTwo
+  = localPrefixStateSixLogChart x0 z2.
+```
+
+The SOURCE basepoint `fullyPinnedStationarySOURCEZ0` is now defined
+literally, so this hypothesis can be discharged rather than assumed.
+The new candidate
+`SourcePinnedDateTwoLogIndexP0Candidate.lean` (commit
+`691e83571fd7ea4681b7c536469028a19437626d`)
+defines the six-state SOURCE extraction by original log indices
+
+```text
+z2 = (z17, z18, z19, z20, z21, z22)
+```
+
+and submits the exact real identity of the original SOURCE 33-log
+date-two state with the six-coordinate log state. It then applies the
+previous audited `sourceFrozenP0_dateOne_nextControl_level` and
+`source16_dateOne_actual_rows_with_exact_frozenP0` to establish that
+the ACTUAL date-one SOURCE economic equations 23,24,27,28,29,30,31,32
+use the P0 future controls with those six exact SOURCE logs at every
+`z,h`, with NO new chart-matching premise.
+
+These declarations have been added to `#print axioms` in
+`.github/workflows/lean-candidates.yml` at
+`bbdd5f692a29978a2733bd5f181c24224797ce7a`.
+Their audited CI run is
+[GitHub Actions #43652154747](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43652154747).
+**Do not promote them to DEMOSTRADO until that particular run
+completes successfully.** They do not make any claim about binary64
+numerical equality, an infinite-horizon P0 continuation, a SOURCE
+root, or a fixed-shock equilibrium.
+
+For the previous fully pinned reference, the fail-closed Python
+data provenance script is
+`code/irf/audit_fully_pinned_source_python_reference.py`,
+wired into `code/verify.py` and archived by `build.yml`. It checks
+all 33 original Python frozen baseline levels are positive and in
+the 7+10+6+10 order, while explicitly rejecting the older
+`make_boundary()` baseline as the stationary predecessor.
+This is only an AST/declaration/data-order guard, not execution of
+SOURCE real arithmetic in Python. Source economic operator equality,
+certified derivative bounds and root existence still require
+an independent proof.
+
+## 9. Critical correction: ORIGINAL SOURCE/Python zero sets versus residual values
+
+The phrase "prove all 33 SOURCE/Python residuals identical" is
+**too strong and false without a row-normalization map** for the original
+implementations. On identical positive economic data, original SOURCE
+`localReducedRemainingResidual` has:
+
+| Local economic row | Genuine SOURCE level/ratio residual | Original Python `remaining_residuals` | Exact positive-domain relationship |
+|---:|---|---|---|
+| 0 (bank-face rollover) | `A - B` | `log(A/B)` | same zeros if A,B>0; at zero, `D Py = D SRC / B` |
+| 3 (labor supply) | `w - W` | `log(w/W)` | same zeros if w,W>0; at zero, `D Py = D SRC / W` |
+| 4 (household deposit Euler) | `1 - A/B` | `log(A/B)` | same zeros if A,B>0; at zero, `D Py = -D SRC` |
+
+Here bank `B = bankRenewalFactor(P)*loanRate*currentBankFace/inflation`;
+Python's corresponding original term uses `s.aB`, so an ADDITIONAL
+`bankRenewalFactor(P)=s.aB` calibrated-source identification is needed.
+For labor supply `W = laborScale*workerConsumption^sigmaW*
+aggregateLabor^laborCurvature`, matching Python's `chiW * L * cw`
+requires the actual stationary exponents and identical labor aggregation.
+For Euler `A/B=(workerDiscount*marginalUtilityNext/marginalUtilityNow)
+*depositRate/nextInflation`, matching Python's `s.bw*cw/cwNext`
+requires log utility and exact common controls.
+
+The correct future SOURCE/Python contract is
+```text
+Py(T(z,h)) = N( SOURCE(z,h); baseline, positivity, row order )
+```
+where `T` is the economically verified coordinate/calibration map
+and `N` performs row-specific logarithmic/level transformations and
+any identified Euler shears, rather than an assumed literal equality
+of unnormalized residual vectors. At a common root, Jacobians must be
+related by the chain rule and their row scalings, not identified naively.
+Proof of coincident zeros and Jacobian rank still requires a complete,
+consistent 33-row transformation.
+
+New Lean candidate:
+`SourcePythonLogResidualZeroSetBridgeCandidate.lean`
+(commit `9916465657a09c5e5200528fed9b68b546256e27`), compiling
+the exact positive-domain real conversion for three actual SOURCE
+economic rows 0,3,4, without executing the Python interpreter.
+The targeted axiom audit is
+[GitHub Actions #43653293903](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43653293903).
+Do not mark DEMOSTRADO until the run succeeds.
+
+New original-Python structural and off-root test:
+`code/irf/audit_source_python_three_log_normalizations.py`
+(commit `ccf7d03874d3cb5430572bec2d5800e20fe1c92a`), added to
+`code/verify.py` and `build.yml`. It checks AST of the THREE original
+log expressions and 12 positive off-root scenarios at BOTH dates and
+BOTH regime branches. A zero float discrepancy in that diagnostic
+would only validate original Python internal normalization, not a
+cross-language proof of the genuine SOURCE value/Jacobian.
+
+Source/Python comparison now has a more precise sequence:
+(1) identical positive baseline and inherited financial positions;
+(2) exact state/calendar/P0 coordinate identification;
+(3) row-by-row algebraic zero-set normalization with all required
+positivity and primitive identities;
+(4) transformed *actual SOURCE* Jacobian and verified box;
+(5) root certificate on that same economic branch and prescribed
+policy innovation. The latter three gates remain OPEN.
+
+## 10. Verification of the three-row normalization diagnostic
+
+The targeted original-Python normalization audit was integrated in
+`code/verify.py` and its JSON uploaded as a build artifact at commit
+`1b46f572cb664c0e157bca8390585038d1d034b3`.
+
+The exact [build #43653361195](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43653361195)
+completed SUCCESS with both code verification and PDF compilation.
+The source-normalization report printed the following values:
+
+```json
+{
+  "status": "SOURCE_LEVEL_AND_ORIGINAL_PYTHON_LOG_ZEROS_DISTINCT_FUNCTIONS",
+  "tested_date_records": 24,
+  "maximum_same_engine_normalization_abs_discrepancy": 8.069174668723367e-17,
+  "actual_source_full_33_row_functional_equivalence": false
+}
+```
+
+These are 12 off-root cases, each evaluated at two dates, in the
+original Python float64 evaluator. The errors are internal consistency
+differences after applying the analytically identified normalization;
+they are **not** an error bound on the original Lean SOURCE operator.
+
+Lean's exact real positive-domain zero-set bridge and its axiom audit
+were separately submitted in
+`SourcePythonLogResidualZeroSetBridgeCandidate.lean` at commit
+`9916465657a09c5e5200528fed9b68b546256e27` with CI axiom
+registration at `03d6f311e23f3d2558049778485404e2afa185d1`.
+The corresponding pinned [Lean run #43653293903](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43653293903)
+must complete SUCCESS before these three source-level zero-set
+equivalences are called proved. Do not conflate the successful Python
+build with the still-pending Lean theorem audit.
+
+Remaining priority: calibrate SOURCE nominal bank-face rollover factor
+and worker/labor primitives against exact Python values, prove the
+row-specific transformed Jacobian at the SAME economically identified
+point, and derive rigorous box enclosures for the actual SOURCE map.
+
+## 11. Directional derivative and six-row rank transport (new candidate gate)
+
+Mathematical correction: even after positive-domain zero equivalence is
+established, the original SOURCE level and Python logarithmic residual
+Jacobians **cannot be identified row for row**. At every common
+positive root, and for any differentiable real economic perturbation
+`A(t),B(t)` with `A(t0)=B(t0)>0`:
+
+```text
+d/dt log(A/B) at t0 = (A'(t0)-B'(t0))/B(t0).
+d/dt (A-B) at t0   = A'(t0)-B'(t0).
+d/dt (1-A/B) at t0 = -d/dt log(A/B) at t0.
+```
+
+New candidate `SourcePythonLogResidualDirectionalJacobianCandidate.lean`,
+commit `dda884e0518e5b7a96b1bd4be61261f75a589b23` proves the
+scalar directional identity using *actual Mathlib differentiation rules*
+on differentiable numerator/denominator paths, not a postulated
+derivative identity. It specializes the algebraic signs to the
+bank/labor level rows and household deposit Euler ratio. These are
+GENERAL calculus results and not a proof of the original SOURCE/Python
+data or 33-row operator identity.
+
+New candidate `SourceSixLogRowJacobianRankTransportCandidate.lean`,
+commit `f9aa50b4584462a3e161d0d31f6b95e707fca5c4`, defines
+the zero-based six-row diagonal scaling:
+
+```text
+D[6]  = 1 / bankFaceTarget_0
+D[9]  = 1 / laborSupplyTarget_0
+D[10] = -1
+D[22] = 1 / bankFaceTarget_1
+D[25] = 1 / laborSupplyTarget_1
+D[26] = -1
+D[i]  = +1 otherwise
+```
+
+with strictly positive bank/labor target hypotheses. Its planned
+`#print axioms` audit proves that nonzero diagonal row reweighting
+preserves injectivity / full-column-rank of ANY 33-output linear
+Jacobian (or arbitrary map). It does **not** establish that all 27
+unchanged positions truly coincide SOURCE vs Python; that remains
+an independent economic identity obligation.
+
+The new original-Python diagnostics script
+`audit_six_log_row_directional_jacobian_at_python_roots.py`
+(commit `d501f22eed8c2576406116a0283a93f0e401d1f6`) reproduces
+4 original `make_boundary()` Python fixed-policy branch roots
+(S/B, h=0 and -1e-5). For 4 deterministic perturbation directions
+per root and 6 original positions, it compares finite-difference
+log-row derivatives against the predicted level/ratio scale. It
+executes only ORIGINAL PYTHON economic functions and must not be
+construed as evaluation of Lean real SOURCE values. The report
+explicitly says `SOURCE_root_at_fixed_negative_policy_certified=false`.
+Its `code/verify.py` and build-artifact registration is at
+`d4dc0ab92d1e406f5c3493ca705fb716d9b6babc`.
+
+**Evidence gate:** the Lean candidates and the new Python audit are
+SUBMITTED, not DEMOSTRADO/NUMERICO until their exact GitHub Actions
+runs report success. Relevant pinned Lean audit:
+[workflow](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/workflows/lean-candidates.yml).
+The full-SOURCE Jacobian rank at a genuine root and any exact
+fixed-policy IRF remain PENDIENTE. Correct next step is to establish
+the remaining SOURCE/Python row translations, economic calibration,
+positive box and interval derivative bounds, then apply an exact
+rational local-root gate on that SAME economic operator.
+
+## 12. Verified zero-set gate and concrete SOURCE bank factor
+
+The older original SOURCE log-row conversion (bank-face, labor supply,
+household deposit Euler) is now **DEMOSTRADO**, not merely a
+submitted candidate. The exact pinned Lean run
+[#43653293903](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43653293903)
+completed SUCCESS, including explicit `#print axioms` for the five
+`sourceLevelDifference_zero_iff_logRatio`,
+`sourceOneMinusRatio_zero_iff_logRatio` and three concrete
+`localReducedRemainingResidual` row theorems. Their only recorded
+logical dependencies are Lean's standard `propext`,
+`Classical.choice` and `Quot.sound`, NOT `sorryAx`.
+
+On the actual stationary SOURCE primitives,
+`P.bankExit = 1/10` and
+`P.bankSeedShare = 10/ProposedStationaryBank.loanRate - 9`.
+The already proved `ProposedStationaryReducedSystem.renewalFactor_identity`
+therefore gives
+
+```text
+bankRenewalFactor(P) = 1 / ProposedStationaryBank.loanRate.
+```
+
+The ORIGINAL Python code separately defines `s.aB = 1/s.rate`.
+The new proof specialization in
+`SourceConcreteBankRenewalCalibrationCandidate.lean`, commit
+`a865ffdf7ab7839d4c1d513399a6510004a112b6`, explicitly
+instantiates the SOURCE bank factor and the SOURCE bank-face
+positive-domain log-row zero equivalence, and pins the four
+worker/labor scalar parameters to the exact rational values
+`(99/100,1,1,1)`. Its dedicated Lean CI is
+[#43654103683](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43654103683).
+Until that CI is SUCCESS and audited, this further specialization is
+a **candidate**. Even if successful, identifying Python's computed
+binary64 `s.rate` with the EXACT Lean
+`ProposedStationaryBank.loanRate` and transporting all 33 original
+economic functions remain distinct tasks.
+
+An independent original-Python directional normalization audit,
+`audit_six_log_row_directional_jacobian_at_python_roots.py`,
+is integrated in `code/verify.py` and archives JSON. It uses four
+original Python fixed-policy root calculations (both branches,
+zero and negative remuneration shocks), and four deterministic
+directions per root for six rows, totaling up to 96 directional
+finite-difference comparisons. Its conclusion must only be
+reported after reviewing the specific successful CI. This audit
+cannot certify a SOURCE root because it does not evaluate
+Lean's actual real SOURCE operator.
+
+## 13. Verified Python fixed-shock six-row directional numerical audit
+
+Exact pinned [build #43653979860](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43653979860)
+completed SUCCESS. The new original-Python directional audit printed:
+
+```json
+{
+  "status": "NUMERICAL_ORIGINAL_PYTHON_SIX_ROW_DIRECTIONAL_TRANSPORT_ONLY",
+  "original_python_fixed_policy_root_count": 4,
+  "directional_row_comparisons": 96,
+  "max_absolute_python_root_residual": 1.6597400537277096e-14,
+  "maximum_relative_directional_scale_discrepancy": 1.0387292710674047e-09,
+  "SOURCE_root_at_fixed_negative_policy_certified": false
+}
+```
+
+The four original fixed-policy numerical roots are
+(2 regimes S/B) x (2 innovations h=0,-1e-5). Each is evaluated
+on four deterministic 33-dimensional real-log perturbation directions
+and six original Python positions (6,9,10,22,25,26). This is a
+**NUMERICO** verification of the predicted six derivative scalings
+in the original Python evaluator at near-zeros, NOT a rigorous
+interval enclosure for the SOURCE 33x33 Jacobian or a cross-language
+functional identity.
+
+The old original-SOURCE exact positive zero-set bridge is
+**DEMOSTRADO** by Lean #43653293903. The newer real-calculus
+directional Jacobian candidate, six-row rank-transport theorem, and
+concrete bank calibration specialization remain **PENDIENTE DE
+COMPILACION** until their exact pinned Lean CI runs complete
+successfully and printed axioms are checked.
+
+The future existence certificate must identify all 33 original
+economic rows, including normalizations and different inherited
+states, and derive a true real SOURCE Jacobian enclosure. A
+Python fixed-policy approximate root is not that theorem.
+
+## 14. Compiler correction, exact bank-factor bridge and reserve-rule target audit
+
+The previous derivative/Jacobian CI results were NOT green:
+[Lean #43653814882](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43653814882)
+and
+[Lean #43653901680](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43653901680)
+failed to compile `SourcePythonLogResidualDirectionalJacobianCandidate.lean`.
+The exact Lean errors were `No goals to be solved` on lines 64 and
+109 (a redundant `ring` after `field_simp` already closed each
+goal). An earlier candidate also used an invalid
+`div_eq_zero_iff (ne_of_gt hBpos)` application; that was corrected
+to `simp [ne_of_gt hBpos]` in commit
+`dda884e0518e5b7a96b1bd4be61261f75a589b23`.
+
+**Corrective commit**
+`b526c190d4527db3b97ffd82638526c4f604f24a`
+deletes the two redundant tactic steps while keeping the real
+calculus theorem statements unchanged. Re-audit is
+[Lean #43654792794](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43654792794).
+The new six-row rank and bank-calibration modules are downstream of
+this derivative module: they MUST NOT be declared Lean-verified until
+the corrected dependency compiles and their own proofs pass.
+
+**New exact SOURCE policy-rule bridge.**
+`SourceReserveRulesLogRatioBridgeCandidate.lean`
+(commit `a89cabbca1a6c9e6959138918f75140cfabca5c1`)
+proposes three exact identities on the strictly positive chart:
+
+```text
+log a - b = log(a / exp b)             for a > 0
+SOURCE reserve-rate row 6 =
+  log(currentReserveRate / exp(SOURCE reserve-rate LOG target))
+SOURCE reserve-quantity row 7 =
+  log(currentReservesPre / exp(SOURCE reserve-quantity LOG target))
+```
+
+Both equations are OFF ROOT and are derived from the ACTUAL
+`localReducedRemainingResidual`, not from a Python surrogate.
+The companion original-Python calls
+`remaining_residuals[6]=log(next_state[5]/aux['rr'])` and
+`remaining_residuals[7]=log(next_state[6]/aux['money'])`
+can only be promoted to SOURCE identities once the calibrated
+`aux` target objects and original SOURCE state/calendar are
+identified exactly. The separate pinned Lean audit for the SOURCE
+identities is
+[Lean #43654879840](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43654879840).
+
+**New original-Python policy-target diagnostic.**
+`code/irf/audit_source_python_reserve_rule_log_targets.py`
+(commit `105af21c3d3e9923e86d8d32f726f560b9ffa0f3`)
+checks the source text and AST anchors of both genuine policy rows,
+then exercises the original binary64 Python `auxiliary` and
+`remaining_residuals` functions on multiple interventions and
+off-root log-chart points at both dates. The test is wired through
+`code/verify.py` and its JSON is an explicit build artifact
+as of commit
+`1849225c2056a63fe0c4ef8155e365f51087dba7`.
+It **does not** evaluate Lean real terms in Python, prove full
+SOURCE/Python identity, certify an interval enclosure, establish an
+actual SOURCE root, or prove an infinite dynamic equilibrium.
+
+**Evidence status at note writing:** correction, new SOURCE policy
+proof, and Python policy diagnostic were COMMITTED and CI was
+SUBMITTED. A green Python build does not imply green Lean proofs.
+The scientific next gate remains complete zero-set/Jacobian transport
+for all original 33 rows, using identical positive data and a
+certified same-operator real derivative enclosure.
+
+## 15. Actual SOURCE residual nonlinear conjugacy, OFF ROOT (new candidate)
+
+A major clarification beyond zero-set and at-root Jacobian
+equivalence: the three original SOURCE level/ratio residuals have
+exact **nonlinear** log normalizations at EVERY admissible chart point:
+
+```text
+SRC bank = A-B, B>0
+  -> Python-shaped bank = log(1 + SRC bank / B)
+SRC labor = w-W, W>0
+  -> Python-shaped labor = log(1 + SRC labor / W)
+SRC deposit Euler = 1 - A/B
+  -> Python-shaped Euler = log(1 - SRC deposit Euler).
+```
+
+The denominators `B`, `W` themselves vary with endogenous
+economic coordinates. Therefore a constant six-row matrix is NOT
+an off-root global equality between residual vectors. At a
+COMMON economic root, however, these exact expressions differentiate
+into the previously derived six diagonal row scales. On a full
+closed box, bounding those endogenous denominators and keeping
+all logarithm arguments positive are necessary interval-domain
+obligations.
+
+This off-root SOURCE reparameterization is the new Lean module
+`SourcePythonOffRootLogResidualReparameterizationCandidate.lean`,
+commit `07b32acf83359ea8ea9673a2b7a96aebe259f8c5`.
+It instantiates the true SOURCE
+`localReducedRemainingResidual` rows 0,3,4 and has five requested
+`#print axioms` checks in the pinned workflow, as of commit
+`304e3178c1e3ee95ccf3e868b4cce73b767ccdcd`.
+**Compiler status PENDING until run completes.**
+
+The previous exact SOURCE reserve-rule bridge similarly expresses
+rows 6/7 as actual log deviations from exponential policy targets.
+The original Python `auxiliary` uses the corresponding log rules,
+but their cross-language equality still needs explicit source data
+and parameter identification (plus numerical rounding control).
+The new Python audit is called
+`audit_source_python_reserve_rule_log_targets.py`,
+archived as
+`source_python_reserve_rule_log_targets.json` in build artifacts.
+No green run is presumed at this documentation checkpoint.
+
+**What remains open:** prove original SOURCE economic row
+correspondence, positivity and lower bounds over the 33-dimensional
+box, exact or rigorous-interval Jacobian transport at a common point,
+local true SOURCE existence and KKT, then global dynamic continuation.
+None of the new algebraic identities closes that sequence alone.
+
+## 16. Latest ledger: compiler blocker fixed, monetary tests green
+
+- **DEMOSTRADO, prior exact SHA only**: 16 genuine SOURCE
+  other-row index equalities, positive real P0 continuation/date-one
+  composition, stationary 33-level positive reference, SOURCE 34/33
+  root-set equivalences under explicit hypotheses, and three positive
+  SOURCE bank/labor/deposit Euler zero-set normalizations. See their
+  earlier successful exact Lean runs in this document. Do not elevate
+  root existence or infinite equilibrium from these statements.
+- **NUMERICO, new result**: exact
+  [build #43655028206](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43655028206)
+  completed SUCCESS for the original Python reserve-rate and reserve-
+  quantity logarithmic-target audit: 48 date records, maximum binary64
+  same-engine discrepancy `2.1494308069525125e-16`. The script
+  carries `fixed_policy_SOURCE_root_certified=false`. This result
+  is a second internal consistency test; it does not evaluate SOURCE
+  real functions or provide cross-language equality.
+- **CORRECTION NECESSARY, prior failed Lean run**:
+  [#43654868357](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43654868357)
+  now exposed the next downstream compiler error at
+  `SourceSixLogRowJacobianRankTransportCandidate.lean:100`:
+  `rw [hab]` could not rewrite the lambda-composed goal after
+  `apply hJ`. This is a Lean proof-elaboration failure; it does not
+  constitute a mathematical counterexample.
+- **CODE FIX SUBMITTED**: commit
+  `e58602ccc88c22ba4a26b9abb450f136fda96aac`
+  replaces the invalid rewrite with
+  `congrArg (sourceSixLogRowReweight ...) hab`, which transports
+  the source equality through the exact row map. Lean CI for this
+  revision is
+  [#43655583015](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43655583015).
+  Do not mark this proof or its downstream concrete bank calibration
+  as DEMOSTRADO until that run is green and `#print axioms` is clean.
+
+**Open structural issues**: (a) prove equality of original SOURCE
+bank-/labor-/Euler numerator-denominator economic expressions with
+Python's exact calibration and inherited data, not just algebraic
+normalization; (b) prove original SOURCE reserve policy targets match
+the Python auxiliary evaluator with the same date phase; (c) extend
+the row transformation to all 33 actual economic equations on one
+positive chart; (d) certify full real residual/Jacobian interval
+bounds at a FIXED policy innovation; (e) only then derive an
+existence theorem with actual KKT and terminal equilibrium obligations.
+
+This ledger is evidence-scoped to the explicitly named runs; it
+does not automatically advance with later Actions jobs.
+
+## 17. Closed audit of six scaling proofs and new 33-row nonlinear zero-map
+
+**Formally verified on the specific commit:** GitHub Actions
+[Lean #43655583015](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43655583015)
+on `e58602ccc88c22ba4a26b9abb450f136fda96aac` completed
+SUCCESS. The exact axiom printouts of
+`sourceLogRatio_hasDerivAt_of_common_positive_root`,
+`sourceSixLogRowReweight_injective_iff`,
+`concreteSOURCE_bankRenewalFactor_eq_inverse_loanRate`,
+`concreteSOURCE_bankFaceLog_zero_iff_original_row`,
+`sourceReserveRateRule_actual_logRatio`,
+`sourceReserveQuantityRule_actual_logRatio`,
+`sourceBankFace_actual_offRootLogTransformation`,
+and `sourceDepositEuler_actual_offRootLogTransformation` show
+only Lean standard axioms `propext`, `Classical.choice`, and
+`Quot.sound`, not `sorryAx`. Earlier failing compiler runs
+were corrected; the successful commit, not the older broken runs,
+is the evidence for DEMOSTRADO.
+
+**Next algebraic gate, newly submitted:** a full 33-output
+source-side nonlinear row-reparameterization,
+`SourceSixNonlinearLogRowRootTransportCandidate.lean`, commit
+`48e84fe5ce50b1d590ae02d212540f0cb74813c2`,
+with explicit `#print axioms` registration in
+`.github/workflows/lean-candidates.yml` commit
+`025c17bb600a590688660d069399d91d81dbe080`.
+Its six changed SOURCE positions (zero based)
+`6,9,10,22,25,26` use respectively
+
+```text
+N_6(v)  = log(1 + v6 / bankTarget0)
+N_9(v)  = log(1 + v9 / laborTarget0)
+N_10(v) = log(1 - v10)
+N_22(v) = log(1 + v22 / bankTarget1)
+N_25(v) = log(1 + v25 / laborTarget1)
+N_26(v) = log(1 - v26)
+N_j(v)  = v_j, for the other 27 rows.
+```
+
+The four bank/labor targets must be strictly positive, and
+all six logarithm arguments must be strictly positive.
+Under these exact domain constraints, the candidate proves
+`N(v)=0 <-> v=0` for the ENTIRE 33-row vector and
+specializes the result to the REAL fully pinned SOURCE reduced33
+operator. This is an exact algebraic SOURCE/SOURCE root-set
+transport, *not* an assertion of the other 27 SOURCE/Python
+economic formula identities. At a common root its differential
+has the six nonzero row scales already audited in Lean. No root
+exists merely because two root sets are equivalent.
+
+**Status at writing:** this latest 33-row theorem is an
+UNCERTIFIED CANDIDATE until its exact Lean run is successful.
+Even after success, a genuine SOURCE root and any fixed-negative-
+shock structural IRF require all 33 economic SOURCE/Python row
+correspondences, a common inherited state and exact calibration,
+and true SOURCE interval center-residual/Jacobian enclosures.
+The infinite-horizon optimum and endogenous permanent growth
+remain further separate open goals.
+
+## 18. Exact six-row nonlinear SOURCE root-preserving map and log positivity
+
+The GREEN audited [Lean run #43655583015](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43655583015)
+at `e58602ccc88c22ba4a26b9abb450f136fda96aac`
+certified the earlier six-row derivative/rank transport, the concrete
+bank renewal calibration, the SOURCE reserve rate/quantity logarithmic
+formulas, and the scalar off-root bank/labor/deposit log normalizations.
+Review of explicit `#print axioms` found only standard Lean axioms,
+not `sorryAx`. That run, not older failed runs, supports the status
+DEMOSTRADO for these exact propositions.
+
+**Submitted, not yet certified:** new
+`SourceSixNonlinearLogRowRootTransportCandidate.lean`
+(commit `48e84fe5ce50b1d590ae02d212540f0cb74813c2`)
+defines the 33-output nonlinear row-normalization `N`.
+It leaves 27 source economic rows unchanged, and replaces precisely
+SOURCE indices `6,9,10,22,25,26` by the real logarithmic formulas
+`log(1+v_i/b_i)` for bank/labor and `log(1-v_i)` for Euler.
+Its vector theorem states `N(v)=0 iff v=0` if the four bank/labor
+targets and all six logarithm arguments are strictly positive.
+It also explicitly specializes to the already pinned genuine SOURCE
+reduced-33 economic map; this does not assert that an actual root exists.
+Registered for axiom audit at commit
+`025c17bb600a590688660d069399d91d81dbe080`.
+
+**Submitted, not yet certified:** new
+`SourceActualLogNormalizationDomainCandidate.lean`
+(commit `da348d2bf161e988ac764e5a55f1b26b66c08532`;
+factorization refinement `0f51269324f16c41e620dbf9852787a3aebf08ee`)
+derives all three scalar log-argument positivity conditions directly
+from strict positivity of actual source bank renewal flows and faces,
+wages and marginal-labor targets, and the deposit Euler ratio. It uses
+the ORIGINAL `localReducedRemainingResidual`, not reconstructed
+Python levels. An extra positivity-lemma axiom audit was registered at
+`6c575f4e55b29b4185964a5a24554d82004f5f49`.
+This does **not yet** close the quantitative positivity of the entire
+33-dimensional closed validation box; those must be bounded with
+certified interval enclosures.
+
+Scientific interpretation:
+the normalized SOURCE map and original SOURCE map would have
+identical roots on their common economically positive domain,
+but there is still NO proof that Python's OTHER 27 economic
+functions match the SOURCE functions under identical inherited
+state, policy and continuation data. The numerical Python Jacobian
+and rational Neumann defect cannot be transplanted to the SOURCE
+real map before establishing the missing full 33-row correspondence
+and rigorous derivative/residual enclosures. A full infinite-horizon
+competitive equilibrium and permanent endogenous growth remain
+separate unresolved objectives.
+
+## 19. CORRECTION: banking "identity rows" use monetary TARGETS in Python, REALIZED states in SOURCE
+
+A direct re-reading of the actual original
+`lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean`
+(`localPrefixDateZeroData`, `localPrefixDateOneData`,
+`localReducedRemainingResidual`, `localPrefixReserveDepositRatio`)
+against the original `code/irf/finite_irf.py`
+(`auxiliary`, `remaining_residuals`) exposed a material
+off-root SOURCE/Python mismatch missed by the earlier
+`audit_source_identity_row_candidates.py`:
+
+- SOURCE date-zero and date-one `currentReserveRate` are the
+  REALIZED state entries `Z.stateOne.reserveRateLag` and
+  `Z.stateTwo.reserveRateLag`, respectively. The original Python
+  auxiliary `aux["rr"]` is the monetary policy-rule TARGET,
+  while the realized state rate is `next_state[5]`.
+- SOURCE `currentReservesPre` is the REALIZED state entry, not
+  the Python `aux["money"]` policy-rule TARGET.
+- SOURCE loan pricing `row 8` uses realized reserve rate;
+  Python `remaining_residuals[8]` uses policy target rate.
+- SOURCE deposit pricing `row 9` uses realized rate directly
+  and in `xi=rd/realized_rate`; Python uses target rate and
+  `xi=rd/target_rate`.
+- SOURCE bank balance `row 10` uses actual money and a
+  reserve/deposit ratio evaluated at the realized rate; Python
+  uses target money and a ratio evaluated at the target rate.
+
+These are six actual SOURCE positions over two dates:
+`14,15,16,30,31,32` (zero-based original SOURCE/Python
+remaining-row order). The earlier Python "sixteen identity rows"
+audit is only a comparison against a SOURCE-*shaped transcription
+where these banking terms had already been replaced by policy
+TARGETS*. It is NOT a literal off-root SOURCE operator or
+Jacobian equivalence. Retaining its formerly asserted unit
+Jacobian factors for these six positions would be UNSOUND.
+
+The ORIGINAL SOURCE monetary policy rules give
+
+```text
+r_R = log(R_real / R_target)
+r_M = log(M_real / M_target)
+
+R_real - R_target = R_target*(exp(r_R)-1)
+M_real - M_target = M_target*(exp(r_M)-1).
+```
+
+For loan pricing, if the original SOURCE OTC average slope is held
+fixed on both sides, the Python-targetized row differs from the
+SOURCE row by `R_target*(exp(r_R)-1)`. The original OTC slope
+correspondence itself still requires separate exact identification.
+
+For the bank balance, if the genuine SOURCE reserve ratio `h_real`
+is held fixed temporarily, replacement of actual reserves by target
+reserves gives the cross-row term
+
+```text
+(1/h_real-1)*M_target*(exp(r_M)-1).
+```
+
+Python additionally uses a `h_target` computed from target
+reserve rate, creating another term proportional to
+`(1/h_real-1/h_target)*M_target`. Deposit pricing also contains
+the target-versus-realized `xi` discrepancy.
+
+**New SOURCE exact real proof candidate:**
+`SourceReserveRuleTargetSubstitutionCandidate.lean`,
+commit `e086d2ec342dac8b5cd7f224eb88144113af4a2b`,
+contains the two real policy-target substitution identities and
+their propagation to genuine SOURCE loan-pricing and (partial)
+bank-balance rows. Registered with `#print axioms` at
+`a354d26e1f46e0605216622d6ee70eb834e088e5`.
+A successful, exact-sha Lean audit is required to mark these
+as DEMOSTRADO. The banking balance theorem holds the genuine
+SOURCE realized-rate deposit ratio fixed; it is not yet the entire
+Python target-rate substitution theorem.
+
+**New Python numerical audit:**
+`code/irf/audit_original_python_realized_vs_policy_target_bank_rows.py`,
+commit `c83168e0f69a2ceee8c107ad4857fb9b95c392d1`,
+runs 60 original-Python two-date records (two branches, five
+policy interventions, three log-chart probes, two dates). It checks
+cross-policy-rule expressions for loan pricing, deposits and
+bank balance, and reports genuinely NONZERO off-root banking
+discrepancies; all comparisons are constructed from the actual
+Python engine, NOT from an evaluation of the Lean SOURCE operator.
+The audit is executed by `code/verify.py` and its JSON archived
+in the GitHub build workflow at commit
+`166b6e3010aa7ee0eec8be4989a8330683e26e6d`.
+At this note-writing checkpoint, its exact CI result had not yet
+been reviewed: no NUMERICO status is presumed.
+
+**Fail-closed change to prior 33-row readiness gate:**
+`audit_source_identity_row_candidates.py` commit
+`bf6aae8ff08b503be29e13709d9b4842125c1fd6`
+marks these six banking "unit root factor" claims as `null`,
+adds explicit flags for unresolved monetary cross-row shears and
+preserves its numerical comparison strictly as an auxiliary-targetized
+same-engine candidate. `audit_source_33_claim_readiness.py`,
+commit `a66bffe86a931be6c042c40612bda821d8d10933`,
+now REQUIRES those false certification flags. This prevents
+the earlier 16-row audit from silently promoting its proxy functions
+into genuine SOURCE/Python off-root identities.
+
+This is a substantive correction to the scientific ledger, not
+a retreat on the proved SOURCE/SOURCE row indexing or on the
+independent same-engine Python simulation. On the common set where
+both monetary policy residuals are zero, realized monetary states
+equal their policy targets. The missing theorem is to account for
+the resulting cross-row transformations and their derivatives,
+including original SOURCE OTC slope and banking reserve-ratio
+dependence, before applying a true SOURCE 33x33 Jacobian certificate.
+
+## 20. Reproduced 60-record banking mismatch and source deposit-rate cross-rule identity
+
+The original-Python bank-row mismatch auditor now has reproducible
+**NUMERICO** evidence from the exact successful
+[build #43656900442](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43656900442)
+on commit `166b6e3010aa7ee0eec8be4989a8330683e26e6d`.
+It checked 60 date records (2 regime labels x 5 four-tool shock
+vectors x 3 off-root charts x 2 dates) against the ORIGINAL
+`finite_irf.py` evaluator:
+
+```json
+{
+  "status": "EXPOSED_OFF_ROOT_SOURCE_VS_PYTHON_MONETARY_STATE_TARGET_MISMATCH",
+  "date_records": 60,
+  "max_relative_polynomial_exponential_identity_error": 4.763442244815064e-16,
+  "max_abs_original_python_vs_realized_proxy_banking_row_gap": 0.002569338840958224,
+  "nonzero_banking_row_mismatch_records": 44,
+  "true_SOURCE_fixed_policy_root_certified": false
+}
+```
+
+The first error key denotes ABSOLUTE same-engine algebraic consistency
+error despite its legacy name; the published numeric magnitude is
+not a rigorous floating-point enclosure of a genuine SOURCE
+operator. The max gap is in raw banking residual units; it is NOT
+a monetary percentage, basis point figure, or SOURCE/Python error
+bound. The SOURCE-shaped proxy holds the original Python OTC slope
+data fixed, making the structural scope limitation explicit.
+
+**Further exact SOURCE proof candidate:** commit
+`7c5816452920d23725f00a8186036fb415682f35`
+adds `sourceDepositPricing_rateTarget_substitution`,
+proposing the genuine SOURCE deposit-pricing monetary cross-row
+correction including the endogenous `xi = depositRate/R_real`:
+
+```text
+deposit_targetized - deposit_SOURCE
+ = -(R_real - R_target) *
+      [1 + depositRate*paymentSize*slopeDifference/
+           (2*R_real*R_target)],
+R_real - R_target = R_target*(exp(reserveRateRuleSOURCE)-1).
+```
+
+The existing SOURCE loan-price and partial balance target
+substitutions are in the same candidate module.
+Dedicated `#print axioms` registration is commit
+`5a4644b919c2bc42a4f452279822b02e32fdc9cc`;
+pinned [Lean #43657063851](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43657063851)
+must be successful before the deposit theorem is DEMOSTRADO.
+The exact SOURCE OTC slope and money-ratio dependence still
+requires its full cross-language identification.
+
+**Scientific and editorial correction:** the 16-row conditional
+transcription audit has been amended so its six banking
+root-factor placeholders are `null`, with the true SOURCE
+realized-versus-target mismatch recorded explicitly. The
+33-row readiness checker now FAILS if these missing shear
+obligations are silently elevated to equality. The original
+paper's numerical Jacobian paragraph in `paper/paper.tex`
+was updated at commit `86b1ac7af6d30641cae4dee2b5d7c2e3266511b8`
+to require ZERO-SET/JACOBIAN transport rather than literal
+equality of the vectors, with the realized/target example
+stated. The corresponding PDF compilation and editorial QA
+must be inspected on that exact paper commit before claiming
+new final artifact verification.
+
+The source/Python full 33-row economic map, a true SOURCE
+33x33 Jacobian enclosure, a fixed-negative-policy SOURCE
+root, infinite-horizon equilibrium, and any permanent
+growth theorem are still PENDIENTE.
+
+## 21. Lean kernel verdict for six nonlinear SOURCE rows and positive domains
+
+The exact pinned
+[Lean audit #43656484357](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43656484357)
+for source commit `6c575f4e55b29b4185964a5a24554d82004f5f49`
+has now COMPLETED SUCCESS. The kernel compiled:
+
+- `sourceSixNonlinearLogRow_vector_zero_iff`:
+  exact equivalence of zeros of all 33 ORIGINAL SOURCE residual rows
+  after modifying just the six bank/labor/Euler log normalizations,
+  conditional on explicitly positive targets/log arguments;
+- `fullyPinnedSOURCE33_sixLogNormalized_root_iff`:
+  the same equivalence applied to the fully pinned original
+  SOURCE real-economy reduced33 residual (32 economic logs plus h);
+- `sourcePositiveLevel_normalizedLogArgument`,
+  `sourceActualBank_logArgument_pos`,
+  `sourceActualLabor_logArgument_pos`, and
+  `sourceActualDepositEuler_logArgument_pos`:
+  exact domain-positivity implications from genuine SOURCE economic
+  variables.
+
+Explicit `#print axioms` for these six named declarations shows
+only Lean standard `propext`, `Classical.choice`, and `Quot.sound`,
+with no `sorryAx` in THOSE declarations. It is not an assertion
+that all other logged declarations throughout the checkpoint have
+an identical axiom footprint.
+
+Scientific status: **DEMOSTRADO** for this exact SOURCE/SOURCE
+33-row zero-set and pointwise log-domain mathematics. **NOT
+DEMOSTRADO** for correspondence of these transformed SOURCE
+functions to the original floating-point Python evaluator.
+Indeed the newly identified realized-vs-policy-target banking gap
+requires additional cross-row corrections beyond the six log
+normalizations. This is recorded in sections 19 and 20.
+
+The Python-order permutation composition candidate is
+`SourceNonlinearPythonOrderZeroSetTransportCandidate.lean`
+(commit `2a2914bf1d1aa4172f99f4477463b3fd9fffb6c5`);
+its axiom audit is the distinct
+[Lean run #43656730393](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/43656730393).
+At note-writing time the combined permutation candidate and
+the later monetary realized-target substitutions remain subject
+to their own CI verdicts.
+
+The manuscript was amended to describe this distinction precisely
+outside the numbered propositions; the full-paper SHA256 ledger
+is synchronized at commit
+`8a2abd62c8e040f141708a6c7828e3346d28c25f`.
+The hash was reproduced with the original paper before edit as
+a control before replacing the ledger's top-level `paper_sha256`.
+The existing 57 proposition/proof text hashes were not deliberately
+changed. The current workflow still must verify that proposition
+ledger consistency and rebuild the revised PDFs.

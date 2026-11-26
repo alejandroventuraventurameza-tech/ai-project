@@ -1,0 +1,96 @@
+# Fast isolated kernel gate for the elementary pledge-row equivalence.
+name: Lean pledge-row equivalence (focused pinned)
+
+on:
+  push:
+    branches:
+      - 'work/lean-ci-validation-*'
+    paths:
+      - '.github/workflows/lean-pledge-row-focused.yml'
+      - 'lean/candidates/Ventura26LiquidityAllocation/HandStencilPledgeRowEquivalenceCandidate.lean'
+      - 'lean/checkpoint/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/lean-pledge-row-focused.yml'
+      - 'lean/candidates/Ventura26LiquidityAllocation/HandStencilPledgeRowEquivalenceCandidate.lean'
+      - 'lean/checkpoint/**'
+  workflow_dispatch:
+
+concurrency:
+  group: lean-pledge-row-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  pledge-row-kernel:
+    name: Kernel and axioms for Euler pledge-row elimination
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout pinned research branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Restore strictly pinned AppliedModelingLib and SOURCE
+        shell: bash
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor 16e24fe828a5a0002ef13bb82bae9e295f190f86 HEAD
+          git clone --quiet --filter=blob:none https://github.com/nikhgarg/AppliedModelingLib.git upstream
+          git -C upstream checkout --quiet --detach 194edcc95df74806a39b961d10dedddc6e730cce
+          test "$(git -C upstream rev-parse HEAD)" = 194edcc95df74806a39b961d10dedddc6e730cce
+          cmp lean/checkpoint/dependencies/lean-toolchain upstream/lean-toolchain
+          cmp lean/checkpoint/dependencies/lake-manifest.json upstream/lake-manifest.json
+          python3 - <<'PY'
+          from pathlib import Path
+          original = Path('upstream/lakefile.toml').read_bytes()
+          overlay = Path('lean/checkpoint/dependencies/lakefile.toml').read_bytes()
+          extra = b'\n[[lean_lib]]\nname = "Ventura26LiquidityAllocation"\nsrcDir = "papers"\n'
+          assert overlay == original + extra
+          PY
+          cp lean/checkpoint/dependencies/lakefile.toml upstream/lakefile.toml
+          mkdir -p upstream/papers/Ventura26LiquidityAllocation
+          cp lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp lean/checkpoint/module_root.lean upstream/papers/Ventura26LiquidityAllocation.lean
+          cp lean/candidates/Ventura26LiquidityAllocation/HandStencilPledgeRowEquivalenceCandidate.lean upstream/papers/Ventura26LiquidityAllocation/
+          mkdir -p lean-pledge-logs
+          sha256sum upstream/papers/Ventura26LiquidityAllocation/EconomicModel.lean upstream/papers/Ventura26LiquidityAllocation/HandStencilPledgeRowEquivalenceCandidate.lean > lean-pledge-logs/source-sha256.txt
+      - name: Install pinned Lean and Mathlib cache
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o "$RUNNER_TEMP/elan-init.sh"
+          sh "$RUNNER_TEMP/elan-init.sh" -y --no-modify-path
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Restore Mathlib cache for pinned toolchain
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          lean --version
+          grep -Fx 'leanprover/lean4:v4.30.0-rc2' lean-toolchain
+          lake exe cache get
+      - name: Compile literal EconomicModel and pledge-row candidate
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          lake build Ventura26LiquidityAllocation.EconomicModel > "$GITHUB_WORKSPACE/lean-pledge-logs/source.log" 2>&1 || { tail -n 120 "$GITHUB_WORKSPACE/lean-pledge-logs/source.log"; exit 1; }
+          lake build Ventura26LiquidityAllocation.HandStencilPledgeRowEquivalenceCandidate > "$GITHUB_WORKSPACE/lean-pledge-logs/candidate.log" 2>&1 || { tail -n 160 "$GITHUB_WORKSPACE/lean-pledge-logs/candidate.log"; exit 1; }
+          tail -n 60 "$GITHUB_WORKSPACE/lean-pledge-logs/candidate.log"
+          if grep -E 'sorryAx|admit|unsound' "$GITHUB_WORKSPACE/lean-pledge-logs/candidate.log"; then
+            echo 'UNEXPECTED AXIOM OR UNCHECKED PROOF'; exit 1
+          fi
+      - name: Archive candidate kernel and axiom logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pledge-row-lean-kernel-logs
+          path: lean-pledge-logs/
+          if-no-files-found: warn
+          retention-days: 30

@@ -1,0 +1,65 @@
+# IE Project: contrato de correspondencia funcional de 33 + 1 filas
+
+**Corte:** 10 de noviembre de 2026. **Status:** auditoria analitica; las cuatro equivalencias logaritmicas del primer grupo ya estan **COMPROBADAS por el kernel Lean** ([Actions #42921708717](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42921708717), SHA `773b79891e77423d043b4d00bb6b50554a76bb53`, solo axiomas fundacionales, sin `sorryAx`). El grupo posterior de tres proposiciones de complementariedad KKT de L y una equivalencia logaritmica de la garantia comun de fecha 1 **TAMBIEN esta COMPROBADO por el kernel** ([Actions #42922148946](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42922148946), revision `e9d627f86abea99cab9672ec7ed12deec3412012`, sin `sorryAx`, con solo `propext`, `Classical.choice` y `Quot.sound`). El modulo reune **17 teoremas verificados** en total. Las columnas `transformacion` y `compuerta` son tareas cientificas, no certificaciones globales. Modelo original: `lean/checkpoint/modules/Ventura26LiquidityAllocation/EconomicModel.lean`; ejecutor numérico: `code/irf/finite_irf.py`. El mapa exacto de nombres, permutacion y fila 34 ya esta automatizado en `code/irf/audit_python_lean_prefix_row_permutation.py`.
+
+## 1. Regla matematica para no comparar erróneamente Jacobianos
+
+Sea $F(x)$ el vector de residuos fuente en coordenadas positivas y $G(z)$ el ejecutor reducido en desviaciones logaritmicas. No basta emparejar etiquetas de ecuaciones. Para equiparar sus ceros de forma local es necesario establecer por cada fila una identidad de la forma
+
+\[G(z)=T(x(z))F(x(z)),\qquad x(z)=x_\star\odot\exp(z),\]
+
+con $T$ cuadrada, diferenciable e invertible en la solucion, y un mapa de estados/controles bien definido. Si $F(x_\star)=0$, entonces la regla del producto implica
+
+\[DG(0)=T(x_\star)\,DF(x_\star)\,Dx(0).\]
+
+Las matrices de permutacion, las operaciones de fila entre las Euler y la fila de garantia, y los factores positivos de normalizacion deben hacerse visibles dentro de $T$. El jacobiano fuente no puede ser reemplazado por el de Python solo porque coincidan los ceros del sistema o porque CI sea verde.
+
+**Dos identidades generales con dominio positivo:**
+
+\[ \log r=0\iff r-1=0\qquad(r>0),\]
+
+\[ \log(F/C)=0\iff F-C=0\qquad(F>0,\;C>0).\]
+
+En cualquier raiz $F=C>0$, la derivada de $\log(F/C)$ coincide con $D(F-C)/C$. En cualquier raiz $r=1$ la derivada de $\log r$ coincide con la de $r-1$. Estas formulas pueden demostrarse por regla de la cadena y separan ceros de derivadas; la forma **source-specific** se esta pasando al kernel en `HandStencilPledgeRowEquivalenceCandidate.lean`.
+
+## 2. Clasificacion por filas
+
+El orden SOURCE es 0-indexado en `Fin 33`; el orden Python es el del vector producido por `prefix_residual()`. Indicaciones: **L** = probado como identidad literal en Lean, **N** = comprobado numericamente en el ejecutor, **C** = nuevo teorema candidato no chequeado aun, **O** = obliga demostracion o auditoria.
+
+| Fila(s) SOURCE → Python | Bloque y representacion Python frente a SOURCE | Transformacion y evidencia |
+|---|---|---|
+| 0→0; 1→3 | Presupuesto H/L en fecha 0 | Residuo fuente en niveles, escritura de precio efectivo **L**; coincidencia de riqueza `aux0['N']` con riqueza SOURCE **O** |
+| 2→1; 3→4 | Euler H/L, fecha 0 | B: Euler simplificada por fila de garantía **L + N** (shear invertible). S, L: Euler no restringida; coincidencia parametrica **O** |
+| 4→2; 5→5 | Régimen H/L fecha 0 | B: diferencia de rostro nominal vs log cociente de rostros (**L** bajo positividad). S, L: $R^Lm_L/\Pi-1$ vs log de ese cociente (**L** bajo positividad). Coincidencia de las definiciones ejecutables y todas las derivadas **O** |
+| 6→6 | Transición de rostro nominal bancario | Fuente diferencia en niveles, Python log cociente: normalizacion por rostro proyectado positivo **O** |
+| 7→7 | Precio del productor de capital | $q-1-\varphi_I I/K$ en niveles; comparar costos/generador de inversión **O** |
+| 8→8 | Contabilidad agregada de recursos | Nivel contra nivel; igualar agregacion, Rotemberg, costos, impuestos y fechas **O** |
+| 9→9 | Oferta de trabajo | Fuente diferencia $w-\chi C_W^{\sigma_W}L^\varphi$, Python log cociente $w/(\chi C_WL)$: requiere $\sigma_W=\varphi=1$ en ilustracion, positividad y escala **O** |
+| 10→10 | Euler del hogar | Fuente $1-R^Dm_W/\Pi$, Python $\log(R^Dm_W/\Pi)$: signos y ceros equivalentes en dominio positivo, factores CRS/CRRA pendientes **O** |
+| 11→11 | NKPC Rotemberg | Residuo en niveles; alinear coeficientes de precio, descuento, output y shocks **O** |
+| 12→12 | Regla de remuneración de reservas | Fuente diferencia de logs, Python log tasa realizada/tasa de regla; comprobar persistencia y fechas **O** |
+| 13→13 | Regla de cantidad de reservas | Fuente diferencia de logs, Python log cociente sobre tasa de regla de cantidad **O** |
+| 14→14; 15→15 | Precio OTC de crédito y depósitos | Niveles en ambos módulos; verificar pendientes de negociación, soporte de pagos, corredor y momentos **O** |
+| 16→16 | Balance bancario | Niveles en ambos; en SOURCE ya existe lema de reconstruccion del balance con identidades de cantidades y ratio no nulo (**L** condicional). Igualdad de definiciones de depósitos y patrimonio Python **O** |
+| 17→17; 18→19 | Presupuesto H/L fecha 1 | Misma identidad fuente generica de presupuesto (**L**), condicionada a la identificacion de variables futuras **O** |
+| 19→18; 20→20 | Euler H/L fecha 1 | B: identidad de Euler reducida con garantia **L**; operacion de fila invertible en stencil numerico **N** |
+| 21→21 | Garantia nominal comun fecha 1 | Fuente diferencia $J-(1-\delta)\Pi q$ vs log cociente: igualdad de **CEROS** bajo positividad **L** (teorema source_common_pledge_one_log_zero_iff_original_row_zero); igualdad funcional de derivadas y conexion a la transicion SOURCE **O** |
+| 22→22; …; 32→32 | Once filas recurrentes bancarias, de capital, recursos, trabajo, hogar, precios y politica | Se repite la auditoria de tipos de filas 6–16, pero con estados de fecha 1, siguiente estado 2 y regla terminal; no basta la coincidencia de nombres **O** |
+
+**Fila 34 fuera del vector `Fin 33`:** el residuo adicional de `augmentedBoundaryZeroResidual` es `localNormalizedCollateralDualL`, NO una nueva innovacion. Su valor diagnostico coincide numericamente con la formula fuente $1/R_L-\beta_E[c_{L,t}/c_{L,t+1}]^{\sigma_E}/\Pi_{t+1}$ sobre 160 transiciones de cada rama S/B (error maximo $2.22\times10^{-16}$, [Actions 42920743503](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42920743503)). En B tras el shock la ecuacion dual 34 **no es igual a cero**: es aprox. $3.2188\times10^{-5}$. El sistema aumentado con dual=0 es el problema de **frontera**, no el equilibrio B interior a su rama; imponerlo en B seria un error economico.
+
+## 3. Ruta de cierre formal
+
+El cierre exige, en este orden: (i) usar los ceros de los regimenes y de la garantia comun ya demostrados en Lean para cerrar las escalas del jacobiano fuente, (ii) completar las transformaciones de las otras filas con definiciones SOURCE exactas, fechas y parametros, (iii) construir y auditar la matriz compuesta de permutacion, shear y escalas positivas en el estacionario, (iv) relacionar el jacobiano y las seis coordenadas de la transicion fuente, (v) levantar la conclusion a un grafo no lineal C1 con radio y restricciones activas, (vi) demostrar optimizacion, pagos contingentes y condiciones terminales. Nada de ello es una prueba de crecimiento endogeno permanente por si mismo.
+
+**Interpretacion economica:** equivalencia de una ecuacion de restricciones necesarias no implica suficiencia de equilibrio. Un sistema de estacionariedad, KKT y persistencia finita puede soportar comparativas de niveles sin generar una tasa de crecimiento tendencial distinta. Cualquier promesa de crecimiento permanente requiere especificar una ley endogena de acumulacion/tecnologia y sus hipotesis de estabilidad/transversalidad.
+
+## 4. Prueba numerica transversal reforzada
+
+El auditor nuevo `code/irf/audit_firm_regime_log_vs_level_irf.py` (incorporado en `code/verify.py`) comprueba directamente `face-cap=cap*expm1(log(face/cap))`, el log del Euler holgado de L y el cociente de la garantia comun en las 160 transiciones de cada rama, con y sin shock. [GitHub Actions #42922148973](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42922148973): prueba general Python y compilacion PDF aprobadas; error maximo de transformacion `8.123686111155731e-16` y 640 evaluaciones de brechas empresariales por rama. El archivo de auditoria se archiva por separado como artifact `finite-irf-source-log-regime-bridge` (ID `13811478295`). **No** equivale a una prueba de la derivada fuente completa.
+
+El chequeo KKT posterior se ha fortalecido en `code/irf/finite_irf.py`: desde t=1 se exige que L tenga holgura nula hasta 1e-9, dual estrictamente positivo y producto de complementariedad cercano a cero, y que H permanezca en garantia vinculante a lo largo de las fechas finitas. En las trayectorias trazadas, el minimo del dual de L desde t=1 es 0.02807495 en B (shock de -0.1pb) y 0.02789273 en B (shock de -1pb); en S los minimos son 0.02807590 y 0.02790220. Es una compuerta de admisibilidad necesaria: no prueba optimalidad global de empresas ni bancos.
+
+## 5. Compuerta de complementariedad fuente L
+
+En el propio `EconomicModel.lean`, `LocalScalarComplementarityL P Z` es la conjuncion de tres condiciones: `localNormalizedSlackL P Z >= 0`, `localNormalizedCollateralDualL P Z >= 0` y su producto igual a cero. El modulo Lean probo tres implicaciones desde esa **definicion literal**: holgura estricta obliga dual nulo; dual positivo obliga holgura nula; una posicion con holgura exactamente cero y dual estrictamente positivo satisface complementariedad. Por tanto, la fila 34 del operador aumentado que fuerza `dual = 0` es una **condicion de frontera** para localizar la transicion entre S/B; no un requisito necesario de un punto B interior con dual positivo. Las tres pruebas fueron chequeadas en [Actions #42922148946](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/42922148946); su estatus es DEMOSTRADO como condicion necesaria, no como suficiencia de la maximizacion empresarial global.

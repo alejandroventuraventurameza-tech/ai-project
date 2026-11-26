@@ -1,0 +1,23 @@
+\begin{tikzpicture}[
+ >=Latex,font=\scriptsize,
+ stage/.style={draw=teal!63!black,fill=teal!5,rounded corners=3pt,
+  align=center,minimum width=3.25cm,minimum height=1.04cm,inner sep=3pt},
+ risk/.style={stage,draw=blue!63!black,fill=blue!6},
+ first/.style={stage,draw=orange!75!black,fill=orange!8},
+ arr/.style={-{Latex[length=2.3mm]},draw=black!70,line width=.85pt}
+]
+\node[first] (a) at (-4.3,1.44) {\textbf{1. Estado y anuncio}\\$s_t,k_{i,t}$ y promesas\\nominales heredadas};
+\node[stage] (b) at (0,1.44) {\textbf{2. Producción y repagos}\\Trabajo, $F_{i,t}$ y obligaciones;\\se determina $N_{i,t}$};
+\node[stage] (c) at (4.3,1.44) {\textbf{3. Contratos y cartera}\\$c^E,k_{i,t+1},b_{it},a_{it}$;\\cartera bancaria y precios};
+\node[risk] (d) at (4.3,-1.08) {\textbf{4. Pagos idiosincráticos}\\$\omega_{jt}$ redistribuye depósitos\\y altera el exceso $s^B$};
+\node[risk] (e) at (0,-1.08) {\textbf{5. Mercado OTC}\\Reservas entre bancos;\\facilidad pública residual};
+\node[stage] (f) at (-4.3,-1.08) {\textbf{6. Transición a $t+1$}\\Renovación bancaria y\\capital $k_{i,t+1}$ instalado};
+\draw[arr] (a.east) -- (b.west);
+\draw[arr] (b.east) -- (c.west);
+\draw[arr] (c.south) -- (d.north);
+\draw[arr] (d.west) -- (e.east);
+\draw[arr] (e.west) -- (f.east);
+\draw[arr,densely dotted] (f.north) to[out=125,in=-125,looseness=.85] (a.south);
+\node[anchor=west,font=\tiny,text=black!72] at (-5.98,-2.28)
+ {Contratos originados en $t$: el préstamo $b_{it}$ promete $R_t^Lb_{it}/\Pi_{t+1}$ unidades reales en $t+1$.};
+\end{tikzpicture}

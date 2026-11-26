@@ -1,0 +1,193 @@
+import Ventura26LiquidityAllocation.DateZeroCalendarEulerBridgeCandidate
+import Ventura26LiquidityAllocation.DateZeroScalarBindingComplementarityCandidate
+
+/-!
+# Source calendar to the binding-borrower scalar capital KKT certificate
+
+Under the original DeterministicBridgeCalendar and binding borrower regime,
+probability-one transition and zero off-path support follow from the Markov
+primitives. No ad hoc assumptions on date-zero/date-one history weights are
+added. Source FirmOptimal with locally feasible capital increases then gives
+a nonnegative scalar multiplier, a zero capital Euler row for a dual-replaced
+carrier, and complementary slackness at the active root collateral constraint.
+
+This is NOT a proof that X.collateralDual is the constructed scalar and NOT
+a proof of a complete competitive equilibrium or Proposition 4.2.
+-/
+
+namespace Ventura26LiquidityAllocation
+namespace ProposedDateZeroCalendarScalarKKT
+
+open ProposedDateZeroCalendarEulerBridge
+open ProposedContinuationContractAudit
+open ProposedDateZeroDeterministicMarkovBridge
+open ProposedDateZeroScalarBindingComplementarity
+open ProposedProposition42KKTIdentification
+
+variable {S : Type*} [Fintype S] [DecidableEq S]
+
+theorem firmOptimal_sourceCalendar_binding_scalarComplementarity
+    (P : Primitives S) (I : InheritedState)
+    (X : Allocation S) (i : FirmType)
+    (dateOne recurrent : S)
+    (hcalendar : DeterministicBridgeCalendar P dateOne recurrent)
+    (hopt : FirmOptimal P I X i)
+    (hbinding : DateZeroBindingBorrower P X i)
+    (hcapital : ∀ h : History S 0,
+      FirmHistoryAdmissible P 0 h → 0 < X.capital i 0 h)
+    (hcoeff : ∀ h : History S 0,
+      FirmHistoryAdmissible P 0 h → ∀ v : S,
+      0 < P.tree.transition (currentState h) v →
+      0 ≤ P.pledgeability i * (1 - P.depreciation) *
+        (X.inflation 1 (childHistory h v) *
+          X.capitalPrice 1 (childHistory h v)))
+    (hunit : 0 < capitalEulerCollateralUnit
+      P X i 0 (rootHistory P.tree) dateOne) :
+    ∃ mu : ℝ, 0 ≤ mu ∧
+      localFirmCapitalEulerResidual P
+        (replaceCollateralDual X (fun _ _ _ => mu))
+        i 0 (rootHistory P.tree) dateOne = 0 ∧
+      0 ≤ rootCollateralSlack P X i dateOne ∧
+      mu * rootCollateralSlack P X i dateOne = 0 := by
+  have htrans : P.tree.transition P.tree.initial dateOne = 1 :=
+    hcalendar.2.2.2.1
+  have hothers : ∀ v : S, v ≠ dateOne →
+      P.tree.transition P.tree.initial v = 0 :=
+    sourceCalendar_other_transitions_zero P dateOne recurrent hcalendar
+  obtain ⟨hw0, hz0, hw1, hz1⟩ :=
+    deterministic_historyWeight_package P dateOne htrans hothers
+  exact firmOptimal_binding_exists_scalarEulerComplementarity
+    P I X i dateOne hopt hbinding hcapital hcoeff hw0 hz0
+      hw1 hz1 hothers hunit
+
+/-- For the SOURCE deterministic calendar the coefficient-positivity
+    hypothesis at all admissible date-zero histories follows from the
+    strict positivity of the single-successor collateral unit. This removes
+    a redundant global sign assumption from the scalar KKT certificate. -/
+theorem firmOptimal_sourceCalendar_binding_scalarComplementarity_of_posUnit
+    (P : Primitives S) (I : InheritedState)
+    (X : Allocation S) (i : FirmType)
+    (dateOne recurrent : S)
+    (hcalendar : DeterministicBridgeCalendar P dateOne recurrent)
+    (hopt : FirmOptimal P I X i)
+    (hbinding : DateZeroBindingBorrower P X i)
+    (hcapital : ∀ h : History S 0,
+      FirmHistoryAdmissible P 0 h → 0 < X.capital i 0 h)
+    (hunit : 0 < capitalEulerCollateralUnit
+      P X i 0 (rootHistory P.tree) dateOne) :
+    ∃ mu : ℝ, 0 ≤ mu ∧
+      localFirmCapitalEulerResidual P
+        (replaceCollateralDual X (fun _ _ _ => mu))
+        i 0 (rootHistory P.tree) dateOne = 0 ∧
+      0 ≤ rootCollateralSlack P X i dateOne ∧
+      mu * rootCollateralSlack P X i dateOne = 0 := by
+  have htrans : P.tree.transition P.tree.initial dateOne = 1 :=
+    hcalendar.2.2.2.1
+  have hothers : ∀ v : S, v ≠ dateOne →
+      P.tree.transition P.tree.initial v = 0 :=
+    sourceCalendar_other_transitions_zero P dateOne recurrent hcalendar
+  obtain ⟨_hw0, hz0, _hw1, _hz1⟩ :=
+    deterministic_historyWeight_package P dateOne htrans hothers
+  have hcoeff : ∀ h : History S 0,
+      FirmHistoryAdmissible P 0 h → ∀ v : S,
+      0 < P.tree.transition (currentState h) v →
+      0 ≤ P.pledgeability i * (1 - P.depreciation) *
+        (X.inflation 1 (childHistory h v) *
+          X.capitalPrice 1 (childHistory h v)) := by
+    intro h hh v hv
+    have hroot : h = rootHistory P.tree := by
+      by_contra hne
+      have hz := hz0 h hne
+      have hp : 0 < P.tree.historyWeight 0 h := hh
+      rw [hz] at hp
+      exact (lt_irrefl (0 : ℝ)) hp
+    subst h
+    have hvpos : 0 < P.tree.transition P.tree.initial v := by
+      simpa [rootHistory, currentState] using hv
+    have hvs : v = dateOne := by
+      by_contra hvne
+      have hz := hothers v hvne
+      rw [hz] at hvpos
+      exact (lt_irrefl (0 : ℝ)) hvpos
+    subst v
+    have hu : 0 < P.pledgeability i * (1 - P.depreciation) *
+        (X.inflation 1 (childHistory (rootHistory P.tree) dateOne) *
+          X.capitalPrice 1 (childHistory (rootHistory P.tree) dateOne)) := by
+      have hu0 := hunit
+      change 0 < P.pledgeability i * (1 - P.depreciation) *
+        X.inflation 1 (childHistory (rootHistory P.tree) dateOne) *
+          X.capitalPrice 1 (childHistory (rootHistory P.tree) dateOne) at hu0
+      nlinarith [hu0]
+    exact le_of_lt hu
+  exact firmOptimal_sourceCalendar_binding_scalarComplementarity
+    P I X i dateOne recurrent hcalendar hopt hbinding hcapital hcoeff hunit
+
+/-- Conditional identification of the ACTUAL source dual. The missing
+    source capital Euler row is stated as an explicit premise: it does not
+    follow merely from FirmOptimal because the Allocation carries a free
+    collateralDual field. Under that premise, the scalar witness equals
+    the existing positive source multiplier at the root. -/
+theorem firmOptimal_binding_actualDual_identified_of_sourceRow
+    (P : Primitives S) (I : InheritedState)
+    (X : Allocation S) (i : FirmType)
+    (dateOne recurrent : S)
+    (hcalendar : DeterministicBridgeCalendar P dateOne recurrent)
+    (hopt : FirmOptimal P I X i)
+    (hbinding : DateZeroBindingBorrower P X i)
+    (hcapital : ∀ h : History S 0,
+      FirmHistoryAdmissible P 0 h → 0 < X.capital i 0 h)
+    (hunit : 0 < capitalEulerCollateralUnit
+      P X i 0 (rootHistory P.tree) dateOne)
+    (hsourceRow :
+      localFirmCapitalEulerResidual P X i 0
+        (rootHistory P.tree) dateOne = 0) :
+    ∃ mu : ℝ, 0 < mu ∧
+      X.collateralDual i 0 (rootHistory P.tree) = mu ∧
+      localFirmCapitalEulerResidual P
+        (replaceCollateralDual X (fun _ _ _ => mu))
+        i 0 (rootHistory P.tree) dateOne = 0 ∧
+      mu * rootCollateralSlack P X i dateOne = 0 := by
+  obtain ⟨mu, _hmu, hrow, _hslack, hcompl⟩ :=
+    firmOptimal_sourceCalendar_binding_scalarComplementarity_of_posUnit
+      P I X i dateOne recurrent hcalendar hopt hbinding hcapital hunit
+  have heq : X.collateralDual i 0 (rootHistory P.tree) = mu :=
+    capitalEuler_dual_unique_of_same_primal P X
+      (fun _ _ _ => mu) i 0 (rootHistory P.tree) dateOne
+      hsourceRow hrow (ne_of_gt hunit)
+  have hpositive : 0 < X.collateralDual i 0 (rootHistory P.tree) :=
+    (hbinding (rootHistory P.tree)).2.1
+  rw [heq] at hpositive
+  exact ⟨mu, hpositive, heq, hrow, hcompl⟩
+
+/-- An economically transparent sufficient condition: positive pledgeability,
+    inflation and next-period capital price, plus the SOURCE depreciation
+    restriction, imply a positive collateral-unit coefficient. -/
+theorem firmOptimal_sourceCalendar_binding_scalarComplementarity_of_positive_prices
+    (P : Primitives S) (I : InheritedState)
+    (X : Allocation S) (i : FirmType)
+    (dateOne recurrent : S)
+    (hcalendar : DeterministicBridgeCalendar P dateOne recurrent)
+    (hopt : FirmOptimal P I X i)
+    (hbinding : DateZeroBindingBorrower P X i)
+    (hcapital : ∀ h : History S 0,
+      FirmHistoryAdmissible P 0 h → 0 < X.capital i 0 h)
+    (htheta : 0 < P.pledgeability i)
+    (hinfl : 0 < X.inflation 1
+      (childHistory (rootHistory P.tree) dateOne))
+    (hq : 0 < X.capitalPrice 1
+      (childHistory (rootHistory P.tree) dateOne)) :
+    ∃ mu : ℝ, 0 ≤ mu ∧
+      localFirmCapitalEulerResidual P
+        (replaceCollateralDual X (fun _ _ _ => mu))
+        i 0 (rootHistory P.tree) dateOne = 0 ∧
+      0 ≤ rootCollateralSlack P X i dateOne ∧
+      mu * rootCollateralSlack P X i dateOne = 0 := by
+  have hunit : 0 < capitalEulerCollateralUnit P X i 0
+      (rootHistory P.tree) dateOne :=
+    capitalEulerCollateralUnit_pos P X i 0 (rootHistory P.tree)
+      dateOne htheta P.depreciation_mem.2 hinfl hq
+  exact firmOptimal_sourceCalendar_binding_scalarComplementarity_of_posUnit
+    P I X i dateOne recurrent hcalendar hopt hbinding hcapital hunit
+
+end ProposedDateZeroCalendarScalarKKT
+end Ventura26LiquidityAllocation

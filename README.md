@@ -1,59 +1,34 @@
-# Reservas bancarias, colateral y asignación de capital
+# Política monetaria, liquidez bancaria y asignación de capital
 
-**Alejandro Ventura · AI Econ Modeling, UP 2026-II · Track B (modelo de tesis)**
+**Alejandro Ventura · Universidad del Pacífico · AI and Economic Modeling · Track B (2026-II)**
 
-Repositorio público: https://github.com/alejandroventuraventurameza-tech/ai-project
-Consigna: https://github.com/alexanderquispe/AI-Econ-Modeling/issues/7
-Tema: 7 de octubre, 08:20 (Lima); entrega en main antes de 07:30.
-Presentación final: 30 de octubre, 07:30 (Lima). Artículo: 26 de noviembre, 22:00.
+**Pregunta.** ¿Cuándo una reducción de la remuneración de reservas, transmitida por bancos y negociación interbancaria OTC, mejora o deteriora la asignación de capital entre empresas heterogéneas?
 
-## Pregunta y modelo
+**Modelo.** Economía neokeynesiana cerrada con hogar trabajador, bancos, banco central y firmas H/L. H tiene mayor productividad tecnológica, pero menor pignorabilidad. La decisión de inversión enfrenta presupuesto y garantía de repago:
 
-¿Cuándo una expansión de reservas mejora la asignación de capital entre empresas
-heterogéneas en productividad, patrimonio y colateral? A es el núcleo estático
-demostrable; B es la extensión objetivo de la presentación final. Ambos siguen Track B.
+\[
+c_{it}+q_t k_{i,t+1}+a_{it}=N_{it}+b_{it},
+\qquad R_t^L b_{it}\leq H_{it}k_{i,t+1}.
+\]
 
-Un banco elige crédito B y depósitos D, con B+m=D+E y costo propio
-C=cB+κ(δD−m)₊²/2. Las empresas maximizan Aᵢkᵢ^α−tbᵢ+ρ(nᵢ−xᵢ),
-sujeto a Rkᵢ=xᵢ+bᵢ, 0≤xᵢ≤nᵢ y tbᵢ≤hᵢ. R ajusta para k_H+k_L=K.
-Supuestos: A_H>A_L>0, 0<α<1, nᵢ,hᵢ,K>0, t>ρ>0, κ>0,
-0<δ<1, c≥0, E≥0 y balance bancario factible. El costo cuadrático es una
-simplificación propia, inspirada por la importancia de la liquidez bancaria,
-sin atribuir su forma a Bianchi y Bigio.
+**Resultado y condiciones.** Si la función de complementariedad reducida es \(C^1\), \(\mathcal M(0,0)=0\), \(\partial_s\mathcal M(0,0)<0\) y \(\partial_h\mathcal M(0,0)<0\), una innovación \(h<0\) suficientemente pequeña genera **dos raíces escalares locales** (holgura cero y holgura positiva). Esto **no** prueba dos equilibrios competitivos infinitos. Además, una auditoría SOURCE identifica una obstrucción al recuperar ambas ramas cerca de un mismo estado heredado.
 
-## Resultados candidatos y condiciones
+El experimento reproducible perturba **solo la remuneración de reservas**, \(h=-10^{-5}\) (aprox. −0.1 pb bajo la convención de log tasa), con encaje fijo \(\rho=0.10\), mismos estados heredados y parámetros **ilustrativos, no estimados para Perú**. Las IRF del *evaluador reducido* arrojan:
 
-En liquidez escasa, más reservas reducen t dentro de los regímenes estudiados,
-incluyendo la respuesta endógena del crédito. Con reservas abundantes son neutrales.
-Si H está estrictamente limitada y L se autofinancia en el interior, una caída
-local de t eleva k_H y producto y reduce la brecha de MRPK y la pérdida 1−Y/Y*.
-Se mantienen K y primitivas y no se cambia de régimen.
+| Respuesta al impacto | S: L inicialmente holgada | B: ambas restringidas |
+|:--|--:|--:|
+| Tasa de préstamo (pb) | −0.063632 | −0.090908 |
+| Crédito a H (log %) | +0.001095 | +0.000841 |
+| Capital elegido por H (log %) | +0.000164 | −0.001073 |
+| Producción corriente (log %) | −0.000036 | −0.004143 |
+| Cambio de pérdida asignativa (100 Δlog) | −0.00000248 | +0.00000852 |
 
-Si ambas están estrictamente limitadas,
-k_H=K(tn_H+h_H)/[t(n_H+n_L)+h_H+h_L]. Al caer t, H recibe más capital
-si y solo si h_H/n_H>h_L/n_L. Eso mejora eficiencia únicamente si H estaba
-subcapitalizada y la intervención no sobrepasa la asignación eficiente.
-La igualdad de ratios es neutral; el orden inverso cambia el signo.
+El capital elegido hoy se instala mañana. Más crédito no implica necesariamente más inversión; la pérdida asignativa compara producto con un referente eficiente a dotaciones dadas y **no mide bienestar**.
 
-El antecedente principal es González, Nuño y Thaler (enero de 2026), que reconoce
-el aporte previo de Albrizio. Ya estudia política monetaria y mala asignación.
-La novedad del cierre particular sigue bajo revisión. EEA/ENAHO
-son motivación descriptiva: no identifican efectos monetarios causales.
+**Evidencia y límites.** El artículo compacto tiene **11 páginas de cuerpo y 16 en total**, con ocho resultados numerados, demostraciones analíticas y una tabla Lean que identifica sus obligaciones abiertas. El PDF fue recompilado desde las figuras originales y comprometido junto al LaTeX. Los cuatro PDF y `code/verify.py` aprobaron en [build #45841282486](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45841282486); la [auditoría editorial #45841282448](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45841282448) también aprobó el 26/11. La [versión histórica de 145 páginas](https://github.com/alejandroventuraventurameza-tech/ai-project/tree/archive/ie-paper-full-20261118) permanece íntegra. **No está acreditada la correspondencia literal de los ocho resultados con Lean ni se han incorporado manuscritos auténticos (0/8).** Los ejemplos S/B no certifican multiplicidad de equilibrio competitivo ni crecimiento permanente.
 
-## Estado y reproducción
+**Archivos:** [paper PDF](paper/paper.pdf) · [LaTeX y bibliografía](paper/paper.tex) · [propuesta](proposal/proposal.pdf) · [presentación inicial](slides/topic.pdf) · [presentación final](slides/final.pdf) · [código](code/verify.py) · [Lean](lean/README.md) · [manuscritos e índice de ocho pruebas](hand/CONTROL_COBERTURA_MANUSCRITA_8.md) · [prompts](prompts.md).
 
-| Componente | Estado |
-|---|---|
-| Propuesta y slides de tema | Preparadas para revisión; fuentes y PDF en proposal/ y slides/topic.* |
-| Simulaciones | `python code/verify.py`; biblioteca estándar, semilla fija y errores fatales |
-| Artículo y slides finales | Borradores propios preliminares, no entrega final de 8–20 páginas |
-| Lean | Pendiente de fijar artículo en commit y ejecutar AppliedModelingLib |
-| Apéndice manuscrito | Pendiente de elaboración personal |
-| Integración y comentario del issue | Pendientes de revisión de PDF y Actions verde |
+**Reproducción desde la raíz:** instalar code/requirements.txt y ejecutar \`python code/verify.py\`.
 
-Compilar desde cada carpeta con `pdflatex` (o `latexmk -pdf`), usar `bibtex`
-en propuesta y artículo y repetir `pdflatex` dos veces. Los cuatro PDF se
-versionan. `.github/workflows/build.yml` conserva el flujo oficial.
-El plan Lean y sus controles están en `lean/README.md`. Las fuentes y el alcance
-de la búsqueda bibliográfica están en `research-audit.md`; los prompts originales
-y respuestas relevantes permanecen en `prompts.md`.
+**Estado al 26/11:** candidato verificable con PDF y fuentes sincronizados en PR #4; aún no integrado en `main` en este corte. Pendientes críticos: 8 demostraciones manuscritas auténticas, formalización paper-scoped en Lean y merge antes de las 22:00 (Lima). Informes: [QA de código](docs/QA_VERIFICADORES_COMPACTO_20261125.md), [QA visual](docs/QA_CANDIDATO_COMPACTO_20261125.md), [correspondencia Lean](paper/lean_formalization_matrix_8.md) y [PR #4](https://github.com/alejandroventuraventurameza-tech/ai-project/pull/4).
