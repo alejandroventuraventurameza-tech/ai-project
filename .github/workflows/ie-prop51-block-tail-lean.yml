@@ -1,0 +1,120 @@
+name: IE Proposition 5.1 exact decimal and Lean 48-block decay
+
+on:
+  push:
+    branches:
+      - work/ie-prop51-decimal-matrix-tail-20261126
+    paths:
+      - lean/current/CurrentCompactBlock48Tail.lean
+      - code/irf/inputs/rational_preconditioners.json
+      - code/irf/exact_linear_tail_power_certificate.py
+      - .github/workflows/ie-prop51-block-tail-lean.yml
+  pull_request:
+    branches: [main]
+    paths:
+      - lean/current/CurrentCompactBlock48Tail.lean
+      - .github/workflows/ie-prop51-block-tail-lean.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ie-prop51-tail-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  lean-and-rational-input-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Check out fixed research source
+        uses: actions/checkout@v4
+        with:
+          path: ai-project
+          fetch-depth: 0
+
+      - name: Retrieve exact pinned AppliedModelingLib
+        uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+
+      - name: Source-lock and verify every Lean rational coefficient
+        shell: bash
+        working-directory: ai-project
+        run: |
+          set -euo pipefail
+          git cat-file -e bac3c6255da39cd1169a965df35bb5e9a230e6e8^{commit}
+          git show bac3c6255da39cd1169a965df35bb5e9a230e6e8:paper/body_compact_after.tex | grep -F 'prop:compact_exact_tail_power'
+          python3 - <<'PY'
+          from decimal import Decimal
+          from fractions import Fraction
+          import hashlib, json, pathlib, re
+          inp=pathlib.Path('code/irf/inputs/rational_preconditioners.json')
+          sha=hashlib.sha256(inp.read_bytes()).hexdigest()
+          assert sha=='d0cef14050de9f4725e51e5cd28b1ea77e33733dfb2c78d2e38a193200337e94', sha
+          raw=json.loads(inp.read_text())['F0']
+          original=[Fraction(Decimal(item)) for row in raw for item in row]
+          s=pathlib.Path('lean/current/CurrentCompactBlock48Tail.lean').read_text()
+          span=s.split('-- BEGIN EXACT_DECIMAL_F0',1)[1].split('-- END EXACT_DECIMAL_F0',1)[0]
+          parsed=re.findall(r'\(\((-?\d+) : ℚ\) / \(10 \^ (\d+) : ℚ\)\)',span)
+          assert len(parsed)==36, ('Expected 36 rational Lean cells',len(parsed))
+          actual=[Fraction(int(n),10**int(e)) for n,e in parsed]
+          assert original==actual, 'Lean matrix literals differ from source decimal rationals'
+          print('F0_EXACT_SOURCE_MATCH: all 36 entries and sha256 verified')
+          PY
+
+      - name: Check source rational 48-step certificate (Python only)
+        shell: bash
+        working-directory: ai-project
+        run: |
+          set -euo pipefail
+          python3 code/irf/exact_linear_tail_power_certificate.py | tee /tmp/ie-prop51-rational.log
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          j=json.loads(Path('code/irf/output/exact_linear_tail_power_certificate.json').read_text())
+          assert j['block_power']==48
+          assert j['strict_contraction_norm_bound']=='24/25'
+          assert j['strict_transient_norm_bound']=='61/10'
+          assert j['source_sha256']=='d0cef14050de9f4725e51e5cd28b1ea77e33733dfb2c78d2e38a193200337e94'
+          print('RATIONAL_NUMERIC_BOUNDS_PASSED: not yet proven inside Lean')
+          PY
+
+      - name: Install Lean 4.30.0-rc2
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Kernel-check universal 48-step decay
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          test "$(git rev-parse HEAD)" = "194edcc95df74806a39b961d10dedddc6e730cce"
+          lake exe cache get
+          cp ../ai-project/lean/current/CurrentCompactBlock48Tail.lean ./CurrentCompactBlock48Tail.lean
+          lake env lean CurrentCompactBlock48Tail.lean 2>&1 | tee /tmp/ie-prop51-lean.log
+          if grep -E 'sorryAx|admit|unsolved goals|error:' /tmp/ie-prop51-lean.log; then
+            echo 'LEAN_PROP51_NOT_VALIDATED: avoid scientific overclaim' >&2
+            exit 2
+          fi
+          grep -F 'block48_decay_of_norm_bounds' /tmp/ie-prop51-lean.log
+          grep -F 'prop51_conditional_exact' /tmp/ie-prop51-lean.log
+          grep -F 'depends on axioms' /tmp/ie-prop51-lean.log
+          echo 'LEAN_PROP51_CONDITIONAL_OK: universal implication only; finite numeric bounds open in Lean'
+
+      - name: Preserve source and kernel evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prop51-lean-rational-contract
+          path: |
+            /tmp/ie-prop51-lean.log
+            /tmp/ie-prop51-rational.log
+          if-no-files-found: ignore
