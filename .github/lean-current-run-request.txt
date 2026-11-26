@@ -1,0 +1,4 @@
+Lean verification request 2026-11-26
+Scope: exact current paper financing capacity, repayment and effective wedge.
+Source pinned: bac3c6255da39cd1169a965df35bb5e9a230e6e8
+No proof or status claims are upgraded until the complete Lean check is green.
