@@ -1,0 +1,138 @@
+import Mathlib
+
+/-!
+# Proposition 5.1: pinned decimal 6x6 graph and block-decay logic
+
+Source: ai-project@bac3c6255da39cd1169a965df35bb5e9a230e6e8,
+  paper/body_compact_after.tex (prop:compact_exact_tail_power).
+The 36 F0 coefficients below are reconstructed EXACTLY as rationals from
+  code/irf/inputs/rational_preconditioners.json
+  SHA256 d0cef14050de9f4725e51e5cd28b1ea77e33733dfb2c78d2e38a193200337e94.
+
+The numerical bounds ||F0^48||_inf < 24/25 and max_{r<48}||F0^r||_inf < 61/10
+were checked by the exact Fraction-based Python certificate. The theorem here
+formally proves the universal all-k/all-x decay from those bounds, but presently
+takes the two strict finite bounds as EXPLICIT assumptions, not Lean theorems.
+DO NOT present the source-specific result as a complete Lean proof of Prop 5.1
+until the finite power inequalities are themselves checked by Lean.
+-/
+
+open scoped Matrix Matrix.Norms.Operator
+
+namespace Ventura26LiquidityAllocation
+namespace CurrentCompact
+
+/-- Raw decimal literals of the local graph, interpreted as exact rational
+values; any E-notation zeros in source are exactly zero in the rationals. -/
+private def exactDecimalF0Rat : Matrix (Fin 6) (Fin 6) ℚ :=
+-- BEGIN EXACT_DECIMAL_F0
+  ![
+    ![((1007684401252265346095141001581161545920059067858232663 : ℚ) / (10 ^ 54 : ℚ)),
+       ((3227130928315780132160088207069023990203014502525375559 : ℚ) / (10 ^ 56 : ℚ)),
+       ((6149940649430797709847852884503041335066755427477067423 : ℚ) / (10 ^ 55 : ℚ)),
+       ((1529257501068452456375826013220470387299601851769125064 : ℚ) / (10 ^ 55 : ℚ)),
+       ((5475120089974215965843641517098575474721893768743396527 : ℚ) / (10 ^ 55 : ℚ)),
+       ((-1320300665374014509718300698100319502571372167189312185 : ℚ) / (10 ^ 57 : ℚ))],
+    ![((3592455648496423161445101647134086640926911643060260207 : ℚ) / (10 ^ 56 : ℚ)),
+       ((1043404974921012197873289816790495471748359212146216357 : ℚ) / (10 ^ 54 : ℚ)),
+       ((2736683016453429039680503640667390420866905490208719206 : ℚ) / (10 ^ 55 : ℚ)),
+       ((-1900242433114985431058778251123589867677809691716658897 : ℚ) / (10 ^ 55 : ℚ)),
+       ((1693635373535299442834831680835279533907035119118269999 : ℚ) / (10 ^ 55 : ℚ)),
+       ((-4219405668551132337665469863143903164532878771738381253 : ℚ) / (10 ^ 58 : ℚ))],
+    ![((3707242087802211912990619578493607539275017781056128293 : ℚ) / (10 ^ 56 : ℚ)),
+       ((7620342503771904732720880029471711797985927015145172070 : ℚ) / (10 ^ 56 : ℚ)),
+       ((-6373842986591236915366681223860056297620368090363648564 : ℚ) / (10 ^ 56 : ℚ)),
+       ((-7899988309851051473975759350142160595169569194045083567 : ℚ) / (10 ^ 55 : ℚ)),
+       ((-5173712205364173231747504752826743655592301757484324662 : ℚ) / (10 ^ 55 : ℚ)),
+       ((1227441228356844511373353579088560363584023452776261292 : ℚ) / (10 ^ 57 : ℚ))],
+    ![((1461371168521853235787204284670899510511202756222367918 : ℚ) / (10 ^ 56 : ℚ)),
+       ((1972991980369983113148645897788682205685769466626531070 : ℚ) / (10 ^ 56 : ℚ)),
+       ((1148878446830795106045440099179076091075969596217559869 : ℚ) / (10 ^ 55 : ℚ)),
+       ((1140151122329136906526612482110399855381388967255369836 : ℚ) / (10 ^ 54 : ℚ)),
+       ((6876292523326395324074168213157367548225362084042177746 : ℚ) / (10 ^ 55 : ℚ)),
+       ((-1645325274758818478747246221211703361763237068186004336 : ℚ) / (10 ^ 57 : ℚ))],
+    ![((3381521993923859771825849835615140209657706585772933519 : ℚ) / (10 ^ 56 : ℚ)),
+       ((5929072747814507674442606577970761914463814345727933377 : ℚ) / (10 ^ 56 : ℚ)),
+       ((2555375377315482460771254713499308333713477429692434328 : ℚ) / (10 ^ 55 : ℚ)),
+       ((-3063175268399986163118263771962811111928047125751399404 : ℚ) / (10 ^ 55 : ℚ)),
+       ((4465623830674757160614550253536998672469122737243726974 : ℚ) / (10 ^ 55 : ℚ)),
+       ((1209919634836377171244965567528641128815738504290893474 : ℚ) / (10 ^ 58 : ℚ))],
+    ![((0 : ℚ) / (10 ^ 0 : ℚ)),
+       ((0 : ℚ) / (10 ^ 0 : ℚ)),
+       ((0 : ℚ) / (10 ^ 0 : ℚ)),
+       ((0 : ℚ) / (10 ^ 0 : ℚ)),
+       ((0 : ℚ) / (10 ^ 0 : ℚ)),
+       ((5000000000000000000000000000000000000000000000000000000 : ℚ) / (10 ^ 55 : ℚ))]
+  ]
+-- END EXACT_DECIMAL_F0
+
+/-- The real local transition graph, obtained via rational-to-real cast.
+This is a concrete 6x6 matrix and NOT an identified SOURCE DSGE Jacobian. -/
+def exactDecimalF0 : Matrix (Fin 6) (Fin 6) ℝ :=
+  fun i j => (exactDecimalF0Rat i j : ℝ)
+
+/-- Generic decay from finite block and within-block norm bounds.
+The infinity norm here is the actual induced matrix row-sum norm and the
+usual supremum norm on vectors, not a scalar surrogate. -/
+theorem block48_decay_of_norm_bounds
+    (F : Matrix (Fin 6) (Fin 6) ℝ)
+    (hBlock : ‖F ^ 48‖ < (24 / 25 : ℝ))
+    (hTransient : ∀ r : ℕ, r < 48 → ‖F ^ r‖ < (61 / 10 : ℝ))
+    (k : ℕ) (x : Fin 6 → ℝ) :
+    ‖(F ^ k) *ᵥ x‖ ≤
+      (61 / 10 : ℝ) * (24 / 25 : ℝ) ^ (k / 48) * ‖x‖ := by
+  let m : ℕ := k / 48
+  let r : ℕ := k % 48
+  have hr : r < 48 := by
+    dsimp [r]
+    exact Nat.mod_lt _ (by omega)
+  have hk : k = 48 * m + r := by
+    dsimp [m, r]
+    omega
+  have hPowerIdentity : F ^ k = (F ^ 48) ^ m * F ^ r := by
+    calc
+      F ^ k = F ^ (48 * m + r) := by rw [← hk]
+      _ = (F ^ 48) ^ m * F ^ r := by rw [pow_add, pow_mul]
+  have hMainPower : ‖(F ^ 48) ^ m‖ ≤ (24 / 25 : ℝ) ^ m := by
+    calc
+      ‖(F ^ 48) ^ m‖ ≤ ‖F ^ 48‖ ^ m := norm_pow_le _ _
+      _ ≤ (24 / 25 : ℝ) ^ m := by
+        exact pow_le_pow_left₀ (norm_nonneg _) hBlock.le _
+  have hTransientBound : ‖F ^ r‖ ≤ (61 / 10 : ℝ) :=
+    (hTransient r hr).le
+  have hMatrix :
+      ‖F ^ k‖ ≤ (61 / 10 : ℝ) * (24 / 25 : ℝ) ^ (k / 48) := by
+    calc
+      ‖F ^ k‖ = ‖(F ^ 48) ^ m * F ^ r‖ := by rw [hPowerIdentity]
+      _ ≤ ‖(F ^ 48) ^ m‖ * ‖F ^ r‖ := norm_mul_le _ _
+      _ ≤ (24 / 25 : ℝ) ^ m * (61 / 10 : ℝ) := by
+        exact mul_le_mul hMainPower hTransientBound (norm_nonneg _)
+          (pow_nonneg (by norm_num) _)
+      _ = (61 / 10 : ℝ) * (24 / 25 : ℝ) ^ (k / 48) := by
+        dsimp [m]
+        ring
+  calc
+    ‖(F ^ k) *ᵥ x‖ ≤ ‖F ^ k‖ * ‖x‖ :=
+      Matrix.linfty_opNorm_mulVec _ _
+    _ ≤ ((61 / 10 : ℝ) * (24 / 25 : ℝ) ^ (k / 48)) * ‖x‖ :=
+      mul_le_mul_of_nonneg_right hMatrix (norm_nonneg x)
+    _ = (61 / 10 : ℝ) * (24 / 25 : ℝ) ^ (k / 48) * ‖x‖ := rfl
+
+/-- This is the EXACT CURRENT SOURCE-SPEC reduction: a theorem for the
+literal pinned matrix with the finite rational bounds still as hypotheses. -/
+def prop51FiniteBoundSpec : Prop :=
+  ‖exactDecimalF0 ^ 48‖ < (24 / 25 : ℝ) ∧
+    (∀ r : ℕ, r < 48 → ‖exactDecimalF0 ^ r‖ < (61 / 10 : ℝ))
+
+theorem prop51_conditional_exact
+    (hFinite : prop51FiniteBoundSpec)
+    (k : ℕ) (x : Fin 6 → ℝ) :
+    ‖(exactDecimalF0 ^ k) *ᵥ x‖ ≤
+      (61 / 10 : ℝ) * (24 / 25 : ℝ) ^ (k / 48) * ‖x‖ := by
+  exact block48_decay_of_norm_bounds exactDecimalF0 hFinite.1 hFinite.2 k x
+
+#print axioms block48_decay_of_norm_bounds
+#print axioms prop51_conditional_exact
+
+end CurrentCompact
+end Ventura26LiquidityAllocation
