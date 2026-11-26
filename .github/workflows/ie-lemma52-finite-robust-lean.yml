@@ -1,0 +1,91 @@
+name: IE Lemma 5.2 exact rational 49-step certificate
+
+on:
+  push:
+    branches: [work/ie-lemma52-finite-rational-kernel-20261126]
+    paths:
+      - lean/current/CurrentCompactBlock48Tail.lean
+      - lean/current/CurrentCompactRobustFiniteCertificate.lean
+      - code/irf/check_lean_robust_majorants.py
+      - .github/workflows/ie-lemma52-finite-robust-lean.yml
+  pull_request:
+    branches: [main]
+    paths:
+      - lean/current/CurrentCompactBlock48Tail.lean
+      - lean/current/CurrentCompactRobustFiniteCertificate.lean
+      - code/irf/check_lean_robust_majorants.py
+      - .github/workflows/ie-lemma52-finite-robust-lean.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ie-robust-finite-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  finite-majorant-kernel:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v4
+        with:
+          path: ai-project
+          fetch-depth: 0
+      - name: Check out pinned AppliedModelingLib
+        uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Audit frozen manuscript and all 98 exact certificate entries
+        shell: bash
+        working-directory: ai-project
+        run: |
+          set -euo pipefail
+          git cat-file -e bac3c6255da39cd1169a965df35bb5e9a230e6e8^{commit}
+          git show bac3c6255da39cd1169a965df35bb5e9a230e6e8:paper/body_compact_after.tex |
+            grep -F 'lem:compact_robust_tail_power'
+          python3 code/irf/check_lean_robust_majorants.py | tee /tmp/ie-robust-49-source.log
+          grep -F 'ROBUST_TABLE_EXACT_SOURCE_MATCH' /tmp/ie-robust-49-source.log
+      - name: Install Lean 4.30.0-rc2
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Check all rational norm and recurrence bounds in Lean kernel
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          test "$(git rev-parse HEAD)" = "194edcc95df74806a39b961d10dedddc6e730cce"
+          lake exe cache get
+          mkdir -p papers/Ventura26LiquidityAllocation
+          cp ../ai-project/lean/current/CurrentCompactBlock48Tail.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentCompactRobustFiniteCertificate.lean papers/Ventura26LiquidityAllocation/
+          lake build Ventura26LiquidityAllocation.CurrentCompactBlock48Tail 2>&1 | tee /tmp/ie-robust-49-prereq.log
+          lake build Ventura26LiquidityAllocation.CurrentCompactRobustFiniteCertificate 2>&1 | tee /tmp/ie-robust-49-build.log
+          lake env lean papers/Ventura26LiquidityAllocation/CurrentCompactRobustFiniteCertificate.lean 2>&1 | tee /tmp/ie-robust-49-axioms.log
+          if grep -E 'sorryAx|error:|unsolved goals' /tmp/ie-robust-49-axioms.log; then
+            exit 2
+          fi
+          grep -F 'finiteSourceRowsVerified' /tmp/ie-robust-49-axioms.log
+          grep -F 'finiteRobustStepVerified' /tmp/ie-robust-49-axioms.log
+          grep -F 'finiteRobust48Verified' /tmp/ie-robust-49-axioms.log
+          grep -F 'finiteRobustTransientVerified' /tmp/ie-robust-49-axioms.log
+          echo 'ROBUST_49_KERNEL_CERTIFIED: finite rational data only; analytic bridge separate'
+      - name: Archive logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ie-robust-49-certification
+          path: |
+            /tmp/ie-robust-49-source.log
+            /tmp/ie-robust-49-prereq.log
+            /tmp/ie-robust-49-build.log
+            /tmp/ie-robust-49-axioms.log
+          if-no-files-found: ignore
