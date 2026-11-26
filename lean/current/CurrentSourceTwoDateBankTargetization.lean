@@ -72,6 +72,7 @@ noncomputable def targetizedPrefix33
     (tail : LocalPrefixContinuationRule) : Fin 33 → ℝ :=
   let d0 := dateZero P I Z dateOneState
   let d1 := dateOne P Z dateOneState recurrent tail
+  let F := originalPrefix33 branch P I Z dateOneState recurrent tail
   fun i =>
     if i = 14 then sourceTargetLoanRow P d0
     else if i = 15 then sourceTargetDepositRow P d0
@@ -140,7 +141,6 @@ theorem targetizedPrefix33_eq_fullEconomicBankShear
   obtain ⟨hLoan1, hDeposit1, hBalance1⟩ :=
     threeTargetRows_eq_crossRows
       P (dateOne P Z dateOneState recurrent tail) hmatch h1
-  let F := originalPrefix33 branch P I Z dateOneState recurrent tail
   have hF12 : originalPrefix33 branch P I Z dateOneState recurrent tail 12 =
       localReducedRemainingResidual P (dateZero P I Z dateOneState) 6 := by rfl
   have hF13 : originalPrefix33 branch P I Z dateOneState recurrent tail 13 =
