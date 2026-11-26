@@ -1,18 +1,16 @@
 name: IE Proposition 3.1 local scalar bridge
 
 on:
-  push:
-    branches: [work/ie-prop31-local-scalar-bridge-20261126]
-    paths:
-      - lean/current/CurrentCompactProp31LocalBridge.lean
-      - lean/current/CurrentCompactProp31C1Bridge.lean
-      - .github/workflows/ie-prop31-local-bridge-lean.yml
   pull_request:
     branches: [main]
     paths:
       - lean/current/CurrentCompactProp31LocalBridge.lean
       - lean/current/CurrentCompactProp31C1Bridge.lean
       - .github/workflows/ie-prop31-local-bridge-lean.yml
+
+concurrency:
+  group: ie-prop31-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: true
 
 permissions:
   contents: read

@@ -76,9 +76,12 @@ theorem c1_at_origin_implies_uniform_local_slack_antitonicity
     have hhabs : |h| < r := by
       have hbound : |h| < rho := abs_lt.mpr ⟨hlow,hhigh⟩
       exact lt_trans hbound hhalf
-    change dist (s,h) ((0 : ℝ), (0 : ℝ)) < r
-    simpa only [dist_zero_right, Prod.norm_def, Real.norm_eq_abs,
-      max_lt_iff] using And.intro hsabs hhabs
+    have hnorm : ‖(s,h)‖ < r := by
+      simpa only [Prod.norm_def, Real.norm_eq_abs, max_lt_iff]
+        using And.intro hsabs hhabs
+    have hdist : dist (s,h) (0 : ℝ × ℝ) < r := by
+      simpa only [dist_zero_right] using hnorm
+    exact Metric.mem_ball.mpr hdist
   refine ⟨rho, eps, hrho, heps, ?_⟩
   intro h hlow hhigh
   let I : Set ℝ := Set.Icc (0 : ℝ) eps
@@ -120,7 +123,7 @@ theorem c1_at_origin_implies_uniform_local_slack_antitonicity
   have hderiveq : deriv (fun x : ℝ => M x h) s =
       fderiv ℝ f (s,h) ((1 : ℝ), (0 : ℝ)) := hcomp.deriv
   rw [hderiveq]
-  exact hneg _ (hinsideNeg s hsI)
+  exact hneg (Metric.mem_ball.mp (hinsideNeg s hsI))
 
 /-- Both statements in the compact paper's scalar Proposition 3.1
 from its stated C^1 assumptions: negative shocks yield precisely two
