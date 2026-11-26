@@ -79,7 +79,7 @@ jobs:
           assert j['strict_contraction_norm_bound']=='24/25'
           assert j['strict_transient_norm_bound']=='61/10'
           assert j['source_sha256']=='d0cef14050de9f4725e51e5cd28b1ea77e33733dfb2c78d2e38a193200337e94'
-          print('RATIONAL_NUMERIC_BOUNDS_PASSED: not yet proven inside Lean')
+          print('RATIONAL_NUMERIC_BOUNDS_PASSED: independent Python cross-check; Lean proof follows')
           PY
 
       - name: Install Lean 4.30.0-rc2
@@ -106,8 +106,12 @@ jobs:
           fi
           grep -F 'block48_decay_of_norm_bounds' /tmp/ie-prop51-lean.log
           grep -F 'prop51_conditional_exact' /tmp/ie-prop51-lean.log
+          grep -F 'rationalF0_all_transient_rows' /tmp/ie-prop51-lean.log
+          grep -F 'rationalF0_pow48_row_norm_lt' /tmp/ie-prop51-lean.log
+          grep -F 'prop51FiniteBound_proved' /tmp/ie-prop51-lean.log
+          grep -F 'prop51_unconditional_exact' /tmp/ie-prop51-lean.log
           grep -F 'depends on axioms' /tmp/ie-prop51-lean.log
-          echo 'LEAN_PROP51_CONDITIONAL_OK: universal implication only; finite numeric bounds open in Lean'
+          echo 'LEAN_PROP51_FULL_KERNEL_OK: exact decimal F0, finite norm bounds, all-k decay'
 
       - name: Preserve source and kernel evidence
         if: always()
