@@ -1,0 +1,56 @@
+name: IE exact integer interval induction soundness
+
+on:
+  push:
+    branches: [work/ie-f0-interval-certificate-20261126]
+    paths:
+      - lean/current/CurrentCompactIntegerIntervalInduction.lean
+      - .github/workflows/ie-f0-interval-induction.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ie-f0-induction-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  interval-induction-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ai-project
+      - uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Install Lean
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Check generic interval induction theorem
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake exe cache get
+          cp ../ai-project/lean/current/CurrentCompactIntegerIntervalInduction.lean .
+          lake env lean CurrentCompactIntegerIntervalInduction.lean 2>&1 | tee /tmp/f0-interval-induction.log
+          if grep -E 'sorryAx|error:|unsolved goals' /tmp/f0-interval-induction.log; then
+            exit 2
+          fi
+          grep -F 'interval_matrix_powers_sound' /tmp/f0-interval-induction.log
+          echo 'INTERVAL_INDUCTION_KERNEL_OK: universal integer matrix enclosure'
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: f0-interval-induction-proof-log
+          path: /tmp/f0-interval-induction.log
+          if-no-files-found: ignore
