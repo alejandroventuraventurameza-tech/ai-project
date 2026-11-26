@@ -170,7 +170,21 @@ private theorem certifiedFiniteRecurrenceReal :
           (((sharpUpperRat j : ℚ) : ℝ) * (1 / 10000 : ℝ)) *
             robustUpperReal (n - 1 - j) ≤ robustUpperReal n := by
     dsimp only [robustUpperReal]
-    exact_mod_cast hRat
+    have hRat0 :
+        sharpUpperRat n +
+          ∑ j ∈ Finset.range n,
+            (sharpUpperRat j * (1 / 10000 : ℚ)) *
+              robustUpperRat (n - 1 - j) ≤ robustUpperRat n := by
+      simpa only [Fin.val_mk] using hRat
+    have hCast :
+        ((sharpUpperRat n +
+          ∑ j ∈ Finset.range n,
+            (sharpUpperRat j * (1 / 10000 : ℚ)) *
+              robustUpperRat (n - 1 - j) : ℚ) : ℝ) ≤
+              ((robustUpperRat n : ℚ) : ℝ) :=
+      Rat.cast_le.mpr hRat0
+    simpa only [Rat.cast_add, Rat.cast_sum, Rat.cast_mul,
+      Rat.cast_div, Rat.cast_ofNat] using hCast
   calc
     ‖exactDecimalF0 ^ n‖ +
         ∑ j ∈ Finset.range n,
@@ -191,7 +205,10 @@ private theorem robustUpperReal_zero :
 private theorem robustUpperReal_48 :
     robustUpperReal 48 < (49 / 50 : ℝ) := by
   unfold robustUpperReal
-  exact_mod_cast finiteRobust48Verified
+  have hCast :
+      ((robustUpperRat 48 : ℚ) : ℝ) < (((49 / 50 : ℚ) : ℝ)) :=
+    Rat.cast_lt.mpr finiteRobust48Verified
+  simpa only [Rat.cast_div, Rat.cast_ofNat] using hCast
 
 private theorem robustUpperReal_transient :
     ∀ r : ℕ, r < 48 → robustUpperReal r < (7 : ℝ) := by
