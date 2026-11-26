@@ -64,7 +64,9 @@ jobs:
           export PATH="$HOME/.elan/bin:$PATH"
           test "$(git rev-parse HEAD)" = "194edcc95df74806a39b961d10dedddc6e730cce"
           lake exe cache get
+          cp ../ai-project/lean/checkpoint/dependencies/lakefile.toml ./lakefile.toml
           mkdir -p papers/Ventura26LiquidityAllocation
+          cp ../ai-project/lean/checkpoint/module_root.lean papers/Ventura26LiquidityAllocation.lean
           cp ../ai-project/lean/current/CurrentCompactBlock48Tail.lean papers/Ventura26LiquidityAllocation/
           cp ../ai-project/lean/current/CurrentCompactRobustFiniteCertificate.lean papers/Ventura26LiquidityAllocation/
           lake build Ventura26LiquidityAllocation.CurrentCompactBlock48Tail 2>&1 | tee /tmp/ie-robust-49-prereq.log

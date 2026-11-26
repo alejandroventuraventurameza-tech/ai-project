@@ -63,6 +63,9 @@ private def sharpUpperRat (n : ℕ) : ℚ :=
 private def robustUpperRat (n : ℕ) : ℚ :=
   if h : n < 49 then (robustUpperInt ⟨n, h⟩ : ℚ) / normScale else 0
 
+set_option maxRecDepth 4096
+set_option maxHeartbeats 0
+
 /-! The following are finite decidable propositions: 49×6 exact
 rational row checks, 48 rational convolution checks, and strict thresholds.
 The constructor uses no floating-point operations or native_decide. -/
