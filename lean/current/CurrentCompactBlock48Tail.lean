@@ -9,15 +9,18 @@ The 36 F0 coefficients below are reconstructed EXACTLY as rationals from
   code/irf/inputs/rational_preconditioners.json
   SHA256 d0cef14050de9f4725e51e5cd28b1ea77e33733dfb2c78d2e38a193200337e94.
 
-The numerical bounds ||F0^48||_inf < 24/25 and max_{r<48}||F0^r||_inf < 61/10
-were checked by the exact Fraction-based Python certificate. The theorem here
-formally proves the universal all-k/all-x decay from those bounds, but presently
-takes the two strict finite bounds as EXPLICIT assumptions, not Lean theorems.
-DO NOT present the source-specific result as a complete Lean proof of Prop 5.1
-until the finite power inequalities are themselves checked by Lean.
+The exact rational matrix norm inequalities for F0^48 and all F0^r,
+0<=r<48, are kernel-proved with finite rational decision and a separately
+proved bridge from rational row sums to the actual real matrix operator norm.
+The final theorem prop51_unconditional_exact establishes the full all-k/all-x
+decay WITHOUT additional numerical norm hypotheses. The older conditional
+theorem is retained as a reusable general algebraic lemma.
+
+These proofs concern the PINNED DECIMAL 6x6 F0; equality to the 34-row
+SOURCE equilibrium Jacobian, and nonlinear equilibrium stability, remain OPEN.
 -/
 
-open scoped Matrix Matrix.Norms.Operator
+open scoped NNReal Matrix Matrix.Norms.Operator
 
 namespace Ventura26LiquidityAllocation
 namespace CurrentCompact
@@ -130,6 +133,108 @@ theorem prop51_conditional_exact
     ‖(exactDecimalF0 ^ k) *ᵥ x‖ ≤
       (61 / 10 : ℝ) * (24 / 25 : ℝ) ^ (k / 48) * ‖x‖ := by
   exact block48_decay_of_norm_bounds exactDecimalF0 hFinite.1 hFinite.2 k x
+
+
+/-!
+# Source-specific finite-power KERNEL CERTIFICATE.
+The rational-to-real operator norm bridge is proved below.
+All finite powers are decided by Lean's kernel (decide +kernel);
+no native_decide or external untrusted oracle is used.
+-/
+set_option maxRecDepth 4096
+set_option maxHeartbeats 0
+
+private theorem rationalF0_pow7_row_norm_lt :
+    ∀ i : Fin 6,
+      (∑ j : Fin 6, |((exactDecimalF0Rat ^ 7) i j)|) <
+        (61 / 10 : ℚ) := by
+  decide +kernel
+
+private theorem rationalF0_pow48_row_norm_lt :
+    ∀ i : Fin 6,
+      (∑ j : Fin 6, |((exactDecimalF0Rat ^ 48) i j)|) <
+        (24 / 25 : ℚ) := by
+  decide +kernel
+
+
+private theorem rationalF0_all_transient_rows :
+    ∀ r : Fin 48, ∀ i : Fin 6,
+      (∑ j : Fin 6, |((exactDecimalF0Rat ^ r.val) i j)|) <
+        (61 / 10 : ℚ) := by
+  decide +kernel
+
+
+/-- The rational-to-real 6x6 row-sum bridge uses the actual matrix
+operator norm, preserving the precise pinned decimal coefficients. -/
+private theorem rational_rows_imply_real_operator_norm
+    (n : ℕ) (c : ℚ) (hc : 0 < c)
+    (hRows : ∀ i : Fin 6,
+      (∑ j : Fin 6, |((exactDecimalF0Rat ^ n) i j)|) < c) :
+    ‖exactDecimalF0 ^ n‖ < (c : ℝ) := by
+  have hPow :
+      exactDecimalF0 ^ n =
+        (exactDecimalF0Rat ^ n).map (Rat.castHom ℝ) := by
+    rw [Matrix.map_pow]
+    rfl
+  have hRealRows (i : Fin 6) :
+      (∑ j : Fin 6, ‖(exactDecimalF0 ^ n) i j‖) =
+        ((∑ j : Fin 6, |((exactDecimalF0Rat ^ n) i j)| : ℚ) : ℝ) := by
+    rw [hPow, Rat.cast_sum]
+    apply Finset.sum_congr rfl
+    intro j hj
+    change ‖(((exactDecimalF0Rat ^ n) i j : ℚ) : ℝ)‖ =
+      ((|((exactDecimalF0Rat ^ n) i j)| : ℚ) : ℝ)
+    rw [Real.norm_eq_abs, Rat.cast_abs]
+  let cN : ℝ≥0 := ⟨(c : ℝ), by exact_mod_cast hc.le⟩
+  have hcN : (0 : ℝ≥0) < cN := by
+    apply NNReal.coe_lt_coe.mp
+    change (0 : ℝ) < (c : ℝ)
+    exact_mod_cast hc
+  have hNNRows (i : Fin 6) :
+      (∑ j : Fin 6, ‖(exactDecimalF0 ^ n) i j‖₊ : ℝ≥0) < cN := by
+    apply NNReal.coe_lt_coe.mp
+    change ((∑ j : Fin 6, ‖(exactDecimalF0 ^ n) i j‖₊ : ℝ≥0) : ℝ) < (c : ℝ)
+    simp only [NNReal.coe_sum, coe_nnnorm]
+    rw [hRealRows]
+    exact_mod_cast hRows i
+  have hSup :
+      ((Finset.univ : Finset (Fin 6)).sup
+        fun i => ∑ j : Fin 6, ‖(exactDecimalF0 ^ n) i j‖₊ : ℝ≥0) < cN :=
+    (Finset.sup_lt_iff hcN).mpr (by
+      intro i hi
+      exact hNNRows i)
+  rw [Matrix.linfty_opNorm_def]
+  change (((Finset.univ : Finset (Fin 6)).sup
+    fun i => ∑ j : Fin 6, ‖(exactDecimalF0 ^ n) i j‖₊ : ℝ≥0) : ℝ) < (cN : ℝ)
+  exact NNReal.coe_lt_coe.mpr hSup
+
+/-- Finite bounds now established *inside Lean*, not postulated:
+all 0..47 and the 48th power were kernel-decided over exact rationals. -/
+theorem prop51FiniteBound_proved : prop51FiniteBoundSpec := by
+  unfold prop51FiniteBoundSpec
+  constructor
+  · simpa only [Rat.cast_div, Rat.cast_ofNat] using
+      (rational_rows_imply_real_operator_norm 48 (24 / 25) (by norm_num)
+        rationalF0_pow48_row_norm_lt)
+  · intro r hr
+    simpa only [Rat.cast_div, Rat.cast_ofNat] using
+      (rational_rows_imply_real_operator_norm r (61 / 10) (by norm_num)
+        (fun i => rationalF0_all_transient_rows ⟨r, hr⟩ i))
+
+/-- Source-specific, all-k/all-vector conclusion of current Prop. 5.1. -/
+theorem prop51_unconditional_exact
+    (k : ℕ) (x : Fin 6 → ℝ) :
+    ‖(exactDecimalF0 ^ k) *ᵥ x‖ ≤
+      (61 / 10 : ℝ) * (24 / 25 : ℝ) ^ (k / 48) * ‖x‖ :=
+  prop51_conditional_exact prop51FiniteBound_proved k x
+
+#print axioms prop51FiniteBound_proved
+#print axioms prop51_unconditional_exact
+
+#print axioms rationalF0_all_transient_rows
+
+#print axioms rationalF0_pow7_row_norm_lt
+#print axioms rationalF0_pow48_row_norm_lt
 
 #print axioms block48_decay_of_norm_bounds
 #print axioms prop51_conditional_exact
