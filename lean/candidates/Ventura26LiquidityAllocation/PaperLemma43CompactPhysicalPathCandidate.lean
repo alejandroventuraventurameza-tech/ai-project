@@ -18,6 +18,7 @@ namespace Ventura26LiquidityAllocation
 namespace CurrentCompact
 
 open Filter
+open scoped Topology
 
 /-- Direct derivative of log(EFFICIENT physical output / ACTUAL physical
 output) along differentiable positive capital paths. Same assumptions
