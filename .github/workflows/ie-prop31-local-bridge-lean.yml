@@ -47,6 +47,7 @@ jobs:
           cp ../ai-project/lean/checkpoint/dependencies/lakefile.toml ./lakefile.toml
           mkdir -p papers/Ventura26LiquidityAllocation
           cp ../ai-project/lean/checkpoint/module_root.lean papers/Ventura26LiquidityAllocation.lean
+          cp ../ai-project/lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean papers/Ventura26LiquidityAllocation/
           cp ../ai-project/lean/candidates/Ventura26LiquidityAllocation/*.lean papers/Ventura26LiquidityAllocation/
           cp ../ai-project/lean/current/CurrentCompactProp31LocalBridge.lean papers/Ventura26LiquidityAllocation/
           cp ../ai-project/lean/current/CurrentCompactProp31C1Bridge.lean papers/Ventura26LiquidityAllocation/
