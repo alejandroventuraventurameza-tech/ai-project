@@ -17,7 +17,7 @@ DO NOT present the source-specific result as a complete Lean proof of Prop 5.1
 until the finite power inequalities are themselves checked by Lean.
 -/
 
-open scoped Matrix.Norms.Operator
+open scoped Matrix Matrix.Norms.Operator
 
 namespace Ventura26LiquidityAllocation
 namespace CurrentCompact
