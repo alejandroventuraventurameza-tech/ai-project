@@ -36,3 +36,16 @@ La carpeta actual lean/ conserva cientos de candidatos y un checkpoint del manus
 El procedimiento de integración debe conservar los resultados anteriores pero copiar sin alteraciones el paquete generado del paper definitivo. No deben introducirse hipótesis que postulen la conclusión. El informe del 26/11 mantiene el estado ABIERTO de cualquier resultado sin esta evidencia.
 
 La compilación más reciente de cuatro declaraciones actuales es https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45851966286 y concluyó correctamente, con el alcance descrito en VALIDACION_KERNEL_4_RESULTADOS_20261126.md. El módulo histórico de eficiencia integrada se compiló aparte en https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45847597337. La prueba adicional del sublema logarítmico está en https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45855571576 y se fusionó mediante PR #9. **Ninguna de estas ejecuciones reemplaza** la revisión semántica paper-scoped oficial.
+
+
+## Adenda formal posterior al 26/11/2026 — PR #77
+
+Los cinco enunciados del paper compacto que este informe del **26/11** clasificaba abiertos para cotejo recibieron una interfaz específica en `lean/candidates/Ventura26LiquidityAllocation/PostDeadlineCurrentPaperFive.lean`. El kernel [Actions #46009434502](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/46009434502) (8,343 trabajos) verificó cinco endpoints matemáticos y un teorema conjunto, todos con axiomas fundacionales sin `sorryAx`. El [control source-locked](../docs/ADENDA_POSTPLAZO_CINCO_PRUEBAS_PAPER_20261127.md) comprobó los ocho `statement_latex` y blobs del commit `bac3c6255da39cd1169a965df35bb5e9a230e6e8`.
+
+- **A.1.1:** `lemma_A11_repayment_paper` (patrimonio por estado con garantía real).
+- **A.1.2:** `lemma_A12_interior_FOC_paper` (FOC con esperanza de **soporte finito** y pesos no negativos, sumando 1).
+- **A.1.3:** `proposition_A13_financing_capacity_paper` (cota alcanzable, derivada parcial y signo).
+- **A.1.4:** `lemma_A14_physical_allocation_and_log_loss_paper` (producción física, frontera eficiente y derivada de log-pérdida).
+- **5.3:** `proposition_53_effective_price_wedge_paper` (cuña de precios efectiva bajo garantía vinculante).
+
+La matriz [paper/lean_formalization_matrix_8.md](../paper/lean_formalization_matrix_8.md) queda actualizada sin ocultar límites. **No cambia retroactivamente el informe histórico**: únicamente añade un resultado formal conseguido después de la entrega; sigue faltando la ejecución oficial de `paper_contribution.py check` con interfaz de **ocho** enunciados realmente generada, además de los puentes SOURCE–Python/DSGE completos.
