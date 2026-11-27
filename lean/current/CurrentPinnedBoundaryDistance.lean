@@ -22,6 +22,7 @@ namespace CurrentPinnedBoundaryDistance
 open CurrentPinnedJointQuantitativeBall
 open CurrentPinnedFiscalFiber
 open CurrentPinnedQuantitativeBank
+open CurrentPinnedLocalNeighborhood
 open CurrentPinnedOpenBankDomain
 open CurrentPinnedBankDomain
 open CurrentSourceFullFDeriv
