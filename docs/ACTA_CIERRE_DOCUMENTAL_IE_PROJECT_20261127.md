@@ -37,3 +37,10 @@ El [PR #71](https://github.com/alejandroventuraventurameza-tech/ai-project/pull/
 **Nota de plazo:** el enlace público a Google Drive proporcionado por el propietario es un respaldo adicional. El PDF manuscrito fue recibido después de las 22:00 (Lima) del 26/11; consta como adenda sin alterar el sello temporal de la entrega anterior. El estado de envío/recepción por terceros no puede acreditarse solo con el contenido de este repositorio.
 
 **Juicio final:** la entrega académica es reproducible, íntegra en artefactos y explícita respecto de los límites de sus afirmaciones. No se declara completo el proyecto de investigación económica en su sentido más fuerte.
+
+
+## Adenda formal POSTERIOR al plazo del 26/11/2026, 22:00 Lima
+
+El [PR #77](https://github.com/alejandroventuraventurameza-tech/ai-project/pull/77) incorporó una interfaz paper-facing de **cinco pruebas adicionales** del artículo: Lema A.1.1, Lema A.1.2, Proposición A.1.3, Lema A.1.4 y Proposición 5.3, con un teorema conjunto. El [kernel Lean #46009434502](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/46009434502) aprobó 8,343 trabajos y las seis auditorías de axiomas sin `sorryAx`. La hipótesis adicional de soporte finito en el Lema A.1.2 representa el árbol finito del modelo y **no** generaliza la expectativa a espacios probabilísticos arbitrarios. Las pruebas se registran en [la matriz actualizada](../paper/lean_formalization_matrix_8.md) y en [el cotejo por resultado](ADENDA_POSTPLAZO_CINCO_PRUEBAS_PAPER_20261127.md).
+
+**Se mantiene la separación entre cierre documental y cierre económico integral:** el equilibro dinámico, los puentes completos SOURCE–Python y la identificación de F0 con su Jacobiano no están demostrados. La comprobación formal `python3 scripts/paper_contribution.py check Ventura26LiquidityAllocation --fast` sobre una interfaz generada específica de ocho resultados permanece pendiente; compilar los cinco teoremas no equivale a ejecutar este protocolo. **Esta adenda no modifica los PDF/LaTeX originales ni su fecha de entrega.**
