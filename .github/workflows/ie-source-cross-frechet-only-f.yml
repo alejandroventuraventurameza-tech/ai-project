@@ -1,7 +1,7 @@
 name: IE SOURCE unconditional bank crosses and Frechet transport with F derivative only
 on:
   pull_request:
-    branches: [main]
+    branches: [main, work/ie-source-pinned-eight-prefactors-20261127]
     paths:
       - lean/current/CurrentPinnedCrossAndFrechetOnlyF.lean
       - .github/workflows/ie-source-cross-frechet-only-f.yml
