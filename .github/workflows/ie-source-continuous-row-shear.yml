@@ -1,0 +1,63 @@
+name: IE SOURCE two-donor monetary-bank Frechet rows with continuous coefficients
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - lean/current/CurrentSourceContinuousRowShear.lean
+      - .github/workflows/ie-source-continuous-row-shear.yml
+permissions:
+  contents: read
+concurrency:
+  group: ie-source-continuous-row-shear
+  cancel-in-progress: true
+jobs:
+  continuous-row-shear:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ai-project
+      - uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Install pinned Lean
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Kernel-check SOURCE one- and two-policy donor row transport
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          test "$(git rev-parse HEAD)" = "194edcc95df74806a39b961d10dedddc6e730cce"
+          lake exe cache get
+          cp ../ai-project/lean/checkpoint/dependencies/lakefile.toml ./lakefile.toml
+          mkdir -p papers/Ventura26LiquidityAllocation
+          cp ../ai-project/lean/checkpoint/module_root.lean papers/Ventura26LiquidityAllocation.lean
+          cp ../ai-project/lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/candidates/Ventura26LiquidityAllocation/*.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceFiveBankTargetization.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceContinuousRootCoefficient.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceContinuousRowShear.lean papers/Ventura26LiquidityAllocation/
+          lake build Ventura26LiquidityAllocation.CurrentSourceContinuousRowShear 2>&1 | tee /tmp/continuous-row-build.log
+          lake env lean papers/Ventura26LiquidityAllocation/CurrentSourceContinuousRowShear.lean 2>&1 | tee /tmp/continuous-row-axioms.log
+          if grep -E 'sorryAx|unsolved goals|error:' /tmp/continuous-row-axioms.log; then exit 2; fi
+          grep -F 'continuous_one_donor_row_hasFDerivAt' /tmp/continuous-row-axioms.log
+          grep -F 'continuous_two_donor_row_hasFDerivAt' /tmp/continuous-row-axioms.log
+          echo SOURCE_CONTINUOUS_ROW_SHEAR_KERNEL_OK
+      - name: Preserve proof and axioms logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-continuous-row-shear
+          path: |
+            /tmp/continuous-row-build.log
+            /tmp/continuous-row-axioms.log
+          if-no-files-found: ignore
