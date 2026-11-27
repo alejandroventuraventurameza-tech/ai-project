@@ -58,3 +58,10 @@ La [auditoría conjunta #46067342833](https://github.com/alejandroventuraventura
 El original PDF del artículo quedó identificado exactamente en `ai-project@bac3c6255da39cd1169a965df35bb5e9a230e6e8` (SHA-256 `923b766624491e7f7b290c4302332140cd5636fe421ab27c7d4024377db7d2e3`). Los ocho enunciados LaTeX se recuperaron de sus Git blobs originales y se generó un `statement-spec` esquema v1 aceptado por el **loader oficial** en [Actions #46070284153](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/46070284153). La adaptación de los dos usos españoles de «todo» al parser upstream está declarada en [ADENDA_EIGHT_STATEMENT_SPEC_SOURCE_LOCK_20261127.md](ADENDA_EIGHT_STATEMENT_SPEC_SOURCE_LOCK_20261127.md) sin modificar el original.
 
 **Delimitación:** se certificaron fuentes, hashes, localizadores y estructura de los ocho contratos, pero no el cotejo semántico independiente source-to-Spec, la ejecución completa de `new --statement-spec` ni el closeout oficial. Esta sección es posterior al corte de entrega y no modifica sus artefactos científicos.
+
+
+## Corrección posterior al cierre: Proposición 5.1 con tres cláusulas completas
+
+La auditoría source-to-Spec detectó que la interfaz paper-scoped provisional de la Proposición 5.1 exponía únicamente el límite para todo horizonte `k`, aunque el original también afirma las dos cotas estrictas `‖F0^48‖ < 24/25` y `‖F0^r‖ < 61/10` para todo `0 ≤ r < 48`. Las cotas finitas ya estaban demostradas por el certificado racional Lean. Se incorporaron las tres conclusiones en una nueva especificación y teorema conjunto; [Actions #46072883272](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/46072883272) aprobó **8,360 trabajos Lean**, el `check --fast` y los ocho endpoints con auditoría de axiomas. Véase [adenda específica](ADENDA_PROP51_TRES_CLAUSULAS_20261127.md).
+
+Esta mejora es **evidencia posterior al plazo**; no altera el PDF entregado ni certifica la identificación de F0 con el Jacobiano SOURCE o la existencia del equilibrio dinámico infinito.
