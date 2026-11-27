@@ -23,7 +23,7 @@ Se cuenta con una raíz exacta \(F_G(0)=0\) para el testigo estacionario y la fi
 J_G\in\mathcal L(\mathbb R^{33},\mathbb R^{33}),
 \]
 
-y, después, proporcionar la identidad de dos lados y la cota de norma de su inversa.
+y, adicionalmente, la regularidad C1 en una vecindad abierta del origen (o las hipótesis precisas del IFT que se invoque). Solo después corresponde proporcionar la identidad de dos lados y la cota de norma de su inversa.
 
 Ningún lema de continuidad de una fila, ni la invertibilidad del shear bancario, demuestra la existencia o invertibilidad del Jacobiano económico original.
 
@@ -77,11 +77,11 @@ La carta \(Z_j(z)=Z_{*,j}\exp(z_j)\) es estrictamente positiva en las 33 coorden
 
 **G3 — Módulos monetarios y bancarios.** Probar las derivadas de los logaritmos de metas, el factor OTC y las cuatro razones bancarias. La continuidad y la raíz monetaria no bastan por sí solas para dar una derivada.
 
-**G4 — Ensamblaje de las 33 filas.** Usar la igualdad de vectores en Fin 33 para construir un operador lineal continuo J_G y demostrar HasFDerivAt F_G J_G 0, fila por fila. Registrar cada fórmula, signo y unidad.
+**G4 — Ensamblaje de las 33 filas.** Usar la igualdad de vectores en Fin 33 para construir un operador lineal continuo J_G y demostrar HasFDerivAt F_G J_G 0, fila por fila. Además, demostrar diferenciabilidad en una vecindad abierta y continuidad local de la derivada, o directamente ContDiffAt de orden 1; la derivada puntual aislada NO basta para el teorema estándar de función implícita. Registrar cada fórmula, signo y unidad.
 
 **G5 — Inversa y validación.** Obtener una matriz explícita exacta o intervalar con producto izquierdo/derecho igual a la identidad, junto con una cota de norma rigurosa. La matriz numérica de un centro de frontera histórico no puede atribuirse sin identificación al testigo estacionario SOURCE actual.
 
-**G6 — IFT, política y cierre.** Solo después de G4 y G5 aplicar un teorema de función implícita y derivar sensibilidades respecto de choques monetarios. Las IRF necesitan un problema dinámico, historia heredada, horizonte, condición terminal y trayectoria de shocks consistentes; el prefijo de dos fechas no sustituye la economía infinita.
+**G6 — IFT, política y cierre.** Solo después de G4 con regularidad C1 local y G5 aplicar un teorema de función implícita y derivar sensibilidades respecto de choques monetarios. Las IRF necesitan un problema dinámico, historia heredada, horizonte, condición terminal y trayectoria de shocks consistentes; el prefijo de dos fechas no sustituye la economía infinita.
 
 ## 5. Trazabilidad y estatus
 
