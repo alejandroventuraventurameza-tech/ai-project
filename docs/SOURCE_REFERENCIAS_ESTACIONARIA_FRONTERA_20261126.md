@@ -39,7 +39,9 @@ Dado que `41/40 > 81/80`, un valor `R` que satisface `R≥41/40` no puede coinci
 
 El módulo `CurrentPinnedReferenceSeparation.lean` formaliza exactamente la desigualdad y la incompatibilidad **condicional al intervalo del productor heredado**. No formaliza el productor Python ni su encierro.
 
-**Conclusión:** no existe contradicción entre (i) excluir toda frontera dual-cero en `||z||∞<1/200` alrededor del testigo Lean y (ii) tener un *candidato condicional* de frontera casi centrado en su propia referencia numérica. Son dos referencias que no deben identificarse. Si se pretende trasladar el antiguo candidato al testigo exacto SOURCE, debe probarse un mapa económico/paramétrico explícito; bajo la identificación directa de la tasa de préstamo, las cotas anteriores ya muestran que esa identificación es imposible.
+**Consecuencia adicional condicional sobre la carta.** Si se postula explícitamente que el préstamo del constructor antiguo respeta **la misma coordenada logarítmica** `R=R_L*exp(z[15])` del estacionario SOURCE, entonces `R≥41/40` y `R_L<81/80` implican `exp(z[15])>82/81` y `z[15]>log(82/81)≥1/82>1/200`. En esta identificación hipotética, el candidato antiguo **tendría que estar fuera de la bola SOURCE ya certificada**, por lo que no existe contradicción. El nuevo teorema `legacy_rate_same_chart_forces_large_log_shift` registra precisamente esta implicación; **no prueba la identificación de cartas ni valida la raíz numérica**.
+
+**Conclusión:** no existe contradicción entre (i) excluir toda frontera dual-cero en `||z||∞<1/200` alrededor del testigo Lean y (ii) tener un *candidato condicional* de frontera casi centrado en su propia referencia numérica. Son dos centros que no deben identificarse. Si se pretende trasladar el antiguo candidato al testigo exacto SOURCE, debe probarse un mapa económico/paramétrico explícito; una igualdad de tasas en los respectivos orígenes es imposible bajo sus intervalos disjuntos.
 
 ## D. Obligaciones de cierre
 
