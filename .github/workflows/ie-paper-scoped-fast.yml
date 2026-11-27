@@ -1,0 +1,96 @@
+name: IE paper-scoped upstream fast check (provisional)
+
+on:
+  push:
+    branches: [work/ie-paper-official-fast-interface-20261127]
+    paths:
+      - .github/workflows/ie-paper-scoped-fast.yml
+      - scripts/stage_eight_paper_interface.py
+      - lean/current/**
+      - lean/candidates/**
+      - lean/current_paper_source_inventory_8.json
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/ie-paper-scoped-fast.yml
+      - scripts/stage_eight_paper_interface.py
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ie-paper-scoped-fast
+  cancel-in-progress: false
+
+jobs:
+  provisional-paper-scoped-eight-fast:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ai-project
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Install pinned Lean 4.30.0-rc2
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Prepare pinned mathlib cache
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          test "$(git rev-parse HEAD)" = '194edcc95df74806a39b961d10dedddc6e730cce'
+          lake exe cache get
+      - name: Stage source-locked eight-paper candidate using official new command
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          export PYTHONPATH="$GITHUB_WORKSPACE/upstream"
+          python3 ai-project/scripts/stage_eight_paper_interface.py ai-project upstream 2>&1 | tee /tmp/ie-paper-stage.log
+          grep -F PAPER_EIGHT_SOURCE_STATEMENTS_GIT_BLOBS_OK /tmp/ie-paper-stage.log
+          grep -F PAPER_SCOPED_EIGHT_STAGING_READY_NO_PROOF_HOLES /tmp/ie-paper-stage.log
+      - name: Execute exact official paper_contribution.py check --fast
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          export PYTHONPATH="$PWD"
+          python3 scripts/paper_contribution.py check Ventura26LiquidityAllocation --fast 2>&1 | tee /tmp/ie-paper-fast.log
+          echo 'UPSTREAM_OFFICIAL_CHECK_FAST_OK'
+      - name: Check all eight exact-type proof endpoints with kernel and axioms
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake build Ventura26LiquidityAllocation.ProofInterface 2>&1 | tee /tmp/ie-paper-proof-build.log
+          lake env lean papers/Ventura26LiquidityAllocation/ProofInterface.lean 2>&1 | tee /tmp/ie-paper-proof-axioms.log
+          if grep -E 'sorryAx|unsolved goals|error:|admit|declaration uses sorry' /tmp/ie-paper-proof-axioms.log; then exit 2; fi
+          for name in p31 p51 l52 p53 a11 a12 a13 a14; do
+            grep -F "'Ventura26LiquidityAllocation.$name' depends on axioms:" /tmp/ie-paper-proof-axioms.log
+          done
+          echo 'EIGHT_PAPER_SCOPED_PROOF_ENDPOINTS_KERNEL_OK'
+          echo 'CAVEAT: fast check, without generated official statement-spec or semantic closeout'
+      - name: Preserve logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ie-upstream-paper-scoped-fast-provisional
+          path: |
+            /tmp/ie-paper-stage.log
+            /tmp/ie-paper-fast.log
+            /tmp/ie-paper-proof-build.log
+            /tmp/ie-paper-proof-axioms.log
+          if-no-files-found: ignore
