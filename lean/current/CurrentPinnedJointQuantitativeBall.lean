@@ -18,6 +18,7 @@ namespace Ventura26LiquidityAllocation
 namespace CurrentPinnedJointQuantitativeBall
 
 open CurrentPinnedQuantitativeBank
+open CurrentPinnedBankDomain
 open CurrentPinnedOpenBankDomain
 open CurrentPinnedStationaryDual
 open CurrentSourceFullFDeriv
@@ -90,15 +91,26 @@ theorem positive_fourLog_funding_dual
       (25 : ℝ) / (24 * R) := by
     rw [← Real.exp_log hratio]
     exact Real.exp_lt_exp.mpr hlog
-  rw [Real.exp_sub, Real.exp_sub, Real.exp_add, div_div_eq_div_mul] at hExp
+  have hExpRatio :
+      Real.exp (a + b - c - d) =
+        (Real.exp a * Real.exp b) /
+          (Real.exp c * Real.exp d) := by
+    rw [Real.exp_sub, Real.exp_sub, Real.exp_add]
+    field_simp [Real.exp_ne_zero] <;> ring
   have hCD : 0 < Real.exp c * Real.exp d :=
     mul_pos (Real.exp_pos _) (Real.exp_pos _)
   have hRA : 0 < R * Real.exp a :=
     mul_pos hR (Real.exp_pos _)
+  have hExpDiv :
+      (Real.exp a * Real.exp b) /
+        (Real.exp c * Real.exp d) <
+          (25 : ℝ) / (24 * R) := by
+    rw [← hExpRatio]
+    exact hExp
   have hprod :
       (Real.exp a * Real.exp b) * (24 * R) <
         (25 : ℝ) * (Real.exp c * Real.exp d) :=
-    (div_lt_div_iff₀ hCD hR24).mp hExp
+    (div_lt_div_iff₀ hCD hR24).mp hExpDiv
   have hfund :
       ((24 / 25 : ℝ) * Real.exp b) /
           (Real.exp c * Real.exp d) <
