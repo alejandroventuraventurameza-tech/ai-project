@@ -76,6 +76,8 @@ jobs:
           cp ../ai-project/lean/current/CurrentSourceBankBalancePreSecantRegularity.lean papers/Ventura26LiquidityAllocation/
           cp ../ai-project/lean/current/CurrentPinnedEightEconomicPrefactorContinuity.lean papers/Ventura26LiquidityAllocation/
           cp ../ai-project/lean/current/CurrentPinnedMonetaryDonorContinuity.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceContinuousRootCoefficient.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceContinuousRowShear.lean papers/Ventura26LiquidityAllocation/
           cp ../ai-project/lean/current/CurrentSourceContinuous33Shear.lean papers/Ventura26LiquidityAllocation/
           cp ../ai-project/lean/current/CurrentSourceEconomicContinuousTransport.lean papers/Ventura26LiquidityAllocation/
           cp ../ai-project/lean/current/CurrentPinnedCrossAndFrechetOnlyF.lean papers/Ventura26LiquidityAllocation/
