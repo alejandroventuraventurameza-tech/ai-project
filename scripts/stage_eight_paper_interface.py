@@ -213,6 +213,36 @@ def main() -> None:
         shutil.copyfile(p, dst / p.name)
     for p in (project / "lean/current").glob("*.lean"):
         shutil.copyfile(p, dst / p.name)
+
+    # Older candidate proofs import the historic 57-claim PaperInterface.
+    # Relocate that historic specification without altering any theorem
+    # statements or proof bodies, so the NEW eight-claim PaperInterface can
+    # import the candidates without forming PaperInterface -> proof -> self.
+    historic_source = (checkpoint / "PaperInterface.lean").read_text(encoding="utf-8")
+    assert "import Ventura26LiquidityAllocation.MainTheorems" in historic_source
+    historic_source = historic_source.replace(
+        "import Ventura26LiquidityAllocation.MainTheorems",
+        "import Ventura26LiquidityAllocation.EconomicModel", 1)
+    historic_source = historic_source.replace(
+        "import Ventura26LiquidityAllocation.Assumptions\n", "", 1)
+    (dst / "LegacyPaperInterface.lean").write_text(historic_source, encoding="utf-8")
+    relinked = []
+    for p in dst.glob("*.lean"):
+        if p.name in {
+            "PaperInterface.lean", "ProofInterface.lean",
+            "MainTheorems.lean", "LegacyPaperInterface.lean"
+        }:
+            continue
+        original = p.read_text(encoding="utf-8")
+        changed = original.replace(
+            "import Ventura26LiquidityAllocation.PaperInterface\n",
+            "import Ventura26LiquidityAllocation.LegacyPaperInterface\n")
+        if changed != original:
+            p.write_text(changed, encoding="utf-8")
+            relinked.append(p.name)
+    assert relinked, "historic PaperInterface imports not found"
+    print("HISTORIC_INTERFACE_IMPORTS_RELOCATED:", sorted(relinked), flush=True)
+
     for filename, contents in (
         ("MainTheorems.lean", MAIN),
         ("PaperInterface.lean", PAPER),
