@@ -1,0 +1,91 @@
+name: IE SOURCE unconditional eight actual bank pre-secant coefficient continuities
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - lean/current/CurrentPinnedEightEconomicPrefactorContinuity.lean
+      - .github/workflows/ie-source-pinned-eight-prefactors.yml
+permissions:
+  contents: read
+concurrency:
+  group: ie-source-pinned-eight-prefactors
+  cancel-in-progress: true
+jobs:
+  pinned-eight-prefactors:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ai-project
+      - uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Install pinned Lean
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Kernel-check all eight actual two-date SOURCE economic bank prefactors
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          test "$(git rev-parse HEAD)" = "194edcc95df74806a39b961d10dedddc6e730cce"
+          lake exe cache get
+          cp ../ai-project/lean/checkpoint/dependencies/lakefile.toml ./lakefile.toml
+          mkdir -p papers/Ventura26LiquidityAllocation
+          cp ../ai-project/lean/checkpoint/module_root.lean papers/Ventura26LiquidityAllocation.lean
+          cp ../ai-project/lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/candidates/Ventura26LiquidityAllocation/*.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceFiveBankTargetization.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceTwoDateBankTargetization.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceTwoDateFDerivTransport.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceTwoDateFDerivRank.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceTwoDateFDerivInverse.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentPinnedBankDomain.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentPinnedOpenBankDomain.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentPinnedSourceDateParity.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentPinnedStationaryPrefix33Root.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentPinnedLocalNeighborhood.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentPinnedQuantitativeBankMargins.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentPinnedStationaryFundingDual.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentPinnedStrictBindingNeighborhood.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentPinnedJointQuantitativeBall.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentPinnedFiscalFiberWitness.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentPinnedMonetaryRoots.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceFiveBankTargetization.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceExpSecantContinuity.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceCrossContinuity.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceTwoDateBankTargetization.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceTwoDateFDerivTransport.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentPinnedEightCrossContinuity.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourcePinnedAggregateOutputContinuity.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourcePinnedOutputDomain.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourcePinnedRateTargetContinuity.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourcePinnedOTCSlopes.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceDepositPreSecantRegularity.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentPinnedSourcePricePrefactorContinuity.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourcePinnedQuantityTargetContinuity.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourcePinnedBankRatioContinuity.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentSourceBankBalancePreSecantRegularity.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/CurrentPinnedEightEconomicPrefactorContinuity.lean papers/Ventura26LiquidityAllocation/
+          lake build Ventura26LiquidityAllocation.CurrentPinnedEightEconomicPrefactorContinuity 2>&1 | tee /tmp/pinned-eight-prefactors-build.log
+          lake env lean papers/Ventura26LiquidityAllocation/CurrentPinnedEightEconomicPrefactorContinuity.lean 2>&1 | tee /tmp/pinned-eight-prefactors-axioms.log
+          if grep -E 'sorryAx|unsolved goals|error:' /tmp/pinned-eight-prefactors-axioms.log; then exit 2; fi
+          grep -F 'pinned_eight_preSecants_continuousAt' /tmp/pinned-eight-prefactors-axioms.log
+          echo SOURCE_EIGHT_PREFACTORS_KERNEL_OK
+      - name: Preserve Lean evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-pinned-eight-prefactors-continuity
+          path: |
+            /tmp/pinned-eight-prefactors-build.log
+            /tmp/pinned-eight-prefactors-axioms.log
+          if-no-files-found: ignore
