@@ -32,9 +32,11 @@ theorem continuous_scalar_mul_hasFDerivAt_at_zero
     (hf : HasFDerivAt f J x)
     (hzero : f x = 0) :
     HasFDerivAt (fun y => a y * f y) ((a x) • J) x := by
+  have hc : ContinuousAt (fun _y : X => a x) x :=
+    continuousAt_const
   have ha0 :
       Tendsto (fun y : X => a y - a x) (𝓝 x) (𝓝 (0 : ℝ)) := by
-    simpa only [sub_self] using (ha.sub continuousAt_const).tendsto
+    simpa only [sub_self] using (ha.sub hc).tendsto
   have hsmall :
       (fun y : X => a y - a x) =o[𝓝 x]
         (fun _y : X => (1 : ℝ)) :=
