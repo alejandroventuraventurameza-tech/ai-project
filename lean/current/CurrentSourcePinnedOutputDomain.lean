@@ -122,7 +122,7 @@ theorem pinned_output_log_continuousAt_of_aggregate_output
   have hRatioNe :
       localPrefixAggregateOutput P (d (0 : Row33)) / P.outputReference ≠ 0 :=
     div_ne_zero hOutAt hRef
-  exact (Real.continuousAt_log hRatioNe).comp hRatio
+  exact hRatio.log hRatioNe
 
 #print axioms pinned_output_log_continuousAt_of_aggregate_output
 
