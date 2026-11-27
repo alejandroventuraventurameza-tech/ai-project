@@ -12,14 +12,14 @@
 
 | Etiqueta LaTeX | Número en PDF compacto | Rótulo manuscrito/histórico | Páginas del PDF manuscrito | Verificación de presencia | Validación matemática |
 |---|---|---|---:|---|---|
-| `prop:local_macro_multiplicity` | Prop. 3.1 | Prop. 3.1 / «dos soluciones locales»; en guías históricas Prop. 4.2 | 1–3 | Presente: hipótesis, monotonicidad y solución frontera/interior | Por cotejar rigurosamente |
-| `lem:repayment` | Lema A.1.1 | Lema A.1.1 (garantía robusta) | 3–4 | Presente: restricción de repago por estado | Por cotejar rigurosamente |
-| `lem:v0m_original_6_2` | Lema A.1.2 | Lema A.1.2 (no ahorro y deuda simultáneos) | 4–5 | Presente: condición de primer orden y argumento de signo | Por cotejar rigurosamente |
-| `prop:v0m_original_6_3` | Prop. A.1.3 | Prop. A.1.3 (capacidad financiable) | 5 | Presente: límite k y derivada respecto de R^L | Por cotejar rigurosamente |
-| `lem:allocation_loss_identity` | Lema A.1.4 | Lema A.1.4 (pérdida de asignación) | 6–8 | Presente: referente eficiente, pérdida y diferenciales | Por cotejar rigurosamente |
-| `prop:compact_exact_tail_power` | Prop. 5.1 | Prop. 5.1 (decaimiento por bloques) | 9 | Presente: división euclidiana 48m+r y cota | Verificar fuente racional para las constantes |
-| `lem:compact_robust_tail_power` | Lema 5.2 | Lema 5.2 (robustez) | 10–11 | Presente: identidad telescópica y mayorante matricial | Verificar fuente racional para las constantes |
-| `prop:compact_source_collateral_effective_wedge` | Prop. 5.3 | Prop. 5.3 (cuña financiera) | 11–12 | Presente: capital financiable, costos efectivos y derivada de cuña | Por cotejar rigurosamente |
+| `prop:local_macro_multiplicity` | Prop. 3.1 | Prop. 3.1 / «dos soluciones locales»; en guías históricas Prop. 4.2 | 1–3 | Presente: hipótesis, monotonicidad y solución frontera/interior | Cotejo manuscrito–paper realizado; alcance condicionado |
+| `lem:repayment` | Lema A.1.1 | Lema A.1.1 (garantía robusta) | 3–4 | Presente: restricción de repago por estado | Cotejo manuscrito–paper realizado; alcance condicionado |
+| `lem:v0m_original_6_2` | Lema A.1.2 | Lema A.1.2 (no ahorro y deuda simultáneos) | 4–5 | Presente: condición de primer orden y argumento de signo | Cotejo manuscrito–paper realizado; alcance condicionado |
+| `prop:v0m_original_6_3` | Prop. A.1.3 | Prop. A.1.3 (capacidad financiable) | 5 | Presente: límite k y derivada respecto de R^L | Cotejo manuscrito–paper realizado; alcance condicionado |
+| `lem:allocation_loss_identity` | Lema A.1.4 | Lema A.1.4 (pérdida de asignación) | 6–8 | Presente: referente eficiente, pérdida y diferenciales | Cotejo manuscrito–paper realizado; alcance condicionado |
+| `prop:compact_exact_tail_power` | Prop. 5.1 | Prop. 5.1 (decaimiento por bloques) | 9 | Presente: división euclidiana 48m+r y cota | Cota racional reejecutada; formalización Lean de F0 verificada |
+| `lem:compact_robust_tail_power` | Lema 5.2 | Lema 5.2 (robustez) | 10–11 | Presente: identidad telescópica y mayorante matricial | Cota racional reejecutada; formalización Lean de F0 verificada |
+| `prop:compact_source_collateral_effective_wedge` | Prop. 5.3 | Prop. 5.3 (cuña financiera) | 11–12 | Presente: capital financiable, costos efectivos y derivada de cuña | Cotejo manuscrito–paper realizado; alcance condicionado |
 
 **Resultado del control actualizado:** **8/8 manuscritos identificados y contrastados visualmente con los enunciados del artículo; 6/8 argumentos económico-algebraicos coherentes bajo sus hipótesis; 2/8 argumentos matriciales con cotas racionales reejecutadas en GitHub Actions 45933840987.** La [auditoría detallada](AUDITORIA_ECUACIONES_MANUSCRITAS_8_20261127.md) distingue estos resultados de una equivalencia integral en Lean, todavía pendiente.
 
@@ -37,6 +37,6 @@
 ## Política editorial y de transparencia
 
 - El manuscrito fue **aportado por el autor**, no fabricado ni transcrito como si fuera escritura humana por IA.
-- Esta documentación **corrige el estado anterior «0/8 recibidos»**. Conservamos el historial y anotamos que el cotejo matemático profundo sigue pendiente.
+- Esta documentación **corrige el estado anterior «0/8 recibidos»**. Conservamos el historial y anotamos que el cotejo matemático de las hojas con el artículo ya se realizó; la identificación económico–Lean integral sigue pendiente.
 - El PDF ORIGINAL, idéntico byte a byte, está **presente en `hand/ai-ieproject.pdf`**, reconstruido por GitHub Actions y verificado con SHA-256. El original en Drive sigue como respaldo. La correspondencia completa con teoremas Lean sigue abierta.
 - Distinguir la recepción del archivo de la hora límite del 26/11/2026, 22:00 Lima; el registro de Drive fue posterior.
