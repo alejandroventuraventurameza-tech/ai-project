@@ -46,12 +46,10 @@ theorem pinned_eight_economic_bank_crosses_continuousAt (G : ℝ) :
       FourCrossContinuousAt G (pinnedDateOne G) := by
   let P := ProposedStationaryPrimitives.primitives G
   obtain ⟨hp0, hp1⟩ :=
-    CurrentPinnedEightEconomicPrefactorContinuity.
-      pinned_eight_preSecants_continuousAt G
+    CurrentPinnedEightEconomicPrefactorContinuity.pinned_eight_preSecants_continuousAt G
   obtain ⟨⟨hPolicyRate0, hPolicyQuantity0⟩,
       ⟨hPolicyRate1, hPolicyQuantity1⟩⟩ :=
-    CurrentPinnedMonetaryDonorContinuity.
-      pinned_four_actual_monetary_donors_continuousAt G
+    CurrentPinnedMonetaryDonorContinuity.pinned_four_actual_monetary_donors_continuousAt G
   obtain ⟨hZeroRate0, hZeroQuantity0, hZeroRate1, hZeroQuantity1⟩ :=
     CurrentPinnedMonetaryRoots.pinned_four_monetary_donor_rows_zero G
   rcases hp0 with ⟨hLoan0, hDeposit0, hBalanceRate0, hBalanceQuantity0⟩
@@ -103,8 +101,7 @@ theorem pinned_targetized_hasFDerivAt_of_original_F
     pinned_eight_economic_bank_crosses_continuousAt G
   rcases hc0 with ⟨hLoan0, hDeposit0, hRate0, hQuantity0⟩
   rcases hc1 with ⟨hLoan1, hDeposit1, hRate1, hQuantity1⟩
-  apply CurrentSourceEconomicContinuousTransport.
-    targetizedLogPrefix33_hasFDerivAt_at_root_of_eight_continuous
+  apply CurrentSourceEconomicContinuousTransport.targetizedLogPrefix33_hasFDerivAt_at_root_of_eight_continuous
       .binding
       (ProposedStationaryPrimitives.primitives G)
       (ProposedStationaryInheritedState.inheritedState G)
