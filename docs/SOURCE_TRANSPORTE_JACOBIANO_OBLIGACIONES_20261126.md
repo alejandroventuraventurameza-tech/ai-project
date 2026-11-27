@@ -1,6 +1,6 @@
 # SOURCE: raíz estacionaria vinculante y transporte de Jacobianos — auditoría de alcance
 
-**Corte:** 26 de noviembre de 2026. **Estado:** raíz exacta de las 33 ecuaciones del prefijo SOURCE vinculante con continuación estacionaria P0, y transporte condicional de Fréchet/rango/inverso, DEMOSTRADOS EN LEAN. También se ha probado que la referencia estacionaria no es una raíz de frontera de 34 ecuaciones. Diferenciabilidad local, inverso efectivo del Jacobiano, raíz 34 con cambio de coordenadas endógenas y equilibrio infinito permanecen PENDIENTES.  
+**Corte documental actualizado:** 26 de noviembre de 2026 (revisión posterior de PR #55). **Estado:** raíz exacta de las 33 ecuaciones del prefijo SOURCE vinculante con continuación estacionaria P0, y transporte condicional de Fréchet/rango/inverso, DEMOSTRADOS EN LEAN. También se ha probado que la referencia estacionaria no es una raíz de frontera de 34 ecuaciones. Diferenciabilidad local, inverso efectivo del Jacobiano, raíz 34 con cambio de coordenadas endógenas y equilibrio infinito permanecen PENDIENTES.  
 **Antecedente comprobado:** PR #20, `CurrentSourceTwoDateBankTargetization.lean`, teoremas `targetizedPrefix33_eq_fullEconomicBankShear`, `targetizedPrefix33_zero_iff_originalPrefix33_zero`, `targetizedLogPrefix33_zero_iff_sourceLogPrefix33_zero`. Compilación referida: Actions #45880659556.
 
 ## Evidencia formal posterior a esta auditoría
@@ -29,7 +29,7 @@
 - **PR #51 — radio de bola CERRADA 7/1000 DEMOSTRADO EN LEAN:** `CurrentPinnedClosedRationalBall.lean`, [Actions #45920402278](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45920402278), 2,355 trabajos sin `sorryAx`, fusionado `669987ec5f1493021671d488bceefd7aef5f0211`. Demuestra `7/1000<r_joint`; en TODO `||z||∞≤7/1000`, dominio bancario en ambas fechas, dual L estrictamente positivo y ninguna raíz de frontera 34 para cualquier G,h. Es cota de admisibilidad, no certificación de Jacobiano ni Banach.
 - **PR #52 — cuatro reglas monetarias SOURCE DEMOSTRADAS EN LEAN:** `CurrentPinnedMonetaryRoots.lean`, [Actions #45920549045](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45920549045), 2,285 trabajos sin `sorryAx`, fusionado `d9ef9bd2091c702344dbce102332bda6aee1591c`. Demuestra igualdad de los datos económicos de ambas fechas con el testigo estacionario y `F12(0)=F13(0)=F28(0)=F29(0)=0`, para cualquier G y el G* seleccionado. No implica continuidad de los residuos ni de los ocho prefactores.
 - **PR #54 — transporte REAL del residuo económico SOURCE con ocho continuidades DEMOSTRADO EN LEAN:** `CurrentSourceEconomicContinuousTransport.lean`, [Actions #45920942637](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45920942637), 2,282 trabajos sin `sorryAx`, fusionado `007a49d8cf90c8c95dd03d580fd2dca29e7d3889`. Aplica la regla completa `D\tilde F(z0)=E(z0) DF(z0)` a las 33 ecuaciones originales y targetizadas, bajo raíz, admisibilidad en vecindad, calibración matching, `HasFDerivAt F J z0` y `ContinuousAt` de los ocho cruces genuinos SOURCE. No demuestra todavía estas ocho regularidades concretas, ni la diferenciabilidad económica de F o invertibilidad de J.
-- **PR #55 — EN VERIFICACIÓN:** reduce continuidad de ocho cruces originales SOURCE en testigo fiscal a diferenciabilidad presupuesta de F y continuidad de los ocho prefactores; utiliza los cuatro residuos monetarios nulos certificados del PR #52. Hasta el CI no debe presentarse como demostrado.
+- **PR #55 — reducción condicional DEMOSTRADA EN LEAN:** `CurrentPinnedEightCrossContinuity.lean`, [Actions #45923309612](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45923309612), 2,288 trabajos, sin `sorryAx` en los dos teoremas auditados; fusionado `f9cb2a364b03f4263fd41b20c0a67d2fc65a6a01`. Deduce continuidad de los ocho coeficientes económicos SOURCE bajo `HasFDerivAt F J 0` y continuidad de sus ocho prefactores pre-secante, usando los cuatro residuos monetarios nulos del PR #52. **No demuestra** estas hipótesis, la inversa económica del Jacobiano ni la identidad SOURCE–Python.
 - **NO certificados:** diferenciabilidad SOURCE en una bola abierta, cota efectiva de `DF_SOURCE(0)^{-1}`, igualdad funcional con `finite_irf.py`, raíz 34 de dual cero con cambios endógenos, rama S y equilibrio completo, resultados finales de `PaperContribution`.
 
 ## Alcance exacto
@@ -38,9 +38,9 @@ El PR #20 prueba, sobre el dominio admisible en ambas fechas y con `P.matchingIn
 
 ## Proposición matemática de transporte (CONDICIONAL)
 
-Sea `U` un abierto de `ℝ³³`, `F,G : U → ℝ³³` y `E : U → GL(33,ℝ)`. Supóngase que las tres funciones son diferenciables en `z₀ ∈ U`, que `G(z)=E(z)F(z)` en un entorno de `z₀`, y que `F(z₀)=0`. Por la regla de Leibniz, en toda dirección `h`:
+Sea `U` un abierto de `ℝ³³`, `F,G : U → ℝ³³` y `E : U → GL(33,ℝ)`. Supóngase que `F` es diferenciable en `z₀ ∈ U`, que `E` es **continua** en `z₀`, que `G(z)=E(z)F(z)` en un entorno de `z₀`, y que `F(z₀)=0`. No se supone diferenciabilidad de `E`. En efecto, dado `F(z)=DF(z₀)(z-z₀)+o(‖z-z₀‖)` y `E(z)=E(z₀)+o(1)`, se sigue
 
-`DG(z₀)[h] = DE(z₀)[h]F(z₀) + E(z₀)DF(z₀)[h] = E(z₀)DF(z₀)[h]`.
+`G(z)-G(z₀)=E(z₀)DF(z₀)(z-z₀)+o(‖z-z₀‖)`.
 
 Así, `DG(z₀)=E(z₀)DF(z₀)`. Dado que `E(z₀)` es invertible, `DG(z₀)` es invertible si y solo si `DF(z₀)` es invertible. Cuando ambas inversas existen,
 
