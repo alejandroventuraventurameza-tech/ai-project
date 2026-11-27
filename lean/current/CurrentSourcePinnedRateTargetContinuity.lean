@@ -97,7 +97,7 @@ theorem pinned_log_coordinate_continuousAt (i : Fin 33) :
     continuousAt_const.mul
       (Real.continuous_exp.continuousAt.comp
         ((continuous_apply i).continuousAt))
-  exact (Real.continuousAt_log hbase).comp hlevel
+  exact hlevel.log hbase
 
 #print axioms pinned_log_coordinate_continuousAt
 
