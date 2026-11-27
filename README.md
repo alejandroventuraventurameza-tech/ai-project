@@ -29,6 +29,8 @@ El capital elegido hoy se instala mañana. Más crédito no implica necesariamen
 
 **Archivos:** [paper PDF](paper/paper.pdf) · [LaTeX y bibliografía](paper/paper.tex) · [propuesta](proposal/proposal.pdf) · [presentación inicial](slides/topic.pdf) · [presentación final](slides/final.pdf) · [código](code/verify.py) · [Lean](lean/README.md) · [PDF manuscrito original](hand/ai-ieproject.pdf) · [cotejo de ocho pruebas](hand/AUDITORIA_ECUACIONES_MANUSCRITAS_8_20261127.md) · [índice manuscrito](hand/CONTROL_COBERTURA_MANUSCRITA_8.md) · [prompts](prompts.md).
 
+**Acta final de cierre de la entrega:** [inventario de artefactos, verificaciones aprobadas y límites científicos](docs/ACTA_CIERRE_DOCUMENTAL_IE_PROJECT_20261127.md).
+
 **Adenda documental tras las 22:00 del 26/11 (Lima).** El [PDF manuscrito original](hand/ai-ieproject.pdf) está en GitHub, idéntico byte a byte al archivo aportado por el autor. El [cotejo manuscrito–paper](hand/AUDITORIA_ECUACIONES_MANUSCRITAS_8_20261127.md) documenta 8/8 resultados; la [auditoría reproducible](.github/workflows/ie-handnotes-math-audit.yml) comprueba su hash, el verificador compacto y la aritmética racional de las cotas matriciales. Las formalizaciones exactas del F0 decimal para Proposición 5.1 y Lema 5.2 están certificadas en Lean, pero **no prueban que F0 sea el Jacobiano SOURCE ni que exista un equilibrio dinámico infinito**. Esta adenda no retrodata el plazo de entrega.
 
 **Reproducción desde la raíz:** instalar `code/requirements.txt` y ejecutar `python code/verify.py`.
