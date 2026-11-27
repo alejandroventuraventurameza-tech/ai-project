@@ -105,9 +105,11 @@ theorem lemma_A14_physical_allocation_and_log_loss_paper
 paper results in their declared domains. The Appendix A.1.4 part is
 expressed as a universally quantified proposition, not a theorem
 whose conclusion is given as a premise. -/
-def CurrentPaperFiveExactSpec : Prop :=
+universe u
+
+def CurrentPaperFiveExactSpec.{u} : Prop :=
   CurrentCompact.repaymentCurrentSpec ∧
-  CurrentCompact.noSimultaneousInteriorCurrentSpec ∧
+  CurrentCompact.noSimultaneousInteriorCurrentSpec.{u} ∧
   CurrentCompact.financingCapacityCurrentSpec ∧
   CurrentCompact.effectiveWedgeCurrentSpec ∧
   (∀ (vH vL AH AL L alpha beta d : ℝ)
@@ -125,7 +127,7 @@ def CurrentPaperFiveExactSpec : Prop :=
 
 /-- Main joint endpoint: no sorry, sorryAx, admit, new axiom or
 unproved source-economy recovery premise. -/
-theorem current_paper_five_exact : CurrentPaperFiveExactSpec := by
+theorem current_paper_five_exact.{u} : CurrentPaperFiveExactSpec.{u} := by
   dsimp only [CurrentPaperFiveExactSpec]
   refine ⟨lemma_A11_repayment_paper, lemma_A12_interior_FOC_paper,
     proposition_A13_financing_capacity_paper,
