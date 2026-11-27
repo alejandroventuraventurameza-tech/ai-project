@@ -175,9 +175,9 @@ theorem pinned_two_rate_rule_rows_hasFDerivAt_of_output
         (ProposedStationaryPrimitives.primitives G)
         (pinnedDateZero G z) 6)
       (rowCoord 5 -
-        (1/2 : ℝ) • (0 : Row33 →L[ℝ] ℝ) -
-        ((1/2 : ℝ) •
-          ((3/2 : ℝ) • rowCoord 12 + (1/8 : ℝ) • jOutput0)))
+        ((1/2 : ℝ) • (0 : Row33 →L[ℝ] ℝ) +
+          (1/2 : ℝ) •
+            ((3/2 : ℝ) • rowCoord 12 + (1/8 : ℝ) • jOutput0)))
       (0 : Row33) ∧
     HasFDerivAt
       (fun z : Row33 => localReducedRemainingResidual
@@ -215,18 +215,8 @@ theorem pinned_two_rate_rule_rows_hasFDerivAt_of_output
       (rowCoord 21) (rowCoord 5) (rowCoord 28) jOutput1
       hReal1 hLag1 hInfl1 hOutput1 hInnov1
   constructor
-  · convert h0 using 1
-    change (rowCoord 5 -
-      (1/2 : ℝ) • (0 : Row33 →L[ℝ] ℝ) -
-      (1/2 : ℝ) •
-        ((3/2 : ℝ) • rowCoord 12 + (1/8 : ℝ) • jOutput0)) =
-      (rowCoord 5 -
-        ((1/2 : ℝ) • (0 : Row33 →L[ℝ] ℝ) +
-          (1/2 : ℝ) •
-            ((3/2 : ℝ) • rowCoord 12 + (1/8 : ℝ) • jOutput0)))
-    abel
-  · convert h1 using 1
-    rfl
+  · convert h0 using 1 <;> rfl
+  · convert h1 using 1 <;> rfl
 
 #print axioms pinned_two_rate_rule_rows_hasFDerivAt_of_output
 
