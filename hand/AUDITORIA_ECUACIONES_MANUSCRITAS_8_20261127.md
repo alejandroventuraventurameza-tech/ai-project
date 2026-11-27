@@ -39,3 +39,17 @@ El workflow \`.github/workflows/ie-handnotes-math-audit.yml\` verifica:
 El script reproduce resultados sobre los objetos que define y **no prueba** que el Jacobiano económico de 33×33 tenga la misma transición 6×6, ni que el modelo dinámico completo sea un equilibrio competitivo infinito.
 
 **Cronología:** documento manuscrito recibido y archivado **después** de las 22:00 (Lima, 26/11/2026); la incorporación al repositorio es una adenda posterior al cierre inicial, no una corrección retroactiva del sello de entrega.
+
+
+## Certificación racional reejecutada después del cotejo
+
+GitHub Actions [ejecución 45933840987](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/45933840987), resultado \`success\`, ejecutó \`code/irf/exact_linear_tail_power_certificate.py\` y \`code/verify_compact_paper.py\`:
+
+- SHA-256 de la matriz fuente decimal fija: \`d0cef14050de9f4725e51e5cd28b1ea77e33733dfb2c78d2e38a193200337e94\`.
+- Cota superior dirigida para \(\|F_0^{48}\|_\infty\): \`0.955246892194\` (estrictamente menor que \(24/25=0.96\)).
+- Máximo dirigido de \(\|F_0^r\|_\infty\), \(0\le r<48\): \`6.097821698407\` (estrictamente menor que \(61/10=6.1\)).
+- Mayorante robusto de 48 pasos: \`0.972103438403\` (estrictamente menor que \(49/50=0.98\)).
+- Pico transitorio en potencia 7.
+- Verificación de ocho resultados reportada como \`passed_eight_result_scoped_checks_not_a_lean_proof\`.
+
+**Clasificación:** prueba de la implicación algebraica desde las cotas en manuscritos y prueba **numérica exacta** de esas cotas en el objeto racional definido por el script. Estas verificaciones **no** certifican la igualdad entre esa matriz y el Jacobiano dinámico SOURCE ni la formalización Lean de los ocho resultados.
