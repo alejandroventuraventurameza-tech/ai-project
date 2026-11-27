@@ -1,6 +1,6 @@
 # Control manuscrito del artículo de ocho resultados
 
-**Estado histórico al 25/11/2026:** **0/8** derivaciones recibidas. **Actualización posterior, 26/11/2026 (22:07 Lima): 8/8 resultados con manuscritos auténticos recibidos; validación matemática individual pendiente.** Véase [registro y copia del original](REGISTRO_MANUSCRITOS_RECIBIDOS_20261126.md). Las guías son material tipografiado, **no** evidencia personal del autor. La versión anterior de 60 resultados está preservada en la rama histórica.
+**Estado histórico al 25/11/2026:** **0/8** derivaciones recibidas. **Actualización posterior, 26/11/2026 (22:07 Lima): 8/8 resultados con manuscritos auténticos recibidos, subidos a GitHub y cotejados; las hipótesis de seis pruebas y las cotas racionales de las otras dos se registran en [auditoría matemática](AUDITORIA_ECUACIONES_MANUSCRITAS_8_20261127.md). La equivalencia integral Lean continúa pendiente.** Véase [registro y copia del original](REGISTRO_MANUSCRITOS_RECIBIDOS_20261126.md). Las guías son material tipografiado, **no** evidencia personal del autor. La versión anterior de 60 resultados está preservada en la rama histórica.
 
 | Orden | Etiqueta | Prueba | Guía para el iPad | Manuscrito real |
 |---:|---|---|---|---|
@@ -38,4 +38,4 @@ Para cada demostración, colocar: etiqueta, hipótesis, manipulación sin saltos
 
 ## Fuente recibida y estado académico
 
-Se recibió `ai-ieproject.pdf` (12 páginas), SHA-256 `14b081edf35c52882bd433021980a8beb12cdf805733aa4b4bca5839d9fcb8a1`. **Cobertura 8/8 recibida**. Original en Drive privado: https://drive.google.com/file/d/1fq4tjuBwCBGerDX6sNwDeCPP89VuaXWv/view?usp=drivesdk . El PDF binario todavía no está alojado en GitHub y su acceso puede exigir permisos. Pendiente revisión matemática individual.
+Se recibió `ai-ieproject.pdf` (12 páginas), SHA-256 `14b081edf35c52882bd433021980a8beb12cdf805733aa4b4bca5839d9fcb8a1`. **Cobertura 8/8 recibida**. Original en Drive privado: https://drive.google.com/file/d/1fq4tjuBwCBGerDX6sNwDeCPP89VuaXWv/view?usp=drivesdk . El [PDF original está alojado en GitHub](ai-ieproject.pdf), con Git blob exacto `7cc7b4378dabda89fd28eb623fa6c034c47a6ef4`; la auditoría manuscrito–paper se completó y las cotas matriciales fueron reejecutadas con aritmética racional. La formalización literal Lean de los ocho enunciados sigue abierta.
