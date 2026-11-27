@@ -65,7 +65,7 @@ theorem pinned_log_level_hasFDerivAt (i : Fin 33) (x : Row33) :
         (rowCoord i) x := by
     simpa using
       (hasFDerivAt_const (Real.log c) x).add
-        ((rowCoord i).hasFDerivAt x)
+        ((rowCoord i).hasFDerivAt)
   have hEq :
       (fun z : Row33 => Real.log (c * Real.exp (z i))) =
         (fun z : Row33 => Real.log c + (rowCoord i) z) := by
@@ -105,7 +105,7 @@ theorem pinned_log_ratio_hasFDerivAt (i : Fin 33) (x : Row33) :
           localPrefixCoordinatesVector fullyPinnedStationarySOURCEZ0 i) = z i
     exact pinned_log_ratio_eq_coordinate i z
   rw [hEq]
-  exact (rowCoord i).hasFDerivAt x
+  exact (rowCoord i).hasFDerivAt
 
 #print axioms pinned_log_ratio_hasFDerivAt
 
