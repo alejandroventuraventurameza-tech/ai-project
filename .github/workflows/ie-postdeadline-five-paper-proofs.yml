@@ -1,0 +1,110 @@
+name: IE post-deadline five exact paper proofs
+on:
+  push:
+    branches:
+      - work/ie-postdeadline-five-paper-proofs-20261127
+    paths:
+      - '.github/workflows/ie-postdeadline-five-paper-proofs.yml'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PostDeadlineCurrentPaperFive.lean'
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/ie-postdeadline-five-paper-proofs.yml'
+      - 'lean/candidates/Ventura26LiquidityAllocation/PostDeadlineCurrentPaperFive.lean'
+permissions:
+  contents: read
+concurrency:
+  group: ie-postdeadline-paper-five-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  five-paper-scope-lean:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ai-project
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Verify frozen original paper and five exact labels
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C upstream rev-parse HEAD)" = '194edcc95df74806a39b961d10dedddc6e730cce'
+          git -C ai-project cat-file -e bac3c6255da39cd1169a965df35bb5e9a230e6e8^{commit}
+          git -C ai-project show bac3c6255da39cd1169a965df35bb5e9a230e6e8:paper/appendix_eight_results.tex > /tmp/source-eight-app.tex
+          git -C ai-project show bac3c6255da39cd1169a965df35bb5e9a230e6e8:paper/body_compact_after.tex > /tmp/source-eight-body.tex
+          grep -F '\label{lem:repayment}' /tmp/source-eight-app.tex
+          grep -F '\label{lem:v0m_original_6_2}' /tmp/source-eight-app.tex
+          grep -F '\label{prop:v0m_original_6_3}' /tmp/source-eight-app.tex
+          grep -F '\label{lem:allocation_loss_identity}' /tmp/source-eight-app.tex
+          grep -F '\label{prop:compact_source_collateral_effective_wedge}' /tmp/source-eight-body.tex
+          python3 - <<'PY'
+          import json, pathlib, subprocess
+          root = pathlib.Path('ai-project')
+          inv = json.loads((root/'lean/current_paper_source_inventory_8.json').read_text())
+          assert inv['source_main_sha'] == 'bac3c6255da39cd1169a965df35bb5e9a230e6e8'
+          assert len(inv['claims']) == 8
+          assert len({v['label'] for v in inv['claims']}) == 8
+          for c in inv['claims']:
+              paper = c['source_path']
+              source = subprocess.check_output(['git','-C','ai-project','show',inv['source_main_sha']+':'+paper], text=True)
+              blob = subprocess.check_output(['git','-C','ai-project','rev-parse',inv['source_main_sha']+':'+paper], text=True).strip()
+              assert c['source_git_blob'] == blob, c['label']
+              assert c['statement_latex'] in source, c['label']
+          print('SOURCE_EIGHT_EXACT_LATEX_AND_BLOBS_OK')
+          PY
+          echo 'SOURCE_FIVE_LABELS_LOCKED_OK'
+      - name: Install pinned Lean
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Stage exact checkpoint and proof dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp ai-project/lean/checkpoint/dependencies/lakefile.toml upstream/lakefile.toml
+          mkdir -p upstream/papers/Ventura26LiquidityAllocation
+          cp ai-project/lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp ai-project/lean/checkpoint/module_root.lean upstream/papers/Ventura26LiquidityAllocation.lean
+          cp ai-project/lean/candidates/Ventura26LiquidityAllocation/*.lean upstream/papers/Ventura26LiquidityAllocation/
+          cp ai-project/lean/current/*.lean upstream/papers/Ventura26LiquidityAllocation/
+      - name: Compile and inspect exact five-paper Lean endpoints
+        shell: bash
+        working-directory: upstream
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake exe cache get
+          lake build Ventura26LiquidityAllocation.PostDeadlineCurrentPaperFive 2>&1 | tee /tmp/postdeadline-five-build.log
+          lake env lean papers/Ventura26LiquidityAllocation/PostDeadlineCurrentPaperFive.lean 2>&1 | tee /tmp/postdeadline-five-kernel.log
+          if grep -E 'sorryAx|unsolved goals|error:|admit|declaration uses sorry' /tmp/postdeadline-five-kernel.log; then
+            echo 'ERROR: forbidden axiom or unresolved proof' >&2
+            exit 2
+          fi
+          for theorem in \
+            lemma_A11_repayment_paper \
+            lemma_A12_interior_FOC_paper \
+            proposition_A13_financing_capacity_paper \
+            proposition_53_effective_price_wedge_paper \
+            lemma_A14_physical_allocation_and_log_loss_paper \
+            current_paper_five_exact; do
+            grep -F "'Ventura26LiquidityAllocation.PostDeadlineCurrentPaperFive.${theorem}' depends on axioms:" /tmp/postdeadline-five-kernel.log
+          done
+          echo 'POSTDEADLINE_FIVE_PAPER_PROOFS_KERNEL_OK'
+      - name: Archive exact compiler evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: postdeadline-five-paper-proof-logs
+          path: |
+            /tmp/postdeadline-five-build.log
+            /tmp/postdeadline-five-kernel.log
+          if-no-files-found: ignore
