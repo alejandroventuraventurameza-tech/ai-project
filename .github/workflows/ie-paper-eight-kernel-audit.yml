@@ -1,0 +1,138 @@
+name: IE compact paper eight result kernel audit
+
+on:
+  push:
+    branches:
+      - work/ie-paper-eight-kernel-audit-20261127
+    paths:
+      - .github/workflows/ie-paper-eight-kernel-audit.yml
+      - lean/current/**
+      - lean/candidates/**
+      - lean/current_paper_source_inventory_8.json
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/ie-paper-eight-kernel-audit.yml
+      - lean/current/**
+      - lean/candidates/**
+      - lean/current_paper_source_inventory_8.json
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ie-paper-eight-kernel-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  verify-eight-scoped-lean-claims:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - name: Check out exact IE repository commit
+        uses: actions/checkout@v4
+        with:
+          path: ai-project
+          fetch-depth: 0
+      - name: Check out pinned AppliedModelingLib
+        uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Verify all eight frozen source statements and blobs
+        working-directory: ai-project
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, pathlib, subprocess
+          root = pathlib.Path.cwd()
+          inv = json.loads((root / 'lean/current_paper_source_inventory_8.json').read_text())
+          sha = 'bac3c6255da39cd1169a965df35bb5e9a230e6e8'
+          assert inv['source_main_sha'] == sha
+          assert len(inv['claims']) == 8
+          assert len({c['label'] for c in inv['claims']}) == 8
+          subprocess.run(['git', 'cat-file', '-e', sha + '^{commit}'], check=True)
+          for c in inv['claims']:
+              original = subprocess.check_output(
+                  ['git', 'show', sha + ':' + c['source_path']], text=True)
+              blob = subprocess.check_output(
+                  ['git', 'rev-parse', sha + ':' + c['source_path']], text=True).strip()
+              assert c['statement_latex'] in original, c['label']
+              assert c['source_git_blob'] == blob, c['label']
+          print('EIGHT_PAPER_STATEMENTS_AND_BLOBS_SOURCE_LOCK_OK')
+          PY
+          python3 code/irf/check_lean_robust_majorants.py | tee /tmp/ie-eight-rational-source.log
+      - name: Install exact Lean toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Stage paper modules and build all eight endpoint groups
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          test "$(git rev-parse HEAD)" = '194edcc95df74806a39b961d10dedddc6e730cce'
+          cp ../ai-project/lean/checkpoint/dependencies/lakefile.toml lakefile.toml
+          mkdir -p papers/Ventura26LiquidityAllocation
+          cp ../ai-project/lean/checkpoint/module_root.lean papers/Ventura26LiquidityAllocation.lean
+          cp ../ai-project/lean/checkpoint/modules/Ventura26LiquidityAllocation/*.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/candidates/Ventura26LiquidityAllocation/*.lean papers/Ventura26LiquidityAllocation/
+          cp ../ai-project/lean/current/*.lean papers/Ventura26LiquidityAllocation/
+          lake exe cache get
+          lake build \
+            Ventura26LiquidityAllocation.CurrentCompactProp31C1Bridge \
+            Ventura26LiquidityAllocation.CurrentCompactBlock48Tail \
+            Ventura26LiquidityAllocation.CurrentCompactRobustFiniteCertificate \
+            Ventura26LiquidityAllocation.PostDeadlineCurrentPaperFive 2>&1 | tee /tmp/ie-eight-kernel-build.log
+      - name: Kernel audit Proposition 3.1, Proposition 5.1, Lemma 5.2
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          for module in CurrentCompactProp31C1Bridge CurrentCompactBlock48Tail CurrentCompactRobustFiniteCertificate; do
+            lake env lean "papers/Ventura26LiquidityAllocation/${module}.lean" 2>&1 | tee "/tmp/ie-eight-${module}.log"
+            if grep -E 'sorryAx|unsolved goals|error:|admit|declaration uses sorry' "/tmp/ie-eight-${module}.log"; then exit 2; fi
+          done
+          grep -F "'Ventura26LiquidityAllocation.CurrentCompactProp31C1.prop31_scalar_from_only_C1_hypotheses' depends on axioms:" /tmp/ie-eight-CurrentCompactProp31C1Bridge.log
+          grep -F "'Ventura26LiquidityAllocation.CurrentCompact.prop51_unconditional_exact' depends on axioms:" /tmp/ie-eight-CurrentCompactBlock48Tail.log
+          grep -F "'Ventura26LiquidityAllocation.CurrentCompact.lemma52_decimal_current_exact' depends on axioms:" /tmp/ie-eight-CurrentCompactRobustFiniteCertificate.log
+          echo 'FIRST_THREE_CURRENT_PAPER_LEAN_KERNEL_OK'
+      - name: Kernel audit remaining five paper-facing results
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake env lean papers/Ventura26LiquidityAllocation/PostDeadlineCurrentPaperFive.lean 2>&1 | tee /tmp/ie-eight-five-paper.log
+          if grep -E 'sorryAx|unsolved goals|error:|admit|declaration uses sorry' /tmp/ie-eight-five-paper.log; then exit 2; fi
+          for theorem in \
+            lemma_A11_repayment_paper \
+            lemma_A12_interior_FOC_paper \
+            proposition_A13_financing_capacity_paper \
+            proposition_53_effective_price_wedge_paper \
+            lemma_A14_physical_allocation_and_log_loss_paper \
+            current_paper_five_exact; do
+            grep -F "'Ventura26LiquidityAllocation.PostDeadlineCurrentPaperFive.${theorem}' depends on axioms:" /tmp/ie-eight-five-paper.log
+          done
+          echo 'ALL_EIGHT_CURRENT_PAPER_LEAN_KERNEL_SCOPED_OK'
+          echo 'NOT_CERTIFIED: SOURCE-33 economic identification, equilibrium infinity, official paper_contribution check'
+      - name: Preserve independent source and compiler logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ie-eight-scoped-lean-kernel-evidence
+          path: |
+            /tmp/ie-eight-rational-source.log
+            /tmp/ie-eight-kernel-build.log
+            /tmp/ie-eight-CurrentCompactProp31C1Bridge.log
+            /tmp/ie-eight-CurrentCompactBlock48Tail.log
+            /tmp/ie-eight-CurrentCompactRobustFiniteCertificate.log
+            /tmp/ie-eight-five-paper.log
+          if-no-files-found: ignore
