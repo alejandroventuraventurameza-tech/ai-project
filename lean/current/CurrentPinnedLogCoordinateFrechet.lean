@@ -63,7 +63,7 @@ theorem pinned_log_level_hasFDerivAt (i : Fin 33) (x : Row33) :
       HasFDerivAt
         (fun z : Row33 => Real.log c + (rowCoord i) z)
         (rowCoord i) x := by
-    simpa using
+    simpa only [zero_add, Pi.add_apply] using
       (hasFDerivAt_const (Real.log c) x).add
         ((rowCoord i).hasFDerivAt)
   have hEq :
