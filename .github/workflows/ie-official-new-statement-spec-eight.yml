@@ -1,0 +1,116 @@
+name: IE official new statement-spec eight result scaffold
+
+on:
+  push:
+    branches: [work/ie-official-new-statement-spec-eight-20261127]
+    paths:
+      - .github/workflows/ie-official-new-statement-spec-eight.yml
+      - scripts/stage_official_eight_statement_spec.py
+      - scripts/stage_eight_paper_interface.py
+      - scripts/build_eight_statement_spec.py
+
+permissions:
+  contents: read
+
+jobs:
+  official-new-source-locked-eight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ai-project
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Install frozen Lean toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Restore mathlib cache for pinned upstream
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          test "$(git rev-parse HEAD)" = '194edcc95df74806a39b961d10dedddc6e730cce'
+          lake exe cache get
+      - name: Build eight schema-v1 source specifications and provisional proof staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONPATH="$GITHUB_WORKSPACE/upstream"
+          python3 ai-project/scripts/build_eight_statement_spec.py ai-project /tmp/ie-eight-official-spec 2>&1 | tee /tmp/ie-eight-official-source.log
+          export PATH="$HOME/.elan/bin:$PATH"
+          python3 ai-project/scripts/stage_eight_paper_interface.py ai-project upstream 2>&1 | tee /tmp/ie-eight-official-provisional.log
+      - name: Execute official new --statement-spec and replace generated proof holes
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONPATH="$GITHUB_WORKSPACE/upstream"
+          export PATH="$HOME/.elan/bin:$PATH"
+          python3 ai-project/scripts/stage_official_eight_statement_spec.py ai-project upstream /tmp/ie-eight-official-spec 2>&1 | tee /tmp/ie-eight-official-new.log
+          grep -F OFFICIAL_NEW_STATEMENT_SPEC_EIGHT_SUCCEEDED /tmp/ie-eight-official-new.log
+          grep -F OFFICIAL_GENERATED_PAPER_INTERFACE_PRESERVED /tmp/ie-eight-official-new.log
+      - name: Validate source map and compile official-generated paper facing eight proofs
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          python3 - <<'PY'
+          import json, pathlib
+          p=pathlib.Path('papers/Ventura26LiquidityAllocation')
+          source_map=json.loads((p/'audit/paper_statement_map.json').read_text(encoding='utf-8'))
+          assert source_map, 'empty official source map'
+          paper=(p/'PaperInterface.lean').read_text(encoding='utf-8')
+          proof=(p/'ProofInterface.lean').read_text(encoding='utf-8')
+          names=('p31','p51','l52','p53','a11','a12','a13','a14')
+          for n in names:
+              assert paper.count('def '+n+'Spec : Prop :=')==1, n
+              assert ('theorem '+n in proof) or ('lemma '+n in proof), n
+          assert 'sorry' not in proof, 'generated proof hole survived'
+          assert 'source-audited.pdf' in str(source_map)
+          print('OFFICIAL_GENERATED_SOURCE_MAP_AND_EIGHT_CLOSED_ENDPOINTS_OK')
+          PY
+          lake build Ventura26LiquidityAllocation.ProofInterface 2>&1 | tee /tmp/ie-eight-official-kernel.log
+          lake env lean papers/Ventura26LiquidityAllocation/ProofInterface.lean 2>&1 | tee /tmp/ie-eight-official-axioms.log
+          if grep -E 'sorryAx|unsolved goals|error:|admit|declaration uses sorry' /tmp/ie-eight-official-axioms.log; then exit 2; fi
+          for name in p31 p51 l52 p53 a11 a12 a13 a14; do
+            grep -F "'Ventura26LiquidityAllocation.$name' depends on axioms:" /tmp/ie-eight-official-axioms.log
+          done
+          echo OFFICIAL_GENERATED_PAPER_INTERFACE_EIGHT_LEAN_KERNEL_OK
+      - name: Run official check --fast after new --statement-spec
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONPATH="$PWD"
+          export PATH="$HOME/.elan/bin:$PATH"
+          python3 scripts/paper_contribution.py check Ventura26LiquidityAllocation --fast 2>&1 | tee /tmp/ie-eight-official-fast.log
+          echo OFFICIAL_NEW_AND_CHECK_FAST_EIGHT_SUCCESS
+          echo CAVEAT_SOURCE_TO_SPEC_SEMANTIC_CLOSEOUT_NOT_CERTIFIED
+      - name: Archive generated statement-spec, source map, and kernel evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ie-official-generated-eight-statement-spec-kernel-evidence
+          path: |
+            /tmp/ie-eight-official-source.log
+            /tmp/ie-eight-official-provisional.log
+            /tmp/ie-eight-official-new.log
+            /tmp/ie-eight-official-kernel.log
+            /tmp/ie-eight-official-axioms.log
+            /tmp/ie-eight-official-fast.log
+            /tmp/ie-eight-official-spec/statement-spec-8.json
+            /tmp/ie-eight-official-spec/statement-spec-provenance.json
+            upstream/papers/Ventura26LiquidityAllocation/audit/paper_statement_map.json
+            upstream/papers/Ventura26LiquidityAllocation/PaperInterface.lean
+            upstream/papers/Ventura26LiquidityAllocation/ProofInterface.lean
+          if-no-files-found: ignore
