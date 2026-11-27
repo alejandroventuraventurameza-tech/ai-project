@@ -1,0 +1,142 @@
+name: IE eight-result source-pinned statement-spec audit
+
+on:
+  push:
+    branches:
+      - work/ie-paper-8-source-statement-spec-20261127
+    paths:
+      - .github/workflows/ie-eight-statement-spec-audit.yml
+      - scripts/build_eight_statement_spec.py
+      - scripts/stage_eight_paper_interface.py
+      - lean/current_paper_source_inventory_8.json
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/ie-eight-statement-spec-audit.yml
+      - scripts/build_eight_statement_spec.py
+      - scripts/stage_eight_paper_interface.py
+
+permissions:
+  contents: read
+
+jobs:
+  verify-statement-spec-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ai-project
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Generate locked PDF and schema-v1 source statement specification
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 ai-project/scripts/build_eight_statement_spec.py ai-project /tmp/ie-statement-spec-8 2>&1 | tee /tmp/ie-spec-generation.log
+          grep -F SOURCE_PDF_GIT_BLOB_SHA256_BYTES_OK /tmp/ie-spec-generation.log
+          grep -F EIGHT_EXACT_LATEX_STATEMENTS_AND_GIT_BLOBS_OK /tmp/ie-spec-generation.log
+          grep -F EIGHT_SOURCE_STATEMENT_SPEC_SCHEMA_V1_EMITTED /tmp/ie-spec-generation.log
+      - name: Validate source-byte-pinned eight targets via official upstream loader
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONPATH="$GITHUB_WORKSPACE/upstream"
+          python3 - <<'PY' 2>&1 | tee /tmp/ie-spec-validation.log
+          import copy
+          import hashlib
+          import json
+          import pathlib
+          import tempfile
+
+          from scripts.new_paper import load_statement_spec, paper_interface_text
+
+          out = pathlib.Path('/tmp/ie-statement-spec-8')
+          path = out / 'statement-spec-8.json'
+          source = out / 'source-paper-8.pdf'
+          obj = load_statement_spec(path)
+          assert len(obj.targets) == 8
+          assert len({t.lean_name for t in obj.targets}) == 8
+          assert obj.source_artifact_sha256 == '923b766624491e7f7b290c4302332140cd5636fe421ab27c7d4024377db7d2e3'
+          names = ['p31', 'p51', 'l52', 'p53', 'a11', 'a12', 'a13', 'a14']
+          assert [t.lean_name for t in obj.targets] == names
+          assert [t.source_kind for t in obj.targets] == [
+              'proposition','proposition','lemma','proposition',
+              'lemma','lemma','proposition','lemma']
+          preview = paper_interface_text(
+              'Financial frictions, policy corridor, and capital allocation',
+              'Ventura26LiquidityAllocation','Ventura26LiquidityAllocation',obj.targets)
+          for name in names:
+              assert preview.count('def ' + name + 'Spec : Prop :=') == 1
+          (out / 'PaperInterface.source-structural-preview.lean').write_text(
+              preview, encoding='utf-8')
+          print('OFFICIAL_UPSTREAM_SCHEMA_V1_SOURCE_LOADER_OK')
+          print('EIGHT_PAPER_INTERFACE_STATEMENT_PREVIEW_OK')
+
+          # Negative tests: a mutated PDF, a fake tautological proof type,
+          # and duplicate target names must all be rejected by official code.
+          with tempfile.TemporaryDirectory() as directory:
+              temp = pathlib.Path(directory)
+              spec = json.loads(path.read_text(encoding='utf-8'))
+              badsource = temp / 'source-paper-8.pdf'
+              badspec = temp / 'statement-spec-8.json'
+              badspec.write_text(json.dumps(spec), encoding='utf-8')
+              pdf = bytearray(source.read_bytes())
+              pdf[10] ^= 1
+              badsource.write_bytes(pdf)
+              try:
+                  load_statement_spec(badspec)
+              except ValueError as exc:
+                  assert 'sha256' in str(exc).lower()
+              else:
+                  raise AssertionError('tampered PDF passed official source hash check')
+              badsource.write_bytes(source.read_bytes())
+              spec2 = copy.deepcopy(spec)
+              spec2['targets'][0]['lean_type'] = 'True'
+              badspec.write_text(json.dumps(spec2), encoding='utf-8')
+              try:
+                  load_statement_spec(badspec)
+              except ValueError as exc:
+                  assert 'placeholder' in str(exc).lower()
+              else:
+                  raise AssertionError('placeholder theorem passed official loader')
+              spec3 = copy.deepcopy(spec)
+              spec3['targets'][1]['lean_name'] = spec3['targets'][0]['lean_name']
+              badspec.write_text(json.dumps(spec3), encoding='utf-8')
+              try:
+                  load_statement_spec(badspec)
+              except ValueError as exc:
+                  assert 'duplicate' in str(exc).lower()
+              else:
+                  raise AssertionError('duplicate endpoint passed official loader')
+          print('OFFICIAL_UPSTREAM_SPEC_NEGATIVE_TESTS_OK')
+          print('CAVEAT: source-to-Spec semantic proof and full paper closeout NOT certified')
+          PY
+      - name: Report PDF origin structure
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          if command -v pdfinfo >/dev/null; then
+            pdfinfo /tmp/ie-statement-spec-8/source-paper-8.pdf | grep -E '^(Pages|Page size|PDF version):'
+            pdfinfo /tmp/ie-statement-spec-8/source-paper-8.pdf | grep -F 'Pages:           16'
+          else
+            echo 'PDFINFO_OPTIONAL_UNAVAILABLE; PDF bytes and SHA256 were fully validated'
+          fi
+      - name: Archive frozen source, eight official-format targets and proof-obligation provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ie-eight-statement-spec-source-pinned
+          path: |
+            /tmp/ie-spec-generation.log
+            /tmp/ie-spec-validation.log
+            /tmp/ie-statement-spec-8/statement-spec-8.json
+            /tmp/ie-statement-spec-8/statement-spec-provenance.json
+            /tmp/ie-statement-spec-8/PaperInterface.source-structural-preview.lean
+            /tmp/ie-statement-spec-8/source-paper-8.pdf
+          if-no-files-found: ignore
