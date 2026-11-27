@@ -76,8 +76,11 @@ theorem legacy_rate_same_chart_forces_large_log_shift
       _ < (41 / 40 : ℝ) := hprod
       _ ≤ R := hlegacy
       _ = ProposedStationaryBank.loanRate * Real.exp (z 15) := hchart
-  have hexp : (82 / 81 : ℝ) < Real.exp (z 15) :=
-    (mul_lt_mul_left hrl).mp hscaled
+  have hexp : (82 / 81 : ℝ) < Real.exp (z 15) := by
+    by_contra h
+    have hle : Real.exp (z 15) ≤ (82 / 81 : ℝ) := le_of_not_gt h
+    have hmul := mul_le_mul_of_nonneg_left hle (le_of_lt hrl)
+    exact (not_le_of_gt hscaled) hmul
   have hlog :
       Real.log (82 / 81 : ℝ) < z 15 := by
     simpa only [Real.log_exp] using
