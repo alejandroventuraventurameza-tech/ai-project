@@ -64,6 +64,7 @@ jobs:
           if grep -E 'sorryAx|unsolved goals|error:' /tmp/reference-separation-axioms.log; then exit 2; fi
           grep -F 'pinned_loanRate_lt_legacy_lower' /tmp/reference-separation-axioms.log
           grep -F 'legacy_boundary_rate_not_pinned' /tmp/reference-separation-axioms.log
+          grep -F 'legacy_rate_same_chart_forces_large_log_shift' /tmp/reference-separation-axioms.log
           echo SOURCE_REFERENCE_SEPARATION_KERNEL_OK
       - name: Preserve Lean evidence
         if: always()
