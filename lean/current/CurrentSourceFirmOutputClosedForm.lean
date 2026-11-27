@@ -1,4 +1,4 @@
-import Ventura26LiquidityAllocation.CurrentPinnedAggregateOutputContinuity
+import Ventura26LiquidityAllocation.CurrentSourcePinnedAggregateOutputContinuity
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 /-!
