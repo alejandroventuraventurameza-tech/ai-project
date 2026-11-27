@@ -4,14 +4,14 @@
 
 | Orden | Etiqueta | Prueba | Guía para el iPad | Manuscrito real |
 |---:|---|---|---|---|
-| 1 | `prop:local_macro_multiplicity` | Complementariedad local | Primera tanda: Proposición 4.2 | Recibido, págs. 1–3; pendiente revisión |
-| 2 | `lem:repayment` | Repago por garantía robusta | Primera tanda: Lema 3.1 | Recibido, págs. 3–4; pendiente revisión |
-| 3 | `lem:v0m_original_6_2` | No ahorrar y endeudarse a la vez | Primera tanda: Lema 3.2 | Recibido, págs. 4–5; pendiente revisión |
-| 4 | `prop:v0m_original_6_3` | Capacidad financiable | Primera tanda: Proposición 3.3 | Recibido, págs. 5; pendiente revisión |
-| 5 | `lem:allocation_loss_identity` | Pérdida asignativa y MPK | Primera tanda: Lema 4.3 | Recibido, págs. 6–8; pendiente revisión |
-| 6 | `prop:compact_exact_tail_power` | Potencias de matriz de 48 pasos | `GUIA_CUERPO_3_RESULTADOS_20261125.md` | Recibido, págs. 9; pendiente revisión |
-| 7 | `lem:compact_robust_tail_power` | Mayorante matricial robusto | `GUIA_CUERPO_3_RESULTADOS_20261125.md` | Recibido, págs. 10–11; pendiente revisión |
-| 8 | `prop:compact_source_collateral_effective_wedge` | Cuña de precio efectivo | `GUIA_CUERPO_3_RESULTADOS_20261125.md` | Recibido, págs. 11–12; pendiente revisión |
+| 1 | `prop:local_macro_multiplicity` | Complementariedad local | Primera tanda: Proposición 4.2 | Recibido y cotejado, págs. 1–3 |
+| 2 | `lem:repayment` | Repago por garantía robusta | Primera tanda: Lema 3.1 | Recibido y cotejado, págs. 3–4 |
+| 3 | `lem:v0m_original_6_2` | No ahorrar y endeudarse a la vez | Primera tanda: Lema 3.2 | Recibido y cotejado, págs. 4–5 |
+| 4 | `prop:v0m_original_6_3` | Capacidad financiable | Primera tanda: Proposición 3.3 | Recibido y cotejado, págs. 5 |
+| 5 | `lem:allocation_loss_identity` | Pérdida asignativa y MPK | Primera tanda: Lema 4.3 | Recibido y cotejado, págs. 6–8 |
+| 6 | `prop:compact_exact_tail_power` | Potencias de matriz de 48 pasos | `GUIA_CUERPO_3_RESULTADOS_20261125.md` | Recibido y cotejado, págs. 9 |
+| 7 | `lem:compact_robust_tail_power` | Mayorante matricial robusto | `GUIA_CUERPO_3_RESULTADOS_20261125.md` | Recibido y cotejado, págs. 10–11 |
+| 8 | `prop:compact_source_collateral_effective_wedge` | Cuña de precio efectivo | `GUIA_CUERPO_3_RESULTADOS_20261125.md` | Recibido y cotejado, págs. 11–12 |
 
 Para cada demostración, colocar: etiqueta, hipótesis, manipulación sin saltos, nombre de teorema/regla aplicado, dominio y signos, conclusión y comentario propio sobre verificación o corrección de IA.
 
