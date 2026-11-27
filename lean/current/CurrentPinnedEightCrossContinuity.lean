@@ -29,6 +29,7 @@ namespace CurrentPinnedEightCrossContinuity
 
 open CurrentSourceFullFDeriv
 open CurrentSourceCrossContinuity
+open CurrentSourceFiveBankBridge
 open CurrentPinnedBankDomain
 open CurrentPinnedMonetaryRoots
 open CurrentSourceTwoDateBank
@@ -113,7 +114,7 @@ theorem pinned_four_policy_donors_continuousAt_of_F_hasFDerivAt
   have hcoord (i : Fin 33) :
       ContinuousAt (fun z : Row33 => pinnedOriginalF G z i)
         (0 : Row33) :=
-    (rowCoord i).continuousAt.comp hF.continuousAt
+    (rowCoord i).continuous.continuousAt.comp hF.continuousAt
   have h0r : ContinuousAt
       (fun z : Row33 => localReducedRemainingResidual
         (ProposedStationaryPrimitives.primitives G)
