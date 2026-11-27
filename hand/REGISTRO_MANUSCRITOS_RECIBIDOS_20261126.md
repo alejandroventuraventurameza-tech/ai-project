@@ -6,7 +6,7 @@
 **Tamaño:** 3,363,589 bytes. **Páginas:** 12.  
 **Recepción:** tras el cierre inicial del repositorio del 26/11/2026; la subida a Drive quedó registrada a las 03:07:17 UTC del 27/11 (22:07:17, Lima, 26/11). **No describir como recibido antes de las 22:00.**
 
-**Estatus de custodia:** PDF auténtico manuscrito recibido en la conversación y preservado en Drive. **No está incorporado como archivo binario dentro de `main`**; este índice conserva referencia, hash, paginación y tabla de cotejo. La URL de Drive es privada y requiere permisos de acceso del propietario. No presentar el enlace privado como descarga pública válida para evaluadores.
+**Estatus de custodia:** PDF auténtico manuscrito recibido en la conversación y preservado en Drive. **El original binario idéntico está incorporado en `hand/ai-ieproject.pdf`** (Git blob `7cc7b4378dabda89fd28eb623fa6c034c47a6ef4`); este índice conserva hash, paginación y tabla de cotejo. La URL de Drive es solo una copia privada de respaldo. Para el evaluador utilizar [el PDF del repositorio](ai-ieproject.pdf).
 
 ## Concordancia con los ocho resultados del artículo compacto
 
@@ -21,7 +21,7 @@
 | `lem:compact_robust_tail_power` | Lema 5.2 | Lema 5.2 (robustez) | 10–11 | Presente: identidad telescópica y mayorante matricial | Verificar fuente racional para las constantes |
 | `prop:compact_source_collateral_effective_wedge` | Prop. 5.3 | Prop. 5.3 (cuña financiera) | 11–12 | Presente: capital financiable, costos efectivos y derivada de cuña | Por cotejar rigurosamente |
 
-**Resultado del control documental:** **8/8 resultados con material manuscrito recibido; 0/8 calificados aquí como demostraciones matemáticamente auditadas.** La cobertura documental no equivale a la aceptación formal de cada prueba.
+**Resultado del control actualizado:** **8/8 manuscritos identificados y contrastados visualmente con los enunciados del artículo; 6/8 argumentos económico-algebraicos coherentes bajo sus hipótesis; 2/8 argumentos matriciales con cotas racionales reejecutadas en GitHub Actions 45933840987.** La [auditoría detallada](AUDITORIA_ECUACIONES_MANUSCRITAS_8_20261127.md) distingue estos resultados de una equivalencia integral en Lean, todavía pendiente.
 
 ## Observaciones de auditoría para el cotejo
 
@@ -38,5 +38,5 @@
 
 - El manuscrito fue **aportado por el autor**, no fabricado ni transcrito como si fuera escritura humana por IA.
 - Esta documentación **corrige el estado anterior «0/8 recibidos»**. Conservamos el historial y anotamos que el cotejo matemático profundo sigue pendiente.
-- El PDF se preserva en Drive por ahora. Para satisfacer una entrega que requiera archivos presentes físicamente en GitHub, se necesita subir el binario al repositorio; este índice por sí solo **no sustituye esa subida**.
+- El PDF ORIGINAL, idéntico byte a byte, está **presente en `hand/ai-ieproject.pdf`**, reconstruido por GitHub Actions y verificado con SHA-256. El original en Drive sigue como respaldo. La correspondencia completa con teoremas Lean sigue abierta.
 - Distinguir la recepción del archivo de la hora límite del 26/11/2026, 22:00 Lima; el registro de Drive fue posterior.
