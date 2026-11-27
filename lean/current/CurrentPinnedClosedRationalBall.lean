@@ -23,6 +23,7 @@ open CurrentPinnedJointQuantitativeBall
 open CurrentPinnedQuantitativeBank
 open CurrentPinnedOpenBankDomain
 open CurrentPinnedBankDomain
+open CurrentPinnedLocalNeighborhood
 open CurrentSourceFullFDeriv
 open CurrentSourceTwoDateBank
 open scoped Topology
