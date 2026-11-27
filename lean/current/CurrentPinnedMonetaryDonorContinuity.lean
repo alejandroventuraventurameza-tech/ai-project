@@ -22,9 +22,7 @@ Combine:
 This proves all FOUR actual monetary donor residuals continuous in
 the pinned 33-dimensional SOURCE chart, with NO assumption that the
 full 33-row economic map F is differentiable. The existing exact
-zero values of donors follow from CurrentPinnedMonetaryRoots.
-
-No Python surrogate, no 33x33 inverse, no infinite equilibrium.
+zero values of donors follow from CurrentPinnedMonetaryRoots.No Python surrogate, no 33x33 inverse, no infinite equilibrium.
 -/
 
 namespace Ventura26LiquidityAllocation
@@ -154,18 +152,14 @@ theorem pinned_four_actual_monetary_donors_continuousAt (G : ℝ) :
         (pinnedDateOne G z) 7) (0 : Row33)) := by
   let P := ProposedStationaryPrimitives.primitives G
   obtain ⟨hOutput0, hOutput1⟩ :=
-    CurrentSourcePinnedAggregateOutputContinuity.
-      pinned_two_actual_aggregate_outputs_continuousAt G
+    CurrentSourcePinnedAggregateOutputContinuity.pinned_two_actual_aggregate_outputs_continuousAt G
   obtain ⟨hLog0, hLog1⟩ :=
-    CurrentSourcePinnedOutputDomain.
-      pinned_two_output_logs_continuousAt_of_aggregate_outputs
+    CurrentSourcePinnedOutputDomain.pinned_two_output_logs_continuousAt_of_aggregate_outputs
         G hOutput0 hOutput1
   obtain ⟨hRateTarget0, hRateTarget1⟩ :=
-    CurrentSourcePinnedRateTargetContinuity.
-      pinned_two_rate_targets_continuousAt_of_log_output G hLog0 hLog1
+    CurrentSourcePinnedRateTargetContinuity.pinned_two_rate_targets_continuousAt_of_log_output G hLog0 hLog1
   obtain ⟨hQuantityTarget0, hQuantityTarget1⟩ :=
-    CurrentSourcePinnedQuantityTargetContinuity.
-      pinned_two_quantity_targets_continuousAt G
+    CurrentSourcePinnedQuantityTargetContinuity.pinned_two_quantity_targets_continuousAt G
   obtain ⟨_hDeposit0, hRealRate0, _hDeposit1, hRealRate1⟩ :=
     pinned_deposit_and_reserve_coordinates_continuousAt G
   obtain ⟨hRealQuantity0, hRealQuantity1⟩ :=
