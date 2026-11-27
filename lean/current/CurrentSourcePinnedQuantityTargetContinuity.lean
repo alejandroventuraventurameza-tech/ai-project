@@ -84,7 +84,7 @@ theorem pinned_two_lag_quantities_log_continuousAt (G : ℝ) :
           Real.exp ((0 : Row33) 6) ≠ 0 :=
       ne_of_gt (mul_pos (fullyPinnedStationarySOURCEZ0_positive 6)
         (Real.exp_pos _))
-    exact (Real.continuousAt_log hNonzero).comp hLevel
+    exact hLevel.log hNonzero
 
 #print axioms pinned_two_lag_quantities_log_continuousAt
 
