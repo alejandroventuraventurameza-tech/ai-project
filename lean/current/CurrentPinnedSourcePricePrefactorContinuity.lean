@@ -42,14 +42,11 @@ theorem pinned_two_genuine_rate_targets_continuousAt (G : ℝ) :
       sourceRateRuleTarget (ProposedStationaryPrimitives.primitives G)
         (pinnedDateOne G z)) (0 : Row33) := by
   obtain ⟨hOutput0, hOutput1⟩ :=
-    CurrentSourcePinnedAggregateOutputContinuity.
-      pinned_two_actual_aggregate_outputs_continuousAt G
+    CurrentSourcePinnedAggregateOutputContinuity.pinned_two_actual_aggregate_outputs_continuousAt G
   obtain ⟨hLog0, hLog1⟩ :=
-    CurrentSourcePinnedOutputDomain.
-      pinned_two_output_logs_continuousAt_of_aggregate_outputs
+    CurrentSourcePinnedOutputDomain.pinned_two_output_logs_continuousAt_of_aggregate_outputs
         G hOutput0 hOutput1
-  exact CurrentSourcePinnedRateTargetContinuity.
-    pinned_two_rate_targets_continuousAt_of_log_output
+  exact CurrentSourcePinnedRateTargetContinuity.pinned_two_rate_targets_continuousAt_of_log_output
       G hLog0 hLog1
 
 #print axioms pinned_two_genuine_rate_targets_continuousAt
@@ -76,8 +73,7 @@ theorem pinned_four_bank_price_prefactors_continuousAt (G : ℝ) :
   obtain ⟨hMinus0, hPlus0, hMinus1, hPlus1⟩ :=
     CurrentSourcePinnedOTCSlopes.pinned_four_frozen_OTC_slopes_continuousAt G
   obtain ⟨hDeposit0, hDeposit1⟩ :=
-    CurrentSourceDepositPreSecantRegularity.
-      pinned_two_deposit_preSecants_continuousAt
+    CurrentSourceDepositPreSecantRegularity.pinned_two_deposit_preSecants_continuousAt
         G hTarget0 hMinus0 hPlus0 hTarget1 hMinus1 hPlus1
   have hLoan0 : ContinuousAt (fun z : Row33 =>
       sourceLoanPreSecant (ProposedStationaryPrimitives.primitives G)
