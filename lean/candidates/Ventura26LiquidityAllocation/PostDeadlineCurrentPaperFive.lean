@@ -105,8 +105,6 @@ theorem lemma_A14_physical_allocation_and_log_loss_paper
 paper results in their declared domains. The Appendix A.1.4 part is
 expressed as a universally quantified proposition, not a theorem
 whose conclusion is given as a premise. -/
-universe u
-
 def CurrentPaperFiveExactSpec.{u} : Prop :=
   CurrentCompact.repaymentCurrentSpec ∧
   CurrentCompact.noSimultaneousInteriorCurrentSpec.{u} ∧
