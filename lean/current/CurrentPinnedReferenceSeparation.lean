@@ -49,5 +49,46 @@ theorem legacy_boundary_rate_not_pinned
 
 #print axioms legacy_boundary_rate_not_pinned
 
+
+/-- If the historical rate R is compared using the SAME pinned SOURCE
+loan-rate log coordinate z[15], its initial bracket forces a positive
+log displacement strictly larger than the certified 1/200 interior
+radius. This is a CONDITIONAL chart statement, not a SOURCE-Python
+chart identification, and does not assert existence of a 34-row root. -/
+theorem legacy_rate_same_chart_forces_large_log_shift
+    (R : ℝ) (z : CurrentSourceFullFDeriv.Row33)
+    (hlegacy : (41 / 40 : ℝ) ≤ R)
+    (hchart :
+      R = ProposedStationaryBank.loanRate * Real.exp (z 15)) :
+    (1 / 200 : ℝ) < z 15 := by
+  have hrl :
+      0 < ProposedStationaryBank.loanRate :=
+    ProposedStationaryRealScale.loanRate_pos
+  have hUpper := pinned_stationary_loanRate_lt_81_80
+  have hprod :
+      ProposedStationaryBank.loanRate * (82 / 81 : ℝ) <
+        (41 / 40 : ℝ) := by
+    nlinarith
+  have hscaled :
+      ProposedStationaryBank.loanRate * (82 / 81 : ℝ) <
+        ProposedStationaryBank.loanRate * Real.exp (z 15) := by
+    calc
+      _ < (41 / 40 : ℝ) := hprod
+      _ ≤ R := hlegacy
+      _ = ProposedStationaryBank.loanRate * Real.exp (z 15) := hchart
+  have hexp : (82 / 81 : ℝ) < Real.exp (z 15) :=
+    (mul_lt_mul_left hrl).mp hscaled
+  have hlog :
+      Real.log (82 / 81 : ℝ) < z 15 := by
+    simpa only [Real.log_exp] using
+      (Real.log_lt_log (by norm_num : (0 : ℝ) < 82 / 81) hexp)
+  have hlogLower : (1 / 82 : ℝ) ≤ Real.log (82 / 81 : ℝ) := by
+    have h := Real.one_sub_inv_le_log_of_pos
+      (show (0 : ℝ) < 82 / 81 by norm_num)
+    convert h using 1 <;> norm_num
+  linarith
+
+#print axioms legacy_rate_same_chart_forces_large_log_shift
+
 end CurrentPinnedReferenceSeparation
 end Ventura26LiquidityAllocation
