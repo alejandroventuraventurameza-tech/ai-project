@@ -25,6 +25,7 @@ namespace CurrentSourceDepositPreSecantRegularity
 open CurrentSourceCrossContinuity
 open CurrentSourceFiveBankBridge
 open CurrentPinnedBankDomain
+open CurrentSourceFullFDeriv
 open scoped Topology
 
 variable {S : Type*} [Fintype S] [DecidableEq S]
