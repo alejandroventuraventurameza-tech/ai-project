@@ -129,17 +129,35 @@ def main() -> None:
             raise ValueError(f"exact LaTeX statement not uniquely found for {c['label']}")
         start_line = original[:original.index(latex)].count("\n") + 1
         typ, generalized = lean_type(name)
+        # Upstream new_paper.py uses an IGNORECASE placeholder regex for
+        # English TODO, which accidentally matches ordinary Spanish "todo".
+        # Keep every original byte and its digest in the independent ledger.
+        # Only the official parser-facing field receives a declared, strictly
+        # meaning-preserving normalization ("Para todo" -> "Para cada").
+        parser_text = latex
+        normalized = False
+        if c["label"] == "prop:compact_exact_tail_power":
+            if latex.count("Para todo") != 1:
+                raise ValueError("unexpected Proposicion 5.1 source phrase")
+            parser_text = latex.replace("Para todo", "Para cada", 1)
+            normalized = True
+        if parser_text.count("Para cada") > 1 and normalized:
+            raise ValueError("unexpected repeated normalization")
         targets.append({
             "source_item": title,
             "source_kind": source_kind,
             "source_location": f"{path}:{start_line}",
-            "source_statement": latex,
+            "source_statement": parser_text,
             "lean_name": name,
             "lean_type": typ,
             "kind": kind,
         })
         provenance.append({
             "label": c["label"],
+            "parser_text_normalized_for_upstream_false_positive": normalized,
+            "parser_normalization": "Para todo -> Para cada" if normalized else None,
+            "original_statement_verbatim": latex,
+            "original_statement_matches_spec_field": not normalized,
             "git_source_path": path,
             "git_source_blob": frozen_blob,
             "source_first_line": start_line,
@@ -174,6 +192,7 @@ def main() -> None:
         json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print("EIGHT_EXACT_LATEX_STATEMENTS_AND_GIT_BLOBS_OK")
     print("EIGHT_SOURCE_STATEMENT_SPEC_SCHEMA_V1_EMITTED")
+    print("UPSTREAM_TODO_SPANISH_FALSE_POSITIVE_NORMALIZATION_DOCUMENTED")
     print("SEMANTIC_SOURCE_TO_SPEC_AUDIT_PENDING")
 
 
