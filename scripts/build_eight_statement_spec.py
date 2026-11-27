@@ -137,12 +137,13 @@ def main() -> None:
         parser_text = latex
         normalized = False
         if c["label"] == "prop:compact_exact_tail_power":
-            if latex.count("Para todo") != 1:
-                raise ValueError("unexpected Proposicion 5.1 source phrase")
+            if latex.count("Para todo") != 1 or latex.count(" y todo ") != 1:
+                raise ValueError("unexpected Proposicion 5.1 source phrases")
             parser_text = latex.replace("Para todo", "Para cada", 1)
+            parser_text = parser_text.replace(" y todo ", " y cada ", 1)
             normalized = True
-        if parser_text.count("Para cada") > 1 and normalized:
-            raise ValueError("unexpected repeated normalization")
+        if normalized and re.search(r"\btodo\b", parser_text, flags=re.IGNORECASE):
+            raise ValueError("unhandled Spanish TODO false-positive in normalized parser field")
         targets.append({
             "source_item": title,
             "source_kind": source_kind,
@@ -155,7 +156,7 @@ def main() -> None:
         provenance.append({
             "label": c["label"],
             "parser_text_normalized_for_upstream_false_positive": normalized,
-            "parser_normalization": "Para todo -> Para cada" if normalized else None,
+            "parser_normalization": "Para todo -> Para cada; y todo -> y cada" if normalized else None,
             "original_statement_verbatim": latex,
             "original_statement_matches_spec_field": not normalized,
             "git_source_path": path,
