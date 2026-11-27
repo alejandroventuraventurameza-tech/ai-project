@@ -1,0 +1,34 @@
+name: Assemble original IE handnotes PDF (hash verified)
+on:
+  push:
+    branches:
+      - work/ie-final-handnotes-binary-review-20261127
+    paths:
+      - 'hand/.pdf-parts/**'
+permissions:
+  contents: write
+concurrency:
+  group: handnotes-source-assemble-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  assemble-original:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Verify and restore exact user-supplied PDF
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f hand/.pdf-parts/part00.b64
+          cat hand/.pdf-parts/part*.b64 | base64 --decode > hand/ai-ieproject.pdf
+          printf '%s  %s\n' '14b081edf35c52882bd433021980a8beb12cdf805733aa4b4bca5839d9fcb8a1' 'hand/ai-ieproject.pdf' | sha256sum --check -
+          test "$(wc -c < hand/ai-ieproject.pdf)" -eq 3363589
+          file hand/ai-ieproject.pdf | grep -i 'PDF document'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add hand/ai-ieproject.pdf
+          git rm -r hand/.pdf-parts
+          git commit -m 'docs(hand): restore byte-identical 12-page author original PDF'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
