@@ -62,6 +62,7 @@ theorem continuous_scalar_mul_hasFDerivAt_at_zero
   change a y * f y - a x * f x - a x * J (y - x) =
     (a y - a x) * (f y - f x) +
       a x * (f y - f x - J (y - x))
+  simp only [hzero, mul_zero, sub_zero]
   ring
 
 #print axioms continuous_scalar_mul_hasFDerivAt_at_zero
