@@ -15,7 +15,7 @@ permissions:
   contents: read
 concurrency:
   group: ie-postdeadline-paper-five-${{ github.head_ref || github.ref_name }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   five-paper-scope-lean:
     runs-on: ubuntu-24.04
@@ -43,6 +43,21 @@ jobs:
           grep -F '\label{prop:v0m_original_6_3}' /tmp/source-eight-app.tex
           grep -F '\label{lem:allocation_loss_identity}' /tmp/source-eight-app.tex
           grep -F '\label{prop:compact_source_collateral_effective_wedge}' /tmp/source-eight-body.tex
+          python3 - <<'PY'
+          import json, pathlib, subprocess
+          root = pathlib.Path('ai-project')
+          inv = json.loads((root/'lean/current_paper_source_inventory_8.json').read_text())
+          assert inv['source_main_sha'] == 'bac3c6255da39cd1169a965df35bb5e9a230e6e8'
+          assert len(inv['claims']) == 8
+          assert len({v['label'] for v in inv['claims']}) == 8
+          for c in inv['claims']:
+              paper = c['source_path']
+              source = subprocess.check_output(['git','-C','ai-project','show',inv['source_main_sha']+':'+paper], text=True)
+              blob = subprocess.check_output(['git','-C','ai-project','rev-parse',inv['source_main_sha']+':'+paper], text=True).strip()
+              assert c['source_git_blob'] == blob, c['label']
+              assert c['statement_latex'] in source, c['label']
+          print('SOURCE_EIGHT_EXACT_LATEX_AND_BLOBS_OK')
+          PY
           echo 'SOURCE_FIVE_LABELS_LOCKED_OK'
       - name: Install pinned Lean
         shell: bash
