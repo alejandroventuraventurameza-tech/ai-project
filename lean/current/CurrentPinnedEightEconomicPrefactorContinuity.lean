@@ -48,14 +48,11 @@ theorem pinned_eight_preSecants_continuousAt (G : ℝ) :
       FourPreSecantContinuousAt G (pinnedDateOne G) := by
   let P := ProposedStationaryPrimitives.primitives G
   obtain ⟨hT0, hT1⟩ :=
-    CurrentPinnedSourcePricePrefactorContinuity.
-      pinned_two_genuine_rate_targets_continuousAt G
+    CurrentPinnedSourcePricePrefactorContinuity.pinned_two_genuine_rate_targets_continuousAt G
   obtain ⟨hQ0, hQ1⟩ :=
-    CurrentSourcePinnedQuantityTargetContinuity.
-      pinned_two_quantity_targets_continuousAt G
+    CurrentSourcePinnedQuantityTargetContinuity.pinned_two_quantity_targets_continuousAt G
   obtain ⟨⟨hLoan0, hDeposit0⟩, ⟨hLoan1, hDeposit1⟩⟩ :=
-    CurrentPinnedSourcePricePrefactorContinuity.
-      pinned_four_bank_price_prefactors_continuousAt G
+    CurrentPinnedSourcePricePrefactorContinuity.pinned_four_bank_price_prefactors_continuousAt G
   obtain ⟨⟨hReal0, hTarget0⟩, ⟨hReal1, hTarget1⟩⟩ :=
     pinned_four_bank_ratios_continuousAt_of_targets G hT0 hT1
   obtain ⟨hD0, hR0, hD1, hR1⟩ :=
