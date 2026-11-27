@@ -25,6 +25,7 @@ namespace CurrentSourcePinnedOTCSlopes
 
 open CurrentPinnedBankDomain
 open CurrentSourceCrossContinuity
+open CurrentSourceFullFDeriv
 open scoped Topology
 
 /-- The actual two frozen SOURCE OTC slope formulas are continuous
