@@ -2,7 +2,7 @@
 """Stage an isolated *provisional* 8-result paper interface in a pinned upstream clone.
 
 This smoke-test generator does not assert full paper-source semantic closeout.
-Four derived Specs currently refer to transparent CurrentCompact definitions,
+Some Specs still refer to transparent CurrentCompact definitions,
 pending independent source-atom review. Never replace a public submission with
 this temporary stage or report --fast as full AppliedModelingLib certification.
 """
@@ -30,6 +30,7 @@ EXPECTED = (
 MAIN = r"""
 import Ventura26LiquidityAllocation.CurrentCompactProp31C1Bridge
 import Ventura26LiquidityAllocation.CurrentCompactBlock48Tail
+import Ventura26LiquidityAllocation.CurrentPaperSourceCompleteProp51
 import Ventura26LiquidityAllocation.CurrentCompactRobustFiniteCertificate
 import Ventura26LiquidityAllocation.PostDeadlineCurrentPaperFive
 
@@ -78,11 +79,14 @@ def p31Spec : Prop :=
               ProposedScalarComplementarityMultiplicity.ScalarComplementarity
                 (fun x => M x h) s)
 
-/-- Proposition 5.1: exact fixed rational matrix; not a SOURCE Jacobian. -/
+/-- Proposition 5.1: 48-step, transient, and all-horizon bounds for F0; not SOURCE. -/
 def p51Spec : Prop :=
-  ∀ (k : ℕ) (x : Fin 6 → ℝ),
+  ‖CurrentCompact.exactDecimalF0 ^ 48‖ < (24 / 25 : ℝ) ∧
+  (∀ r : ℕ, r < 48 →
+    ‖CurrentCompact.exactDecimalF0 ^ r‖ < (61 / 10 : ℝ)) ∧
+  (∀ (k : ℕ) (x : Fin 6 → ℝ),
     ‖(CurrentCompact.exactDecimalF0 ^ k) *ᵥ x‖ ≤
-      (61 / 10 : ℝ) * (24 / 25 : ℝ) ^ (k / 48) * ‖x‖
+      (61 / 10 : ℝ) * (24 / 25 : ℝ) ^ (k / 48) * ‖x‖)
 
 /-- Lemma 5.2: all 6x6 real matrices in an explicitly specified ball. -/
 def l52Spec : Prop :=
@@ -136,8 +140,7 @@ theorem p31 : p31Spec := by
     M hzero hC1 hb ha
 
 theorem p51 : p51Spec := by
-  intro k x
-  exact CurrentCompact.prop51_unconditional_exact k x
+  exact CurrentPaperSource.prop51AllSourceClauses_proved
 
 theorem l52 : l52Spec := by
   exact CurrentCompact.lemma52_decimal_current_exact
