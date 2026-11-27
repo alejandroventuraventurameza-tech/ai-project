@@ -19,7 +19,7 @@
 | Formalización Lean | `lean/` | Entregada; teoremas en kernel auditados por su alcance exacto |
 | Matriz paper–Lean | `paper/lean_formalization_matrix_8.md`, `paper/verification_map_8.md` | Entregada |
 | Registro de uso de IA | `prompts.md` | Entregado |
-| Derivaciones manuscritas | `hand/` | **INCOMPLETO**: hay guías y controles de cobertura, pero NO ocho manuscritos auténticos del autor adjuntos. No simular que lo están. |
+| Derivaciones manuscritas | `hand/` y [registro posterior](../hand/REGISTRO_MANUSCRITOS_RECIBIDOS_20261126.md) | **ACTUALIZACIÓN POSTERIOR AL CORTE:** manuscrito auténtico PDF de 12 páginas recibido; 8/8 resultados localizados, revisión matemática pendiente, original privado en Drive (no binario en GitHub). |
 
 ## Evidencias de publicación
 
@@ -36,7 +36,7 @@
 2. **No hay inversa rigurosamente certificada del Jacobiano original 33×33**, ni aplicación completa del IFT al equilibrio económico.
 3. **No se ha probado la correspondencia funcional total SOURCE–Python**, ni que las IRF numéricas del evaluador reducido correspondan a un equilibrio competitivo dinámico infinito.
 4. **No se demuestran dos equilibrios generales completos**: las raíces escalares locales y los mecanismos condicionales tienen ese alcance y no otro.
-5. Las pruebas manuscritas auténticas exigidas son un insumo del autor que permanece pendiente. Las guías tipografiadas no sustituyen evidencia manuscrita.
+5. **Actualización posterior al cierre:** el autor entregó un PDF manuscrito de 12 páginas con contenido para los ocho resultados del artículo compacto. Existe evidencia auténtica recibida (ver registro en `hand/`), pero la auditoría de cada prueba sigue pendiente; el binario está preservado en Drive privado y no alojado aún en GitHub. La recepción del enlace ocurrió después de las 22:00, por lo que no se puede atribuir a la entrega original en plazo.
 6. PR #71 (derivadas de reglas monetarias de tasa condicionadas a producción) sigue en borrador y con CI especializado fallido. No se incorpora a `main` como resultado demostrado.
 
 ## Reproducción y lectura responsable
@@ -44,3 +44,8 @@
 Ejecutar, desde raíz del repositorio con dependencias declaradas, `python code/verify.py` y el auditor `python code/verify_compact_paper.py`. La compilación y los tests oficiales se controlan desde `.github/workflows/` y sus artefactos en GitHub Actions. Para verificar un resultado específico, consultar su módulo Lean y `#print axioms`; un workflow verde no corrige por sí solo una discrepancia de semántica económica.
 
 **Decisión editorial de cierre:** entregar material académico reproducible y formalmente delimitado en `main`, sin renombrar hipótesis pendientes como teoremas ni reconstruir en falso manuscritos, equilibrio, inversa o IRF estructurales.
+
+
+## Adenda de custodia posterior al cierre
+
+Documento recibido: `ai-ieproject.pdf`, 12 páginas, hash SHA-256 `14b081edf35c52882bd433021980a8beb12cdf805733aa4b4bca5839d9fcb8a1`. Conservado en [Drive privado](https://drive.google.com/file/d/1fq4tjuBwCBGerDX6sNwDeCPP89VuaXWv/view?usp=drivesdk), subida registrada 27/11 03:07 UTC (26/11 22:07 Lima), posterior al corte de las 22:00. [Índice cotejado](../hand/REGISTRO_MANUSCRITOS_RECIBIDOS_20261126.md). Esta adenda no altera retroactivamente el estado temporal de la entrega anterior.
