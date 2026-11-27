@@ -1,6 +1,6 @@
 # Apéndice manuscrito — artículo evaluable de ocho resultados
 
-**Histórico previo: 0/8. Actualización documental posterior al corte del 26/11/2026: 8/8 resultados con material manuscrito auténtico recibido y preservado en Drive, sin auditoría matemática completa.** Las guías tipografiadas de este directorio sirven para preparar pruebas, pero **no** cumplen por sí solas la exigencia de escritura a mano del issue #7.
+**Histórico previo: 0/8. Actualización documental posterior al corte del 26/11/2026: 8/8 resultados con material manuscrito auténtico recibido, verificado y alojado en GitHub; cotejo matemático realizado con las hipótesis y limitaciones señaladas en la auditoría.** Las guías tipografiadas de este directorio sirven para preparar pruebas, pero **no** cumplen por sí solas la exigencia de escritura a mano del issue #7.
 
 El artículo sometido es el compacto de 11 páginas de cuerpo (16 totales), con **ocho resultados numerados**. Los 57 resultados históricos y otros antecedentes quedan preservados separadamente en la rama `archive/ie-paper-full-20261118` y el archivo `paper/historical/paper_full_20261118.tex`. **No son 60 obligaciones manuscritas del paper compacto actual.**
 
@@ -11,4 +11,4 @@ La [matriz de ocho resultados](CONTROL_COBERTURA_MANUSCRITA_8.md) vincula cada p
 
 ## Actualización tras recibir las notas originales
 
-[Registro detallado y correspondencia por página](REGISTRO_MANUSCRITOS_RECIBIDOS_20261126.md). PDF auténtico de 12 páginas conservado fuera del repositorio (Drive privado), con hash de integridad. **Recibido 8/8; verificado matemáticamente 0/8; binario en GitHub pendiente.** No presentar el control histórico 0/8 como situación vigente. La subida a Drive quedó registrada después de las 22:00 de Lima.
+[Registro detallado y correspondencia por página](REGISTRO_MANUSCRITOS_RECIBIDOS_20261126.md). [PDF auténtico de 12 páginas en GitHub](ai-ieproject.pdf), conservado también en Drive privado, con SHA-256 y Git blob comprobados. **Cobertura 8/8; cotejo manuscrito–paper 8/8; verificaciones racionales externas 2/2; correspondencia literal paper–Lean pendiente.** Véase la [auditoría de ecuaciones y limitaciones](AUDITORIA_ECUACIONES_MANUSCRITAS_8_20261127.md). No presentar el control histórico 0/8 como situación vigente. La subida a Drive quedó registrada después de las 22:00 de Lima.

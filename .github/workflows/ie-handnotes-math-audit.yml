@@ -1,0 +1,31 @@
+name: IE eight authentic handnotes audit
+on:
+  push:
+    branches:
+      - work/ie-final-handnotes-binary-review-20261127
+    paths:
+      - 'hand/**'
+      - '.github/workflows/ie-handnotes-math-audit.yml'
+  pull_request:
+    paths:
+      - 'hand/**'
+      - '.github/workflows/ie-handnotes-math-audit.yml'
+permissions:
+  contents: read
+jobs:
+  handnotes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify original author PDF bytes and tracked location
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(wc -c < hand/ai-ieproject.pdf)" -eq 3363589
+          echo '14b081edf35c52882bd433021980a8beb12cdf805733aa4b4bca5839d9fcb8a1  hand/ai-ieproject.pdf' | sha256sum -c -
+          test "$(git hash-object hand/ai-ieproject.pdf)" = 7cc7b4378dabda89fd28eb623fa6c034c47a6ef4
+          git ls-files --error-unmatch hand/ai-ieproject.pdf
+      - name: Recompute exact rational matrix power and robustness certificate
+        run: python3 code/irf/exact_linear_tail_power_certificate.py
+      - name: Check eight paper results, labels and scoped algebra
+        run: python3 code/verify_compact_paper.py
