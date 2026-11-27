@@ -1,0 +1,119 @@
+name: IE Proposition 5.1 full source and eight-proof regression
+
+on:
+  push:
+    branches:
+      - work/ie-paper-prop51-source-complete-20261127
+    paths:
+      - .github/workflows/ie-prop51-full-source-eight-regression.yml
+      - scripts/stage_eight_paper_interface.py
+      - scripts/build_eight_statement_spec.py
+      - lean/candidates/Ventura26LiquidityAllocation/CurrentPaperSourceCompleteProp51.lean
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/ie-prop51-full-source-eight-regression.yml
+      - scripts/stage_eight_paper_interface.py
+      - scripts/build_eight_statement_spec.py
+      - lean/candidates/Ventura26LiquidityAllocation/CurrentPaperSourceCompleteProp51.lean
+
+permissions:
+  contents: read
+
+jobs:
+  source-complete-proposition-five-one:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ai-project
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Install pinned Lean
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Load pinned original statement and verify all three Proposition 5.1 proof clauses
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 ai-project/scripts/build_eight_statement_spec.py ai-project /tmp/ie-full-p51-spec 2>&1 | tee /tmp/ie-full-p51-source.log
+          export PYTHONPATH="$GITHUB_WORKSPACE/upstream"
+          python3 - <<'PY' 2>&1 | tee /tmp/ie-full-p51-structure.log
+          from pathlib import Path
+          from scripts.new_paper import load_statement_spec
+          p=load_statement_spec(Path('/tmp/ie-full-p51-spec/statement-spec-8.json'))
+          assert len(p.targets)==8
+          row=p.targets[1]
+          assert row.lean_name=='p51'
+          assert row.source_item=='Proposition 5.1'
+          typ=row.lean_type
+          assert 'exactDecimalF0 ^ 48' in typ, '48th-power finite bound absent'
+          assert 'r < 48' in typ, 'uniform transient finite bound absent'
+          assert '∀ (k : ℕ) (x : Fin 6 → ℝ)' in typ, 'all-horizon inequality absent'
+          assert typ.count('∧')==2, 'Prop 5.1 must have three conjunction clauses'
+          assert '24 / 25' in typ and '61 / 10' in typ
+          print('P51_ALL_THREE_ORIGINAL_MATHEMATICAL_CLAUSES_EXPOSED')
+          print('UPSTREAM_SOURCE_SPEC_V1_LOADER_EIGHT_OK')
+          PY
+      - name: Build pinned AppliedModelingLib mathlib cache
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          test "$(git rev-parse HEAD)" = '194edcc95df74806a39b961d10dedddc6e730cce'
+          lake exe cache get
+      - name: Stage complete eight-paper package and execute official fast check
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          export PYTHONPATH="$GITHUB_WORKSPACE/upstream"
+          python3 ai-project/scripts/stage_eight_paper_interface.py ai-project upstream 2>&1 | tee /tmp/ie-full-p51-staging.log
+          cd upstream
+          python3 scripts/paper_contribution.py check Ventura26LiquidityAllocation --fast 2>&1 | tee /tmp/ie-full-p51-official-fast.log
+          echo "UPSTREAM_FULL_P51_SOURCE_FAST_CHECK_OK"
+      - name: Kernel audit three proposition clauses and all eight proof endpoints
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake build Ventura26LiquidityAllocation.ProofInterface 2>&1 | tee /tmp/ie-full-p51-build.log
+          lake env lean papers/Ventura26LiquidityAllocation/CurrentPaperSourceCompleteProp51.lean 2>&1 | tee /tmp/ie-full-p51-proof.log
+          lake env lean papers/Ventura26LiquidityAllocation/ProofInterface.lean 2>&1 | tee /tmp/ie-full-eight-proof.log
+          if grep -E 'sorryAx|unsolved goals|error:|admit|declaration uses sorry' /tmp/ie-full-p51-proof.log /tmp/ie-full-eight-proof.log; then
+            exit 2
+          fi
+          grep -F "'Ventura26LiquidityAllocation.CurrentPaperSource.prop51AllSourceClauses_proved' depends on axioms:" /tmp/ie-full-p51-proof.log
+          for name in p31 p51 l52 p53 a11 a12 a13 a14; do
+            grep -F "'Ventura26LiquidityAllocation.$name' depends on axioms:" /tmp/ie-full-eight-proof.log
+          done
+          echo "PROPOSITION_51_ALL_THREE_CLAUSES_LEAN_KERNEL_OK"
+          echo "EIGHT_SCOPED_PAPER_PROOFS_REGRESSION_OK"
+          echo "CAVEAT: no SOURCE-Jacobian identification; no official full semantic closeout"
+      - name: Save provenance and kernel logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ie-prop51-source-complete-kernel-and-upstream
+          path: |
+            /tmp/ie-full-p51-source.log
+            /tmp/ie-full-p51-structure.log
+            /tmp/ie-full-p51-staging.log
+            /tmp/ie-full-p51-official-fast.log
+            /tmp/ie-full-p51-build.log
+            /tmp/ie-full-p51-proof.log
+            /tmp/ie-full-eight-proof.log
+            /tmp/ie-full-p51-spec/statement-spec-8.json
+            /tmp/ie-full-p51-spec/statement-spec-provenance.json
+          if-no-files-found: ignore
