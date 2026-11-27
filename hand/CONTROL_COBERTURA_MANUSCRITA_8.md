@@ -1,17 +1,17 @@
 # Control manuscrito del artículo de ocho resultados
 
-**Estado al 25/11/2026:** **0/8** derivaciones genuinamente recibidas. Las guías son material tipografiado, **no** evidencia personal del autor. La versión anterior de 60 resultados está preservada en la rama histórica.
+**Estado histórico al 25/11/2026:** **0/8** derivaciones recibidas. **Actualización posterior, 26/11/2026 (22:07 Lima): 8/8 resultados con manuscritos auténticos recibidos; validación matemática individual pendiente.** Véase [registro y copia del original](REGISTRO_MANUSCRITOS_RECIBIDOS_20261126.md). Las guías son material tipografiado, **no** evidencia personal del autor. La versión anterior de 60 resultados está preservada en la rama histórica.
 
 | Orden | Etiqueta | Prueba | Guía para el iPad | Manuscrito real |
 |---:|---|---|---|---|
-| 1 | `prop:local_macro_multiplicity` | Complementariedad local | Primera tanda: Proposición 4.2 | Pendiente |
-| 2 | `lem:repayment` | Repago por garantía robusta | Primera tanda: Lema 3.1 | Pendiente |
-| 3 | `lem:v0m_original_6_2` | No ahorrar y endeudarse a la vez | Primera tanda: Lema 3.2 | Pendiente |
-| 4 | `prop:v0m_original_6_3` | Capacidad financiable | Primera tanda: Proposición 3.3 | Pendiente |
-| 5 | `lem:allocation_loss_identity` | Pérdida asignativa y MPK | Primera tanda: Lema 4.3 | Pendiente |
-| 6 | `prop:compact_exact_tail_power` | Potencias de matriz de 48 pasos | `GUIA_CUERPO_3_RESULTADOS_20261125.md` | Pendiente |
-| 7 | `lem:compact_robust_tail_power` | Mayorante matricial robusto | `GUIA_CUERPO_3_RESULTADOS_20261125.md` | Pendiente |
-| 8 | `prop:compact_source_collateral_effective_wedge` | Cuña de precio efectivo | `GUIA_CUERPO_3_RESULTADOS_20261125.md` | Pendiente |
+| 1 | `prop:local_macro_multiplicity` | Complementariedad local | Primera tanda: Proposición 4.2 | Recibido, págs. 1–3; pendiente revisión |
+| 2 | `lem:repayment` | Repago por garantía robusta | Primera tanda: Lema 3.1 | Recibido, págs. 3–4; pendiente revisión |
+| 3 | `lem:v0m_original_6_2` | No ahorrar y endeudarse a la vez | Primera tanda: Lema 3.2 | Recibido, págs. 4–5; pendiente revisión |
+| 4 | `prop:v0m_original_6_3` | Capacidad financiable | Primera tanda: Proposición 3.3 | Recibido, págs. 5; pendiente revisión |
+| 5 | `lem:allocation_loss_identity` | Pérdida asignativa y MPK | Primera tanda: Lema 4.3 | Recibido, págs. 6–8; pendiente revisión |
+| 6 | `prop:compact_exact_tail_power` | Potencias de matriz de 48 pasos | `GUIA_CUERPO_3_RESULTADOS_20261125.md` | Recibido, págs. 9; pendiente revisión |
+| 7 | `lem:compact_robust_tail_power` | Mayorante matricial robusto | `GUIA_CUERPO_3_RESULTADOS_20261125.md` | Recibido, págs. 10–11; pendiente revisión |
+| 8 | `prop:compact_source_collateral_effective_wedge` | Cuña de precio efectivo | `GUIA_CUERPO_3_RESULTADOS_20261125.md` | Recibido, págs. 11–12; pendiente revisión |
 
 Para cada demostración, colocar: etiqueta, hipótesis, manipulación sin saltos, nombre de teorema/regla aplicado, dominio y signos, conclusión y comentario propio sobre verificación o corrección de IA.
 
@@ -33,4 +33,9 @@ Para cada demostración, colocar: etiqueta, hipótesis, manipulación sin saltos
 | `lem:compact_robust_tail_power` | Resultado nuevo del cuerpo compacto | Lema **5.2** | 8 |
 | `prop:compact_source_collateral_effective_wedge` | Resultado nuevo del cuerpo compacto | Proposición **5.3** | 10 |
 
-**Instrucción para el autor:** no rehacer las hojas ya escritas. Añadir, en el encabezado o índice de la digitalización, ambos números y la etiqueta LaTeX. La demostración y sus hipótesis deben cotejarse contra **la versión compacta** antes de marcarse revisadas. Las hojas no se han recibido todavía; este cuadro no constituye evidencia de manuscritos auténticos.
+**Instrucción para el autor:** no rehacer las hojas ya escritas. Añadir, en el encabezado o índice de la digitalización, ambos números y la etiqueta LaTeX. La demostración y sus hipótesis deben cotejarse contra **la versión compacta** antes de marcarse revisadas. **Actualización:** el PDF auténtico de doce páginas ya fue recibido y preservado en Drive; su cobertura está en el registro vinculado. La fecha de recepción es posterior al corte de las 22:00, y ninguna prueba está marcada como aprobada matemáticamente.
+
+
+## Fuente recibida y estado académico
+
+Se recibió `ai-ieproject.pdf` (12 páginas), SHA-256 `14b081edf35c52882bd433021980a8beb12cdf805733aa4b4bca5839d9fcb8a1`. **Cobertura 8/8 recibida**. Original en Drive privado: https://drive.google.com/file/d/1fq4tjuBwCBGerDX6sNwDeCPP89VuaXWv/view?usp=drivesdk . El PDF binario todavía no está alojado en GitHub y su acceso puede exigir permisos. Pendiente revisión matemática individual.
