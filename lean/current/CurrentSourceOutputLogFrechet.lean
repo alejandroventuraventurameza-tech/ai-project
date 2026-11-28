@@ -18,6 +18,7 @@ open CurrentSourceFullFDeriv
 open CurrentPinnedBankDomain
 open CurrentSourceOutputFrechetAggregation
 open CurrentSourcePinnedOutputDomain
+open CurrentPinnedMonetaryRoots
 open CurrentSourceRateRuleFrechet
 open scoped Topology
 
@@ -48,7 +49,7 @@ theorem pinned_output_log_differentiableAt_of_aggregate
     exact ne_of_gt ProposedStationaryRealScale.aggregates_pos.2.1
   have hRatio : DifferentiableAt ℝ
       (fun z : Row33 => localPrefixAggregateOutput P (d z) / P.outputReference)
-      (0 : Row33) := hY.div_const P.outputReference
+      (0 : Row33) := hY.div (differentiableAt_const _) hRef
   have hRatioNe :
       localPrefixAggregateOutput P (d (0 : Row33)) / P.outputReference ≠ 0 :=
     div_ne_zero hYAt hRef
