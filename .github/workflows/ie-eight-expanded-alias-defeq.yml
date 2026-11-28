@@ -1,0 +1,110 @@
+name: IE 8-result expanded type alias definitional-equivalence audit
+
+on:
+  push:
+    branches:
+      - work/ie-eight-expanded-spec-defeq-audit-20261128
+    paths:
+      - .github/workflows/ie-eight-expanded-alias-defeq.yml
+      - scripts/audit_eight_expanded_aliases.py
+      - scripts/build_eight_statement_spec.py
+      - scripts/stage_eight_paper_interface.py
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/ie-eight-expanded-alias-defeq.yml
+      - scripts/audit_eight_expanded_aliases.py
+
+permissions:
+  contents: read
+
+jobs:
+  three-source-alias-definitional-equalities:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ai-project
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Install pinned Lean toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Load pinned mathlib cache
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          test "$(git rev-parse HEAD)" = '194edcc95df74806a39b961d10dedddc6e730cce'
+          lake exe cache get
+      - name: Verify frozen 8-source statements and generate 3 literal-expanded types
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 ai-project/scripts/build_eight_statement_spec.py ai-project /tmp/ie-defeq-sources 2>&1 | tee /tmp/ie-defeq-source.log
+          python3 ai-project/scripts/audit_eight_expanded_aliases.py ai-project /tmp/ie-defeq-generated 2>&1 | tee /tmp/ie-defeq-generation.log
+          grep -F THREE_LITERAL_COMPATIBILITY_ALIAS_PROOFS_GENERATED /tmp/ie-defeq-generation.log
+          grep -F A12_FINITE_SUPPORT_ORIGINAL_BODY_EXPANDED_WITH_UNIVERSE_ZERO /tmp/ie-defeq-generation.log
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          orig=json.loads(Path('/tmp/ie-defeq-sources/statement-spec-8.json').read_text())
+          receipt=json.loads(Path('/tmp/ie-defeq-generated/defeq-proof-obligations.json').read_text())
+          assert len(orig['targets'])==8
+          assert [t['lean_name'] for t in orig['targets']]==[
+            'p31','p51','l52','p53','a11','a12','a13','a14'
+          ]
+          assert set(receipt['targets'])=={'p51','l52','a12'}
+          assert not receipt['independent_source_to_expanded_spec_semantic_certification']
+          assert not receipt['formal_proofs_kernel_verified']
+          print('EIGHT_SOURCE_LOCKS_AND_THREE_TYPE_OBLIGATIONS_STRUCTURALLY_VALID')
+          PY
+      - name: Stage frozen paper-specific definitions with no new axioms
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONPATH="$GITHUB_WORKSPACE/upstream"
+          python3 ai-project/scripts/stage_eight_paper_interface.py ai-project upstream 2>&1 | tee /tmp/ie-defeq-staging.log
+          cp /tmp/ie-defeq-generated/SourceToSpecDefeqAudit.lean upstream/papers/Ventura26LiquidityAllocation/SourceToSpecDefeqAudit.lean
+      - name: Compile three kernel definitional equivalences and six theorems
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake build Ventura26LiquidityAllocation.SourceToSpecDefeqAudit 2>&1 | tee /tmp/ie-defeq-build.log
+          lake env lean papers/Ventura26LiquidityAllocation/SourceToSpecDefeqAudit.lean 2>&1 | tee /tmp/ie-defeq-axioms.log
+          if grep -E 'sorryAx|unsolved goals|error:|admit|declaration uses sorry' /tmp/ie-defeq-axioms.log; then exit 2; fi
+          for t in p51_expanded_defeq l52_expanded_defeq a12_finite_expanded_defeq p51_explicit_proved l52_explicit_proved a12_finite_explicit_proved; do
+            grep -E "'Ventura26LiquidityAllocation.SourceToSpecDefeqAudit.$t' (depends on axioms:|does not depend on any axioms)" /tmp/ie-defeq-axioms.log
+          done
+          echo THREE_ALIAS_EXPANSIONS_DEFINITIONALLY_EQUAL_LEAN_KERNEL_OK
+          echo THREE_LITERAL_SOURCE_TYPES_PROVED_LEAN_KERNEL_OK
+          echo A12_REMAINS_FINITE_SUPPORT_TYPE_0
+          echo CAUTION_NO_INDEPENDENT_SOURCE_TO_LIBRARY_SEMANTIC_CERTIFICATION
+      - name: Store formal proof evidence with honest audit boundaries
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ie-three-alias-expanded-defeq-kernel-evidence
+          path: |
+            /tmp/ie-defeq-source.log
+            /tmp/ie-defeq-generation.log
+            /tmp/ie-defeq-staging.log
+            /tmp/ie-defeq-build.log
+            /tmp/ie-defeq-axioms.log
+            /tmp/ie-defeq-generated/SourceToSpecDefeqAudit.lean
+            /tmp/ie-defeq-generated/defeq-proof-obligations.json
+            /tmp/ie-defeq-sources/statement-spec-8.json
+            /tmp/ie-defeq-sources/statement-spec-provenance.json
+          if-no-files-found: ignore
