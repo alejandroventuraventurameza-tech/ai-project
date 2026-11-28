@@ -1,4 +1,5 @@
-% Working presentation: internal finite-law IRFs, not full equilibrium validation.
+% Presentacion Beamer original: revision oral postplazo, 28/11/2026.
+% Conserva las figuras y las IRF del proyecto; no certifica equilibrio completo.
 \documentclass[aspectratio=169,11pt]{beamer}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -18,7 +19,7 @@
 \title{Política monetaria, liquidez bancaria\\y asignación de capital}
 \subtitle{Modelo NK, colateral nominal y respuestas locales condicionadas}
 \author{Alejandro Ventura}
-\date{Revisión para exposición: 18 de noviembre de 2026}
+\date{Versión de exposición: 28 de noviembre de 2026}
 \begin{document}
 \begin{frame}[plain]\titlepage
 \centering\footnotesize
@@ -582,17 +583,38 @@ no una prueba de existencia en horizonte infinito.
 \end{frame}
 
 \begin{frame}{Qué comprobamos y qué no está cerrado}
+\small
 \begin{itemize}
 \item Pasan residuos del prefijo, márgenes de régimen y error de cola del choque pequeño.
 \item Tolerancia más estricta y horizonte 320 conservan las respuestas comunes.
-\item Choque $-1$ pb: falla el umbral de error de aproximación; no se promueve.
-\item Lean: 71 módulos candidatos compilados y auditoría principal de axiomas
-sin \texttt{sorryAx}, en una rama de validación separada.
-\item Certificado externo de existencia reducida $\neq$ equilibrio completo probado.
+\item Choque $-1$ pb: falla el umbral de aproximación y no se promueve.
+\item Lean: ocho resultados del artículo con interfaz \emph{paper-scoped} validada; su identificación con SOURCE completo sigue abierta.
+\item Adenda posterior al plazo: derivadas de la regla monetaria y agregación H/L, bajo premisas explícitas y sin \texttt{sorryAx}.
 \end{itemize}
 \medskip
-Pendientes: conectar trayectoria y cotas con todas las hipótesis, aplicar
-condiciones terminales, demostrar optimalidad dinámica y correspondencia completa.
+Pendientes: derivadas empresariales, recuperar la dinámica desde SOURCE,
+optimalidad, condiciones terminales y equilibrio infinito.
+\end{frame}
+
+\begin{frame}{Adenda técnica: alcance de la formalización (28/11)}
+\small
+\begin{block}{Comprobado en Lean, con condiciones explícitas}
+\begin{itemize}
+\item Ocho resultados del artículo: validación de la interfaz
+\emph{paper-scoped} con el generador oficial y \texttt{check --fast}.
+\item Dos filas monetarias SOURCE: derivadas de Fréchet
+\emph{condicionadas} a las derivadas de $\log(Y/\bar Y)$.
+\item Producto agregado SOURCE: regla exacta de suma ponderada
+de las derivadas de las firmas H y L.
+\end{itemize}
+\end{block}
+\begin{alertblock}{No demostrado por esos controles}
+La derivabilidad Cobb--Douglas con trabajo endógeno, el Jacobiano
+SOURCE completo, su invertibilidad y dos equilibrios competitivos dinámicos.
+\end{alertblock}
+\footnotesize
+Evidencia posterior a la entrega: PR \#83, \#86 y \#88;
+la extensión del logaritmo del producto está todavía en revisión.
 \end{frame}
 
 \begin{frame}{Resultado para discusión y siguiente paso}
@@ -709,8 +731,9 @@ $\Delta k'_H>0$, porque $N_H-c_H$, $q$ y $H_H$
 también cambian endógenamente.
 \medskip
 \footnotesize
-\textbf{Cotejo manuscrito exigido por el curso: pendiente del autor.}
-Esta derivación tipografiada no se presenta como evidencia manuscrita.
+\textbf{Cotejo manuscrito:} se adjuntaron 12 páginas en
+\texttt{hand/ai-ieproject.pdf}. Esta derivación tipografiada no sustituye
+el análisis del manuscrito original ni la auditoría independiente.
 \end{frame}
 
 \begin{frame}{Tres preguntas para la crítica del curso}
@@ -799,6 +822,30 @@ prefijo; la formalización Lean de
 \texttt{BoundaryWorkerLaborPackage} todavía falta.
 La nueva prueba numérica independiente verifica
 la FOC y esta ley de escala sin alterar la IRF.
+\end{frame}
+
+
+\begin{frame}{Anexo D. Derivación de producto aún pendiente en Lean}
+\small
+La tecnología y la demanda de trabajo originales son
+\[
+Y_i=A\,A_i k_i^{\alpha}\ell_i^{\beta},\qquad
+\ell_i=\left(\frac{\beta p A A_i k_i^\alpha}{w}\right)^{1/(1-\beta)}.
+\]
+Con $Y=\sum_{i\in\{H,L\}}v_iY_i$ y
+$\omega_i=v_iY_i/Y$, la derivación matemática da
+\[
+\mathrm d\log Y
+=\frac{\mathrm d\log A}{1-\beta}
++\frac{\alpha}{1-\beta}\sum_i\omega_i\,\mathrm d\log k_i
++\frac{\beta}{1-\beta}(\mathrm d\log p-\mathrm d\log w).
+\]
+\medskip
+\footnotesize
+\textbf{Estatus:} la agregación es una prueba condicional
+certificada; todavía hay que demostrar en Lean las derivadas
+de $\ell_i$, $Y_i$ y $\log(Y/\bar Y)$ para las dos fechas
+con la carta de 33 coordenadas y sus dominios positivos.
 \end{frame}
 
 \end{document}
