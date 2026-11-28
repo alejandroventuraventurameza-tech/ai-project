@@ -16,7 +16,9 @@ import subprocess
 import sys
 
 from build_eight_statement_spec import PDF_SHA256, VERSION
-from stage_eight_paper_interface import MAIN, PROOFS, REPO
+from stage_eight_paper_interface import PROOFS, REPO
+
+OFFICIAL_FOLDER = "Ventura26LiquidityAllocationEight"
 
 SOURCE_NAMES = ("p31", "p51", "l52", "p53", "a11", "a12", "a13", "a14")
 
@@ -50,7 +52,11 @@ def main() -> None:
     original_root = root.read_text(encoding="utf-8")
     if ROOT_IMPORTS.strip().splitlines()[0] in original_root:
         raise ValueError("temporary upstream root has already been patched")
-    root.write_text(ROOT_IMPORTS + "\n" + original_root, encoding="utf-8")
+    # Fast, isolated type-check shim: the original broad upstream root is
+    # intentionally not compiled; all paper dependencies are imported here.
+    # The pinned upstream Git checkout itself remains unchanged on disk.
+    assert "import AppliedModelingLib.Basic" in original_root
+    root.write_text(ROOT_IMPORTS + "\n", encoding="utf-8")
     print("PINNED_UPSTREAM_ROOT_EXPOSES_SOURCE_PROOF_TYPES", flush=True)
 
     # The official generator checks its proof-spec surface by compiling
@@ -66,16 +72,16 @@ def main() -> None:
     )
     run([
         "python3", "scripts/paper_contribution.py", "new", url,
-        "--folder", REPO,
+        "--folder", OFFICIAL_FOLDER,
         "--namespace", REPO,
         "--title", "Financial frictions, policy corridor, and capital allocation",
         "--authors", "Alejandro Ventura",
         "--version", VERSION,
         "--statement-spec", str(spec_path),
-        "--no-download", "--force"
+        "--no-download"
     ], upstream)
 
-    out = upstream / "papers" / REPO
+    out = upstream / "papers" / OFFICIAL_FOLDER
     exact_source = out / "source-audited.pdf"
     if not exact_source.is_file():
         raise AssertionError("official generated source-audited.pdf missing")
@@ -92,8 +98,13 @@ def main() -> None:
     if "exactDecimalF0 ^ 48" not in paper or "r < 48" not in paper:
         raise AssertionError("official-generated Proposition 5.1 omitted source bounds")
 
-    (out / "MainTheorems.lean").write_text(MAIN.lstrip(), encoding="utf-8")
-    (out / "ProofInterface.lean").write_text(PROOFS.lstrip(), encoding="utf-8")
+    closed_proofs = PROOFS.replace(
+        f"import {REPO}.PaperInterface",
+        f"import {OFFICIAL_FOLDER}.PaperInterface", 1)
+    if closed_proofs == PROOFS:
+        raise AssertionError("proof interface import path was not rewritten")
+    (out / "ProofInterface.lean").write_text(closed_proofs.lstrip(), encoding="utf-8")
+    print(f"OFFICIAL_FRESH_FOLDER:{OFFICIAL_FOLDER}", flush=True)
     print("OFFICIAL_GENERATED_PAPER_INTERFACE_PRESERVED", flush=True)
     print("OFFICIAL_GENERATED_SORRY_ENDPOINTS_REPLACED_BY_EIGHT_ACTUAL_PROOFS", flush=True)
     print("OFFICIAL_NEW_STATEMENT_SPEC_EIGHT_SUCCEEDED", flush=True)
