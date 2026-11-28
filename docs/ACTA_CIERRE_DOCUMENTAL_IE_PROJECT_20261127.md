@@ -65,3 +65,10 @@ El original PDF del artículo quedó identificado exactamente en `ai-project@bac
 La auditoría source-to-Spec detectó que la interfaz paper-scoped provisional de la Proposición 5.1 exponía únicamente el límite para todo horizonte `k`, aunque el original también afirma las dos cotas estrictas `‖F0^48‖ < 24/25` y `‖F0^r‖ < 61/10` para todo `0 ≤ r < 48`. Las cotas finitas ya estaban demostradas por el certificado racional Lean. Se incorporaron las tres conclusiones en una nueva especificación y teorema conjunto; [Actions #46072883272](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/46072883272) aprobó **8,360 trabajos Lean**, el `check --fast` y los ocho endpoints con auditoría de axiomas. Véase [adenda específica](ADENDA_PROP51_TRES_CLAUSULAS_20261127.md).
 
 Esta mejora es **evidencia posterior al plazo**; no altera el PDF entregado ni certifica la identificación de F0 con el Jacobiano SOURCE o la existencia del equilibrio dinámico infinito.
+
+
+## Adenda técnica verificable del 28/11/2026: generador oficial y paquete aislado
+
+Después de la entrega científica de 26/11, se comprobó la generación oficial `new --statement-spec` y la validación `paper_contribution.py check Ventura26LiquidityAllocationEight --fast`, usando el PDF congelado del artículo y ocho pruebas Lean. [Actions #46173145169](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/46173145169): **success**, 8.360 trabajos Lean, 44 módulos propios y 46 rutas de importaciones adaptadas y reversiblemente cotejadas. El conjunto se generó en un checkout temporal de upstream; no se modificó el original científico, ni se hizo merge a AppliedModelingLib. Ver [adenda del 28/11](ADENDA_OFFICIAL_NEW_EIGHT_FAST_20261128.md).
+
+**No equivale al cierre semántico integral:** la versión admitida por el generador emplea tres alias transparentes y un universo especializado para A.1.2; la auditoría v11 independiente del texto fuente contra la fórmula Lean expandida, la validación de las 33 ecuaciones SOURCE, las condiciones terminales del equilibrio y el protocolo completo de `prepare-pr` siguen pendientes.
