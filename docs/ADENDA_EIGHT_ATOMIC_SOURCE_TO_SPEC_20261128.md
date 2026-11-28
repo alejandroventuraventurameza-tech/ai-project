@@ -23,7 +23,7 @@ El script `scripts/audit_eight_expanded_aliases.py` genera `SourceToSpecDefeqAud
 
 **Importante:** que `rfl` pase acredita igualdad de fórmulas y referencias **dentro de Lean**. No acredita que la fórmula capture todas las condiciones del manuscrito; esas comparaciones siguen clasificadas arriba, en particular las tres brechas SOURCE y el dominio A.1.2. Las fórmulas de 5.1 y 5.2 dependen de la elección exacta de norma y de los 36 coeficientes racionales de $F_0$.
 
-**Estatus al crear esta adenda:** prueba generada y enviada a GitHub Actions; no declarar éxito del kernel sin registro de ejecución exitoso. Al aprobar, anotar el run id y el commit sin modificar la fuente original ni atribuir cierre semántico a los ocho resultados.
+**Resultado auditado (28/11/2026):** [GitHub Actions #46174588467](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/46174588467), *success*, sobre el script del commit `a2592ee5f12bc15eb4ff595a7e63ed1f4d149765`. El kernel compiló **8.348 trabajos Lean** y cerró seis declaraciones: `p51_expanded_defeq`, `l52_expanded_defeq`, `a12_finite_expanded_defeq`, `p51_explicit_proved`, `l52_explicit_proved` y `a12_finite_explicit_proved`. Los tres `rfl` prueban igualdad definicional exacta de los tipos; las otras tres pruebas son conclusiones válidas en los tipos expandidos. `#print axioms` mostró solo axiomas fundacionales de Lean y no `sorryAx`. Esto **no** eleva la validación semántica económica independiente a estado de aprobación.
 
 ## Criterio del cierre científico
 
