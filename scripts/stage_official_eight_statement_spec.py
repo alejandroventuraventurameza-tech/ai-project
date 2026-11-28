@@ -110,8 +110,8 @@ def main() -> None:
         if paper.count("def " + name + "Spec : Prop :=") != 1:
             raise AssertionError(f"official-generated missing or duplicate {name}Spec")
         if not re.search(
-            rf"\\b(?:theorem|lemma)\\s+{re.escape(name)}\\s*:\\s*"
-            rf"{re.escape(name)}Spec\\s*:=\\s*by\\s+sorry\\b", proof
+            rf"\b(?:theorem|lemma)\s+{re.escape(name)}\s*:\s*"
+            rf"{re.escape(name)}Spec\s*:=\s*by\s+sorry\b", proof
         ):
             raise AssertionError(
                 f"official-generated draft proof endpoint {name} missing"
