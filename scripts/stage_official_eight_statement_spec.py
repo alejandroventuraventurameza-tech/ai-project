@@ -14,6 +14,7 @@ import hashlib
 import json
 import pathlib
 import re
+import shutil
 import subprocess
 import sys
 
@@ -153,6 +154,64 @@ def main() -> None:
     if hashlib.sha256(exact_source.read_bytes()).hexdigest() != PDF_SHA256:
         raise AssertionError("official generated source PDF not byte-pinned")
 
+    # The official fast checker rejects a paper that imports modules
+    # belonging to another papers/paper-id target. Assemble the dependency
+    # closure inside the new folder, retaining every theorem and proof body.
+    old_dir = upstream / "papers" / REPO
+    excluded = {
+        "MainTheorems.lean", "Assumptions.lean",
+        "PaperInterface.lean", "ProofInterface.lean",
+    }
+    sources = sorted(p for p in old_dir.glob("*.lean") if p.name not in excluded)
+    if len(sources) < 30:
+        raise AssertionError(f"unexpectedly sparse owned source closure: {len(sources)}")
+    owned_modules = {p.stem for p in sources}
+    copied = []
+    remap_count = 0
+    import_re = re.compile(
+        rf"(?<!\S){re.escape(REPO)}\.([A-Za-z0-9_']+)"
+    )
+    for source in sources:
+        destination = out / source.name
+        if destination.exists():
+            raise AssertionError(f"official generated file conflict: {source.name}")
+        original = source.read_text(encoding="utf-8")
+        rewritten_lines = []
+        for line in original.splitlines(keepends=True):
+            if line.lstrip().startswith("import "):
+                def remap(match: re.Match[str]) -> str:
+                    nonlocal remap_count
+                    module = match.group(1)
+                    if module not in owned_modules:
+                        raise AssertionError(
+                            f"{source.name}: unowned cross-paper import {module}"
+                        )
+                    remap_count += 1
+                    return f"{OFFICIAL_FOLDER}.{module}"
+                line = import_re.sub(remap, line)
+            rewritten_lines.append(line)
+        rewritten = "".join(rewritten_lines)
+        # Reverse solely the changed import-module prefixes; the untouched
+        # code, namespace, statements, and proof terms must match source.
+        canonical = rewritten.replace(
+            f"{OFFICIAL_FOLDER}.", f"{REPO}."
+        )
+        if canonical != original:
+            raise AssertionError(f"non-import change in {source.name}")
+        destination.write_text(rewritten, encoding="utf-8")
+        copied.append(source.name)
+    if not remap_count:
+        raise AssertionError("no internal import paths relinked")
+    print(
+        f"SELF_OWNED_SOURCE_CLOSURE:{len(copied)}_modules:"
+        f"{remap_count}_imports_relinked",
+        flush=True,
+    )
+    # Only a disposable generator typecheck shim edited the upstream
+    # library root. Restore the pinned original before strict fast check.
+    root.write_text(original_root, encoding="utf-8")
+    print("UPSTREAM_ORIGINAL_ROOT_RESTORED_AFTER_GENERATION", flush=True)
+
     paper = (out / "PaperInterface.lean").read_text(encoding="utf-8")
     proof = (out / "ProofInterface.lean").read_text(encoding="utf-8")
     for name in SOURCE_NAMES:
@@ -176,7 +235,10 @@ def main() -> None:
     main_path = out / "MainTheorems.lean"
     main_original = main_path.read_text(encoding="utf-8")
     assert main_original.startswith("import Mathlib\n")
-    main_path.write_text(ROOT_IMPORTS + "\n" + main_original, encoding="utf-8")
+    owned_imports = ROOT_IMPORTS.replace(
+        f"import {REPO}.", f"import {OFFICIAL_FOLDER}."
+    )
+    main_path.write_text(owned_imports + "\n" + main_original, encoding="utf-8")
     print("GENERATED_SUPPORT_IMPORTS_OF_PINNED_THEOREMS_RELINKED", flush=True)
 
     closed_proofs = PROOFS.replace(
