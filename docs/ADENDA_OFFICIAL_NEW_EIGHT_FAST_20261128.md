@@ -8,7 +8,7 @@ Artículo compacto de ocho proposiciones y lemas, identificado mediante los ocho
 
 Upstream: `nikhgarg/AppliedModelingLib@194edcc95df74806a39b961d10dedddc6e730cce`; Lean `v4.30.0-rc2`. Carpeta temporal de contribución nueva: `papers/Ventura26LiquidityAllocationEight`. El contenido se genera **en cada ejecución de GitHub Actions**; la prueba no supone que se haya fusionado una contribución en el repositorio upstream.
 
-## Comp puertas ejecutadas y evidencia
+## Compuertas ejecutadas y evidencia
 
 La [ejecución reproducible #46173145169](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/46173145169) concluyó **success** el 28/11/2026:
 
