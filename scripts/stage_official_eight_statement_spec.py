@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import hashlib
 import pathlib
+import re
 import subprocess
 import sys
 
@@ -66,6 +67,21 @@ def main() -> None:
     run(["lake", "build", "AppliedModelingLib"], upstream)
     print("UPSTREAM_ROOT_WITH_TEMPORARY_PAPER_TYPE_IMPORTS_BUILT", flush=True)
 
+    # The upstream CLI condenses Lean errors to the FIRST four lines.
+    # If warnings precede a real error, that hides the actionable message.
+    # Expand error reporting in this disposable checkout ONLY; do not
+    # change the verifier, generated types, or success criteria.
+    upstream_generator = upstream / "scripts/new_paper.py"
+    generator_text = upstream_generator.read_text(encoding="utf-8")
+    old_excerpt = 'excerpt = " ".join(details[:4])[:800]'
+    assert generator_text.count(old_excerpt) == 1
+    upstream_generator.write_text(
+        generator_text.replace(
+            old_excerpt, 'excerpt = " ".join(details[-60:])[:10000]', 1
+        ), encoding="utf-8"
+    )
+    print("UPSTREAM_GENERATOR_ERROR_DIAGNOSTICS_ONLY_EXPANDED", flush=True)
+
     url = (
         "https://github.com/alejandroventuraventurameza-tech/ai-project/blob/"
         "bac3c6255da39cd1169a965df35bb5e9a230e6e8/paper/paper.pdf"
@@ -93,10 +109,24 @@ def main() -> None:
     for name in SOURCE_NAMES:
         if paper.count("def " + name + "Spec : Prop :=") != 1:
             raise AssertionError(f"official-generated missing or duplicate {name}Spec")
-        if name + "Spec := by sorry" not in proof:
-            raise AssertionError(f"official-generated draft proof endpoint {name} missing")
+        if not re.search(
+            rf"\\b(?:theorem|lemma)\\s+{re.escape(name)}\\s*:\\s*"
+            rf"{re.escape(name)}Spec\\s*:=\\s*by\\s+sorry\\b", proof
+        ):
+            raise AssertionError(
+                f"official-generated draft proof endpoint {name} missing"
+            )
     if "exactDecimalF0 ^ 48" not in paper or "r < 48" not in paper:
         raise AssertionError("official-generated Proposition 5.1 omitted source bounds")
+
+    # Generated MainTheorems initially imports Mathlib only; the eight
+    # pinned source definitions are imported from this ephemeral supporting
+    # module so the generated human-facing PaperInterface stays unchanged.
+    main_path = out / "MainTheorems.lean"
+    main_original = main_path.read_text(encoding="utf-8")
+    assert main_original.startswith("import Mathlib\n")
+    main_path.write_text(ROOT_IMPORTS + "\n" + main_original, encoding="utf-8")
+    print("GENERATED_SUPPORT_IMPORTS_OF_PINNED_THEOREMS_RELINKED", flush=True)
 
     closed_proofs = PROOFS.replace(
         f"import {REPO}.PaperInterface",
