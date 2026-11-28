@@ -109,6 +109,8 @@ jobs:
             /tmp/ie-eight-official-axioms.log
             /tmp/ie-eight-official-fast.log
             /tmp/ie-eight-official-spec/statement-spec-8.json
+            /tmp/ie-eight-official-spec/statement-spec-8-official-compat.json
+            /tmp/ie-eight-official-spec/official-compatibility-aliases.json
             /tmp/ie-eight-official-spec/statement-spec-provenance.json
             upstream/papers/Ventura26LiquidityAllocationEight/audit/paper_statement_map.json
             upstream/papers/Ventura26LiquidityAllocationEight/PaperInterface.lean
