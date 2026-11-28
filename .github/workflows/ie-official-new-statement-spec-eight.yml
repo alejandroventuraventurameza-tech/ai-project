@@ -65,7 +65,7 @@ jobs:
           set -euo pipefail
           export PATH="$HOME/.elan/bin:$PATH"
           python3 - <<'PY'
-          import json, pathlib
+          import json, pathlib, re
           p=pathlib.Path('papers/Ventura26LiquidityAllocationEight')
           source_map=json.loads((p/'audit/paper_statement_map.json').read_text(encoding='utf-8'))
           assert source_map, 'empty official source map'
@@ -75,7 +75,8 @@ jobs:
           for n in names:
               assert paper.count('def '+n+'Spec : Prop :=')==1, n
               assert ('theorem '+n in proof) or ('lemma '+n in proof), n
-          assert 'sorry' not in proof, 'generated proof hole survived'
+          proof_code = re.sub(r'/-.*?-/', '', proof, flags=re.DOTALL)
+          assert not re.search(r'\b(sorry|admit)\b', proof_code), 'generated proof hole survived'
           assert 'source-audited.pdf' in str(source_map)
           print('OFFICIAL_GENERATED_SOURCE_MAP_AND_EIGHT_CLOSED_ENDPOINTS_OK')
           PY
