@@ -214,9 +214,12 @@ theorem pinned_two_rate_rule_rows_hasFDerivAt_of_output
       P (pinnedDateOne G) (0 : Row33)
       (rowCoord 21) (rowCoord 5) (rowCoord 28) jOutput1
       hReal1 hLag1 hInfl1 hOutput1 hInnov1
+  -- The specialized coefficients are stored in the pinned primitive record.
+  -- They are propositionally equal after unfolding that record, but not
+  -- definitionally equal to the displayed rational expressions via `rfl`.
   constructor
-  · convert h0 using 1 <;> rfl
-  · convert h1 using 1 <;> rfl
+  · convert h0 using 1 <;> simp [P, ProposedStationaryPrimitives.primitives]
+  · convert h1 using 1 <;> simp [P, ProposedStationaryPrimitives.primitives]
 
 #print axioms pinned_two_rate_rule_rows_hasFDerivAt_of_output
 
