@@ -17,7 +17,7 @@ La prueba tiene tres piezas: (1) la integral del marginal real es estrictamente 
 
 ## Evidencia y límites
 
-**Estado al abrir esta adenda:** CANDIDATO, prueba Lean enviada a [GitHub Actions #46175766176](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/46175766176). No declarar `DEMOSTRADO` hasta que la compilación del teorema `noSimultaneousInteriorGeneral_exact` y la auditoría `#print axioms` concluyan exitosamente.
+**Resultado kernel comprobado (28/11/2026):** [GitHub Actions #46175766176](https://github.com/alejandroventuraventurameza-tech/ai-project/actions/runs/46175766176) concluyó **success** en el commit `cf62dbac235f862e270a685c29ca75db70392715` de la rama experimental. La compilación reporta **8.313 trabajos Lean**. Se verificaron `integral_pos_of_ae_pos_probability`, `integral_marginal_rate_factor` y `noSimultaneousInteriorGeneral_exact` con `#print axioms` y sin `sorryAx`. La extensión es **DEMOSTRADA** como implicación lógica de las FOC en espacios de probabilidad arbitrarios, con positividad casi segura e integrabilidad explícitas. No afirma que las FOC hayan sido derivadas del problema económico integral ni sustituye todavía la interfaz paper-facing finita del envío original.
 
 Incluso al certificar el teorema general, **no se habrán demostrado** la existencia o suficiencia de condiciones KKT de la firma, la realización de los integrandos desde la economía SOURCE 33×33, la medición/calibración económica, la identificación F0–Jacobiano ni un equilibrio dinámico con condición terminal. Esta es una extensión de la **implicación lógica entre las FOC**, no la construcción de las FOC dentro del modelo completo.
 
