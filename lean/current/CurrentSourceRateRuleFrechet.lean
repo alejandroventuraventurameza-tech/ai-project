@@ -218,8 +218,8 @@ theorem pinned_two_rate_rule_rows_hasFDerivAt_of_output
   -- They are propositionally equal after unfolding that record, but not
   -- definitionally equal to the displayed rational expressions via `rfl`.
   constructor
-  · convert h0 using 1 <;> simp [P, ProposedStationaryPrimitives.primitives]
-  · convert h1 using 1 <;> simp [P, ProposedStationaryPrimitives.primitives]
+  · convert h0 using 1 <;> norm_num [P, ProposedStationaryPrimitives.primitives]
+  · convert h1 using 1 <;> norm_num [P, ProposedStationaryPrimitives.primitives]
 
 #print axioms pinned_two_rate_rule_rows_hasFDerivAt_of_output
 
