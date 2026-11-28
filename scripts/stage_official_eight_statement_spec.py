@@ -162,15 +162,49 @@ def main() -> None:
         "MainTheorems.lean", "Assumptions.lean",
         "PaperInterface.lean", "ProofInterface.lean",
     }
-    sources = sorted(p for p in old_dir.glob("*.lean") if p.name not in excluded)
-    if len(sources) < 30:
-        raise AssertionError(f"unexpectedly sparse owned source closure: {len(sources)}")
-    owned_modules = {p.stem for p in sources}
-    copied = []
-    remap_count = 0
+    available_sources = {
+        p.stem: p for p in old_dir.glob("*.lean") if p.name not in excluded
+    }
     import_re = re.compile(
         rf"(?<!\S){re.escape(REPO)}\.([A-Za-z0-9_']+)"
     )
+    roots = [
+        m.group(1)
+        for line in ROOT_IMPORTS.splitlines()
+        if line.startswith("import ")
+        for m in import_re.finditer(line)
+    ]
+    if len(roots) != 4:
+        raise AssertionError("unexpected root theorem modules")
+    # Traverse only actual theorem dependencies, never the large unimported
+    # historical candidate pool. The old provisional stage is imported
+    # successfully by Lean, so this imports-only closure is deterministic.
+    needed: set[str] = set()
+    queue = list(roots)
+    while queue:
+        module = queue.pop()
+        if module in needed:
+            continue
+        if module not in available_sources:
+            raise AssertionError(f"required proof module missing: {module}")
+        needed.add(module)
+        contents = available_sources[module].read_text(encoding="utf-8")
+        for line in contents.splitlines():
+            if not line.lstrip().startswith("import "):
+                continue
+            for match in import_re.finditer(line):
+                imported = match.group(1)
+                if imported in {p.removesuffix(".lean") for p in excluded}:
+                    raise AssertionError(
+                        f"proof closure would require generated interface: {module} -> {imported}"
+                    )
+                queue.append(imported)
+    sources = [available_sources[m] for m in sorted(needed)]
+    if len(sources) < len(roots):
+        raise AssertionError("incomplete source import closure")
+    owned_modules = set(needed)
+    copied = []
+    remap_count = 0
     for source in sources:
         destination = out / source.name
         if destination.exists():
