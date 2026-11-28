@@ -86,7 +86,7 @@ jobs:
           lake env lean papers/Ventura26LiquidityAllocation/SourceToSpecDefeqAudit.lean 2>&1 | tee /tmp/ie-defeq-axioms.log
           if grep -E 'sorryAx|unsolved goals|error:|admit|declaration uses sorry' /tmp/ie-defeq-axioms.log; then exit 2; fi
           for t in p51_expanded_defeq l52_expanded_defeq a12_finite_expanded_defeq p51_explicit_proved l52_explicit_proved a12_finite_explicit_proved; do
-            grep -F "'Ventura26LiquidityAllocation.SourceToSpecDefeqAudit.$t' depends on axioms:" /tmp/ie-defeq-axioms.log
+            grep -E "'Ventura26LiquidityAllocation.SourceToSpecDefeqAudit.$t' (depends on axioms:|does not depend on any axioms)" /tmp/ie-defeq-axioms.log
           done
           echo THREE_ALIAS_EXPANSIONS_DEFINITIONALLY_EQUAL_LEAN_KERNEL_OK
           echo THREE_LITERAL_SOURCE_TYPES_PROVED_LEAN_KERNEL_OK
