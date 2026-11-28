@@ -11,6 +11,7 @@ audit, a full closeout, or a proof of the SOURCE-33 equilibrium.
 from __future__ import annotations
 
 import hashlib
+import json
 import pathlib
 import re
 import subprocess
@@ -48,6 +49,54 @@ def main() -> None:
         raise ValueError("missing frozen PDF / schema-v1 statement spec")
     if hashlib.sha256(source_path.read_bytes()).hexdigest() != PDF_SHA256:
         raise ValueError("wrong original PDF bytes")
+
+    # Preserve the exact, explicit source-facing types in statement-spec-8.json.
+    # The stock upstream renderer validates isolated spec fragments without
+    # inheriting the Matrix.Norms.Operator / Matrix notation scopes, and cannot
+    # infer a Type* universe level from a bare reference in a Prop definition.
+    # For this *compatibility-only* generator smoke test, replace those three
+    # opaque-in-isolation type spellings with transparent, kernel-proved source
+    # declarations. This is NOT a v11 source-to-expanded-Spec audit receipt.
+    original_spec = json.loads(spec_path.read_text(encoding="utf-8"))
+    targets = original_spec["targets"]
+    assert len(targets) == 8
+    assert [t["lean_name"] for t in targets] == list(SOURCE_NAMES)
+    assert "exactDecimalF0 ^ 48" in targets[1]["lean_type"]
+    assert "r < 48" in targets[1]["lean_type"]
+    assert "‖A - CurrentCompact.exactDecimalF0‖" in targets[2]["lean_type"]
+    assert targets[5]["lean_type"] == (
+        "CurrentCompact.noSimultaneousInteriorCurrentSpec"
+    )
+    compatibility_aliases = {
+        "p51": "CurrentPaperSource.prop51AllSourceClauses",
+        "l52": "CurrentCompact.lemma52_decimal_current_spec",
+        "a12": "CurrentCompact.noSimultaneousInteriorCurrentSpec.{0}",
+    }
+    for target in targets:
+        if target["lean_name"] in compatibility_aliases:
+            target["lean_type"] = compatibility_aliases[target["lean_name"]]
+    compat_path = specdir / "statement-spec-8-official-compat.json"
+    compat_path.write_text(
+        json.dumps(original_spec, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    (specdir / "official-compatibility-aliases.json").write_text(
+        json.dumps(
+            {
+                "status": "experimental-generator-compatibility-only",
+                "exact_literal_types_preserved_at": spec_path.name,
+                "stock_upstream_scoped_instance_gap": True,
+                "stock_upstream_universe_generalization_gap": True,
+                "aliases": compatibility_aliases,
+                "independent_source_to_expanded_spec_certification": False,
+                "full_closeout": False,
+            },
+            indent=2,
+        ) + "\n",
+        encoding="utf-8",
+    )
+    print("SOURCE_EXPLICIT_TYPE_SNAPSHOT_PRESERVED_UNCHANGED", flush=True)
+    print("OFFICIAL_GENERATOR_THREE_ALIAS_COMPATIBILITY_DECLARED", flush=True)
 
     root = upstream / "AppliedModelingLib.lean"
     original_root = root.read_text(encoding="utf-8")
@@ -93,7 +142,7 @@ def main() -> None:
         "--title", "Financial frictions, policy corridor, and capital allocation",
         "--authors", "Alejandro Ventura",
         "--version", VERSION,
-        "--statement-spec", str(spec_path),
+        "--statement-spec", str(compat_path),
         "--no-download"
     ], upstream)
 
@@ -116,8 +165,10 @@ def main() -> None:
             raise AssertionError(
                 f"official-generated draft proof endpoint {name} missing"
             )
-    if "exactDecimalF0 ^ 48" not in paper or "r < 48" not in paper:
-        raise AssertionError("official-generated Proposition 5.1 omitted source bounds")
+    for alias in compatibility_aliases.values():
+        if alias not in paper:
+            raise AssertionError(f"official-generated compatibility alias missing: {alias}")
+    print("OFFICIAL_GENERATED_ALIASES_REQUIRE_INDEPENDENT_EXPANSION_REVIEW", flush=True)
 
     # Generated MainTheorems initially imports Mathlib only; the eight
     # pinned source definitions are imported from this ephemeral supporting
@@ -133,6 +184,15 @@ def main() -> None:
         f"import {OFFICIAL_FOLDER}.PaperInterface", 1)
     if closed_proofs == PROOFS:
         raise AssertionError("proof interface import path was not rewritten")
+
+    # The compatibility interface fixes the finite state universe at 0
+    # (ordinary Type0), so this one endpoint must specialize the already
+    # polymorphic theorem without changing its mathematical proof.
+    old_a12 = "theorem a12.{u} : a12Spec.{u} :="
+    assert closed_proofs.count(old_a12) == 1
+    closed_proofs = closed_proofs.replace(
+        old_a12, "theorem a12 : a12Spec :=", 1
+    )
     (out / "ProofInterface.lean").write_text(closed_proofs.lstrip(), encoding="utf-8")
     print(f"OFFICIAL_FRESH_FOLDER:{OFFICIAL_FOLDER}", flush=True)
     print("OFFICIAL_GENERATED_PAPER_INTERFACE_PRESERVED", flush=True)
