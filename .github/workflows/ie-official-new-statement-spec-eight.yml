@@ -66,7 +66,7 @@ jobs:
           export PATH="$HOME/.elan/bin:$PATH"
           python3 - <<'PY'
           import json, pathlib
-          p=pathlib.Path('papers/Ventura26LiquidityAllocation')
+          p=pathlib.Path('papers/Ventura26LiquidityAllocationEight')
           source_map=json.loads((p/'audit/paper_statement_map.json').read_text(encoding='utf-8'))
           assert source_map, 'empty official source map'
           paper=(p/'PaperInterface.lean').read_text(encoding='utf-8')
@@ -79,8 +79,8 @@ jobs:
           assert 'source-audited.pdf' in str(source_map)
           print('OFFICIAL_GENERATED_SOURCE_MAP_AND_EIGHT_CLOSED_ENDPOINTS_OK')
           PY
-          lake build Ventura26LiquidityAllocation.ProofInterface 2>&1 | tee /tmp/ie-eight-official-kernel.log
-          lake env lean papers/Ventura26LiquidityAllocation/ProofInterface.lean 2>&1 | tee /tmp/ie-eight-official-axioms.log
+          lake build Ventura26LiquidityAllocationEight.ProofInterface 2>&1 | tee /tmp/ie-eight-official-kernel.log
+          lake env lean papers/Ventura26LiquidityAllocationEight/ProofInterface.lean 2>&1 | tee /tmp/ie-eight-official-axioms.log
           if grep -E 'sorryAx|unsolved goals|error:|admit|declaration uses sorry' /tmp/ie-eight-official-axioms.log; then exit 2; fi
           for name in p31 p51 l52 p53 a11 a12 a13 a14; do
             grep -F "'Ventura26LiquidityAllocation.$name' depends on axioms:" /tmp/ie-eight-official-axioms.log
@@ -93,7 +93,7 @@ jobs:
           set -euo pipefail
           export PYTHONPATH="$PWD"
           export PATH="$HOME/.elan/bin:$PATH"
-          python3 scripts/paper_contribution.py check Ventura26LiquidityAllocation --fast 2>&1 | tee /tmp/ie-eight-official-fast.log
+          python3 scripts/paper_contribution.py check Ventura26LiquidityAllocationEight --fast 2>&1 | tee /tmp/ie-eight-official-fast.log
           echo OFFICIAL_NEW_AND_CHECK_FAST_EIGHT_SUCCESS
           echo CAVEAT_SOURCE_TO_SPEC_SEMANTIC_CLOSEOUT_NOT_CERTIFIED
       - name: Archive generated statement-spec, source map, and kernel evidence
@@ -110,7 +110,7 @@ jobs:
             /tmp/ie-eight-official-fast.log
             /tmp/ie-eight-official-spec/statement-spec-8.json
             /tmp/ie-eight-official-spec/statement-spec-provenance.json
-            upstream/papers/Ventura26LiquidityAllocation/audit/paper_statement_map.json
-            upstream/papers/Ventura26LiquidityAllocation/PaperInterface.lean
-            upstream/papers/Ventura26LiquidityAllocation/ProofInterface.lean
+            upstream/papers/Ventura26LiquidityAllocationEight/audit/paper_statement_map.json
+            upstream/papers/Ventura26LiquidityAllocationEight/PaperInterface.lean
+            upstream/papers/Ventura26LiquidityAllocationEight/ProofInterface.lean
           if-no-files-found: ignore
