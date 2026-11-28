@@ -1,0 +1,90 @@
+name: IE A.1.2 general probability measure Lean proof
+
+on:
+  push:
+    branches:
+      - work/ie-a12-general-measure-proof-20261128
+    paths:
+      - .github/workflows/ie-a12-general-measure-proof.yml
+      - lean/candidates/Ventura26LiquidityAllocation/CurrentCompactInteriorGeneralMeasure.lean
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/ie-a12-general-measure-proof.yml
+      - lean/candidates/Ventura26LiquidityAllocation/CurrentCompactInteriorGeneralMeasure.lean
+
+permissions:
+  contents: read
+
+jobs:
+  arbitrary-probability-measure-a12:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: ai-project
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: nikhgarg/AppliedModelingLib
+          ref: 194edcc95df74806a39b961d10dedddc6e730cce
+          path: upstream
+      - name: Install pinned Lean 4
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.30.0-rc2
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Restore pinned Mathlib cache
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          test "$(git rev-parse HEAD)" = "194edcc95df74806a39b961d10dedddc6e730cce"
+          lake exe cache get
+      - name: Stage source-frozen eight-paper baseline and new general theorem
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONPATH="$GITHUB_WORKSPACE/upstream"
+          python3 ai-project/scripts/stage_eight_paper_interface.py ai-project upstream 2>&1 | tee /tmp/ie-a12-general-staging.log
+          test -f upstream/papers/Ventura26LiquidityAllocation/CurrentCompactInteriorGeneralMeasure.lean
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path('upstream/papers/Ventura26LiquidityAllocation/CurrentCompactInteriorGeneralMeasure.lean').read_text()
+          assert 'IsProbabilityMeasure' in s
+          assert 'Integrable (fun' in s
+          assert '∀ᵐ ω ∂μ' in s
+          assert 'noSimultaneousInteriorGeneral_exact' in s
+          assert 'Fintype W' not in s
+          assert '∑ w' not in s
+          assert 'sorry' not in s and 'admit' not in s and '\naxiom ' not in s
+          print('ARBITRARY_MEASURE_FINITE_EXPECTATION_EXPLICITLY_STATED')
+          PY
+      - name: Kernel compile general A.1.2 and audit all theorem axioms
+        working-directory: upstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake build Ventura26LiquidityAllocation.CurrentCompactInteriorGeneralMeasure 2>&1 | tee /tmp/ie-a12-general-build.log
+          lake env lean papers/Ventura26LiquidityAllocation/CurrentCompactInteriorGeneralMeasure.lean 2>&1 | tee /tmp/ie-a12-general-axioms.log
+          if grep -E 'sorryAx|unsolved goals|error:|admit|declaration uses sorry' /tmp/ie-a12-general-axioms.log; then exit 2; fi
+          for t in integral_pos_of_ae_pos_probability integral_marginal_rate_factor noSimultaneousInteriorGeneral_exact; do
+            grep -F "'Ventura26LiquidityAllocation.CurrentCompact.$t' depends on axioms:" /tmp/ie-a12-general-axioms.log
+          done
+          echo GENERAL_A12_ARBITRARY_PROBABILITY_MEASURE_LEAN_KERNEL_OK
+          echo SOURCE_EQUILIBRIUM_AND_KKT_SUFFICIENCY_UNPROVEN
+      - name: Archive source and Lean kernel logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ie-a12-general-probability-kernel
+          path: |
+            /tmp/ie-a12-general-staging.log
+            /tmp/ie-a12-general-build.log
+            /tmp/ie-a12-general-axioms.log
+          if-no-files-found: ignore
